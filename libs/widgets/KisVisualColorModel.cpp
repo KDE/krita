@@ -96,7 +96,7 @@ void KisVisualColorModel::slotSetColorSpace(const KoColorSpace *cs)
         loadColorSpace(csNew);
         m_d->currentcolor = KoColor(csNew);
         m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
-        emit sigColorSpaceChanged();
+        Q_EMIT sigColorSpaceChanged();
     }
 }
 
@@ -116,8 +116,8 @@ void KisVisualColorModel::slotSetChannelValues(const QVector4D &values)
         m_d->allowUpdates = false;
         m_d->channelValues = newValues;
         m_d->currentcolor = convertChannelValuesToKoColor(newValues);
-        emit sigChannelValuesChanged(m_d->channelValues, changeFlags);
-        emit sigNewColor(m_d->currentcolor);
+        Q_EMIT sigChannelValuesChanged(m_d->channelValues, changeFlags);
+        Q_EMIT sigNewColor(m_d->currentcolor);
         m_d->allowUpdates = true;
     }
 }
@@ -180,7 +180,7 @@ void KisVisualColorModel::setRGBColorModel(KisVisualColorModel::ColorModel model
         if (m_d->isRGBA) {
             m_d->model = model;
             m_d->applyGamma = (m_d->isLinear && m_d->modelRGB != ColorModel::HSY);
-            emit sigColorModelChanged();
+            Q_EMIT sigColorModelChanged();
             m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
             emitChannelValues();
         }
@@ -430,7 +430,7 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
     m_d->currentCS = cs;
 
     if (!oldCS || (oldCS->colorModelId() != cs->colorModelId())) {
-        emit sigColorModelChanged();
+        Q_EMIT sigColorModelChanged();
     }
 }
 
@@ -438,6 +438,6 @@ void KisVisualColorModel::emitChannelValues()
 {
     bool updatesAllowed = m_d->allowUpdates;
     m_d->allowUpdates = false;
-    emit sigChannelValuesChanged(m_d->channelValues, (1u << m_d->colorChannelCount) - 1);
+    Q_EMIT sigChannelValuesChanged(m_d->channelValues, (1u << m_d->colorChannelCount) - 1);
     m_d->allowUpdates = updatesAllowed;
 }

@@ -1559,12 +1559,12 @@ bool KisPaintDevice::read(QIODevice *stream)
 
 void KisPaintDevice::emitColorSpaceChanged()
 {
-    emit colorSpaceChanged(m_d->colorSpace());
+    Q_EMIT colorSpaceChanged(m_d->colorSpace());
 }
 
 void KisPaintDevice::emitProfileChanged()
 {
-    emit profileChanged(m_d->colorSpace()->profile());
+    Q_EMIT profileChanged(m_d->colorSpace()->profile());
 }
 
 void KisPaintDevice::convertTo(const KoColorSpace *dstColorSpace,

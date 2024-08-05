@@ -97,5 +97,5 @@ QModelIndex KisMultiSensorsModel::sensorIndex(const QString &id)
 
 void KisMultiSensorsModel::slotSensorModelChanged()
 {
-    emit dataChanged(index(0), index(rowCount() - 1));
+    Q_EMIT dataChanged(index(0), index(rowCount() - 1));
 }

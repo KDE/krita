@@ -389,7 +389,7 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
         return;
     }
 
-    emit reloadPresetClicked();
+    Q_EMIT reloadPresetClicked();
 
     // create a new brush preset with the name specified and add to resource provider
     KisResourceModel model(ResourceType::PaintOpPresets);
@@ -689,7 +689,7 @@ void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
     }
     m_d->horzSplitter->setSizes(splitterSizes);
 
-    emit brushEditorShown();
+    Q_EMIT brushEditorShown();
 }
 
 void KisPaintOpPresetsEditor::resizeEvent(QResizeEvent* event)
@@ -854,7 +854,7 @@ void KisPaintOpPresetsEditor::slotSaveNewBrushPreset() {
 
 void KisPaintOpPresetsEditor::slotToggleDetach(bool detach)
 {
-    emit toggleDetachState(detach);
+    Q_EMIT toggleDetachState(detach);
     KisConfig cfg(false);
     cfg.setPaintopPopupDetached(detach);
 }
@@ -867,7 +867,7 @@ void KisPaintOpPresetsEditor::slotUpdateEffectiveLodAvailable(bool value)
 
 void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()
 {
-    emit createPresetFromScratch(sender()->objectName());
+    Q_EMIT createPresetFromScratch(sender()->objectName());
 }
 
 void KisPaintOpPresetsEditor::updateViewSettings()

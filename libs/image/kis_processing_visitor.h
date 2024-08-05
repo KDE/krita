@@ -32,7 +32,7 @@ class KUndo2Command;
 /**
  * A visitor that processes a single layer; it does not recurse into the
  * layer's children. Classes inheriting KisProcessingVisitor must not
- * emit signals or ask the image to update the projection.
+ * Q_EMIT signals or ask the image to update the projection.
  */
 class KRITAIMAGE_EXPORT KisProcessingVisitor : public KisShared
 {

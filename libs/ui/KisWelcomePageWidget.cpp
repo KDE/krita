@@ -88,7 +88,7 @@ QLabel* KisWelcomePageWidget::donationBannerImage {nullptr};
 void ShowNewsAction::enableFromLink(QString unused_url)
 {
     Q_UNUSED(unused_url);
-    emit setChecked(true);
+    Q_EMIT setChecked(true);
 }
 
 

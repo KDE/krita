@@ -114,7 +114,7 @@ void HistogramComputationStrokeStrategy::finishStrokeCallback()
 
     if (m_d->results.size() == 1) {
         hisData.bins = m_d->results[0];
-        emit computationResultReady(hisData);
+        Q_EMIT computationResultReady(hisData);
     } else {
 
         quint32 channelCount = m_d->image->projection()->channelCount();
@@ -132,7 +132,7 @@ void HistogramComputationStrokeStrategy::finishStrokeCallback()
             }
         }
 
-        emit computationResultReady(hisData);
+        Q_EMIT computationResultReady(hisData);
     }
 
     KisIdleTaskStrokeStrategy::finishStrokeCallback();

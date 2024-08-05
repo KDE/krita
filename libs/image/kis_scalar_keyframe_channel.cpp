@@ -70,7 +70,7 @@ void KisScalarKeyframe::setValue(qreal value, KUndo2Command *parentUndoCmd)
             m_value = limits->clamp(m_value);
         }
 
-        emit sigChanged(this);
+        Q_EMIT sigChanged(this);
     }
 }
 
@@ -81,7 +81,7 @@ void KisScalarKeyframe::setInterpolationMode(InterpolationMode mode, KUndo2Comma
         cmd->redo();
     } else {
         m_interpolationMode = mode;
-        emit sigChanged(this);
+        Q_EMIT sigChanged(this);
     }
 }
 
@@ -97,7 +97,7 @@ void KisScalarKeyframe::setTangentsMode(TangentsMode mode, KUndo2Command *parent
         cmd->redo();
     } else {
         m_tangentsMode = mode;
-        emit sigChanged(this);
+        Q_EMIT sigChanged(this);
     }
 }
 
@@ -114,7 +114,7 @@ void KisScalarKeyframe::setInterpolationTangents(QPointF leftTangent, QPointF ri
     } else {
         m_leftTangent = leftTangent;
         m_rightTangent = rightTangent;
-        emit sigChanged(this);
+        Q_EMIT sigChanged(this);
     }
 }
 
@@ -316,7 +316,7 @@ void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, 
                              &KisScalarKeyframe::sigChanged,
                              [this, time](const KisScalarKeyframe* key){
                                  Q_UNUSED(key);
-                                 emit sigKeyframeChanged(this, time);
+                                 Q_EMIT sigKeyframeChanged(this, time);
                              });
     }
 

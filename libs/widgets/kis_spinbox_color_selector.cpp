@@ -231,7 +231,7 @@ void KisSpinboxColorSelector::createColorFromSpinboxValues()
 void KisSpinboxColorSelector::slotUpdateFromSpinBoxes()
 {
     createColorFromSpinboxValues();
-    emit sigNewColor(m_d->color);
+    Q_EMIT sigNewColor(m_d->color);
 }
 
 void KisSpinboxColorSelector::updateSpinboxesWithNewValues()

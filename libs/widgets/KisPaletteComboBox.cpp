@@ -140,6 +140,6 @@ void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
 void KisPaletteComboBox::slotIndexUpdated(int idx)
 {
     if (idx >= 0 && idx < m_idxSwatchMap.size()) {
-        emit sigColorSelected(m_idxSwatchMap[idx].color());
+        Q_EMIT sigColorSelected(m_idxSwatchMap[idx].color());
     }
 }

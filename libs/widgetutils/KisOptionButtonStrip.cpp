@@ -38,8 +38,8 @@ KisOptionButtonStrip::KisOptionButtonStrip(QWidget *parent)
         m_d->buttonGroup,
         QOverload<QAbstractButton *, bool>::of(&QButtonGroup::buttonToggled),
         [this](QAbstractButton *button, bool checked) {
-            emit buttonToggled(dynamic_cast<KoGroupButton *>(button), checked);
-            emit buttonToggled(m_d->buttonGroup->id(button), checked);
+            Q_EMIT buttonToggled(dynamic_cast<KoGroupButton *>(button), checked);
+            Q_EMIT buttonToggled(m_d->buttonGroup->id(button), checked);
         });
 }
 

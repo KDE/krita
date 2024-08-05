@@ -52,7 +52,7 @@ public:
     QString section() const;        ///< The section the tool wants to be in.
     int priority() const;           ///< Lower number (higher priority) means coming first in the section.
     int buttonGroupId() const;      ///< A unique ID for this tool as passed by changedTool(), >= 0
-    QString visibilityCode() const; ///< This tool should become visible when we emit this string in toolCodesSelected()
+    QString visibilityCode() const; ///< This tool should become visible when we Q_EMIT this string in toolCodesSelected()
 
     KoToolFactoryBase *toolFactory() const; ///< Factory to create new tool object instances
 

@@ -66,7 +66,7 @@ void KisClickableGLImageWidget::mousePressEvent(QMouseEvent *event)
     if (!event->isAccepted()) {
         event->accept();
         m_normalizedClickPoint = normalizePoint(event->localPos());
-        emit selected(m_normalizedClickPoint);
+        Q_EMIT selected(m_normalizedClickPoint);
 
         if (m_handleStrategy) {
             update();
@@ -81,7 +81,7 @@ void KisClickableGLImageWidget::mouseReleaseEvent(QMouseEvent *event)
     if (!event->isAccepted()) {
         event->accept();
         m_normalizedClickPoint = normalizePoint(event->localPos());
-        emit selected(m_normalizedClickPoint);
+        Q_EMIT selected(m_normalizedClickPoint);
 
         if (m_handleStrategy) {
             update();
@@ -96,7 +96,7 @@ void KisClickableGLImageWidget::mouseMoveEvent(QMouseEvent *event)
     if (!event->isAccepted()) {
         event->accept();
         m_normalizedClickPoint = normalizePoint(event->localPos());
-        emit selected(m_normalizedClickPoint);
+        Q_EMIT selected(m_normalizedClickPoint);
 
         if (m_handleStrategy) {
             update();

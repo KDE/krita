@@ -512,7 +512,7 @@ void KisResourceItemChooser::activate(const QModelIndex &index)
         if (resource != d->currentResource) {
             d->currentResource = resource;
             d->updatesBlocked = true;
-            emit resourceSelected(resource);
+            Q_EMIT resourceSelected(resource);
             d->updatesBlocked = false;
         }
         updatePreview(index);
@@ -526,7 +526,7 @@ void KisResourceItemChooser::clicked(const QModelIndex &index)
 
     KoResourceSP resource = currentResource();
     if (resource) {
-        emit resourceClicked(resource);
+        Q_EMIT resourceClicked(resource);
     }
 }
 
@@ -718,7 +718,7 @@ void KisResourceItemChooser::applyVerticalLayout()
     hideEverything();
 
     d->view->setListViewMode(d->requestedViewMode);
-    emit listViewModeChanged(d->requestedViewMode);
+    Q_EMIT listViewModeChanged(d->requestedViewMode);
 
     // The horizontal layouts size the items based widget height not user configured base length
     // so it needs to be restored when switching back to vertical layout
@@ -762,7 +762,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             hideEverything();
 
             d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-            emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+            Q_EMIT listViewModeChanged(ListViewMode::IconStripHorizontal);
 
             // Left
             QLayout* leftLayout = d->left->layout();
@@ -814,7 +814,7 @@ void KisResourceItemChooser::changeLayoutBasedOnSize()
             hideEverything();
 
             d->view->setListViewMode(ListViewMode::IconStripHorizontal);
-            emit listViewModeChanged(ListViewMode::IconStripHorizontal);
+            Q_EMIT listViewModeChanged(ListViewMode::IconStripHorizontal);
 
             QLayout* leftLayout = d->left->layout();
             leftLayout->addWidget(d->resourcesSplitter);

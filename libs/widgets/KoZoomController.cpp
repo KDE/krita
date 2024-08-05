@@ -180,7 +180,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
     // Actually canvasController doesn't know about zoom, but the document in pixels
     // has changed as a result of the zoom change
     // To allow listeners of offset changes to react on the real new offset and not on the
-    // intermediate offsets, we block the signals here, and emit by ourselves later.
+    // intermediate offsets, we block the signals here, and Q_EMIT by ourselves later.
     d->canvasController->proxyObject->blockSignals(true);
     d->canvasController->updateDocumentSize(documentViewportSize, true);
     d->canvasController->proxyObject->blockSignals(false);
@@ -196,7 +196,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         documentCenter = stillPoint * zoomCoeff - (stillPoint - 1.0 / zoomCoeff * oldCenter);
     }
     d->canvasController->setPreferredCenter(documentCenter);
-    emit zoomChanged(mode, d->action->effectiveZoom());
+    Q_EMIT zoomChanged(mode, d->action->effectiveZoom());
 }
 
 QSizeF KoZoomController::documentToViewport(const QSizeF &size)

@@ -66,7 +66,7 @@ KisAngleSelector* KisLayerStyleAngleSelector::angleSelector()
 
 void KisLayerStyleAngleSelector::slotAngleSelectorAngleChanged(qreal value)
 {
-    emit valueChanged(static_cast<int>(value));
+    Q_EMIT valueChanged(static_cast<int>(value));
     emitChangeSignals();
 }
 
@@ -78,8 +78,8 @@ void KisLayerStyleAngleSelector::slotGlobalLightToggled()
 void KisLayerStyleAngleSelector::emitChangeSignals()
 {
     if (useGlobalLight()) {
-        emit globalAngleChanged(value());
+        Q_EMIT globalAngleChanged(value());
     }
 
-    emit configChanged();
+    Q_EMIT configChanged();
 }

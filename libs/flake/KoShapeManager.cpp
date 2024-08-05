@@ -278,10 +278,10 @@ void KoShapeManager::Private::updateTree()
     }
 
     if (selectionModified) {
-        emit q->selectionContentChanged();
+        Q_EMIT q->selectionContentChanged();
     }
     if (anyModified) {
-        emit q->contentChanged();
+        Q_EMIT q->contentChanged();
     }
 }
 

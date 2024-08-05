@@ -56,10 +56,10 @@ bool KisResourceItemView::viewportEvent(QEvent *event)
 void KisResourceItemView::selectionChanged(const QItemSelection &selected, const QItemSelection &/*deselected*/)
 {
     if (selected.isEmpty()) {
-        emit currentResourceChanged(QModelIndex());
+        Q_EMIT currentResourceChanged(QModelIndex());
     }
     else {
-        emit currentResourceChanged(selected.indexes().first());
+        Q_EMIT currentResourceChanged(selected.indexes().first());
     }
 }
 
@@ -72,7 +72,7 @@ void KisResourceItemView::mousePressEvent(QMouseEvent *event)
 void KisResourceItemView::slotItemClicked(const QModelIndex &index)
 {
     if (m_beforeClickIndex == index) {
-        emit currentResourceClicked(index);
+        Q_EMIT currentResourceClicked(index);
     }
     m_beforeClickIndex = QModelIndex();
 }
@@ -80,14 +80,14 @@ void KisResourceItemView::slotItemClicked(const QModelIndex &index)
 void KisResourceItemView::contextMenuEvent(QContextMenuEvent *event)
 {
     QTableView::contextMenuEvent(event);
-    emit contextMenuRequested(event->globalPos());
+    Q_EMIT contextMenuRequested(event->globalPos());
 }
 
 void KisResourceItemView::resizeEvent(QResizeEvent *event)
 {
     QTableView::resizeEvent(event);
     updateView();
-    emit sigSizeChanged();
+    Q_EMIT sigSizeChanged();
 }
 
 void KisResourceItemView::setViewMode(ViewMode mode)

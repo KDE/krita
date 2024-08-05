@@ -45,7 +45,7 @@ void KisInputProfile::setName(const QString &name)
 {
     if (d->name != name) {
         d->name = name;
-        emit nameChanged();
+        Q_EMIT nameChanged();
     }
 }
 

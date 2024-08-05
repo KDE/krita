@@ -65,7 +65,7 @@ void KisLevelsSlider::setHandlePosition(int handleIndex, qreal newPosition)
     m_handles[handleIndex].position = newPosition;
 
     update();
-    emit handlePositionChanged(handleIndex, newPosition);
+    Q_EMIT handlePositionChanged(handleIndex, newPosition);
 }
 
 void KisLevelsSlider::setHandleColor(int handleIndex, const QColor &newColor)
@@ -79,7 +79,7 @@ void KisLevelsSlider::setHandleColor(int handleIndex, const QColor &newColor)
     m_handles[handleIndex].color = newColor;
     
     update();
-    emit handleColorChanged(handleIndex, newColor);
+    Q_EMIT handleColorChanged(handleIndex, newColor);
 }
 
 QSize KisLevelsSlider::sizeHint() const
@@ -331,9 +331,9 @@ KisInputLevelsSlider::KisInputLevelsSlider(QWidget *parent)
         [this](int handleIndex, qreal position)
         {
             if (handleIndex == m_handles.first().index) {
-                emit blackPointChanged(position);
+                Q_EMIT blackPointChanged(position);
             } else if (handleIndex == m_handles.last().index) {
-                emit whitePointChanged(position);
+                Q_EMIT whitePointChanged(position);
             }
         }
     );
@@ -479,8 +479,8 @@ void KisInputLevelsSliderWithGamma::setHandlePosition(int handleIndex, qreal new
         m_handles[1].position = newPosition;
         m_gamma = positionToGamma();
         update();
-        emit handlePositionChanged(1, newPosition);
-        emit gammaChanged(m_gamma);
+        Q_EMIT handlePositionChanged(1, newPosition);
+        Q_EMIT gammaChanged(m_gamma);
     } else {
         if (handleIndex == m_handles.first().index) {
             newPosition = qBound(0.0, newPosition, m_handles.last().position - minimumSpaceBetweenHandles);
@@ -493,8 +493,8 @@ void KisInputLevelsSliderWithGamma::setHandlePosition(int handleIndex, qreal new
         m_handles[handleIndex].position = newPosition;
         m_handles[1].position = gammaToPosition();
         update();
-        emit handlePositionChanged(handleIndex, newPosition);
-        emit handlePositionChanged(1, newPosition);
+        Q_EMIT handlePositionChanged(handleIndex, newPosition);
+        Q_EMIT handlePositionChanged(1, newPosition);
     }
 
 }
@@ -508,8 +508,8 @@ void KisInputLevelsSliderWithGamma::setGamma(qreal newGamma)
     m_gamma = newGamma;
     m_handles[1].position = gammaToPosition();
     update();
-    emit gammaChanged(m_gamma);
-    emit handlePositionChanged(1, m_handles[1].position);
+    Q_EMIT gammaChanged(m_gamma);
+    Q_EMIT handlePositionChanged(1, m_handles[1].position);
 }
 
 void KisInputLevelsSliderWithGamma::reset(qreal newBlackPoint, qreal newWhitePoint)
@@ -633,11 +633,11 @@ void KisThresholdSlider::reset(qreal newBlackPoint, qreal newWhitePoint)
     }
     m_handles.first().position = m_handles.last().position = newBlackPoint;
     update();
-    emit handlePositionChanged(0, newBlackPoint);
-    emit blackPointChanged(newBlackPoint);
-    emit handlePositionChanged(1, newBlackPoint);
-    emit whitePointChanged(newBlackPoint);
-    emit thresholdChanged(newBlackPoint);
+    Q_EMIT handlePositionChanged(0, newBlackPoint);
+    Q_EMIT blackPointChanged(newBlackPoint);
+    Q_EMIT handlePositionChanged(1, newBlackPoint);
+    Q_EMIT whitePointChanged(newBlackPoint);
+    Q_EMIT thresholdChanged(newBlackPoint);
 }
 
 void KisThresholdSlider::setThreshold(qreal newThreshold)

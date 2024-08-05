@@ -238,7 +238,7 @@ void KisScratchPad::wheelDelta(QWheelEvent *event)
             break;
         }
 
-        emit scaleChanged(m_scratchpadScaleX);
+        Q_EMIT scaleChanged(m_scratchpadScaleX);
 
         // cursor position after scale
         QPointF offsetPosition = QPointF(position.x() / m_scratchpadScaleX, position.y() / m_scratchpadScaleY);
@@ -364,7 +364,7 @@ void KisScratchPad::endStroke(KoPointerEvent *event)
 {
     Q_UNUSED(event);
     m_helper->endPaint();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::beginPan(KoPointerEvent *event)
@@ -399,7 +399,7 @@ void KisScratchPad::sample(KoPointerEvent *event)
 {
     KoColor color;
     if (KisToolUtils::sampleColor(color, m_paintLayer->projection(), event->point.toPoint())) {
-        emit colorSelected(color);
+        Q_EMIT colorSelected(color);
     }
 }
 
@@ -430,7 +430,7 @@ void KisScratchPad::setOnScreenResolution(qreal scaleX, qreal scaleY)
         updateTransformations();
         update();
 
-        emit scaleChanged(m_scratchpadScaleX);
+        Q_EMIT scaleChanged(m_scratchpadScaleX);
         updateViewport();
     }
 }
@@ -440,7 +440,7 @@ bool KisScratchPad::setScale(qreal scaleX, qreal scaleY)
     const bool retval = setScaleImpl(scaleX, scaleY);
 
     if (retval) {
-        emit scaleChanged(m_scratchpadScaleX);
+        Q_EMIT scaleChanged(m_scratchpadScaleX);
         updateViewport();
     }
 
@@ -508,7 +508,7 @@ void KisScratchPad::scaleToFit() {
     }
 
     if (setScaleImpl(scale, scale)) {
-        emit scaleChanged(m_scratchpadScaleX);
+        Q_EMIT scaleChanged(m_scratchpadScaleX);
     }
     panCenter();
 }
@@ -519,7 +519,7 @@ void KisScratchPad::scaleReset() {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_linkCanvasZoomLevel);
 
     if (setScaleImpl(1.0, 1.0)) {
-        emit scaleChanged(m_scratchpadScaleX);
+        Q_EMIT scaleChanged(m_scratchpadScaleX);
     }
     panTo(0, 0);
 }
@@ -571,7 +571,7 @@ QRect KisScratchPad::viewportBounds() const
 void KisScratchPad::updateViewport()
 {
     if (updateViewportImpl()) {
-        emit viewportChanged(m_viewport);
+        Q_EMIT viewportChanged(m_viewport);
     }
 }
 
@@ -621,7 +621,7 @@ QRect KisScratchPad::contentBounds() const
 
 void KisScratchPad::imageUpdated(const QRect &rect)
 {
-    emit sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
+    Q_EMIT sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
 }
 
 void KisScratchPad::slotUpdateCanvas(const QRect &rect)
@@ -812,7 +812,7 @@ void KisScratchPad::paintCustomImage(const QImage& loadedImage)
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);
     painter.deleteTransaction();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::loadScratchpadImage(QImage image)
@@ -866,7 +866,7 @@ void KisScratchPad::paintPresetImage()
     painter.bitBlt(overlayRect.topLeft(), device, imageRect);
     painter.deleteTransaction();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile)
@@ -887,7 +887,7 @@ void KisScratchPad::fillDefault()
     paintDevice->clear();
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillTransparent()
@@ -904,7 +904,7 @@ void KisScratchPad::fillTransparent()
     paintDevice->clear();
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::setFillColor(QColor newColor)
@@ -954,7 +954,7 @@ void KisScratchPad::fillGradient(const QPoint &gradientVectorStart,
     }
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillGradient()
@@ -992,7 +992,7 @@ void KisScratchPad::fillPattern(QTransform transform)
 
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillBackground()
@@ -1005,7 +1005,7 @@ void KisScratchPad::fillBackground()
     paintDevice->clear();
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillForeground()
@@ -1018,7 +1018,7 @@ void KisScratchPad::fillForeground()
     paintDevice->clear();
     t.end();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillDocument(bool fullContent)
@@ -1040,7 +1040,7 @@ void KisScratchPad::fillDocument(bool fullContent)
     painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);
     painter.deleteTransaction();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 void KisScratchPad::fillDocument()
@@ -1068,7 +1068,7 @@ void KisScratchPad::fillLayer(bool fullContent)
     painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentNode()->projection(), sourceRect);
     painter.deleteTransaction();
     update();
-    emit contentChanged();
+    Q_EMIT contentChanged();
 }
 
 #include "kis_scratch_pad.moc"

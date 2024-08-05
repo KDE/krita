@@ -94,5 +94,5 @@ void KisImageThumbnailStrokeStrategy::reportThumbnailGenerationCompleted(KisPain
                                             rect,
                                             m_renderingIntent,
                                             m_conversionFlags);
-    emit thumbnailUpdated(overviewImage);
+    Q_EMIT thumbnailUpdated(overviewImage);
 }

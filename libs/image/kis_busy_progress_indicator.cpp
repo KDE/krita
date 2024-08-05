@@ -88,7 +88,7 @@ void KisBusyProgressIndicator::update()
     m_d->numUpdates.ref();
 
     if (!m_d->timerStarted) {
-        emit sigStartTimer();
+        Q_EMIT sigStartTimer();
     }
 }
 

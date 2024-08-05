@@ -144,16 +144,16 @@ KisPropagateColorsConfigWidget::KisPropagateColorsConfigWidget(QWidget *parent)
     connect(optionButtonStripDistanceMetric,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
             this,
-            [this](int, bool c){ if (c) { emit sigConfigurationItemChanged(); } });
+            [this](int, bool c){ if (c) { Q_EMIT sigConfigurationItemChanged(); } });
     connect(optionButtonStripExpansionMode,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
             this,
-            [this](int, bool c){ if (c) { emit sigConfigurationItemChanged(); } });
+            [this](int, bool c){ if (c) { Q_EMIT sigConfigurationItemChanged(); } });
     connect(m_d->sliderExpansionAmount, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(optionButtonStripAlphaChannelMode,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
             this,
-            [this](int, bool c){ if (c) { emit sigConfigurationItemChanged(); } });
+            [this](int, bool c){ if (c) { Q_EMIT sigConfigurationItemChanged(); } });
 }
 
 KisPropagateColorsConfigWidget::~KisPropagateColorsConfigWidget()
@@ -201,7 +201,7 @@ void KisPropagateColorsConfigWidget::setConfiguration(const KisPropertiesConfigu
         }
     }
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisPropagateColorsConfigWidget::configuration() const

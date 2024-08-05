@@ -50,7 +50,7 @@ void KisAnimCurvesValuesHeader::setScale(qreal scale)
     const qreal minimumScale = 0.001f;
     m_d->scale = qMax(scale, minimumScale);
     viewport()->update();
-    emit scaleChanged(m_d->scale);
+    Q_EMIT scaleChanged(m_d->scale);
 }
 
 qreal KisAnimCurvesValuesHeader::scale() const

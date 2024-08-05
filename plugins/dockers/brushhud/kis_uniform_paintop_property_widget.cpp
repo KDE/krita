@@ -120,7 +120,7 @@ void KisUniformPaintOpPropertyIntSlider::setValue(const QVariant &value)
 
 void KisUniformPaintOpPropertyIntSlider::slotSliderChanged(int value)
 {
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 void KisUniformPaintOpPropertyIntSlider::slotRangeChanged()
@@ -194,7 +194,7 @@ void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
 
 void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)
 {
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 void KisUniformPaintOpPropertyDoubleSlider::slotRangeChanged()
@@ -233,7 +233,7 @@ void KisUniformPaintOpPropertyCheckBox::setValue(const QVariant &value)
 
 void KisUniformPaintOpPropertyCheckBox::slotCheckBoxChanged(bool value)
 {
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 /****************************************************************/
@@ -288,5 +288,5 @@ void KisUniformPaintOpPropertyComboBox::setValue(const QVariant &value)
 
 void KisUniformPaintOpPropertyComboBox::slotComboBoxChanged(int value)
 {
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }

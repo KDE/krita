@@ -117,7 +117,7 @@
           </doc:para>
           <doc:para>
             If this property is set then the calibration process should
-            show the color patch fullscreen and should emit an audible
+            show the color patch fullscreen and should Q_EMIT an audible
             alert when completed.
           </doc:para>
         </doc:description>

@@ -106,7 +106,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
 
     connect(m_colorSelectorContainer, SIGNAL(openSettings()), this, SLOT(openSettings()));
 
-    //emit settingsChanged() if the settings are changed in krita preferences
+    //Q_EMIT settingsChanged() if the settings are changed in krita preferences
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
     KisColorSelectorSettingsFactory* factory =
             dynamic_cast<KisColorSelectorSettingsFactory*>(preferenceSetRegistry->get("KisColorSelectorSettingsFactory"));
@@ -119,7 +119,7 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     connect(this,     SIGNAL(settingsChanged()), this,                     SLOT(update()), Qt::UniqueConnection);
 
 
-    emit settingsChanged();
+    Q_EMIT settingsChanged();
 
     m_colorHistoryAction = KisActionRegistry::instance()->makeQAction("show_color_history", this);
     connect(m_colorHistoryAction, SIGNAL(triggered()), m_colorHistoryWidget, SLOT(showPopup()), Qt::UniqueConnection);
@@ -170,7 +170,7 @@ void KisColorSelectorNgDockerWidget::openSettings()
 
     KisColorSelectorSettingsDialog settings;
     if(settings.exec()==QDialog::Accepted) {
-        emit settingsChanged();
+        Q_EMIT settingsChanged();
         KisConfigNotifier::instance()->notifyConfigChanged();
     }
 }

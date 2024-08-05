@@ -68,7 +68,7 @@ void KisAngleGauge::setAngle(qreal newAngle)
 
     m_d->angle = newAngle;
     update();
-    emit angleChanged(newAngle);
+    Q_EMIT angleChanged(newAngle);
 }
 
 void KisAngleGauge::setSnapAngle(qreal newSnapAngle)

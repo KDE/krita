@@ -440,7 +440,7 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     m_d->clickTransform = m.finalTransform();
 
     if (m_d->function == ROTATEBOUNDS) {
-        emit requestConvexHullCalculation();
+        Q_EMIT requestConvexHullCalculation();
     }
 
     return true;
@@ -774,7 +774,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         }
 
         m_d->currentArgs.setRotationCenterOffset(newRotationCenterOffset);
-        emit requestResetRotationCenterButtons();
+        Q_EMIT requestResetRotationCenterButtons();
     }
         break;
     case TOPSHEAR:
@@ -872,6 +872,6 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     // recalculate cached handles position
     recalculateTransformedHandles();
 
-    emit q->requestShowImageTooBig(imageTooBig);
-    emit q->requestImageRecalculation();
+    Q_EMIT q->requestShowImageTooBig(imageTooBig);
+    Q_EMIT q->requestImageRecalculation();
 }

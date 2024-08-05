@@ -292,7 +292,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                 /**
                  * Optimization Hack Alert:
                  *
-                 * ideally, we should emit all four signals, but... The
+                 * ideally, we should Q_EMIT all four signals, but... The
                  * point is this code is used in a tight loop during
                  * playback, so it should run as fast as possible. To tell
                  * the story short, commenting out these three lines makes
@@ -300,7 +300,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                  */
 
                 if (m_d->scrubInProgress) {
-                    emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
+                    Q_EMIT dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
 
                     /*
                      * In order to try to correct rendering issues while preserving performance, we will
@@ -314,14 +314,14 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                     m_d->scrubHeaderUpdateCompressor->start(m_d->activeFrameIndex);
 
                     // vvvvvvvvvvvvvvvvvvvvv Read above comment.. This fixes all timeline rendering issues, but at what cost???
-                    //emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-                    //emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
-                    //emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
+                    //Q_EMIT dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
+                    //Q_EMIT headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+                    //Q_EMIT headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
                 } else {
-                    emit dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
-                    emit dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
-                    emit headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
-                    emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
+                    Q_EMIT dataChanged(this->index(0, prevFrame), this->index(rowCount() - 1, prevFrame));
+                    Q_EMIT dataChanged(this->index(0, m_d->activeFrameIndex), this->index(rowCount() - 1, m_d->activeFrameIndex));
+                    Q_EMIT headerDataChanged (Qt::Horizontal, prevFrame, prevFrame);
+                    Q_EMIT headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
                 }
             }
             break;
@@ -340,7 +340,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
 
 void KisTimeBasedItemModel::scrubHorizontalHeaderUpdate(int activeColumn)
 {
-    emit headerDataChanged (Qt::Horizontal, m_d->scrubHeaderMin, m_d->scrubHeaderMax);
+    Q_EMIT headerDataChanged (Qt::Horizontal, m_d->scrubHeaderMin, m_d->scrubHeaderMax);
     m_d->scrubHeaderMin = activeColumn;
     m_d->scrubHeaderMax = activeColumn;
 }
@@ -566,7 +566,7 @@ void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
 
 void KisTimeBasedItemModel::slotFramerateChanged()
 {
-    emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
+    Q_EMIT headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
 void KisTimeBasedItemModel::slotPlaybackRangeChanged()
@@ -594,7 +594,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
             m_d->framesCache->frameStatus(i) == KisAnimationFrameCache::Cached;
     }
 
-    emit headerDataChanged(Qt::Horizontal, 0, numFrames);
+    Q_EMIT headerDataChanged(Qt::Horizontal, 0, numFrames);
 }
 
 

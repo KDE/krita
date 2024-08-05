@@ -87,7 +87,7 @@ void KisRecentFilesManager::loadEntries(const KConfigGroup &_config)
         });
     }
 
-    emit listRenewed();
+    Q_EMIT listRenewed();
 }
 
 void KisRecentFilesManager::saveEntries(const KConfigGroup &_cg)
@@ -143,7 +143,7 @@ void KisRecentFilesManager::add(const QUrl &url)
         int removeIndex = m_d->indexOfUrl(url);
         if (removeIndex >= 0) {
             m_d->m_entries.removeAt(removeIndex);
-            emit fileRemoved(url);
+            Q_EMIT fileRemoved(url);
         }
     }
 
@@ -157,6 +157,6 @@ void KisRecentFilesManager::add(const QUrl &url)
         url, // m_url
         tmpName, // m_displayName
     });
-    emit fileAdded(url);
+    Q_EMIT fileAdded(url);
     m_d->requestSaveOnNextTick();
 }

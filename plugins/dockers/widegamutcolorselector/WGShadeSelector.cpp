@@ -105,7 +105,7 @@ void WGShadeSelector::slotChannelValuesChanged(const QVector4D &values)
 void WGShadeSelector::slotSliderValuesChanged(const QVector4D &values)
 {
     m_allowUpdates = false;
-    emit sigChannelValuesChanged(values);
+    Q_EMIT sigChannelValuesChanged(values);
     m_allowUpdates = true;
 }
 
@@ -118,11 +118,11 @@ void WGShadeSelector::slotSliderInteraction(bool active)
                 slider->resetHandle();
             }
         }
-        emit sigColorInteraction(active);
+        Q_EMIT sigColorInteraction(active);
         if (activeLine) {
             // the line may have different channel values at any position than the last used one
             m_allowUpdates = false;
-            emit sigChannelValuesChanged(activeLine->channelValues());
+            Q_EMIT sigChannelValuesChanged(activeLine->channelValues());
             m_allowUpdates = true;
         }
     }
@@ -133,7 +133,7 @@ void WGShadeSelector::slotSliderInteraction(bool active)
                 slider->slotSetChannelValues(m_model->channelValues());
             }
         }
-        emit sigColorInteraction(active);
+        Q_EMIT sigColorInteraction(active);
     }
 }
 

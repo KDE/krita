@@ -140,5 +140,5 @@ void KisColorHistory::colorHistoryChanged(const QList<KoColor> &history)
 
 void KisColorHistoryNotifier::notifyColorHistoryChanged(const QList<KoColor> &history)
 {
-    emit colorHistoryChanged(history);
+    Q_EMIT colorHistoryChanged(history);
 }

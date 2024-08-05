@@ -46,7 +46,7 @@ void KisIdleTaskStrokeStrategy::initStrokeCallback()
 
 void KisIdleTaskStrokeStrategy::finishStrokeCallback()
 {
-    emit sigIdleTaskFinished();
+    Q_EMIT sigIdleTaskFinished();
 
     /**
      * Just a small sanity check if idle tasks don't occupy too much time

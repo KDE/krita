@@ -420,7 +420,7 @@ void KisPopupPalette::slotEmitColorChanged()
 {
     if (isVisible()) {
         update();
-        emit sigChangefGColor(m_colorSelector->getCurrentColor());
+        Q_EMIT sigChangefGColor(m_colorSelector->getCurrentColor());
     }
 }
 
@@ -468,7 +468,7 @@ void KisPopupPalette::setSelectedColor(int x)
 }
 
 void KisPopupPalette::slotZoomSliderChanged(int zoom) {
-    emit zoomLevelChanged(zoom);
+    Q_EMIT zoomLevelChanged(zoom);
 }
 
 void KisPopupPalette::slotZoomSliderPressed()
@@ -852,7 +852,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
             m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle);
 
             update();
-            emit sigUpdateCanvas();
+            Q_EMIT sigUpdateCanvas();
         }
     }
 
@@ -937,7 +937,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                 canvasController->rotateCanvas(angleDifference);
                 m_canvasRotationIndicatorRect = rotationIndicatorRect(0);
 
-                emit sigUpdateCanvas();
+                Q_EMIT sigUpdateCanvas();
             }
         }
     }
@@ -1121,7 +1121,7 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
         //in favorite brushes area
         if (hoveredPreset() > -1) {
             //setSelectedBrush(hoveredBrush());
-            emit sigChangeActivePaintop(hoveredPreset());
+            Q_EMIT sigChangeActivePaintop(hoveredPreset());
         }
 
         if (m_showColorHistory) {
@@ -1130,12 +1130,12 @@ void KisPopupPalette::mouseReleaseEvent(QMouseEvent *event)
                 int pos = calculateColorIndex(point, m_resourceManager->recentColorsTotal());
 
                 if (pos >= 0 && pos < m_resourceManager->recentColorsTotal()) {
-                    emit sigUpdateRecentColor(pos);
+                    Q_EMIT sigUpdateRecentColor(pos);
                 }
             }
         }
     } else if (event->button() == Qt::RightButton) {
-        emit finished();
+        Q_EMIT finished();
     }
 }
 

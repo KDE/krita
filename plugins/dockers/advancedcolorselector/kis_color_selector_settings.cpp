@@ -254,7 +254,7 @@ void KisColorSelectorSettings::savePreferences() const
     hotkeycfg.writeEntry("steps_redgreen", ui->sb_rg->value());
     hotkeycfg.writeEntry("steps_blueyellow", ui->sb_by->value());
 
-    emit settingsChanged();
+    Q_EMIT settingsChanged();
     KisConfigNotifier::instance()->notifyColorHistoryModeChanged();
 }
 
@@ -282,7 +282,7 @@ void KisColorSelectorSettings::changedACSColorSelectorType(int index)
     }
 
     ui->colorSelectorConfiguration->update();
-    emit hsxchanged(index);
+    Q_EMIT hsxchanged(index);
 
 }
 

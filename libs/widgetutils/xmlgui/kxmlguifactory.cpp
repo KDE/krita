@@ -227,7 +227,7 @@ void KisKXMLGUIFactory::addClient(KisKXMLGUIClient *client)
     }
 
     if (d->emptyState()) {
-        emit makingChanges(true);
+        Q_EMIT makingChanges(true);
     }
     d->pushState();
 
@@ -296,7 +296,7 @@ void KisKXMLGUIFactory::addClient(KisKXMLGUIClient *client)
 
     d->popState();
 
-    emit clientAdded(client);
+    Q_EMIT clientAdded(client);
 
     // build child clients
     Q_FOREACH (KisKXMLGUIClient *child, client->childClients()) {
@@ -304,7 +304,7 @@ void KisKXMLGUIFactory::addClient(KisKXMLGUIClient *client)
     }
 
     if (d->emptyState()) {
-        emit makingChanges(false);
+        Q_EMIT makingChanges(false);
     }
     /*
         QString unaddedActions;
@@ -388,7 +388,7 @@ void KisKXMLGUIFactory::removeClient(KisKXMLGUIClient *client)
     }
 
     if (d->emptyState()) {
-        emit makingChanges(true);
+        Q_EMIT makingChanges(true);
     }
 
     // remove this client from our client list
@@ -433,10 +433,10 @@ void KisKXMLGUIFactory::removeClient(KisKXMLGUIClient *client)
     d->popState();
 
     if (d->emptyState()) {
-        emit makingChanges(false);
+        Q_EMIT makingChanges(false);
     }
 
-    emit clientRemoved(client);
+    Q_EMIT clientRemoved(client);
 }
 
 QList<KisKXMLGUIClient *> KisKXMLGUIFactory::clients() const

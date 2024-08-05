@@ -98,7 +98,7 @@ void KisKShortcutWidget::setShortcut(const QList<QKeySequence> &newSc)
 
     d->holdChangedSignal = false;
 
-    emit shortcutChanged(d->cut);
+    Q_EMIT shortcutChanged(d->cut);
 }
 
 //slot
@@ -117,7 +117,7 @@ void KisKShortcutWidgetPrivate::priKeySequenceChanged(const QKeySequence &seq)
     }
 
     if (!holdChangedSignal) {
-        emit q->shortcutChanged(cut);
+        Q_EMIT q->shortcutChanged(cut);
     }
 }
 
@@ -131,7 +131,7 @@ void KisKShortcutWidgetPrivate::altKeySequenceChanged(const QKeySequence &seq)
     }
 
     if (!holdChangedSignal) {
-        emit q->shortcutChanged(cut);
+        Q_EMIT q->shortcutChanged(cut);
     }
 }
 

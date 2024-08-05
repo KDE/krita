@@ -402,11 +402,11 @@ public:
     void emitSignals() const
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-        emit m_q->textChanged(m_q->text());
+        Q_EMIT m_q->textChanged(m_q->text());
 #else
-        emit m_q->valueChanged(m_q->text());
+        Q_EMIT m_q->valueChanged(m_q->text());
 #endif
-        emit m_q->valueChanged(m_q->value());
+        Q_EMIT m_q->valueChanged(m_q->value());
     }
 
     bool qResizeEvent(QResizeEvent*)
@@ -755,7 +755,7 @@ public:
                 QTimer::singleShot(0, &m_startEditingSignalProxy, SLOT(start()));
             // Releasing the left mouse button stops the dragging and also
             // the "enter edition mode" timer. If signals must be blocked when
-            // dragging then we set the value here and emit a signal
+            // dragging then we set the value here and Q_EMIT a signal
             } else if (e->button() == Qt::LeftButton) {
                 m_timerStartEditing.stop();
 
@@ -770,7 +770,7 @@ public:
                 }
 
                 m_isDragging = false;
-                emit m_q->draggingFinished();
+                Q_EMIT m_q->draggingFinished();
             }
             return true;
         }

@@ -220,7 +220,7 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
 
     m_d->guiSignalsBlocked = false;
 
-    emit gridValueChanged();
+    Q_EMIT gridValueChanged();
 }
 
 void GridConfigWidget::setGuidesConfigImpl(const KisGuidesConfig &value)
@@ -237,7 +237,7 @@ void GridConfigWidget::setGuidesConfigImpl(const KisGuidesConfig &value)
 
     m_d->guiSignalsBlocked = false;
 
-    emit guidesValueChanged();
+    Q_EMIT guidesValueChanged();
 }
 
 KisGridConfig GridConfigWidget::gridConfig() const
@@ -253,7 +253,7 @@ KisGuidesConfig GridConfigWidget::guidesConfig() const
 
 void GridConfigWidget::removeAllGuides() {
     m_d->guidesConfig.removeAllGuides();
-    emit guidesValueChanged();
+    Q_EMIT guidesValueChanged();
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const

@@ -547,7 +547,7 @@ void KisClipboard::clipboardDataChanged()
                 || (cbData && cbData->hasFormat("application/x-krita-selection"));
     }
     d->pushedClipboard = false;
-    emit clipChanged();
+    Q_EMIT clipChanged();
 }
 
 bool KisClipboard::hasClip() const

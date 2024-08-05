@@ -667,8 +667,8 @@ bool StoryboardDelegate::eventFilter(QObject *editor, QEvent *event)
         QKeyEvent* kEvent = static_cast<QKeyEvent*>(event);
         QTextEdit* textEditor = qobject_cast<QTextEdit*>(editor);
         if (textEditor && kEvent->key() == Qt::Key_Escape) {
-            emit commitData(textEditor);
-            emit closeEditor(textEditor, QAbstractItemDelegate::SubmitModelCache);
+            Q_EMIT commitData(textEditor);
+            Q_EMIT closeEditor(textEditor, QAbstractItemDelegate::SubmitModelCache);
             return true;
         }
     }

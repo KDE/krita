@@ -97,7 +97,7 @@ void KisWdgBlur::sldHalfWidthChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisWdgBlur::sldHalfHeightChanged(int v)
@@ -111,6 +111,6 @@ void KisWdgBlur::sldHalfHeightChanged(int v)
             widget()->intAngle->setEnabled(false);
         else
             widget()->intAngle->setEnabled(true);*/
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 

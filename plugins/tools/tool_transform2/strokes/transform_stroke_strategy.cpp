@@ -291,7 +291,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             putDeviceCache(rootNode->paintDevice(), cacheDevice);
         }
 
-        emit sigPreviewDeviceReady(previewDevice);
+        Q_EMIT sigPreviewDeviceReady(previewDevice);
     }
     else if (td) {
         if (td->destination == TransformData::PAINT_DEVICE) {
@@ -652,7 +652,7 @@ void TransformStrokeStrategy::initStrokeCallback()
             transaction.setConvexHull(calculateConvexHull());
             transaction.setConvexHullHasBeenRequested(true);
         }
-        emit this->sigTransactionGenerated(transaction, initialTransformArgs, this);
+        Q_EMIT this->sigTransactionGenerated(transaction, initialTransformArgs, this);
     });
 
     extraInitJobs << new PreparePreviewData();

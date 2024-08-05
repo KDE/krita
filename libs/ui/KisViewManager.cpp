@@ -1529,7 +1529,7 @@ void KisViewManager::showFloatingMessage(const QString &message, const QIcon& ic
     if (!d->currentImageView) return;
     d->currentImageView->showFloatingMessage(message, icon, timeout, priority, alignment);
 
-    emit floatingMessageRequested(message, icon.name());
+    Q_EMIT floatingMessageRequested(message, icon.name());
 }
 
 KisMainWindow *KisViewManager::mainWindow() const
@@ -1694,7 +1694,7 @@ void KisViewManager::slotToggleBrushOutline()
 
     cfg.setNewOutlineStyle(style);
 
-    emit brushOutlineToggled();
+    Q_EMIT brushOutlineToggled();
 }
 
 void KisViewManager::slotResetRotation()

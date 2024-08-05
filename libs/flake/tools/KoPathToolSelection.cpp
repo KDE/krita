@@ -67,7 +67,7 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
             it = m_shapePointMap.insert(pathShape, QSet<KoPathPoint *>());
         }
         it.value().insert(point);
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
     }
 }
 
@@ -79,7 +79,7 @@ void KoPathToolSelection::remove(KoPathPoint * point)
         if (m_shapePointMap[pathShape].size() == 0) {
             m_shapePointMap.remove(pathShape);
         }
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
     }
 }
 
@@ -87,7 +87,7 @@ void KoPathToolSelection::clear()
 {
     m_selectedPoints.clear();
     m_shapePointMap.clear();
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
@@ -105,7 +105,7 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
             add(point, false);
     }
     blockSignals(false);
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 void KoPathToolSelection::selectAll()
@@ -119,7 +119,7 @@ void KoPathToolSelection::selectAll()
             add(point, false);
     }
     blockSignals(false);
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 int KoPathToolSelection::objectCount() const
@@ -234,7 +234,7 @@ void KoPathToolSelection::update()
     }
 
     if (selectionHasChanged)
-        emit selectionChanged();
+        Q_EMIT selectionChanged();
 }
 
 bool KoPathToolSelection::hasSelection()
@@ -257,7 +257,7 @@ void KoPathToolSelection::recommendPointSelectionChange(KoPathShape *shape, cons
         add(point, false);
     }
 
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 void KoPathToolSelection::notifyPathPointsChanged(KoPathShape *shape)
@@ -271,7 +271,7 @@ void KoPathToolSelection::notifyPathPointsChanged(KoPathShape *shape)
 
     m_tool->notifyPathPointsChanged(shape);
 
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 void KoPathToolSelection::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)

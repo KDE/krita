@@ -502,7 +502,7 @@ void KisToolCrop::setCropType(KisToolCrop::CropToolType cropType)
 
     configGroup.writeEntry("cropType", static_cast<int>(cropType));
 
-    emit cropTypeChanged(m_cropType);
+    Q_EMIT cropTypeChanged(m_cropType);
 }
 
 KisToolCrop::CropToolType KisToolCrop::cropType() const
@@ -515,7 +515,7 @@ void KisToolCrop::setCropTypeSelectable(bool selectable)
     if(selectable == m_cropTypeSelectable)
         return;
     m_cropTypeSelectable = selectable;
-    emit cropTypeSelectableChanged();
+    Q_EMIT cropTypeSelectableChanged();
 }
 
 bool KisToolCrop::cropTypeSelectable() const
@@ -534,7 +534,7 @@ void KisToolCrop::setDecoration(int i)
     if(i < 0 || i > DECORATION_COUNT)
         return;
     m_decoration = i;
-    emit decorationChanged(decoration());
+    Q_EMIT decorationChanged(decoration());
     updateCanvasViewRect(boundingRect());
 
     configGroup.writeEntry("decoration", i);
@@ -548,17 +548,17 @@ void KisToolCrop::doCanvasUpdate(const QRect &updateRect)
 
 void KisToolCrop::slotRectChanged()
 {
-    emit cropHeightChanged(cropHeight());
-    emit cropWidthChanged(cropWidth());
-    emit cropXChanged(cropX());
-    emit cropYChanged(cropY());
-    emit ratioChanged(ratio());
-    emit lockHeightChanged(lockHeight());
-    emit lockWidthChanged(lockWidth());
-    emit lockRatioChanged(lockRatio());
+    Q_EMIT cropHeightChanged(cropHeight());
+    Q_EMIT cropWidthChanged(cropWidth());
+    Q_EMIT cropXChanged(cropX());
+    Q_EMIT cropYChanged(cropY());
+    Q_EMIT ratioChanged(ratio());
+    Q_EMIT lockHeightChanged(lockHeight());
+    Q_EMIT lockWidthChanged(lockWidth());
+    Q_EMIT lockRatioChanged(lockRatio());
 
-    emit canGrowChanged(allowGrow());
-    emit isCenteredChanged(growCenter());
+    Q_EMIT canGrowChanged(allowGrow());
+    Q_EMIT isCenteredChanged(growCenter());
 
     doCanvasUpdate(boundingRect().toAlignedRect());
 }
@@ -665,7 +665,7 @@ void KisToolCrop::setAllowGrow(bool g)
     m_finalRect.setCropRect(image()->bounds());
     configGroup.writeEntry("allowGrow", g);
 
-    emit canGrowChanged(g);
+    Q_EMIT canGrowChanged(g);
 }
 
 bool KisToolCrop::allowGrow() const
@@ -680,7 +680,7 @@ void KisToolCrop::setGrowCenter(bool value)
 
     configGroup.writeEntry("growCenter", value);
 
-    emit isCenteredChanged(value);
+    Q_EMIT isCenteredChanged(value);
 }
 
 bool KisToolCrop::growCenter() const

@@ -291,7 +291,7 @@ void MoveStrokeStrategy::initStrokeCallback()
     }
 
     if (m_nodes.isEmpty()) {
-        emit sigStrokeStartedEmpty();
+        Q_EMIT sigStrokeStartedEmpty();
         return;
     }
 
@@ -357,7 +357,7 @@ void MoveStrokeStrategy::initStrokeCallback()
             KisLodTransform t(m_nodes.first()->image()->currentLevelOfDetail());
             handlesRect = t.mapInverted(handlesRect);
 
-            emit this->sigHandlesRectCalculated(handlesRect);
+            Q_EMIT this->sigHandlesRectCalculated(handlesRect);
         }
 
         m_updateTimer.start();
@@ -417,7 +417,7 @@ void MoveStrokeStrategy::cancelStrokeCallback()
 
                 m_dirtyRects[node] |= dirtyRect;
 
-                /// emit updates not looking onto the
+                /// Q_EMIT updates not looking onto the
                 /// updatesEnabled switch, since that is
                 /// the end of the stroke
                 m_updatesFacade->refreshGraphAsync(node, dirtyRect);
@@ -447,7 +447,7 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (PickLayerData *pickData = dynamic_cast<PickLayerData*>(data)) {
         KisNodeSelectionRecipe clone = m_requestedNodeSelection;
         clone.pickPoint = pickData->pos;
-        emit sigLayersPicked(clone.selectNodesToProcess());
+        Q_EMIT sigLayersPicked(clone.selectNodesToProcess());
         return;
     }
 

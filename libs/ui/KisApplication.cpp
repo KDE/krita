@@ -313,7 +313,7 @@ bool KisApplication::event(QEvent *event)
     #ifdef Q_OS_MACOS
     if (event->type() == QEvent::FileOpen) {
         QFileOpenEvent *openEvent = static_cast<QFileOpenEvent *>(event);
-        emit fileOpenRequest(openEvent->file());
+        Q_EMIT fileOpenRequest(openEvent->file());
         return true;
     }
     #endif

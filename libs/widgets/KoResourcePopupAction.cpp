@@ -152,7 +152,7 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
             qSharedPointerDynamicCast<KoPatternBackground>(d->background)->setPattern(pattern->pattern());
         }
 
-        emit resourceSelected(d->background);
+        Q_EMIT resourceSelected(d->background);
 
         updateIcon();
     }

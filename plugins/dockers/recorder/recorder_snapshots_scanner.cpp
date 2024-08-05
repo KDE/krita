@@ -65,7 +65,7 @@ void RecorderSnapshotsScanner::run()
         }
     }
 
-    emit scanningFinished(result);
+    Q_EMIT scanningFinished(result);
 }
 
 

@@ -952,7 +952,7 @@ QString KisResourceLocator::filePathForResource(KoResourceSP resource)
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)
 {
-    emit progressMessage(i18n("Krita is running for the first time. Initialization will take some time."));
+    Q_EMIT progressMessage(i18n("Krita is running for the first time. Initialization will take some time."));
     Q_UNUSED(initializationStatus);
 
     Q_FOREACH(const QString &folder, KisResourceLoaderRegistry::instance()->resourceTypes()) {
@@ -984,7 +984,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Initi
     QDirIterator iter(installationResourcesLocation, filters, QDir::Files, QDirIterator::Subdirectories);
     while (iter.hasNext()) {
         iter.next();
-        emit progressMessage(i18n("Installing the resources from bundle %1.", iter.filePath()));
+        Q_EMIT progressMessage(i18n("Installing the resources from bundle %1.", iter.filePath()));
         QFile f(iter.filePath());
         Q_ASSERT(f.exists());
         if (!f.copy(d->resourceLocation + '/' + iter.fileName())) {
@@ -1006,7 +1006,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Initi
 
 bool KisResourceLocator::initializeDb()
 {
-    emit progressMessage(i18n("Initializing the resources."));
+    Q_EMIT progressMessage(i18n("Initializing the resources."));
     d->errorMessages.clear();
     findStorages();
 
@@ -1191,7 +1191,7 @@ bool KisResourceLocator::synchronizeDb()
                 qWarning() << d->errorMessages;
                 return false;
             }
-            emit storageRemoved(this->makeStorageLocationAbsolute(location));
+            Q_EMIT storageRemoved(this->makeStorageLocationAbsolute(location));
         }
     }
 

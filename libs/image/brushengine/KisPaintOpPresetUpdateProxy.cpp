@@ -39,15 +39,15 @@ void KisPaintOpPresetUpdateProxy::notifySettingsChanged()
     if (m_d->updatesBlocked) {
         m_d->numUpdatesWhileBlocked++;
     } else {
-        emit sigSettingsChangedUncompressedEarlyWarning();
-        emit sigSettingsChangedUncompressed();
+        Q_EMIT sigSettingsChangedUncompressedEarlyWarning();
+        Q_EMIT sigSettingsChangedUncompressed();
         m_d->updatesCompressor.start();
     }
 }
 
 void KisPaintOpPresetUpdateProxy::notifyUniformPropertiesChanged()
 {
-    emit sigUniformPropertiesChanged();
+    Q_EMIT sigUniformPropertiesChanged();
 }
 
 void KisPaintOpPresetUpdateProxy::postponeSettingsChanges()
@@ -61,9 +61,9 @@ void KisPaintOpPresetUpdateProxy::unpostponeSettingsChanges()
 
     if (!m_d->updatesBlocked && m_d->numUpdatesWhileBlocked) {
         m_d->numUpdatesWhileBlocked = 0;
-        emit sigSettingsChangedUncompressedEarlyWarning();
-        emit sigSettingsChangedUncompressed();
-        emit sigSettingsChanged();
+        Q_EMIT sigSettingsChangedUncompressedEarlyWarning();
+        Q_EMIT sigSettingsChangedUncompressed();
+        Q_EMIT sigSettingsChanged();
     }
 }
 
@@ -72,6 +72,6 @@ void KisPaintOpPresetUpdateProxy::slotDeliverSettingsChanged()
     if (m_d->updatesBlocked) {
         m_d->numUpdatesWhileBlocked++;
     } else {
-        emit sigSettingsChanged();
+        Q_EMIT sigSettingsChanged();
     }
 }

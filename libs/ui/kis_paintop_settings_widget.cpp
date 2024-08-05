@@ -242,10 +242,10 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
             m_d->model->signalDataChanged(index);
 
             if (m_saveLockedOption){
-                emit sigSaveLockedConfig(p);
+                Q_EMIT sigSaveLockedConfig(p);
             }
             else {
-                emit sigDropLockedConfig(p);
+                Q_EMIT sigDropLockedConfig(p);
             }
             m_saveLockedOption = false;
         }
@@ -264,7 +264,7 @@ void KisPaintOpSettingsWidget::slotLockPropertiesSave()
 void KisPaintOpSettingsWidget::slotEntryChecked(const QModelIndex &index)
 {
     Q_UNUSED(index);
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 bool KisPaintOpSettingsWidget::eventFilter(QObject *obj, QEvent *event)

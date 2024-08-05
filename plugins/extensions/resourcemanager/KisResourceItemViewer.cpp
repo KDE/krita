@@ -75,7 +75,7 @@ void KisResourceItemViewer::slotViewThumbnail()
     } else {
         cfg.writeEntry("ResourceItemsBCSelected.viewMode", qint32(1));
     }
-    emit onViewThumbnail();
+    Q_EMIT onViewThumbnail();
 }
 
 void KisResourceItemViewer::slotViewDetails()
@@ -88,6 +88,6 @@ void KisResourceItemViewer::slotViewDetails()
     } else {
         cfg.writeEntry("ResourceItemsBCSelected.viewMode", qint32(0));
     }
-    emit onViewDetails();
+    Q_EMIT onViewDetails();
 }
 

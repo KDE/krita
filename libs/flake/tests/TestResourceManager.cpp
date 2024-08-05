@@ -176,7 +176,7 @@ struct ComplexMediator : public KoResourceUpdateMediator
     }
 
     void forceNotify() {
-        emit sigResourceChanged(key());
+        Q_EMIT sigResourceChanged(key());
     }
 
     QVariant m_res;

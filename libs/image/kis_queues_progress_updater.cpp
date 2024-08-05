@@ -82,14 +82,14 @@ void KisQueuesProgressUpdater::updateProgress(int queueSizeMetric, const QString
     if (m_d->queueSizeMetric && !m_d->tickingRequested) {
 
         m_d->tickingRequested = true;
-        emit sigStartTicking();
+        Q_EMIT sigStartTicking();
 
     } else if (!m_d->queueSizeMetric && m_d->tickingRequested) {
 
         m_d->initialQueueSizeMetric = 0;
         m_d->jobName.clear();
         m_d->tickingRequested = false;
-        emit sigStopTicking();
+        Q_EMIT sigStopTicking();
     }
 }
 

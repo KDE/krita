@@ -205,7 +205,7 @@ void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset
     v.setValue(preset);
     m_resourceManager->setResource(KoCanvasResource::CurrentPaintOpPreset, v);
 
-    emit sigPaintOpPresetChanged(preset);
+    Q_EMIT sigPaintOpPresetChanged(preset);
 }
 
 KisPaintOpPresetSP KisCanvasResourceProvider::previousPreset() const
@@ -231,7 +231,7 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResourceSP res)
     QVariant v;
     v.setValue<KoPatternSP>(pattern);
     m_resourceManager->setResource(KoCanvasResource::CurrentPattern, v);
-    emit sigPatternChanged(pattern);
+    Q_EMIT sigPatternChanged(pattern);
 }
 
 void KisCanvasResourceProvider::slotGradientActivated(KoResourceSP res)
@@ -241,7 +241,7 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResourceSP res)
     QVariant v;
     v.setValue<KoAbstractGradientSP>(gradient);
     m_resourceManager->setResource(KoCanvasResource::CurrentGradient, v);
-    emit sigGradientChanged(gradient);
+    Q_EMIT sigGradientChanged(gradient);
 }
 
 
@@ -250,7 +250,7 @@ void KisCanvasResourceProvider::setBGColor(const KoColor& c)
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResource::BackgroundColor, v);
-    emit sigBGColorChanged(c);
+    Q_EMIT sigBGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::setFGColor(const KoColor& c)
@@ -260,7 +260,7 @@ void KisCanvasResourceProvider::setFGColor(const KoColor& c)
     QVariant v;
     v.setValue(c);
     m_resourceManager->setResource(KoCanvasResource::ForegroundColor, v);
-    emit sigFGColorChanged(c);
+    Q_EMIT sigFGColorChanged(c);
 }
 
 void KisCanvasResourceProvider::slotSetFGColor(const KoColor& c)
@@ -278,7 +278,7 @@ void KisCanvasResourceProvider::slotNodeActivated(const KisNodeSP node)
     QVariant v;
     v.setValue(KisNodeWSP(node));
     m_resourceManager->setResource(KoCanvasResource::CurrentKritaNode, v);
-    emit sigNodeChanged(currentNode());
+    Q_EMIT sigNodeChanged(currentNode());
 }
 
 
@@ -306,7 +306,7 @@ void KisCanvasResourceProvider::slotOnScreenResolutionChanged()
     qreal scaleX = zoomX / image->xRes();
     qreal scaleY = zoomY / image->yRes();
 
-    emit sigOnScreenResolutionChanged(scaleX, scaleY);
+    Q_EMIT sigOnScreenResolutionChanged(scaleX, scaleY);
 }
 
 void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVariant & res)
@@ -314,26 +314,26 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
     switch (key) {
     case(KoCanvasResource::ForegroundColor):
         m_fGChanged = true;
-        emit sigFGColorChanged(res.value<KoColor>());
+        Q_EMIT sigFGColorChanged(res.value<KoColor>());
         break;
     case(KoCanvasResource::BackgroundColor):
-        emit sigBGColorChanged(res.value<KoColor>());
+        Q_EMIT sigBGColorChanged(res.value<KoColor>());
         break;
     case(KoCanvasResource::CurrentPattern):
-        emit sigPatternChanged(res.value<KoPatternSP>());
+        Q_EMIT sigPatternChanged(res.value<KoPatternSP>());
         break;
     case(KoCanvasResource::CurrentGradient):
-        emit sigGradientChanged(res.value<KoAbstractGradientSP>());
+        Q_EMIT sigGradientChanged(res.value<KoAbstractGradientSP>());
         break;
     case(KoCanvasResource::CurrentKritaNode) :
-        emit sigNodeChanged(currentNode());
+        Q_EMIT sigNodeChanged(currentNode());
         break;
     case(KoCanvasResource::CurrentEffectiveCompositeOp) :
-        emit sigEffectiveCompositeOpChanged();
+        Q_EMIT sigEffectiveCompositeOpChanged();
         break;
     case (KoCanvasResource::Opacity):
     {
-        emit sigOpacityChanged(res.toDouble());
+        Q_EMIT sigOpacityChanged(res.toDouble());
     }
     default:
         ;
@@ -366,7 +366,7 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 void KisCanvasResourceProvider::slotPainting()
 {
     if (m_fGChanged) {
-        emit sigFGColorUsed(fgColor());
+        Q_EMIT sigFGColorUsed(fgColor());
         m_fGChanged = false;
     }
 }
@@ -379,31 +379,31 @@ void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMaskSP mask)
 
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, QVariant::fromValue(true));
 
-    emit sigGamutMaskChanged(mask);
+    Q_EMIT sigGamutMaskChanged(mask);
 }
 
 void KisCanvasResourceProvider::slotGamutMaskUnset()
 {
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, QVariant::fromValue(false));
     m_resourceManager->clearResource(KoCanvasResource::CurrentGamutMask);
-    emit sigGamutMaskUnset();
+    Q_EMIT sigGamutMaskUnset();
 }
 
 void KisCanvasResourceProvider::slotGamutMaskPreviewUpdate()
 {
-    emit sigGamutMaskPreviewUpdate();
+    Q_EMIT sigGamutMaskPreviewUpdate();
 }
 
 void KisCanvasResourceProvider::slotGamutMaskDeactivate()
 {
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, QVariant::fromValue(false));
-    emit sigGamutMaskDeactivated();
+    Q_EMIT sigGamutMaskDeactivated();
 }
 
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorHorizontal, mirrorHorizontal);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorHorizontal() const
@@ -414,7 +414,7 @@ bool KisCanvasResourceProvider::mirrorHorizontal() const
 void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorVertical, mirrorVertical);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorVertical() const
@@ -425,7 +425,7 @@ bool KisCanvasResourceProvider::mirrorVertical() const
 void KisCanvasResourceProvider::setMirrorHorizontalLock(bool isLocked)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorHorizontalLock, isLocked);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 bool KisCanvasResourceProvider::mirrorHorizontalLock() {
@@ -435,7 +435,7 @@ bool KisCanvasResourceProvider::mirrorHorizontalLock() {
 void KisCanvasResourceProvider::setMirrorVerticalLock(bool isLocked)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorVerticalLock, isLocked);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -447,7 +447,7 @@ bool KisCanvasResourceProvider::mirrorVerticalHideDecorations() {
 void KisCanvasResourceProvider::setMirrorVerticalHideDecorations(bool hide)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorVerticalHideDecorations, hide);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -458,7 +458,7 @@ bool KisCanvasResourceProvider::mirrorHorizontalHideDecorations() {
 void KisCanvasResourceProvider::setMirrorHorizontalHideDecorations(bool hide)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorHorizontalHideDecorations, hide);
-    emit mirrorModeChanged();
+    Q_EMIT mirrorModeChanged();
 }
 
 
@@ -467,11 +467,11 @@ bool KisCanvasResourceProvider::mirrorVerticalLock() {
 }
 
 void KisCanvasResourceProvider::mirrorVerticalMoveCanvasToCenter() {
-     emit moveMirrorVerticalCenter();
+     Q_EMIT moveMirrorVerticalCenter();
 }
 
 void KisCanvasResourceProvider::mirrorHorizontalMoveCanvasToCenter() {
-     emit moveMirrorHorizontalCenter();
+     Q_EMIT moveMirrorHorizontalCenter();
 }
 
 
@@ -549,7 +549,7 @@ bool KisCanvasResourceProvider::disablePressure() const
 void KisCanvasResourceProvider::setTextPropertyData(KoSvgTextPropertyData data)
 {
     m_resourceManager->setResource(KoCanvasResource::SvgTextPropertyData, QVariant::fromValue(data));
-    emit sigTextPropertiesChanged();
+    Q_EMIT sigTextPropertiesChanged();
 }
 
 KoSvgTextPropertyData KisCanvasResourceProvider::textPropertyData() const
@@ -559,11 +559,11 @@ KoSvgTextPropertyData KisCanvasResourceProvider::textPropertyData() const
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResourceSP workspace)
 {
-    emit sigLoadingWorkspace(workspace);
+    Q_EMIT sigLoadingWorkspace(workspace);
 }
 
 void KisCanvasResourceProvider::notifySavingWorkspace(KisWorkspaceResourceSP workspace)
 {
-    emit sigSavingWorkspace(workspace);
+    Q_EMIT sigSavingWorkspace(workspace);
 }
 

@@ -180,9 +180,9 @@ public:
         if (fetchCategory(category)) return 0;
         DataItem *item = new DataItem(category, this);
 
-        emit beginInsertRow(m_items.size());
+        Q_EMIT beginInsertRow(m_items.size());
         m_items.append(item);
-        emit endInsertRow();
+        Q_EMIT endInsertRow();
         return item;
     }
 
@@ -197,10 +197,10 @@ public:
             if (!item->isCategory() &&
                 item->parentCategory()->name() == category) {
 
-                emit beginRemoveRow(row);
+                Q_EMIT beginRemoveRow(row);
                 it.remove();
                 delete item;
-                emit endRemoveRow();
+                Q_EMIT endRemoveRow();
             } else {
                 if (item->isCategory() && item->name() == category) {
                     Q_ASSERT(!categoryItem);
@@ -212,9 +212,9 @@ public:
 
         if (categoryItem) {
             int row = m_items.indexOf(categoryItem);
-            emit beginRemoveRow(row);
+            Q_EMIT beginRemoveRow(row);
             delete m_items.takeAt(row);
-            emit endRemoveRow();
+            Q_EMIT endRemoveRow();
         }
     }
 
@@ -225,9 +225,9 @@ public:
         }
         DataItem *item = new DataItem(entry, categoryItem, this);
 
-        emit beginInsertRow(m_items.size());
+        Q_EMIT beginInsertRow(m_items.size());
         m_items.append(item);
-        emit endInsertRow();
+        Q_EMIT endInsertRow();
         return item;
     }
 
@@ -236,9 +236,9 @@ public:
         if (!item) return;
 
         int row = m_items.indexOf(item);
-        emit beginRemoveRow(row);
+        Q_EMIT beginRemoveRow(row);
         delete m_items.takeAt(row);
-        emit endRemoveRow();
+        Q_EMIT endRemoveRow();
     }
 
     DataItem* fetchCategory(const QString &category) const {
@@ -301,7 +301,7 @@ public:
 
 private:
     void notifyItemChanged(DataItem *item) {
-        emit rowChanged(m_items.indexOf(item));
+        Q_EMIT rowChanged(m_items.indexOf(item));
     }
 
     void notifyCategoryExpanded(DataItem *categoryItem) {

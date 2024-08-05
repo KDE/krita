@@ -44,7 +44,7 @@ void KisFileNameRequester::setConfigurationName(const QString &name)
 void KisFileNameRequester::setFileName(const QString &path)
 {
     m_ui->txtFileName->setText(path);
-    emit fileSelected(path);
+    Q_EMIT fileSelected(path);
 }
 
 QString KisFileNameRequester::fileName() const

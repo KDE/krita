@@ -25,7 +25,7 @@ void KisConstrainedRect::setRectInitial(const QRect &rect)
     if (!ratioLocked()) {
         storeRatioSafe(m_rect.size());
     }
-    emit sigValuesChanged();
+    Q_EMIT sigValuesChanged();
 }
 
 void KisConstrainedRect::setCropRect(const QRect &cropRect)
@@ -225,7 +225,7 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
         }
     }
 
-    emit sigValuesChanged();
+    Q_EMIT sigValuesChanged();
 }
 
 QPointF KisConstrainedRect::handleSnapPoint(HandleType handle, const QPointF &cursorPos)
@@ -286,7 +286,7 @@ void KisConstrainedRect::setOffset(const QPoint &offset)
         m_rect = newRect;
     }
 
-    emit sigValuesChanged();
+    Q_EMIT sigValuesChanged();
 }
 
 void KisConstrainedRect::setRatio(qreal value) {
@@ -296,7 +296,7 @@ void KisConstrainedRect::setRatio(qreal value) {
     const qreal invEps = 1.0 / eps;
 
     if (value < eps || value > invEps) {
-        emit sigValuesChanged();
+        Q_EMIT sigValuesChanged();
         return;
     }
 
@@ -372,7 +372,7 @@ void KisConstrainedRect::assignNewSize(const QSize &newSize)
         m_rect &= m_cropRect;
     }
 
-    emit sigValuesChanged();
+    Q_EMIT sigValuesChanged();
 }
 
 void KisConstrainedRect::storeRatioSafe(const QSize &newSize)
@@ -406,14 +406,14 @@ void KisConstrainedRect::setWidthLocked(bool value) {
     m_widthLocked = value;
     m_ratioLocked &= !(m_widthLocked || m_heightLocked);
 
-    emit sigLockValuesChanged();
+    Q_EMIT sigLockValuesChanged();
 }
 
 void KisConstrainedRect::setHeightLocked(bool value) {
     m_heightLocked = value;
     m_ratioLocked &= !(m_widthLocked || m_heightLocked);
 
-    emit sigLockValuesChanged();
+    Q_EMIT sigLockValuesChanged();
 }
 
 void KisConstrainedRect::setRatioLocked(bool value) {
@@ -422,6 +422,6 @@ void KisConstrainedRect::setRatioLocked(bool value) {
     m_widthLocked &= !m_ratioLocked;
     m_heightLocked &= !m_ratioLocked;
 
-    emit sigLockValuesChanged();
+    Q_EMIT sigLockValuesChanged();
 }
 

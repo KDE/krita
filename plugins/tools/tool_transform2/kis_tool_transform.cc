@@ -184,7 +184,7 @@ KisToolTransform::~KisToolTransform()
 
 void KisToolTransform::outlineChanged()
 {
-    emit freeTransformChanged();
+    Q_EMIT freeTransformChanged();
     m_canvas->updateCanvas();
 }
 
@@ -668,7 +668,7 @@ void KisToolTransform::setTransformMode(KisToolTransform::TransformToolMode newM
             m_optionsWidget->slotSetMeshModeButtonClicked( true );
         }
 
-        emit transformModeChanged();
+        Q_EMIT transformModeChanged();
     }
 }
 

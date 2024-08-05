@@ -22,7 +22,7 @@ class KisViewManager;
 /**
  * Empty base class. Configurable resources like filters, paintops etc.
  * can build their own configuration widgets that inherit this class.
- * The configuration widget should emit sigConfigurationItemChanged
+ * The configuration widget should Q_EMIT sigConfigurationItemChanged
  * when it wants a preview updated; there is a timer that
  * waits a little time to see if there are more changes coming
  * and then emits sigConfigurationUpdated.
@@ -66,7 +66,7 @@ Q_SIGNALS:
     void sigConfigurationUpdated();
 
     /**
-     * Subclasses should emit this signal whenever the preview should be
+     * Subclasses should Q_EMIT this signal whenever the preview should be
      * be recalculated. This kicks of a timer, so it's perfectly fine
      * to connect this to the changed signals of the widgets in your configuration
      * widget.

@@ -736,7 +736,7 @@ void KoColorSet::setModified(bool _modified)
 {
     setDirty(_modified);
     if (_modified) {
-        emit modified();
+        Q_EMIT modified();
     }
 }
 

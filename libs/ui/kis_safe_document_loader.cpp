@@ -105,9 +105,9 @@ private Q_SLOTS:
                 entry.state = Exists;
 
                 if (oldState == Lost) {
-                    emit fileExistsStateChanged(path, true);
+                    Q_EMIT fileExistsStateChanged(path, true);
                 } else {
-                    emit fileChanged(path);
+                    Q_EMIT fileChanged(path);
                 }
 
             } else {
@@ -121,7 +121,7 @@ private Q_SLOTS:
                     if (entry.lostTimer.elapsed() > 10000) {
                         entry.state = Lost;
                         m_lostCompressor.start();
-                        emit fileExistsStateChanged(path, false);
+                        Q_EMIT fileExistsStateChanged(path, false);
                     } else {
                         m_reattachmentCompressor.start();
                     }
@@ -160,7 +160,7 @@ private Q_SLOTS:
 #endif
             }
         } else {
-            emit fileChanged(path);
+            Q_EMIT fileChanged(path);
         }
     }
 
@@ -273,7 +273,7 @@ void KisSafeDocumentLoader::fileChanged(QString path)
 void KisSafeDocumentLoader::slotFileExistsStateChanged(const QString &path, bool fileExists)
 {
     if (FileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
-        emit fileExistsStateChanged(fileExists);
+        Q_EMIT fileExistsStateChanged(fileExists);
         if (fileExists) {
             fileChanged(path);
         }
@@ -385,7 +385,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
         // Restart the attempt
         m_d->failureCount++;
         if (m_d->failureCount >= 3) {
-            emit loadingFailed();
+            Q_EMIT loadingFailed();
         }
         else {
             m_d->fileChangedSignalCompressor.start();
@@ -395,7 +395,7 @@ void KisSafeDocumentLoader::delayedLoadStart()
         KisPaintDeviceSP paintDevice = new KisPaintDevice(m_d->doc->image()->colorSpace());
         KisPaintDeviceSP projection = m_d->doc->image()->projection();
         paintDevice->makeCloneFrom(projection, projection->extent());
-        emit loadingFinished(paintDevice,
+        Q_EMIT loadingFinished(paintDevice,
                              m_d->doc->image()->xRes(),
                              m_d->doc->image()->yRes(),
                              m_d->doc->image()->size());

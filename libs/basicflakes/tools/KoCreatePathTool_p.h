@@ -420,7 +420,7 @@ public:
         KisConfig cfg(true);
         autoSmoothCurves = cfg.autoSmoothBezierCurves();
 
-        emit q->sigUpdateAutoSmoothCurvesGUI(autoSmoothCurves);
+        Q_EMIT q->sigUpdateAutoSmoothCurvesGUI(autoSmoothCurves);
     }
 
     void angleSnapChanged(int angleSnap) {

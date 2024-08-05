@@ -300,6 +300,12 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                         const KisPaintDeviceSP src = dev;
                         const KoID depthId = src->colorSpace()->colorDepthId();
                         const KoColorSpace *destCs = KoColorSpaceRegistry::instance()->rgb8();
+                        if (cs->colorModelId() == RGBAColorModelID) {
+                            // Preserve color profile if model is RGB
+                            destCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                                                  Integer8BitsColorDepthID.id(),
+                                                                                  src->colorSpace()->profile());
+                        }
                         const KoColorSpace *mixCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                                  depthId.id(),
                                                                                                  destCs->profile());
@@ -416,6 +422,12 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
                     const KisPaintDeviceSP src = document->savingImage()->projection();
                     const KoID depthId = src->colorSpace()->colorDepthId();
                     const KoColorSpace *destCs = KoColorSpaceRegistry::instance()->rgb8();
+                    if (cs->colorModelId() == RGBAColorModelID) {
+                        // Preserve color profile if model is RGB
+                        destCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
+                                                                              Integer8BitsColorDepthID.id(),
+                                                                              src->colorSpace()->profile());
+                    }
                     const KoColorSpace *mixCs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(),
                                                                                              depthId.id(),
                                                                                              destCs->profile());

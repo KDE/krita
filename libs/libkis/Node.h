@@ -576,6 +576,8 @@ public Q_SLOTS:
      * @brief paint a line on the canvas. Uses current brush preset
      * @param pointOne starting point
      * @param pointTwo end point
+     * @param pressureOne starting pressure
+     * @param pressureTwo end pressure
      * @param strokeStyle appearance of the outline, one of:
      * <ul>
      * <li>None - will use Foreground Color, since line would be invisible otherwise
@@ -583,7 +585,11 @@ public Q_SLOTS:
      * <li>BackgroundColor</li>
      * </ul>
      */
-    void paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle = PaintingResources::defaultStrokeStyle);
+    void paintLine(const QPointF pointOne,
+                   const QPointF pointTwo,
+                   double pressureOne = 1.0,
+                   double pressureTwo = 1.0,
+                   const QString strokeStyle = PaintingResources::defaultStrokeStyle);
 
     /**
      * @brief paint a rectangle on the canvas. Uses current brush preset

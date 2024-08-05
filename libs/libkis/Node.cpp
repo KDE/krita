@@ -863,7 +863,7 @@ QString Node::paintAbility()
     return "UNPAINTABLE";
 }
 
-void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle)
+void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, double pressureOne, double pressureTwo, const QString strokeStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintLine() on an unpaintable node, ignoring.";
@@ -871,11 +871,11 @@ void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, const QStri
     }
 
     KisPaintInformation pointOneInfo;
-    pointOneInfo.setPressure(1.0);
+    pointOneInfo.setPressure(pressureOne);
     pointOneInfo.setPos(pointOne);
 
     KisPaintInformation pointTwoInfo;
-    pointTwoInfo.setPressure(1.0);
+    pointTwoInfo.setPressure(pressureTwo);
     pointTwoInfo.setPos(pointTwo);
 
     KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle);

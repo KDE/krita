@@ -667,6 +667,8 @@ KisDocument::~KisDocument()
     delete d->koShapeController;
 
     if (d->image) {
+        d->image->animationInterface()->blockBackgroundFrameGeneration();
+
         d->image->notifyAboutToBeDeleted();
 
         /**

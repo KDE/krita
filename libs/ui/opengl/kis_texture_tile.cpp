@@ -122,7 +122,7 @@ int KisTextureTile::bindToActiveTexture(bool blockMipmapRegeneration)
     f->glBindTexture(GL_TEXTURE_2D, m_textureId);
 
     if (m_needsMipmapRegeneration && !blockMipmapRegeneration) {
-        f->glGenerateMipmap(GL_TEXTURE_2D);
+        regenerateMipmap();
         setPreparedLodPlane(0);
     }
 
@@ -141,6 +141,13 @@ void KisTextureTile::setNeedsMipmapRegeneration()
 void KisTextureTile::setPreparedLodPlane(int lod)
 {
     m_preparedLodPlane = lod;
+    m_needsMipmapRegeneration = false;
+}
+
+void KisTextureTile::regenerateMipmap()
+{
+    f->glGenerateMipmap(GL_TEXTURE_2D);
+    m_mipmapHasBeenAllocated = true;
     m_needsMipmapRegeneration = false;
 }
 
@@ -176,14 +183,22 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
      *
      * To avoid this issue, we should regenerate the dirty mipmap
      * *before* doing anything with the low-resolution plane.
+     *
+     * Another case is when the user has Bilinear or
+     * Nearest Neighbour filtering selected and tries to use LoD
+     * funcionality in animation. glTexSubImage2D() and textureLod()
+     * are defined only when all the planes were explicitly initialized
+     * with glTexImage2D(), which doesn't happen in case of bilinear- or
+     * nn-filtering. In this case !m_mipmapHasBeenAllocated condition
+     * comes in.
      */
     if (!blockMipmapRegeneration &&
         patchLevelOfDetail > 0 &&
-        m_needsMipmapRegeneration &&
-        !updateInfo.isEntireTileUpdated()) {
+        (m_needsMipmapRegeneration &&
+         !updateInfo.isEntireTileUpdated())
+            || !m_mipmapHasBeenAllocated) {
 
-        f->glGenerateMipmap(GL_TEXTURE_2D);
-        m_needsMipmapRegeneration = false;
+        regenerateMipmap();
     }
 
 

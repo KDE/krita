@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-01 03:25+0000\n"
+"POT-Creation-Date: 2024-08-06 03:18+0000\n"
 "PO-Revision-Date: 2024-07-28 19:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17096,7 +17096,7 @@ msgstr "İçe Aktarılmış Görsel"
 msgid "Selection Mask"
 msgstr "Seçim Maskesi"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2585
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19455,11 +19455,11 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/kis_node_manager.cpp:1288 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:969
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
-#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
+#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
+#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -30198,34 +30198,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Belgeyi Klonla"
 
-#: libs/ui/KisDocument.cpp:733
+#: libs/ui/KisDocument.cpp:735
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 yazılamadı. Lütfen başka bir adla kaydedin."
 
-#: libs/ui/KisDocument.cpp:783
+#: libs/ui/KisDocument.cpp:785
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:802
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Numaralandırılmış bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:822
+#: libs/ui/KisDocument.cpp:824
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Belge Dışa Aktarılıyor…"
 
-#: libs/ui/KisDocument.cpp:823
+#: libs/ui/KisDocument.cpp:825
 #, kde-format
 msgid "Saving Document..."
 msgstr "Belge Kaydediliyor…"
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:835
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30234,18 +30234,18 @@ msgstr ""
 "%1 kaydedilmeye başlanamadı. Geçerli kaydetme işlemi bitinceye değin "
 "bekleyin."
 
-#: libs/ui/KisDocument.cpp:962
+#: libs/ui/KisDocument.cpp:964
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "%1 dosyası kaydedilirken hata: %2"
 
-#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
 #, kde-format
 msgid "Could not save %1."
 msgstr "%1 kaydedilemedi."
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1001
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30253,45 +30253,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 kaydedildi; ancak tamamlanmamış"
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1007
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Kaydetme sırasında sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1024
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1428
+#: libs/ui/KisDocument.cpp:1430
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Kendiliğinden kaydediliyor… %1"
 
-#: libs/ui/KisDocument.cpp:1436
+#: libs/ui/KisDocument.cpp:1438
 #, kde-format
 msgid "Autosaving..."
 msgstr "Kendiliğinden kaydediliyor…"
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1444
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Kendiliğinden kaydetme ertelendi: Belge meşgul…"
 
-#: libs/ui/KisDocument.cpp:1585
+#: libs/ui/KisDocument.cpp:1587
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "%1 kendiliğinden kaydedilirken hata: %2"
 
-#: libs/ui/KisDocument.cpp:1599
+#: libs/ui/KisDocument.cpp:1601
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 kendiliğinden kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1843
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30300,38 +30300,38 @@ msgstr ""
 "Hatalı Oluşturulmuş Yol\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 dosyası yok."
 
-#: libs/ui/KisDocument.cpp:1936
+#: libs/ui/KisDocument.cpp:1938
 #, kde-format
 msgid "Opening document"
 msgstr "Belge açılıyor"
 
-#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
 #, kde-format
 msgid "Could not open %1."
 msgstr "%1 açılamadı."
 
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 açılırken sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:2110
+#: libs/ui/KisDocument.cpp:2112
 #, kde-format
 msgid "Not Saved"
 msgstr "Kaydedilmemiş"
 
-#: libs/ui/KisDocument.cpp:2592
+#: libs/ui/KisDocument.cpp:2594
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Arka Plan Dolgusu"
 
-#: libs/ui/KisDocument.cpp:2644
+#: libs/ui/KisDocument.cpp:2646
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

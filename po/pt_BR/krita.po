@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-01 03:25+0000\n"
+"POT-Creation-Date: 2024-08-06 03:18+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -17145,7 +17145,7 @@ msgstr "Imagem Importada"
 msgid "Selection Mask"
 msgstr "Seleção de Máscara"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2585
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -19515,11 +19515,11 @@ msgstr "Recursos locais"
 #: libs/ui/kis_node_manager.cpp:1288 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:969
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
-#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
+#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
+#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -30432,36 +30432,36 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Clonar o Documento"
 
-#: libs/ui/KisDocument.cpp:733
+#: libs/ui/KisDocument.cpp:735
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 não pode ser escrita. Salve com um nome diferente."
 
-#: libs/ui/KisDocument.cpp:783
+#: libs/ui/KisDocument.cpp:785
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Não foi possível criar uma ação."
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:802
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Não foi possível criar uma ação."
 
-#: libs/ui/KisDocument.cpp:822
+#: libs/ui/KisDocument.cpp:824
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Exportando Documento..."
 
-#: libs/ui/KisDocument.cpp:823
+#: libs/ui/KisDocument.cpp:825
 #, kde-format
 msgid "Saving Document..."
 msgstr "Salvando documento... "
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:835
 #, fuzzy, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30470,13 +30470,13 @@ msgstr ""
 "Não foi possível comçar a salvar %1. Espere até que as operações de salvar "
 "atuais tenham terminado."
 
-#: libs/ui/KisDocument.cpp:962
+#: libs/ui/KisDocument.cpp:964
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Erro durante o salvamento %1: %2"
 
-#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30486,7 +30486,7 @@ msgstr ""
 "Não foi possível salvar\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1001
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30494,7 +30494,7 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1007
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "dialog box shown to the user if there were warnings while saving the "
@@ -30509,38 +30509,38 @@ msgstr ""
 "%1 foi salvo, mas está incompleto.\n"
 "Os seguintes problemas foram encontrados ao salvar:"
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1024
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Terminou de Salvar %1"
 
-#: libs/ui/KisDocument.cpp:1428
+#: libs/ui/KisDocument.cpp:1430
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Salvando automaticamente... %1"
 
-#: libs/ui/KisDocument.cpp:1436
+#: libs/ui/KisDocument.cpp:1438
 #, kde-format
 msgid "Autosaving..."
 msgstr "Salvando automaticamente..."
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1444
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Salvar Automaticamente foi atrasado: documento está ocupado..."
 
-#: libs/ui/KisDocument.cpp:1585
+#: libs/ui/KisDocument.cpp:1587
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Erro durante o salvamento automático %1: %2"
 
-#: libs/ui/KisDocument.cpp:1599
+#: libs/ui/KisDocument.cpp:1601
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Salvar automático terminado %1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1843
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30549,40 +30549,40 @@ msgstr ""
 "Caminho malformado\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1909
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "O arquivo %1 não existe."
 
-#: libs/ui/KisDocument.cpp:1936
+#: libs/ui/KisDocument.cpp:1938
 #, kde-format
 msgid "Opening document"
 msgstr "Abrindo documento "
 
-#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Não foi possível abrir '%1'."
 
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "Ocorreram problemas ao abrir %1"
 
-#: libs/ui/KisDocument.cpp:2110
+#: libs/ui/KisDocument.cpp:2112
 #, kde-format
 msgid "Not Saved"
 msgstr "Não foi salvo"
 
-#: libs/ui/KisDocument.cpp:2592
+#: libs/ui/KisDocument.cpp:2594
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Preenchimento de fundo"
 
-#: libs/ui/KisDocument.cpp:2644
+#: libs/ui/KisDocument.cpp:2646
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

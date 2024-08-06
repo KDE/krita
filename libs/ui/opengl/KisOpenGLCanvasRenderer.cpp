@@ -956,6 +956,7 @@ void KisOpenGLCanvasRenderer::drawImageTiles(int firstCol, int lastCol, int firs
 
                 d->displayShader->setUniformValue(d->displayShader->location(Uniform::FixedLodLevel),
                                                   (GLfloat) currentLodPlane);
+                lastTileLodPlane = currentLodPlane;
             }
 
             if (currentLodPlane > 0) {

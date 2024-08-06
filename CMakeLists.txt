@@ -402,6 +402,22 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "M
 endif()
 endif()
 
+# Select the Qt version we want to use
+# Qt5 is the default, set QT_MAJOR_VERSION to 6 to look for Qt6
+option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
+if (BUILD_WITH_QT6)
+    set(QT_MAJOR_VERSION 6)
+else()
+    set(QT_MAJOR_VERSION 5)
+endif()
+
+# KDE Frameworks
+set(KF_MAJOR ${QT_MAJOR_VERSION})
+
+if (KF_MAJOR STREQUAL "6")
+    set(KF_DEP_VERSION "6.0.0")
+endif()
+
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
 find_package(KF5 ${MIN_FRAMEWORKS_VERSION} REQUIRED COMPONENTS

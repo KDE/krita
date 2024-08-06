@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                              QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
                              QFileDialog)
@@ -54,16 +54,19 @@ LISTOFTOOLS = [
 
 LISTOFSIZES = [16, 22, 32, 48, 64]
 
+LISTOFICONMODES = [i18n("Custom icon"), i18n("Tool icon"), i18n("Brush preset icon")]
+
 class ButtonsSettingsDialog(QDialog):
     def __init__(self, parent=None, buttonsContentList=[], sizeIndex=2):
         super().__init__(parent)
         self.setWindowTitle(i18n("Workflow buttons settings"))
         self.kritaInstance = Krita.instance()
+        self.allBrushPresets = self.kritaInstance.resources('preset')
 
         mainLayout = QVBoxLayout(self)
 
         self.buttonsContentList = copy.deepcopy(buttonsContentList)
-        self.defaultButtonContent = { "icon" : "", "tooltip": "", "toolIndex" : 0, "presetName" : "", "FGColorValues" : { "model":"","depth":"","components":[],"profile":"" }, "BGColorValues" : { "model":"","depth":"","components":[],"profile":"" }, "script" : "" }
+        self.defaultButtonContent = { "iconMode": 0, "icon" : "", "tooltip": "", "toolIndex" : 0, "presetName" : "", "FGColorValues" : { "model":"","depth":"","components":[],"profile":"" }, "BGColorValues" : { "model":"","depth":"","components":[],"profile":"" }, "script" : "" }
 
         # button ID starts at 1, 0 is no button selected when list is empty
         self.selectedButtonID = 0
@@ -123,18 +126,29 @@ class ButtonsSettingsDialog(QDialog):
         layoutForSelectorControls.addWidget(deleteButtonButton)
         mainLayout.addLayout(layoutForSelectorControls)
 
-        # set selected button's icon
+        # set selected button's icon mode
+        layoutForIconMode = QHBoxLayout()
+        iconModeLabel = QLabel(i18n("Select icon mode:"), self)
+        layoutForIconMode.addWidget(iconModeLabel)
+        self.iconModeSelector = QComboBox(self)
+        self.populateIconModeList()
+        self.iconModeSelector.activated.connect(self.iconModeChanged)
+        layoutForIconMode.addWidget(self.iconModeSelector)
+
+        mainLayout.addLayout(layoutForIconMode)
+
+        # set selected button's custom icon
         layoutForIconSelection = QHBoxLayout()
 
-        addIconLabel = QLabel(i18n("Select an icon:"), self)
+        addIconLabel = QLabel(i18n("Select a custom icon:"), self)
         layoutForIconSelection.addWidget(addIconLabel)
         self.iconPathInput = QLineEdit(self)
-        self.iconPathInput.setToolTip(i18n("Icon path"))
+        self.iconPathInput.setToolTip(i18n("Custom icon path"))
         self.iconPathInput.editingFinished.connect(self.iconPathChanged)
         layoutForIconSelection.addWidget(self.iconPathInput)
 
         iconPathDialogButton = QPushButton(i18n("..."), self)
-        iconPathDialogButton.setToolTip(i18n("Select the icon"))
+        iconPathDialogButton.setToolTip(i18n("Select the custom icon"))
         iconPathDialogButton.clicked.connect(self.selectIcon)
         layoutForIconSelection.addWidget(iconPathDialogButton)
 
@@ -257,6 +271,12 @@ class ButtonsSettingsDialog(QDialog):
         self.resize(640, 360)
         # end of __init__
 
+    def populateIconModeList(self):
+        listIndex = -1
+        for mode in LISTOFICONMODES:
+            listIndex += 1
+            self.iconModeSelector.insertItem(listIndex,str(LISTOFICONMODES[listIndex]))
+
     def populateToolList(self):
         toolNumber = -1
         for tool in LISTOFTOOLS:
@@ -273,7 +293,15 @@ class ButtonsSettingsDialog(QDialog):
 
     def createButton(self, buttonToCreate, buttonID):
         # print("create button with buttonID: " + str(buttonID))
-        buttonIcon = QIcon(buttonToCreate["icon"])
+        if buttonToCreate["iconMode"] == 0:
+            buttonIcon = QIcon(buttonToCreate["icon"])
+        elif buttonToCreate["iconMode"] == 1 and buttonToCreate["toolIndex"] != 0:
+            buttonIcon = self.kritaInstance.icon(LISTOFTOOLS[buttonToCreate["toolIndex"]]["toolIcon"])
+        elif buttonToCreate["iconMode"] == 2 and buttonToCreate["presetName"] != "":
+            brushPreset = self.allBrushPresets[buttonToCreate["presetName"]]
+            buttonIcon = QIcon(QPixmap.fromImage(brushPreset.image()))
+        else:
+            buttonIcon = QIcon()
         button = CustomButtonForSettings(self.buttonsWidget, buttonID)
         button.setIconSize(self.globalButtonSize)
         button.setIcon(buttonIcon)
@@ -305,6 +333,7 @@ class ButtonsSettingsDialog(QDialog):
         self.selectedButtonIDLabel.setText(str(self.selectedButtonID))
         # add a line here for new dialog fields...
         if self.selectedButtonID > 0:
+            self.iconModeSelector.setCurrentIndex(self.buttonsContentList[self.selectedButtonID - 1]["iconMode"])
             self.iconPathInput.setText(self.buttonsContentList[self.selectedButtonID - 1]["icon"])
             self.toolTipInput.setText(self.buttonsContentList[self.selectedButtonID - 1]["tooltip"])
             self.toolSelector.setCurrentIndex(self.buttonsContentList[self.selectedButtonID - 1]["toolIndex"])
@@ -331,6 +360,12 @@ class ButtonsSettingsDialog(QDialog):
         buttonContent = copy.deepcopy(self.defaultButtonContent)
         self.buttonsContentList.append(buttonContent)
         self.createButton(self.defaultButtonContent, buttonID)
+        self.refreshButtons()
+
+    def iconModeChanged(self, iconModeIndex):
+        if self.selectedButtonID < 1:
+            return
+        self.buttonsContentList[self.selectedButtonID - 1]["iconMode"] = iconModeIndex
         self.refreshButtons()
 
     def selectIcon(self):
@@ -363,6 +398,8 @@ class ButtonsSettingsDialog(QDialog):
         if self.selectedButtonID < 1:
             return
         self.buttonsContentList[self.selectedButtonID - 1]["toolIndex"] = toolIndex
+        if self.iconModeSelector.currentIndex() == 1:
+            self.refreshButtons()
 
     def selectPreset(self):
         # print("select preset dialog started")
@@ -388,6 +425,8 @@ class ButtonsSettingsDialog(QDialog):
         if self.selectedButtonID < 1:
             return
         self.buttonsContentList[self.selectedButtonID - 1]["presetName"] = self.presetSelectorInput.text()
+        if self.iconModeSelector.currentIndex() == 2:
+            self.refreshButtons()
 
     def setFGColorInfoLabel(self, values):
         colorInfoLabel = i18n("Color info: ")
@@ -474,6 +513,7 @@ class ButtonsSettingsDialog(QDialog):
     def clearDialogFields(self):
         # print("clear all dialog fields...")
         # add a line here for new dialog fields...
+        self.iconModeSelector.setCurrentIndex(0)
         self.selectedButtonIDLabel.setText("0")
         self.iconPathInput.setText("")
         self.toolTipInput.setText("")

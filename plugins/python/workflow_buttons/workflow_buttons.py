@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon, QKeySequence
+from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QToolButton, QShortcut
 from krita import Krita, DockWidget, DockWidgetFactory, DockWidgetFactoryBase, ManagedColor
 from .flow_layout import FlowLayout
@@ -71,9 +71,18 @@ class WorkflowButtons(DockWidget):
 
     def populateButtons(self):
         buttonID = -1
+        allBrushPresets = INSTANCE.resources('preset')
         for buttonToCreate in self.buttonsContentList:
             buttonID += 1
-            buttonIcon = QIcon(buttonToCreate["icon"])
+            if buttonToCreate["iconMode"] == 0:
+                buttonIcon = QIcon(buttonToCreate["icon"])
+            elif buttonToCreate["iconMode"] == 1 and buttonToCreate["toolIndex"] != 0:
+                buttonIcon = INSTANCE.icon(LISTOFTOOLS[buttonToCreate["toolIndex"]]["toolIcon"])
+            elif buttonToCreate["iconMode"] == 2 and buttonToCreate["presetName"] != "":
+                brushPreset = allBrushPresets[buttonToCreate["presetName"]]
+                buttonIcon = QIcon(QPixmap.fromImage(brushPreset.image()))
+            else:
+                buttonIcon = QIcon()
             button = CustomButton(self.buttonsWidget, buttonID, buttonToCreate)
             button.setIconSize(self.globalButtonSize)
             button.setIcon(buttonIcon)

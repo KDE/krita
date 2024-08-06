@@ -82,6 +82,7 @@ private:
 
     void setNeedsMipmapRegeneration();
     void setPreparedLodPlane(int lod);
+    void regenerateMipmap();
 
     GLuint m_textureId;
 
@@ -95,6 +96,7 @@ private:
     int m_numMipmapLevels;
     QOpenGLFunctions *f;
     KisOpenGLBufferCircularStorage *m_bufferStorage;
+    bool m_mipmapHasBeenAllocated = false;
     Q_DISABLE_COPY(KisTextureTile)
 };
 

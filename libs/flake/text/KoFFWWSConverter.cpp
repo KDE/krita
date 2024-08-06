@@ -1012,13 +1012,14 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                 if (candidates.size() > 1) {
                     QVector<FontFamilyNode> italics;
                     QVector<FontFamilyNode> obliques;
+
                     if (wws->isVariable) {
                         italics = findNodesByAxis(candidates, "ital", 1.0, 0.0, 0.0);
                         obliques = findNodesByAxis(candidates, "slnt", -slantValue, 0.0, 0.0);
                     }
                     if (italics.isEmpty() && obliques.isEmpty()) {
                         Q_FOREACH(const FontFamilyNode &node, candidates) {
-                            if (slantMode > 0 && node.isItalic) {
+                            if (node.isItalic) {
                                 if (!node.isOblique) {
                                     italics.append(node);
                                 } else {
@@ -1027,6 +1028,7 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                             }
                         }
                     }
+
                     if (slantMode == QFont::StyleItalic) {
                         if (!italics.isEmpty()) {
                             candidates = italics;
@@ -1038,6 +1040,23 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                             candidates = obliques;
                         } else if (!italics.isEmpty()) {
                             candidates = italics;
+                        }
+                    } else {
+                        QStringList slantedFontFiles;
+                        QVector<FontFamilyNode> regular;
+                        Q_FOREACH(const FontFamilyNode &italic, italics) {
+                            slantedFontFiles.append(italic.fileName);
+                        }
+                        Q_FOREACH(const FontFamilyNode &oblique, obliques) {
+                            slantedFontFiles.append(oblique.fileName);
+                        }
+                        Q_FOREACH(const FontFamilyNode &node, candidates) {
+                            if (!slantedFontFiles.contains(node.fileName)) {
+                                regular.append(node);
+                            }
+                        }
+                        if (!regular.isEmpty()) {
+                            candidates = regular;
                         }
                     }
                 }

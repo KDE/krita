@@ -473,7 +473,7 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
                     it->second += 1;
                 } else {
                     // Add with initial frequency of 1 if met for the first time
-                    valueFrequencies.push_front({formatPropValue, 1});
+                    valueFrequencies.push_back({formatPropValue, 1});
                 }
             }
         }

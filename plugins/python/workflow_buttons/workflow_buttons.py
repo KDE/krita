@@ -5,7 +5,7 @@
 
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QScrollArea, QToolButton, QShortcut
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QScrollArea, QToolButton, QPushButton, QToolBar, QAction, QSizePolicy
 from krita import Krita, DockWidget, DockWidgetFactory, DockWidgetFactoryBase, ManagedColor
 from .flow_layout import FlowLayout
 from .buttons_settings_dialog import LISTOFTOOLS, LISTOFSIZES, ButtonsSettingsDialog
@@ -21,11 +21,14 @@ class WorkflowButtons(DockWidget):
         self.setWindowTitle(DOCKER_NAME)
         self.sizeIndex = 2
         self.globalButtonSize = QSize(LISTOFSIZES[self.sizeIndex], LISTOFSIZES[self.sizeIndex])
+        self.settingsButtonPosition = 0
 
         # all widget and layout setup of the docker
         mainWidget = QWidget(self)
         self.setWidget(mainWidget)
         mainLayout = QVBoxLayout(mainWidget)
+        mainLayout.setSpacing(2)
+        mainLayout.setContentsMargins(0, 0, 0, 0)
 
         buttonsScrollArea = QScrollArea(mainWidget)
         buttonsScrollArea.setMinimumSize(self.globalButtonSize)
@@ -34,18 +37,39 @@ class WorkflowButtons(DockWidget):
         buttonsScrollArea.setWidget(self.buttonsWidget)
 
         mainLayout.addWidget(buttonsScrollArea)
-        self.buttonsLayout = FlowLayout(self.buttonsWidget)
 
-        # Edit button setup
+        self.buttonsLayout = FlowLayout(self.buttonsWidget)
+        self.buttonsLayout.setSpacing(2)
+        self.buttonsLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.bottomLayout = QHBoxLayout()
+        self.bottomLayout.setSpacing(2)
+        self.bottomLayout.setContentsMargins(0, 0, 0, 0)
+        mainLayout.addLayout(self.bottomLayout)
+
+        self.bottomBar = QToolBar(self)
+        self.bottomBar.setIconSize(QSize(22,22))
+        self.bottomBar.setStyleSheet("QToolBar{spacing:0px; margins:0px;}")
+        barSpacer = QWidget(self.bottomBar)
+        barSpacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.bottomBar.addWidget(barSpacer)
+        self.bottomLayout.addWidget(self.bottomBar)
+
+        self.settingsAction = QAction(self)
+        self.settingsAction.setIcon(INSTANCE.icon('view-choose-22'))
+        self.settingsAction.setToolTip(i18n("Open workflow buttons settings dialog"))
+        self.settingsAction.triggered.connect(self.openSettingsDialog)
+        self.bottomBar.addAction(self.settingsAction)
+
+        # Inline edit button setup
         self.editButton = QToolButton(self.buttonsWidget)
         self.editButton.setIconSize(self.globalButtonSize)
-        self.editButton.setIcon(INSTANCE.icon('properties'))
-        self.editButton.setToolTip(i18n("Open workflow buttons settings dialog"))
-        self.editButton.clicked.connect(self.openSettingsDialog)
+        self.editButton.setDefaultAction(self.settingsAction)
         self.buttonsLayout.addWidget(self.editButton)
 
         self.buttonsContentList = []
         self.readSettings()
+        self.refreshSettingsButtonPosition()
         self.populateButtons()
 
     def canvasChanged(self, canvas):
@@ -59,10 +83,22 @@ class WorkflowButtons(DockWidget):
         savedList = Application.readSetting("workflowbuttons", "buttons", "")
         if savedList:
             self.buttonsContentList = ast.literal_eval(savedList)
+        savedSettingsButtonPosition = Application.readSetting("workflowbuttons", "settingsButtonPosition", "")
+        if savedSettingsButtonPosition:
+            self.settingsButtonPosition = int(savedSettingsButtonPosition)
 
     def writeSettings(self):
         Application.writeSetting("workflowbuttons", "buttonsSize", str(self.sizeIndex))
         Application.writeSetting("workflowbuttons", "buttons", str(self.buttonsContentList))
+        Application.writeSetting("workflowbuttons", "settingsButtonPosition", str(self.settingsButtonPosition))
+
+    def refreshSettingsButtonPosition(self):
+        if self.settingsButtonPosition == 0:
+            self.bottomBar.setVisible(True)
+            self.editButton.setVisible(False)
+        elif self.settingsButtonPosition == 1:
+            self.bottomBar.setVisible(False)
+            self.editButton.setVisible(True)
 
     def clearButtons(self):
         for widget in self.buttonsWidget.children():
@@ -93,11 +129,13 @@ class WorkflowButtons(DockWidget):
         self.populateButtons()
 
     def openSettingsDialog(self):
-        newDialog = ButtonsSettingsDialog(self, self.buttonsContentList, self.sizeIndex)
+        newDialog = ButtonsSettingsDialog(self, self.buttonsContentList, self.sizeIndex, self.settingsButtonPosition)
         newDialog.exec_()
         if newDialog.result() == 1:
             self.buttonsContentList = newDialog.buttonsContentList
             self.sizeIndex = newDialog.sizeIndex
+            self.settingsButtonPosition = newDialog.settingsButtonPosition
+            self.refreshSettingsButtonPosition()
             self.refreshButtonsSize()
             self.writeSettings()
             self.refreshButtons()

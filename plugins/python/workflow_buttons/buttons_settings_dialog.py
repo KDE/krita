@@ -7,7 +7,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                              QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
-                             QFileDialog)
+                             QFileDialog, QFrame)
 from krita import Krita, PresetChooser
 from .flow_layout import FlowLayout
 import copy
@@ -57,7 +57,7 @@ LISTOFSIZES = [16, 22, 32, 48, 64]
 LISTOFICONMODES = [i18n("Custom icon"), i18n("Tool icon"), i18n("Brush preset icon")]
 
 class ButtonsSettingsDialog(QDialog):
-    def __init__(self, parent=None, buttonsContentList=[], sizeIndex=2):
+    def __init__(self, parent=None, buttonsContentList=[], sizeIndex=2, settingsButtonPosition=0):
         super().__init__(parent)
         self.setWindowTitle(i18n("Workflow buttons settings"))
         self.kritaInstance = Krita.instance()
@@ -85,6 +85,8 @@ class ButtonsSettingsDialog(QDialog):
 
         self.sizeIndex = sizeIndex
         self.globalButtonSize = QSize(LISTOFSIZES[self.sizeIndex], LISTOFSIZES[self.sizeIndex])
+
+        self.settingsButtonPosition = settingsButtonPosition
 
         layoutForSelectorControls = QHBoxLayout()
         controlsSize = QSize(22,22)
@@ -247,19 +249,37 @@ class ButtonsSettingsDialog(QDialog):
 
         mainLayout.addLayout(layoutForScriptSelection)
 
-        # add bottom buttons
-        layoutForBottom = QHBoxLayout()
+        # spacer for global controls
+        spacerLine = QFrame(self)
+        spacerLine.setFrameShape(QFrame.HLine)
+        spacerLine.setFrameShadow(QFrame.Sunken)
+        mainLayout.addWidget(spacerLine)
 
         # button's size selector
+        layoutForButtonsSize = QHBoxLayout()
         buttonsSizeLabel = QLabel(i18n("Buttons size:"), self)
         self.buttonsSizeSelector = QComboBox(self)
         self.populateSizeList()
         self.buttonsSizeSelector.setCurrentIndex(self.sizeIndex)
         self.buttonsSizeSelector.activated.connect(self.buttonsSizeChanged)
-        layoutForBottom.addWidget(buttonsSizeLabel)
-        layoutForBottom.addWidget(self.buttonsSizeSelector)
+        layoutForButtonsSize.addWidget(buttonsSizeLabel)
+        layoutForButtonsSize.addWidget(self.buttonsSizeSelector)
+        mainLayout.addLayout(layoutForButtonsSize)
+
+        # layout for settings button position option
+        layoutForSettingsButtonOption = QHBoxLayout()
+        settingsButtonOptionLabel = QLabel(i18n("Settings button position:"), self)
+        self.settingsButtonPositionSelector = QComboBox(self)
+        self.settingsButtonPositionSelector.insertItem(0, i18n("Bottom bar"))
+        self.settingsButtonPositionSelector.insertItem(1, i18n("Inline"))
+        self.settingsButtonPositionSelector.setCurrentIndex(self.settingsButtonPosition)
+        self.settingsButtonPositionSelector.activated.connect(self.settingsButtonPositionChanged)
+        layoutForSettingsButtonOption.addWidget(settingsButtonOptionLabel)
+        layoutForSettingsButtonOption.addWidget(self.settingsButtonPositionSelector)
+        mainLayout.addLayout(layoutForSettingsButtonOption)
 
         # main dialog's default buttons
+        layoutForBottom = QHBoxLayout()
         buttonBox = QDialogButtonBox(self)
         buttonBox.setStandardButtons( QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
@@ -560,6 +580,11 @@ class ButtonsSettingsDialog(QDialog):
         self.globalButtonSize = QSize(LISTOFSIZES[sizeIndex], LISTOFSIZES[sizeIndex])
         if self.selectedButtonID > 0:
             self.refreshButtons()
+
+    def settingsButtonPositionChanged(self, position):
+        # print("settings button position changed")
+        self.settingsButtonPosition = position
+
 
 class CustomButtonForSettings(QToolButton):
     # Class to define the custom buttons inside the dialog

@@ -217,11 +217,28 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
-        if (shapeController->lastActivatedNode()) {
-            slotNonUiActivatedNode(shapeController->lastActivatedNode());
+
+        if (!m_d->imageView->currentNode()) {
+            /**
+             * The view has not been initialized yet, so we should try to initialize it with
+             * the node saved in KisDummiesFacadeBase (or just wait for a signal from it)
+             */
+            if (shapeController->lastActivatedNode() && !m_d->imageView->currentNode()) {
+                slotNonUiActivatedNode(shapeController->lastActivatedNode());
+            } else {
+                // if last activated node is null, most probably, it means that the shape controller
+                // is going to Q_EMIT the activation signal very soon
+            }
         } else {
-            // if last activated node is null, most probably, it means that the shape controller
-            // is going to Q_EMIT the activation signal very soon
+            /**
+             * If the view is initialized, we should check if the layer still belongs
+             * to the actual image, since it could have been removed. And since the
+             * forwarding happens via KisNodeManager, the could have missed this
+             * update.
+             */
+            if (!m_d->imageView->currentNode()->graphListener()) {
+                slotNonUiActivatedNode(m_d->imageView->image()->root()->lastChild());
+            }
         }
 
         m_d->activateNodeConnection.connectInputSignal(m_d->imageView->image(), &KisImage::sigRequestNodeReselection);

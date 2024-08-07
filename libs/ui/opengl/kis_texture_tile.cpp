@@ -357,7 +357,19 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
     restoreTextureParameters();
 
     if (!patchLevelOfDetail) {
-        setNeedsMipmapRegeneration();
+        if (m_mipmapHasBeenAllocated &&
+                (m_filter == KisOpenGL::BilinearFilterMode ||
+                 m_filter == KisOpenGL::NearestFilterMode)) {
+            /**
+             * When in a mode that doesn't use mipmaps we should
+             * just switch back onto lod0 plane instead of requesting
+             * full mipmap regeneration.
+             */
+
+            setPreparedLodPlane(0);
+        } else {
+            setNeedsMipmapRegeneration();
+        }
     } else {
         setPreparedLodPlane(patchLevelOfDetail);
     }

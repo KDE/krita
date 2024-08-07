@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 03:18+0000\n"
+"POT-Creation-Date: 2024-08-07 03:15+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -16558,7 +16558,7 @@ msgid "No 'text' node found!"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:760
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""
@@ -19802,8 +19802,8 @@ msgstr "स्रोत फाइल:"
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
@@ -40179,8 +40179,8 @@ msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
 msgstr "खण्ड हटाउनुहोस्"
 
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #, kde-format
 msgid ""
 "Please enter correct range. There are no panels in the range of frames "

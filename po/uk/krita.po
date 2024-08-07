@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 03:18+0000\n"
+"POT-Creation-Date: 2024-08-07 03:15+0000\n"
 "PO-Revision-Date: 2024-03-21 22:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -16433,7 +16433,7 @@ msgid "No 'text' node found!"
 msgstr "Не знайдено вузла «text»!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:760
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Невідома помилка під час спроби записати текстовий елемент SVG"
@@ -19717,8 +19717,8 @@ msgstr "Локальні ресурси"
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
@@ -40938,8 +40938,8 @@ msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
 msgstr "Вилучити сцену"
 
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #, kde-format
 msgid ""
 "Please enter correct range. There are no panels in the range of frames "

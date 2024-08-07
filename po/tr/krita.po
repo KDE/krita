@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-06 03:18+0000\n"
+"POT-Creation-Date: 2024-08-07 03:15+0000\n"
 "PO-Revision-Date: 2024-07-28 19:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16326,7 +16326,7 @@ msgid "No 'text' node found!"
 msgstr "“metin” düğümü bulunamadı!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:362
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:747
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:760
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "SVG metin ögesi yazılırken bilinmeyen hata"
@@ -19481,8 +19481,8 @@ msgstr "Yerel Özkaynaklar"
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
@@ -40308,8 +40308,8 @@ msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
 msgstr "Sahneyi Kaldır"
 
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #, kde-format
 msgid ""
 "Please enter correct range. There are no panels in the range of frames "

@@ -4,13 +4,15 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                              QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
-                             QFileDialog, QFrame)
-from krita import Krita, PresetChooser
+                             QFileDialog, QFrame, QWidget)
+from krita import Krita, PresetChooser, ManagedColor
 from .flow_layout import FlowLayout
 import copy
+
+INSTANCE = Krita.instance()
 
 LISTOFTOOLS = [
     { "toolName": "", "toolIcon": "", "toolString": "" },
@@ -60,8 +62,7 @@ class ButtonsSettingsDialog(QDialog):
     def __init__(self, parent=None, buttonsContentList=[], sizeIndex=2, settingsButtonPosition=0):
         super().__init__(parent)
         self.setWindowTitle(i18n("Workflow buttons settings"))
-        self.kritaInstance = Krita.instance()
-        self.allBrushPresets = self.kritaInstance.resources('preset')
+        self.allBrushPresets = INSTANCE.resources('preset')
 
         mainLayout = QVBoxLayout(self)
 
@@ -100,7 +101,7 @@ class ButtonsSettingsDialog(QDialog):
         # button to add a custom button
         addButtonButton = QToolButton(self)
         addButtonButton.setIconSize(controlsSize)
-        addButtonButton.setIcon(self.kritaInstance.icon('addlayer'))
+        addButtonButton.setIcon(INSTANCE.icon('addlayer'))
         addButtonButton.setToolTip(i18n("Add a workflow button"))
         addButtonButton.clicked.connect(self.addButton)
         layoutForSelectorControls.addWidget(addButtonButton)
@@ -108,13 +109,13 @@ class ButtonsSettingsDialog(QDialog):
         # buttons to move selected button to left/right
         moveButtonLeftButton = QToolButton(self)
         moveButtonLeftButton.setIconSize(controlsSize)
-        moveButtonLeftButton.setIcon(self.kritaInstance.icon('arrow-left'))
+        moveButtonLeftButton.setIcon(INSTANCE.icon('arrow-left'))
         moveButtonLeftButton.setToolTip(i18n("Move selected workflow button to the left"))
         moveButtonLeftButton.clicked.connect(self.moveButtonLeft)
         layoutForSelectorControls.addWidget(moveButtonLeftButton)
         moveButtonRightButton = QToolButton(self)
         moveButtonRightButton.setIconSize(controlsSize)
-        moveButtonRightButton.setIcon(self.kritaInstance.icon('arrow-right'))
+        moveButtonRightButton.setIcon(INSTANCE.icon('arrow-right'))
         moveButtonRightButton.setToolTip(i18n("Move selected workflow button to the right"))
         moveButtonRightButton.clicked.connect(self.moveButtonRight)
         layoutForSelectorControls.addWidget(moveButtonRightButton)
@@ -122,7 +123,7 @@ class ButtonsSettingsDialog(QDialog):
         # button to delete selected button
         deleteButtonButton = QToolButton(self)
         deleteButtonButton.setIconSize(controlsSize)
-        deleteButtonButton.setIcon(self.kritaInstance.icon('deletelayer'))
+        deleteButtonButton.setIcon(INSTANCE.icon('deletelayer'))
         deleteButtonButton.setToolTip(i18n("Delete selected workflow button"))
         deleteButtonButton.clicked.connect(self.deleteButton)
         layoutForSelectorControls.addWidget(deleteButtonButton)
@@ -209,6 +210,8 @@ class ButtonsSettingsDialog(QDialog):
         colorInfoToolTip = i18n("Color model ; depth ; profile ; components")
 
         layoutForFGColorInfo = QHBoxLayout()
+        self.FGColorPreview = SelectedColorPreview(self, self.defaultButtonContent["FGColorValues"])
+        layoutForFGColorInfo.addWidget(self.FGColorPreview)
         self.FGColorInfoLabel = QLabel(self)
         self.FGColorInfoLabel.setToolTip(colorInfoToolTip)
         layoutForFGColorInfo.addWidget(self.FGColorInfoLabel)
@@ -227,6 +230,8 @@ class ButtonsSettingsDialog(QDialog):
         mainLayout.addLayout(layoutForBGColorInput)
 
         layoutForBGColorInfo = QHBoxLayout()
+        self.BGColorPreview = SelectedColorPreview(self, self.defaultButtonContent["BGColorValues"])
+        layoutForBGColorInfo.addWidget(self.BGColorPreview)
         self.BGColorInfoLabel = QLabel(self)
         self.BGColorInfoLabel.setToolTip(colorInfoToolTip)
         layoutForBGColorInfo.addWidget(self.BGColorInfoLabel)
@@ -302,7 +307,7 @@ class ButtonsSettingsDialog(QDialog):
         for tool in LISTOFTOOLS:
             toolNumber += 1
             self.toolSelector.insertItem(toolNumber,
-                                         self.kritaInstance.icon(LISTOFTOOLS[toolNumber]["toolIcon"]),
+                                         INSTANCE.icon(LISTOFTOOLS[toolNumber]["toolIcon"]),
                                          i18n(LISTOFTOOLS[toolNumber]["toolString"]))
 
     def populateSizeList(self):
@@ -316,7 +321,7 @@ class ButtonsSettingsDialog(QDialog):
         if buttonToCreate["iconMode"] == 0:
             buttonIcon = QIcon(buttonToCreate["icon"])
         elif buttonToCreate["iconMode"] == 1 and buttonToCreate["toolIndex"] != 0:
-            buttonIcon = self.kritaInstance.icon(LISTOFTOOLS[buttonToCreate["toolIndex"]]["toolIcon"])
+            buttonIcon = INSTANCE.icon(LISTOFTOOLS[buttonToCreate["toolIndex"]]["toolIcon"])
         elif buttonToCreate["iconMode"] == 2 and buttonToCreate["presetName"] != "":
             brushPreset = self.allBrushPresets[buttonToCreate["presetName"]]
             buttonIcon = QIcon(QPixmap.fromImage(brushPreset.image()))
@@ -460,13 +465,14 @@ class ButtonsSettingsDialog(QDialog):
             shortenedComponents = [ "%.3f" % component for component in colorComponents ]
             separator = " ; "
             self.FGColorInfoLabel.setText(colorInfoLabel + colorModel + separator + colorDepth + separator + colorProfile + separator + str(shortenedComponents))
+        self.FGColorPreview.setColor(values)
 
     def selectFGColor(self):
         if self.selectedButtonID < 1:
             return
         # print("FGColor edited...")
         savedColor = { "model":"", "depth":"", "components":[] }
-        currentFGColor = self.kritaInstance.activeWindow().activeView().foregroundColor()
+        currentFGColor = INSTANCE.activeWindow().activeView().foregroundColor()
         savedColor["model"] = currentFGColor.colorModel()
         savedColor["depth"] = currentFGColor.colorDepth()
         savedColor["components"] = currentFGColor.components()
@@ -492,13 +498,14 @@ class ButtonsSettingsDialog(QDialog):
             shortenedComponents = [ "%.3f" % component for component in colorComponents ]
             separator = " ; "
             self.BGColorInfoLabel.setText(colorInfoLabel + colorModel + separator + colorDepth + separator + colorProfile + separator + str(shortenedComponents))
+        self.BGColorPreview.setColor(values)
 
     def selectBGColor(self):
         if self.selectedButtonID < 1:
             return
         # print("BGColor edited...")
         savedColor = { "model":"", "depth":"", "components":[] }
-        currentBGColor = self.kritaInstance.activeWindow().activeView().backgroundColor()
+        currentBGColor = INSTANCE.activeWindow().activeView().backgroundColor()
         savedColor["model"] = currentBGColor.colorModel()
         savedColor["depth"] = currentBGColor.colorDepth()
         savedColor["components"] = currentBGColor.components()
@@ -592,3 +599,37 @@ class CustomButtonForSettings(QToolButton):
         super().__init__(parent)
         self.buttonID = buttonID
         self.setCheckable(True)
+
+class SelectedColorPreview(QWidget):
+    # Class to define the widget used to visualize selected FG and BG colors
+    def __init__(self, parent=None, colorInfo={}):
+        super().__init__(parent)
+        self.setMinimumSize(32, 32)
+        self.canvas = INSTANCE.activeWindow().activeView().canvas()
+        self.colorInfo = {}
+        self.color = QColor(0,0,0,0)
+        self.emptyColor = QColor(0,0,0,0)
+        self.outlineColor = self.palette().text().color()
+        self.setColor(colorInfo)
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setPen(QPen(self.outlineColor, 1, 1)) # last 1 is for Qt.SolidLine
+        painter.setBrush(QBrush(self.color, 1)) # last 1 is for Qt.SolidPattern
+        painter.drawRect(1, 1, 30, 30)
+
+    def convertColorInfoToQColor(self):
+        if(self.colorInfo["model"] != ""):
+            managedColor = ManagedColor(self.colorInfo["model"],
+                                        self.colorInfo["depth"],
+                                        self.colorInfo["profile"])
+            colorComponents = self.colorInfo["components"]
+            managedColor.setComponents(colorComponents)
+            self.color = managedColor.colorForCanvas(self.canvas)
+        else:
+            self.color = self.emptyColor
+
+    def setColor(self, colorInfo):
+        self.colorInfo = colorInfo
+        self.convertColorInfoToQColor()
+        self.update()

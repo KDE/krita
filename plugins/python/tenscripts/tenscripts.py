@@ -34,16 +34,17 @@ class TenScriptsExtension(krita.Extension):
         self.uitenscripts.initialize(self)
 
     def readSettings(self):
-        self.scripts = Application.readSetting(
-            "tenscripts", "scripts", "").split(',')
+        for item in range(1, 11):
+            self.scripts.append(
+                Application.readSetting("tenscripts", f"script_{item}", "")
+            )
 
     def writeSettings(self):
 
         saved_scripts = self.uitenscripts.saved_scripts()
         self.scripts = saved_scripts
-
-        Application.writeSetting(
-            "tenscripts", "scripts", ','.join(map(str, saved_scripts)))
+        for index in range(10):
+            Application.writeSetting("tenscripts", f"script_{index + 1}", saved_scripts[index])
 
     def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5',
@@ -58,10 +59,10 @@ class TenScriptsExtension(krita.Extension):
 
     def _executeScript(self):
         scriptIndex = self.actionToIndex[self.sender().objectName()]
-        script = self.scripts[scriptIndex] if len(self.scripts) > scriptIndex else None
+        script = self.scripts[scriptIndex] if len(self.scripts) > scriptIndex else ""
         window = Application.activeWindow()
 
-        if script:
+        if script != "":
             try:
                 if sys.version_info[0] > 2:
                     spec = importlib.util.spec_from_file_location(

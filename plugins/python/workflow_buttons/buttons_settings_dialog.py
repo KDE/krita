@@ -373,9 +373,9 @@ class ButtonsSettingsDialog(QDialog):
         for widget in self.buttonsWidget.children():
             if isinstance(widget, CustomButtonForSettings):
                 if widget.buttonID == self.selectedButtonID:
-                    widget.setChecked(True)
+                    widget.selectButton()
                 else:
-                    widget.setChecked(False)
+                    widget.deselectButton()
         self.updateDialogFields()
 
     def addButton(self):
@@ -598,7 +598,32 @@ class CustomButtonForSettings(QToolButton):
     def __init__(self, parent=None, buttonID=-1):
         super().__init__(parent)
         self.buttonID = buttonID
-        self.setCheckable(True)
+        self.highlightSquare = selectedButtonHighlight(self, self.height())
+
+    def resizeEvent(self, event):
+        self.highlightSquare.setMinimumSize(QSize(self.height(), self.height()))
+
+    def selectButton(self):
+        self.highlightSquare.setVisible(True)
+
+    def deselectButton(self):
+        self.highlightSquare.setVisible(False)
+
+
+class selectedButtonHighlight(QWidget):
+    # Class to define the highlight for selected button
+    def __init__(self, parent=None, size=32):
+        super().__init__(parent)
+        self.color = self.palette().highlight().color()
+        self.color.setAlpha(64)
+        self.setMinimumSize(QSize(size,size))
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setPen(QPen(self.color, 1, 1)) # last 1 is for Qt.SolidLine
+        painter.setBrush(QBrush(self.color, 1)) # last 1 is for Qt.SolidPattern
+        painter.drawRect(1,1,self.minimumSize().width(),self.minimumSize().height())
+
 
 class SelectedColorPreview(QWidget):
     # Class to define the widget used to visualize selected FG and BG colors

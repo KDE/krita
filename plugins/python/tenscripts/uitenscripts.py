@@ -57,6 +57,7 @@ class UITenScripts(object):
         label = QLabel()
         directoryTextField = QLineEdit()
         directoryDialogButton = QPushButton(i18n("..."))
+        directoryClearButton = QPushButton(self.kritaInstance.icon('close-tab'), "")
 
         action = Application.action(self.tenscripts.indexToAction[index])
 
@@ -65,24 +66,33 @@ class UITenScripts(object):
         directoryTextField.setToolTip(i18n("Selected path"))
         directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
+        directoryClearButton.clicked.connect(self._clearScript)
 
         self.scriptsLayout.addWidget(
             label, rowPosition, 0, Qt.AlignLeft | Qt.AlignTop)
         self.scriptsLayout.addWidget(
             directoryTextField, rowPosition, 1, Qt.AlignLeft | Qt.AlignTop)
         self.scriptsLayout.addWidget(
-            directoryDialogButton, rowPosition, 2, Qt.AlignLeft | Qt.AlignTop)
+            directoryClearButton, rowPosition, 2, Qt.AlignLeft | Qt.AlignTop)
+        self.scriptsLayout.addWidget(
+            directoryDialogButton, rowPosition, 3, Qt.AlignLeft | Qt.AlignTop)
 
     def saved_scripts(self):
         _saved_scripts = []
         index = 0
 
-        for row in range(self.scriptsLayout.rowCount()-1):
+        for _ in range(self.scriptsLayout.rowCount()-1):
             textField = self.scriptsLayout.itemAt(index + 1).widget()
             _saved_scripts.append(textField.text())
-            index += 3
+            index += 4
 
         return _saved_scripts
+
+    def _clearScript(self):
+        obj = self.mainDialog.sender()
+        textField = self.scriptsLayout.itemAt(
+            self.scriptsLayout.indexOf(obj)-1).widget()
+        textField.setText("")
 
     def _selectScript(self):
         dialog = QFileDialog(self.mainDialog)
@@ -92,7 +102,7 @@ class UITenScripts(object):
             selectedFile = dialog.selectedFiles()[0]
             obj = self.mainDialog.sender()
             textField = self.scriptsLayout.itemAt(
-                self.scriptsLayout.indexOf(obj)-1).widget()
+                self.scriptsLayout.indexOf(obj) - 2).widget()
             textField.setText(selectedFile)
 
     def _loadGridLayout(self):
@@ -101,12 +111,10 @@ class UITenScripts(object):
 
     def _fillScripts(self):
         scripts = self.tenscripts.scripts
+        num_rows = self.scriptsLayout.rowCount() - 1
         index = 0
 
-        for row in range(self.scriptsLayout.rowCount()-1):
-            if row >= len(scripts):
-                return
-
+        for row in range(min(len(scripts), num_rows)):
             textField = self.scriptsLayout.itemAt(index + 1).widget()
             textField.setText(scripts[row])
-            index += 3
+            index += 4

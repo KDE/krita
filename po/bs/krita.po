@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 03:15+0000\n"
+"POT-Creation-Date: 2024-08-08 03:19+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -18397,7 +18397,7 @@ msgid "Clone Layer"
 msgstr "&Kloniraj sloj"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1521
+#: libs/ui/kis_node_manager.cpp:1538
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18443,7 +18443,7 @@ msgid "Transform Mask"
 msgstr "Maska transformacije"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1301
+#: libs/ui/kis_node_manager.cpp:1318
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20168,8 +20168,8 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1225
-#: libs/ui/kis_node_manager.cpp:1288 libs/ui/KisApplication.cpp:1012
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1242
+#: libs/ui/kis_node_manager.cpp:1305 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
@@ -30264,91 +30264,91 @@ msgstr "Pogled u ogledalu"
 msgid "Mirror View Around Canvas"
 msgstr "Pogled u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:460
+#: libs/ui/kis_node_manager.cpp:477
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked"
 msgstr "Sloj je zaključan"
 
-#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
+#: libs/ui/kis_node_manager.cpp:479 libs/ui/kis_node_manager.cpp:504
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer \"%1\" is locked"
 msgstr "Sloj je zaključan"
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:532
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Alat za linije"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:539
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopija od %1"
 
-#: libs/ui/kis_node_manager.cpp:529
+#: libs/ui/kis_node_manager.cpp:546
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Dodaj resurse"
 
-#: libs/ui/kis_node_manager.cpp:700
+#: libs/ui/kis_node_manager.cpp:717
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Konvertuj u masku odabira"
 
-#: libs/ui/kis_node_manager.cpp:948
+#: libs/ui/kis_node_manager.cpp:965
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:975
+#: libs/ui/kis_node_manager.cpp:992
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Udvostruči"
 
-#: libs/ui/kis_node_manager.cpp:1000
+#: libs/ui/kis_node_manager.cpp:1017
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Alat za linije"
 
-#: libs/ui/kis_node_manager.cpp:1009
+#: libs/ui/kis_node_manager.cpp:1026
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Alat za linije"
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1046
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Alat za linije"
 
-#: libs/ui/kis_node_manager.cpp:1045
+#: libs/ui/kis_node_manager.cpp:1062
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Sloj X u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1047
+#: libs/ui/kis_node_manager.cpp:1064
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Ogledalo maske X"
 
-#: libs/ui/kis_node_manager.cpp:1058
+#: libs/ui/kis_node_manager.cpp:1075
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Sloj Y u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1077
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Ogledaj masku Y"
 
-#: libs/ui/kis_node_manager.cpp:1068
+#: libs/ui/kis_node_manager.cpp:1085
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer X"
@@ -30356,7 +30356,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Sloj X u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Mirror Layer Y"
@@ -30364,12 +30364,12 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Sloj Y u ogledalu"
 
-#: libs/ui/kis_node_manager.cpp:1196
+#: libs/ui/kis_node_manager.cpp:1213
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Izvezi \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1226
+#: libs/ui/kis_node_manager.cpp:1243
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30379,7 +30379,7 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1244
+#: libs/ui/kis_node_manager.cpp:1261
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -30387,13 +30387,13 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Sloj %1 se ne može mijenjati"
 
-#: libs/ui/kis_node_manager.cpp:1268
+#: libs/ui/kis_node_manager.cpp:1285
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Iz&vezi..."
 
-#: libs/ui/kis_node_manager.cpp:1288
+#: libs/ui/kis_node_manager.cpp:1305
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30403,13 +30403,13 @@ msgstr ""
 "Ne mogu snimiti\n"
 "%1"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1331
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Sloj %1 se ne može mijenjati"
 
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1332
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30418,52 +30418,52 @@ msgstr ""
 "Ne mogu pisati alfa kanal roditeljskog sloja \"%1\".\n"
 "Operavija će biti otkazana."
 
-#: libs/ui/kis_node_manager.cpp:1346
+#: libs/ui/kis_node_manager.cpp:1363
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Piši alpha u sloj"
 
-#: libs/ui/kis_node_manager.cpp:1469
+#: libs/ui/kis_node_manager.cpp:1486
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Udvostruči"
 
-#: libs/ui/kis_node_manager.cpp:1551
+#: libs/ui/kis_node_manager.cpp:1568
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1562
+#: libs/ui/kis_node_manager.cpp:1579
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1569
+#: libs/ui/kis_node_manager.cpp:1586
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grupa:"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1587
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Slikarski sloj"
 
-#: libs/ui/kis_node_manager.cpp:1597
+#: libs/ui/kis_node_manager.cpp:1614
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1600
+#: libs/ui/kis_node_manager.cpp:1617
 #, fuzzy, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Stavi svaki sloj u svoj vlastiti, odvojeni grupni sloj"
 
-#: libs/ui/kis_node_manager.cpp:1608
+#: libs/ui/kis_node_manager.cpp:1625
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-07 03:15+0000\n"
+"POT-Creation-Date: 2024-08-08 03:19+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -19270,7 +19270,7 @@ msgid "Clone Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1521
+#: libs/ui/kis_node_manager.cpp:1538
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "A group of layers"
@@ -19322,7 +19322,7 @@ msgid "Transform Mask"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1301
+#: libs/ui/kis_node_manager.cpp:1318
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -21046,8 +21046,8 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1225
-#: libs/ui/kis_node_manager.cpp:1288 libs/ui/KisApplication.cpp:1012
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1242
+#: libs/ui/kis_node_manager.cpp:1305 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
@@ -31389,19 +31389,19 @@ msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 msgid "Mirror View Around Canvas"
 msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 
-#: libs/ui/kis_node_manager.cpp:460
+#: libs/ui/kis_node_manager.cpp:477
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgid "Layer is locked"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
+#: libs/ui/kis_node_manager.cpp:479 libs/ui/kis_node_manager.cpp:504
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgid "Layer \"%1\" is locked"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:532
 #, fuzzy
 #| msgid "Delete slide"
 #| msgid_plural "Delete slides"
@@ -31409,14 +31409,14 @@ msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "ਸਲਾਈਡ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:539
 #, fuzzy
 #| msgid "Copy Page"
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
-#: libs/ui/kis_node_manager.cpp:529
+#: libs/ui/kis_node_manager.cpp:546
 #, fuzzy
 #| msgid "Delete slide"
 #| msgid_plural "Delete slides"
@@ -31424,33 +31424,33 @@ msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "ਸਲਾਈਡ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:700
+#: libs/ui/kis_node_manager.cpp:717
 #, fuzzy
 #| msgid "Create shape"
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:948
+#: libs/ui/kis_node_manager.cpp:965
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:975
+#: libs/ui/kis_node_manager.cpp:992
 #, fuzzy
 #| msgid "Collection"
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/ui/kis_node_manager.cpp:1000
+#: libs/ui/kis_node_manager.cpp:1017
 #, fuzzy
 #| msgid "Remove points"
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:1009
+#: libs/ui/kis_node_manager.cpp:1026
 #, fuzzy
 #| msgid "Delete slide"
 #| msgid_plural "Delete slides"
@@ -31458,62 +31458,62 @@ msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "ਸਲਾਈਡ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1046
 #, fuzzy
 #| msgid "Remove points"
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:1045
+#: libs/ui/kis_node_manager.cpp:1062
 #, fuzzy
 #| msgid "Layer"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1047
+#: libs/ui/kis_node_manager.cpp:1064
 #, fuzzy
 #| msgid "Zoom"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/kis_node_manager.cpp:1058
+#: libs/ui/kis_node_manager.cpp:1075
 #, fuzzy
 #| msgid "Layer"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1077
 #, fuzzy
 #| msgid "Zoom"
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "ਜ਼ੂਮ"
 
-#: libs/ui/kis_node_manager.cpp:1068
+#: libs/ui/kis_node_manager.cpp:1085
 #, fuzzy
 #| msgid "Layer"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1092
 #, fuzzy
 #| msgid "Layer"
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1196
+#: libs/ui/kis_node_manager.cpp:1213
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Export \"%1\""
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:1226
+#: libs/ui/kis_node_manager.cpp:1243
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -31523,21 +31523,21 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/kis_node_manager.cpp:1244
+#: libs/ui/kis_node_manager.cpp:1261
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1268
+#: libs/ui/kis_node_manager.cpp:1285
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_node_manager.cpp:1288
+#: libs/ui/kis_node_manager.cpp:1305
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -31547,73 +31547,73 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1331
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1315
+#: libs/ui/kis_node_manager.cpp:1332
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1346
+#: libs/ui/kis_node_manager.cpp:1363
 #, fuzzy
 #| msgid "Delete Layer"
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/ui/kis_node_manager.cpp:1469
+#: libs/ui/kis_node_manager.cpp:1486
 #, fuzzy
 #| msgid "Copy Page"
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
-#: libs/ui/kis_node_manager.cpp:1551
+#: libs/ui/kis_node_manager.cpp:1568
 #, fuzzy
 #| msgid "Group"
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "ਗਰੁੱਪ"
 
-#: libs/ui/kis_node_manager.cpp:1562
+#: libs/ui/kis_node_manager.cpp:1579
 #, fuzzy
 #| msgid "Group"
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "ਗਰੁੱਪ"
 
-#: libs/ui/kis_node_manager.cpp:1569
+#: libs/ui/kis_node_manager.cpp:1586
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "ਗਰੁੱਪ"
 
-#: libs/ui/kis_node_manager.cpp:1570
+#: libs/ui/kis_node_manager.cpp:1587
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_node_manager.cpp:1597
+#: libs/ui/kis_node_manager.cpp:1614
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1600
+#: libs/ui/kis_node_manager.cpp:1617
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1608
+#: libs/ui/kis_node_manager.cpp:1625
 #, fuzzy
 #| msgid "Group"
 msgctxt "(qtundo-format)"

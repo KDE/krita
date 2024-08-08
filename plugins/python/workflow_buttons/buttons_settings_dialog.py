@@ -7,7 +7,7 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                              QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
-                             QFileDialog, QFrame, QWidget)
+                             QFileDialog, QFrame, QWidget, QSizePolicy)
 from krita import Krita, PresetChooser, ManagedColor
 from .flow_layout import FlowLayout
 import copy
@@ -98,6 +98,10 @@ class ButtonsSettingsDialog(QDialog):
         layoutForSelectorControls.addWidget(selectedButtonIDLabelTitle)
         layoutForSelectorControls.addWidget(self.selectedButtonIDLabel)
 
+        spacer1 = QWidget(self)
+        spacer1.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForSelectorControls.addWidget(spacer1)
+
         # button to add a custom button
         addButtonButton = QToolButton(self)
         addButtonButton.setIconSize(controlsSize)
@@ -138,6 +142,10 @@ class ButtonsSettingsDialog(QDialog):
         self.iconModeSelector.activated.connect(self.iconModeChanged)
         layoutForIconMode.addWidget(self.iconModeSelector)
 
+        spacer2 = QWidget(self)
+        spacer2.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForIconMode.addWidget(spacer2)
+
         mainLayout.addLayout(layoutForIconMode)
 
         # set selected button's custom icon
@@ -177,6 +185,10 @@ class ButtonsSettingsDialog(QDialog):
         self.toolSelector.activated.connect(self.toolChanged)
         layoutForToolSelector.addWidget(self.toolSelector)
 
+        spacer3 = QWidget(self)
+        spacer3.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForToolSelector.addWidget(spacer3)
+
         mainLayout.addLayout(layoutForToolSelector)
 
         # set custom button's presetName
@@ -205,6 +217,11 @@ class ButtonsSettingsDialog(QDialog):
         FGColorClear = QPushButton(i18n("Clear foreground color"), self)
         FGColorClear.clicked.connect(self.clearFGColor)
         layoutForFGColorInput.addWidget(FGColorClear)
+
+        spacer4 = QWidget(self)
+        spacer4.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForFGColorInput.addWidget(spacer4)
+
         mainLayout.addLayout(layoutForFGColorInput)
 
         colorInfoToolTip = i18n("Color model ; depth ; profile ; components")
@@ -215,6 +232,11 @@ class ButtonsSettingsDialog(QDialog):
         self.FGColorInfoLabel = QLabel(self)
         self.FGColorInfoLabel.setToolTip(colorInfoToolTip)
         layoutForFGColorInfo.addWidget(self.FGColorInfoLabel)
+
+        spacer5 = QWidget(self)
+        spacer5.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForFGColorInfo.addWidget(spacer5)
+
         mainLayout.addLayout(layoutForFGColorInfo)
 
         # set custom button's BGColorValues
@@ -227,6 +249,11 @@ class ButtonsSettingsDialog(QDialog):
         BGColorClear = QPushButton(i18n("Clear background color"), self)
         BGColorClear.clicked.connect(self.clearBGColor)
         layoutForBGColorInput.addWidget(BGColorClear)
+
+        spacer6 = QWidget(self)
+        spacer6.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForBGColorInput.addWidget(spacer6)
+
         mainLayout.addLayout(layoutForBGColorInput)
 
         layoutForBGColorInfo = QHBoxLayout()
@@ -235,6 +262,11 @@ class ButtonsSettingsDialog(QDialog):
         self.BGColorInfoLabel = QLabel(self)
         self.BGColorInfoLabel.setToolTip(colorInfoToolTip)
         layoutForBGColorInfo.addWidget(self.BGColorInfoLabel)
+
+        spacer7 = QWidget(self)
+        spacer7.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForBGColorInfo.addWidget(spacer7)
+
         mainLayout.addLayout(layoutForBGColorInfo)
 
         # set custom button's extra script
@@ -269,6 +301,11 @@ class ButtonsSettingsDialog(QDialog):
         self.buttonsSizeSelector.activated.connect(self.buttonsSizeChanged)
         layoutForButtonsSize.addWidget(buttonsSizeLabel)
         layoutForButtonsSize.addWidget(self.buttonsSizeSelector)
+
+        spacer8 = QWidget(self)
+        spacer8.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForButtonsSize.addWidget(spacer8)
+
         mainLayout.addLayout(layoutForButtonsSize)
 
         # layout for settings button position option
@@ -281,6 +318,11 @@ class ButtonsSettingsDialog(QDialog):
         self.settingsButtonPositionSelector.activated.connect(self.settingsButtonPositionChanged)
         layoutForSettingsButtonOption.addWidget(settingsButtonOptionLabel)
         layoutForSettingsButtonOption.addWidget(self.settingsButtonPositionSelector)
+
+        spacer9 = QWidget(self)
+        spacer9.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        layoutForSettingsButtonOption.addWidget(spacer9)
+
         mainLayout.addLayout(layoutForSettingsButtonOption)
 
         # main dialog's default buttons
@@ -293,14 +335,15 @@ class ButtonsSettingsDialog(QDialog):
         mainLayout.addLayout(layoutForBottom)
 
         self.populateButtons()
-        self.resize(640, 360)
+        self.resize(500, 500)
         # end of __init__
 
     def populateIconModeList(self):
         listIndex = -1
         for mode in LISTOFICONMODES:
             listIndex += 1
-            self.iconModeSelector.insertItem(listIndex,str(LISTOFICONMODES[listIndex]))
+            self.iconModeSelector.insertItem(listIndex,str(LISTOFICONMODES[listIndex]) + " ")
+            # extra " " to workaround possible cut of last letter...
 
     def populateToolList(self):
         toolNumber = -1
@@ -614,15 +657,16 @@ class selectedButtonHighlight(QWidget):
     # Class to define the highlight for selected button
     def __init__(self, parent=None, size=32):
         super().__init__(parent)
-        self.color = self.palette().highlight().color()
-        self.color.setAlpha(64)
+        self.colorPen = self.palette().highlight().color()
+        self.colorBrush = self.palette().highlight().color()
+        self.colorBrush.setAlpha(64)
         self.setMinimumSize(QSize(size,size))
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setPen(QPen(self.color, 1, 1)) # last 1 is for Qt.SolidLine
-        painter.setBrush(QBrush(self.color, 1)) # last 1 is for Qt.SolidPattern
-        painter.drawRect(1,1,self.minimumSize().width(),self.minimumSize().height())
+        painter.setPen(QPen(self.colorPen, 4, 1)) # last 1 is for Qt.SolidLine
+        painter.setBrush(QBrush(self.colorBrush, 1)) # last 1 is for Qt.SolidPattern
+        painter.drawRect(2, 2, self.minimumSize().width() - 3, self.minimumSize().height() - 4)
 
 
 class SelectedColorPreview(QWidget):

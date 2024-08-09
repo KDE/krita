@@ -608,7 +608,7 @@ krita_deploy () {
     rsync -priul ${KIS_INSTALL_DIR}/lib/libKF5* ${KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     echo "Copying qml..."
-    rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml
+    rsync -prul ${KIS_INSTALL_DIR}/qml/ Resources/qml
 
     echo "Copying plugins..."
     local KRITA_DMG_PLUGIN_DIR="${KRITA_DMG}/krita.app/Contents/PlugIns"

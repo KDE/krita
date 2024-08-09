@@ -42307,7 +42307,8 @@ msgid "Delete the taskset"
 msgstr "Dieses Stichwort löschen"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Properties"
 msgid "Text Properties"
 msgstr "Texteigenschaften"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-01 01:53+0000\n"
+"POT-Creation-Date: 2024-08-08 01:48+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16414,7 +16414,7 @@ msgstr "%1-val"
 msgid "Active tool: %1"
 msgstr "Gjeldande verktøy: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1869
+#: libs/flake/svg/SvgParser.cpp:1857
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16472,7 +16472,7 @@ msgid "No 'text' node found!"
 msgstr "Fann ikkje nokon «text»-node"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:844
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Ukjend feil ved lagring av SVG-tekstelement"
@@ -17251,7 +17251,7 @@ msgstr "Send vidare"
 msgid "Imported Image"
 msgstr "Importert bilete"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2617
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17996,7 +17996,7 @@ msgid "Clone Layer"
 msgstr "Klonelag"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1594
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18040,7 +18040,7 @@ msgid "Transform Mask"
 msgstr "Transformeringsmaske"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1357
+#: libs/ui/kis_node_manager.cpp:1374
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19646,15 +19646,15 @@ msgstr "Lokale ressursar"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1281
-#: libs/ui/kis_node_manager.cpp:1344 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1298
+#: libs/ui/kis_node_manager.cpp:1361 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:978
-#: libs/ui/KisDocument.cpp:985 libs/ui/KisDocument.cpp:1005
-#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1975
-#: libs/ui/KisDocument.cpp:1981 libs/ui/KisDocument.cpp:1994
-#: libs/ui/KisDocument.cpp:1998 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
+#: libs/ui/KisDocument.cpp:987 libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1933 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:1983 libs/ui/KisDocument.cpp:1996
+#: libs/ui/KisDocument.cpp:2000 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19676,8 +19676,8 @@ msgstr "Lokale ressursar"
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:187
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
 #: plugins/extensions/qmic/QMic.cpp:54 plugins/extensions/qmic/QMic.cpp:79
@@ -29527,79 +29527,79 @@ msgstr "Spegelvising rundt peikaren"
 msgid "Mirror View Around Canvas"
 msgstr "Spegelvising rundt lerretet"
 
-#: libs/ui/kis_node_manager.cpp:466
+#: libs/ui/kis_node_manager.cpp:483
 #, kde-format
 msgid "Layer is locked"
 msgstr "Laget er låst"
 
-#: libs/ui/kis_node_manager.cpp:468 libs/ui/kis_node_manager.cpp:493
+#: libs/ui/kis_node_manager.cpp:485 libs/ui/kis_node_manager.cpp:510
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Laget «%1» er låst"
 
-#: libs/ui/kis_node_manager.cpp:521
+#: libs/ui/kis_node_manager.cpp:538
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Flytt nodar"
 
-#: libs/ui/kis_node_manager.cpp:528
+#: libs/ui/kis_node_manager.cpp:545
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopier nodar"
 
-#: libs/ui/kis_node_manager.cpp:535
+#: libs/ui/kis_node_manager.cpp:552
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Legg til nodar"
 
-#: libs/ui/kis_node_manager.cpp:706
+#: libs/ui/kis_node_manager.cpp:723
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Gjer om til utvalsmaske"
 
-#: libs/ui/kis_node_manager.cpp:753
+#: libs/ui/kis_node_manager.cpp:770
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:754
+#: libs/ui/kis_node_manager.cpp:771
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:991
+#: libs/ui/kis_node_manager.cpp:1008
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Gjennomskinsmodus krev eit lag med gjennomsiktig bakgrunn."
 
-#: libs/ui/kis_node_manager.cpp:1018
+#: libs/ui/kis_node_manager.cpp:1035
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Dupliser nodar"
 
-#: libs/ui/kis_node_manager.cpp:1043
+#: libs/ui/kis_node_manager.cpp:1060
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Hev nodar"
 
-#: libs/ui/kis_node_manager.cpp:1052
+#: libs/ui/kis_node_manager.cpp:1069
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Senk nodar"
 
-#: libs/ui/kis_node_manager.cpp:1072
+#: libs/ui/kis_node_manager.cpp:1089
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Fjern nodar"
 
-#: libs/ui/kis_node_manager.cpp:1088
+#: libs/ui/kis_node_manager.cpp:1105
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1091
+#: libs/ui/kis_node_manager.cpp:1108
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29607,12 +29607,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1119
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1122
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29620,50 +29620,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/kis_node_manager.cpp:1113
+#: libs/ui/kis_node_manager.cpp:1130
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1120
+#: libs/ui/kis_node_manager.cpp:1137
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1252
+#: libs/ui/kis_node_manager.cpp:1269
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Eksporter «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1282
+#: libs/ui/kis_node_manager.cpp:1299
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Klarte ikkje lagra laget. %1"
 
-#: libs/ui/kis_node_manager.cpp:1300
+#: libs/ui/kis_node_manager.cpp:1317
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Laget manglar pikseldata"
 
-#: libs/ui/kis_node_manager.cpp:1324
+#: libs/ui/kis_node_manager.cpp:1341
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Eksporter til SVG"
 
-#: libs/ui/kis_node_manager.cpp:1344
+#: libs/ui/kis_node_manager.cpp:1361
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Klarte ikkje lagra til SVG-format: %1"
 
-#: libs/ui/kis_node_manager.cpp:1370
+#: libs/ui/kis_node_manager.cpp:1387
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Laget %1 kan ikkje redigerast"
 
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1388
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29672,49 +29672,49 @@ msgstr ""
 "Kan ikkje lagra alfakanalen til forelderlaget «%1».\n"
 "Handlinga vert avbroten."
 
-#: libs/ui/kis_node_manager.cpp:1402
+#: libs/ui/kis_node_manager.cpp:1419
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Lagra alfa til lag"
 
-#: libs/ui/kis_node_manager.cpp:1525
+#: libs/ui/kis_node_manager.cpp:1542
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Klipp ut nodar"
 
-#: libs/ui/kis_node_manager.cpp:1607
+#: libs/ui/kis_node_manager.cpp:1624
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Snøgg-grupper"
 
-#: libs/ui/kis_node_manager.cpp:1618
+#: libs/ui/kis_node_manager.cpp:1635
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Snøgg-klippgrupper"
 
-#: libs/ui/kis_node_manager.cpp:1625
+#: libs/ui/kis_node_manager.cpp:1642
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Klippgruppe"
 
-#: libs/ui/kis_node_manager.cpp:1626
+#: libs/ui/kis_node_manager.cpp:1643
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskelag"
 
-#: libs/ui/kis_node_manager.cpp:1653
+#: libs/ui/kis_node_manager.cpp:1670
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1656
+#: libs/ui/kis_node_manager.cpp:1673
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1664
+#: libs/ui/kis_node_manager.cpp:1681
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Snøgg-oppløysing"
@@ -30486,34 +30486,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Klon dokument"
 
-#: libs/ui/KisDocument.cpp:742
+#: libs/ui/KisDocument.cpp:744
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Kan ikkje skriva til %1. Prøv å lagra med eit anna namn."
 
-#: libs/ui/KisDocument.cpp:792
+#: libs/ui/KisDocument.cpp:794
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:809
+#: libs/ui/KisDocument.cpp:811
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:831
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Eksporterer dokument …"
 
-#: libs/ui/KisDocument.cpp:832
+#: libs/ui/KisDocument.cpp:834
 #, kde-format
 msgid "Saving Document..."
 msgstr "Lagrar dokument …"
 
-#: libs/ui/KisDocument.cpp:842
+#: libs/ui/KisDocument.cpp:844
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30522,18 +30522,18 @@ msgstr ""
 "Klarte ikkje starta lagring av %1. Vent til gjeldande lagringshandling er "
 "fullført."
 
-#: libs/ui/KisDocument.cpp:971
+#: libs/ui/KisDocument.cpp:973
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Feil ved lagring %1: %2"
 
-#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:986
+#: libs/ui/KisDocument.cpp:981 libs/ui/KisDocument.cpp:988
 #, kde-format
 msgid "Could not save %1."
 msgstr "Klarte ikkje lagra %1."
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1010
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30541,45 +30541,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1014
+#: libs/ui/KisDocument.cpp:1016
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1031
+#: libs/ui/KisDocument.cpp:1033
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Ferdig lagra %1"
 
-#: libs/ui/KisDocument.cpp:1437
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Autolagrar … %1"
 
-#: libs/ui/KisDocument.cpp:1445
+#: libs/ui/KisDocument.cpp:1447
 #, kde-format
 msgid "Autosaving..."
 msgstr "Autolagrar …"
 
-#: libs/ui/KisDocument.cpp:1451
+#: libs/ui/KisDocument.cpp:1453
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Autolagring utsett – dokumentet er oppteke …"
 
-#: libs/ui/KisDocument.cpp:1594
+#: libs/ui/KisDocument.cpp:1596
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Feil ved autolagring %1: %2"
 
-#: libs/ui/KisDocument.cpp:1608
+#: libs/ui/KisDocument.cpp:1610
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Ferdig autolagra %1"
 
-#: libs/ui/KisDocument.cpp:1865
+#: libs/ui/KisDocument.cpp:1867
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30588,38 +30588,38 @@ msgstr ""
 "Ugyldig adresse\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1931
+#: libs/ui/KisDocument.cpp:1933
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Fila %1 finst ikkje."
 
-#: libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1962
 #, kde-format
 msgid "Opening document"
 msgstr "Opnar dokument"
 
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisDocument.cpp:1982
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1984
 #, kde-format
 msgid "Could not open %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1995 libs/ui/KisDocument.cpp:1999
+#: libs/ui/KisDocument.cpp:1997 libs/ui/KisDocument.cpp:2001
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2138
+#: libs/ui/KisDocument.cpp:2140
 #, kde-format
 msgid "Not Saved"
 msgstr "Ikkje lagra"
 
-#: libs/ui/KisDocument.cpp:2624
+#: libs/ui/KisDocument.cpp:2626
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrunnsfyll"
 
-#: libs/ui/KisDocument.cpp:2686
+#: libs/ui/KisDocument.cpp:2688
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -40904,8 +40904,8 @@ msgctxt "Remove current scene from storyboards"
 msgid "Remove Scene"
 msgstr "Fjern scene"
 
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:428
-#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:437
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:432
+#: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:441
 #, kde-format
 msgid ""
 "Please enter correct range. There are no panels in the range of frames "

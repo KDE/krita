@@ -295,8 +295,16 @@ waiting_fixed() {
 
 add_lib_to_list() {
     local llist=${2}
-    if [[ -z "$(grep ${1##*/} <<< ${llist})" ]]; then
-        local llist="${llist} ${1##*/} "
+    local libPathTail="${1##*/}"
+    local lib=${libPathTail}
+
+    # we add a special case if the lib is a framework
+    if [[ -n "$(grep ${libPathTail}.framework <<< ${1})" ]]; then
+        lib="${libPathTail}.framework"
+    fi
+
+    if [[ -z "$(grep ${lib} <<< ${llist})" ]]; then
+        local llist="${llist} ${lib} "
     fi
     echo "${llist}"
 }
@@ -316,7 +324,6 @@ find_needed_libs () {
 
         resultArray=($(otool -L ${libFile} | awk '{print $1","substr($2,2)}'))
 
-        printf "Fixing %s\n" "${libFile#${KRITA_DMG}/}" >&2
         for entry in ${resultArray[@]:1}; do
             # skip fat-bin file markers
             if [[ "${entry##*,}" = "architecture" ]]; then
@@ -324,8 +331,10 @@ find_needed_libs () {
             fi
 
             lib="${entry%%,*}"
+            printf "checking %s\n" "${lib}" >&2
 
             if [[ "${lib:0:1}" = "@" ]]; then
+                printf "Fixing %s from %s\n" "${lib}" "${libFile}" >&2
                 local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
             fi
 
@@ -347,8 +356,9 @@ find_missing_libs (){
     # echo "Searching for missing libs on deployment folders…" >&2
     local libs_missing=""
     for lib in ${@}; do
+        printf "looking for %s\n" "${lib}" >&2
         if [[ -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})" ]]; then
-            # echo "Adding ${lib} to missing libraries." >&2
+            echo "Adding ${lib} to missing libraries." >&2
             libs_missing="${libs_missing} ${lib}"
         fi
     done
@@ -371,7 +381,8 @@ copy_missing_libs () {
     for lib in ${@}; do
         result=$(find -L "${KIS_INSTALL_DIR}" -name "${lib}")
 
-        if [[ $(countArgs ${result}) -eq 1 ]]; then
+        # check if missing lib is a framework
+        if [[ ${lib} = ${lib%.framework} ]]; then
             if [ "$(stringContains "${result}" "plugin")" ]; then
                 copy_missing_lib_wlink ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
                 krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/PlugIns/${result##*/}"
@@ -380,15 +391,9 @@ copy_missing_libs () {
                 krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/Frameworks/${result##*/}"
             fi
         else
-            echo "${lib} might be a missing framework"
-            if [ "$(stringContains "${result}" "framework")" ]; then
-                echo "copying framework ${KIS_INSTALL_DIR}/lib/${lib}.framework to dmg"
-                # rsync only included ${lib} Resources Versions
-                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -type f -perm 755)"
-            fi
+            echo "copying missing framework ${lib}"
+            rsync -priul ${KIS_INSTALL_DIR}/lib/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/
+            krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}/" -type f -perm 755)"
         fi
     done
 }

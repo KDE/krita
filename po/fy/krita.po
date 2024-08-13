@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -16965,6 +16965,9 @@ msgstr "Utzoome"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -57546,6 +57549,7 @@ msgid "Selected path"
 msgstr "Seleksjemodus:"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "&Add to current selection"
 msgid "Select the script"
@@ -57556,6 +57560,191 @@ msgstr "&Oan besteande seleksje tafoegje"
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"
 msgstr "Lytse tegels"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Custom icon"
+msgstr "Geometry-opsjes"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "Ark-piktogram"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Brush preset icon"
+msgstr "Foarynstelling:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Color Settings"
+msgid "Workflow buttons settings"
+msgstr "Kleurynstellings"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+msgid "Selected button:"
+msgstr "Drukknop"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgid "Delete selected workflow button"
+msgstr "De laach of masker wiskje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "Seleksjemodus:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "Seleksjemodus:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Gradient"
+msgid "Custom icon path"
+msgstr "Oanpast kleurferrin"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "&Oan besteande seleksje tafoegje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+msgid "Enter a Tooltip:"
+msgstr "Yntegraalstap:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+msgid "Tooltip text"
+msgstr "&Ark"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "Seleksjemodus:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+msgid "Select a brush preset:"
+msgstr "foarynstelde opset bewurkje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+msgid "Brush preset name"
+msgstr "Foarynstelling:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+msgid "Select the brush preset"
+msgstr "foarynstelde opset bewurkje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "Eftergrûn ynstelle"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+msgid "Load current foreground color"
+msgstr "Kleur fan foargrûn"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+msgid "Clear foreground color"
+msgstr "Kleur fan foargrûn"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "Eftergrûn ynstelle"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "Eftergrûn ynstelle"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "Eftergrûn ynstelle"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "&Add to current selection"
+msgid "Select a script file:"
+msgstr "&Oan besteande seleksje tafoegje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+msgid "Script path"
+msgstr "Seleksjemodus:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+msgid "Buttons size:"
+msgstr "Drukknop"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+msgid "Settings button position:"
+msgstr "Untwerpmodus"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+msgid "Bottom bar"
+msgstr "Under útlynje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+msgid "Inline"
+msgstr "B-spline"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Small Tiles"
+msgid "Icon files (*.png, *.svg)"
+msgstr "Lytse tegels"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Coloring:"
+msgid "Color info: "
+msgstr "Kleur:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Small Tiles"
+msgid "Script files (*.py)"
+msgstr "Lytse tegels"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 #, fuzzy
@@ -62989,11 +63178,6 @@ msgstr "Referinsje-ôfbylding:"
 #~ msgstr "Kleurynstellings"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Group settings"
-#~ msgstr "Kleurynstellings"
-
-#, fuzzy
 #~ msgid "Column count"
 #~ msgstr "eftergrûn"
 
@@ -64785,10 +64969,6 @@ msgstr "Referinsje-ôfbylding:"
 #~ msgstr "Namme:"
 
 #, fuzzy
-#~ msgid "Sort by position"
-#~ msgstr "Untwerpmodus"
-
-#, fuzzy
 #~ msgid "Sort keys"
 #~ msgstr "Namme:"
 
@@ -66193,10 +66373,6 @@ msgstr "Referinsje-ôfbylding:"
 #, fuzzy
 #~ msgid "Bottom Left"
 #~ msgstr "Laach rotearje"
-
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "Under útlynje"
 
 #, fuzzy
 #~ msgid "Bottom Right"
@@ -71979,11 +72155,6 @@ msgstr "Referinsje-ôfbylding:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action down"
 #~ msgstr "Masker nei boppe ferpleatse"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "&Oan besteande seleksje tafoegje"
 
 #, fuzzy
 #~| msgid "Current color model:"
@@ -82209,11 +82380,6 @@ msgstr "Referinsje-ôfbylding:"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "Seleksjemodus:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
 #~ msgid "Select a file to load..."
 #~ msgstr "Alle&s selektearje"
 
@@ -91507,9 +91673,6 @@ msgstr "Referinsje-ôfbylding:"
 
 #~ msgid "Count:"
 #~ msgstr "Oantal:"
-
-#~ msgid "Coloring:"
-#~ msgstr "Kleur:"
 
 #~ msgid "Plain"
 #~ msgstr "Egaal"

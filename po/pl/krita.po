@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-08-03 11:24+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16756,6 +16756,9 @@ msgstr "Po&mniejsz"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -57630,12 +57633,226 @@ msgid "Selected path"
 msgstr "Wybierz ścieżkę"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Wybierz skrypt"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
 msgstr "Plik Python (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom options"
+msgid "Custom icon"
+msgstr "Własne ustawienia"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "Ikona narzędzia"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "Nastawy pędzli"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Group settings"
+msgid "Workflow buttons settings"
+msgstr "Ustawienia grupy"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "lewy przycisk"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete selected mask"
+msgid "Delete selected workflow button"
+msgstr "Usuń zaznaczoną maskę"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "Tryb zaznaczania:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Select a color"
+msgid "Select a custom icon:"
+msgstr "Wybierz barwę"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Input"
+msgid "Custom icon path"
+msgstr "Własne wejście"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Delete the current action"
+msgid "Select the custom icon"
+msgstr "Usuń obecne działanie"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal Pool:"
+msgid "Enter a Tooltip:"
+msgstr "Wewnętrzny zasobnik:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "Podpowiedź"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select a Color"
+msgid "Select a tool:"
+msgstr "Wybierz barwę"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select a brush preset:"
+msgstr "Wybierz nastawę pędzla"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "Nastawy pędzli"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select the brush preset"
+msgstr "Wybierz nastawę pędzla"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select foreground color:"
+msgstr "Wybierz barwę tła"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Load current foreground color"
+msgstr "Dodaj barwę pierwszoplanową"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Clear foreground color"
+msgstr "Dodaj barwę pierwszoplanową"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select backround color:"
+msgstr "Wybierz barwę tła"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Select background color"
+msgid "Load current background color"
+msgstr "Wybierz barwę tła"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Select background color"
+msgid "Clear background color"
+msgstr "Wybierz barwę tła"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select the script"
+msgid "Select a script file:"
+msgstr "Wybierz skrypt"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "Wybierz ścieżkę"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "Buttons"
+msgid "Buttons size:"
+msgstr "Przyciski"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Sort by position"
+msgid "Settings button position:"
+msgstr "Uszereguj wg położenia"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "Dół"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
+#| msgid "Inline"
+msgid "Inline"
+msgstr "W treści"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Icon files (*.png, *.svg)"
+msgstr "Plik Python (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Coloring:"
+msgid "Color info: "
+msgstr "Kolor"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Script files (*.py)"
+msgstr "Plik Python (*.py)"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -63249,9 +63466,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgid "Palette settings"
 #~ msgstr "Ustawienia palety"
 
-#~ msgid "Group settings"
-#~ msgstr "Ustawienia grupy"
-
 #~ msgid "Column count"
 #~ msgstr "Liczba kolumn"
 
@@ -65027,9 +65241,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgid "Sort"
 #~ msgstr "Uszereguj"
 
-#~ msgid "Sort by position"
-#~ msgstr "Uszereguj wg położenia"
-
 #~ msgid "Sort keys"
 #~ msgstr "Klucze szeregowania"
 
@@ -66383,9 +66594,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 
 #~ msgid "Bottom Left"
 #~ msgstr "Lewy dolny róg"
-
-#~ msgid "Bottom"
-#~ msgstr "Dół"
 
 #~ msgid "Bottom Right"
 #~ msgstr "Prawy dolny róg"
@@ -72553,10 +72761,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action down"
 #~ msgstr "Przesuń działanie w dół"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "Usuń obecne działanie"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Offset by x/2, y/2"
@@ -84190,10 +84394,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Workspace %1"
 #~ msgstr "Przestrzeń robocza %1"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "Wybierz barwę"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select a file to load..."
@@ -97319,9 +97519,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 
 #~ msgid "Program:"
 #~ msgstr "Program:"
-
-#~ msgid "Coloring:"
-#~ msgstr "Kolor"
 
 #~ msgid "Plain"
 #~ msgstr "Jednostajny"

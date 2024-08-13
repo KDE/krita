@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -16732,6 +16732,9 @@ msgstr "ขยาย&ออก"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, fuzzy, kde-format
 msgid "..."
 msgstr "ค่า"
@@ -56487,6 +56490,7 @@ msgid "Selected path"
 msgstr "เครื่องมือการเลือก"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select the script"
 msgstr "สร้างเลเยอร์ใหม่"
@@ -56495,6 +56499,183 @@ msgstr "สร้างเลเยอร์ใหม่"
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "คุณสมบัติเลเยอร์..."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Custom icon"
+msgstr "ตัวเลือกการไล่ระดับสี"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Tool icon"
+msgstr "รูปแบบ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Brush preset icon"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+msgid "Workflow buttons settings"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+msgid "Selected button:"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+msgid "Delete selected workflow button"
+msgstr "สร้างเลเยอร์ใหม่"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+msgid "Select icon mode:"
+msgstr "การเลือก"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "การเลือก"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "custom input"
+msgid "Custom icon path"
+msgstr "การใส่ค่าที่ตั้งเอง"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "สร้างเลเยอร์ใหม่"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+msgid "Enter a Tooltip:"
+msgstr "มุม:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+msgid "Tooltip text"
+msgstr "เครื่องมือ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "การเลือก"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+msgid "Select a brush preset:"
+msgstr "อยู่เหนือเลเยอร์ปัจจุบัน"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+msgid "Brush preset name"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+msgid "Select the brush preset"
+msgstr "อยู่เหนือเลเยอร์ปัจจุบัน"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "สีพื้นหลัง:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+msgid "Load current foreground color"
+msgstr "สีพื้น&หน้า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+msgid "Clear foreground color"
+msgstr "สีพื้น&หน้า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "สีพื้นหลัง:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "สีพื้นหลัง:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "สีพื้นหลัง:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+msgid "Select a script file:"
+msgstr "สร้างเลเยอร์ใหม่"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+msgid "Script path"
+msgstr "เครื่องมือการเลือก"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+msgid "Buttons size:"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+msgid "Settings button position:"
+msgstr "การเพิ่ม"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+msgid "Bottom bar"
+msgstr "เติมสีวัตถุ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+msgid "Inline"
+msgstr "ลิงค์"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+msgid "Icon files (*.png, *.svg)"
+msgstr "คุณสมบัติเลเยอร์..."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+msgid "Color info: "
+msgstr "สี"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+msgid "Script files (*.py)"
+msgstr "คุณสมบัติเลเยอร์..."
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 #, fuzzy
@@ -61756,10 +61937,6 @@ msgstr "ลบรูปภาพ"
 #~ msgstr "ตั้งค่า"
 
 #, fuzzy
-#~ msgid "Group settings"
-#~ msgstr "ตั้งค่า"
-
-#, fuzzy
 #~ msgid "Column count"
 #~ msgstr "พื้นหลัง"
 
@@ -63472,10 +63649,6 @@ msgstr "ลบรูปภาพ"
 #~ msgstr "ถนน"
 
 #, fuzzy
-#~ msgid "Sort by position"
-#~ msgstr "การเพิ่ม"
-
-#, fuzzy
 #~ msgid "Sort keys"
 #~ msgstr "เพิ่มแฟ้มสคริปต์"
 
@@ -64770,10 +64943,6 @@ msgstr "ลบรูปภาพ"
 #, fuzzy
 #~ msgid "Bottom Left"
 #~ msgstr "&ลบเลเยอร์"
-
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "เติมสีวัตถุ"
 
 #, fuzzy
 #~ msgid "Bottom Right"
@@ -69449,11 +69618,6 @@ msgstr "ลบรูปภาพ"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action down"
 #~ msgstr "การเลือก"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "สร้างเลเยอร์ใหม่"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -78910,11 +79074,6 @@ msgstr "ลบรูปภาพ"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "การเลือก"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
 #~ msgid "Select a file to load..."
 #~ msgstr "เลือกทั้งหมด"
 
@@ -86452,10 +86611,6 @@ msgstr "ลบรูปภาพ"
 #, fuzzy
 #~ msgid "Main"
 #~ msgstr "หมุน &90"
-
-#, fuzzy
-#~ msgid "Coloring:"
-#~ msgstr "สี"
 
 #, fuzzy
 #~ msgid "Plain"

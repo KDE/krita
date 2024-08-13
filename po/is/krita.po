@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -17006,6 +17006,9 @@ msgstr "Renna frá"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, fuzzy, kde-format
 msgid "..."
 msgstr "..."
@@ -57517,12 +57520,198 @@ msgid "Selected path"
 msgstr "Velja slóð"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select the script"
 msgstr "Valtól"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Custom icon"
+msgstr "Sérsniðnir valkostir"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Tool icon"
+msgstr "Tækjamynd"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush Presets"
+msgid "Brush preset icon"
+msgstr "Penslar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+msgid "Workflow buttons settings"
+msgstr "Litastillingar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "vinstri músarhnappur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+msgid "Delete selected workflow button"
+msgstr "Draga í val"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+msgid "Select icon mode:"
+msgstr "Valhamur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "Valtól"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+msgid "Custom icon path"
+msgstr "Skjár"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "Velja"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+msgid "Enter a Tooltip:"
+msgstr "Fléttun"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tools"
+msgid "Tooltip text"
+msgstr "Verkfæri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "Valtól"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Choose brush preset"
+msgid "Select a brush preset:"
+msgstr "Stillingar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush Presets"
+msgid "Brush preset name"
+msgstr "Penslar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Choose brush preset"
+msgid "Select the brush preset"
+msgstr "Stillingar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "Bakgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+msgid "Load current foreground color"
+msgstr "Forgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+msgid "Clear foreground color"
+msgstr "Forgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "Bakgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "Bakgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "Bakgrunnslitur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+msgid "Select a script file:"
+msgstr "Valtól"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "Velja slóð"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+msgid "Buttons size:"
+msgstr "Stillingar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+msgid "Settings button position:"
+msgstr "Viðbót"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+msgid "Bottom bar"
+msgstr "Neðst"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Split"
+msgid "Inline"
+msgstr "Kljúfa"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+msgid "Color info: "
+msgstr "Litur:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+msgid "Script files (*.py)"
+msgstr "Mynstur"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
@@ -62844,10 +63033,6 @@ msgstr "Stillingar"
 #~ msgstr "Stillingar"
 
 #, fuzzy
-#~ msgid "Group settings"
-#~ msgstr "Litastillingar"
-
-#, fuzzy
 #~ msgid "Column count"
 #~ msgstr "bakgrunnur"
 
@@ -64030,10 +64215,6 @@ msgstr "Stillingar"
 #~ msgstr "Línur"
 
 #, fuzzy
-#~ msgid "Color: "
-#~ msgstr "Litur:"
-
-#, fuzzy
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "Skráin %1 er ekki til."
 
@@ -64560,10 +64741,6 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgid "Sort"
 #~ msgstr "Raða"
-
-#, fuzzy
-#~ msgid "Sort by position"
-#~ msgstr "Viðbót"
 
 #~ msgid "Sort keys"
 #~ msgstr "Raða lyklum"
@@ -65823,10 +66000,6 @@ msgstr "Stillingar"
 #, fuzzy
 #~ msgid "Bottom Left"
 #~ msgstr "Neðst til vinstri"
-
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "Neðst"
 
 #, fuzzy
 #~ msgid "Bottom Right"
@@ -75783,11 +75956,6 @@ msgstr "Stillingar"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Workspace"
 #~ msgstr "Vinnusvæði"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "Valtól"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

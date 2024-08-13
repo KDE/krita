@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-07-07 07:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -16625,6 +16625,9 @@ msgstr "&დაპატარავება"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -55682,11 +55685,215 @@ msgid "Selected path"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom options"
+msgid "Custom icon"
+msgstr "ხელით მითითებული პარამეტრები"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "ხელსაწყოს ხატულა"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "ფუნჯის პრესეტები"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+msgid "Workflow buttons settings"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "მარცხენა ღილაკი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+msgid "Delete selected workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection Mode"
+msgid "Select icon mode:"
+msgstr "არჩევის რეჟიმი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgid "Selection Actions"
+msgid "Select a custom icon:"
+msgstr "მონიშვნის ქმედებები"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Combine paths"
+msgid "Custom icon path"
+msgstr "ბილიკების კომბინირება"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select one document."
+msgid "Select the custom icon"
+msgstr "არჩიეთ ერთი დოკუმენტი."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal Pool:"
+msgid "Enter a Tooltip:"
+msgstr "შიდა პული:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "მინიშნება"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select a Color"
+msgid "Select a tool:"
+msgstr "ფერის არჩევა"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select a brush preset:"
+msgstr "აირჩიეთ ფუნჯის პრესეტი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "ფუნჯის პრესეტები"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select the brush preset"
+msgstr "აირჩიეთ ფუნჯის პრესეტი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Foreground color"
+msgid "Select foreground color:"
+msgstr "წინა პლანის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Foreground color"
+msgid "Load current foreground color"
+msgstr "წინა პლანის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Foreground color"
+msgid "Clear foreground color"
+msgstr "წინა პლანის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Background color"
+msgid "Select backround color:"
+msgstr "ფონის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Background color"
+msgid "Load current background color"
+msgstr "ფონის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Background color"
+msgid "Clear background color"
+msgstr "ფონის ფერი"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select a Folder"
+msgid "Select a script file:"
+msgstr "აირჩიეთ საქაღალდე"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "ბილიკის არჩევა"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "Buttons"
+msgid "Buttons size:"
+msgstr "ღილაკები"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+msgid "Settings button position:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "ბოლოში"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
+#| msgid "Inline"
+msgid "Inline"
+msgstr "ხაზში"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color Engine:"
+msgid "Color info: "
+msgstr "ფერების ძრავა:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+msgid "Script files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57

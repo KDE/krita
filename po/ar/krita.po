@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17386,6 +17386,9 @@ msgstr "ب&عّد"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -59091,6 +59094,7 @@ msgid "Selected path"
 msgstr "المحدّد"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Save the script"
 msgid "Select the script"
@@ -59098,6 +59102,217 @@ msgstr "احفظ السّكربت"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom Options:"
+msgid "Custom icon"
+msgstr "خيارات مخصصة:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "أيقونة الأداء"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "الفُرش مسبقة الضّبط"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Color Settings"
+msgid "Workflow buttons settings"
+msgstr "إعدادات الم&جموعات"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "الزّرّ الأيسر"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgid "Delete selected workflow button"
+msgstr "احذف الطّبقة أو القناع"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "وضع التّحديد:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgid "Select an image"
+msgid "Select a custom icon:"
+msgstr "اختر صورة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Bullet"
+msgid "Custom icon path"
+msgstr "نقطة مخصّصة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Selected Bundle"
+msgid "Select the custom icon"
+msgstr "الحزمة المحدّدة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+msgid "Enter a Tooltip:"
+msgstr "الحوض الدّاخليّ:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "التلميحة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select a Color"
+msgid "Select a tool:"
+msgstr "اختر لوناً"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Choose workspace"
+msgid "Select a brush preset:"
+msgstr "اختر مساحة عمل"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "الفُرش مسبقة الضّبط"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Choose workspace"
+msgid "Select the brush preset"
+msgstr "اختر مساحة عمل"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select foreground color:"
+msgstr "حدّد لون الخلفيّة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Load current foreground color"
+msgstr "أضف لون مقدّمة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Clear foreground color"
+msgstr "أضف لون مقدّمة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select backround color:"
+msgstr "حدّد لون الخلفيّة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Select background color"
+msgid "Load current background color"
+msgstr "حدّد لون الخلفيّة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Select background color"
+msgid "Clear background color"
+msgstr "حدّد لون الخلفيّة"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Save the script"
+msgid "Select a script file:"
+msgstr "احفظ السّكربت"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "اختيار مسار"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgid "Buttons size:"
+msgstr "لا أزرار"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Export Composition"
+msgid "Settings button position:"
+msgstr "صدّر التّراكب"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "أسفل"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
+#| msgid "Inline"
+msgid "Inline"
+msgstr "داخلي"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color:"
+msgid "Color info: "
+msgstr "اللون:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Save ICC Profile"
+msgid "Script files (*.py)"
+msgstr "احفظ لاحة ICC"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
@@ -64724,11 +64939,6 @@ msgstr "الصّور المرجع"
 #~ msgstr "إعدادات اللوحي"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Group settings"
-#~ msgstr "إعدادات الم&جموعات"
-
-#, fuzzy
 #~| msgid "Color Burn"
 #~ msgid "Column count"
 #~ msgstr "حرق اللون"
@@ -65967,11 +66177,6 @@ msgstr "الصّور المرجع"
 #~ msgstr "خطوط"
 
 #, fuzzy
-#~| msgid "Color:"
-#~ msgid "Color: "
-#~ msgstr "اللون:"
-
-#, fuzzy
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "ملفّ قناة الصّوت %1 غير موجود!"
 
@@ -66494,11 +66699,6 @@ msgstr "الصّور المرجع"
 #~ msgid "Sort"
 #~ msgstr "الفرز"
 
-#, fuzzy
-#~| msgid "Export Composition"
-#~ msgid "Sort by position"
-#~ msgstr "صدّر التّراكب"
-
 #~ msgid "Sort keys"
 #~ msgstr "مفاتيح الفرز"
 
@@ -66646,11 +66846,6 @@ msgstr "الصّور المرجع"
 #~ msgctxt "None"
 #~ msgid "Nothing"
 #~ msgstr "لا تفعل شيئًا"
-
-#, fuzzy
-#~| msgid "Select an image"
-#~ msgid "Select a list image"
-#~ msgstr "اختر صورة"
 
 #~ msgid "Alignment:"
 #~ msgstr "المحاذاة:"
@@ -67739,12 +67934,6 @@ msgstr "الصّور المرجع"
 #~| msgid "Bottom Edge"
 #~ msgid "Bottom Left"
 #~ msgstr "الحافّة السفليّة"
-
-#, fuzzy
-#~| msgctxt "toolbar position string"
-#~| msgid "Bottom"
-#~ msgid "Bottom"
-#~ msgstr "أسفل"
 
 #, fuzzy
 #~| msgid "Rotate Right"

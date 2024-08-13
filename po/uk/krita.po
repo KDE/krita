@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-08-01 20:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -16784,6 +16784,9 @@ msgstr "З&меншити"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -58245,12 +58248,224 @@ msgid "Selected path"
 msgstr "Позначений контур"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Виберіть скрипт"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
 msgstr "файли Python (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom options"
+msgid "Custom icon"
+msgstr "Нетипові параметри"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "Піктограма інструмента"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "Набори пензлів"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Group settings"
+msgid "Workflow buttons settings"
+msgstr "Параметри групи"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "ліва кнопка"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete selected mask"
+msgid "Delete selected workflow button"
+msgstr "Вилучити позначену маску"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "Режим вибору:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgctxt "@title:window"
+#| msgid "Select a swap directory"
+msgid "Select a custom icon:"
+msgstr "Виберіть каталог резервної пам’яті"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Input"
+msgid "Custom icon path"
+msgstr "Нетипові вхідні дані"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select the bundle"
+msgid "Select the custom icon"
+msgstr "Виберіть комплект"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal Pool:"
+msgid "Enter a Tooltip:"
+msgstr "Внутрішній буфер:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "Підказка"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select a Color"
+msgid "Select a tool:"
+msgstr "Виберіть колір"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select a brush preset:"
+msgstr "Вибрати набір пензлів"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "Набори пензлів"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Select brush preset"
+msgid "Select the brush preset"
+msgstr "Вибрати набір пензлів"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select foreground color:"
+msgstr "Виберіть колір тла"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Load current foreground color"
+msgstr "Додати колір переднього плану"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Clear foreground color"
+msgstr "Додати колір переднього плану"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select backround color:"
+msgstr "Виберіть колір тла"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Select background color"
+msgid "Load current background color"
+msgstr "Виберіть колір тла"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Select background color"
+msgid "Clear background color"
+msgstr "Виберіть колір тла"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select the script"
+msgid "Select a script file:"
+msgstr "Виберіть скрипт"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "Позначення контуром"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "Buttons"
+msgid "Buttons size:"
+msgstr "Кнопки"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+msgid "Settings button position:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "Знизу"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
+#| msgid "Inline"
+msgid "Inline"
+msgstr "У рядку"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Icon files (*.png, *.svg)"
+msgstr "файли Python (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color: "
+msgid "Color info: "
+msgstr "Колір:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Script files (*.py)"
+msgstr "файли Python (*.py)"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -63695,10 +63910,6 @@ msgstr "Інструмент еталонних зображень"
 #~ msgid "Open Color Profile"
 #~ msgstr "Відкрити профіль кольорів"
 
-#~ msgctxt "@title:window"
-#~ msgid "Select a swap directory"
-#~ msgstr "Виберіть каталог резервної пам’яті"
-
 #~ msgid "Add new color profile:"
 #~ msgstr "Додати новий профіль кольорів:"
 
@@ -63929,9 +64140,6 @@ msgstr "Інструмент еталонних зображень"
 
 #~ msgid "Delete this group"
 #~ msgstr "Вилучити цю групу"
-
-#~ msgid "Group settings"
-#~ msgstr "Параметри групи"
 
 #~ msgid "Column count"
 #~ msgstr "Кількість стовпчиків"
@@ -65139,9 +65347,6 @@ msgstr "Інструмент еталонних зображень"
 #~ msgctxt "Line label in Multigrid pattern options"
 #~ msgid "Lines"
 #~ msgstr "Лінії"
-
-#~ msgid "Color: "
-#~ msgstr "Колір:"
 
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "Файла звукового каналу %1 не існує!"

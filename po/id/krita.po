@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -16639,6 +16639,9 @@ msgstr "Zu&m Perkecil"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -55858,11 +55861,210 @@ msgid "Selected path"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom color"
+msgid "Custom icon"
+msgstr "Warna kustom"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "Ikon Alat"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "Prasetel Kuas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+msgid "Workflow buttons settings"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgid "Selected:"
+msgid "Selected button:"
+msgstr "Dipilih:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+msgid "Delete selected workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "Mode pemilihan:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgid "Selection"
+msgid "Select a custom icon:"
+msgstr "Pemilihan"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Combine paths"
+msgid "Custom icon path"
+msgstr "Kombinasikan alur"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Select one document."
+msgid "Select the custom icon"
+msgstr "Pilih satu dokumen."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Enter a Tooltip:"
+msgstr "Tip Alat"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "Tip Alat"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select Shapes Tool"
+msgid "Select a tool:"
+msgstr "Alat Pilih Bentuk"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Current brush preset"
+msgid "Select a brush preset:"
+msgstr "Prasetel kuas saat ini"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "Prasetel Kuas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Reload the brush preset"
+msgid "Select the brush preset"
+msgstr "Muat ulang prasetel kuas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select foreground color:"
+msgstr "Pilih warna latar belakang"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Foreground color"
+msgid "Load current foreground color"
+msgstr "Warna latar depan"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Foreground color"
+msgid "Clear foreground color"
+msgstr "Warna latar depan"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select backround color:"
+msgstr "Pilih warna latar belakang"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Select background color"
+msgid "Load current background color"
+msgstr "Pilih warna latar belakang"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Select background color"
+msgid "Clear background color"
+msgstr "Pilih warna latar belakang"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select an image"
+msgid "Select a script file:"
+msgstr "Pilih sebuah gambar"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgctxt "Script list label"
+#| msgid "Script"
+msgid "Script path"
+msgstr "Skrip"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "PushButton"
+msgid "Buttons size:"
+msgstr "TombolDorong"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+msgid "Settings button position:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgctxt "toolbar position string"
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "Bawah"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+msgid "Inline"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color name:"
+msgid "Color info: "
+msgstr "Nama warna:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+msgid "Script files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57

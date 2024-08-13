@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17757,6 +17757,9 @@ msgstr "Loitonna"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -59703,12 +59706,216 @@ msgid "Selected path"
 msgstr "Valittu sijainti"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Valitse skripti"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
 msgstr "Python-tiedostot (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Histogram Options"
+msgid "Custom icon"
+msgstr "Histogrammiasetukset"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "Työkalukuvake"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush Presets"
+msgid "Brush preset icon"
+msgstr "Valmiit siveltimet"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Color Settings"
+msgid "Workflow buttons settings"
+msgstr "Väriasetukset"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "vasenta painiketta"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgid "Delete selected workflow button"
+msgstr "Poista taso tai maski"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "Valintatapa:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "Valitse läpinäkymätön"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Input"
+msgid "Custom icon path"
+msgstr "Mukautettu syöte"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Delete the current action"
+msgid "Select the custom icon"
+msgstr "Poista valittu toiminto"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+msgid "Enter a Tooltip:"
+msgstr "Askel:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "Työkaluvihje"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "Valitse läpinäkymätön"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Current preset"
+msgid "Select a brush preset:"
+msgstr "Nykyinen esiasetus"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush Presets"
+msgid "Brush preset name"
+msgstr "Valmiit siveltimet"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Current preset"
+msgid "Select the brush preset"
+msgstr "Nykyinen esiasetus"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select foreground color:"
+msgstr "Valitse taustaväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Load current foreground color"
+msgstr "Lisää piirtoväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Add foreground color"
+msgid "Clear foreground color"
+msgstr "Lisää piirtoväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select backround color:"
+msgstr "Valitse taustaväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Select background color"
+msgid "Load current background color"
+msgstr "Valitse taustaväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Select background color"
+msgid "Clear background color"
+msgstr "Valitse taustaväri"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select the script"
+msgid "Select a script file:"
+msgstr "Valitse skripti"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "Valitse polku"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+msgid "Buttons size:"
+msgstr "painike"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Sort by position"
+msgid "Settings button position:"
+msgstr "Lajittele sijainnin mukaan"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "Alas"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+msgid "Inline"
+msgstr "BSpline"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Icon files (*.png, *.svg)"
+msgstr "Python-tiedostot (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Coloring:"
+msgid "Color info: "
+msgstr "Väritys:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Script files (*.py)"
+msgstr "Python-tiedostot (*.py)"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -65340,11 +65547,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgstr "Piirtopöydän asetukset"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Group settings"
-#~ msgstr "Väriasetukset"
-
-#, fuzzy
 #~| msgid "Color count:"
 #~ msgid "Column count"
 #~ msgstr "Värien määrä:"
@@ -67273,9 +67475,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgid "Sort"
 #~ msgstr "Lajittelu"
 
-#~ msgid "Sort by position"
-#~ msgstr "Lajittele sijainnin mukaan"
-
 #~ msgid "Sort keys"
 #~ msgstr "Lajitteluavaimet"
 
@@ -68691,9 +68890,6 @@ msgstr "Viitekuvatyökalu"
 
 #~ msgid "Bottom Left"
 #~ msgstr "Alavasemmalle"
-
-#~ msgid "Bottom"
-#~ msgstr "Alas"
 
 #~ msgid "Bottom Right"
 #~ msgstr "Alaoikealle"
@@ -75416,12 +75612,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action down"
 #~ msgstr "Siirrä toimintoa alemmas"
-
-#, fuzzy
-#~| msgid "Delete the current action"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "Poista valittu toiminto"
 
 #, fuzzy
 #~| msgid "Offset by x/2, y/2"
@@ -90076,11 +90266,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgstr "Työtila %1"
 
 #, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "Valitse läpinäkymätön"
-
-#, fuzzy
 #~| msgid "Select a file to load..."
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Select a file to load..."
@@ -103417,9 +103602,6 @@ msgstr "Viitekuvatyökalu"
 
 #~ msgid "Count:"
 #~ msgstr "Lukumääär:"
-
-#~ msgid "Coloring:"
-#~ msgstr "Väritys:"
 
 #~ msgid "Plain"
 #~ msgstr "Tasainen"

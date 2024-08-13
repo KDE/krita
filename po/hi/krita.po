@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16784,6 +16784,9 @@ msgstr "ज़ूम आउट (&m)"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -57028,12 +57031,216 @@ msgid "Selected path"
 msgstr "चयनित पथ"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "स्क्रिप्ट को चुनें"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
 msgstr "पायथन फ़ाइलें (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Custom Options:"
+msgid "Custom icon"
+msgstr "तदनुकूल विकल्प"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Icon"
+msgid "Tool icon"
+msgstr "औजार प्रतीक"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset icon"
+msgstr "ब्रश के नमूने"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Group settings"
+msgid "Workflow buttons settings"
+msgstr "समूह विन्यास"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgctxt "left mouse button"
+#| msgid "left button"
+msgid "Selected button:"
+msgstr "बायाँ बटनः"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the layer or mask"
+msgid "Delete selected workflow button"
+msgstr "परत या मास्क को मिटाएँ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection mode:"
+msgid "Select icon mode:"
+msgstr "चयन मोड :"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "चयन मोड:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom Input"
+msgid "Custom icon path"
+msgstr "तदनुकूल इंपुट"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "वर्तमान चयन में जोड़ें (&A)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal Pool:"
+msgid "Enter a Tooltip:"
+msgstr "आंतरिक पूल :"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tooltip"
+msgid "Tooltip text"
+msgstr "औज़ार-टिप"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "Select a Color"
+msgid "Select a tool:"
+msgstr "एक रंग चुने"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Current brush preset"
+msgid "Select a brush preset:"
+msgstr "वर्तमान ब्रश प्रीसेट"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Brush presets"
+msgid "Brush preset name"
+msgstr "ब्रश के नमूने"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Current brush preset"
+msgid "Select the brush preset"
+msgstr "वर्तमान ब्रश प्रीसेट"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "पृष्ठभूमि सेट करें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+msgid "Load current foreground color"
+msgstr "अग्रभूमि का रंग"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+msgid "Clear foreground color"
+msgstr "अग्रभूमि का रंग"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "पृष्ठभूमि सेट करें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "पृष्ठभूमि सेट करें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "पृष्ठभूमि सेट करें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Select the script"
+msgid "Select a script file:"
+msgstr "स्क्रिप्ट को चुनें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Select path"
+msgid "Script path"
+msgstr "पथ चुनें"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgid "Buttons size:"
+msgstr "%1 बटन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+msgid "Settings button position:"
+msgstr "कम्पोजिट मोड"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+msgid "Bottom bar"
+msgstr "ज़ूम"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgctxt "spline filtering"
+#| msgid "spline"
+msgid "Inline"
+msgstr "स्प्लाइन"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Icon files (*.png, *.svg)"
+msgstr "पायथन फ़ाइलें (*.py)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Coloring:"
+msgid "Color info: "
+msgstr "रंग:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Python files (*.py)"
+msgid "Script files (*.py)"
+msgstr "पायथन फ़ाइलें (*.py)"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -62464,9 +62671,6 @@ msgstr "संदर्भ छवि औज़ार"
 #~ msgid "Palette settings"
 #~ msgstr "रंगपट्टिका विन्यास"
 
-#~ msgid "Group settings"
-#~ msgstr "समूह विन्यास"
-
 #~ msgid "Column count"
 #~ msgstr "स्तम्भ संख्या"
 
@@ -64195,10 +64399,6 @@ msgstr "संदर्भ छवि औज़ार"
 #~ msgstr "नाम:"
 
 #, fuzzy
-#~ msgid "Sort by position"
-#~ msgstr "कम्पोजिट मोड"
-
-#, fuzzy
 #~ msgid "Sort keys"
 #~ msgstr "नाम:"
 
@@ -65514,10 +65714,6 @@ msgstr "संदर्भ छवि औज़ार"
 #, fuzzy
 #~ msgid "Bottom Left"
 #~ msgstr "परत को घुमाएं"
-
-#, fuzzy
-#~ msgid "Bottom"
-#~ msgstr "ज़ूम"
 
 #, fuzzy
 #~ msgid "Bottom Right"
@@ -71024,11 +71220,6 @@ msgstr "संदर्भ छवि औज़ार"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action down"
 #~ msgstr "मास्क को शीर्ष में ले जाएँ"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "वर्तमान चयन में जोड़ें (&A)"
 
 #, fuzzy
 #~| msgid "Current color model:"
@@ -81163,11 +81354,6 @@ msgstr "संदर्भ छवि औज़ार"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "चयन मोड:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
 #~ msgid "Select a file to load..."
 #~ msgstr "सभी का चयन करें"
 
@@ -90165,9 +90351,6 @@ msgstr "संदर्भ छवि औज़ार"
 
 #~ msgid "Count:"
 #~ msgstr "गणनाः"
-
-#~ msgid "Coloring:"
-#~ msgstr "रंग:"
 
 #~ msgid "Plain"
 #~ msgstr "सादा"

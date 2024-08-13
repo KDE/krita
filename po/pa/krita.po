@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17949,6 +17949,9 @@ msgstr "ਜ਼ੂਮ"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "..."
@@ -61634,6 +61637,7 @@ msgid "Selected path"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Delete the current page"
 msgid "Select the script"
@@ -61641,6 +61645,211 @@ msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Options"
+msgid "Custom icon"
+msgstr "ਟੂਲ ਚੋਣਾਂ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Options"
+msgid "Tool icon"
+msgstr "ਟੂਲ ਚੋਣਾਂ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Import Document"
+msgid "Brush preset icon"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Document Settings"
+msgid "Workflow buttons settings"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgid "Delete Layer"
+msgid "Selected button:"
+msgstr "ਲੇਅਰ ਹਟਾਓ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Delete the current page"
+msgid "Delete selected workflow button"
+msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Object Name"
+msgid "Select icon mode:"
+msgstr "ਆਬਜੈਕਟ ਨਾਂ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+#| msgid "D&elete"
+msgid "Select a custom icon:"
+msgstr "ਹਟਾਓ(&e)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Document"
+msgid "Custom icon path"
+msgstr "ਡੌਕੂਮੈਂਟ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+#| msgid "Delete the current page"
+msgid "Select the custom icon"
+msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Change Connection"
+msgid "Enter a Tooltip:"
+msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+#| msgid "Tools"
+msgid "Tooltip text"
+msgstr "ਟੂਲ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+#| msgid "D&elete"
+msgid "Select a tool:"
+msgstr "ਹਟਾਓ(&e)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Configure..."
+msgid "Select a brush preset:"
+msgstr "...ਸੰਰਚਨਾ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "Import Document"
+msgid "Brush preset name"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Configure..."
+msgid "Select the brush preset"
+msgstr "...ਸੰਰਚਨਾ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+#| msgid "Background Color"
+msgid "Select foreground color:"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Background Color"
+msgid "Load current foreground color"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Background Color"
+msgid "Clear foreground color"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+#| msgid "Background Color"
+msgid "Select backround color:"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+#| msgid "Background Color"
+msgid "Load current background color"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+#| msgid "Background Color"
+msgid "Clear background color"
+msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+#| msgid "Delete the current page"
+msgid "Select a script file:"
+msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+#| msgid "Insert Page"
+msgid "Script path"
+msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "Add collection folder"
+msgid "Buttons size:"
+msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Position"
+msgid "Settings button position:"
+msgstr "ਸਥਿਤੀ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgid "Straight"
+msgid "Bottom bar"
+msgstr "ਸਿੱਧਾ ਉੱਤੇ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgid "Lines"
+msgid "Inline"
+msgstr "ਲਾਈਨਾਂ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Line Color"
+msgid "Color info: "
+msgstr "ਰੇਖਾ ਰੰਗ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Save"
+msgid "Script files (*.py)"
+msgstr "ਸੰਭਾਲੋ"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
@@ -67452,11 +67661,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
 #, fuzzy
-#~| msgid "Document Settings"
-#~ msgid "Group settings"
-#~ msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
-
-#, fuzzy
 #~| msgid "Line Color"
 #~ msgid "Column count"
 #~ msgstr "ਰੇਖਾ ਰੰਗ"
@@ -68706,11 +68910,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgstr "ਲਾਈਨਾਂ"
 
 #, fuzzy
-#~| msgid "Line Color"
-#~ msgid "Color: "
-#~ msgstr "ਰੇਖਾ ਰੰਗ"
-
-#, fuzzy
 #~| msgid "Insert page"
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
@@ -69209,11 +69408,6 @@ msgstr "ਤਬਦੀਲ"
 #~| msgid "Add script file"
 #~ msgid "Sort"
 #~ msgstr "ਸਕ੍ਰਿਪਟ ਫਾਇਲ ਸ਼ਾਮਲ"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgid "Sort by position"
-#~ msgstr "ਸਥਿਤੀ"
 
 #, fuzzy
 #~| msgid "Add script file"
@@ -70505,11 +70699,6 @@ msgstr "ਤਬਦੀਲ"
 #, fuzzy
 #~| msgid "Straight"
 #~ msgid "Bottom Left"
-#~ msgstr "ਸਿੱਧਾ ਉੱਤੇ"
-
-#, fuzzy
-#~| msgid "Straight"
-#~ msgid "Bottom"
 #~ msgstr "ਸਿੱਧਾ ਉੱਤੇ"
 
 #, fuzzy
@@ -73137,12 +73326,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action up"
 #~ msgstr "ਭੰਡਾਰ"
-
-#, fuzzy
-#~| msgid "Delete the current page"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
 #, fuzzy
 #~| msgid "Create Layer"
@@ -77211,12 +77394,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Detach from Toolbar"
 #~ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
-
-#, fuzzy
-#~| msgid "D&elete"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "ਹਟਾਓ(&e)"
 
 #, fuzzy
 #~| msgid "Delete the current page"

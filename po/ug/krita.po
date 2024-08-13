@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -17125,6 +17125,9 @@ msgstr "كىچىكلىتىش"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr "…"
@@ -58266,6 +58269,7 @@ msgid "Selected path"
 msgstr "مۇندەرىجە تاللاش"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select the script"
 msgstr "ئەكسىچە تاللا"
@@ -58275,6 +58279,198 @@ msgstr "ئەكسىچە تاللا"
 #| msgid "Filter"
 msgid "Python files (*.py)"
 msgstr "سۈزگۈچ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Custom icon"
+msgstr "سىتاتىسكا گرافىكى، چاسا دىئاگرامما"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "Tool Options"
+msgid "Tool icon"
+msgstr "قورال تاللانمىلىرى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Brush preset icon"
+msgstr "رەسىم قەلىمى تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+#| msgid "Color Settings"
+msgid "Workflow buttons settings"
+msgstr "رەڭ تەڭشىكى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgid "Mouse Wheel"
+msgid "Selected button:"
+msgstr "چاشقىنەك غالتىكى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+msgid "Delete selected workflow button"
+msgstr "مەشغۇلاتنى كۆپەيت"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Selection Mode"
+msgid "Select icon mode:"
+msgstr "تاللىغان شەكلى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "مۇندەرىجە تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Stop color."
+msgid "Custom icon path"
+msgstr "توختاش رەڭگى."
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "تاللا"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal error"
+msgid "Enter a Tooltip:"
+msgstr "ئىچكى خاتالىق"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+msgid "Tooltip text"
+msgstr "قوراللار(&T)"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "مۇندەرىجە تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+#| msgid "Current preset"
+msgid "Select a brush preset:"
+msgstr "چەكلەش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+msgid "Brush preset name"
+msgstr "رەسىم قەلىمى تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+#| msgid "Current preset"
+msgid "Select the brush preset"
+msgstr "چەكلەش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "تەگلىك رەڭگى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+#| msgid "Foreground Color"
+msgid "Load current foreground color"
+msgstr "ئالدى رەڭ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+#| msgid "Foreground Color"
+msgid "Clear foreground color"
+msgstr "ئالدى رەڭ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "تەگلىك رەڭگى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "تەگلىك رەڭگى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "تەگلىك رەڭگى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+msgid "Select a script file:"
+msgstr "ئەكسىچە تاللا"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+msgid "Script path"
+msgstr "مۇندەرىجە تاللاش"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+msgid "Buttons size:"
+msgstr "توپچىلار"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Composition"
+msgid "Settings button position:"
+msgstr "يېزىقچىلىق"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgid "Bottom"
+msgid "Bottom bar"
+msgstr "ئاستى"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+#| msgid "Bilinear"
+msgid "Inline"
+msgstr "قوش سىزىقلىق"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#, fuzzy
+#| msgid "Filter"
+msgid "Icon files (*.png, *.svg)"
+msgstr "سۈزگۈچ"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color:"
+msgid "Color info: "
+msgstr "رەڭ:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Filter"
+msgid "Script files (*.py)"
+msgstr "سۈزگۈچ"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 #, fuzzy
@@ -63729,11 +63925,6 @@ msgstr "نەقىل"
 #~ msgstr "رەڭ تەڭشىكى"
 
 #, fuzzy
-#~| msgid "Color Settings"
-#~ msgid "Group settings"
-#~ msgstr "رەڭ تەڭشىكى"
-
-#, fuzzy
 #~ msgid "Column count"
 #~ msgstr "رەڭ ئاتى:"
 
@@ -64895,11 +65086,6 @@ msgstr "نەقىل"
 #~ msgstr "سىزىقلار"
 
 #, fuzzy
-#~| msgid "Color:"
-#~ msgid "Color: "
-#~ msgstr "رەڭ:"
-
-#, fuzzy
 #~| msgid "The file %1 does not exist."
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "ھۆججەت %1 مەۋجۇت ئەمەس."
@@ -65447,11 +65633,6 @@ msgstr "نەقىل"
 
 #~ msgid "Sort"
 #~ msgstr "تەرتىپلە"
-
-#, fuzzy
-#~| msgid "Composition"
-#~ msgid "Sort by position"
-#~ msgstr "يېزىقچىلىق"
 
 #, fuzzy
 #~ msgid "Sort keys"
@@ -66689,9 +66870,6 @@ msgstr "نەقىل"
 
 #~ msgid "Bottom Left"
 #~ msgstr "سول ئاستى"
-
-#~ msgid "Bottom"
-#~ msgstr "ئاستى"
 
 #~ msgid "Bottom Right"
 #~ msgstr "ئوڭ ئاستى"
@@ -78206,11 +78384,6 @@ msgstr "نەقىل"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Workspace"
 #~ msgstr "خىزمەت بوشلۇقى"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "مۇندەرىجە تاللاش"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

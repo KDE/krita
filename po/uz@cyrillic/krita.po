@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17439,6 +17439,9 @@ msgstr "Жорий бўлим"
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, fuzzy, kde-format
 msgid "..."
 msgstr "Қўшиш..."
@@ -59374,12 +59377,200 @@ msgid "Selected path"
 msgstr "Андоза йўл"
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select the script"
 msgstr "Матнни ўчириш"
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Custom icon"
+msgstr "Тўлдириш мосламалари"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+msgid "Tool icon"
+msgstr "Тўлдириш мосламалари"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#, fuzzy
+#| msgid "&Reset"
+msgid "Brush preset icon"
+msgstr "&Тиклаш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#, fuzzy
+msgid "Workflow buttons settings"
+msgstr "Қатор:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#, fuzzy
+#| msgid "Completion"
+msgid "Selected button:"
+msgstr "Тўлдириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#, fuzzy
+#| msgid "Remove Selected Text"
+msgid "Delete selected workflow button"
+msgstr "Белгиланган матнни ўчириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#, fuzzy
+#| msgid "Section Title"
+msgid "Select icon mode:"
+msgstr "Бўлимнинг сарлавҳаси"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#, fuzzy
+msgid "Select a custom icon:"
+msgstr "Матнни ўчириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#, fuzzy
+#| msgid "Custom"
+msgid "Custom icon path"
+msgstr "Бошқа"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#, fuzzy
+msgid "Select the custom icon"
+msgstr "Матнни ўчириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#, fuzzy
+#| msgid "Internal error"
+msgid "Enter a Tooltip:"
+msgstr "Ички хато"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#, fuzzy
+msgid "Tooltip text"
+msgstr "Андоза ранг"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#, fuzzy
+msgid "Select a tool:"
+msgstr "Матнни ўчириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#, fuzzy
+msgid "Select a brush preset:"
+msgstr "Жорий бўлим"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#, fuzzy
+#| msgid "&Reset"
+msgid "Brush preset name"
+msgstr "&Тиклаш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#, fuzzy
+msgid "Select the brush preset"
+msgstr "Жорий бўлим"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#, fuzzy
+msgid "Select foreground color:"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#, fuzzy
+msgid "Load current foreground color"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#, fuzzy
+msgid "Clear foreground color"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#, fuzzy
+msgid "Select backround color:"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#, fuzzy
+msgid "Load current background color"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#, fuzzy
+msgid "Clear background color"
+msgstr "Сония"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#, fuzzy
+msgid "Select a script file:"
+msgstr "Матнни ўчириш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#, fuzzy
+msgid "Script path"
+msgstr "Андоза йўл"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#, fuzzy
+#| msgid "&Select..."
+msgid "Buttons size:"
+msgstr "&Танлаш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#, fuzzy
+#| msgid "Position"
+msgid "Settings button position:"
+msgstr "Жойлашиши"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#, fuzzy
+#| msgid "Align Auto"
+msgid "Bottom bar"
+msgstr "Автоматик текислаш"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#, fuzzy
+msgid "Inline"
+msgstr "Атиргул"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#, fuzzy
+#| msgid "Color:"
+msgid "Color info: "
+msgstr "Ранги:"
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#, fuzzy
+#| msgid "Palettes"
+msgid "Script files (*.py)"
+msgstr "Асбоб ойналари"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
@@ -64935,10 +65126,6 @@ msgstr "&Алмаштириш:"
 #~ msgstr "Қатор:"
 
 #, fuzzy
-#~ msgid "Group settings"
-#~ msgstr "Қатор:"
-
-#, fuzzy
 #~| msgid "Color:"
 #~ msgid "Column count"
 #~ msgstr "Ранги:"
@@ -66147,11 +66334,6 @@ msgstr "&Алмаштириш:"
 #~ msgstr "Атиргул"
 
 #, fuzzy
-#~| msgid "Color:"
-#~ msgid "Color: "
-#~ msgstr "Ранги:"
-
-#, fuzzy
 #~| msgid "The file %1 does not exist."
 #~ msgid "Audio channel file %1 doesn't exist!"
 #~ msgstr "%1 файли мавжуд эмас."
@@ -66791,11 +66973,6 @@ msgstr "&Алмаштириш:"
 #~| msgid "Street"
 #~ msgid "Sort"
 #~ msgstr "Кўча"
-
-#, fuzzy
-#~| msgid "Position"
-#~ msgid "Sort by position"
-#~ msgstr "Жойлашиши"
 
 #, fuzzy
 #~| msgid "Scriptfile"
@@ -68107,11 +68284,6 @@ msgstr "&Алмаштириш:"
 #, fuzzy
 #~| msgid "Align Auto"
 #~ msgid "Bottom Left"
-#~ msgstr "Автоматик текислаш"
-
-#, fuzzy
-#~| msgid "Align Auto"
-#~ msgid "Bottom"
 #~ msgstr "Автоматик текислаш"
 
 #, fuzzy
@@ -71769,11 +71941,6 @@ msgstr "&Алмаштириш:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Move an action up"
 #~ msgstr "Манзили:"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Delete the current action"
-#~ msgstr "Матнни ўчириш"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"
@@ -78319,11 +78486,6 @@ msgstr "&Алмаштириш:"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "No tone curve available..."
 #~ msgstr "Ҳеч қандай расм йўқ."
-
-#, fuzzy
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Select a color"
-#~ msgstr "Матнни ўчириш"
 
 #, fuzzy
 #~| msgid "Template %1 failed to load."

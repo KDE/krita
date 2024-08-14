@@ -27,19 +27,20 @@
 # MaryamSadat Razavi <razavi@itland.ir>, 2007.
 # Nasim Daniarzadeh <daniarzadeh@itland.ir>, 2007.
 # Nazanin Kazemi <kazemi@itland.ir>, 2007.
+# SPDX-FileCopyrightText: 2024 Mohi Mirdamadi <mohi.pub@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-13 01:45+0000\n"
-"PO-Revision-Date: 2011-09-26 14:11+0330\n"
-"Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
-"Language-Team: Farsi (Persian) <>\n"
+"PO-Revision-Date: 2024-08-14 00:39+0330\n"
+"Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
+"Language-Team: fa\n"
 "Language: fa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -22622,7 +22623,7 @@ msgstr "محمدرضا میردامادی , نسیم دانیارزاده"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "mohi@ubuntu.ir , daniarzadeh@itland.ir"
+msgstr "mohi.pub@gmail.com , daniarzadeh@itland.ir"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format

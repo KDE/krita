@@ -241,7 +241,7 @@ class ButtonsSettingsDialog(QDialog):
 
         # set custom button's BGColorValues
         layoutForBGColorInput = QHBoxLayout()
-        BGColorLabel = QLabel(i18n("Select backround color:"), self)
+        BGColorLabel = QLabel(i18n("Select background color:"), self)
         layoutForBGColorInput.addWidget(BGColorLabel)
         BGColorInputSelector = QPushButton(i18n("Load current background color"), self)
         BGColorInputSelector.clicked.connect(self.selectBGColor)

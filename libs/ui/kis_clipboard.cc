@@ -327,10 +327,9 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const KoColorSpace *cs) const
     if (nodes.size() > 1) {
         // we explicitly include point (0,0) into the bounds since that
         // is a requirement for the image
-        QRect bounds = QRect(0, 0, 1, 1);
-        Q_FOREACH (KisNodeSP node, nodes) {
-            bounds |= node->exactBounds();
-        }
+        const QRect bounds =
+            std::accumulate(nodes.begin(), nodes.end(), QRect(0, 0, 1, 1),
+                            kismpl::mem_bit_or(&KisNode::exactBounds));
 
         // if no color space provided choose the most used one in the layer data
         if (cs == nullptr) {

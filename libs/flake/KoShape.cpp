@@ -10,6 +10,7 @@
 
 #include <limits>
 
+#include "KisMpl.h"
 #include "KoShape.h"
 #include "KoShape_p.h"
 #include "KoShapeContainer.h"
@@ -311,11 +312,8 @@ QRectF KoShape::boundingRect() const
 
 QRectF KoShape::boundingRect(const QList<KoShape *> &shapes)
 {
-    QRectF boundingRect;
-    Q_FOREACH (KoShape *shape, shapes) {
-        boundingRect |= shape->boundingRect();
-    }
-    return boundingRect;
+    return std::accumulate(shapes.begin(), shapes.end(), QRectF(),
+                           kismpl::mem_bit_or(&KoShape::boundingRect));
 }
 
 QRectF KoShape::absoluteOutlineRect() const
@@ -325,11 +323,8 @@ QRectF KoShape::absoluteOutlineRect() const
 
 QRectF KoShape::absoluteOutlineRect(const QList<KoShape *> &shapes)
 {
-    QRectF absoluteOutlineRect;
-    Q_FOREACH (KoShape *shape, shapes) {
-        absoluteOutlineRect |= shape->absoluteOutlineRect();
-    }
-    return absoluteOutlineRect;
+    return std::accumulate(shapes.begin(), shapes.end(), QRectF(),
+                           kismpl::mem_bit_or(&KoShape::absoluteOutlineRect));
 }
 
 QTransform KoShape::absoluteTransformation() const

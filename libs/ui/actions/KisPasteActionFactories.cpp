@@ -235,9 +235,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
                     view->canvasBase()->coordinatesConverter()->documentToImage(
                         docPos);
 
-            } else if (!clip->exactBounds().contains(image->bounds()) &&
-                       !clip->exactBounds().intersects(image->bounds()) &&
-                       !image->bounds().contains(clip->exactBounds())) {
+            } else if (!clip->exactBounds().intersects(image->bounds())) {
                  // BUG:459111
                 pasteAtCursorPosition = true;
                 imagePos = QPointF(image->bounds().center());

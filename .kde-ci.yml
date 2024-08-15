@@ -4,9 +4,6 @@
 PostInstallScripts:
     krita-plugins: build-tools/ci-scripts/build-plugins.py
 
-PackageAliases:
-    ext_qt: ext_qt-quickcontrols2
-
 Options:
     use-ccache: True
     use-asan: False

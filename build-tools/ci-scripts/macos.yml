@@ -31,7 +31,6 @@ macos-build:
     # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
     KDECI_ONLY_BUILD: True
 
-    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-quickcontrols2 }'
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1

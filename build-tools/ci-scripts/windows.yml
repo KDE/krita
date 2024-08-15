@@ -21,7 +21,6 @@ windows-build:
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_WINDOWS_SIGN_CONFIG: upstream-ci-utilities/signing/signwindowsbinaries.ini
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
-    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-quickcontrols2 }'
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1

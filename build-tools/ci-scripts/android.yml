@@ -22,8 +22,6 @@
     KRITACI_ANDROID_PACKAGE_TYPE: debug
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
-
-    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-quickcontrols2 }'
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1

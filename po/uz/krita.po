@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -56821,7 +56821,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Soniya"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61094,6 +61094,10 @@ msgstr "Kattalashtirish vositasi"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Rasmning nomini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Soniya"
 
 #, fuzzy
 #~| msgid "Fill entire selection"

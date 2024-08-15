@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 01:48+0000\n"
+"POT-Creation-Date: 2024-08-13 01:45+0000\n"
 "PO-Revision-Date: 2024-03-09 12:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -16629,6 +16629,9 @@ msgstr ""
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
 #: plugins/python/tenscripts/uitenscripts.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
 msgstr " …"
@@ -55806,11 +55809,157 @@ msgid "Selected path"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr ""
 
 #: plugins/python/tenscripts/uitenscripts.py:89
 msgid "Python files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+msgid "Custom icon"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+msgid "Tool icon"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+msgid "Brush preset icon"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+msgid "Workflow buttons settings"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+msgid "Selected button:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+msgid "Add a workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+msgid "Move selected workflow button to the left"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+msgid "Move selected workflow button to the right"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+msgid "Delete selected workflow button"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+msgid "Select icon mode:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+msgid "Select a custom icon:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+msgid "Custom icon path"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+msgid "Select the custom icon"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+msgid "Enter a Tooltip:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+msgid "Tooltip text"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+msgid "Select a tool:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+msgid "Select a brush preset:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+msgid "Brush preset name"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+msgid "Select the brush preset"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+msgid "Select foreground color:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+msgid "Load current foreground color"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+msgid "Clear foreground color"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+msgid "Color model ; depth ; profile ; components"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+msgid "Select backround color:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+msgid "Load current background color"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+msgid "Clear background color"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+msgid "Select a script file:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+msgid "Script path"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+msgid "Buttons size:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+msgid "Settings button position:"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+msgid "Bottom bar"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+msgid "Inline"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+msgid "Icon files (*.png, *.svg)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+msgid "Color info: "
+msgstr ""
+
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+msgid "Script files (*.py)"
+msgstr ""
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:60
+msgid "Open workflow buttons settings dialog"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57

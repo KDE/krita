@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -56406,7 +56406,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Umzuzwana"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -60632,6 +60632,10 @@ msgstr "&Isixhobo Sokusondeza"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Umfanekiso Onikwe igama kwakhona"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Umzuzwana"
 
 #, fuzzy
 #~ msgid "Button Actions"

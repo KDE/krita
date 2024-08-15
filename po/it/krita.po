@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-08-03 11:04+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -57898,7 +57898,7 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Seleziona il colore di sfondo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -62210,6 +62210,11 @@ msgstr "Strumento Ingrandimento"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Strumento Immagini di riferimento"
+
+#, fuzzy
+#~| msgid "Select background color"
+#~ msgid "Select backround color:"
+#~ msgstr "Seleziona il colore di sfondo"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "Velocità CPU"

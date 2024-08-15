@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -57558,7 +57558,7 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Ezarri atzeko planoko kolorea"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61900,6 +61900,11 @@ msgstr "Zoom tresna"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Erreferentziazko irudien tresna"
+
+#, fuzzy
+#~| msgid "Select background color"
+#~ msgid "Select backround color:"
+#~ msgstr "Ezarri atzeko planoko kolorea"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "PUZ erregulatzailea"

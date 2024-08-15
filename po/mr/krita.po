@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -58595,7 +58595,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "पार्श्वभूमीचा रंग"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -63005,6 +63005,10 @@ msgstr "आकाराप्रमाणे वाढवा"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "25%"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "पार्श्वभूमीचा रंग"
 
 #, fuzzy
 #~| msgid "Selection decoration"

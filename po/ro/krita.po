@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -57297,7 +57297,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Setează culoare fundal"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61593,6 +61593,10 @@ msgstr "Unealtă de măr&ire"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Șterge imaginea"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Setează culoare fundal"
 
 #, fuzzy
 #~ msgid "Button Actions"

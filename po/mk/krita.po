@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -57369,7 +57369,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Отстрани табулатор"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61651,6 +61651,10 @@ msgstr "Колони:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Отстрани приказ"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Отстрани табулатор"
 
 #, fuzzy
 #~ msgid "Configure Popup Palette dockers"

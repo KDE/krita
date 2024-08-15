@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -56614,7 +56614,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "สีพื้นหลัง:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -60852,6 +60852,10 @@ msgstr "เครื่องมือ&ย่อ/ขยาย"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ลบรูปภาพ"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "สีพื้นหลัง:"
 
 #, fuzzy
 #~| msgid "Selection decoration"

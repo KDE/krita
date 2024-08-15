@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-08-13 14:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -57519,8 +57519,10 @@ msgid "Color model ; depth ; profile ; components"
 msgstr "Renk modeli ; derinlik ; profil ; bileşenler"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-msgid "Select backround color:"
-msgstr "Arka plan rengini seç:"
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select background color:"
+msgstr "Arka plan rengini seç"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"
@@ -61789,6 +61791,9 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
+
+#~ msgid "Select backround color:"
+#~ msgstr "Arka plan rengini seç:"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "İşlemci Kısma"

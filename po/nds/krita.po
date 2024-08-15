@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -58392,7 +58392,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Achtergrundklöör fastleggen"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -62800,6 +62800,10 @@ msgstr "Ansichtgrött op all"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Betogbild:"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Achtergrundklöör fastleggen"
 
 #, fuzzy
 #~| msgid "Selection decoration"

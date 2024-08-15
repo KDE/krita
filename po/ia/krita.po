@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -58265,7 +58265,7 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Selige le color de fundo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -62621,6 +62621,11 @@ msgstr "Instrumento de Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Instrumento de Inages de Referentia"
+
+#, fuzzy
+#~| msgid "Select background color"
+#~ msgid "Select backround color:"
+#~ msgstr "Selige le color de fundo"
 
 #, fuzzy
 #~ msgid "Button Actions"

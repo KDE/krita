@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -56736,7 +56736,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Sekunde"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -60983,6 +60983,10 @@ msgstr "Aplaušanas pults T&roksnis."
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Atsauksme:"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Sekunde"
 
 #, fuzzy
 #~ msgid "Button Actions"

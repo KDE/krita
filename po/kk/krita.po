@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -58956,7 +58956,7 @@ msgstr ""
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Аясының түсін орнату"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -63391,6 +63391,12 @@ msgstr "Барлығын ұғайту"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Эталон кескіндері"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Set Background Color"
+#~ msgid "Select backround color:"
+#~ msgstr "Аясының түсін орнату"
 
 #, fuzzy
 #~| msgid "Selection decoration"

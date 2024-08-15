@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -56579,7 +56579,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "நொடி"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -60826,6 +60826,10 @@ msgstr "பெரிதாக்க கருவி"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "நொடி"
 
 #, fuzzy
 #~ msgid "Button Actions"

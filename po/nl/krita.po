@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-08-13 14:34+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -57837,8 +57837,10 @@ msgid "Color model ; depth ; profile ; components"
 msgstr "Kleurmedel ; diepte ; profiel ; componenten"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-msgid "Select backround color:"
-msgstr "Achtergrondkleur selecteren:"
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select background color:"
+msgstr "Achtergrondkleur selecteren"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"
@@ -62127,6 +62129,9 @@ msgstr "Zoomen"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentie-afbeeldingen"
+
+#~ msgid "Select backround color:"
+#~ msgstr "Achtergrondkleur selecteren:"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "CPU-vernauwing"

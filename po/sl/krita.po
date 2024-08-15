@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-08-14 01:50+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -57604,8 +57604,10 @@ msgid "Color model ; depth ; profile ; components"
 msgstr "Barvni model ; globina; profil; komponente"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-msgid "Select backround color:"
-msgstr "Izberite barvo ozadja:"
+#, fuzzy
+#| msgid "Select background color"
+msgid "Select background color:"
+msgstr "Izberite barvo ozadja"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"
@@ -61869,3 +61871,6 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgid "Select backround color:"
+#~ msgstr "Izberite barvo ozadja:"

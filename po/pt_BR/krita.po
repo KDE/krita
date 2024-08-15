@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -58372,7 +58372,7 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Selecionar cor de fundo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -62789,6 +62789,11 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#, fuzzy
+#~| msgid "Select background color"
+#~ msgid "Select backround color:"
+#~ msgstr "Selecionar cor de fundo"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "Acelerador CPU"

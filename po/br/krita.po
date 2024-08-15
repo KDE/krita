@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -56913,7 +56913,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Lakaat an drekleur"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61199,6 +61199,10 @@ msgstr "Ostilh Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Adenvel ar skeudenn"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Lakaat an drekleur"
 
 #, fuzzy
 #~ msgid "Button Actions"

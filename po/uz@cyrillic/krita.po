@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -59506,7 +59506,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Сония"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -63972,6 +63972,10 @@ msgstr "Ранги:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "&Алмаштириш:"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Сония"
 
 #, fuzzy
 #~ msgid "Double Click"

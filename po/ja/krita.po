@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -57547,7 +57547,7 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "背景色を設定"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61844,6 +61844,11 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#, fuzzy
+#~| msgid "Select background color"
+#~ msgid "Select backround color:"
+#~ msgstr "背景色を設定"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "CPU スロット"

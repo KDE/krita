@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2024-03-31 09:20+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -56374,7 +56374,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "שנייה"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -60595,6 +60595,10 @@ msgstr "כל&י התקרבות"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "שינוי שם התמונה"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "שנייה"
 
 #, fuzzy
 #~| msgctxt "Line spacing value"

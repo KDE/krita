@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -58856,7 +58856,7 @@ msgstr ""
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Set Background Color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Háttérszín beállítása"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -63279,6 +63279,12 @@ msgstr "Nagyító eszköz"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenciaképek eszköz"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Set Background Color"
+#~ msgid "Select backround color:"
+#~ msgstr "Háttérszín beállítása"
 
 #, fuzzy
 #~| msgid "Selection decoration"

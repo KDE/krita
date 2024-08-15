@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -57956,7 +57956,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Defini coleur di fond"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -62324,6 +62324,10 @@ msgstr "Zoumer so ttafwait"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Imådje di referince:"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "Defini coleur di fond"
 
 #, fuzzy
 #~| msgid "Selection decoration"

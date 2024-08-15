@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -55800,8 +55800,10 @@ msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-msgid "Select backround color:"
-msgstr ""
+#, fuzzy
+#| msgid "Select All"
+msgid "Select background color:"
+msgstr "o suli e wile tawa ijo ale"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"

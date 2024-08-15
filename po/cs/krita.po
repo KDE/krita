@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
-"PO-Revision-Date: 2024-07-26 14:53+0200\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"PO-Revision-Date: 2024-08-14 15:03+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -12793,22 +12793,20 @@ msgstr ""
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Přidat referenční obrázek"
+msgstr "Referenční obrázek z vrstvy"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
-#, fuzzy, kde-format
-#| msgid "Reference images"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Referenční obrázky"
+msgstr "Referenční obrázek z viditelného"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -16233,11 +16231,9 @@ msgid "Lock shapes"
 msgstr ""
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
-#, fuzzy
-#| msgid "Image Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "Vlastnosti obrázku"
+msgstr "Změnit vlastnosti tvaru textu"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -40236,10 +40232,9 @@ msgid "Delete the taskset"
 msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
-#, fuzzy, kde-format
-#| msgid "Properties"
+#, kde-format
 msgid "Text Properties"
-msgstr "Vlastnosti"
+msgstr "Vlastnosti textu"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -55909,33 +55904,24 @@ msgid "Python files (*.py)"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Custom options"
 msgid "Custom icon"
-msgstr "Vlastní možnosti"
+msgstr "Vlastní ikona"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "Ikona nástroje"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset icon"
-msgstr "Předvolby štětců"
+msgstr "Ikona předvoleb štětců"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 msgid "Workflow buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
-#, fuzzy
-#| msgctxt "left mouse button"
-#| msgid "left button"
 msgid "Selected button:"
-msgstr "levé tlačítko"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
 msgid "Add a workflow button"
@@ -55954,83 +55940,56 @@ msgid "Delete selected workflow button"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
-#, fuzzy
-#| msgid "Selection mode:"
 msgid "Select icon mode:"
-msgstr "Režim výběru:"
+msgstr "Vyberte režim ikony:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
-#, fuzzy
-#| msgid "Select a Directory"
 msgid "Select a custom icon:"
-msgstr "Vyberte adresář"
+msgstr "Vyberte vlastní ikonu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
 msgid "Custom icon path"
-msgstr "Kombinovat cesty"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
-#| msgid "Select Shapes Tool"
 msgid "Select the custom icon"
-msgstr "Nástroj pro výběr tvarů"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Enter a Tooltip:"
-msgstr "Nástrojový tip"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Tooltip text"
-msgstr "Nástrojový tip"
+msgstr "Text nástrojového tipu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Select a Folder"
 msgid "Select a tool:"
-msgstr "Vyberte složku"
+msgstr "Vyberte nástroj:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
-#, fuzzy
-#| msgid "Current brush preset"
 msgid "Select a brush preset:"
-msgstr "Současná předvolba štětce"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset name"
-msgstr "Předvolby štětců"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
-#| msgid "Choose brush preset"
 msgid "Select the brush preset"
-msgstr "Zvolte předvolbu štětce"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select foreground color:"
-msgstr "Vybrat barvu pozadí"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Load current foreground color"
-msgstr "Přidat barvu popředí"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Clear foreground color"
-msgstr "Přidat barvu popředí"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
 msgid "Color model ; depth ; profile ; components"
@@ -56039,71 +55998,53 @@ msgstr ""
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
 #| msgid "Select background color"
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "Vybrat barvu pozadí"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
-#, fuzzy
-#| msgid "Select background color"
 msgid "Load current background color"
-msgstr "Vybrat barvu pozadí"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
-#, fuzzy
-#| msgid "Select background color"
 msgid "Clear background color"
-msgstr "Vybrat barvu pozadí"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
-#, fuzzy
-#| msgid "Select ASL file"
 msgid "Select a script file:"
-msgstr "Vyberte filtr ASL"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
-#, fuzzy
-#| msgid "Select path"
 msgid "Script path"
-msgstr "Vyberte cestu"
+msgstr "Cesta ke skriptu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
-#, fuzzy
-#| msgid "Buttons"
 msgid "Buttons size:"
-msgstr "Tlačítka"
+msgstr "Velikost tlačítek:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
 msgid "Settings button position:"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
-#, fuzzy
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "Dole"
+msgstr "Spodní panel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
-#, fuzzy
-#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#| msgid "Inline"
 msgid "Inline"
-msgstr "Vloženě"
+msgstr "Vložené"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
 msgid "Icon files (*.png, *.svg)"
-msgstr ""
+msgstr "Soubory ikon (*.png *.svg)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
-#, fuzzy
-#| msgid "Color 1:"
 msgid "Color info: "
-msgstr "Barva 1:"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
 msgid "Script files (*.py)"
-msgstr ""
+msgstr "Soubory skriptu (*.py)"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:60
 msgid "Open workflow buttons settings dialog"
@@ -57338,17 +57279,14 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste as Reference Image"
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Vložit jako referenční obrázek"
+msgstr "Smazat vybrané referenční obrázky"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Přidat referenční obrázek"
+msgstr ""
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
@@ -57404,11 +57342,9 @@ msgstr "Umístění ukládaných souborů:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgctxt "@action:inmenu"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Sloučit vybrané vrstvy"
+msgstr "Smazat vybrané obrázky"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -57418,25 +57354,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Přidat referenční obrázek"
+msgstr "Přidat jako nový referenční obrázek:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Iterations:"
+#, kde-format
 msgid "Other options:"
-msgstr "Opakování:"
+msgstr "Ostatní volby:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Delete All"
-msgstr "Vybrat vše"
+msgstr "Smazat vše"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format

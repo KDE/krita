@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-13 01:45+0000\n"
+"POT-Creation-Date: 2024-08-15 01:50+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -57167,7 +57167,7 @@ msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 #, fuzzy
-msgid "Select backround color:"
+msgid "Select background color:"
 msgstr "पृष्ठभूमि सेट करें"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
@@ -61488,6 +61488,10 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#, fuzzy
+#~ msgid "Select backround color:"
+#~ msgstr "पृष्ठभूमि सेट करें"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "सीपीयू उपरोधक"

@@ -221,7 +221,6 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         const QPointF offsetTopLeft = [&]() -> QPointF {
             KisPaintDeviceSP clip =
                 KisClipboard::instance()->clipFromKritaLayers(
-                    fittingBounds,
                     image->colorSpace());
 
             if (!clip) {
@@ -236,7 +235,9 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
                     view->canvasBase()->coordinatesConverter()->documentToImage(
                         docPos);
 
-            } else if (!clip->exactBounds().intersects(image->bounds())) {
+            } else if (!clip->exactBounds().contains(image->bounds()) &&
+                       !clip->exactBounds().intersects(image->bounds()) &&
+                       !image->bounds().contains(clip->exactBounds())) {
                  // BUG:459111
                 pasteAtCursorPosition = true;
                 imagePos = QPointF(image->bounds().center());
@@ -333,7 +334,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
 
     QRect imageBounds = image->bounds();
 
-    KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(imageBounds, image->colorSpace());
+    KisPaintDeviceSP clipdev = KisClipboard::instance()->clipFromKritaLayers(image->colorSpace());
     KisPaintDeviceSP clip = clipdev ? new KisPaintDevice(*clipdev) : nullptr;
 
     if (clip)

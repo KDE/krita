@@ -32,7 +32,7 @@ public:
     double m_grabOffsetY {0.0};
     double m_grabOriginalX {0.0};
     double m_grabOriginalY {0.0};
-    QPointF m_draggedAwayPoint;
+    KisCubicCurvePoint m_draggedAwayPoint;
     int m_draggedAwayPointIndex {0};
 
     bool m_readOnlyMode {false};
@@ -112,8 +112,8 @@ KisCurveWidget::Private::Private(KisCurveWidget *parent)
 
 bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
-    Q_FOREACH (const QPointF &it, m_curve.points()) {
-        if (m_curve.points().indexOf(it) == skipIndex)
+    Q_FOREACH (const KisCubicCurvePoint &it, m_curve.curvePoints()) {
+        if (m_curve.curvePoints().indexOf(it) == skipIndex)
             continue;
         if (fabs(it.x() - pt.x()) < POINT_AREA) {
             pt.rx() = pt.x() >= it.x() ?
@@ -133,7 +133,7 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     // pt and points from the curve are in (0, 1) ranges
     // hence the usage of wWidth etc.
 
-    Q_FOREACH (const QPointF & point, m_curve.points()) {
+    Q_FOREACH (const KisCubicCurvePoint &point, m_curve.curvePoints()) {
         double distanceSquared = (pt.x() - point.x()) *
                                  (pt.x() - point.x()) +
                                  (pt.y() - point.y()) *
@@ -149,8 +149,8 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     if (nearestIndex >= 0) {
 
         // difference between points is in (0, 1) range as well (or rather, (-1,1))
-        QPointF distanceVector = QPointF((pt.x() - m_curve.points()[nearestIndex].x()) *(wWidth - 1),
-                                        (pt.y() - m_curve.points()[nearestIndex].y()) *(wHeight - 1));
+        QPointF distanceVector = QPointF((pt.x() - m_curve.curvePoints()[nearestIndex].x()) *(wWidth - 1),
+                                        (pt.y() - m_curve.curvePoints()[nearestIndex].y()) *(wHeight - 1));
 
         if (distanceVector.x() > m_handleSize || distanceVector.y() > m_handleSize) {
             // small performance optimization

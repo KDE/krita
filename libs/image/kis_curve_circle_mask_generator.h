@@ -14,6 +14,7 @@
 
 #include "kritaimage_export.h"
 #include "kis_base_mask_generator.h"
+#include "kis_cubic_curve.h"
 
 class KisCubicCurve;
 class QDomElement;
@@ -49,7 +50,7 @@ public:
 
     void setMaskScalarApplicator();
 
-    static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
+    static void transformCurveForSoftness(qreal softness,const QList<KisCubicCurvePoint> &points, int curveResolution, QVector<qreal> &result);
 
 private:
 

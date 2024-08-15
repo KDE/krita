@@ -29,7 +29,7 @@ namespace {
         [] (const std::tuple<QString, QRectF> &curveData)
         {
             MyPaintCurveRangeModel::NormalizedCurve normalized;
-            QList<QPointF> points = KisCubicCurve(std::get<0>(curveData)).points();
+            QList<KisCubicCurvePoint> points = KisCubicCurve(std::get<0>(curveData)).curvePoints();
             const QRectF bounds = std::get<1>(curveData);
 
             normalized.yLimit = qMax(qAbs(bounds.top()), qAbs(bounds.bottom()));
@@ -37,11 +37,11 @@ namespace {
             normalized.xMin = bounds.left();
             
             if (qFuzzyIsNull(normalized.yLimit)) {
-                points = {{0.0,0.5}, {1.0, 0.5}};
+                points = {{0.0, 0.5, false}, {1.0, 0.5, false}};
             } else {
                 for (auto it = points.begin(); it != points.end(); ++it) {
-                    it->rx() = (it->x() - bounds.left()) / bounds.width();
-                    it->ry() = it->y() / (2.0 * normalized.yLimit) + 0.5;
+                    it->setX((it->x() - bounds.left()) / bounds.width());
+                    it->setY(it->y() / (2.0 * normalized.yLimit) + 0.5);
                 }
             }
             
@@ -51,11 +51,11 @@ namespace {
             return normalized;
         },
         [] (std::tuple<QString, QRectF> curveData, const MyPaintCurveRangeModel::NormalizedCurve &normalizedCurve) {
-            QList<QPointF> points = KisCubicCurve(normalizedCurve.curve).points();
+            QList<KisCubicCurvePoint> points = KisCubicCurve(normalizedCurve.curve).curvePoints();
 
             for (auto it = points.begin(); it != points.end(); ++it) {
-                it->rx() = it->x() * (normalizedCurve.xMax - normalizedCurve.xMin) + normalizedCurve.xMin;
-                it->ry() = (it->y() - 0.5) * normalizedCurve.yLimit * 2.0;
+                it->setX(it->x() * (normalizedCurve.xMax - normalizedCurve.xMin) + normalizedCurve.xMin);
+                it->setY((it->y() - 0.5) * normalizedCurve.yLimit * 2.0);
             }
 
             std::get<0>(curveData) = KisCubicCurve(points).toString();

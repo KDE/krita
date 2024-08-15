@@ -418,11 +418,11 @@ void MyPaintSensorPack::write(const KisCurveOptionDataCommon &data, KisPropertie
             inputs_map.remove(sensorJsonId);
         } else {
             KisCubicCurve curve(sensor->curve);
-            const QList<QPointF> &points = curve.points();
+            const QList<KisCubicCurvePoint> &points = curve.curvePoints();
 
             QVariantList pointsList;
 
-            Q_FOREACH(const QPointF &pt, points) {
+            Q_FOREACH(const KisCubicCurvePoint &pt, points) {
                 pointsList.push_back(QVariantList{pt.x(), pt.y()});
             }
             inputs_map[sensorJsonId] = pointsList;

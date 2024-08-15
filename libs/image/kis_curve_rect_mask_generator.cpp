@@ -26,7 +26,7 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
 {
     d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
     d->curveData = curve.floatTransfer( d->curveResolution + 1);
-    d->curvePoints = curve.points();
+    d->curvePoints = curve.curvePoints();
     setCurveString(curve.toString());
     d->dirty = false;
 

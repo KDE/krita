@@ -11,6 +11,8 @@
 
 #include <QPointF>
 
+#include "kis_cubic_curve.h"
+
 class KisCubicCurveTest : public QObject
 {
     Q_OBJECT
@@ -27,7 +29,8 @@ private Q_SLOTS:
     void testNull();
     void testTransfer();
 private:
-    QPointF pt0, pt1, pt2, pt3, pt4, pt5;
+    using Point = KisCubicCurvePoint;
+    Point pt0, pt1, pt2, pt3, pt4, pt5;
 };
 
 

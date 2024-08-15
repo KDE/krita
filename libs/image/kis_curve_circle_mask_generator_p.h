@@ -9,6 +9,7 @@
 
 #include "kis_antialiasing_fade_maker.h"
 #include "kis_brush_mask_applicator_base.h"
+#include "kis_cubic_curve.h"
 
 struct Q_DECL_HIDDEN KisCurveCircleMaskGenerator::Private
 {
@@ -32,7 +33,7 @@ struct Q_DECL_HIDDEN KisCurveCircleMaskGenerator::Private
     qreal ycoef {0.0};
     qreal curveResolution {0.0};
     QVector<qreal> curveData;
-    QList<QPointF> curvePoints;
+    QList<KisCubicCurvePoint> curvePoints;
     bool dirty {false};
 
     KisAntialiasingFadeMaker1D<Private> fadeMaker;

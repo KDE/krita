@@ -163,7 +163,7 @@ inOutChanged()
     pt.setX(detail::io2sp(m_intIn->value(), m_inMin, m_inMax));
     pt.setY(detail::io2sp(m_intOut->value(), m_outMin, m_outMax));
 
-    if (m_curveWidget->setCurrentPoint(pt)) {
+    if (m_curveWidget->setCurrentPointPosition(pt)) {
         syncIOControls();
     }
 }
@@ -175,16 +175,16 @@ syncIOControls()
     if (!m_intIn || !m_intOut)
         return;
 
-    std::optional<QPointF> currentPoint = m_curveWidget->currentPoint();
+    std::optional<QPointF> currentPointPosition = m_curveWidget->currentPointPosition();
 
-    m_intIn->setEnabled(currentPoint.has_value());
-    m_intOut->setEnabled(currentPoint.has_value());
+    m_intIn->setEnabled(currentPointPosition.has_value());
+    m_intOut->setEnabled(currentPointPosition.has_value());
 
-    if (currentPoint) {
+    if (currentPointPosition) {
         KisSignalsBlocker b(m_intIn, m_intOut);
 
-        const ValueType inValue = detail::sp2io(currentPoint->x(), m_inMin, m_inMax);
-        const ValueType outValue = detail::sp2io(currentPoint->y(), m_outMin, m_outMax);
+        const ValueType inValue = detail::sp2io(currentPointPosition->x(), m_inMin, m_inMax);
+        const ValueType outValue = detail::sp2io(currentPointPosition->y(), m_outMin, m_outMax);
 
         if (detail::willChangeSpinBox(m_intIn, inValue)) {
             m_intIn->setValue(inValue);

@@ -12,7 +12,10 @@
 
 #include <QVector>
 #include <QList>
+
 #include <Eigen/Sparse>
+
+#include <kis_assert.h>
 
 template <typename T>
 class KisTridiagonalSystem
@@ -315,23 +318,34 @@ public:
         for (qint32 i = 1; i < a.size() - 1; ++i) {
             pointX = a[i].x();
             const qint32 baseColumn = i * 4;
-            pointXSquared = pointX * pointX;
-            // First derivatives
-            triplets.push_back(Triplet(row, baseColumn - 4, 3.0 * pointXSquared));
-            triplets.push_back(Triplet(row, baseColumn - 3, 2.0 * pointX));
-            triplets.push_back(Triplet(row, baseColumn - 2, 1.0));
-            triplets.push_back(Triplet(row, baseColumn + 0, -3.0 * pointXSquared));
-            triplets.push_back(Triplet(row, baseColumn + 1, -2.0 * pointX));
-            triplets.push_back(Triplet(row, baseColumn + 2, -1.0));
-            b(row) = 0.0;
-            ++row;
-            // Second derivatives
-            triplets.push_back(Triplet(row, baseColumn - 4, 6.0 * pointX));
-            triplets.push_back(Triplet(row, baseColumn - 3, 2.0));
-            triplets.push_back(Triplet(row, baseColumn + 0, -6.0 * pointX));
-            triplets.push_back(Triplet(row, baseColumn + 1, -2.0));
-            b(row) = 0.0;
-            ++row;
+            if (a[i].isSetAsCorner()) {
+                triplets.push_back(Triplet(row, baseColumn - 4, 6.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn - 3, 2.0));
+                b(row) = 0.0;
+                ++row;
+                triplets.push_back(Triplet(row, baseColumn + 0, 6.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn + 1, 2.0));
+                b(row) = 0.0;
+                ++row;
+            } else {
+                pointXSquared = pointX * pointX;
+                // First derivatives
+                triplets.push_back(Triplet(row, baseColumn - 4, 3.0 * pointXSquared));
+                triplets.push_back(Triplet(row, baseColumn - 3, 2.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn - 2, 1.0));
+                triplets.push_back(Triplet(row, baseColumn + 0, -3.0 * pointXSquared));
+                triplets.push_back(Triplet(row, baseColumn + 1, -2.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn + 2, -1.0));
+                b(row) = 0.0;
+                ++row;
+                // Second derivatives
+                triplets.push_back(Triplet(row, baseColumn - 4, 6.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn - 3, 2.0));
+                triplets.push_back(Triplet(row, baseColumn + 0, -6.0 * pointX));
+                triplets.push_back(Triplet(row, baseColumn + 1, -2.0));
+                b(row) = 0.0;
+                ++row;
+            }
         }
         // Solve
         A.setFromTriplets(triplets.begin(), triplets.end());

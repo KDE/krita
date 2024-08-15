@@ -180,8 +180,8 @@ void KisAutoBrushWidget::slotCurvePropertyChanged(const QString &value)
     if (!value.isEmpty()) {
         curve = KisCubicCurve(value);
     } else {
-        curve.setPoint(0, QPointF(0.0, 1.0));
-        curve.setPoint(1, QPointF(1.0, 0.0));
+        curve.setPointPosition(0, QPointF(0.0, 1.0));
+        curve.setPointPosition(1, QPointF(1.0, 0.0));
     }
 
     KisSignalsBlocker b(softnessCurve);

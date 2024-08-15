@@ -20,10 +20,11 @@
 #include <QList>
 #include <optional>
 
+#include <kis_cubic_curve.h>
+
 #include <kritaui_export.h>
 
 class QSpinBox;
-class KisCubicCurve;
 
 /**
  * KisCurveWidget is a widget that shows a single curve that can be edited
@@ -73,8 +74,12 @@ public:
      */
     bool pointSelected() const;
 
-    bool setCurrentPoint(QPointF pt);
-    std::optional<QPointF> currentPoint() const;
+    bool setCurrentPoint(const QPointF &position, bool setAsCorner);
+    bool setCurrentPointPosition(const QPointF &position);
+    bool setCurrentPointAsCorner(bool setAsCorner);
+    std::optional<KisCubicCurvePoint> currentPoint() const;
+    std::optional<QPointF> currentPointPosition() const;
+    std::optional<bool> isCurrentPointSetAsCorner() const;
 
 Q_SIGNALS:
 

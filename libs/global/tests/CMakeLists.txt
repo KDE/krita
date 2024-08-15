@@ -1,6 +1,7 @@
 kis_add_tests(KisSignalAutoConnectionTest.cpp
     KisSignalCompressorTest.cpp
     KisForestTest.cpp
+    KisMplTest.cpp
     KisRectsGridTest.cpp
     KisLazyStorageTest.cpp
     KisValueCacheTest.cpp

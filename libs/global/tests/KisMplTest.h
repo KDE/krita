@@ -18,11 +18,15 @@ private Q_SLOTS:
     void testMemberOperatorsEqualToStdSharedPtr();
     void testMemberOperatorsEqualToQSharedPointer();
     void testMemberOperatorsEqualToKisSharedPtr();
+    void testMemberOperatorsEqualToKisSharedPtrFunction();
 
     void testMemberOperatorsLess();
     void testMemberOperatorsLessEqual();
     void testMemberOperatorsGreater();
     void testMemberOperatorsGreaterEqual();
+
+    void testMemberOperatorsAccumulate();
+    void testMemberOperatorsAccumulateToKisSharedPtr();
 };
 
 #endif // KISMPLTEST_H

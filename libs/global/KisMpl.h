@@ -163,21 +163,21 @@ template<typename Op, typename Class, typename MemType, typename PtrType>
 struct mem_compare
 {
     template <typename Object>
-    bool operator() (Object &&lhs, Object &&rhs) const {
+    auto operator() (Object &&lhs, Object &&rhs) const {
         Op op;
         return op(std::invoke(ptr, std::forward<Object>(lhs)),
                   std::invoke(ptr, std::forward<Object>(rhs)));
     }
 
     template <typename Object>
-    bool operator() (Object &&lhs, const MemType &rhs) const {
+    auto operator() (Object &&lhs, const MemType &rhs) const {
         Op op;
         return op(std::invoke(ptr, std::forward<Object>(lhs)),
                   rhs);
     }
 
     template <typename Object>
-    bool operator() (const MemType &lhs, Object &&rhs) const {
+    auto operator() (const MemType &lhs, Object &&rhs) const {
         Op op;
         return op(lhs,
                   std::invoke(ptr, std::forward<Object>(rhs)));
@@ -578,6 +578,111 @@ inline auto mem_greater_equal(MemType (Class::*ptr)() noexcept) {
 template<typename Class, typename MemType>
 inline auto mem_greater_equal(MemType (Class::*ptr)() const noexcept) {
     return detail::mem_compare<std::greater_equal<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_bit_or is a binary functor that applies a bitwise-or operator to member of
+ *                   an object and a given value or two members of two objects. The function
+ *                   is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_bit_or(MemType Class::*ptr) {
+    return detail::mem_compare<std::bit_or<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_bit_or(MemType (Class::*ptr)() const) {
+    return detail::mem_compare<std::bit_or<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_bit_and is a binary functor that applies a bitwise-and operator to member of
+ *                    an object and a given value or two members of two objects. The function
+ *                    is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_bit_and(MemType Class::*ptr) {
+    return detail::mem_compare<std::bit_and<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_bit_and(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::bit_and<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_bit_xor is a binary functor that applies a bitwise-xor operator to member of
+ *                    an object and a given value or two members of two objects. The function
+ *                    is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_bit_xor(MemType Class::*ptr) {
+    return detail::mem_compare<std::bit_xor<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_bit_xor(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::bit_xor<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_plus is a binary functor that applies a plus operator to member of
+ *                 an object and a given value or two members of two objects. The function
+ *                 is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_plus(MemType Class::*ptr) {
+    return detail::mem_compare<std::plus<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_plus(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::plus<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_minus is a binary functor that applies a minus operator to member of
+ *                  an object and a given value or two members of two objects. The function
+ *                  is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_minus(MemType Class::*ptr) {
+    return detail::mem_compare<std::minus<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_minus(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::minus<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_multiplies is a binary functor that applies a multiplication operator to member of
+ *                       an object and a given value or two members of two objects. The function
+ *                       is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_multiplies(MemType Class::*ptr) {
+    return detail::mem_compare<std::multiplies<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_multiplies(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::multiplies<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+/**
+ * @brief mem_divides is a binary functor that applies a division operator to member of
+ *                    an object and a given value or two members of two objects. The function
+ *                    is supposed to be used with standard algorithms like std::accumulate.
+ */
+template<typename Class, typename MemType>
+inline auto mem_divides(MemType Class::*ptr) {
+    return detail::mem_compare<std::divides<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_divides(MemType (Class::*ptr)()) {
+    return detail::mem_compare<std::divides<>, Class, std::invoke_result_t<decltype(ptr), Class>, decltype(ptr)>{ptr};
 }
 
 /**

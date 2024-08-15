@@ -133,11 +133,6 @@ kis_add_tests(
     )
 
 kis_add_test(
-    KisMplTest.cpp
-    LINK_LIBRARIES kritaimage kritatestsdk kritaglobal
-    )
-
-kis_add_test(
     kis_clone_layer_test.cpp
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
     )

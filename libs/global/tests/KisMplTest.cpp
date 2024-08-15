@@ -261,6 +261,19 @@ void KisMplTest::testMemberOperatorsEqualToKisSharedPtr()
     }
 }
 
+void KisMplTest::testMemberOperatorsEqualToKisSharedPtrFunction()
+{
+    std::vector<KisSharedPtr<StructWithShared>> vec({new StructWithShared(0),
+                                                     new StructWithShared(1),
+                                                     new StructWithShared(2),
+                                                     new StructWithShared(3),
+                                                     new StructWithShared(4)});
+    {
+        auto it = std::find_if(vec.begin(), vec.end(), kismpl::mem_equal_to(&StructWithShared::idConstFunc, 1));
+        QVERIFY(it != vec.end());
+        QCOMPARE(std::distance(vec.begin(), it), 1);
+    }
+}
 
 void KisMplTest::testMemberOperatorsLess()
 {
@@ -475,6 +488,75 @@ void KisMplTest::testMemberOperatorsGreaterEqual()
         auto it = std::lower_bound(vec.begin(), vec.end(), 2, kismpl::mem_greater_equal(&StructExplicit::idNoexceptFunc));
         QVERIFY(it != vec.end());
         QCOMPARE(std::distance(vec.begin(), it), 3);
+    }
+}
+
+namespace kismpl2 {
+
+template<typename Class, typename MemType>
+inline auto mem_bit_or(MemType Class::*ptr) {
+    return kismpl::detail::mem_compare<std::bit_or<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+template<typename Class, typename MemType>
+inline auto mem_bit_or(MemType (Class::*ptr)()) {
+    return kismpl::detail::mem_compare<std::bit_or<>, Class, MemType, decltype(ptr)>{ptr};
+}
+
+}
+
+void KisMplTest::testMemberOperatorsAccumulate()
+{
+    struct RectStruct {
+        QRect rect;
+    };
+
+    std::vector<RectStruct> vec({{QRect(0,0,10,10)},
+                            {QRect(0,0,20,10)},
+                            {QRect(0,0,10,20)},
+                            {QRect(0,0,30,10)},
+                            {QRect(0,0,10,30)}});
+    {
+        const QRect result = std::accumulate(vec.begin(), vec.end(), QRect(), kismpl::mem_bit_or(&RectStruct::rect));
+        QCOMPARE(result, QRect(0,0,30,30));
+    }
+
+    {
+        const QRect result = std::accumulate(vec.begin(), vec.end(), QRect(0,0,100,100), kismpl::mem_bit_and(&RectStruct::rect));
+        QCOMPARE(result, QRect(0,0,10,10));
+    }
+}
+
+void KisMplTest::testMemberOperatorsAccumulateToKisSharedPtr()
+{
+    std::vector<KisSharedPtr<StructWithShared>> vec({new StructWithShared(0),
+                                                     new StructWithShared(1),
+                                                     new StructWithShared(2),
+                                                     new StructWithShared(3),
+                                                     new StructWithShared(4)});
+    {
+        const int result = std::accumulate(vec.begin(), vec.end(), 0, kismpl::mem_plus(&StructWithShared::idConstFunc));
+        QCOMPARE(result, 10);
+    }
+
+    {
+        const int result = std::accumulate(vec.begin(), vec.end(), 0, kismpl::mem_minus(&StructWithShared::idConstFunc));
+        QCOMPARE(result, -10);
+    }
+
+    {
+        const int result = std::accumulate(vec.begin(), vec.end(), 0, kismpl::mem_multiplies(&StructWithShared::idConstFunc));
+        QCOMPARE(result, 0);
+    }
+
+    {
+        const int result = std::accumulate(vec.begin(), vec.end(), 0, kismpl::mem_divides(&StructWithShared::idConstFunc));
+        QCOMPARE(result, 0);
+    }
+
+    {
+        const int result = std::accumulate(vec.begin(), vec.end(), 0, kismpl::mem_bit_xor(&StructWithShared::idConstFunc));
+        QCOMPARE(result, 4);
     }
 }
 

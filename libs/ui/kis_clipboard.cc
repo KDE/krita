@@ -307,8 +307,7 @@ KisPaintDeviceSP KisClipboard::clipFromKritaSelection(const QMimeData *cbData, c
     return clip;
 }
 
-KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const QRect &imageBounds,
-                                                   const KoColorSpace *cs) const
+KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const KoColorSpace *cs) const
 {
     const QMimeData *data = KisClipboard::instance()->layersMimeData();
 
@@ -322,15 +321,23 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const QRect &imageBounds,
     KisNodeList nodes = mimedata->nodes();
 
     if (nodes.size() > 1) {
+        // we explicitly include point (0,0) into the bounds since that
+        // is a requirement for the image
+        QRect bounds = QRect(0, 0, 1, 1);
+        Q_FOREACH (KisNodeSP node, nodes) {
+            bounds |= node->exactBounds();
+        }
+
         KisImageSP tempImage = new KisImage(nullptr,
-                                            imageBounds.width(),
-                                            imageBounds.height(),
+                                            bounds.width(),
+                                            bounds.height(),
                                             cs,
                                             "ClipImage");
         for (KisNodeSP node : nodes) {
             tempImage->addNode(node, tempImage->root());
         }
         tempImage->refreshGraphAsync();
+        KisLayerUtils::refreshHiddenAreaAsync(tempImage, tempImage->root(), bounds);
         tempImage->waitForDone();
 
         return tempImage->projection();

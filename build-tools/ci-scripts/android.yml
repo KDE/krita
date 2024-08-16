@@ -31,7 +31,8 @@
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $DEPS_BRANCH_NAME_ANDROID
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build --skip-publishing 2>&1 | tee build-krita.log
     - python3 -u build-tools/ci-scripts/build-android-package.py 2>&1 | tee build-apk.log
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config upstream-ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk 2>&1 | tee apk-sign.log ; fi

@@ -1,6 +1,6 @@
 windows-build:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder-clang18:latest
   tags:
     - Windows
   extends:
@@ -33,7 +33,8 @@ windows-build:
     - pip install -r ci-notary-service/requirements.txt
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - python -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $DEPS_BRANCH_NAME_WINDOWS
+    - python -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared --skip-publishing 2>&1 | Tee-Object -FilePath "build-krita.log"
     - python -u build-tools/ci-scripts/build-windows-package.py 2>&1 | Tee-Object -FilePath "build-installers.log"
     - python -u build-tools/ci-scripts/upload-nightly-packages.py --platform windows --folder $CI_PROJECT_DIR 2>&1 | Tee-Object -FilePath "installers-publish.log"

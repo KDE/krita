@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -42374,7 +42374,8 @@ msgid "Delete the taskset"
 msgstr "احذف مجموعة المهام"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Text Properties"
 msgid "Text Properties"
 msgstr "خصائص النّصّ"
 
@@ -59075,32 +59076,32 @@ msgstr "عشرُ سكربتات"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 #| msgctxt "action"
 #| msgid "Execute Script 1"
 msgid "Execute Script {num}"
 msgstr "نفّذ السّكربت 1"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "نفذ سكربت {0}"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Selected"
 msgid "Selected path"
 msgstr "المحدّد"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Save the script"
 msgid "Select the script"
 msgstr "احفظ السّكربت"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr ""
 

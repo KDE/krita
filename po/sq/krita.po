@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -56271,29 +56271,29 @@ msgstr "Përzgjedhje"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Zgjedhës i ngjyrës"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, fuzzy, python-brace-format
 msgid "Script {0} executed"
 msgstr "Përzgjedhje"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 msgid "Selected path"
 msgstr "Përzgjedhje"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Current layer"
 msgid "Select the script"
 msgstr "Shtresa e tanishme"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 #, fuzzy
 #| msgid "Profile:"
 msgid "Python files (*.py)"

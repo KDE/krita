@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2024-07-20 16:05+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -58030,26 +58030,26 @@ msgstr "10 scripts"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Associer 10 scripts à 10 raccourcis."
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Exécuter le script {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Script {0} exécuté."
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Selected path"
 msgstr "Emplacement sélectionné"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Sélectionner le script"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr "Fichier Python (*.py)"
 

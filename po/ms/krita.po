@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -56732,28 +56732,28 @@ msgstr "&Skrip"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Cipta Dokumen"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, fuzzy, python-brace-format
 msgid "Script {0} executed"
 msgstr "&Skrip"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 msgid "Selected path"
 msgstr "Pemilihan"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 msgid "Select the script"
 msgstr "Kemaskini warna semasa"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 #, fuzzy
 msgid "Python files (*.py)"
 msgstr "Segiempat Sama Kecil"

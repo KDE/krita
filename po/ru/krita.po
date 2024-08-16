@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -58266,26 +58266,26 @@ msgstr "Десять сценариев"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Установить десять сценариев десяти комбинациям клавиш"
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Выполнить сценарий {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Сценарий {0} выполнен"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Selected path"
 msgstr "Выделенный контур"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Выбрать сценарий"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr "Файлы Python (*.py)"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -57369,29 +57369,29 @@ msgstr "ពិពណ៌នា ៖"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 msgid "Execute Script {num}"
 msgstr "បង្កើត"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, fuzzy, python-brace-format
 msgid "Script {0} executed"
 msgstr "ពិពណ៌នា ៖"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 msgid "Selected path"
 msgstr "ជ្រើស​ស្រអាប់"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Delete the current action"
 msgid "Select the script"
 msgstr "លុប​សកម្មភាព​​បច្ចុប្បន្ន"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 #, fuzzy
 #| msgid "Small Tiles"
 msgid "Python files (*.py)"

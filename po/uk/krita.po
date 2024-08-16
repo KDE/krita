@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
-"PO-Revision-Date: 2024-08-14 09:31+0300\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"PO-Revision-Date: 2024-08-15 09:01+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -58233,26 +58233,26 @@ msgstr "Десять скриптів"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Прив'язка десятьох скриптів до десятьох клавіатурних скорочень."
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Виконати скрипт {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Скрипт {0} виконано"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Selected path"
 msgstr "Позначений контур"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "Виберіть скрипт"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr "файли Python (*.py)"
 
@@ -58349,10 +58349,8 @@ msgid "Color model ; depth ; profile ; components"
 msgstr "Модель кольорів ; глибина ; профіль ; компоненти"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select background color:"
-msgstr "Виберіть колір тла"
+msgstr "Виберіть колір тла:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"

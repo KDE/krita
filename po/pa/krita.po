@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -61618,32 +61618,32 @@ msgstr "ਸਕ੍ਰਿਪਟ"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, fuzzy, python-brace-format
 #| msgid "Create object"
 msgid "Execute Script {num}"
 msgstr "ਆਬਜੈਕਟ ਬਣਾਓ"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, fuzzy, python-brace-format
 #| msgid "Script"
 msgid "Script {0} executed"
 msgstr "ਸਕ੍ਰਿਪਟ"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 #, fuzzy
 #| msgid "Insert Page"
 msgid "Selected path"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 #, fuzzy
 #| msgid "Delete the current page"
 msgid "Select the script"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr ""
 

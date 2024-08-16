@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-15 01:50+0000\n"
+"POT-Creation-Date: 2024-08-16 01:46+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -56698,57 +56698,48 @@ msgstr "常用脚本快捷键"
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "将十个脚本指定给十个快捷键。"
 
-#: plugins/python/tenscripts/tenscripts.py:53
+#: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "执行脚本 {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:79
+#: plugins/python/tenscripts/tenscripts.py:80
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "脚本 {0} 执行完毕"
 
-#: plugins/python/tenscripts/uitenscripts.py:65
+#: plugins/python/tenscripts/uitenscripts.py:66
 msgid "Selected path"
 msgstr "选定路径"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:67
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
 msgid "Select the script"
 msgstr "选择脚本"
 
-#: plugins/python/tenscripts/uitenscripts.py:89
+#: plugins/python/tenscripts/uitenscripts.py:99
 msgid "Python files (*.py)"
 msgstr "Python 文件 (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Custom options"
 msgid "Custom icon"
-msgstr "自定义选项"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Tool Icon"
 msgid "Tool icon"
-msgstr "工具图标"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset icon"
-msgstr "笔刷预设"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 msgid "Workflow buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
-#, fuzzy
-#| msgctxt "left mouse button"
-#| msgid "left button"
 msgid "Selected button:"
-msgstr "左键"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
 msgid "Add a workflow button"
@@ -56763,167 +56754,113 @@ msgid "Move selected workflow button to the right"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
-#, fuzzy
-#| msgid "Delete selected mask"
 msgid "Delete selected workflow button"
-msgstr "删除所选蒙版"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
-#, fuzzy
-#| msgid "Selection mode:"
 msgid "Select icon mode:"
-msgstr "笔尖图像顺序："
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
-#, fuzzy
-#| msgid "Selection Actions"
 msgid "Select a custom icon:"
-msgstr "选区操作"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
-#, fuzzy
-#| msgid "Custom Input"
 msgid "Custom icon path"
-msgstr "自定义输入"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
-#, fuzzy
-#| msgid "Select the bundle"
 msgid "Select the custom icon"
-msgstr "选择资源包"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgid "Internal Pool:"
 msgid "Enter a Tooltip:"
-msgstr "内部保留上限："
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Tooltip text"
-msgstr "工具提示"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Select a Color"
 msgid "Select a tool:"
-msgstr "选择颜色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Select brush preset"
 msgid "Select a brush preset:"
-msgstr "选择笔刷预设"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset name"
-msgstr "笔刷预设"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Select brush preset"
 msgid "Select the brush preset"
-msgstr "选择笔刷预设"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select foreground color:"
-msgstr "选择背景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Load current foreground color"
-msgstr "添加前景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
-#, fuzzy
-#| msgid "Add foreground color"
 msgid "Clear foreground color"
-msgstr "添加前景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select background color:"
-msgstr "选择背景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
-#, fuzzy
-#| msgid "Select background color"
 msgid "Load current background color"
-msgstr "选择背景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
-#, fuzzy
-#| msgid "Select background color"
 msgid "Clear background color"
-msgstr "选择背景色"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
-#, fuzzy
-#| msgid "Select the script"
 msgid "Select a script file:"
-msgstr "选择脚本"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
-#, fuzzy
-#| msgid "Select path"
 msgid "Script path"
-msgstr "按路径建立选区"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
-#, fuzzy
-#| msgid "Buttons"
 msgid "Buttons size:"
-msgstr "按钮"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
 msgid "Settings button position:"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
-#, fuzzy
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "底部"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
-#, fuzzy
-#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#| msgid "Inline"
 msgid "Inline"
-msgstr "显示为一行"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-#, fuzzy
-#| msgid "Python files (*.py)"
 msgid "Icon files (*.png, *.svg)"
-msgstr "Python 文件 (*.py)"
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
-#, fuzzy
-#| msgid "Color Engine:"
 msgid "Color info: "
-msgstr "色彩引擎："
+msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-#, fuzzy
-#| msgid "Python files (*.py)"
 msgid "Script files (*.py)"
-msgstr "Python 文件 (*.py)"
+msgstr ""
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:60
 msgid "Open workflow buttons settings dialog"
@@ -61083,8 +61020,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#, fuzzy
-#~| msgid "Select background color"
-#~ msgid "Select backround color:"
-#~ msgstr "选择背景色"

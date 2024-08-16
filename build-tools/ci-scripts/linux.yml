@@ -31,7 +31,8 @@ linux-build:
     # just silently hangs up. For this reason we don't use extra logging on Linux.
 
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $DEPS_BRANCH_NAME_LINUX
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
     - python3 -u build-tools/ci-scripts/build-appimage.py
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $KRITACI_LINUX_PUBLISH_PLATFORM --folder $CI_PROJECT_DIR/_packaging

@@ -6,6 +6,12 @@ variables:
   DEBIAN_FRONTEND: "noninteractive"
   release_branch_pattern: '/^release\/.*/'
 
+variables:
+  DEPS_BRANCH_NAME_WINDOWS: 'transition/win-clang18'
+  DEPS_BRANCH_NAME_LINUX: 'master'
+  DEPS_BRANCH_NAME_MACOS: 'master'
+  DEPS_BRANCH_NAME_ANDROID: 'master'
+
 .nightly-job-mixin:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $KRITACI_SCHEDULED_JOB_NAME == "nightly"

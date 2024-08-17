@@ -65,7 +65,6 @@ public:
                    KisNodeSP overrideNode = 0,
                    KisDefaultBoundsBaseSP bounds = 0);
     void paintEvent(KoPointerEvent *event );
-    //, const std::vector<QPoint>& smoothedPoints
     void endPaint();
 
     KisOptimizedBrushOutline paintOpOutline(const QPointF &savedCursorPos,
@@ -130,11 +129,9 @@ protected:
 
 private:
     void paint(KisPaintInformation &info );
-    //, const std::vector<QPoint>& smoothedPoints
     void paintBezierSegment(KisPaintInformation pi1, KisPaintInformation pi2,
                                                    QPointF tangent1, QPointF tangent2 
                                                  );
-                                                 //const std::vector<QPoint>& smoothedPoints
 
     void stabilizerStart(KisPaintInformation firstPaintInfo);
     void stabilizerEnd();
@@ -149,8 +146,6 @@ private Q_SLOTS:
     void finishStroke();
     void doAirbrushing();
     void stabilizerPollAndPaint();
-    // QVector<KisPaintInformation> filterSubpixelMovements(const QVector<KisPaintInformation> &points);
-    // void pixelPerfectLinePainter();
     void slotSmoothingTypeChanged();
 
 private:

@@ -170,7 +170,6 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
             if (event->type() == QEvent::MouseButtonDblClick) {
                 activeTool->beginPrimaryDoubleClickAction(&ev);
             } else {
-                //qDebug() << "kis_tool_proxy in forwardToTool";
                 activeTool->beginPrimaryAction(&ev);
             }
         } else {

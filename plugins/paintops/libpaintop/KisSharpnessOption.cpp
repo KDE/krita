@@ -25,7 +25,6 @@ KisSharpnessOption::KisSharpnessOption(const KisSharpnessOptionData &data)
     : KisCurveOption(data)
     , m_alignOutlinePixels(data.alignOutlinePixels)
     , m_softness(data.softness)
-    , m_perfectPixel(data.perfectPixel)
 {
 
 }
@@ -96,9 +95,4 @@ void KisSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab, const KisPain
 bool KisSharpnessOption::alignOutlineToPixels() const
 {
     return m_alignOutlinePixels;
-}
-
-bool KisSharpnessOption::perfectPixelOption() const
-{
-    return m_perfectPixel;
 }

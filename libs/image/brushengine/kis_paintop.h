@@ -86,7 +86,6 @@ public:
                                   const KisPaintInformation &pi2,
                                   KisDistanceInformation *currentDistance
                                   );
-                                    //const std::vector<QPoint>& smoothedPoints
 
     /**
     * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.

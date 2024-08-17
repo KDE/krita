@@ -1153,7 +1153,6 @@ void KisPainter::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
 {   
-    //qDebug()<< "kis_painter::paintLine";
     if (d->device && d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintLine(pi1, pi2, currentDistance);
     }
@@ -1240,7 +1239,6 @@ void KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                   const KisPaintInformation &pi2,
                                   KisDistanceInformation *currentDistance)                              
 {   
-    //qDebug() << "KisPainter::paintBezierCurve";
     if (d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, currentDistance);
     }
@@ -1638,7 +1636,6 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& _pen, con
 
 inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
 {
-    //qDebug()<< "kis_painter compositeOnePixel";
     d->paramInfo.dstRowStart = dst;
     d->paramInfo.dstRowStride = 0;
     d->paramInfo.srcRowStart = color.data();
@@ -1655,7 +1652,6 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
 
 /**/
 void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width, bool antialias){
-    //qDebug()<< "kis_painter::drawLine";
     int x1 = qFloor(start.x());
     int y1 = qFloor(start.y());
     int x2 = qFloor(end.x());
@@ -1742,7 +1738,6 @@ void KisPainter::drawLine(const QPointF & start, const QPointF & end)
     drawThickLine(start, end, 1, 1);
 }
 
-//original drawDDALine
 void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 {
     int x = qFloor(start.x());
@@ -1750,8 +1745,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
-    //qDebug() << " start: " << x  <<" start " << x2  << " y: " << y << " y2 " << y2 ;
-    qDebug() << "drawDDAlinepainter x: " << x  <<" x2 " << x2  << " y: " << y << " y2 " << y2 ;
     // Width and height of the line
     int xd = x2 - x;
     int yd = y2 - y;
@@ -1785,7 +1778,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     }
 
     if (fabs(m) > 1.0f) {
-        //qDebug() << "fabs in kis_painter";
         inc = (yd > 0) ? 1 : -1;
         m = (lockAxis)? 0 : 1.0f / m;
         m *= inc;
@@ -1802,7 +1794,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
             }
         }
     } else {
-        //qDebug() <<  "not fabs in kis_painter";
         inc = (xd > 0) ? 1 : -1;
         m *= inc;
         while (x != x2) {
@@ -1819,328 +1810,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
         }
     }
 }
-
-// void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
-// {
-//     static QPoint lastDrawnPixel(-1, -1);
-//     static QPoint waitingPixel(-1, -1);
-
-//     int x = qFloor(start.x());
-//     int y = qFloor(start.y());
-
-//     int x2 = qFloor(end.x());
-//     int y2 = qFloor(end.y());
-
-//     int xd = x2 - x;
-//     int yd = y2 - y;
-
-//     float m = 0;
-//     bool lockAxis = true;
-
-//     if (xd == 0) {
-//         m = 2.0;
-//     } else if (yd != 0) {
-//         lockAxis = false;
-//         m = (float)yd / (float)xd;
-//     }
-
-//     float fx = x;
-//     float fy = y;
-//     int inc;
-
-//     KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
-//     KisRandomConstAccessorSP selectionAccessor;
-//     if (d->selection) {
-//         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
-//     }
-
-//     QPoint currentPixel(x, y);
-
-//     auto drawPixel = [&](int x, int y) {
-//         accessor->moveTo(x, y);
-//         if (selectionAccessor) selectionAccessor->moveTo(x, y);
-
-//         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-//             compositeOnePixel(accessor->rawData(), d->paintColor);
-//             qDebug() << "Drawing pixel at: " << x << ", " << y;
-//         }
-//     };
-
-//     // for the first pixel if its not drawn yet
-//     if (lastDrawnPixel == QPoint(-1, -1)) {
-//         drawPixel(x, y);
-//         lastDrawnPixel = QPoint(x, y);
-//         waitingPixel = QPoint(-1, -1);  
-//     }
-
-//     if (fabs(m) > 1.0f) {
-//         inc = (yd > 0) ? 1 : -1;
-//         m = (lockAxis) ? 0 : 1.0f / m;
-//         m *= inc;
-//         while (y != y2) {
-//             y += inc;
-//             fx += m;
-//             x = qRound(fx);
-
-//             currentPixel = QPoint(x, y);
-//             if (currentPixel == lastDrawnPixel) continue;
-
-//             if (waitingPixel == QPoint(-1, -1)) {
-//                 waitingPixel = currentPixel;
-//             } else {
-//                 QPoint dir = currentPixel - lastDrawnPixel;
-//                 QPoint waitingDir = waitingPixel - lastDrawnPixel;
-
-//                 if (dir == waitingDir) {
-//                     drawPixel(waitingPixel.x(), waitingPixel.y());
-//                     lastDrawnPixel = waitingPixel;
-//                     waitingPixel = currentPixel;
-//                 } else {
-//                     waitingPixel = currentPixel;
-//                 }
-//             }
-//         }
-//     } else {
-//         inc = (xd > 0) ? 1 : -1;
-//         m *= inc;
-//         while (x != x2) {
-//             x += inc;
-//             fy += m;
-//             y = qRound(fy);
-
-//             currentPixel = QPoint(x, y);
-//             if (currentPixel == lastDrawnPixel) continue;
-
-//             if (waitingPixel == QPoint(-1, -1)) {
-//                 waitingPixel = currentPixel;
-//             } else {
-//                 QPoint dir = currentPixel - lastDrawnPixel;
-//                 QPoint waitingDir = waitingPixel - lastDrawnPixel;
-
-//                 if (dir == waitingDir) {
-//                     drawPixel(waitingPixel.x(), waitingPixel.y());
-//                     lastDrawnPixel = waitingPixel;
-//                     waitingPixel = currentPixel;
-//                 } else {
-//                     waitingPixel = currentPixel;
-//                 }
-//             }
-//         }
-//     }
-
-//     if (x == x2 && y == y2) {
-//         lastDrawnPixel = QPoint(-1, -1);
-//         waitingPixel = QPoint(-1, -1);
-//     }
-// }
-
-// void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
-// {
-//     static QPoint lastDrawnPixel(-1, -1);
-//     static QPoint waitingPixel(-1, -1);
-
-//     int x = qFloor(start.x());
-//     int y = qFloor(start.y());
-
-//     int x2 = qFloor(end.x());
-//     int y2 = qFloor(end.y());
-
-//     int xd = x2 - x;
-//     int yd = y2 - y;
-
-//     float m = 0;
-//     bool lockAxis = true;
-
-//     if (xd == 0) {
-//         m = 2.0;
-//     } else if (yd != 0) {
-//         lockAxis = false;
-//         m = (float)yd / (float)xd;
-//     }
-
-//     float fx = x;
-//     float fy = y;
-//     int inc;
-
-//     KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
-//     KisRandomConstAccessorSP selectionAccessor;
-//     if (d->selection) {
-//         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
-//     }
-
-//     QPoint currentPixel(x, y);
-
-//     auto drawPixel = [&](int x, int y) {
-//         accessor->moveTo(x, y);
-//         if (selectionAccessor) selectionAccessor->moveTo(x, y);
-
-//         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-//             compositeOnePixel(accessor->rawData(), d->paintColor);
-//             qDebug() << "Drawing pixel at: " << x << ", " << y;
-//         }
-//     };
-
-//     if (lastDrawnPixel == QPoint(-1, -1)) {
-//         drawPixel(x, y);
-//         lastDrawnPixel = QPoint(x, y);
-//         waitingPixel = QPoint(-1, -1); 
-//     }
-
-//     if (fabs(m) > 1.0f) {
-//         inc = (yd > 0) ? 1 : -1;
-//         m = (lockAxis) ? 0 : 1.0f / m;
-//         m *= inc;
-//         while (y != y2) {
-//             y += inc;
-//             fx += m;
-//             x = qRound(fx);
-
-//             currentPixel = QPoint(x, y);
-//             if (currentPixel == lastDrawnPixel) continue;
-
-//             if (waitingPixel == QPoint(-1, -1)) {
-//                 waitingPixel = currentPixel;
-//             } else {
-//                 QPoint dir = currentPixel - lastDrawnPixel;
-//                 QPoint waitingDir = waitingPixel - lastDrawnPixel;
-
-//                 if (dir == waitingDir) {
-//                     drawPixel(waitingPixel.x(), waitingPixel.y());
-//                     lastDrawnPixel = waitingPixel;
-//                     waitingPixel = currentPixel;
-//                 } else {
-//                     waitingPixel = currentPixel;
-//                 }
-//             }
-//         }
-//     } else {
-//         inc = (xd > 0) ? 1 : -1;
-//         m *= inc;
-//         while (x != x2) {
-//             x += inc;
-//             fy += m;
-//             y = qRound(fy);
-
-//             currentPixel = QPoint(x, y);
-//             if (currentPixel == lastDrawnPixel) continue;
-
-//             if (waitingPixel == QPoint(-1, -1)) {
-//                 waitingPixel = currentPixel;
-//             } else {
-//                 QPoint dir = currentPixel - lastDrawnPixel;
-//                 QPoint waitingDir = waitingPixel - lastDrawnPixel;
-
-//                 if (dir == waitingDir) {
-//                     drawPixel(waitingPixel.x(), waitingPixel.y());
-//                     lastDrawnPixel = waitingPixel;
-//                     waitingPixel = currentPixel;
-//                 } else {
-//                     waitingPixel = currentPixel;
-//                 }
-//             }
-//         }
-//     }
-
-//     // Reset static variables after completing the stroke
-//     if (x == x2 && y == y2) {
-//         lastDrawnPixel = QPoint(-1, -1);
-//         waitingPixel = QPoint(-1, -1);
-//     }
-// }
-
-// void KisPainter::drawDDALine(const QPointF & start, const QPointF & end) {
-//     int x = qFloor(start.x());
-//     int y = qFloor(start.y());
-
-//     int x2 = qFloor(end.x());
-//     int y2 = qFloor(end.y());
-
-//     int xd = x2 - x;
-//     int yd = y2 - y;
-
-//     float m = 0;
-//     bool lockAxis = true;
-
-//     if (xd == 0) {
-//         m = 2.0;
-//     } else if (yd != 0) {
-//         lockAxis = false;
-//         m = static_cast<float>(yd) / static_cast<float>(xd);
-//     }
-
-//     float fx = x;
-//     float fy = y;
-//     int inc;
-
-//     KisRandomAccessorSP accessor = d->device->createRandomAccessorNG();
-//     KisRandomConstAccessorSP selectionAccessor;
-//     if (d->selection) {
-//         selectionAccessor = d->selection->projection()->createRandomConstAccessorNG();
-//     }
-
-//     accessor->moveTo(x, y);
-//     if (selectionAccessor) selectionAccessor->moveTo(x, y);
-
-//     if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-//         compositeOnePixel(accessor->rawData(), d->paintColor);
-//     }
-
-//     QPoint lastDrawnPixel(x, y);
-//     QPoint waitingPixel(x, y);
-//     QPoint currentPixel(x, y);
-
-//     auto drawPixel = [&](int px, int py) {
-//         accessor->moveTo(px, py);
-//         if (selectionAccessor) selectionAccessor->moveTo(px, py);
-
-//         if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
-//             compositeOnePixel(accessor->rawData(), d->paintColor);
-//             qDebug() << "Drawing pixel at: " << x << ", " << y;
-//         }
-//     };
-
-//     if (fabs(m) > 1.0f) {
-//         inc = (yd > 0) ? 1 : -1;
-//         m = (lockAxis) ? 0 : 1.0f / m;
-//         m *= inc;
-//         while (y != y2) {
-//             y = y + inc;
-//             fx = fx + m;
-//             x = qRound(fx);
-
-//             currentPixel = QPoint(x, y);
-//             if ((abs(currentPixel.x() - lastDrawnPixel.x()) > 1) || (abs(currentPixel.y() - lastDrawnPixel.y()) > 1)) {
-//                 drawPixel(waitingPixel.x(), waitingPixel.y());
-//                 lastDrawnPixel = waitingPixel;
-//                 waitingPixel = currentPixel;
-//             } else if ((abs(currentPixel.x() - waitingPixel.x()) > 1) || (abs(currentPixel.y() - waitingPixel.y()) > 1)) {
-//                 waitingPixel = currentPixel;
-//             }
-//         }
-//     } else {
-//         inc = (xd > 0) ? 1 : -1;
-//         m *= inc;
-//         while (x != x2) {
-//             x = x + inc;
-//             fy = fy + m;
-//             y = qRound(fy);
-
-//             currentPixel = QPoint(x, y);
-//             if ((abs(currentPixel.x() - lastDrawnPixel.x()) > 1) || (abs(currentPixel.y() - lastDrawnPixel.y()) > 1)) {
-//                 drawPixel(waitingPixel.x(), waitingPixel.y());
-//                 lastDrawnPixel = waitingPixel;
-//                 waitingPixel = currentPixel;
-//             } else if ((abs(currentPixel.x() - waitingPixel.x()) > 1) || (abs(currentPixel.y() - waitingPixel.y()) > 1)) {
-//                 waitingPixel = currentPixel;
-//             }
-//         }
-//     }
-
-//     drawPixel(waitingPixel.x(), waitingPixel.y());
-// }
-
-
-//qDebug() << " x: " << x << " y: " << y << " x2 " << x2 << " y2 " << y2 ;
 
 void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 {

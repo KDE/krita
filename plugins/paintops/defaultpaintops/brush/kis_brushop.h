@@ -21,8 +21,6 @@
 #include <KisRotationOption.h>
 #include <KisFlowOpacityOption.h>
 
- #include <kis_tool_freehand.h>
-
 #include <KisRollingMeanAccumulatorWrapper.h>
 
 #include <QElapsedTimer>
@@ -42,10 +40,8 @@ public:
     ~KisBrushOp() override;
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
-    //, const std::vector<QPoint>& smoothedPoints
     std::pair<int, bool> doAsynchronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
 
-    // void setSmoothedPoints(const std::vector<QPoint>& points);
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;
@@ -92,7 +88,6 @@ private:
 
     const int m_minUpdatePeriod;
     const int m_maxUpdatePeriod;
-    // std::vector<QPoint> smoothedPoints;
 };
 
 #endif // KIS_BRUSHOP_H_

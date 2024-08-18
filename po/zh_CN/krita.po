@@ -56723,148 +56723,148 @@ msgstr "Python 文件 (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 msgid "Custom icon"
-msgstr ""
+msgstr "自定义图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 msgid "Tool icon"
-msgstr ""
+msgstr "工具图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 msgid "Brush preset icon"
-msgstr ""
+msgstr "笔刷预设图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 msgid "Workflow buttons settings"
-msgstr ""
+msgstr "自定义按钮设置"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
 msgid "Selected button:"
-msgstr ""
+msgstr "选择的按钮："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
 msgid "Add a workflow button"
-msgstr ""
+msgstr "添加自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "向左移动选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "向右移动选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Delete selected workflow button"
-msgstr ""
+msgstr "删除选中的自定义按钮"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
 msgid "Select icon mode:"
-msgstr ""
+msgstr "选择图标模式："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
 msgid "Select a custom icon:"
-msgstr ""
+msgstr "选择自定义图标："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
 msgid "Custom icon path"
-msgstr ""
+msgstr "自定义图标路径"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
 msgid "Select the custom icon"
-msgstr ""
+msgstr "选择自定义图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
 msgid "Enter a Tooltip:"
-msgstr ""
+msgstr "输入悬停提示文字"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
 msgid "Tooltip text"
-msgstr ""
+msgstr "悬停提示文字"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
 msgid "Select a tool:"
-msgstr ""
+msgstr "选择工具："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
 msgid "Select a brush preset:"
-msgstr ""
+msgstr "选择笔刷预设："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
 msgid "Brush preset name"
-msgstr ""
+msgstr "笔刷预设名称"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
 msgid "Select the brush preset"
-msgstr ""
+msgstr "选择笔刷预设"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
 msgid "Select foreground color:"
-msgstr ""
+msgstr "选择前景色："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
 msgid "Load current foreground color"
-msgstr ""
+msgstr "加载当前前景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
 msgid "Clear foreground color"
-msgstr ""
+msgstr "清除前景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
 msgid "Color model ; depth ; profile ; components"
-msgstr ""
+msgstr "色彩模型 ; 位深 ; 特性文件 ; 颜色分量"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 msgid "Select background color:"
-msgstr ""
+msgstr "选择背景色："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"
-msgstr ""
+msgstr "加载当前背景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
 msgid "Clear background color"
-msgstr ""
+msgstr "清除背景色"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
 msgid "Select a script file:"
-msgstr ""
+msgstr "选择脚本文件："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
 msgid "Script path"
-msgstr ""
+msgstr "脚本路径"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
 msgid "Buttons size:"
-msgstr ""
+msgstr "按钮大小："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
 msgid "Settings button position:"
-msgstr ""
+msgstr "设置按钮位置："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
 msgid "Bottom bar"
-msgstr ""
+msgstr "底栏"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
 msgid "Inline"
-msgstr ""
+msgstr "同行显示"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
 msgid "Icon files (*.png, *.svg)"
-msgstr ""
+msgstr "图标文件 (*.png, *.svg)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
 msgid "Color info: "
-msgstr ""
+msgstr "颜色信息："
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
 msgid "Script files (*.py)"
-msgstr ""
+msgstr "脚本文件 (*.py)"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:60
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "打开自定义按钮设置对话框"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"

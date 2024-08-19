@@ -11,7 +11,7 @@ from .flow_layout import FlowLayout
 from .buttons_settings_dialog import LISTOFTOOLS, LISTOFSIZES, ButtonsSettingsDialog
 import ast
 
-DOCKER_NAME = 'Workflow buttons'
+DOCKER_NAME = 'Workflow Buttons'
 DOCKER_ID = 'pykrita_workflow_buttons'
 INSTANCE = Krita.instance()
 

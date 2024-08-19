@@ -61,7 +61,7 @@ LISTOFICONMODES = [i18n("Custom icon"), i18n("Tool icon"), i18n("Brush preset ic
 class ButtonsSettingsDialog(QDialog):
     def __init__(self, parent=None, buttonsContentList=[], sizeIndex=2, settingsButtonPosition=0):
         super().__init__(parent)
-        self.setWindowTitle(i18n("Workflow buttons settings"))
+        self.setWindowTitle(i18n("Workflow Buttons settings"))
         self.allBrushPresets = INSTANCE.resources('preset')
 
         mainLayout = QVBoxLayout(self)

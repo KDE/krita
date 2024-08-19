@@ -346,8 +346,12 @@ class ButtonsSettingsDialog(QDialog):
             # extra " " to workaround possible cut of last letter...
 
     def populateToolList(self):
-        toolNumber = -1
-        for tool in LISTOFTOOLS:
+        toolNumber = 0
+        # Workaround to avoid passing an empty string to i18n(), which triggers a warning.
+        self.toolSelector.insertItem(toolNumber,
+                                     INSTANCE.icon(LISTOFTOOLS[toolNumber]["toolIcon"]),
+                                     LISTOFTOOLS[toolNumber]["toolString"])
+        for tool in LISTOFTOOLS[1:]:
             toolNumber += 1
             self.toolSelector.insertItem(toolNumber,
                                          INSTANCE.icon(LISTOFTOOLS[toolNumber]["toolIcon"]),

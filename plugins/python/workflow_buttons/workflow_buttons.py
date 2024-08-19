@@ -49,7 +49,7 @@ class WorkflowButtons(DockWidget):
 
         self.bottomBar = QToolBar(self)
         self.bottomBar.setIconSize(QSize(22,22))
-        self.bottomBar.setStyleSheet("QToolBar{spacing:0px; margins:0px;}")
+        self.bottomBar.setStyleSheet("QToolBar{spacing:0px; margin:0px;}")
         barSpacer = QWidget(self.bottomBar)
         barSpacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.bottomBar.addWidget(barSpacer)

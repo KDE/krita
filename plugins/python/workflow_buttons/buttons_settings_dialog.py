@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter
+from PyQt5.QtGui import QIcon, QPixmap, QColor, QPen, QBrush, QPainter, QImageReader
 from PyQt5.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QWidget, QScrollArea, QPushButton,
                              QToolButton, QLabel, QLineEdit, QComboBox, QDialogButtonBox,
                              QFileDialog, QFrame, QWidget, QSizePolicy)
@@ -441,7 +441,12 @@ class ButtonsSettingsDialog(QDialog):
         if self.selectedButtonID < 1:
             return
         dialog = QFileDialog(self)
-        dialog.setNameFilter(i18n("Icon files (*.png, *.svg)"))
+        formatList = []
+        for formatBytes in QImageReader.supportedImageFormats():
+            formatList.append(f"*.{str(formatBytes, 'utf-8')}")
+        formatsString = " ".join(formatList)
+        # The format string cannot be translated, only the description
+        dialog.setNameFilter(i18n("Icon files ") + "(" + formatsString + ")")
 
         if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]
@@ -567,7 +572,7 @@ class ButtonsSettingsDialog(QDialog):
         if self.selectedButtonID < 1:
             return
         dialog = QFileDialog(self)
-        dialog.setNameFilter(i18n("Script files (*.py)"))
+        dialog.setNameFilter(i18n("Script files ") + "(*.py)")
 
         if dialog.exec_():
             selectedFile = dialog.selectedFiles()[0]

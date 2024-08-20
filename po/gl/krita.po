@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2024-03-02 21:38+0100\n"
+"PO-Revision-Date: 2024-08-19 17:15+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -4431,7 +4431,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "k)_Blender_Pixelize.kpp"
 msgid "k) Blender Pixelize"
-msgstr "k) Mesturador, pixelizar"
+msgstr "k) Mesturador, pixelar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -9652,7 +9652,7 @@ msgstr "Curvas de axuste de cores"
 #, kde-format
 msgctxt "action"
 msgid "Pi&xelize..."
-msgstr "Pi&xelizar…"
+msgstr "Pi&xelar…"
 
 #. i18n: context: toolTip @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
@@ -9662,7 +9662,7 @@ msgstr "Pi&xelizar…"
 #, kde-format
 msgctxt "action"
 msgid "Pixelize"
-msgstr "Pixelizar"
+msgstr "Pixelar"
 
 #. i18n: context: text @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1192
@@ -17789,7 +17789,7 @@ msgstr "Colorar"
 #: libs/image/lazybrush/kis_colorize_stroke_strategy.cpp:74
 msgctxt "(qtundo-format)"
 msgid "Prefilter Colorize Mask"
-msgstr "Máscara de colorar de prefiltro"
+msgstr "Máscara de colorar de filtro previo"
 
 #: libs/impex/AnimationCheck.h:25
 #, kde-format
@@ -18070,7 +18070,7 @@ msgstr "Spriter SCML"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Starview Metafile"
-msgstr "Metaficheiro de Starview"
+msgstr "Ficheiro de metadatos de Starview"
 
 #: libs/koplugin/KisMimeDatabase.cpp:224
 #, kde-format
@@ -19928,7 +19928,7 @@ msgstr "Data de creación"
 #: libs/resources/KisStorageModel.cpp:482
 #, kde-format
 msgid "Preinstalled"
-msgstr "Preinstalado"
+msgstr "Instalado previamente"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
@@ -22155,7 +22155,7 @@ msgid ""
 "Current mode is %1"
 msgstr ""
 "A vista previa pode usarse nos\n"
-"modos de filtro triliñal ou de alta calidade.\n"
+"modos de filtro de tres liñas ou de alta calidade.\n"
 "O modo actual é %1."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:377
@@ -24750,7 +24750,7 @@ msgstr "Filtro bilineal"
 #: libs/ui/forms/wdgdisplaysettings.ui:120
 #, kde-format
 msgid "Trilinear Filtering"
-msgstr "Filtro triliñal"
+msgstr "Filtro de tres liñas"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
@@ -27223,8 +27223,8 @@ msgid ""
 "<html><head/><body><p>Automatically prerender animation cache in background "
 "when the user is idle</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Prerenderizar automaticamente a caché de animación en "
-"segundo plano cando o usuario non está a facer nada</p></body></html>"
+"<html><head/><body><p>Renderizar automaticamente a caché de animación en "
+"segundo plano cando vostede non estea a facer nada.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:517
@@ -33609,8 +33609,8 @@ msgstr ""
 "se usa a continuación, «compatíbel con Adobe RGB 1998» é terminoloxía "
 "suxerida no preámbulo da especificación do espazo de cores AdobeRGB de 1998."
 "</p> <p>A gama de cores Adobe RGB de 1998 cubre unha maior porcentaxe dos "
-"cianos, verdes e verdes amarelados que sRGB, pero aínda así non inclúe todos "
-"os cianos, verdes e verdes amarelados que se poden imprimir, especialmente "
+"ciano, verdes e verdes amarelados que sRGB, pero aínda así non inclúe todos "
+"os ciano, verdes e verdes amarelados que se poden imprimir, especialmente "
 "cando se usan impresoras de última xeración, de ampla gama de cores e "
 "técnica de inxección. BetaRGB (que non forma parte do grupo de perfís) e "
 "Rec.2020 son máis axeitadas para as gamas de cores das impresoras de ampla "
@@ -33773,7 +33773,7 @@ msgstr ""
 "sRGB (as boas novas son que, a medida que progresa a tecnoloxía, os "
 "monitores do mercado inclúen gamas de cores máis amplas).</p> <p>As gamas de "
 "cores das impresoras poden superar facilmente a gama de cores de RGB en "
-"cianos, verdes e verdes amarelados. As cores dos ficheiros en bruto das "
+"ciano, verdes e verdes amarelados. As cores dos ficheiros en bruto das "
 "cámaras interpoladas adoitan superar a gama de cores de sRGB.</p> <p>Como "
 "nota aparte moi relevante, usar intención perceptiva ao converter a sRGB non "
 "fai que as cores que non forman parte da gama de cores de sRGB se inclúan "
@@ -33814,11 +33814,11 @@ msgid ""
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
 "<p>Estes perfís están para usarse con imaxes RGB que se converteron a gris "
-"monoton (branco e negro). O motivo principal para converter RGB a gris é "
-"para aforrar o almacenamento necesario para codificar o ficheiro da imaxe. "
-"Google premia as páxinas web que se cargan rapidamente, e as imaxes son uns "
-"dos elementos das páxinas web que máis tardan en cargarse. Así que converter "
-"as imaxes en branco e negro a escala de grises aforra algúns kilobytes. Para "
+"un ton (branco e negro). O motivo principal para converter RGB a gris é para "
+"aforrar o almacenamento necesario para codificar o ficheiro da imaxe. Google "
+"premia as páxinas web que se cargan rapidamente, e as imaxes son uns dos "
+"elementos das páxinas web que máis tardan en cargarse. Así que converter as "
+"imaxes en branco e negro a escala de grises aforra algúns kilobytes. Para "
 "imaxes en escala de grises enviadas a Internet, converta a imaxe ao perfil "
 "V2 Gris coa TRC de sRGB.</p>"
 
@@ -44883,7 +44883,7 @@ msgstr "Tramado"
 #, kde-format
 msgctxt "action"
 msgid "Halftone Filter"
-msgstr "Filtro de semiton"
+msgstr "Filtro de medio ton"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
@@ -44937,12 +44937,12 @@ msgstr "Modo:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Semiton…"
+msgstr "&Medio ton…"
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
 msgid "Halftone"
-msgstr "Semiton"
+msgstr "Medio ton"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
@@ -45493,7 +45493,7 @@ msgstr "Fonte de luz &3"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:46
 #, kde-format
 msgid "&Pixelize..."
-msgstr "&Pixelizar…"
+msgstr "&Pixelar…"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
 #, kde-format
@@ -45508,7 +45508,7 @@ msgstr "Altura do píxel"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.h:27
 #, kde-format
 msgid "Pixelize"
-msgstr "Pixelizar"
+msgstr "Pixelar"
 
 #: plugins/filters/posterize/posterize.cpp:43
 #, kde-format
@@ -46408,7 +46408,7 @@ msgstr "Interpolación:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
 #, kde-format
 msgid "Equalization:"
-msgstr "Ecualización:"
+msgstr "Nivelación:"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationNone)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:144
@@ -49117,9 +49117,9 @@ msgid ""
 msgstr ""
 "<p>O formato de ficheiro «Portable Network Graphics», PNG, permite gardar as "
 "transparencias pois gárdaas na canle alfa.\n"
-"Pode desmarcar esta caixiña se non quere usar transparencias e se quere "
-"facer que o ficheiro resultante sexa máis pequeno.<br>Recoméndase sempre "
-"gardar a canle alfa.</p>"
+"Pode desmarcar esta caixa se non quere usar transparencias e se quere facer "
+"que o ficheiro resultante sexa máis pequeno.<br>Recoméndase sempre gardar a "
+"canle alfa.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:184
@@ -49188,7 +49188,7 @@ msgstr ""
 #: plugins/impex/psd/psd_loader.cpp:156
 #, kde-format
 msgid "Duotone Colormode Block"
-msgstr "Bloque de modos de cor duoton"
+msgstr "Bloque de modos de cor de ton duplo"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18

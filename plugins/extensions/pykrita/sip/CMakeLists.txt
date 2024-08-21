@@ -9,12 +9,12 @@ if(${SIP_VERSION_STR} VERSION_LESS 5)
 
     set(SIP_INCLUDES
         ${SIP_DEFAULT_SIP_DIR}
-        ${PYQT5_SIP_DIR}
+        ${PYQT_SIP_DIR}
         ${PYQT_SIP_DIR_OVERRIDE}
         ./krita)
 
     set(SIP_CONCAT_PARTS 1)
-    set(SIP_TAGS ALL WS_X11 ${PYQT5_VERSION_TAG})
+    set(SIP_TAGS ALL WS_X11 ${PYQT_VERSION_TAG})
     set(SIP_EXTRA_OPTIONS -g -o -x PyKDE_QVector)
     IF (PYQT5_SIP_NAME)
         set(SIP_EXTRA_OPTIONS ${SIP_EXTRA_OPTIONS} -n ${PYQT5_SIP_NAME})
@@ -26,9 +26,9 @@ if(${SIP_VERSION_STR} VERSION_LESS 5)
     add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
 else()
     set(SIP_CONCAT_PARTS 1)
-    set(SIP_MODULE ${PYQT5_SIP_NAME})
-    set(SIP_TAGS ${PYQT5_SIP_TAGS})
-    set(SIP_INCLUDES ${PYQT5_SIP_DIR})
+    set(SIP_MODULE ${PYQT_SIP_NAME})
+    set(SIP_TAGS ${PYQT_SIP_TAGS})
+    set(SIP_INCLUDES ${PYQT_SIP_DIR})
     set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${LIB_INSTALL_DIR}/krita-python-libs)
     set(SIP_EXTRA_FILES_DEPEND "${CMAKE_CURRENT_SOURCE_DIR}/krita")
     set(SIP_EXTRA_STUBS "${CMAKE_CURRENT_SOURCE_DIR}/extra.pyi")

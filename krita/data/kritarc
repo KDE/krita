@@ -377,3 +377,4 @@ actionGestureSwipeDown=make_brush_color_darker
 actionGestureSwipeRight=KritaSelected/KisToolColorSampler
 actionGestureSwipeLeft=KritaShape/KisToolBrush
 actionGestureSwipeUp=make_brush_color_lighter
+

@@ -87,7 +87,7 @@ set(krita_QRCS
     CACHE INTERNAL "krita_QRCS"
 )
 
-qt5_add_resources(krita_SRCS ${krita_QRCS})
+qt_add_resources(krita_SRCS ${krita_QRCS})
 
 if (ANDROID)
     kis_add_library(krita SHARED ${krita_SRCS})
@@ -103,16 +103,16 @@ target_link_libraries(krita
     PRIVATE
                       kritamultiarch
                       kritaui
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Xml
-                      Qt5::Network
-                      Qt5::PrintSupport
-                      Qt5::Svg
-                      Qt5::Concurrent)
+                      Qt${QT_MAJOR_VERSION}::Core
+                      Qt${QT_MAJOR_VERSION}::Gui
+                      Qt${QT_MAJOR_VERSION}::Widgets
+                      Qt${QT_MAJOR_VERSION}::Xml
+                      Qt${QT_MAJOR_VERSION}::Network
+                      Qt${QT_MAJOR_VERSION}::PrintSupport
+                      Qt${QT_MAJOR_VERSION}::Svg
+                      Qt${QT_MAJOR_VERSION}::Concurrent)
 if(HAVE_KCRASH)
-    target_link_libraries(krita PRIVATE KF5::Crash)
+    target_link_libraries(krita PRIVATE KF${KF_MAJOR}::Crash)
 endif()
 
 if (APPLE)
@@ -134,7 +134,7 @@ if (NOT ANDROID)
   add_executable(krita_version ${KRITAVERSION_SRCS})
   target_link_libraries(krita_version
     PRIVATE
-        Qt5::Core
+        Qt${QT_MAJOR_VERSION}::Core
         kritaversion
   )
 
@@ -172,7 +172,7 @@ if (WIN32)
         ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
         ${KRITA_MANIFEST_SRC}
     )
-    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt5::WinMain)
+    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt${QT_MAJOR_VERSION}::WinMain)
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
             OUTPUT_NAME "krita"

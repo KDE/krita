@@ -384,7 +384,7 @@ target_link_libraries(kritaimage
         kritametadata
         kritaresources
 
-        Qt5::Concurrent
+        Qt${QT_MAJOR_VERSION}::Concurrent
 
         Eigen3::Eigen
         Boost::boost

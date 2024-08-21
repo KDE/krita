@@ -9,14 +9,14 @@ set(kritarunner_SRCS main.cpp)
 set(kritarunner_PRIVATE_LINK_LIBS
     ${PYTHON_LIBRARY}
     pykrita
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::Xml
-    Qt5::Network
-    Qt5::PrintSupport
-    Qt5::Svg
-    Qt5::Concurrent
+    Qt${QT_MAJOR_VERSION}::Core
+    Qt${QT_MAJOR_VERSION}::Gui
+    Qt${QT_MAJOR_VERSION}::Widgets
+    Qt${QT_MAJOR_VERSION}::Xml
+    Qt${QT_MAJOR_VERSION}::Network
+    Qt${QT_MAJOR_VERSION}::PrintSupport
+    Qt${QT_MAJOR_VERSION}::Svg
+    Qt${QT_MAJOR_VERSION}::Concurrent
 )
 
 if(WIN32)

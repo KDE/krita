@@ -682,12 +682,12 @@ generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui
     PUBLIC
-        KF5::CoreAddons
-        KF5::Completion
-        KF5::I18n
-        KF5::ItemViews
+        KF${KF_MAJOR}::CoreAddons
+        KF${KF_MAJOR}::Completion
+        KF${KF_MAJOR}::I18n
+        KF${KF_MAJOR}::ItemViews
 
-        Qt5::Network
+        Qt${QT_MAJOR_VERSION}::Network
 
         Eigen3::Eigen
         Boost::boost
@@ -709,8 +709,8 @@ endif()
 
 if (ANDROID)
     target_link_libraries(kritaui PRIVATE GLESv3)
-    target_link_libraries(kritaui PUBLIC Qt5::Gui)
-    target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
+    target_link_libraries(kritaui PUBLIC Qt${QT_MAJOR_VERSION}::Gui)
+    target_link_libraries(kritaui PRIVATE Qt${QT_MAJOR_VERSION}::AndroidExtras)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
@@ -738,12 +738,12 @@ if(OpenEXR_FOUND)
 endif()
 
 # Add VSync disable workaround
-if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
-    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt5::X11Extras)
+if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU AND QT_MAJOR_VERSION STREQUAL "5")
+    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt${QT_MAJOR_VERSION}::X11Extras)
 endif()
 
-if(X11_FOUND)
-    target_link_libraries(kritaui PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
+if (X11_FOUND AND (QT_MAJOR_VERSION STREQUAL "5"))
+    target_link_libraries(kritaui PRIVATE Qt${QT_MAJOR_VERSION}::X11Extras ${X11_LIBRARIES})
 endif()
 
 target_include_directories(kritaui

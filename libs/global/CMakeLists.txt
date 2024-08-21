@@ -69,12 +69,12 @@ generate_export_header(kritaglobal BASE_NAME kritaglobal)
 target_link_libraries(kritaglobal 
     PUBLIC
         kritaversion
-        Qt5::Concurrent 
-        Qt5::Core 
-        Qt5::Gui 
-        Qt5::Widgets 
-        Qt5::Xml 
-        KF5::I18n
+        Qt${QT_MAJOR_VERSION}::Concurrent 
+        Qt${QT_MAJOR_VERSION}::Core 
+        Qt${QT_MAJOR_VERSION}::Gui 
+        Qt${QT_MAJOR_VERSION}::Widgets 
+        Qt${QT_MAJOR_VERSION}::Xml 
+        KF${KF_MAJOR}::I18n
         Boost::boost
         zug
         lager
@@ -87,7 +87,7 @@ if (GSL_FOUND)
 endif ()
 
 if (ANDROID)
-    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
+    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt${QT_MAJOR_VERSION}::AndroidExtras log)
 endif()
 
 if(APPLE)

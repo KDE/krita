@@ -19,7 +19,7 @@ kis_add_test(
     KisDialogStateSaverTest.cpp
     ${DialogStateSaver_SRCS}
     TEST_NAME KisDialogStateSaverTest
-    LINK_LIBRARIES kritawidgetutils kritatestsdk KF5::ConfigCore
+    LINK_LIBRARIES kritawidgetutils kritatestsdk KF${KF_MAJOR}::ConfigCore
     NAME_PREFIX "libs-widgetutils-"
     )
 

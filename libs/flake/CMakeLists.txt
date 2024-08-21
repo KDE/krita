@@ -269,13 +269,13 @@ target_link_libraries(kritaflake
         kritapigment
         kritawidgetutils
         kritacommand
-        KF5::WidgetsAddons
-        Qt5::Svg
-        KF5::CoreAddons
-        KF5::ConfigCore
-        KF5::I18n
-        Qt5::Gui
-        Qt5::Xml
+        KF${KF_MAJOR}::WidgetsAddons
+        Qt${QT_MAJOR_VERSION}::Svg
+        KF${KF_MAJOR}::CoreAddons
+        KF${KF_MAJOR}::ConfigCore
+        KF${KF_MAJOR}::I18n
+        Qt${QT_MAJOR_VERSION}::Gui
+        Qt${QT_MAJOR_VERSION}::Xml
         Boost::boost
         Freetype::Freetype
         HarfBuzz::HarfBuzz

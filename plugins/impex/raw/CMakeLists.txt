@@ -18,7 +18,7 @@ ki18n_wrap_ui(krita_raw_import_SOURCES
 )
 
 kis_add_library(krita_raw_import MODULE ${krita_raw_import_SOURCES})
-target_link_libraries(krita_raw_import kritaui KF5::KDcraw kritaexifcommon)
+target_link_libraries(krita_raw_import kritaui KF${KF_MAJOR}::KDcraw kritaexifcommon)
 
 install(TARGETS krita_raw_import  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

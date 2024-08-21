@@ -13,9 +13,9 @@ endif()
 
 target_link_libraries(kritamultiarch
     PUBLIC
-        Qt5::Core
+        Qt${QT_MAJOR_VERSION}::Core
     PRIVATE
-        KF5::ConfigCore
+        KF${KF_MAJOR}::ConfigCore
         kritaglobal
 )
 

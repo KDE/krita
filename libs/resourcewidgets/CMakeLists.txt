@@ -24,20 +24,20 @@ generate_export_header(kritaresourcewidgets BASE_NAME kritaresourcewidgets)
 
 target_link_libraries(kritaresourcewidgets
     PUBLIC
-        Qt5::Core
-        Qt5::Widgets
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Widgets
     PRIVATE
-        Qt5::Sql
+        Qt${QT_MAJOR_VERSION}::Sql
         kritaversion
         kritaglobal
         kritaplugin
         kritastore
         kritaresources
         kritawidgetutils
-        KF5::ConfigCore
-        KF5::WidgetsAddons
-        KF5::CoreAddons
-        KF5::I18n
+        KF${KF_MAJOR}::ConfigCore
+        KF${KF_MAJOR}::WidgetsAddons
+        KF${KF_MAJOR}::CoreAddons
+        KF${KF_MAJOR}::I18n
 )
 
 set_target_properties(kritaresourcewidgets PROPERTIES

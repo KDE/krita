@@ -55,7 +55,7 @@ set(kritaresources_LIB_SRCS
     KisResourceThumbnailCache.cpp
 )
 
-qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)
+qt_add_resources(kritaresources_LIB_SRCS sql.qrc)
 
 kis_add_library(kritaresources SHARED ${kritaresources_LIB_SRCS})
 
@@ -63,18 +63,18 @@ generate_export_header(kritaresources BASE_NAME kritaresources)
 
 target_link_libraries(kritaresources
     PUBLIC
-        Qt5::Core
-        Qt5::Widgets
-        Qt5::Sql
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt${QT_MAJOR_VERSION}::Sql
         Boost::boost
     PRIVATE
         kritaversion
         kritaglobal
         kritaplugin
         kritastore
-        KF5::ConfigCore
-        KF5::CoreAddons
-        KF5::I18n
+        KF${KF_MAJOR}::ConfigCore
+        KF${KF_MAJOR}::CoreAddons
+        KF${KF_MAJOR}::I18n
         ${QUAZIP_LIBRARIES}
 )
 

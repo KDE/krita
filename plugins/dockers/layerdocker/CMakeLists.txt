@@ -12,10 +12,23 @@ ki18n_wrap_ui(kritalayerdocker_static_SRCS
     WdgLayerBox.ui
 )
 
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+
+QT_WRAP_CPP(kritalayerdocker_HEADERS_MOC 
+    NodePropertyAction_p.h
+    SyncButtonAndAction.h
+)
+
+else()
+
 QT5_WRAP_CPP(kritalayerdocker_HEADERS_MOC 
     NodePropertyAction_p.h
     SyncButtonAndAction.h
 )
+
+endif()
+
 
 kis_add_library(kritalayerdocker_static STATIC ${kritalayerdocker_static_SRCS} ${kritalayerdocker_HEADERS_MOC})
 

@@ -13,9 +13,9 @@ target_link_libraries(kritadbexplorer
         kritaresources
         kritaresourcewidgets
         kritaui
-        Qt5::Core
-        Qt5::Widgets
-        Qt5::Sql
+        Qt${QT_MAJOR_VERSION}::Core
+        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt${QT_MAJOR_VERSION}::Sql
 )
 install(TARGETS kritadbexplorer DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(FILES dbexplorer.xmlgui DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

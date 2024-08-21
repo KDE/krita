@@ -11,14 +11,13 @@ from .flow_layout import FlowLayout
 from .buttons_settings_dialog import LISTOFTOOLS, LISTOFSIZES, ButtonsSettingsDialog
 import ast
 
-DOCKER_NAME = 'Workflow Buttons'
 DOCKER_ID = 'pykrita_workflow_buttons'
 INSTANCE = Krita.instance()
 
 class WorkflowButtons(DockWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle(DOCKER_NAME)
+        self.setWindowTitle(i18nc("@title:window", "Workflow Buttons"))
         self.sizeIndex = 2
         self.globalButtonSize = QSize(LISTOFSIZES[self.sizeIndex], LISTOFSIZES[self.sizeIndex])
         self.settingsButtonPosition = 0

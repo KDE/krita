@@ -1,6 +1,6 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-# Shinjo Park <kde@peremen.name>, 2014, 2015, 2016, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2019, 2020, 2021, 2022, 2023, 2024 Shinjo Park <kde@peremen.name>
 # Yeheun Shin <syh0091@gmail.com>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
 # JungHee Lee <daemul72@gmail.com>, 2019, 2020, 2021.
 #
@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2023-07-24 21:59+0200\n"
+"PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -13772,7 +13772,7 @@ msgstr "최근에 연 문서(&R)"
 #, kde-format
 msgctxt "action"
 msgid "Open a document which was recently opened"
-msgstr "최근에 열었던 문서를 열기"
+msgstr "최근에 열었던 문서 열기"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
@@ -36578,7 +36578,7 @@ msgstr "되돌리기(&V)"
 #: libs/widgetutils/config/kstandardaction_p.h:34
 #, kde-format
 msgid "Revert unsaved changes made to document"
-msgstr "문서로 저장되지 않았던 변경 사항을 되돌리기"
+msgstr "저장되지 않은 문서의 변경 사항 되돌리기"
 
 #: libs/widgetutils/config/kstandardaction_p.h:35
 #, kde-format
@@ -36725,7 +36725,7 @@ msgstr "문서를 실제 크기로 보기"
 #: libs/widgetutils/config/kstandardaction_p.h:56
 #, kde-format
 msgid "&Fit to Page"
-msgstr "쪽 맞춤(&F)"
+msgstr "쪽에 맞추기(&F)"
 
 #: libs/widgetutils/config/kstandardaction_p.h:56
 #, kde-format
@@ -36735,17 +36735,17 @@ msgstr "쪽 크기를 창 크기에 맞게 조정"
 #: libs/widgetutils/config/kstandardaction_p.h:57
 #, kde-format
 msgid "Fit to Page &Width"
-msgstr "쪽 너비 맞춤(&W)"
+msgstr "쪽 너비에 맞추기(&W)"
 
 #: libs/widgetutils/config/kstandardaction_p.h:57
 #, kde-format
 msgid "Zoom to fit page width in window"
-msgstr "창의 쪽 너비에 맞게 확대/축소"
+msgstr "쪽 너비를 창 너비에 맞게 조정"
 
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format
 msgid "Fit to Page &Height"
-msgstr "쪽 높이 맞춤(&H)"
+msgstr "쪽 높이에 맞추기(&H)"
 
 #: libs/widgetutils/config/kstandardaction_p.h:58
 #, kde-format
@@ -36770,7 +36770,7 @@ msgstr "확대/축소(&Z)..."
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "Select zoom level"
-msgstr "확대/축소 레벨 선택"
+msgstr "확대/축소 단계 선택"
 
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format

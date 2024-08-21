@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2024-04-27 10:24+0200\n"
+"PO-Revision-Date: 2024-08-17 20:45+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -14064,7 +14064,7 @@ msgstr "Adatta alla larghezza della vista"
 #, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Adatta tela alla vista della vista"
+msgstr "Adatta tela alla larghezza della vista"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)

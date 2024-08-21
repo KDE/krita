@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-16 01:46+0000\n"
-"PO-Revision-Date: 2024-08-14 15:03+0200\n"
+"PO-Revision-Date: 2024-08-20 15:26+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -15869,14 +15869,14 @@ msgstr "Zrcadlit"
 #, kde-format
 msgctxt "action"
 msgid "Layouts"
-msgstr "Rozložení"
+msgstr "Rozvržení"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2053
 #, kde-format
 msgctxt "action"
 msgid "Select layout"
-msgstr "Vybrat rozložení"
+msgstr "Vybrat rozvržení"
 
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -36923,7 +36923,7 @@ msgstr "Klávesové zkratky barev"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Change to a Horizontal Layout"
-msgstr "Změnit na vodorovné rozložení"
+msgstr "Změnit na vodorovné rozvržení"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
@@ -40130,7 +40130,7 @@ msgstr "Orientace stránky :"
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:116
 #, kde-format
 msgid "Board Layout:"
-msgstr "Uspořádání desky:"
+msgstr "Rozvržení desky:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, boardLayoutComboBox)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:130
@@ -55996,10 +55996,8 @@ msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
-#, fuzzy
-#| msgid "Select background color"
 msgid "Select background color:"
-msgstr "Vybrat barvu pozadí"
+msgstr "Vybrat barvu pozadí:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
 msgid "Load current background color"

@@ -149,11 +149,13 @@ KRITAGLOBAL_EXPORT QString kisBacktrace();
  */
 #define ppVar( var ) #var << "=" << (var)
 
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #  ifndef QT_NO_DEBUG
 #    undef Q_ASSERT
 #    define Q_ASSERT(cond) if(!(cond)) { errKrita.noquote() << kisBacktrace(); qt_assert(#cond,__FILE__,__LINE__); } qt_noop()
 #  endif
-
+#endif
 
 #ifdef __GNUC__
 KRITAGLOBAL_EXPORT QString __methodName(const char *prettyFunction);

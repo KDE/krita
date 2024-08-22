@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "FontAxesModel.h"
+#include <klocalizedstring.h>
 #include <QDebug>
 
 const QString WEIGHT_TAG = "wght";
@@ -41,7 +42,8 @@ void FontAxesModel::setAxesData(QList<KoSvgText::FontFamilyAxis> axes)
         if (!(tag == WEIGHT_TAG
                 || tag == WIDTH_TAG
                 || tag == ITALIC_TAG
-                || tag == SLANT_TAG)) {
+                || tag == SLANT_TAG)
+                && !axes.at(i).axisHidden) {
             d->axes.append(axes.at(i));
         }
     }
@@ -100,7 +102,13 @@ QVariant FontAxesModel::data(const QModelIndex &index, int role) const
 
     KoSvgText::FontFamilyAxis axis = d->axes.at(index.row());
     if (role == Qt::DisplayRole) {
-        if (axis.localizedLabels.isEmpty()) return axis.tag;
+        if (axis.tag == OPTICAL_TAG){
+            // Refers to https://learn.microsoft.com/en-us/typography/opentype/spec/dvaraxistag_opsz
+            return i18nc("@info:label", "Optical Size");
+        }
+        if (axis.localizedLabels.isEmpty()) {
+            return axis.tag;
+        }
         QString label = axis.localizedLabels.value(QLocale(QLocale::English), axis.localizedLabels.values().first());
         Q_FOREACH(const QLocale &locale, d->locales) {
             if (axis.localizedLabels.keys().contains(locale)) {

@@ -98,5 +98,6 @@ using FT_FaceSP = KisLibraryResourcePointerWithSanityCheck<std::remove_pointer_t
                                                            FT_Done_Face>;
 
 using hb_font_t_sp = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
+using hb_face_t_sp = KisLibraryResourcePointer<hb_face_t, hb_face_destroy>;
 
 #endif // KOFONTLIBRARYRESOURCEUTILS_H

@@ -299,24 +299,27 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         }
     } else {
         fontFamily.type = KoSvgText::OpenTypeFontType;
-        hb_face_t *hbFace = hb_ft_face_create_referenced(face.data());
+        hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
+        hb_font_t_sp hbFont(hb_ft_font_create_referenced(face.data()));
 
         // Retrieve width, weight and slant data.
+
+        fontFamily.axes.insert("wght", KoSvgText::FontFamilyAxis::weightAxis(hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WEIGHT)));
+        fontFamily.axes.insert("wdth", KoSvgText::FontFamilyAxis::widthAxis(hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WIDTH)));
+        fontFamily.isItalic = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_ITALIC) > 0;
+        //fontFamily.isOblique = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE) != 0;
+
         TT_OS2 *os2Table = nullptr;
         os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
         if (os2Table) {
-            fontFamily.axes.insert("wght", KoSvgText::FontFamilyAxis::weightAxis(os2Table->usWeightClass));
-            fontFamily.axes.insert("wdth", KoSvgText::FontFamilyAxis::widthAxis(percentageFromUsWidthClass(os2Table->usWidthClass)));
-            if (os2Table->fsSelection & OS2_BOLD && os2Table->usWeightClass == 400) {
-                fontFamily.axes.insert("wght", KoSvgText::FontFamilyAxis::weightAxis(700));
-            }
-            fontFamily.isItalic = (os2Table->fsSelection & OS2_ITALIC);
-            fontFamily.isOblique = (os2Table->fsSelection & OS2_OBLIQUE);
+
+            fontFamily.isOblique = os2Table->fsSelection & OS2_OBLIQUE;
+
             if (os2Table->fsSelection & OS2_REGULAR) {
-                fontFamily.axes.insert("wght", KoSvgText::FontFamilyAxis::weightAxis(os2Table->usWeightClass));
                 fontFamily.isItalic = false;
                 fontFamily.isOblique = false;
             }
+
             if (os2Table->version >= 5) {
                 FontFamilySizeInfo sizeInfo;
                 qreal twip = 0.05; ///< twip is 'Twenty-in-point';
@@ -329,13 +332,14 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             isWWSFamilyWithoutName = (os2Table->fsSelection & OS2_WWS);
         }
 
+
         // retrieve gpos size data...
         uint designSize;
         uint subFamilyId;
         uint rangeStart;
         uint rangeEnd;
         hb_ot_name_id_t sizeNameId;
-        if (hb_ot_layout_get_size_params(hbFace, &designSize, &subFamilyId, &sizeNameId, &rangeStart, &rangeEnd)) {
+        if (hb_ot_layout_get_size_params(hbFace.data(), &designSize, &subFamilyId, &sizeNameId, &rangeStart, &rangeEnd)) {
             FontFamilySizeInfo sizeInfo;
             qreal tenth = 0.1;
             sizeInfo.low = rangeStart * tenth;
@@ -351,15 +355,15 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
 
         QHash<hb_ot_name_id_t, QString> axisNameIDs;
         QVector<hb_ot_name_id_t> instanceNameIDs;
-        if (hb_ot_var_has_data(hbFace)) {
+        if (hb_ot_var_has_data(hbFace.data())) {
             fontFamily.isVariable = true;
-            uint count = hb_ot_var_get_axis_count(hbFace);
+            uint count = hb_ot_var_get_axis_count(hbFace.data());
             uint maxInfos = 1;
             QStringList axesTags;
             for (uint i = 0; i < count; i++) {
                 KoSvgText::FontFamilyAxis axisInfo;
                 hb_ot_var_axis_info_t axis;
-                hb_ot_var_get_axis_infos(hbFace, i, &maxInfos, &axis);
+                hb_ot_var_get_axis_infos(hbFace.data(), i, &maxInfos, &axis);
                 axisInfo.min = axis.min_value;
                 axisInfo.max = axis.max_value;
                 axisInfo.value = axis.default_value;
@@ -372,34 +376,33 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
                 fontFamily.axes.insert(axisInfo.tag, axisInfo);
                 axesTags.append(axisInfo.tag);
             }
-            count = hb_ot_var_get_named_instance_count (hbFace);
+            count = hb_ot_var_get_named_instance_count (hbFace.data());
             for (uint i = 0; i < count; i++) {
                 QHash<QString, float> instanceCoords;
                 uint coordLength = axesTags.size();
                 float coordinate[coordLength];
-                hb_ot_var_named_instance_get_design_coords (hbFace, i, &coordLength, coordinate);
+                hb_ot_var_named_instance_get_design_coords (hbFace.data(), i, &coordLength, coordinate);
                 for (uint j =0; j < coordLength; j++ ){
                     instanceCoords.insert(axesTags.value(j), coordinate[j]);
                 }
                 KoSvgText::FontFamilyStyleInfo style;
                 style.instanceCoords = instanceCoords;
-                instanceNameIDs.append(hb_ot_var_named_instance_get_subfamily_name_id(hbFace, i));
+                instanceNameIDs.append(hb_ot_var_named_instance_get_subfamily_name_id(hbFace.data(), i));
                 fontFamily.styleInfo.append(style);
             }
-
         }
 
         // Get some basic color data.
-        fontFamily.colorBitMap = hb_ot_color_has_png(hbFace);
-        fontFamily.colorSVG = hb_ot_color_has_svg(hbFace);
-        fontFamily.colorClrV0 = hb_ot_color_has_layers(hbFace);
+        fontFamily.colorBitMap = hb_ot_color_has_png(hbFace.data());
+        fontFamily.colorSVG = hb_ot_color_has_svg(hbFace.data());
+        fontFamily.colorClrV0 = hb_ot_color_has_layers(hbFace.data());
         //fontFamily.colorClrV1 = hb_ot_color_has_paint(hbFace);
         wwsFamily.colorBitMap = fontFamily.colorBitMap;
         wwsFamily.colorSVG = fontFamily.colorSVG;
         wwsFamily.colorClrV0 = fontFamily.colorClrV0;
 
         uint numEntries = 0;
-        const hb_ot_name_entry_t *entries = hb_ot_name_list_names(hbFace, &numEntries);
+        const hb_ot_name_entry_t *entries = hb_ot_name_list_names(hbFace.data(), &numEntries);
 
         QHash<QLocale, QString> ribbiFamilyNames;
         QHash<QLocale, QString> ribbiStyleNames;
@@ -411,9 +414,9 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             hb_ot_name_entry_t entry = entries[i];
             QString lang(hb_language_to_string(entry.language));
             QLocale locale(lang);
-            uint length = hb_ot_name_get_utf8(hbFace, entry.name_id, entry.language, nullptr, nullptr)+1;
+            uint length = hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, nullptr, nullptr)+1;
             char buff[length];
-            hb_ot_name_get_utf8(hbFace, entry.name_id, entry.language, &length, buff);
+            hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, &length, buff);
             QString name = QString::fromUtf8(buff, length);
 
             if (entry.name_id == HB_OT_NAME_ID_FONT_FAMILY) {
@@ -458,8 +461,6 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             wwsFamily.localizedFontFamilies = WWSFamilyNames;
         }
         fontFamily.localizedWWSStyle = WWSStyleNames;
-
-        hb_face_destroy(hbFace);
     }
     if (typographicFamily.fontFamily.isEmpty()) {
         typographicFamily.fontFamily = fontFamily.fontFamily;

@@ -74,9 +74,9 @@ emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, i
         }
 
         // Some heavy weight classes don't cause FT_STYLE_FLAG_BOLD to be set,
-        // so we have to check the OS/2 table for its weight class to be sure.
-        if (const TT_OS2 *const os2Table = reinterpret_cast<TT_OS2 *>(FT_Get_Sfnt_Table(ftface, FT_SFNT_OS2));
-            os2Table && os2Table->usWeightClass >= WEIGHT_SEMIBOLD) {
+        // so we have to check the OS/2 and STAT table for its weight class to be sure.
+        hb_font_t_sp hbFont(hb_ft_font_create_referenced(ftface));
+        if (hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WEIGHT) >= WEIGHT_SEMIBOLD) {
             return;
         }
 
@@ -123,26 +123,15 @@ emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, i
 }
 
 bool faceIsItalic(const FT_Face face) {
-    bool isItalic = (face->style_flags & FT_STYLE_FLAG_ITALIC);
+    hb_font_t_sp hbFont(hb_ft_font_create_referenced(face));
+    bool isItalic = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_ITALIC) > 0;
+    bool isOblique = false;
 
-    if (FT_IS_SFNT(face) && FT_HAS_MULTIPLE_MASTERS(face)) {
-        FT_MM_Var *amaster = nullptr;
-        FT_Get_MM_Var(face, &amaster);
-        std::vector<FT_Fixed> designCoords(amaster->num_axis);
-        FT_Get_Var_Design_Coordinates(face, amaster->num_axis, designCoords.data());
-        for (FT_UInt i = 0; i < amaster->num_axis; i++) {
-            FT_Var_Axis axis = amaster->axis[i];
-            if (axis.tag == FT_MAKE_TAG('i', 't', 'a', 'l')) {
-                isItalic = !(designCoords[i] == axis.def);
-                break;
-            } else if (axis.tag == FT_MAKE_TAG('s', 'l', 'n', 't')) {
-                isItalic = !(designCoords[i] == axis.def);
-                break;
-            }
-        }
-
+    if (FT_HAS_MULTIPLE_MASTERS(face)) {
+        isOblique = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE) != 0;
     }
-    return isItalic;
+
+    return isItalic || isOblique;
 }
 
 /**

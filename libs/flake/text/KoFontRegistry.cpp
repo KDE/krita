@@ -58,8 +58,8 @@ private:
 
     struct ThreadData {
         FT_LibrarySP m_library;
-        QHash<FcChar32, FcPatternSP> m_patterns;
-        QHash<FcChar32, FcFontSetSP> m_fontSets;
+        QHash<QString, FcPatternSP> m_patterns;
+        QHash<QString, FcFontSetSP> m_fontSets;
         QHash<QString, FT_FaceSP> m_faces;
         QHash<QString, QStringList> m_suggestedFiles;
 
@@ -143,14 +143,14 @@ public:
         return m_data.localData()->m_library;
     }
 
-    QHash<FcChar32, FcPatternSP> &patterns()
+    QHash<QString, FcPatternSP> &patterns()
     {
         if (!m_data.hasLocalData())
             initialize();
         return m_data.localData()->m_patterns;
     }
 
-    QHash<FcChar32, FcFontSetSP> &sets()
+    QHash<QString, FcFontSetSP> &sets()
     {
         if (!m_data.hasLocalData())
             initialize();
@@ -247,7 +247,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
 
     QStringList candidates;
-    const QString suggestedHash = families.join("+") + QString::number(slantMode) + modifications;
+    const QString suggestedHash = families.join("+") + ":" + QString::number(slantMode) + ":" + modifications;
     auto entry = d->suggestedFileNames().find(suggestedHash);
     if (entry != d->suggestedFileNames().end()) {
         candidates = entry.value();
@@ -299,13 +299,17 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
     FcDefaultSubstitute(p.data());
 
+
     p = [&]() {
         const FcChar32 hash = FcPatternHash(p.data());
-        const auto oldPattern = d->patterns().find(hash);
+        QString patternHash = families.join("+")+QString::number(hash);
+        // FCPatternHash breaks down when there's mutliple family names that start
+        // with the same letter and are the same length (Butcherman and Babylonica, Eater and Elsie, all 4 on google fonts).
+        const auto oldPattern = d->patterns().find(patternHash);
         if (oldPattern != d->patterns().end()) {
             return oldPattern.value();
         } else {
-            d->patterns().insert(hash, p);
+            d->patterns().insert(patternHash, p);
             return p;
         }
     }();
@@ -314,7 +318,8 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     FcCharSetSP charSet;
     FcFontSetSP fontSet = [&]() -> FcFontSetSP {
         const FcChar32 hash = FcPatternHash(p.data());
-        const auto set = d->sets().find(hash);
+        QString patternHash = families.join("+")+QString::number(hash);
+        const auto set = d->sets().find(patternHash);
 
         if (set != d->sets().end()) {
             return set.value();
@@ -322,7 +327,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
             FcCharSet *cs = nullptr;
             FcFontSetSP avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcTrue, &cs, &result));
             charSet.reset(cs);
-            d->sets().insert(hash, avalue);
+            d->sets().insert(patternHash, avalue);
             return avalue;
         }
     }();

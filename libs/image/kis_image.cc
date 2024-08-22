@@ -1488,8 +1488,17 @@ double KisImage::yRes() const
 
 void KisImage::setResolution(double xres, double yres)
 {
-    m_d->xres = xres;
-    m_d->yres = yres;
+    if (xres > 0) {
+        m_d->xres = xres;
+    } else {
+        qWarning() << "WARNING: Ignoring attempt to set image x resolution <= 0 (" << xres << ")!";
+    }
+
+    if (yres > 0) {
+        m_d->yres = yres;
+    } else {
+        qWarning() << "WARNING: Ignoring attempt to set image y resolution <= 0 (" << yres << ")!";
+    }
 }
 
 QPointF KisImage::documentToPixel(const QPointF &documentCoord) const

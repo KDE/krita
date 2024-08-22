@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -55981,7 +55981,7 @@ msgid "Brush preset icon"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56118,23 +56118,28 @@ msgstr ""
 msgid "Inline"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+msgid "Icon files "
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgctxt "action"
 #| msgid "&Color"
 msgid "Color info: "
 msgstr "&Ранг"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+msgid "Script files "
 msgstr ""
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr ""
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

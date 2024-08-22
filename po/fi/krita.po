@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -59735,7 +59735,7 @@ msgstr "Valmiit siveltimet"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Väriasetukset"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -59894,26 +59894,33 @@ msgstr "Alas"
 msgid "Inline"
 msgstr "BSpline"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Python-tiedostot (*.py)"
+#| msgid "Action Name"
+msgid "Icon files "
+msgstr "Toiminnon nimi"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Väritys:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Python-tiedostot (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Väriasetukset"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -64148,6 +64155,11 @@ msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Python-tiedostot (*.py)"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Valitse taustaväri"
@@ -66717,11 +66729,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgstr ""
 #~ "Käynnistä Krita uudelleen ja aktivoi liitännäiset kohdassa <em>Asetukset "
 #~ "→ Kritan asetukset → Python-liitännäisten hallinta</em>."
-
-#, fuzzy
-#~| msgid "Action Name"
-#~ msgid "Action file"
-#~ msgstr "Toiminnon nimi"
 
 #, fuzzy
 #~| msgid "Select a Directory"

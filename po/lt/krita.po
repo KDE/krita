@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -58087,7 +58087,7 @@ msgstr "Teptuko ruošiniai"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Spalvų nuostatos"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58243,23 +58243,31 @@ msgstr "Apačia"
 msgid "Inline"
 msgstr "Lekalas"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr ""
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+msgid "Icon files "
+msgstr "Nustatyti šrifto dydį"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "Spalva:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Dalintis spalvų profiliu"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Spalvų nuostatos"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

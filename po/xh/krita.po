@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -56310,7 +56310,7 @@ msgstr "Izinto zobumnini Zolwaleko..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Izicwangciso"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56449,23 +56449,29 @@ msgstr "Gcwalisa Iinjongo"
 msgid "Inline"
 msgstr "Idityanisiwe"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-msgid "Icon files (*.png, *.svg)"
-msgstr "Izinto zobumnini Zolwaleko..."
+msgid "Icon files "
+msgstr "Khetha ubukhulu begama"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "Umbala"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Izinto zobumnini Zolwaleko..."
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Izicwangciso"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -60632,6 +60638,10 @@ msgstr "&Isixhobo Sokusondeza"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Umfanekiso Onikwe igama kwakhona"
+
+#, fuzzy
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Izinto zobumnini Zolwaleko..."
 
 #, fuzzy
 #~ msgid "Select backround color:"

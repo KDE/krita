@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -57432,7 +57432,7 @@ msgid "Brush preset icon"
 msgstr "ブラシプリセット"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57602,26 +57602,37 @@ msgstr "下"
 msgid "Inline"
 msgstr "行内に表示"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Python ファイル (*.py)"
+#| msgid "Icon Size"
+msgid "Icon files "
+msgstr "アイコンサイズ"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color Engine:"
 msgid "Color info: "
 msgstr "色エンジン:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Python ファイル (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "%1 ボタン"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61844,6 +61855,11 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Python ファイル (*.py)"
 
 #, fuzzy
 #~| msgid "Select background color"

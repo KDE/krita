@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -56823,7 +56823,7 @@ msgstr "Paleta"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Selection"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Seleccion"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56965,26 +56965,32 @@ msgstr "Inferior"
 msgid "Inline"
 msgstr "Sinus"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Profile"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Perfil"
+msgid "Icon files "
+msgstr "Opacitat"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "Color :"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Profile"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Perfil"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Selection"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Seleccion"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61197,6 +61203,11 @@ msgstr "Reduire el zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Preferéncias"
+
+#, fuzzy
+#~| msgid "Profile"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Perfil"
 
 #, fuzzy
 #~ msgid "Select backround color:"

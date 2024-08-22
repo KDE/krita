@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -56482,7 +56482,7 @@ msgstr "அடுக்கு குணங்கள்..."
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "அமைப்புகள்"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56623,23 +56623,29 @@ msgstr "தானியக்கி சீரமை"
 msgid "Inline"
 msgstr "B-Spline"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-msgid "Icon files (*.png, *.svg)"
-msgstr "சதுரம்"
+msgid "Icon files "
+msgstr "எழுத்துருவை தேர்"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "&வண்ணங்கள்"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "சதுரம்"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "அமைப்புகள்"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -60826,6 +60832,10 @@ msgstr "பெரிதாக்க கருவி"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
+
+#, fuzzy
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "சதுரம்"
 
 #, fuzzy
 #~ msgid "Select backround color:"

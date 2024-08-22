@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -56301,7 +56301,7 @@ msgstr "Націск:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Наставіць колеры"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56440,23 +56440,29 @@ msgstr "Па ніжнім боку"
 msgid "Inline"
 msgstr "B-Spline (паліномныя крывыя)"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-msgid "Icon files (*.png, *.svg)"
-msgstr "Маленькая чарапіца"
+msgid "Icon files "
+msgstr "Уставіць спасылку"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "Колер:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Маленькая чарапіца"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Наставіць колеры"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -60620,6 +60626,10 @@ msgstr "Маштабаванне"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інтэрферэнцыйны бэзавы"
+
+#, fuzzy
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Маленькая чарапіца"
 
 #, fuzzy
 #~ msgid "Select backround color:"

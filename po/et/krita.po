@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -60038,7 +60038,7 @@ msgstr "Valmispintslid"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Rühma seadistused"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -60205,26 +60205,33 @@ msgstr "All"
 msgid "Inline"
 msgstr "Splain"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Pythoni failid (*.py)"
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "Toimingufail"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Toonimine:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Pythoni failid (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Rühma seadistused"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -64569,6 +64576,11 @@ msgid "Reference Images Tool"
 msgstr "Kõrvutuspiltide tööriist"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Pythoni failid (*.py)"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Vali taustavärv"
@@ -67114,9 +67126,6 @@ msgstr "Kõrvutuspiltide tööriist"
 #~ msgstr ""
 #~ "Palun taaskäivita Krita ja aktiveeri pluginad menüükäsuga <em>Seadistused "
 #~ "-> Krita seadistamine -> Pythoni pluginahaldur</em>."
-
-#~ msgid "Action file"
-#~ msgstr "Toimingufail"
 
 #, fuzzy
 #~| msgid "Export directory"

@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-03 11:24+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -57662,7 +57662,7 @@ msgstr "Nastawy pędzli"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Ustawienia grupy"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57831,26 +57831,33 @@ msgstr "Dół"
 msgid "Inline"
 msgstr "W treści"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Plik Python (*.py)"
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "Plik działań"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Kolor"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Plik Python (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Ustawienia grupy"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -62079,6 +62086,11 @@ msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Plik Python (*.py)"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Wybierz barwę tła"
@@ -64576,9 +64588,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 #~ msgstr ""
 #~ "Wyłącz Kritę i włącz wtyczki w <em>Ustawienia -> Ustawienia Krtiy -> "
 #~ "Zarządzanie wtyczkami Pythona</em>."
-
-#~ msgid "Action file"
-#~ msgstr "Plik działań"
 
 #, fuzzy
 #~| msgid "Export directory"

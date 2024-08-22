@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -58829,7 +58829,7 @@ msgstr "브러시 사전 설정"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "그룹 설정"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58998,26 +58998,33 @@ msgstr "아래"
 msgid "Inline"
 msgstr "자유 곡선"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Python 파일 (*.py)"
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "동작 파일"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "색상:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Python 파일 (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "그룹 설정"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -63358,6 +63365,11 @@ msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Python 파일 (*.py)"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "배경색 선택"
@@ -65896,9 +65908,6 @@ msgstr "참조 이미지 도구"
 #~ msgstr ""
 #~ "Krita를 다시 시작한 후 <em>설정 -> Krita 설정 -> Python 플러그인 관리자</"
 #~ "em>에서 플러그인을 활성화하십시오."
-
-#~ msgid "Action file"
-#~ msgstr "동작 파일"
 
 #, fuzzy
 #~| msgid "Export directory"

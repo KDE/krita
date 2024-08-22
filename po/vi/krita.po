@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -57008,7 +57008,7 @@ msgstr "Định sẵn:"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Thiết lập Màu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57149,25 +57149,31 @@ msgstr "Các lề"
 msgid "Inline"
 msgstr "Hình sin"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Small Tiles"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Miếng nhỏ"
+msgid "Icon files "
+msgstr "Đặt kiểu điểm"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "Khoảng màu"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Small Tiles"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Miếng nhỏ"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Thiết lập Màu"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61407,6 +61413,11 @@ msgstr "Công cụ &Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ảnh tham chiếu:"
+
+#, fuzzy
+#~| msgid "Small Tiles"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Miếng nhỏ"
 
 #, fuzzy
 #~ msgid "Select backround color:"

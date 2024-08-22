@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -56734,7 +56734,9 @@ msgid "Brush preset icon"
 msgstr "笔刷预设图标"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "自定义按钮设置"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56849,20 +56851,31 @@ msgstr "底栏"
 msgid "Inline"
 msgstr "同行显示"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr "图标文件 (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Icon Size"
+msgid "Icon files "
+msgstr "图标大小"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 msgid "Color info: "
 msgstr "颜色信息："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#, fuzzy
+#| msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "脚本文件 (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "自定义按钮设置"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr "打开自定义按钮设置对话框"
 
@@ -61020,3 +61033,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "图标文件 (*.png, *.svg)"

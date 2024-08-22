@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -59029,7 +59029,7 @@ msgstr "Penselforvalg"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Gruppeindstillinger"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -59192,26 +59192,33 @@ msgstr "Nederst"
 msgid "Inline"
 msgstr "Spline"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "All Files"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Alle filer"
+#| msgid "Action Name"
+msgid "Icon files "
+msgstr "Handlingsnavn"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Farve:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "All Files"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Alle filer"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Gruppeindstillinger"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -63613,6 +63620,11 @@ msgid "Reference Images Tool"
 msgstr "Referencebilleder"
 
 #, fuzzy
+#~| msgid "All Files"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Alle filer"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Vælg baggrundsfarve"
@@ -66031,11 +66043,6 @@ msgstr "Referencebilleder"
 
 #~ msgid "Macros"
 #~ msgstr "Makroer"
-
-#, fuzzy
-#~| msgid "Action Name"
-#~ msgid "Action file"
-#~ msgstr "Handlingsnavn"
 
 #, fuzzy
 #~| msgid "Select a Directory"

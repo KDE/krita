@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -61668,7 +61668,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Document Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -61831,24 +61831,33 @@ msgstr "ਸਿੱਧਾ ਉੱਤੇ"
 msgid "Inline"
 msgstr "ਲਾਈਨਾਂ"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr ""
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Size"
+msgid "Icon files "
+msgstr "ਸਾਈਜ਼"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Line Color"
 msgid "Color info: "
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Save"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "ਸੰਭਾਲੋ"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Document Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

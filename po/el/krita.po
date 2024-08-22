@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -58691,7 +58691,7 @@ msgstr "Προρυθμίσεις πινέλου"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Ρυθμίσεις χρώματος"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58850,26 +58850,32 @@ msgstr "Κάτω"
 msgid "Inline"
 msgstr "Spline"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Small Tiles"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Μικρές εικόνες παράθεσης"
+msgid "Icon files "
+msgstr "Ορισμός μεγέθους γραμματοσειράς"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Χρωματισμός:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Small Tiles"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Μικρές εικόνες παράθεσης"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Ρυθμίσεις χρώματος"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -63221,6 +63227,11 @@ msgstr "Εστίαση όλων"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Εικόνες αναφοράς"
+
+#, fuzzy
+#~| msgid "Small Tiles"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Μικρές εικόνες παράθεσης"
 
 #, fuzzy
 #~| msgctxt "(qtundo-format)"

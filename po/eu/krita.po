@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-17 23:11+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -57444,7 +57444,7 @@ msgstr "Pintzelen aurrehautaketak"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Talde-ezarpenak"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57613,26 +57613,33 @@ msgstr "Behean"
 msgid "Inline"
 msgstr "Lerro barruan"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Python fitxategiak (*.py)"
+#| msgid "Action Name"
+msgid "Icon files "
+msgstr "Ekintza-izena"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "Kolorea:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Python fitxategiak (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Talde-ezarpenak"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61902,6 +61909,11 @@ msgid "Reference Images Tool"
 msgstr "Erreferentziazko irudien tresna"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Python fitxategiak (*.py)"
+
+#, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Ezarri atzeko planoko kolorea"
@@ -64304,11 +64316,6 @@ msgstr "Erreferentziazko irudien tresna"
 
 #~ msgid "Macros"
 #~ msgstr "Makroak"
-
-#, fuzzy
-#~| msgid "Action Name"
-#~ msgid "Action file"
-#~ msgstr "Ekintza-izena"
 
 #, fuzzy
 #~ msgctxt "A folder where recordings are stored"

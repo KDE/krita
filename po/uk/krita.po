@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-15 09:01+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -58269,7 +58269,9 @@ msgid "Brush preset icon"
 msgstr "Піктограма набору пензлів"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Параметри кнопок робочого процесу"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58384,20 +58386,31 @@ msgstr "Панель кнопок"
 msgid "Inline"
 msgstr "Вбудована"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr "файли піктограм (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "Файл дії"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 msgid "Color info: "
 msgstr "Дані щодо кольору: "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#, fuzzy
+#| msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "файли скриптів (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Параметри кнопок робочого процесу"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr "Відкрити вікно параметрів кнопок робочого процесу"
 
@@ -62718,6 +62731,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
 
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "файли піктограм (*.png, *.svg)"
+
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
 #~ msgstr "Виберіть колір тла:"
@@ -65127,9 +65143,6 @@ msgstr "Інструмент еталонних зображень"
 #~ msgstr ""
 #~ "Будь ласка, перезапустіть Krita і активуйте додатки за допомогою пункту "
 #~ "меню <em>Параметри → Налаштувати Krita → Керування додатками Python</em>."
-
-#~ msgid "Action file"
-#~ msgstr "Файл дії"
 
 #~ msgctxt "A folder where recordings are stored"
 #~ msgid "Snapshots directory:"

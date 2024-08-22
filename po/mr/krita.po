@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -58491,7 +58491,7 @@ msgstr "कुंचला पूर्व संयोजना"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "रंगाची संयोजना"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58643,26 +58643,32 @@ msgstr "खाली"
 msgid "Inline"
 msgstr "स्प्लाईन"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Small Tiles"
-msgid "Icon files (*.png, *.svg)"
-msgstr "लहान फरशा"
+msgid "Icon files "
+msgstr "फॉन्ट आकार निश्चित करा"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "रंगः"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Small Tiles"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "लहान फरशा"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "रंगाची संयोजना"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -63005,6 +63011,11 @@ msgstr "आकाराप्रमाणे वाढवा"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "25%"
+
+#, fuzzy
+#~| msgid "Small Tiles"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "लहान फरशा"
 
 #, fuzzy
 #~ msgid "Select backround color:"

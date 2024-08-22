@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -56517,7 +56517,7 @@ msgstr "ตั้งค่า"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "ตั้งค่า"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -56657,23 +56657,29 @@ msgstr "เติมสีวัตถุ"
 msgid "Inline"
 msgstr "ลิงค์"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-msgid "Icon files (*.png, *.svg)"
-msgstr "คุณสมบัติเลเยอร์..."
+msgid "Icon files "
+msgstr "เลือกรูปแบบตัวอักษร"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "สี"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "คุณสมบัติเลเยอร์..."
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "ตั้งค่า"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -60852,6 +60858,10 @@ msgstr "เครื่องมือ&ย่อ/ขยาย"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ลบรูปภาพ"
+
+#, fuzzy
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "คุณสมบัติเลเยอร์..."
 
 #, fuzzy
 #~ msgid "Select backround color:"

@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -57197,7 +57197,7 @@ msgid "Brush preset icon"
 msgstr "Preconfigurări:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57340,23 +57340,30 @@ msgstr "Jos"
 msgid "Inline"
 msgstr "Legată"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-msgid "Icon files (*.png, *.svg)"
-msgstr "Proprietăți plan..."
+msgid "Icon files "
+msgstr "Setează dimensiune font"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "Modificator culoare"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Proprietăți plan..."
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "PushButton"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Buton de comandă"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61593,6 +61600,10 @@ msgstr "Unealtă de măr&ire"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Șterge imaginea"
+
+#, fuzzy
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Proprietăți plan..."
 
 #, fuzzy
 #~ msgid "Select backround color:"

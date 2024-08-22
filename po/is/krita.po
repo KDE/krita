@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -57547,7 +57547,7 @@ msgstr "Penslar"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Litastillingar"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57695,22 +57695,30 @@ msgstr "Neðst"
 msgid "Inline"
 msgstr "Kljúfa"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr ""
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Action Name"
+msgid "Icon files "
+msgstr "Heiti aðgerðar"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 msgid "Color info: "
 msgstr "Litur:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Mynstur"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Litastillingar"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -64017,11 +64025,6 @@ msgstr "Stillingar"
 
 #~ msgid "Macros"
 #~ msgstr "Fjölvar"
-
-#, fuzzy
-#~| msgid "Action Name"
-#~ msgid "Action file"
-#~ msgstr "Heiti aðgerðar"
 
 #, fuzzy
 #~ msgctxt "A folder where recordings are stored"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -57842,7 +57842,7 @@ msgstr "Réamhshocruithe"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Socruithe Datha"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57988,26 +57988,32 @@ msgstr "Bun"
 msgid "Inline"
 msgstr "B-Splíona"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Small Tiles"
-msgid "Icon files (*.png, *.svg)"
-msgstr "Tíleanna Beaga"
+msgid "Icon files "
+msgstr "Socraigh Clómhéid"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Dathú:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Small Tiles"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Tíleanna Beaga"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Socruithe Datha"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -62284,6 +62290,11 @@ msgstr "Uirlis Súmála"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Athainmnigh Íomhá"
+
+#, fuzzy
+#~| msgid "Small Tiles"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Tíleanna Beaga"
 
 #, fuzzy
 #~ msgid "Select backround color:"

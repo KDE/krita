@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-15 14:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -57439,7 +57439,9 @@ msgid "Brush preset icon"
 msgstr "Fırça önayarı simgesi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "İş akışı düğmeleri ayarları"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57554,20 +57556,31 @@ msgstr "Alt çubuk"
 msgid "Inline"
 msgstr "Satır içi"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr "Simge dosyaları (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Icon Size"
+msgid "Icon files "
+msgstr "Simge Boyutu"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 msgid "Color info: "
 msgstr "Renk bilgisi: "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#, fuzzy
+#| msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Betik dosyaları (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "İş akışı düğmeleri ayarları"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr "İş akışı düğmeleri ayarları iletişim kutusunu aç"
 
@@ -61789,6 +61802,9 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
+
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Simge dosyaları (*.png, *.svg)"
 
 #~ msgid "Select backround color:"
 #~ msgstr "Arka plan rengini seç:"

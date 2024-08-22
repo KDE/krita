@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -58299,7 +58299,7 @@ msgstr "رەسىم قەلىمى تاللاش"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Color Settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "رەڭ تەڭشىكى"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -58449,26 +58449,32 @@ msgstr "ئاستى"
 msgid "Inline"
 msgstr "قوش سىزىقلىق"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Filter"
-msgid "Icon files (*.png, *.svg)"
-msgstr "سۈزگۈچ"
+msgid "Icon files "
+msgstr "چوڭلۇقى"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "رەڭ:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Filter"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "سۈزگۈچ"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Color Settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "رەڭ تەڭشىكى"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -62805,6 +62811,11 @@ msgstr "تاللىغان رايون چوڭلۇقىغا تارايت"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "نەقىل"
+
+#, fuzzy
+#~| msgid "Filter"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "سۈزگۈچ"
 
 #, fuzzy
 #~ msgid "Select backround color:"

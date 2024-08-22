@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -57107,7 +57107,7 @@ msgstr "पैलेट संपादित करू"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Grow Selection"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "चयन बढाउ"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57251,26 +57251,32 @@ msgstr "नीच्चाँ"
 msgid "Inline"
 msgstr "साइन"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Profile"
-msgid "Icon files (*.png, *.svg)"
-msgstr "प्रोफाइल"
+msgid "Icon files "
+msgstr "अपारदर्शिता"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Color:"
 msgid "Color info: "
 msgstr "रँग:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Profile"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "प्रोफाइल"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Grow Selection"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "चयन बढाउ"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61513,6 +61519,11 @@ msgstr "ज़ूम आउट"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "वरीयतासभ"
+
+#, fuzzy
+#~| msgid "Profile"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "प्रोफाइल"
 
 #, fuzzy
 #~ msgid "Select backround color:"

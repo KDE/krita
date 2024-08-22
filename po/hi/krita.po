@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -57060,7 +57060,7 @@ msgstr "ब्रश के नमूने"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 #, fuzzy
 #| msgid "Group settings"
-msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "समूह विन्यास"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57219,26 +57219,33 @@ msgstr "ज़ूम"
 msgid "Inline"
 msgstr "स्प्लाइन"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
 #, fuzzy
-#| msgid "Python files (*.py)"
-msgid "Icon files (*.png, *.svg)"
-msgstr "पायथन फ़ाइलें (*.py)"
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "क्रिया फाइल"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "रंग:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 #, fuzzy
 #| msgid "Python files (*.py)"
-msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "पायथन फ़ाइलें (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Group settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "समूह विन्यास"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
@@ -61490,6 +61497,11 @@ msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
 
 #, fuzzy
+#~| msgid "Python files (*.py)"
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "पायथन फ़ाइलें (*.py)"
+
+#, fuzzy
 #~ msgid "Select backround color:"
 #~ msgstr "पृष्ठभूमि सेट करें"
 
@@ -63663,9 +63675,6 @@ msgstr "संदर्भ छवि औज़ार"
 
 #~ msgid "Macros"
 #~ msgstr "मेक्रोज़"
-
-#~ msgid "Action file"
-#~ msgstr "क्रिया फाइल"
 
 #, fuzzy
 #~ msgctxt "A folder where recordings are stored"

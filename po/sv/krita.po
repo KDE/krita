@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-15 08:15+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -57484,7 +57484,9 @@ msgid "Brush preset icon"
 msgstr "Penselförinställningsikon"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Inställningar av arbetsflödesknappar"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57599,20 +57601,31 @@ msgstr "Nedre raden"
 msgid "Inline"
 msgstr "På plats"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr "Ikonfiler (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "Åtgärdsfil"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 msgid "Color info: "
 msgstr "Färginformation: "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#, fuzzy
+#| msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Skriptfiler (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Inställningar av arbetsflödesknappar"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr "Öppna inställningsdialogrutan för arbetsflödesknappar"
 
@@ -61830,6 +61843,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Ikonfiler (*.png, *.svg)"
+
 #~ msgid "Select backround color:"
 #~ msgstr "Välj bakgrundsfärg:"
 
@@ -64089,9 +64105,6 @@ msgstr "Referensbildverktyg"
 #~ msgstr ""
 #~ "Starta om Krita och aktivera insticksprogrammen under <em>Inställningar -"
 #~ "> Anpassa Krita -> Python-instickshanterare</em>."
-
-#~ msgid "Action file"
-#~ msgstr "Åtgärdsfil"
 
 #~ msgctxt "A folder where recordings are stored"
 #~ msgid "Snapshots directory:"

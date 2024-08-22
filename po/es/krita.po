@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-16 01:46+0000\n"
+"POT-Creation-Date: 2024-08-22 01:53+0000\n"
 "PO-Revision-Date: 2024-08-16 01:13+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -57783,7 +57783,9 @@ msgid "Brush preset icon"
 msgstr "Icono de preajuste de pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-msgid "Workflow buttons settings"
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgid "Workflow Buttons settings"
 msgstr "Preferencias de botones de flujo de trabajo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
@@ -57898,20 +57900,31 @@ msgstr "Barra inferior"
 msgid "Inline"
 msgstr "En línea"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:444
-msgid "Icon files (*.png, *.svg)"
-msgstr "Archivos de iconos (*.png, *.svg)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#, fuzzy
+#| msgid "Action file"
+msgid "Icon files "
+msgstr "Archivo de acción"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:500
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:533
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
 msgid "Color info: "
 msgstr "Información del color: "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:570
-msgid "Script files (*.py)"
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#, fuzzy
+#| msgid "Script files (*.py)"
+msgid "Script files "
 msgstr "Archivos de guiones (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:60
+#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#, fuzzy
+#| msgid "Workflow buttons settings"
+msgctxt "@title:window"
+msgid "Workflow Buttons"
+msgstr "Preferencias de botones de flujo de trabajo"
+
+#: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
 msgstr "Abrir el diálogo de preferencias de los botones de flujo de trabajo"
 
@@ -62163,6 +62176,9 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
 
+#~ msgid "Icon files (*.png, *.svg)"
+#~ msgstr "Archivos de iconos (*.png, *.svg)"
+
 #, fuzzy
 #~| msgid "Select background color"
 #~ msgid "Select backround color:"
@@ -64634,9 +64650,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgstr ""
 #~ "Por favor, reinicie Krita y active los complementos en <em>Preferencias -"
 #~ "> Configurar Krita -> Gestor de complementos de Python</em>."
-
-#~ msgid "Action file"
-#~ msgstr "Archivo de acción"
 
 #~ msgctxt "A folder where recordings are stored"
 #~ msgid "Snapshots directory:"

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2024-05-07 12:12+0200\n"
+"PO-Revision-Date: 2024-08-16 10:42+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -21502,7 +21502,7 @@ msgstr "rectangle"
 #, kde-format
 msgctxt "kilo-bits-per-second, video bitrate suffix"
 msgid "kbps"
-msgstr "KB / s"
+msgstr "Ko / s"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
 #, kde-format
@@ -27218,10 +27218,10 @@ msgid ""
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Quand la journalisation de la performance est activée, "
-"Krita enregistre des informations de durées dans le dossier <tt>&lt;"
-"dossier_de_travail&gt;/log</tt>. Si vous rencontrez des problèmes de "
-"performances et voulez nous aider, activez cette option et ajoutez le "
-"contenu de ce dossier à un rapport de bogue.</p></body></html>"
+"Krita enregistre des informations de durées dans le dossier <tt>&lt;dossier-"
+"de-travail&gt;/log</tt>. Si vous rencontrez des problèmes de performances et "
+"voulez nous aider, activez cette option et ajoutez le contenu de ce dossier "
+"à un rapport de bogue.</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgperformancesettings.ui:427

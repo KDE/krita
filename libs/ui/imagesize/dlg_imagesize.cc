@@ -145,7 +145,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->printHeight->setUnitManager(m_printSizeUnitManager);
     m_page->printWidth->setDisplayUnit(false);
     m_page->printHeight->setDisplayUnit(false);
-    m_page->printResolution->setDecimals(2);
     m_page->printResolution->setAlignment(Qt::AlignRight);
 
     m_page->printWidthUnit->setModel(m_printSizeUnitManager);

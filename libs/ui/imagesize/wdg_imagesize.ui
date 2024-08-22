@@ -263,10 +263,10 @@
          </size>
         </property>
         <property name="decimals">
-         <number>4</number>
+         <number>2</number>
         </property>
         <property name="minimum">
-         <double>0.000100000000000</double>
+         <double>0.010000000000000</double>
         </property>
         <property name="maximum">
          <double>10000.000000000000000</double>

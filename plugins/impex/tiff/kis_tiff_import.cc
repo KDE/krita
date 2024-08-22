@@ -1628,13 +1628,13 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    if (TIFFGetField(image, TIFFTAG_XRESOLUTION, &basicInfo.xres) == 0) {
+    if (TIFFGetField(image, TIFFTAG_XRESOLUTION, &basicInfo.xres) == 0 || basicInfo.xres == 0) {
         dbgFile << "Image does not define x resolution";
         // but we don't stop
         basicInfo.xres = 100;
     }
 
-    if (TIFFGetField(image, TIFFTAG_YRESOLUTION, &basicInfo.yres) == 0) {
+    if (TIFFGetField(image, TIFFTAG_YRESOLUTION, &basicInfo.yres) == 0 || basicInfo.yres == 0) {
         dbgFile << "Image does not define y resolution";
         // but we don't stop
         basicInfo.yres = 100;

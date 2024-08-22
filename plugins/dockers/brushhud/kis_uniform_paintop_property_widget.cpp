@@ -188,7 +188,7 @@ void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
         dynamic_cast<KisAngleSelector*>(m_slider)->setAngle(value.toInt());
     } else {
         KIS_SAFE_ASSERT_RECOVER_RETURN(dynamic_cast<KisDoubleSliderSpinBox*>(m_slider));
-        dynamic_cast<KisDoubleSliderSpinBox*>(m_slider)->setValue(value.toInt());
+        dynamic_cast<KisDoubleSliderSpinBox*>(m_slider)->setValue(value.toReal());
     }
 }
 

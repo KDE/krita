@@ -274,4 +274,15 @@ void TextPropertiesDock::slotFontSearchInTag(const bool checked)
 {
     d->fontTagFilterProxyModel->setFilterInCurrentTag(checked);
 }
+
+#include <KoFontRegistry.h>
+QString TextPropertiesDock::wwsFontFamilyName(QString familyName)
+{
+    bool found = false;
+    QString name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName, &found);
+    if (!found) {
+        name = familyName;
+    }
+    return name;
+}
 #include "TextPropertiesDock.moc"

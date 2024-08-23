@@ -639,6 +639,11 @@ KoFontFamilyWWSRepresentation KoFontRegistry::representationByFamilyName(const Q
     return d->converter()->representationByFamilyName(familyName, found);
 }
 
+QString KoFontRegistry::wwsNameByFamilyName(const QString familyName, bool *found) const
+{
+    return d->converter()->wwsNameByFamilyName(familyName, found);
+}
+
 void KoFontRegistry::updateConfig()
 {
     d->updateConfig();

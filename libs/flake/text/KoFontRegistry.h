@@ -89,6 +89,9 @@ public:
      */
     KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
 
+    // Get the closest font family resource name for a given font family name, used by the selectors.
+    QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;
+
     /**
      * Update the config and reset the FontChangeListener.
      */

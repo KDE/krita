@@ -29,7 +29,7 @@ CollapsibleGroupProperty {
     onFontFamiliesChanged: {
         if (blockSignals) {
             if (fontFamilies.length >0) {
-                mainFamilyCmb.currentIndex = mainFamilyCmb.find(fontFamilies[0]);
+                mainFamilyCmb.currentIndex = mainFamilyCmb.find(mainWindow.wwsFontFamilyName(fontFamilies[0]));
             }
             familyListView.model = fontFamilies;
         } else {
@@ -98,7 +98,7 @@ CollapsibleGroupProperty {
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = currentText;
                         }
-                        Component.onCompleted: currentIndex = find(fontFamilies[fontListDelegate.dIndex]);
+                        Component.onCompleted: currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]));
                     }
                     ToolButton {
                         id: removeFont;

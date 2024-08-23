@@ -71,6 +71,9 @@ public:
     /// Gets a single WWSFamily representation for a given CSS Family Name, used by KoFontStorage.
     KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
 
+    /// Used to find the closest corresponding resource when the family name doesn't match.
+    QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;
+
     /**
      * @brief candidatesForCssValues
      * Search the nodes for the most appropriate font for the given css values.

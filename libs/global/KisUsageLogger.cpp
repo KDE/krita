@@ -14,7 +14,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QClipboard>
 #include <QThread>
 #include <QApplication>

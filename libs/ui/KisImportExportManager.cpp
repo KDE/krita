@@ -692,11 +692,12 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             box->addTab(wdg,i18n("Options"));
         }
 
-        auto dlgImageSize = new DlgImageSize(box, m_document->image()->width(), m_document->image()->height(), m_document->image()->yRes());
-        dlgImageSize->setButtons(KoDialog::None);
+        DlgImageSize *dlgImageSize = nullptr;
 
-        if(isAdvancedExporting)
-        {
+        if (isAdvancedExporting) {
+            dlgImageSize = new DlgImageSize(box, m_document->image()->width(), m_document->image()->height(), m_document->image()->yRes());
+            dlgImageSize->setButtons(KoDialog::None);
+
             box->addTab(dlgImageSize,i18n("Resize"));
         }
         layout->addWidget(box);
@@ -726,7 +727,9 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
-        if(isAdvancedExporting) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(bool(isAdvancedExporting) == bool(dlgImageSize));
+
+        if (isAdvancedExporting && dlgImageSize) {
             if (shouldFlattenTheImageBeforeScaling) {
                 m_document->savingImage()->flatten(KisNodeSP());
                 m_document->savingImage()->waitForDone();

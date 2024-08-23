@@ -59,6 +59,8 @@
 #include "kis_config.h"
 #include "kis_grid_config.h"
 #include "kis_guides_config.h"
+#include <kis_adjustment_layer.h>
+#include <kis_filter_mask.h>
 
 #include <KisImportUserFeedbackInterface.h>
 
@@ -591,6 +593,41 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         warnings.append(i18nc("image conversion warning", "The image contains a <b>custom grid configuration</b>. The configuration will not be saved."));
     }
 
+    bool shouldFlattenTheImageBeforeScaling = false;
+
+    if (isAdvancedExporting) {
+        QMap<QString, KisExportCheckBase *> exportChecks = filter->exportChecks();
+
+        const bool filterSupportsMultilayerExport =
+                exportChecks.contains("MultiLayerCheck") &&
+                exportChecks["MultiLayerCheck"]->checkNeeded(m_document->image()) &&
+                exportChecks["MultiLayerCheck"]->check(m_document->image()) == KisExportCheckBase::SUPPORTED;
+
+        if (!filterSupportsMultilayerExport) {
+            shouldFlattenTheImageBeforeScaling = true;
+        } else {
+            if (KisLayerUtils::findNodeByType<KisAdjustmentLayer>(m_document->image()->root())) {
+                shouldFlattenTheImageBeforeScaling = true;
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter layer</b>. The image will be <b>flattened<b> before resizing."));
+            }
+            if (KisLayerUtils::findNodeByType<KisFilterMask>(m_document->image()->root())) {
+                shouldFlattenTheImageBeforeScaling = true;
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter mask</b>. The image will be <b>flattened<b> before resizing."));
+            }
+            bool hasLayerStyles =
+                    KisLayerUtils::recursiveFindNode(m_document->image()->root(),
+                                                     [] (KisNodeSP node) {
+                    KisLayer *layer = dynamic_cast<KisLayer*>(node.data());
+                    return layer && layer->layerStyle();
+        });
+
+            if (hasLayerStyles) {
+                shouldFlattenTheImageBeforeScaling = true;
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>layer style</b>. The image will be <b>flattened<b> before resizing."));
+            }
+        }
+    }
+
     if (!batchMode && !errors.isEmpty()) {
         QString error =  "<html><body><p><b>"
                 + i18n("Error: cannot save this image as a %1.", mimeUserDescription)
@@ -690,6 +727,11 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         }
 
         if(isAdvancedExporting) {
+            if (shouldFlattenTheImageBeforeScaling) {
+                m_document->savingImage()->flatten(KisNodeSP());
+                m_document->savingImage()->waitForDone();
+            }
+
             const QSize desiredSize(dlgImageSize->desiredWidth(), dlgImageSize->desiredHeight());
             double res = dlgImageSize->desiredResolution();
             m_document->savingImage()->scaleImage(desiredSize,res,res,dlgImageSize->filterType());

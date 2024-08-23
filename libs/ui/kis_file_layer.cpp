@@ -329,12 +329,41 @@ KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
     return 0;
 }
 
+void KisFileLayer::slotImageResolutionChanged()
+{
+    KisImageSP image = this->image();
+    if (!image) return;
+
+    if (m_scalingMethod == ToImagePPI &&
+            qFuzzyCompare(image->xRes(), m_generatedForXRes) &&
+            qFuzzyCompare(image->yRes(), m_generatedForYRes)) {
+
+                m_loader.reloadImage();
+    }
+}
+
+void KisFileLayer::slotImageSizeChanged()
+{
+    KisImageSP image = this->image();
+    if (!image) return;
+
+    if (m_scalingMethod == ToImageSize && image->size() != m_generatedForImageSize) {
+        m_loader.reloadImage();
+    }
+}
+
 void KisFileLayer::setImage(KisImageWSP image)
 {
     KisImageWSP oldImage = this->image();
+    m_imageConnections.clear();
 
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     KisExternalLayer::setImage(image);
+
+    if (image) {
+        m_imageConnections.addUniqueConnection(image, SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
+        m_imageConnections.addUniqueConnection(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
+    }
 
     if (m_scalingMethod != None && image && oldImage != image) {
         bool canSkipReloading = false;

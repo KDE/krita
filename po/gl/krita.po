@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2024-08-19 17:15+0200\n"
+"PO-Revision-Date: 2024-08-22 10:43+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -53164,7 +53164,7 @@ msgstr "Ton CW"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(50% is active color)"
-msgstr "(½ é a cor activa)"
+msgstr "(o 50% é a cor activa)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

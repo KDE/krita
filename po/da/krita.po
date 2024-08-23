@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17929,7 +17929,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskær markeringer"

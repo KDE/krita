@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -17724,7 +17724,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atverti spalvų profilį"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

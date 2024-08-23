@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
-"PO-Revision-Date: 2024-08-15 09:01+0300\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"PO-Revision-Date: 2024-08-22 09:56+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -17526,7 +17526,7 @@ msgstr ""
 "Призначити профіль\n"
 "призначення профілю"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -58269,8 +58269,6 @@ msgid "Brush preset icon"
 msgstr "Піктограма набору пензлів"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Параметри кнопок робочого процесу"
 
@@ -58387,10 +58385,8 @@ msgid "Inline"
 msgstr "Вбудована"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action file"
 msgid "Icon files "
-msgstr "Файл дії"
+msgstr "файли піктограм "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -58398,17 +58394,13 @@ msgid "Color info: "
 msgstr "Дані щодо кольору: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "файли скриптів (*.py)"
+msgstr "файли скриптів "
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Параметри кнопок робочого процесу"
+msgstr "Кнопки робочого процесу"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"

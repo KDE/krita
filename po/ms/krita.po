@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -17502,7 +17502,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Guna Profil"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

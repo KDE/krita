@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
 "PO-Revision-Date: 2024-08-16 10:42+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -17446,7 +17446,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Associer un profil"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Rogner les sélections"

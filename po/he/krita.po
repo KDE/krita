@@ -41,7 +41,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
 "PO-Revision-Date: 2024-03-31 09:20+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -17377,7 +17377,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "מאפייני שכבה..."
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

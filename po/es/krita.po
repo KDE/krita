@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
-"PO-Revision-Date: 2024-08-16 01:13+0100\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"PO-Revision-Date: 2024-08-22 16:46+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17386,7 +17386,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Asignar perfil"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Recortar las selecciones"
@@ -57783,8 +57783,6 @@ msgid "Brush preset icon"
 msgstr "Icono de preajuste de pincel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Preferencias de botones de flujo de trabajo"
 
@@ -57901,10 +57899,8 @@ msgid "Inline"
 msgstr "En línea"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action file"
 msgid "Icon files "
-msgstr "Archivo de acción"
+msgstr "Archivos de iconos"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -57912,17 +57908,13 @@ msgid "Color info: "
 msgstr "Información del color: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "Archivos de guiones (*.py)"
+msgstr "Archivos de guiones"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Preferencias de botones de flujo de trabajo"
+msgstr "Botones de flujo de trabajo"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
-"PO-Revision-Date: 2024-08-15 08:45+0200\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"PO-Revision-Date: 2024-08-22 12:30+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17333,7 +17333,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"
@@ -57524,8 +57524,6 @@ msgid "Brush preset icon"
 msgstr "Ikona prednastavitve čopiča"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Nastavitve gumbov poteka dela"
 
@@ -57642,10 +57640,8 @@ msgid "Inline"
 msgstr "Znotrajvrstično"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Icon Size"
 msgid "Icon files "
-msgstr "Velikost ikon"
+msgstr "Datoteke ikon "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -57653,17 +57649,13 @@ msgid "Color info: "
 msgstr "Barvne informacije: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "Skriptne datoteke (*.py)"
+msgstr "Skriptne datoteke"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Nastavitve gumbov poteka dela"
+msgstr "Gumbi poteka dela"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
@@ -61882,6 +61874,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Icon files (*.png, *.svg)"
-#~ msgstr "Datoteke ikon (*.png, *.svg)"

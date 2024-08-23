@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-22 01:53+0000\n"
-"PO-Revision-Date: 2024-08-15 09:55+0200\n"
+"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"PO-Revision-Date: 2024-08-22 18:52+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -17412,7 +17412,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profiel toewijzen"
 
-#: libs/image/kis_image.cc:2502
+#: libs/image/kis_image.cc:2511
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Selecties afsnijden"
@@ -57757,8 +57757,6 @@ msgid "Brush preset icon"
 msgstr "Pictogram van voorinstelling van penseel"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Instellingen van knoppen voor werkmethode"
 
@@ -57875,10 +57873,8 @@ msgid "Inline"
 msgstr "Inline"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action file"
 msgid "Icon files "
-msgstr "Actiebestand"
+msgstr "Pictogrambestanden"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -57886,17 +57882,13 @@ msgid "Color info: "
 msgstr "Kleurinformatie:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "Scriptbestanden (*.py)"
+msgstr "Scriptbestanden"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Instellingen van knoppen voor werkmethode"
+msgstr "Knoppen voor werkmethode"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"

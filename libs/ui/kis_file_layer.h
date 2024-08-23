@@ -10,6 +10,7 @@
 
 #include "kis_external_layer_iface.h"
 #include "kis_safe_document_loader.h"
+#include "kis_signal_auto_connection.h"
 
 /**
  * @brief The KisFileLayer class loads a particular file as a layer into the layer stack.
@@ -81,6 +82,8 @@ private Q_SLOTS:
     void slotLoadingFailed();
     void slotFileExistsStateChanged(bool exists);
     void openFile() const;
+    void slotImageSizeChanged();
+    void slotImageResolutionChanged();
 
 Q_SIGNALS:
     void sigRequestOpenFile();
@@ -107,6 +110,8 @@ private:
     qreal m_generatedForYRes = 0.0;
 
     State m_state = FileNotFound;
+
+    KisSignalAutoConnectionsStore m_imageConnections;
 };
 
 #endif // KIS_FILE_LAYER_H

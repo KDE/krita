@@ -613,41 +613,40 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::PIXEL_PERFECT) {
         // initial case: No last drawn pixel or waiting pixel
-            if(!m_d->hasLastDrawnPixel) {
-                currentPixelPos = info.pos();
-                m_d->waitingPixel = currentPixelPos;
-                
-                paintLine(m_d->previousPaintInformation, KisPaintInformation(m_d->waitingPixel));
-                m_d->lastDrawnPixel = m_d->waitingPixel;
-                m_d->hasLastDrawnPixel = true;
+        if(!m_d->hasLastDrawnPixel) {
+            currentPixelPos = info.pos();
+            m_d->waitingPixel = currentPixelPos;
+
+            paintLine(m_d->previousPaintInformation, KisPaintInformation(m_d->waitingPixel));
+            m_d->lastDrawnPixel = m_d->waitingPixel;
+            m_d->hasLastDrawnPixel = true;
+            m_d->pixelInLineCount = 1;
+        } else {
+            if (abs(currentPixelPos.x() - m_d->lastDrawnPixel.x()) > PIXEL_DISTANCE_THRESHOLD || abs(currentPixelPos.y() - m_d->lastDrawnPixel.y()) > PIXEL_DISTANCE_THRESHOLD) {
                 m_d->pixelInLineCount = 1;
-            } else {
-                if (abs(currentPixelPos.x() - m_d->lastDrawnPixel.x()) > PIXEL_DISTANCE_THRESHOLD || abs(currentPixelPos.y() - m_d->lastDrawnPixel.y()) > PIXEL_DISTANCE_THRESHOLD) {
-                    if(m_d->hasLastDrawnPixel) {
-                        m_d->pixelInLineCount = 1;
-                    }
                 // current pixel is too far, draw the waiting pixel
-                    paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
-                    m_d->pixelInLineCount += 2;
-                    m_d->lastDrawnPixel = m_d->waitingPixel;
-                    m_d->waitingPixel = currentPixelPos;
-                } 
-                // check axis, if the currentpixel is in the same axis as the lastdrawnpixel, we can draw waiting pixel
-                if (m_d->pixelInLineCount > 2 && (currentPixelPos.x() == m_d->lastDrawnPixel.x() || currentPixelPos.y() == m_d->lastDrawnPixel.y())) {
-                    paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
-                    m_d->lastDrawnPixel = m_d->waitingPixel;
-                    m_d->olderPaintInformation = m_d->previousPaintInformation;
-                }
-                else{
-                    //otherwise just change update waiting pixel without drawing it, this is the scenario where we just skip a corner and therefore we also reset pixelInLineCount
-                    m_d->waitingPixel = currentPixelPos;
-                    m_d->pixelInLineCount = 0;
-                } 
-                // Enable stroke timeout only when not airbrushing.
-                if (!m_d->airbrushingTimer.isActive()) {
-                    m_d->strokeTimeoutTimer.start(100);
-                }
+                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
+                m_d->pixelInLineCount += 2; 
+                m_d->lastDrawnPixel = m_d->waitingPixel;
+                m_d->waitingPixel = currentPixelPos;
+            } 
+            // check axis, if the currentpixel is in the same axis as the lastdrawnpixel, we can draw waiting pixel
+            if (m_d->pixelInLineCount >= 1 && (currentPixelPos.x() == m_d->lastDrawnPixel.x() || currentPixelPos.y() == m_d->lastDrawnPixel.y())) {
+                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
+                m_d->lastDrawnPixel = m_d->waitingPixel;
+                m_d->olderPaintInformation = m_d->previousPaintInformation;
+                m_d->pixelInLineCount++; 
             }
+            else{
+                //otherwise just change update waiting pixel without drawing it, this is the scenario where we just skip a corner and therefore we also reset pixelInLineCount
+                m_d->waitingPixel = currentPixelPos;
+                m_d->pixelInLineCount = 0;
+            } 
+            // Enable stroke timeout only when not airbrushing.
+            if (!m_d->airbrushingTimer.isActive()) {
+                m_d->strokeTimeoutTimer.start(100);
+            }
+        }
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {

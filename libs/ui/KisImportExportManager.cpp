@@ -608,11 +608,11 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
         } else {
             if (KisLayerUtils::findNodeByType<KisAdjustmentLayer>(m_document->image()->root())) {
                 shouldFlattenTheImageBeforeScaling = true;
-                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter layer</b>. The image will be <b>flattened<b> before resizing."));
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter layer</b>. The image will be <b>flattened</b> before resizing."));
             }
             if (KisLayerUtils::findNodeByType<KisFilterMask>(m_document->image()->root())) {
                 shouldFlattenTheImageBeforeScaling = true;
-                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter mask</b>. The image will be <b>flattened<b> before resizing."));
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>filter mask</b>. The image will be <b>flattened</b> before resizing."));
             }
             bool hasLayerStyles =
                     KisLayerUtils::recursiveFindNode(m_document->image()->root(),
@@ -623,7 +623,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
 
             if (hasLayerStyles) {
                 shouldFlattenTheImageBeforeScaling = true;
-                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>layer style</b>. The image will be <b>flattened<b> before resizing."));
+                warnings.append(i18nc("image conversion warning", "Trying to perform an Advanced Export with the image containing a <b>layer style</b>. The image will be <b>flattened</b> before resizing."));
             }
         }
     }

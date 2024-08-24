@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"POT-Creation-Date: 2024-08-24 01:46+0000\n"
 "PO-Revision-Date: 2024-08-22 13:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -30859,29 +30859,29 @@ msgstr ""
 "%1 dosyası %2 içinde kayıp ve bozulmuş. Lütfen başka bir konuma yeniden "
 "kaydetmeyi deneyin."
 
-#: libs/ui/KisImportExportManager.cpp:321
+#: libs/ui/KisImportExportManager.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Sesi Aç"
 
-#: libs/ui/KisImportExportManager.cpp:420
+#: libs/ui/KisImportExportManager.cpp:422
 #, kde-format
 msgid "Opening document..."
 msgstr "Belge açılıyor…"
 
-#: libs/ui/KisImportExportManager.cpp:488
+#: libs/ui/KisImportExportManager.cpp:490
 #, kde-format
 msgid "Saving document..."
 msgstr "Belge kaydediliyor…"
 
-#: libs/ui/KisImportExportManager.cpp:582
+#: libs/ui/KisImportExportManager.cpp:584
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Görsel, <b>yardımcılar</b> içeriyor. Yardımcılar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:585
+#: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30891,13 +30891,13 @@ msgstr ""
 "Görsel, <b>başvurulan görseller</b> içeriyor. Başvurulan görseller "
 "kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:590
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Görsel, <b>kılavuzlar</b> içeriyor. Kılavuzlar kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:593
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30907,36 +30907,60 @@ msgstr ""
 "Görsel, bir <b>özel ızgara yapılandırması</b> içeriyor. Yapılandırma "
 "kaydedilmeyecek."
 
-#: libs/ui/KisImportExportManager.cpp:596
+#: libs/ui/KisImportExportManager.cpp:611
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"layer</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:615
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"mask</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:626
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>layer "
+"style</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Hata: Bu görsel, %1 olarak kaydedilemiyor."
 
-#: libs/ui/KisImportExportManager.cpp:597
-#: libs/ui/KisImportExportManager.cpp:640
+#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:677
 #, kde-format
 msgid "Reasons:"
 msgstr "Gerekçeler:"
 
-#: libs/ui/KisImportExportManager.cpp:605
+#: libs/ui/KisImportExportManager.cpp:642
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Dışa Aktarma Hatası"
 
-#: libs/ui/KisImportExportManager.cpp:622
+#: libs/ui/KisImportExportManager.cpp:659
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Uyarı: %1 olarak kaydetmek, görselinizden bilgi kaybına neden olacak.    "
 
-#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:671
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Bu görseli, %1 olarak kaydederken bilgi kaybedeceksiniz."
 
-#: libs/ui/KisImportExportManager.cpp:637
+#: libs/ui/KisImportExportManager.cpp:674
 #, kde-format
 msgid "Reason:"
 msgstr "Gerekçe:"
@@ -30944,7 +30968,7 @@ msgstr "Gerekçe:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:655
+#: libs/ui/KisImportExportManager.cpp:692
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30952,12 +30976,12 @@ msgstr "Gerekçe:"
 msgid "Options"
 msgstr "Seçenekler"
 
-#: libs/ui/KisImportExportManager.cpp:663
+#: libs/ui/KisImportExportManager.cpp:701
 #, kde-format
 msgid "Resize"
 msgstr "Yeniden Boyutlandır"
 
-#: libs/ui/KisImportExportManager.cpp:669
+#: libs/ui/KisImportExportManager.cpp:707
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Ayrıca, görselinizi Krita dosyası olarak kaydedin."

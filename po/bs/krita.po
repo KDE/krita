@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"POT-Creation-Date: 2024-08-24 01:46+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -31914,24 +31914,24 @@ msgid ""
 "different location."
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:321
+#: libs/ui/KisImportExportManager.cpp:323
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Otvori i izmijeni..."
 
-#: libs/ui/KisImportExportManager.cpp:420
+#: libs/ui/KisImportExportManager.cpp:422
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document..."
 msgstr "Otvaram okument"
 
-#: libs/ui/KisImportExportManager.cpp:488
+#: libs/ui/KisImportExportManager.cpp:490
 #, fuzzy, kde-format
 msgid "Saving document..."
 msgstr "Snimi dokument"
 
-#: libs/ui/KisImportExportManager.cpp:582
+#: libs/ui/KisImportExportManager.cpp:584
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -31942,7 +31942,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:585
+#: libs/ui/KisImportExportManager.cpp:587
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -31955,7 +31955,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:590
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -31966,7 +31966,7 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:593
 #, fuzzy, kde-format
 #| msgid ""
 #| "This image contains vector, clone or fill layers.\n"
@@ -31979,38 +31979,62 @@ msgstr ""
 "Ova slika sadrži vektor, klon ili fill slojeve\n"
 "Ovi slojevi će biti spašeni kao raster slojevi."
 
-#: libs/ui/KisImportExportManager.cpp:596
+#: libs/ui/KisImportExportManager.cpp:611
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"layer</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:615
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"mask</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:626
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>layer "
+"style</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:633
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "Error: cannot save this image as a %1."
 msgstr "Ne mogu da izvezem slike u %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:597
-#: libs/ui/KisImportExportManager.cpp:640
+#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:677
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Reasons:"
 msgstr "Dimenzije"
 
-#: libs/ui/KisImportExportManager.cpp:605
+#: libs/ui/KisImportExportManager.cpp:642
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Greška u izvozu u Photoshop"
 
-#: libs/ui/KisImportExportManager.cpp:622
+#: libs/ui/KisImportExportManager.cpp:659
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 
-#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:671
 #, fuzzy, kde-format
 #| msgid "Cannot export images in %1.\n"
 msgid "You will lose information when saving this image as a %1."
 msgstr "Ne mogu da izvezem slike u %1.\n"
 
-#: libs/ui/KisImportExportManager.cpp:637
+#: libs/ui/KisImportExportManager.cpp:674
 #, fuzzy, kde-format
 #| msgid "Ruler assistant"
 msgid "Reason:"
@@ -32019,7 +32043,7 @@ msgstr "Lenjirski pomoćnik"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:655
+#: libs/ui/KisImportExportManager.cpp:692
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -32027,14 +32051,14 @@ msgstr "Lenjirski pomoćnik"
 msgid "Options"
 msgstr "Opcije"
 
-#: libs/ui/KisImportExportManager.cpp:663
+#: libs/ui/KisImportExportManager.cpp:701
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: libs/ui/KisImportExportManager.cpp:669
+#: libs/ui/KisImportExportManager.cpp:707
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

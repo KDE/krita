@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-23 01:45+0000\n"
+"POT-Creation-Date: 2024-08-24 01:46+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -31147,29 +31147,29 @@ msgstr ""
 "Súbor %1 chýba v %2 a je poškodený. Prosím, skúste ho znova uložiť na iné "
 "miesto."
 
-#: libs/ui/KisImportExportManager.cpp:321
+#: libs/ui/KisImportExportManager.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Otvoriť zvuk"
 
-#: libs/ui/KisImportExportManager.cpp:420
+#: libs/ui/KisImportExportManager.cpp:422
 #, kde-format
 msgid "Opening document..."
 msgstr "Otváranie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:488
+#: libs/ui/KisImportExportManager.cpp:490
 #, kde-format
 msgid "Saving document..."
 msgstr "Ukladanie dokumentu..."
 
-#: libs/ui/KisImportExportManager.cpp:582
+#: libs/ui/KisImportExportManager.cpp:584
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Obrázok obsahuje <b>asistentov</b>. Asistenti sa neuložia."
 
-#: libs/ui/KisImportExportManager.cpp:585
+#: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31178,13 +31178,13 @@ msgid ""
 msgstr ""
 "Obrázok obsahuje <b>referenčné obrázky</b>. Referenčné obrázky nebudúuložené."
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:590
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Obrázok obsahuje <b>vodiace čiary</b>. Vodiace čiary nebudú uložené."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:593
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -31194,36 +31194,60 @@ msgstr ""
 "Obrázok obsahuje <b>vlastnú konfiguráciu mriežky</b>. Konfigurácia nebude "
 "uložená."
 
-#: libs/ui/KisImportExportManager.cpp:596
+#: libs/ui/KisImportExportManager.cpp:611
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"layer</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:615
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"mask</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:626
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>layer "
+"style</b>. The image will be <b>flattened<b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "CHYBA: nie je možné uložiť tento obrázok ako %1."
 
-#: libs/ui/KisImportExportManager.cpp:597
-#: libs/ui/KisImportExportManager.cpp:640
+#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:677
 #, kde-format
 msgid "Reasons:"
 msgstr "Dôvody:"
 
-#: libs/ui/KisImportExportManager.cpp:605
+#: libs/ui/KisImportExportManager.cpp:642
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Chyba exportu"
 
-#: libs/ui/KisImportExportManager.cpp:622
+#: libs/ui/KisImportExportManager.cpp:659
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Upozornenie: uložením ako %1 sa stratia informácie z vášho obrázka.    "
 
-#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:671
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Pri uložení tohto obrázka ako %1 stratíte informácie."
 
-#: libs/ui/KisImportExportManager.cpp:637
+#: libs/ui/KisImportExportManager.cpp:674
 #, kde-format
 msgid "Reason:"
 msgstr "Dôvod:"
@@ -31231,7 +31255,7 @@ msgstr "Dôvod:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:655
+#: libs/ui/KisImportExportManager.cpp:692
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -31239,12 +31263,12 @@ msgstr "Dôvod:"
 msgid "Options"
 msgstr "Možnosti"
 
-#: libs/ui/KisImportExportManager.cpp:663
+#: libs/ui/KisImportExportManager.cpp:701
 #, kde-format
 msgid "Resize"
 msgstr "Zmeniť veľkosť"
 
-#: libs/ui/KisImportExportManager.cpp:669
+#: libs/ui/KisImportExportManager.cpp:707
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Uložte tiež svoj obrázok ako súbor Krita."

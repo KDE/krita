@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 01:46+0000\n"
+"POT-Creation-Date: 2024-08-25 01:46+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -30671,7 +30671,7 @@ msgstr "此图像包含<b>自定义网格设置</b>。这些自定义网格设�
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"layer</b>. The image will be <b>flattened<b> before resizing."
+"layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:615
@@ -30679,7 +30679,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"mask</b>. The image will be <b>flattened<b> before resizing."
+"mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:626
@@ -30687,7 +30687,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
-"style</b>. The image will be <b>flattened<b> before resizing."
+"style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 
 #: libs/ui/KisImportExportManager.cpp:633

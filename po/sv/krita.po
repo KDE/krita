@@ -52,8 +52,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-24 01:46+0000\n"
-"PO-Revision-Date: 2024-08-22 08:35+0200\n"
+"POT-Creation-Date: 2024-08-25 01:46+0000\n"
+"PO-Revision-Date: 2024-08-24 08:08+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -30937,28 +30937,47 @@ msgstr ""
 "kommer inte att sparas."
 
 #: libs/ui/KisImportExportManager.cpp:611
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "Trying to perform an Advanced Export with the image containing a "
+#| "<b>filter layer</b>. The image will be <b>flattened<b> before resizing."
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"layer</b>. The image will be <b>flattened<b> before resizing."
+"layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller ett "
+"<b>filterlager</b>. Bilden kommer att <b>plattas ut<b> innan storleken "
+"ändras."
 
 #: libs/ui/KisImportExportManager.cpp:615
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "Trying to perform an Advanced Export with the image containing a "
+#| "<b>filter mask</b>. The image will be <b>flattened<b> before resizing."
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"mask</b>. The image will be <b>flattened<b> before resizing."
+"mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller en "
+"<b>filtermask</b>. Bilden kommer att <b>plattas ut<b> innan storleken ändras."
 
 #: libs/ui/KisImportExportManager.cpp:626
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "image conversion warning"
+#| msgid ""
+#| "Trying to perform an Advanced Export with the image containing a <b>layer "
+#| "style</b>. The image will be <b>flattened<b> before resizing."
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
-"style</b>. The image will be <b>flattened<b> before resizing."
+"style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller en "
+"<b>lagerstil</b>. Bilden kommer att <b>plattas ut<b> innan storleken ändras."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format

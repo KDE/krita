@@ -1395,6 +1395,7 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
                     i18n("%1\nselected",
                          m_resourceProvider->currentPreset()->name()),
                     QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
+        m_presetsEditor->setPresetImage(m_resourceProvider->currentPreset()->image());
     }
 }
 

@@ -166,6 +166,8 @@ private:
     void cancelAction(QVector<KisStrokeJobData *> &mutatedJobs);
     void addDirtyRect(KisNodeSP node, const QRect &rect, int levelOfDetail);
 
+    static void repopulateUI(QVector<KisStrokeJobData *> &mutatedJobs, KisUpdatesFacade *updatesFacade, const QRect &dirtyRect);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -53,6 +53,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "KisAnimAutoKey.h"
+#include "krita_utils.h"
 
 
 struct InplaceTransformStrokeStrategy::Private
@@ -934,6 +935,19 @@ void InplaceTransformStrokeStrategy::finalizeStrokeImpl(QVector<KisStrokeJobData
     }
 }
 
+void InplaceTransformStrokeStrategy::repopulateUI(QVector<KisStrokeJobData *> &mutatedJobs, KisUpdatesFacade *updatesFacade, const QRect &dirtyRect)
+{
+    const QVector<QRect> finalDirtyRects =
+        KritaUtils::splitRectIntoPatchesTight(dirtyRect,
+                                              KritaUtils::optimalPatchSize());
+
+    Q_FOREACH (const QRect &rc, finalDirtyRects) {
+        KritaUtils::addJobConcurrent(mutatedJobs, [rc, updatesFacade] () {
+            updatesFacade->notifyUIUpdateCompleted(rc);
+        });
+    }
+}
+
 void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &mutatedJobs)
 {
     /**
@@ -976,6 +990,15 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
         }
 
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0, true);
+
+        /**
+         * We could have issues updates on lodN planes, which did not end
+         * up in the final lod0 update, so we should reupload lod0 data to
+         * the UI part manually.
+         */
+        KritaUtils::addJobBarrier(mutatedJobs, [this]() { Q_UNUSED(this) });
+        repopulateUI(mutatedJobs, m_d->updatesFacade, m_d->updatesFacade->bounds());
+
     } else {
         if (m_d->pendingUpdateArgs) {
             mutatedJobs << new BarrierUpdateData(true);
@@ -1034,6 +1057,17 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
             undoTransformCommands(0);
             undoAllCommands();
         });
+
+        if (m_d->previewLevelOfDetail > 0) {
+            /**
+             * We could have issues updates on lodN planes, which did not end
+             * up in the final lod0 update, so we should reupload lod0 data to
+             * the UI part manually.
+             */
+            KritaUtils::addJobBarrier(mutatedJobs, [this]() { Q_UNUSED(this) });
+            repopulateUI(mutatedJobs, m_d->updatesFacade, m_d->updatesFacade->bounds());
+        }
+
         finalizeStrokeImpl(mutatedJobs, false);
 
         KritaUtils::addJobSequential(mutatedJobs, [this]() {
@@ -1055,6 +1089,16 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
         });
 
         reapplyTransform(m_d->initialTransformArgs, mutatedJobs, 0, true);
+
+        if (m_d->previewLevelOfDetail > 0) {
+            /**
+             * We could have issues updates on lodN planes, which did not end
+             * up in the final lod0 update, so we should reupload lod0 data to
+             * the UI part manually.
+             */
+            KritaUtils::addJobBarrier(mutatedJobs, [this]() { Q_UNUSED(this) });
+            repopulateUI(mutatedJobs, m_d->updatesFacade, m_d->updatesFacade->bounds());
+        }
 
         mutatedJobs << new UpdateTransformData(m_d->initialTransformArgs,
                                                UpdateTransformData::SELECTION);

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-25 01:46+0000\n"
-"PO-Revision-Date: 2024-08-22 13:55+0300\n"
+"PO-Revision-Date: 2024-08-25 21:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -30908,25 +30908,17 @@ msgstr ""
 "kaydedilmeyecek."
 
 #: libs/ui/KisImportExportManager.cpp:611
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a "
-#| "<b>filter layer</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "Bir <b>süzgeç katman</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
-"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir<b>."
+"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:615
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a "
-#| "<b>filter mask</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
@@ -30934,21 +30926,17 @@ msgid ""
 msgstr ""
 "Bir <b>süzgeç maskesi</b> içeren bir görselde gelişmiş dışa aktarma "
 "yapılmaya çalışılıyor. Yeniden boyutlandırma öncesi görsel "
-"<b>düzleştirilecektir<b>."
+"<b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:626
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a <b>layer "
-#| "style</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "Bir <b>katman biçemi</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
-"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir<b>."
+"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format

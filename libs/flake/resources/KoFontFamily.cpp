@@ -99,11 +99,10 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
     addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, localeHashtoVariantMap(representation.localizedTypographicFamily));
     addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, localeHashtoVariantMap(representation.localizedTypographicStyles));
 
-    QVariantHash samples;
-    Q_FOREACH(const QLocale::Script &key, representation.sampleStrings.keys()) {
-        samples.insert(QString::number(key), QVariant::fromValue(representation.sampleStrings.value(key)));
+    QMap<QString, QVariant> samples;
+    Q_FOREACH(const QString key, representation.sampleStrings.keys()) {
+        samples.insert(key, QVariant::fromValue(representation.sampleStrings.value(key)));
     }
-
     addMetaData(SAMPLE_STRING, samples);
     addMetaData(FONT_TYPE, representation.type);
     addMetaData(IS_VARIABLE, representation.isVariable);
@@ -174,7 +173,7 @@ void KoFontFamily::updateThumbnail()
 {
     QHash<QString, QVariant> samples = metadata().value(SAMPLE_STRING).toHash();
     QString sample = samples.isEmpty()? QString("AaBbGg"):
-                                        samples.value(QString::number(QLocale::LatinScript), samples.values().first()).toString();
+                                        samples.value("s_Latn", samples.values().first()).toString();
     bool isColor = (metadata().value(COLOR_BITMAP).toBool() || metadata().value(COLOR_CLRV0).toBool());
     addMetaData(SAMPLE_SVG, generateSVG(sample, filename()));
     setImage(generateImage(sample, filename(), isColor));

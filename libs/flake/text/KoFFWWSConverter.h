@@ -23,7 +23,7 @@ struct KoFontFamilyWWSRepresentation {
     QHash<QLocale, QString> localizedTypographicFamily;
     QHash<QLocale, QString> localizedTypographicStyles;
 
-    QHash<QLocale::Script, QString> sampleStrings; /// sample string used to generate the preview;
+    QHash<QString, QString> sampleStrings; /// sample string used to generate the preview;
     QList<QLocale> supportedLanguages;
 
     QHash<QString, KoSvgText::FontFamilyAxis> axes;

@@ -55,7 +55,7 @@ struct FontFamilyNode {
     QString fileName;
     int fileIndex = 0;
 
-    QHash<QLocale::Script, QString> sampleStrings; /// sample string used to generate the preview;
+    QHash<QString, QString> sampleStrings; /// sample string used to generate the preview;
     QList<QLocale> supportedLanguages;
 
     QStringList otherFiles;
@@ -534,114 +534,118 @@ void KoFFWWSConverter::addSupportedLanguagesByFile(const QString &filename, cons
     }
     if (it != d->fontFamilyCollection.depthFirstTailEnd()) {
         it->supportedLanguages = supportedLanguages;
+        QVector<QLocale::Script> scripts;
         Q_FOREACH(const QLocale &locale, supportedLanguages) {
             QLocale::Script script = locale.script();
-            QString sample;
+            if (locale.language() == QLocale::Vietnamese) {
+                it->sampleStrings.insert("l_vi", QFontDatabase::writingSystemSample(QFontDatabase::Vietnamese));
+            }
 
-            if (!it->sampleStrings.keys().contains(script)) {
+            if (!scripts.contains(script)) {
 
                 // The QFontDatabase writing system list seems similar to the MacOS list.
+                // String it is stored with is s_<ISO 15924> tag for scripts and l_<BCP 47 Language> tag for languages.
+                // This way we can have samples per language as is useful for vietnamese.
                 switch(script) {
                 case QLocale::LatinScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Latin);
+                    it->sampleStrings.insert("s_Latn", QFontDatabase::writingSystemSample(QFontDatabase::Latin));
                     break;
                 case QLocale::GreekScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Greek);
+                    it->sampleStrings.insert("s_Grek", QFontDatabase::writingSystemSample(QFontDatabase::Greek));
                     break;
                 case QLocale::CyrillicScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Cyrillic);
+                    it->sampleStrings.insert("s_Cyrl", QFontDatabase::writingSystemSample(QFontDatabase::Cyrillic));
                     break;
                 case QLocale::ArmenianScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Armenian);
+                    it->sampleStrings.insert("s_Armn", QFontDatabase::writingSystemSample(QFontDatabase::Armenian));
                     break;
                 case QLocale::HebrewScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Hebrew);
+                    it->sampleStrings.insert("s_Hebr", QFontDatabase::writingSystemSample(QFontDatabase::Hebrew));
                     break;
                 case QLocale::ArabicScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Arabic);
+                    it->sampleStrings.insert("s_Arab", QFontDatabase::writingSystemSample(QFontDatabase::Arabic));
                     break;
                 case QLocale::SyriacScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Syriac);
+                    it->sampleStrings.insert("s_Syrc", QFontDatabase::writingSystemSample(QFontDatabase::Syriac));
                     break;
                 case QLocale::ThaanaScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Thaana);
+                    it->sampleStrings.insert("s_Thaa", QFontDatabase::writingSystemSample(QFontDatabase::Thaana));
                     break;
                 case QLocale::DevanagariScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Devanagari);
+                    it->sampleStrings.insert("s_Deva", QFontDatabase::writingSystemSample(QFontDatabase::Devanagari));
                     break;
                 case QLocale::BengaliScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Bengali);
+                    it->sampleStrings.insert("s_Beng", QFontDatabase::writingSystemSample(QFontDatabase::Bengali));
                     break;
                 case QLocale::GurmukhiScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Gurmukhi);
+                    it->sampleStrings.insert("s_Guru", QFontDatabase::writingSystemSample(QFontDatabase::Gurmukhi));
                     break;
                 case QLocale::GujaratiScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Gujarati);
+                    it->sampleStrings.insert("s_Gujr", QFontDatabase::writingSystemSample(QFontDatabase::Gujarati));
                     break;
                 case QLocale::OriyaScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Oriya);
+                    it->sampleStrings.insert("s_Orya", QFontDatabase::writingSystemSample(QFontDatabase::Oriya));
                     break;
                 case QLocale::TamilScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Tamil);
+                    it->sampleStrings.insert("s_Taml", QFontDatabase::writingSystemSample(QFontDatabase::Tamil));
                     break;
                 case QLocale::TeluguScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Telugu);
+                    it->sampleStrings.insert("s_Telu", QFontDatabase::writingSystemSample(QFontDatabase::Telugu));
                     break;
                 case QLocale::KannadaScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Kannada);
+                    it->sampleStrings.insert("s_Knda", QFontDatabase::writingSystemSample(QFontDatabase::Kannada));
                     break;
                 case QLocale::MalayalamScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Malayalam);
+                    it->sampleStrings.insert("s_Mylm", QFontDatabase::writingSystemSample(QFontDatabase::Malayalam));
                     break;
                 case QLocale::SinhalaScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Sinhala);
+                    it->sampleStrings.insert("s_Sinh", QFontDatabase::writingSystemSample(QFontDatabase::Sinhala));
                     break;
                 case QLocale::ThaiScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Thai);
+                    it->sampleStrings.insert("s_Thai", QFontDatabase::writingSystemSample(QFontDatabase::Thai));
                     break;
                 case QLocale::LaoScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Lao);
+                    it->sampleStrings.insert("s_Laoo", QFontDatabase::writingSystemSample(QFontDatabase::Lao));
                     break;
                 case QLocale::TibetanScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Tibetan);
+                    it->sampleStrings.insert("s_Tibt", QFontDatabase::writingSystemSample(QFontDatabase::Tibetan));
                     break;
                 case QLocale::MyanmarScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Myanmar);
+                    it->sampleStrings.insert("s_Mymr", QFontDatabase::writingSystemSample(QFontDatabase::Myanmar));
                     break;
                 case QLocale::GeorgianScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Georgian);
+                    it->sampleStrings.insert("s_Geok", QFontDatabase::writingSystemSample(QFontDatabase::Georgian));
                     break;
                 case QLocale::KhmerScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Khmer);
+                    it->sampleStrings.insert("s_Khmr", QFontDatabase::writingSystemSample(QFontDatabase::Khmer));
                     break;
                 case QLocale::SimplifiedChineseScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::SimplifiedChinese);
+                    it->sampleStrings.insert("s_Hans", QFontDatabase::writingSystemSample(QFontDatabase::SimplifiedChinese));
                     break;
                 case QLocale::TraditionalChineseScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::TraditionalChinese);
+                    it->sampleStrings.insert("s_Hant", QFontDatabase::writingSystemSample(QFontDatabase::TraditionalChinese));
                     break;
                 case QLocale::JapaneseScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Japanese);
+                    it->sampleStrings.insert("s_Jpan", QFontDatabase::writingSystemSample(QFontDatabase::Japanese));
                     break;
                 case QLocale::KoreanScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Korean);
+                    it->sampleStrings.insert("s_Kore", QFontDatabase::writingSystemSample(QFontDatabase::Korean));
                     break;
                 case QLocale::OghamScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Ogham);
+                    it->sampleStrings.insert("s_Ogam", QFontDatabase::writingSystemSample(QFontDatabase::Ogham));
                     break;
                 case QLocale::RunicScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Runic);
+                    it->sampleStrings.insert("s_Runr", QFontDatabase::writingSystemSample(QFontDatabase::Runic));
                     break;
                 case QLocale::NkoScript:
-                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Nko);
+                    it->sampleStrings.insert("s_Nkoo", QFontDatabase::writingSystemSample(QFontDatabase::Nko));
                     break;
                 default:
-                    // TODO: misses symbol and vietnamese sample, but I have no idea what is meant by the latter...
-                    sample = QString();
+                    // TODO: better default...
+                    continue;
+                    //it->sampleStrings.insert("sZsye", QFontDatabase::writingSystemSample(QFontDatabase::Symbol));
                 }
-                if (!sample.isEmpty()) {
-                    it->sampleStrings.insert(script, sample);
-                }
+                scripts.append(script);
             }
         }
 

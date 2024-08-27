@@ -467,11 +467,9 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
     if (changeOffset) {
         Q_FOREACH (KisNodeSP node, nodes) {
             KisLayerUtils::recursiveApplyNodes(node, [offset] (KisNodeSP node){
-                if (node->hasEditablePaintDevice()) {
-                    KisPaintDeviceSP dev = node->paintDevice();
-                    QPointF newOffset = offset + dev->offset();
-                    dev->moveTo(newOffset.x(), newOffset.y());
-                }
+                const QPoint newOffset(node->x() + offset.x(), node->y() + offset.y());
+                node->setX(newOffset.x());
+                node->setY(newOffset.y());
             });
         }
     }

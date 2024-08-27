@@ -131,7 +131,7 @@ void KisFilterOptionWidget::setNode(KisNodeWSP node)
 void KisFilterOptionWidget::updateFilterState(const QString &filterId, const QString &filterConfig, bool forceResetWidget)
 {
     if (!m_d->currentFilter ||
-        m_d->page->filtersList->currentItem().id() != filterId) {
+        m_d->currentFilter->id() != filterId) {
 
         KisSignalsBlocker b(m_d->page->filtersList);
         m_d->page->filtersList->setCurrent(filterId);

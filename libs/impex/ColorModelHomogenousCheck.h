@@ -84,7 +84,7 @@ private:
     bool check(KisNode * node)
     {
         KisLayer *layer = dynamic_cast<KisLayer*>(node);
-        if (layer) {
+        if (layer && !layer->isFakeNode()) {
 
             const KoColorSpace * cs = layer->colorSpace();
             if (cs->colorModelId() != m_colorModelID || cs->colorDepthId() != m_colorDepthID) {

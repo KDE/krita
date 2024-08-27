@@ -56,42 +56,43 @@ Language combobox that can take locale codes and get the right language for it a
 class language_combo_box(QComboBox):
     languageList = []
     codesList = []
+    codesToDisplayNames = {}
 
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
-        for i in range(1, 357):
-            locale = QLocale(i)
-            if locale and QLocale.languageToString(locale.language()) != "C":
-                codeName = locale.name().split("_")[0]
-                if codeName not in self.codesList:
-                    self.codesList.append(codeName)
-            self.codesList.sort()
+        for locale in QLocale.matchingLocales(QLocale.AnyLanguage, QLocale.AnyScript, QLocale.AnyCountry):
+            if locale.language() == QLocale.C:
+                continue
+            codeName = locale.name().split("_")[0]
+            if codeName not in self.codesToDisplayNames:
+                self.codesToDisplayNames[codeName] = []
+                self.codesList.append(codeName)
+            displayName = locale.nativeLanguageName()
+            if not displayName:
+                displayName = QLocale.languageToString(locale.language()).title()
+            if displayName not in self.codesToDisplayNames[codeName]:
+                self.codesToDisplayNames[codeName].append(displayName)
+
+        self.codesList.sort()
 
         for lang in self.codesList:
-            locale = QLocale(lang)
+            languageName = " / ".join(self.codesToDisplayNames[lang])
 
-            if locale:
-                languageName = locale.nativeLanguageName()
-
-                if len(languageName)==0:
-                    languageName = QLocale.languageToString(locale.language())
-
-                self.languageList.append(languageName.title())
-                self.setIconSize(QSize(32, 22))
-                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
-                painter = QPainter(codeIcon)
-                painter.setBrush(Qt.transparent)
-                codeIcon.fill(Qt.transparent)
-                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
-                painter.setFont(font)
-                painter.setPen(self.palette().color(QPalette.Text))
-                painter.drawText(codeIcon.rect(), Qt.AlignCenter,lang)
-                painter.end()
-                self.addItem(QIcon(QPixmap.fromImage(codeIcon)), languageName.title())
+            self.languageList.append(languageName)
+            self.setIconSize(QSize(32, 22))
+            codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+            painter = QPainter(codeIcon)
+            painter.setBrush(Qt.transparent)
+            codeIcon.fill(Qt.transparent)
+            font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+            painter.setFont(font)
+            painter.setPen(self.palette().color(QPalette.Text))
+            painter.drawText(codeIcon.rect(), Qt.AlignCenter,lang)
+            painter.end()
+            self.addItem(QIcon(QPixmap.fromImage(codeIcon)), languageName)
 
     def codeForCurrentEntry(self):
-        if self.currentText() in self.languageList:
-            return self.codesList[self.languageList.index(self.currentText())]
+        return self.codesList[self.currentIndex()]
 
     def setEntryToCode(self, code):
         if (code == "C" and "en" in self.codesList):

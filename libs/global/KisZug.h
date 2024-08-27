@@ -30,7 +30,7 @@ template <typename T>
 constexpr auto map_static_cast = zug::map([](auto&& x) { return static_cast<T>(x); });
 
 template <typename T>
-constexpr auto map_mupliply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
+constexpr auto map_muptiply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
 
 template <typename T>
 constexpr auto map_equal = [] (T value) { return zug::map([value](auto&& x) { return x == value; }); };

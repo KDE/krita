@@ -124,11 +124,11 @@ KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commo
       LAGER_QT(adjustmentMidPoint) {m_effectivePredefinedData[&PredefinedBrushData::adjustmentMidPoint]
                   .zoom(kislager::lenses::do_static_cast<quint8, int>)},
       LAGER_QT(brightnessAdjustment) {m_effectivePredefinedData[&PredefinedBrushData::brightnessAdjustment]
-                  .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
-                         kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
+                  .xform(kiszug::map_muptiply<qreal>(100.0) | kiszug::map_round,
+                         kiszug::map_static_cast<qreal> | kiszug::map_muptiply<qreal>(0.01))},
       LAGER_QT(contrastAdjustment) {m_effectivePredefinedData[&PredefinedBrushData::contrastAdjustment]
-                  .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
-                         kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
+                  .xform(kiszug::map_muptiply<qreal>(100.0) | kiszug::map_round,
+                         kiszug::map_static_cast<qreal> | kiszug::map_muptiply<qreal>(0.01))},
       LAGER_QT(angle) {m_commonData[&CommonData::angle]
                   .zoom(kislager::lenses::scale<qreal>(180.0 / M_PI))},
       LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},

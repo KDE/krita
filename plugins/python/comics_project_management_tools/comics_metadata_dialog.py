@@ -108,15 +108,21 @@ class country_combo_box(QComboBox):
         super(QComboBox, self).__init__(parent)
         
     def set_country_for_locale(self, languageCode):
+        languageLocale = QLocale(languageCode)
         self.clear()
         self.codesList = []
         self.countryList = []
-        for locale in QLocale.matchingLocales(QLocale(languageCode).language(), QLocale.AnyScript, QLocale.AnyCountry):
+        for locale in QLocale.matchingLocales(languageLocale.language(), QLocale.AnyScript, QLocale.AnyCountry):
             codeName = locale.name().split("_")[-1]
             if codeName not in self.codesList:
                 self.codesList.append(codeName)
-            self.codesList.sort()
-            
+        self.codesList.sort()
+
+        if QLocale.system().language() == languageLocale.language():
+            langDefaultCountryCode = QLocale.system().name().split("_")[-1]
+        else:
+            langDefaultCountryCode = languageLocale.name().split("_")[-1]
+
         for country in self.codesList:
             locale = QLocale(languageCode+"-"+country)
             if locale:
@@ -133,7 +139,10 @@ class country_combo_box(QComboBox):
                 painter.drawText(codeIcon.rect(), Qt.AlignCenter,country)
                 painter.end()
                 self.addItem(QIcon(QPixmap.fromImage(codeIcon)), countryName.title())
-                
+
+                if country == langDefaultCountryCode:
+                    self.setCurrentIndex(self.count() - 1)
+
     def codeForCurrentEntry(self):
         if self.currentText() in self.countryList:
             return self.codesList[self.countryList.index(self.currentText())]

@@ -16,6 +16,7 @@ Name[sv]=Arbetsflödesknappar
 Name[tr]=İş Akışı Düğmeleri
 Name[uk]=Кнопки робочого процесу
 Name[x-test]=xxWorkflow Buttonsxx
+Name[zh_CN]=自定义按钮面板
 Comment=A Python-based docker to create multi-action buttons to improve your workflow.
 Comment[ca]=Un acoblador basat en Python per a crear botons multiacció per a millorar el flux de treball.
 Comment[ca@valencia]=Un acoblador basat en Python per a crear botons multiacció per a millorar el flux de treball.

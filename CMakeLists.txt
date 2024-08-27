@@ -262,8 +262,6 @@ add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notif
 option(KRITA_ENABLE_PCH "Enable precompiled headers support" OFF)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
 
-option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
-
 option(USE_EXTERNAL_RAQM "Fetch Raqm dependency online instead of the embedded one" OFF)
 
 if(ANDROID)
@@ -1222,7 +1220,11 @@ set_package_properties(Freetype PROPERTIES
 ##
 ## Check for HarfBuzz
 ##
-find_package(HarfBuzz 2.7.4 REQUIRED)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(HarfBuzz 2.7.4 REQUIRED)
+else()
+    find_package(HarfBuzz 4.0 REQUIRED)
+endif()
 set_package_properties(HarfBuzz PROPERTIES
     DESCRIPTION "OpenType text shaping engine"
     URL "https://harfbuzz.github.io"
@@ -1375,3 +1377,5 @@ if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
 elseif(ANDROID)
     message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")
 endif()
+
+ki18n_install(po)

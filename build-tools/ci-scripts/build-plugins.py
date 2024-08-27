@@ -44,6 +44,11 @@ if useCcacheForBuilds:
     os.environ['CMAKE_CXX_COMPILER_LAUNCHER'] = 'ccache'
 
 
+if sys.platform == 'darwin':
+    # Ensure we always build Fat-binaries on macOS
+    cmakeCommand.append('-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64')    
+
+
 commandToRun = ' '.join(cmakeCommand)
 
 # Run the CMake command

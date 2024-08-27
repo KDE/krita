@@ -29,7 +29,9 @@ def choice(prompt="Is this ok?"):
 
 
 def find_on_path(variable, executable):
-    os.environ[variable] = shutil.which(executable)
+    exeString = shutil.which(executable)
+    if exeString:
+        os.environ[variable] = exeString
 
 
 def prompt_for_file(prompt):
@@ -95,17 +97,17 @@ if os.environ.get("SEVENZIP_EXE") is None:
             os.environ["ProgramFiles(x86)"])
     if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
         warnings.warn("7-Zip not found!")
-        exit(102)
+        sys.exit(102)
 print(f"7-Zip: {os.environ['SEVENZIP_EXE']}")
 
 if not os.environ.get("MINGW_BIN_DIR"):
     find_on_path("MINGW_BIN_DIR_MAKE_EXE", "mingw32-make.exe")
-    if not os.environ.get['MINGW_BIN_DIR_MAKE_EXE']:
+    if not os.environ.get('MINGW_BIN_DIR_MAKE_EXE'):
         if not args.no_interactive:
             os.environ['MINGW_BIN_DIR_MAKE_EXE'] = prompt_for_file("Provide path to mingw32-make.exe of mingw-w64")
-        if not os.environ.get['MINGW_BIN_DIR_MAKE_EXE']:
+        if not os.environ.get('MINGW_BIN_DIR_MAKE_EXE'):
             warnings.warn("ERROR: mingw-w64 not found!")
-            exit(102)
+            sys.exit(102)
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
     else:
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
@@ -116,7 +118,7 @@ if not os.environ.get("MINGW_BIN_DIR"):
                 os.environ['MINGW_BIN_DIR_MAKE_EXE'] = prompt_for_dir("Provide path to mingw32-make.exe of mingw-w64")
             if not os.environ['MINGW_BIN_DIR_MAKE_EXE']:
                 warnings.warn("ERROR: mingw-w64 not found!")
-                exit(102)
+                sys.exit(102)
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
 print(f"mingw-w64: {os.environ['MINGW_BIN_DIR']}")
         
@@ -163,7 +165,7 @@ if KRITA_SRC_DIR is None:
         KRITA_SRC_DIR = prompt_for_dir("Provide path of Krita src dir")
     if KRITA_SRC_DIR is None:
         warnings.warn("ERROR: Krita src dir not found!")
-        exit(102)
+        sys.exit(102)
 print(f"Krita src: {KRITA_SRC_DIR}")
 
 DEPS_INSTALL_DIR = None
@@ -180,7 +182,7 @@ if DEPS_INSTALL_DIR is None:
                 "Provide path of deps install dir")
     if DEPS_INSTALL_DIR is None:
         warnings.warn("ERROR: Deps install dir not set!")
-        exit(102)
+        sys.exit(102)
 print(f"Deps install dir: {DEPS_INSTALL_DIR}")
 
 KRITA_INSTALL_DIR = None
@@ -197,16 +199,16 @@ if KRITA_INSTALL_DIR is None:
                 "Provide path of Krita install dir")
     if KRITA_INSTALL_DIR is None:
         warnings.warn("ERROR: Krita install dir not set!")
-        exit(102)
+        sys.exit(102)
 print(f"Krita install dir: {KRITA_INSTALL_DIR}")
 
 # Simple checking
 if not os.path.isdir(DEPS_INSTALL_DIR):
     warnings.warn("ERROR: Cannot find the deps install folder!")
-    exit(1)
+    sys.exit(1)
 if not os.path.isdir(KRITA_INSTALL_DIR):
     warnings.warn("ERROR: Cannot find the krita install folder!")
-    exit(1)
+    sys.exit(1)
 # Amyspark: paths with spaces are automagically handled by Python!
 
 pkg_name = args.package_name
@@ -217,20 +219,20 @@ print(f"Packaging dir is {pkg_root}\n")
 if os.path.isdir(pkg_root):
     warnings.warn(
         "ERROR: Packaging dir already exists! Please remove or rename it first.")
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(f"{pkg_root}.zip"):
     warnings.warn(
         "ERROR: Packaging zip already exists! Please remove or rename it first.")
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(f"{pkg_root}-dbg.zip"):
     warnings.warn(
         "ERROR: Packaging debug zip already exists! Please remove or rename it first.")
-    exit(1)
+    sys.exit(1)
 
 if not args.no_interactive:
     status = choice()
     if not status:
-        exit(255)
+        sys.exit(255)
     print("")
 
 # Initialize clean PATH
@@ -244,9 +246,9 @@ for arg in ("g++", "clang++"):
     ret = subprocess.call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
     if ret != 1:
         os.environ['CC'] = arg
-if not os.environ['CC']:
+if not os.environ.get('CC'):
     warnings.warn("ERROR: No working compiler.")
-    exit(1)
+    sys.exit(1)
 output = subprocess.check_output(f"{os.environ['CC']} --version", shell=True, text=True)
 GCCversionLines = output.splitlines()
 GCC_VERSION_LINE = ""
@@ -261,7 +263,7 @@ if not GCC_VERSION_LINE:
             GCC_VERSION_LINE = versionLine
 if not GCC_VERSION_LINE:
     warnings.warn("ERROR: Failed to get version of g++.")
-    exit(1)
+    sys.exit(1)
 print(f"-- {GCC_VERSION_LINE}")
 IS_TDM = False
 IS_MSYS = False
@@ -299,7 +301,7 @@ for arg in ("objdump", "llvm-objdump"):
         OBJDUMP = arg
 if not OBJDUMP:
     warnings.warn("ERROR: objdump is not working.")
-    exit(1)
+    sys.exit(1)
 output = subprocess.check_output(fr"{OBJDUMP} -f {KRITA_INSTALL_DIR}\bin\krita.exe", shell=True, text=True)
 targetArchLines = output.splitlines()
 TARGET_ARCH_LINE = ""
@@ -324,7 +326,7 @@ try:
     subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR: objcopy is not working.")
-    exit(1)
+    sys.exit(1)
 
 print("\nTesting for strip...")
 commandToRun = "strip --version"
@@ -332,7 +334,7 @@ try:
     subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR: strip is not working.")
-    exit(1)
+    sys.exit(1)
 
 
 print("\nCreating base directories...")
@@ -345,7 +347,7 @@ try:
     os.makedirs(f"{pkg_root}\\share", exist_ok=True)
 except:
     warnings.warn("ERROR: Cannot create packaging dir tree!")
-    exit(1)
+    sys.exit(1)
 
 print("\nCopying GCC libraries...")
 os.environ['STDLIBS_DIR'] = os.environ['MINGW_BIN_DIR']
@@ -376,9 +378,9 @@ elif IS_LLVM_MINGW:
     # The toolchain does not include all of the DLLs in the compiler bin dir,
     # so we need to copy them from the cross target bin dir.
     if not IS_x64:
-        os.environ['STDLIBS_DIR'] = r"%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin"
+        os.environ['STDLIBS_DIR'] = fr"{os.environ['MINGW_BIN_DIR']}\..\i686-w64-mingw32\bin"
     else:
-        os.environ['STDLIBS_DIR'] = r"%MINGW_BIN_DIR%\..\x86_64-w64-mingw32\bin"
+        os.environ['STDLIBS_DIR'] = fr"{os.environ['MINGW_BIN_DIR']}\..\x86_64-w64-mingw32\bin"
 else:
     if not IS_x64:
 		# mingw-w64 x86
@@ -387,7 +389,7 @@ else:
 		# mingw-w64 x64
         os.environ['STDLIBS'] = "libgcc_s_seh-1 libgomp-1 libstdc++-6 libwinpthread-1"
 
-for lib in os.environ['STDLIBS']:
+for lib in os.environ['STDLIBS'].split(" "):
     shutil.copy(fr"{os.environ['STDLIBS_DIR']}\{lib}.dll", fr"{pkg_root}\bin")
 
 print("\nCopying files...")
@@ -401,7 +403,7 @@ shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb"):
     shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
                 f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner_com.com",
+shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.com",
             f"{pkg_root}\\bin\\")
 
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
@@ -532,10 +534,12 @@ subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe", f"{pkg_root}\\bin")
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffprobe.exe", f"{pkg_root}\\bin")
-    shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_LICENSE.txt",
-                f"{pkg_root}\\bin")
-    shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_README.txt",
-                f"{pkg_root}\\bin")
+    if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_LICENSE.txt"):
+        shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_LICENSE.txt",
+                    f"{pkg_root}\\bin")
+    if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_README.txt"):
+        shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_README.txt",
+                    f"{pkg_root}\\bin")
 
 # Copy embedded Python
 subprocess.run(["xcopy", "/S", "/Y", "/I",
@@ -583,16 +587,16 @@ def split_debug(arg1, arg2):
     try:
         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
     except subprocess.CalledProcessError:
-        exit(1)
+        sys.exit(1)
     # If the debug file is small enough then consider there being no debug info.
     # Discard these files since they somehow make gdb crash.
-    if os.path.size(f"{arg1}.debug") <= 2048:
+    if os.path.getsize(f"{arg1}.debug") <= 2048:
         print(f"Discarding {arg2}.debug")
         os.remove(f"{arg1}.debug")
         return 0
     if not os.path.isdir(os.path.dirname(f"{arg1}.debug")):
         os.mkdir(os.path.dirname(f"{arg1}.debug"))
-        shutil.move(f"{arg1}.debug", f"{os.path.dirname(f"{arg1}.debug")}\\")
+        shutil.move(f"{arg1}.debug", f"{os.path.dirname(f'{arg1}.debug')}\\")
         commandToRun = f"strip --strip-debug {arg1}"
         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
         # Add debuglink

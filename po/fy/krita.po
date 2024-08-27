@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 01:46+0000\n"
+"POT-Creation-Date: 2024-08-27 01:49+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -61426,7 +61426,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformearje in laach of seleksje"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"

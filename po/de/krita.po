@@ -47,14 +47,14 @@
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
 # Burkhard Lück <lueck@hube-lueck.de>, 2012, 2013, 2014, 2015, 2017, 2018, 2019, 2020, 2021.
 # Maik Wagner <linuxandlanguages@t-online.de>, 2016.
-# tobi <onewayme001@posteo.de>, 2021.
+# tobi <onewayme001@posteo.de>, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 01:46+0000\n"
-"PO-Revision-Date: 2022-08-28 09:26+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"POT-Creation-Date: 2024-08-27 01:49+0000\n"
+"PO-Revision-Date: 2024-08-01 17:30+0200\n"
+"Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -13604,7 +13604,7 @@ msgstr "Textumfluss-Modus"
 #: krita/krita5.xmlgui:99
 #, kde-format
 msgid "&Zoom, Rotate, and Mirror"
-msgstr ""
+msgstr "&Zoomen, drehen und spiegeln"
 
 #: krita/krita5.xmlgui:131
 #, kde-format
@@ -13798,7 +13798,7 @@ msgstr "Öffnen"
 #, kde-format
 msgctxt "action"
 msgid "Open &Recent"
-msgstr "&Zuletzt geöffnete"
+msgstr "&Zuletzt geöffnete Dateien"
 
 #. i18n: context: toolTip @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:33
@@ -13809,12 +13809,10 @@ msgstr "Ein kürzlich geöffnetes Dokument öffnen"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Open &Recent"
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "&Zuletzt geöffnete"
+msgstr "Zuletzt geöffnete Dateien"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
@@ -14656,9 +14654,7 @@ msgstr "&Vollbildmodus"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
 msgstr "Leinwand lösen"
@@ -14796,7 +14792,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror View"
-msgstr "Spiegelansicht"
+msgstr "Ansicht spiegeln"
 
 #. i18n: context: text @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
@@ -14806,12 +14802,10 @@ msgstr "Spiegelansicht"
 #. i18n: context: iconText @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:742 krita/kritamenu.action:744
 #: krita/kritamenu.action:745
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr "Spiegelansicht"
+msgstr "Ansicht an Cursor spiegeln"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -14821,12 +14815,10 @@ msgstr "Spiegelansicht"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Spiegelansicht"
+msgstr "Ansicht an Leinwand spiegeln"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -14998,31 +14990,27 @@ msgstr "Leinwanddrehung zurücksetzen"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Anzeige:"
+msgstr "Anzeige zurücksetzen"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Auf Voreinstellung zurücksetzen"
+msgstr "Zoom, Drehung und Spiegelung auf Voreinstellung zurücksetzen."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Druckgröße"
+msgstr "Druckgröße anzeigen"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -24624,10 +24612,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:288
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Bilder öffnen"
+msgstr "Bild öffnen"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:366
@@ -24679,27 +24666,26 @@ msgstr "Krita-Webseite"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1041
-#, fuzzy, kde-format
-#| msgid "Replace Image"
+#, kde-format
 msgid "Recent Images"
-msgstr "Grafik ersetzen"
+msgstr "Zuletzt göffnete Bilder"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1065
-#, fuzzy, kde-format
-#| msgid "Clear"
+#, kde-format
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
 msgid "Clear"
-msgstr "Zurücksetzen"
+msgstr "Leeren"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
 #: libs/ui/forms/KisWelcomePage.ui:1116
-#, fuzzy, kde-format
-#| msgid "Could not create the output document"
+#, kde-format
 msgid ""
 "You don't seem to have any\n"
 "recently opened documents"
-msgstr "Das Ausgabedokument kann nicht erstellt werden"
+msgstr ""
+"Es scheint keine zuletzt\n"
+"geöffneten Dokumente zu geben"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1247
@@ -24741,6 +24727,9 @@ msgid ""
 "decoration: underline;\">enable news</a> from krita.org in various languages "
 "with the menu above"
 msgstr ""
+"Mit dem Menü oben können <a href=\"ignored\" style=\"color: "
+"COLOR_PLACEHOLDER; text-decoration: underline;\">Neuigkeiten</a> in "
+"verschiedenen Sprachen angezeigt werden."
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
 #: libs/ui/forms/KisWelcomePage.ui:1559
@@ -25199,10 +25188,9 @@ msgstr "Farbeinstellungen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDefColorSpace)
 #: libs/ui/forms/wdgcolorsettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Default color model for new images:"
+#, kde-format
 msgid "Use Default color model for new images"
-msgstr "Standard-Farbmodell für neue Bilder:"
+msgstr "Standard-Farbmodell für neue Bilder verwenden"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
@@ -26052,8 +26040,7 @@ msgstr "Ebenenname:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:57
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Storage location:"
 msgstr "Speicherort:"
 
@@ -26203,17 +26190,15 @@ msgstr "Cursor"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdggeneralsettings.ui:61
-#, fuzzy, kde-format
-#| msgid "Brush count"
+#, kde-format
 msgid "Brush Cursor Icon:"
-msgstr "Pinselanzahl"
+msgstr "Symbol für Pinselcursor:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: libs/ui/forms/wdggeneralsettings.ui:83
-#, fuzzy, kde-format
-#| msgid "Outline Shape:"
+#, kde-format
 msgid "Brush Outline Shape:"
-msgstr "Umriss:"
+msgstr "Form Pinselumriss:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdggeneralsettings.ui:111
@@ -26235,51 +26220,43 @@ msgstr "Umriss anzeigen"
 #: libs/ui/forms/wdggeneralsettings.ui:254
 #, kde-format
 msgid "Use effective outline size"
-msgstr ""
+msgstr "Effektive Umrissgröße verwenden"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkSeparateEraserCursor)
 #: libs/ui/forms/wdggeneralsettings.ui:161
-#, fuzzy, kde-format
-#| msgid "Unlock (restore settings from preset)"
+#, kde-format
 msgid "Use separate settings for eraser"
-msgstr "Entsperren (Einstellungen aus Vorgabe wieder herstellen)"
+msgstr "Eigene Einstellungen für Radierer verwenden"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: libs/ui/forms/wdggeneralsettings.ui:182
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Eraser_soft.kpp"
-#| msgid "Eraser soft"
+#, kde-format
 msgid "Eraser Cursor Icon:"
-msgstr "Radierer weich"
+msgstr "Symbol für Radierercursor:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdggeneralsettings.ui:195
-#, fuzzy, kde-format
-#| msgid "Outline Shape:"
+#, kde-format
 msgid "Eraser Outline Shape:"
-msgstr "Umriss:"
+msgstr "Form Radiererumriss:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdggeneralsettings.ui:232
-#, fuzzy, kde-format
-#| msgid "While painting..."
+#, kde-format
 msgid "While painting with an eraser..."
-msgstr "Beim Malen ..."
+msgstr "Beim Malen mit einem Radierer ..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:267
 #, kde-format
 msgid "Eraser Outline Color:"
-msgstr ""
+msgstr "Farbe Radiererumriss:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: libs/ui/forms/wdggeneralsettings.ui:303
-#, fuzzy, kde-format
-#| msgid "Brush Outline with Crosshair"
+#, kde-format
 msgid "Brush Outline Color:"
-msgstr "Pinselumriss mit Fadenkreuz"
+msgstr "Farbe Pinselumriss:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdggeneralsettings.ui:324
@@ -27938,8 +27915,7 @@ msgstr "Die Auslagerungsdatei wird nicht größer als dieser Grenzwert."
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgperformancesettings.ui:193
-#, fuzzy, kde-format
-#| msgid "File Size Limit:"
+#, kde-format
 msgid "Size Limit:"
 msgstr "Maximale Dateigröße:"
 
@@ -27947,10 +27923,9 @@ msgstr "Maximale Dateigröße:"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:224
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:247
-#, fuzzy, kde-format
-#| msgid "Location"
+#, kde-format
 msgid "Location:"
-msgstr "Ort"
+msgstr "Speicherort:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: libs/ui/forms/wdgperformancesettings.ui:257
@@ -30022,10 +29997,9 @@ msgid "Toggle Eraser"
 msgstr "Vorschau anzeigen"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Reset Display"
-msgstr "Anzeige:"
+msgstr "Anzeige zurücksetzen"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, fuzzy, kde-format
@@ -30527,19 +30501,17 @@ msgstr "Filtermaske-Eigenschaften"
 #: libs/ui/kis_mirror_manager.cpp:37
 #, kde-format
 msgid "Mirror View"
-msgstr "Spiegelansicht"
+msgstr "Ansicht spiegeln"
 
 #: libs/ui/kis_mirror_manager.cpp:43
-#, fuzzy, kde-format
-#| msgid "Mirror View"
+#, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "Spiegelansicht"
+msgstr "Ansicht an Cursor spiegeln"
 
 #: libs/ui/kis_mirror_manager.cpp:48
-#, fuzzy, kde-format
-#| msgid "Mirror View"
+#, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "Spiegelansicht"
+msgstr "Ansicht an Leinwand spiegeln"
 
 #: libs/ui/kis_node_manager.cpp:483
 #, kde-format
@@ -32164,10 +32136,9 @@ msgstr "Ebene/Maske speichern"
 #: libs/ui/KisMainWindow.cpp:1986
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
-#, fuzzy, kde-format
-#| msgid "Could not create the output document"
+#, kde-format
 msgid "You don't have any resource bundles enabled."
-msgstr "Das Ausgabedokument kann nicht erstellt werden"
+msgstr "Es sind keine Ressourcenpakete aktiviert."
 
 #: libs/ui/KisMainWindow.cpp:1990
 #, kde-format
@@ -32731,7 +32702,7 @@ msgstr "Anonym"
 #: libs/ui/KisWelcomePageWidget.cpp:156
 #, kde-format
 msgid "Enable news and check for new releases"
-msgstr ""
+msgstr "Neuigkeiten einschalten und nach neuen Versionen suchen"
 
 #: libs/ui/KisWelcomePageWidget.cpp:158
 #, kde-format
@@ -32749,7 +32720,7 @@ msgstr "Sprache"
 #: libs/ui/KisWelcomePageWidget.cpp:162
 #, kde-format
 msgid "English news is always up to date."
-msgstr ""
+msgstr "Englische Neuigkeiten sind immer aktuell."
 
 #: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
@@ -36705,7 +36676,7 @@ msgstr "Ein vorhandenes Dokument öffnen"
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
 msgid "Open &Recent"
-msgstr "&Zuletzt geöffnete"
+msgstr "&Zuletzt geöffnete Dateien"
 
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
@@ -37733,9 +37704,9 @@ msgstr "Kurzbefehl"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alternate"
-msgstr "Abwechselnd"
+msgstr "Alternativ"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
 #, kde-format
@@ -45008,10 +44979,9 @@ msgid "Enter Bundle Details"
 msgstr "Pinsel-Details"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "Speicherort:"
+msgstr "Speicherort eingeben"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -45037,10 +45007,9 @@ msgid "Edit Bundle Details"
 msgstr "Pinsel-Details"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "Speicherort:"
+msgstr "Speicherort bearbeiten"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -45427,10 +45396,9 @@ msgstr "Gelöschte Ressourcen anzeigen"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "Speicherort:"
+msgstr "Speicherort auswählen"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -58478,21 +58446,17 @@ msgstr "Python-Modulimport"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Import Python Plugin..."
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "Python-Modul importieren ..."
+msgstr "Python-Modul aus Datei importieren ..."
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Import Python Plugin..."
+#, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Python-Modul importieren ..."
+msgstr "Python-Modul aus dem Web importieren ..."
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -58503,16 +58467,12 @@ msgid "No plugins found in archive"
 msgstr "Keine Module im Archiv gefunden"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:32
-#, fuzzy
-#| msgid "Import Python Plugin..."
 msgid "Import Python Plugin from File..."
-msgstr "Python-Modul importieren ..."
+msgstr "Python-Modul aus Datei importieren ..."
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
-#, fuzzy
-#| msgid "Import Python Plugin..."
 msgid "Import Python Plugin from Web..."
-msgstr "Python-Modul importieren ..."
+msgstr "Python-Modul aus dem Web importieren ..."
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -62908,7 +62868,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Eine Ebene oder Auswahl transformieren"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Transform"

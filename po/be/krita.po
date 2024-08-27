@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-25 01:46+0000\n"
+"POT-Creation-Date: 2024-08-27 01:49+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -60042,7 +60042,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Пераўтварыць пласт або вылучэнне"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"

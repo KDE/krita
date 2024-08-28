@@ -304,20 +304,21 @@ if not OBJDUMP:
     sys.exit(1)
 output = subprocess.check_output(fr"{OBJDUMP} -f {KRITA_INSTALL_DIR}\bin\krita.exe", shell=True, text=True)
 targetArchLines = output.splitlines()
+
 TARGET_ARCH_LINE = ""
 for archLine in targetArchLines:
     if re.search("i386", archLine):
         TARGET_ARCH_LINE = archLine
-if not TARGET_ARCH_LINE:
-    print("Possible LLVM objdump, trying to detect architecture...")
-    if re.search("coff", archLine):
-        TARGET_ARCH_LINE = archLine
+    if not TARGET_ARCH_LINE:
+        print("Possible LLVM objdump, trying to detect architecture...")
+        if re.search("coff", archLine):
+            TARGET_ARCH_LINE = archLine
 print(f"-- {TARGET_ARCH_LINE}")
 IS_x64 = False
-if not re.search("x64-64", TARGET_ARCH_LINE):
+if not re.search("x86-64", TARGET_ARCH_LINE):
     print("Target looks like x86")
 else:
-    print("Target looks like x64")
+    print("Target looks like x86_64")
     IS_x64 = True
 
 print("\nTesting for objcopy...")

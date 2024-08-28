@@ -168,7 +168,7 @@ if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe*"):
 
 print("\n=== Step 1: Generate resources.pri ===")
 
-commandToRun = r'"%MAKEPRI%" new /pr "%SCRIPT_DIR%\pkg" /mn "%SCRIPT_DIR%manifest.xml" /cf "%SCRIPT_DIR%\priconfig.xml" /o /of "%OUTPUT_DIR%\resources.pri"'
+commandToRun = r'"%MAKEPRI%" new /pr "%SCRIPT_DIR%\pkg" /mn "%SCRIPT_DIR%\manifest.xml" /cf "%SCRIPT_DIR%\priconfig.xml" /o /of "%OUTPUT_DIR%\resources.pri"'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
@@ -239,7 +239,7 @@ except subprocess.CalledProcessError:
     
 print(f"\nMSIX generated as {environ['OUTPUT_DIR']}\\krita.msix")
 
-if environ.get['SIGNTOOL_SIGN_FLAGS']:
+if environ.get('SIGNTOOL_SIGN_FLAGS'):
     print("Signing MSIX...")
     commandToRun = r'"%SIGNTOOL%" sign %SIGNTOOL_SIGN_FLAGS% /fd sha256 "%OUTPUT_DIR%\krita.msix"'
 try:

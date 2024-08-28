@@ -91,9 +91,9 @@ if os.environ.get("SEVENZIP_EXE") is None:
 if os.environ.get("SEVENZIP_EXE") is None:
     find_on_path("SEVENZIP_EXE", "7za.exe")
 if os.environ.get("SEVENZIP_EXE") is None:
-    os.environ["SEVENZIP_EXE"] = f"{os.environ['ProgramFiles']}\\7-Zip\\7-Z.exe"
+    os.environ["SEVENZIP_EXE"] = f"{os.environ['ProgramFiles']}\\7-Zip\\7z.exe"
     if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
-        os.environ["SEVENZIP_EXE"] = "{}\\7-Zip\\7-Z.exe".format(
+        os.environ["SEVENZIP_EXE"] = "{}\\7-Zip\\7z.exe".format(
             os.environ["ProgramFiles(x86)"])
     if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
         warnings.warn("7-Zip not found!")

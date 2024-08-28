@@ -577,6 +577,8 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\toml*"):
         shutil.rmtree(f)
+    for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\meson*"):
+        shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\easy-install.pth"):
         os.remove(f)
 

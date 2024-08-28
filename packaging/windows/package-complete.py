@@ -636,8 +636,15 @@ for f in files:
 
 if args.pre_zip_hook:
     print("Running pre-zip hook...")
-    subprocess.run(["cmd", "/c", args.pre_zip_hook,
-                   f"{pkg_root}\\"], check=True)
+    if args.pre_zip_hook.endswith('.cmd'):
+        subprocess.run(["cmd", "/c", args.pre_zip_hook,
+                       f"{pkg_root}\\"], check=True)
+    elif args.pre_zip_hook.endswith('.py'):
+        subprocess.run([sys.executable, "-u", args.pre_zip_hook,
+                       f"{pkg_root}\\"], check=True)
+    else:
+        warnings.warn("ERROR: pre-zip hook has unknown format!")
+        sys.exit(102)
 
 print("\nPackaging stripped binaries...")
 subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",

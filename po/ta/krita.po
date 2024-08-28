@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 01:49+0000\n"
+"POT-Creation-Date: 2024-08-28 01:56+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -52895,13 +52895,13 @@ msgstr ""
 msgid "X max: "
 msgstr ""
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
 #, fuzzy, kde-format
 msgid "Base Value: "
 msgstr "அடுக்கு வகை"

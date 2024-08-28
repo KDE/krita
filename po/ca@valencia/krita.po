@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 01:49+0000\n"
-"PO-Revision-Date: 2024-08-15 10:15+0200\n"
+"POT-Creation-Date: 2024-08-28 01:56+0000\n"
+"PO-Revision-Date: 2024-08-25 17:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -31015,6 +31015,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"S'està intentant realitzar una exportació avançada amb la imatge que conté "
+"una <b>capa de filtre</b>. La imatge s'<b>aplanarà</b> abans de "
+"redimensionar."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -31023,6 +31026,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"S'està intentant realitzar una exportació avançada amb la imatge que conté "
+"una <b>màscara de filtre</b>. La imatge s'<b>aplanarà</b> abans de "
+"redimensionar."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -31031,6 +31037,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"S'està intentant realitzar una exportació avançada amb la imatge que conté "
+"un <b>estil de capa</b>. La imatge s'<b>aplanarà</b> abans de redimensionar."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -54311,7 +54319,7 @@ msgstr "X mín.: "
 msgid "X max: "
 msgstr "X màx.: "
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
@@ -54319,7 +54327,7 @@ msgstr ""
 "Sensor aleatori actiu en l'opció %1, considereu desactivar la vista prèvia "
 "instantània"
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
 #, kde-format
 msgid "Base Value: "
 msgstr "Valor base: "
@@ -57746,8 +57754,6 @@ msgid "Brush preset icon"
 msgstr "Icona de pinzell predefinit"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Paràmetres dels botons de flux de treball"
 
@@ -57865,10 +57871,8 @@ msgid "Inline"
 msgstr "Inclosa"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Icon Size"
 msgid "Icon files "
-msgstr "Mida de les icones"
+msgstr "Fitxers d'icona"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -57876,17 +57880,13 @@ msgid "Color info: "
 msgstr "Informació del color:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "Fitxers de script (*.py)"
+msgstr "Fitxers de script"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Paràmetres dels botons de flux de treball"
+msgstr "Botons de flux de treball"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
@@ -62121,6 +62121,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Icon files (*.png, *.svg)"
-#~ msgstr "Fitxers d'icona (*.png, *.svg)"

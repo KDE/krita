@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-27 01:49+0000\n"
-"PO-Revision-Date: 2024-08-17 20:45+0200\n"
+"POT-Creation-Date: 2024-08-28 01:56+0000\n"
+"PO-Revision-Date: 2024-08-27 10:16+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -31035,6 +31035,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentativo di eseguire l'esportazione avanzata con l'immagine che contiene un "
+"<b>livello filtro</b>. L'immagine sarà <b>appiattita</b> prima del suo "
+"ridimensionamento."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -31043,6 +31046,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentativo di eseguire l'esportazione avanzata con l'immagine che contiene "
+"una <b>maschera filtro</b>. L'immagine sarà <b>appiattita</b> prima del suo "
+"ridimensionamento."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -31051,6 +31057,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentativo di eseguire l'esportazione avanzata con l'immagine che contiene "
+"uno <b>stile di livello</b>. L'immagine sarà <b>appiattita</b> prima del suo "
+"ridimensionamento."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -54356,7 +54365,7 @@ msgstr "X min: "
 msgid "X max: "
 msgstr "X max: "
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:23
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
@@ -54364,7 +54373,7 @@ msgstr ""
 "Sensore di casualità attivo nell'opzione %1, considera la disattivazione "
 "dell'anteprima automatica"
 
-#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
+#: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:44
 #, kde-format
 msgid "Base Value: "
 msgstr "Valore base: "
@@ -57799,8 +57808,6 @@ msgid "Brush preset icon"
 msgstr "Icona Preimpostazioni del pennello"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Impostazioni pulsanti Flusso di lavoro"
 
@@ -57917,10 +57924,8 @@ msgid "Inline"
 msgstr "All'interno"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action file"
 msgid "Icon files "
-msgstr "File dell'azione"
+msgstr "File icone "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -57928,17 +57933,13 @@ msgid "Color info: "
 msgstr "Informazioni colore: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "File di script (*.py)"
+msgstr "File di script "
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Impostazioni pulsanti Flusso di lavoro"
+msgstr "Pulsanti Flusso di lavoro"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"

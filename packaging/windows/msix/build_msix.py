@@ -193,12 +193,16 @@ print(fr'"{environ['SCRIPT_DIR']}manifest.xml" "AppxManifest.xml"', file=OUT_TEM
 print(fr'"{environ['OUTPUT_DIR']}\resources.pri" "Resources.pri"', file=OUT_TEMP)
 
 # Krita application files:
-for f in os.scandir(environ['KRITA_DIR']):
-    print(fr'"{f}" "krita\{os.path.relpath(f, environ['KRITA_DIR'])}"', file=OUT_TEMP)
+for root, dirs, files in os.walk(environ['KRITA_DIR']):
+    for file in files:
+        f = os.path.join(root, file)
+        print(fr'"{f}" "krita\{os.path.relpath(f, environ['KRITA_DIR'])}"', file=OUT_TEMP)
 
 # Assets:
-for f in os.scandir(environ['ASSETS_DIR']):
-    print(fr'"{f}" "Assets\{os.path.relpath(f, environ['ASSETS_DIR'])}"', file=OUT_TEMP)
+for root, dirs, files in os.walk(environ['ASSETS_DIR']):
+    for file in files:
+        f = os.path.join(root, file)
+        print(fr'"{f}" "Assets\{os.path.relpath(f, environ['ASSETS_DIR'])}"', file=OUT_TEMP)
 
 shutil.copy(OUT_TEMP, environ['MAPPING_OUT'])
 os.remove(OUT_TEMP)

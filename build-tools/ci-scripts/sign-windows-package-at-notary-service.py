@@ -24,10 +24,11 @@ if not os.path.isfile(KRITACI_WINDOWS_SIGN_CONFIG):
     exit(1)
 
 with open("files-to-sign.txt", 'w') as toSign:
-    with os.scandir(pkg_root) as pkg_files:
-        for entry in pkg_files:
-            if entry.is_file() and entry.name.endswith(('.exe', '.com', '.dll', '.pyd')):
-                print(entry.path, file=toSign)
+    for rootPath, dirs, files in os.walk(pkg_root):
+        for fileName in files:
+            if fileName.endswith(('.exe', '.com', '.dll', '.pyd')):
+                filePath = os.path.join(rootPath, fileName)
+                print(filePath, file=toSign)
 
 commandToRun = "python.exe -u ci-notary-service/signwindowsbinaries.py --config %KRITACI_WINDOWS_SIGN_CONFIG% --files-from files-to-sign.txt"
 subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )

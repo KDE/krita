@@ -5,6 +5,7 @@ import glob
 import subprocess
 import sys
 import warnings
+import tempfile
 
 if not environ.get('OUTPUT_DIR'):
     environ['OUTPUT_DIR'] = fr"{os.getcwd()}\out"
@@ -23,12 +24,6 @@ if environ.get('KRITA_INSTALLER'):
 
 # Subroutines
 
-def get_temp_file():
-    uniqueFileName = fr"{environ.get('tmp')}\bat~{environ.get('RANDOM')}.tmp"
-    if os.path.isFile(uniqueFileName):
-        uniqueFileName = get_temp_file()
-    return uniqueFileName
-
 def find_on_path(variable, executable):
     os.environ[variable] = shutil.which(executable)
 
@@ -38,15 +33,14 @@ print("*** Krita MSIX build script ***")
 
 if (not environ.get('WindowsSdkDir')) and environ.get('ProgramFiles(x86)'):
     environ['WindowsSdkDir'] = fr"{environ['ProgramFiles(x86)']}\Windows Kits\10"
-if os.path.isfile(environ.get('WindowsSdkDir')):
-    delims = glob.glob(fr"{environ['WindowsSdkDir']}\bin\10.*")
-    for dir in delims:
-        if os.path.isfile(fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\makepri.exe"):
-            environ['MAKEPRI'] = fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\makepri.exe"
-        if os.path.isfile(fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\makeappx.exe"):
-            environ['MAKEAPPX'] = fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\makeappx.exe"
-        if os.path.isfile(fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\signtool.exe"):
-            environ['SIGNTOOL'] = fr"{environ['WindowsSdkDir']}\bin\{dir}\x64\signtool.exe"
+if os.path.isdir(environ.get('WindowsSdkDir')):
+    for dir in glob.glob(fr"{environ['WindowsSdkDir']}\bin\10.*"):
+        if os.path.isfile(fr"{dir}\x64\makepri.exe"):
+            environ['MAKEPRI'] = fr"{dir}\x64\makepri.exe"
+        if os.path.isfile(fr"{dir}\x64\makeappx.exe"):
+            environ['MAKEAPPX'] = fr"{dir}\x64\makeappx.exe"
+        if os.path.isfile(fr"{dir}\x64\signtool.exe"):
+            environ['SIGNTOOL'] = fr"{dir}\x64\signtool.exe"
     if (not environ['MAKEPRI']) and os.path.isfile(fr"{environ['WindowsSdkDir']}\bin\x64\makepri.exe"):
         environ['MAKEPRI'] = fr"{environ['WindowsSdkDir']}\bin\x64\makepri.exe"
     if (not environ['MAKEAPPX']) and os.path.isfile(fr"{environ['WindowsSdkDir']}\bin\x64\makeappx.exe"):
@@ -67,8 +61,12 @@ if not environ.get('SIGNTOOL'):
     sys.exit(1)
 
 environ['SCRIPT_DIR'] = sys.argv[0]
-os.mkdir(environ['OUTPUT_DIR'])
-
+try:
+    os.mkdir(environ['OUTPUT_DIR'])
+except FileExistsError:
+    # We may have already created it in build-windows-package.py,
+    # just ignore
+    pass
 
 if not environ['KRITA_DIR']:
 
@@ -170,7 +168,7 @@ if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe*"):
 
 print("\n=== Step 1: Generate resources.pri ===")
 
-commandToRun = r'"%MAKEPRI%" new /pr "%SCRIPT_DIR%pkg" /mn "%SCRIPT_DIR%manifest.xml" /cf "%SCRIPT_DIR%priconfig.xml" /o /of "%OUTPUT_DIR%\resources.pri"'
+commandToRun = r'"%MAKEPRI%" new /pr "%SCRIPT_DIR%\pkg" /mn "%SCRIPT_DIR%manifest.xml" /cf "%SCRIPT_DIR%\priconfig.xml" /o /of "%OUTPUT_DIR%\resources.pri"'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
@@ -182,30 +180,32 @@ print("=== Step 1 done. ===")
 
 print("\n=== Step 2: Generate file mapping list ===")
 
-environ['ASSETS_DIR'] = fr"{environ['SCRIPT_DIR']}pkg\Assets"
+environ['ASSETS_DIR'] = fr"{environ['SCRIPT_DIR']}\pkg\Assets"
 environ['MAPPING_OUT'] = fr"{environ['OUTPUT_DIR']}\mapping.txt"
 
-OUT_TEMP = get_temp_file()
-print(f"Writing list to temporary file {OUT_TEMP}")
+OUT_TEMP_NAME = ""
+with tempfile.NamedTemporaryFile(mode='w', delete=False) as OUT_TEMP:
+    OUT_TEMP_NAME = OUT_TEMP.name
+    print(f"Writing list to temporary file {OUT_TEMP_NAME}")
 
-print("[Files]", file=OUT_TEMP)
-print(fr'"{environ["SCRIPT_DIR"]}manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
-print(fr'"{environ["OUTPUT_DIR"]}\resources.pri" "Resources.pri"', file=OUT_TEMP)
+    print("[Files]", file=OUT_TEMP)
+    print(fr'"{environ["SCRIPT_DIR"]}\manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
+    print(fr'"{environ["OUTPUT_DIR"]}\resources.pri" "Resources.pri"', file=OUT_TEMP)
 
-# Krita application files:
-for root, dirs, files in os.walk(environ['KRITA_DIR']):
-    for file in files:
-        f = os.path.join(root, file)
-        print(fr'"{f}" "krita\{os.path.relpath(f, environ["KRITA_DIR"])}"', file=OUT_TEMP)
+    # Krita application files:
+    for root, dirs, files in os.walk(environ['KRITA_DIR']):
+        for file in files:
+            f = os.path.join(root, file)
+            print(fr'"{f}" "krita\{os.path.relpath(f, environ["KRITA_DIR"])}"', file=OUT_TEMP)
 
-# Assets:
-for root, dirs, files in os.walk(environ['ASSETS_DIR']):
-    for file in files:
-        f = os.path.join(root, file)
-        print(fr'"{f}" "Assets\{os.path.relpath(f, environ["ASSETS_DIR"])}"', file=OUT_TEMP)
+    # Assets:
+    for root, dirs, files in os.walk(environ['ASSETS_DIR']):
+        for file in files:
+            f = os.path.join(root, file)
+            print(fr'"{f}" "Assets\{os.path.relpath(f, environ["ASSETS_DIR"])}"', file=OUT_TEMP)
 
-shutil.copy(OUT_TEMP, environ['MAPPING_OUT'])
-os.remove(OUT_TEMP)
+shutil.copy(OUT_TEMP_NAME, environ['MAPPING_OUT'])
+os.remove(OUT_TEMP_NAME)
 
 print(f'Written mapping file to "{environ["MAPPING_OUT"]}"')
 print("=== Step 2 done. ===")

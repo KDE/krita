@@ -173,7 +173,7 @@ DEPS_INSTALL_DIR = None
 if args.deps_install_dir is not None:
     DEPS_INSTALL_DIR = args.deps_install_dir
 if DEPS_INSTALL_DIR is None:
-    DEPS_INSTALL_DIR = f"{os.getcwd()}\\i_deps"
+    DEPS_INSTALL_DIR = f"{os.getcwd()}\\_install"
     print(f"Using default deps install dir: {DEPS_INSTALL_DIR}")
     if not args.no_interactive:
         status = choice()
@@ -190,7 +190,7 @@ KRITA_INSTALL_DIR = None
 if args.krita_install_dir is not None:
     KRITA_INSTALL_DIR = args.krita_install_dir
 if KRITA_INSTALL_DIR is None:
-    KRITA_INSTALL_DIR = f"{os.getcwd()}\\i"
+    KRITA_INSTALL_DIR = f"{os.getcwd()}\\_install"
     print(f"Using default Krita install dir: {KRITA_INSTALL_DIR}")
     if not args.no_interactive:
         status = choice()

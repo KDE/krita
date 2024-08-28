@@ -1152,7 +1152,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 void KisPainter::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
-{
+{   
     if (d->device && d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintLine(pi1, pi2, currentDistance);
     }
@@ -1237,12 +1237,13 @@ void KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                   const QPointF &control1,
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2,
-                                  KisDistanceInformation *currentDistance)
-{
+                                  KisDistanceInformation *currentDistance)                              
+{   
     if (d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, currentDistance);
     }
 }
+
 
 void KisPainter::paintRect(const QRectF &rect)
 {
@@ -1737,7 +1738,6 @@ void KisPainter::drawLine(const QPointF & start, const QPointF & end)
     drawThickLine(start, end, 1, 1);
 }
 
-
 void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 {
     int x = qFloor(start.x());
@@ -1745,7 +1745,6 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
-
     // Width and height of the line
     int xd = x2 - x;
     int yd = y2 - y;

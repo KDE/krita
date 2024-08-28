@@ -84,8 +84,8 @@ public:
                                   const QPointF &control1,
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2,
-                                  KisDistanceInformation *currentDistance);
-
+                                  KisDistanceInformation *currentDistance
+                                  );
 
     /**
     * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.

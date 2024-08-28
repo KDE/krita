@@ -468,6 +468,7 @@ public:
                           const QPointF &control2,
                           const KisPaintInformation &pi2,
                           KisDistanceInformation *currentDistance);
+
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * @p pos1 and @p pos2 using control points @p control1 and @p control2, excluding the final pos2.

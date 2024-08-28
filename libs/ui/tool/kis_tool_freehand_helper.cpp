@@ -78,6 +78,11 @@ struct KisToolFreehandHelper::Private
     KisPaintInformation previousPaintInformation;
     KisPaintInformation olderPaintInformation;
 
+    QPointF lastDrawnPixel;
+    QPointF waitingPixel;
+    bool hasLastDrawnPixel;
+    int pixelInLineCount;
+
     KisSmoothingOptionsSP smoothingOptions;
 
     // fake random sources for hovering outline *only*
@@ -307,6 +312,9 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
 
     m_d->history.clear();
     m_d->distanceHistory.clear();
+    m_d->lastDrawnPixel = QPointF(-1.0, -1.0); 
+    m_d->hasLastDrawnPixel = false;
+    m_d->pixelInLineCount = 0;
 
     if (airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
@@ -448,8 +456,9 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     paint(info);
 }
 
+
 void KisToolFreehandHelper::paint(KisPaintInformation &info)
-{
+{ 
     /**
      * Smooth the coordinates out using the history and the
      * distance. This is a heavily modified version of an algo used in
@@ -469,10 +478,16 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      * 4) The formula is a little bit different: 'Distance' parameter
      *    stands for $3 \Sigma$
      */
+
+    KisPaintInformation lastUsedPaintInformation;
+    QPointF currentPixelPos = info.pos();
+    const float PIXEL_DISTANCE_THRESHOLD = 1.7;
+   
+
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && m_d->smoothingOptions->smoothnessDistance() > 0.0) {
-
-        { // initialize current distance
+        { 
+            // initialize current distance
             QPointF prevPos;
 
             if (!m_d->history.isEmpty()) {
@@ -560,39 +575,78 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             }
         }
     }
-
+ 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
-        || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING)
-    {
-        // Now paint between the coordinates, using the bezier curve interpolation
-        if (!m_d->haveTangent) {
-            m_d->haveTangent = true;
-            m_d->previousTangent =
-                (info.pos() - m_d->previousPaintInformation.pos()) /
-                qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
-        } else {
-            QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-                qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
-
-            if (newTangent.isNull() || m_d->previousTangent.isNull())
-            {
-                paintLine(m_d->previousPaintInformation, info);
+            || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING)
+        {
+            // Now paint between the coordinates, using the bezier curve interpolation
+            if (!m_d->haveTangent) {
+                m_d->haveTangent = true;
+                m_d->previousTangent =
+                    (info.pos() - m_d->previousPaintInformation.pos()) /
+                    qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
             } else {
-                paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-                                   m_d->previousTangent, newTangent);
+                QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
+                    qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
+
+                if (newTangent.isNull() || m_d->previousTangent.isNull())
+                {
+                    paintLine(m_d->previousPaintInformation, info);
+                } else {
+                    paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
+                                    m_d->previousTangent, newTangent);
+                }
+
+                m_d->previousTangent = newTangent;
             }
+            m_d->olderPaintInformation = m_d->previousPaintInformation;
 
-            m_d->previousTangent = newTangent;
+            // Enable stroke timeout only when not airbrushing.
+            if (!m_d->airbrushingTimer.isActive()) {
+                m_d->strokeTimeoutTimer.start(100);
+            }
         }
-        m_d->olderPaintInformation = m_d->previousPaintInformation;
 
-        // Enable stroke timeout only when not airbrushing.
-        if (!m_d->airbrushingTimer.isActive()) {
-            m_d->strokeTimeoutTimer.start(100);
-        }
-    }
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         paintLine(m_d->previousPaintInformation, info);
+    }
+
+    if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::PIXEL_PERFECT) {
+        // initial case: No last drawn pixel or waiting pixel
+        if(!m_d->hasLastDrawnPixel) {
+            currentPixelPos = info.pos();
+            m_d->waitingPixel = currentPixelPos;
+
+            paintLine(m_d->previousPaintInformation, KisPaintInformation(m_d->waitingPixel));
+            m_d->lastDrawnPixel = m_d->waitingPixel;
+            m_d->hasLastDrawnPixel = true;
+            m_d->pixelInLineCount = 1;
+        } else {
+            if (abs(currentPixelPos.x() - m_d->lastDrawnPixel.x()) > PIXEL_DISTANCE_THRESHOLD || abs(currentPixelPos.y() - m_d->lastDrawnPixel.y()) > PIXEL_DISTANCE_THRESHOLD) {
+                m_d->pixelInLineCount = 1;
+                // current pixel is too far, draw the waiting pixel
+                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
+                m_d->pixelInLineCount += 2; 
+                m_d->lastDrawnPixel = m_d->waitingPixel;
+                m_d->waitingPixel = currentPixelPos;
+            } 
+            // check axis, if the currentpixel is in the same axis as the lastdrawnpixel, we can draw waiting pixel
+            if (m_d->pixelInLineCount >= 1 && (currentPixelPos.x() == m_d->lastDrawnPixel.x() || currentPixelPos.y() == m_d->lastDrawnPixel.y())) {
+                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
+                m_d->lastDrawnPixel = m_d->waitingPixel;
+                m_d->olderPaintInformation = m_d->previousPaintInformation;
+                m_d->pixelInLineCount++; 
+            }
+            else{
+                //otherwise just change update waiting pixel without drawing it, this is the scenario where we just skip a corner and therefore we also reset pixelInLineCount
+                m_d->waitingPixel = currentPixelPos;
+                m_d->pixelInLineCount = 0;
+            } 
+            // Enable stroke timeout only when not airbrushing.
+            if (!m_d->airbrushingTimer.isActive()) {
+                m_d->strokeTimeoutTimer.start(100);
+            }
+        }
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
@@ -803,7 +857,6 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             m_d->stabilizerDeque.dequeue();
             m_d->stabilizerDeque.enqueue(sampledInfo);
         } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
-
             QQueue<KisPaintInformation>::iterator it = m_d->stabilizerDeque.begin();
             QQueue<KisPaintInformation>::iterator end = m_d->stabilizerDeque.end();
 
@@ -873,6 +926,7 @@ void KisToolFreehandHelper::finishStroke()
                            m_d->previousTangent,
                            newTangent);
     }
+    
 }
 
 void KisToolFreehandHelper::doAirbrushing()
@@ -940,6 +994,7 @@ void KisToolFreehandHelper::paintBezierCurve(int strokeInfoId,
                                              const QPointF &control2,
                                              const KisPaintInformation &pi2)
 {
+
 #ifdef DEBUG_BEZIER_CURVES
     KisPaintInformation tpi1;
     KisPaintInformation tpi2;

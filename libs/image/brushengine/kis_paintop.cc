@@ -100,7 +100,8 @@ static void paintBezierCurve(KisPaintOp *paintOp,
                              const KisVector2D &control1,
                              const KisVector2D &control2,
                              const KisPaintInformation &pi2,
-                             KisDistanceInformation *currentDistance)
+                             KisDistanceInformation *currentDistance
+                             )
 {
     LineEquation line = LineEquation::Through(toKisVector2D(pi1.pos()), toKisVector2D(pi2.pos()));
     qreal d1 = line.absDistance(control1);
@@ -147,7 +148,6 @@ void KisPaintOp::paintLine(const KisPaintInformation &pi1,
 void KisPaintOp::paintAt(const KisPaintInformation& info, KisDistanceInformation *currentDistance)
 {
     Q_ASSERT(currentDistance);
-
     KisPaintInformation pi(info);
     pi.paintAt(*this, currentDistance);
 }

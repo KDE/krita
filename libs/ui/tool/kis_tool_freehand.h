@@ -35,6 +35,7 @@ public:
     ~KisToolFreehand() override;
     int flags() const override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
@@ -61,6 +62,8 @@ protected:
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
+
+
 
     KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
                                             const KoPointerEvent *event,

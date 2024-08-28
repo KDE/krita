@@ -40,8 +40,8 @@ public:
     ~KisBrushOp() override;
 
     void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
-
     std::pair<int, bool> doAsynchronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
+
 
 protected:
     KisSpacingInformation paintAt(const KisPaintInformation& info) override;

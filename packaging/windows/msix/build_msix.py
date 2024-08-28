@@ -81,7 +81,7 @@ if not environ['KRITA_DIR']:
     if not environ.get("SEVENZIP_EXE"):
         os.environ["SEVENZIP_EXE"] = fr"{environ.get('ProgramFiles')}\7-Zip\7z.exe"
         if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
-            os.environ["SEVENZIP_EXE"] = fr"{environ.get('ProgramFiles(x86)')}\\7-Zip\\7-Z.exe"
+            os.environ["SEVENZIP_EXE"] = fr"{environ.get('ProgramFiles(x86)')}\\7-Zip\\7z.exe"
         if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
             warnings.warn("7-Zip not found!")
             exit(102)

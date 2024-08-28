@@ -146,10 +146,10 @@ if environ.get('KRITA_SHELLEX'):
 
 # Sanity checks:
 if not os.path.isfile(fr"{environ['KRITA_DIR']}\bin\krita.exe"):
-    warnings.warn(fr'ERROR: KRITA_DIR is set to "{environ['KRITA_DIR']}" but {environ['KRITA_DIR']}\bin\krita.exe" does not exist!')
+    warnings.warn(fr'ERROR: KRITA_DIR is set to "{environ["KRITA_DIR"]}" but {environ["KRITA_DIR"]}\bin\krita.exe" does not exist!')
     exit(1)
 if not os.path.isfile(fr"{environ['KRITA_DIR']}\shellex\kritashellex64.dll"):
-    warnings.warn(fr'ERROR: "{environ['KRITA_DIR']}\shellex\kritashellex64.dll" does not exist!')
+    warnings.warn(fr'ERROR: "{environ["KRITA_DIR"]}\shellex\kritashellex64.dll" does not exist!')
     exit(1)
 if os.path.isfile(fr"{environ['KRITA_DIR']}\bin\.debug"):
     warnings.warn("ERROR: Package dir seems to contain debug symbols [gcc/mingw].")
@@ -189,25 +189,25 @@ OUT_TEMP = get_temp_file()
 print(f"Writing list to temporary file {OUT_TEMP}")
 
 print("[Files]", file=OUT_TEMP)
-print(fr'"{environ['SCRIPT_DIR']}manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
-print(fr'"{environ['OUTPUT_DIR']}\resources.pri" "Resources.pri"', file=OUT_TEMP)
+print(fr'"{environ["SCRIPT_DIR"]}manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
+print(fr'"{environ["OUTPUT_DIR"]}\resources.pri" "Resources.pri"', file=OUT_TEMP)
 
 # Krita application files:
 for root, dirs, files in os.walk(environ['KRITA_DIR']):
     for file in files:
         f = os.path.join(root, file)
-        print(fr'"{f}" "krita\{os.path.relpath(f, environ['KRITA_DIR'])}"', file=OUT_TEMP)
+        print(fr'"{f}" "krita\{os.path.relpath(f, environ["KRITA_DIR"])}"', file=OUT_TEMP)
 
 # Assets:
 for root, dirs, files in os.walk(environ['ASSETS_DIR']):
     for file in files:
         f = os.path.join(root, file)
-        print(fr'"{f}" "Assets\{os.path.relpath(f, environ['ASSETS_DIR'])}"', file=OUT_TEMP)
+        print(fr'"{f}" "Assets\{os.path.relpath(f, environ["ASSETS_DIR"])}"', file=OUT_TEMP)
 
 shutil.copy(OUT_TEMP, environ['MAPPING_OUT'])
 os.remove(OUT_TEMP)
 
-print(f'Written mapping file to "{environ['MAPPING_OUT']}"')
+print(f'Written mapping file to "{environ["MAPPING_OUT"]}"')
 print("=== Step 2 done. ===")
 
 

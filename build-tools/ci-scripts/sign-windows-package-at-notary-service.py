@@ -29,5 +29,5 @@ with open("files-to-sign.txt", 'w') as toSign:
             if entry.is_file() and entry.name.endswith(('.exe', '.com', '.dll', '.pyd')):
                 print(entry.path, file=toSign)
 
-    commandToRun = "python.exe -u ci-notary-service/signwindowsbinaries.py --config %KRITACI_WINDOWS_SIGN_CONFIG% --files-from files-to-sign.txt"
-    subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+commandToRun = "python.exe -u ci-notary-service/signwindowsbinaries.py --config %KRITACI_WINDOWS_SIGN_CONFIG% --files-from files-to-sign.txt"
+subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )

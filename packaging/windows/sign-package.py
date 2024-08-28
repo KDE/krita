@@ -40,21 +40,22 @@ if not os.path.isdir(pkg_root):
     print(f"ERROR: No packaging dir {pkg_root}")
     exit(1)
 
-with os.scandir(pkg_root) as pkg_files:
-    for entry in pkg_files:
-        if entry.is_file() and entry.name.endswith(('.exe', '.com', '.dll', '.pyd')):
+for rootPath, dirs, files in os.walk(pkg_root):
+    for fileName in files:
+        if fileName.endswith(('.exe', '.com', '.dll', '.pyd')):
+            filePath = os.path.join(rootPath, fileName)
             # Check for existing signature
-            commandToRun = f'"%SIGNTOOL%" verify /q /pa "{entry.name}"'
+            commandToRun = f'"%SIGNTOOL%" verify /q /pa "{filePath}"'
             try:
                 subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
             except subprocess.CalledProcessError as status:
                 if status.returncode == 1:
-                    print(f"Signing {entry.path}")
+                    print(f"Signing {filePath}")
                     try:
-                        commandToRun = f'"%SIGNTOOL%" sign %SIGNTOOL_SIGN_FLAGS% "{entry.path}"'
+                        commandToRun = f'"%SIGNTOOL%" sign %SIGNTOOL_SIGN_FLAGS% "{filePath}"'
                         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
                     except subprocess.CalledProcessError as status:
                         print(f"ERROR: Got exit code {status.returncode} from signtool!")
                         exit(1)
             else:
-                print(f"Not signing {entry.path} - file already signed")
+                print(f"Not signing {filePath} - file already signed")

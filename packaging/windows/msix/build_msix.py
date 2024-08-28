@@ -11,7 +11,7 @@ if not environ.get('OUTPUT_DIR'):
 if not environ.get('KRITA_DIR'):
     if not environ.get('KRITA_INSTALLER'):
         print("ERROR: KRITA_DIR and KRITA_INSTALLER not specified, one of them must be set.")
-        exit(1)
+        sys.exit(1)
 
 # For CI, define both KRITA_DIR and KRITA_SHELLEX.
 # Do not use KRITA_SHELLEX if building outside of CI, unless you
@@ -19,7 +19,7 @@ if not environ.get('KRITA_DIR'):
 if environ.get('KRITA_INSTALLER'):
     if environ.get('KRITA_SHELLEX'):
         print("ERROR: KRITA_SHELLEX must not be set if using KRITA_INSTALLER.")
-        exit(1)
+        sys.exit(1)
 
 # Subroutines
 
@@ -56,15 +56,15 @@ if os.path.isfile(environ.get('WindowsSdkDir')):
 
 if not environ.get('MAKEPRI'):
     print("ERROR: makepri not found")
-    exit(1)
+    sys.exit(1)
 
 if not environ.get('MAKEAPPX'):
     print("ERROR: makeappx not found")
-    exit(1)
+    sys.exit(1)
 
 if not environ.get('SIGNTOOL'):
     print("ERROR: signtool not found")
-    exit(1)
+    sys.exit(1)
 
 environ['SCRIPT_DIR'] = sys.argv[0]
 os.mkdir(environ['OUTPUT_DIR'])
@@ -84,7 +84,7 @@ if not environ['KRITA_DIR']:
             os.environ["SEVENZIP_EXE"] = fr"{environ.get('ProgramFiles(x86)')}\\7-Zip\\7z.exe"
         if not os.path.isfile(os.environ["SEVENZIP_EXE"]):
             warnings.warn("7-Zip not found!")
-            exit(102)
+            sys.exit(102)
 
     os.mkdir(fr"{environ['OUTPUT_DIR']}\installer_content")
     commandToRun = f"{environ['SEVENZIP_EXE']} x {environ['KRITA_INSTALLER']}"
@@ -92,7 +92,7 @@ if not environ['KRITA_DIR']:
         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
     except subprocess.CalledProcessError:
         warnings.warn(f"ERROR failed to extract installer {environ['KRITA_INSTALLER']}")
-        exit(1)
+        sys.exit(1)
     environ['KRITA_DIR'] = fr"{environ['OUTPUT_DIR']}\installer_content"
     shutil.rmtree(fr"{environ['KRITA_DIR']}\$PLUGINSDIR")
     os.remove(fr"{environ['KRITA_DIR']}\uninstall.exe.nsis")
@@ -111,27 +111,27 @@ if environ.get('KRITA_SHELLEX'):
         os.mkdir(shellex)
     except:
         warnings.warn("ERROR mkdir shellex failed")
-        exit(1)
+        sys.exit(1)
     try:
         shutil.copy(fr"{environ['KRITA_SHELLEX']}\krita.ico", shellex)
     except:
         warnings.warn("ERROR copying krita.ico failed")
-        exit(1)
+        sys.exit(1)
     try:
         shutil.copy(fr"{environ['KRITA_SHELLEX']}\kritafile.ico", shellex)
     except:
         warnings.warn("ERROR copying kritafile.ico failed")
-        exit(1)
+        sys.exit(1)
     try:
         shutil.copy(fr"{environ['KRITA_SHELLEX']}\kritashellex32.dll", shellex)
     except:
         warnings.warn("ERROR copying kritashellex32.dll failed")
-        exit(1)
+        sys.exit(1)
     try:
         shutil.copy(fr"{environ['KRITA_SHELLEX']}\kritashellex64.dll", shellex)
     except:
         warnings.warn("ERROR copying kritashellex64.dll failed")
-        exit(1)
+        sys.exit(1)
     # Optional files:
     try:
         shutil.copy(fr"{environ['KRITA_SHELLEX']}\kritashellex32.pdb", shellex)
@@ -147,25 +147,25 @@ if environ.get('KRITA_SHELLEX'):
 # Sanity checks:
 if not os.path.isfile(fr"{environ['KRITA_DIR']}\bin\krita.exe"):
     warnings.warn(fr'ERROR: KRITA_DIR is set to "{environ["KRITA_DIR"]}" but {environ["KRITA_DIR"]}\bin\krita.exe" does not exist!')
-    exit(1)
+    sys.exit(1)
 if not os.path.isfile(fr"{environ['KRITA_DIR']}\shellex\kritashellex64.dll"):
     warnings.warn(fr'ERROR: "{environ["KRITA_DIR"]}\shellex\kritashellex64.dll" does not exist!')
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(fr"{environ['KRITA_DIR']}\bin\.debug"):
     warnings.warn("ERROR: Package dir seems to contain debug symbols [gcc/mingw].")
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(fr"{environ['KRITA_DIR']}\bin\*.pdb"):
     warnings.warn("ERROR: Package dir seems to contain debug symbols [msvc].")
-    exit(1)
+    sys.exit(1)
 if os.path.isdir(fr"{environ['KRITA_DIR']}\$PLUGINSDIR"):
     warnings.warn("")
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe.nsis"):
     warnings.warn('ERROR: You did not remove "uninstall.exe.nsis."')
-    exit(1)
+    sys.exit(1)
 if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe*"):
     warnings.warn('ERROR: You did not remove "uninstall.exe*".')
-    exit(1)
+    sys.exit(1)
 
 
 print("\n=== Step 1: Generate resources.pri ===")
@@ -175,7 +175,7 @@ try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR running makepri")
-    exit(1)
+    sys.exit(1)
 
 print("=== Step 1 done. ===")
 
@@ -235,7 +235,7 @@ try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
     warnings.warn("ERROR running makeappx")
-    exit(1)
+    sys.exit(1)
     
 print(f"\nMSIX generated as {environ['OUTPUT_DIR']}\\krita.msix")
 
@@ -248,7 +248,7 @@ except subprocess.CalledProcessError:
     warnings.warn("ERROR running signtool\n" +
                   "If you need to specify a PFX keyfile and its password, run:\n" +
                  r'    set SIGNTOOL_SIGN_FLAGS=/f "absolute_path_to_keyfile.pfx" /p password')
-    exit(1)
+    sys.exit(1)
 
 
 print("=== Step 3 done. ===")

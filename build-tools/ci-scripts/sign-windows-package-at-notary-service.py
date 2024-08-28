@@ -13,15 +13,15 @@ pkg_root = args.pkg_root
 print(f"Signing binaries in {pkg_root}")
 if not os.path.isdir(pkg_root):
     print(f"ERROR: No packaging dir {pkg_root}")
-    exit(1)
+    sys.exit(1)
 
 KRITACI_WINDOWS_SIGN_CONFIG = environ.get('KRITACI_WINDOWS_SIGN_CONFIG')
 if not KRITACI_WINDOWS_SIGN_CONFIG:
     print("ERROR: %KRITACI_WINDOWS_SIGN_CONFIG% not set")
-    exit(1)
+    sys.exit(1)
 if not os.path.isfile(KRITACI_WINDOWS_SIGN_CONFIG):
     print(f"ERROR: No signing config file found: {KRITACI_WINDOWS_SIGN_CONFIG}")
-    exit(1)
+    sys.exit(1)
 
 with open("files-to-sign.txt", 'w') as toSign:
     for rootPath, dirs, files in os.walk(pkg_root):

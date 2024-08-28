@@ -26,19 +26,19 @@ if not environ.get('SIGNTOOL'):
                 environ['SIGNTOOL'] = fr"{sdkDir}\bin\x86\signtool.exe"
     if not environ.get('SIGNTOOL'):
         print("ERROR: signtool not found")
-        exit(1)
+        sys.exit(1)
 
 
 if not environ.get('SIGNTOOL_SIGN_FLAGS'):
     print("ERROR: Please set environment variable SIGNTOOL_SIGN_FLAGS")
-    exit(1)
+    sys.exit(1)
     # This is what I used for testing:
     # set "SIGNTOOL_SIGN_FLAGS=/f "C:\Users\Alvin\MySPC.pfx" /t http://timestamp.verisign.com/scripts/timstamp.dll"
 
 print(f"Signing binaries in {pkg_root}")
 if not os.path.isdir(pkg_root):
     print(f"ERROR: No packaging dir {pkg_root}")
-    exit(1)
+    sys.exit(1)
 
 for rootPath, dirs, files in os.walk(pkg_root):
     for fileName in files:
@@ -56,6 +56,6 @@ for rootPath, dirs, files in os.walk(pkg_root):
                         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
                     except subprocess.CalledProcessError as status:
                         print(f"ERROR: Got exit code {status.returncode} from signtool!")
-                        exit(1)
+                        sys.exit(1)
             else:
                 print(f"Not signing {filePath} - file already signed")

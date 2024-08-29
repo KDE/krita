@@ -57,20 +57,16 @@ unstablePackageSuffix = '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA']) \
     if not arguments.release_package_naming else ''
 
 packageName = 'krita-x64-{}{}'.format(kritaVersionString, unstablePackageSuffix)
-hookFile = os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.cmd')
+hookFile = os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.py')
 
-commandToRun = ' '.join(['cmd.exe /c',
-                         'packaging\windows\package-complete.cmd',
+commandToRun = ' '.join([sys.executable,
+                         'packaging\windows\package-complete.py',
                          '--no-interactive',
                          '--package-name', packageName,
                          '--src-dir',  srcPath,
                          '--deps-install-dir', depsPath,
                          '--krita-install-dir', depsPath,
-                         '--pre-zip-hook \"{}\"'.format(os.path.join(srcPath,
-                                                                        'build-tools',
-                                                                        'ci-scripts',
-                                                                        'sign-windows-package-at-notary-service.cmd'))
-                            if signPackages else ''
+                         f'--pre-zip-hook \"{hookFile}\"' if signPackages else ''
                         ])
 
 # Run the command
@@ -131,12 +127,12 @@ if arguments.build_installers:
     msixEnvironment['KRITA_SHELLEX'] = os.path.join(srcPath, '_installer', 'krita-nsis')
     msixEnvironment['OUTPUT_DIR'] = msixFolder
 
-    # build_msix.cmd populates this directory itself
+    # build_msix.py populates this directory itself
     if os.path.exists(os.path.join(packageFolder, 'shellex')):
         shutil.rmtree(os.path.join(packageFolder, 'shellex'))
 
-    commandToRun = ' '.join(['cmd.exe /c',
-                            os.path.join(depsPath, 'krita-msix', 'build_msix.cmd')
+    commandToRun = ' '.join([sys.executable,
+                            os.path.join(depsPath, 'krita-msix', 'build_msix.py')
                             ])
 
     # Run the command

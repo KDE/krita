@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 01:56+0000\n"
+"POT-Creation-Date: 2024-08-29 01:46+0000\n"
 "PO-Revision-Date: 2024-08-25 09:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -16973,7 +16973,7 @@ msgstr "Розмір"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:400
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -58443,83 +58443,90 @@ msgstr ""
 "Довільний мазок пензлем\n"
 "довільний мазок пензлем"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
 msgid "Sample count:"
 msgstr "Лічильник семплів:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:199
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Відстань:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:356
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Жодного"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:357
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Просте"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Зважене"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:359
+#, fuzzy, kde-format
+#| msgid "Pixel"
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Pixel"
+msgstr "Піксель"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:360
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Стабілізатор"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Згладжування пензля:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #, kde-format
 msgid "Delay:"
 msgstr "Затримка:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Затримка мазка пензлем для згладжування лінії"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:397
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Радіус кола, за межами якого пензель буде заблоковано"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:404
 #, kde-format
 msgid "Finish line:"
 msgstr "Замикання лінії:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Стабілізація датчиків:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Завершення мазка:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Згладжувати натиск"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58529,40 +58536,40 @@ msgstr ""
 "Під час обчислення масштабованої відстані береться до уваги масштаб. Така "
 "відстань виглядає однаково за різних масштабів."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:445
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Масштабована відстань"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:461
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Прилипати до допоміжних ліній"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 "Перш ніж ви зможете працювати з цим інструментом, вам слід додати допоміжні "
 "лінійки."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Допоміжне тяжіння"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #, kde-format
 msgid "Magnetism:"
 msgstr "Магнетизм:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Прилипання до одинарної лінії"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:480
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58572,13 +58579,13 @@ msgstr ""
 "Прилипання лише до одинарної допоміжної лінії. Допомагає у запобіганні "
 "прилипанню, якщо використовується нескінченна кількість допоміжних елементів."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:485
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Прилипання гумки"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:488
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

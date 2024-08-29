@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 01:56+0000\n"
+"POT-Creation-Date: 2024-08-29 01:46+0000\n"
 "PO-Revision-Date: 2024-08-25 17:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -16896,7 +16896,7 @@ msgstr "Mida"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:400
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -57897,83 +57897,90 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Traç del pinzell a mà alçada"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
 msgid "Sample count:"
 msgstr "Comptador de mostres:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:199
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Distància:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:356
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Sense"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:357
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Bàsica"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Ponderada"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:359
+#, fuzzy, kde-format
+#| msgid "Pixel"
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Pixel"
+msgstr "Píxel"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:360
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Estabilitzadora"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Suavitat del pinzell:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #, kde-format
 msgid "Delay:"
 msgstr "Retard:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Retard de la pinzellada per a fer la línia més suau"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:397
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Radi a on es bloqueja el pinzell"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:404
 #, kde-format
 msgid "Finish line:"
 msgstr "Final de la línia:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Sensors d'estabilització:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Final del traç:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pressió del suavitzat"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -57983,38 +57990,38 @@ msgstr ""
 "La distància escalable pren el nivell de zoom i fa que la distància siga "
 "visualment constant en qualsevol nivell de zoom que es trie"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:445
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Distància escalable"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:461
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Ajusta als assistents"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Heu d'afegir assistents per tal que funcione esta eina."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Magnetisme assistent"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetisme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Ajusta a una sola línia"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:480
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58024,13 +58031,13 @@ msgstr ""
 "Fa que només s'ajuste a una sola línia de l'assistent, evita que hi haja "
 "desordre d'ajust emprant els assistents infinits."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:485
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Ajusta l'esborrador"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:488
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

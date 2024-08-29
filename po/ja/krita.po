@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 01:56+0000\n"
+"POT-Creation-Date: 2024-08-29 01:46+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16896,7 +16896,7 @@ msgstr "サイズ"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:400
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -57665,83 +57665,90 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "フリーハンドブラシ描線"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
 msgid "Sample count:"
 msgstr "サンプル数:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:199
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "距離:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:356
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "なし"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:357
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "基本"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "重み付け"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:359
+#, fuzzy, kde-format
+#| msgid "Pixel"
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Pixel"
+msgstr "ピクセル"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:360
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "スタビライザー"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "手ブレ補正:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:388
 #, kde-format
 msgid "Delay:"
 msgstr "遅延:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "ブラシの描線を遅延させて線をより滑らかにします"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:397
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "ブラシがブロックされる半径"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:404
 #, kde-format
 msgid "Finish line:"
 msgstr "最後まで描画:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "各センサーからの数値を安定化する:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "はらいの長さ:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "筆圧の変化を滑らかにする"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:440
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -57751,41 +57758,41 @@ msgstr ""
 "「表示倍率に合わせる」はキャンバスの表示倍率を計算に入れ、どのズームレベルを"
 "選択していても、ディスプレイ上では同じ距離になるようにするものです"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:445
 #, kde-format
 msgid "Scalable Distance"
 msgstr "表示倍率に合わせる"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:461
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "補助線にスナップ"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "このツールを使用するには補助線を追加する必要があります。"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:468
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "補助線への引き寄せ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #, kde-format
 msgid "Magnetism:"
 msgstr "描線が引き寄せられる割合:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "一つの補助線にスナップ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:480
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -57795,13 +57802,13 @@ msgstr ""
 "一つの補助線にのみスナップさせ、無限直線定規を使っている際にめちゃくちゃにス"
 "ナップする現象を防止します"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:485
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "消しゴムにスナップ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:488
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

@@ -8,6 +8,7 @@
 
 #include <QTransform>
 #include <QDomElement>
+#include "kis_dom_utils.h"
 
 #include "tool_transform_args.h"
 #include "kis_transform_utils.h"
@@ -104,6 +105,34 @@ void KisTransformMaskAdapter::toXML(QDomElement *e) const
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomElement &e)
 {
     ToolTransformArgs args(ToolTransformArgs::fromXML(e));
+
+    // bounds rotation cannot be used on transform masks currently
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(args.boundsRotation()));
+
+    return KisTransformMaskParamsInterfaceSP(
+        new KisTransformMaskAdapter(args));
+}
+
+KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromDumbXML(const QDomElement &e)
+{
+    ToolTransformArgs args;
+
+    {
+        QDomElement transformEl;
+        bool result = false;
+
+        QTransform transform;
+
+        result =
+            KisDomUtils::findOnlyElement(e, "dumb_transform", &transformEl) &&
+            KisDomUtils::loadValue(transformEl, "transform", &transform);
+
+        if (!result) {
+            warnKrita << "WARNING: couldn't load dumb transform. Ignoring...";
+        }
+
+        args.translateDstSpace(QPointF(transform.dx(), transform.dy()));
+    }
 
     // bounds rotation cannot be used on transform masks currently
     KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(args.boundsRotation()));

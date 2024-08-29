@@ -37,6 +37,7 @@ public:
     QString id() const override;
     void toXML(QDomElement *e) const override;
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
+    static KisTransformMaskParamsInterfaceSP fromDumbXML(const QDomElement &e);
 
     void translateSrcAndDst(const QPointF &offset) override;
     void transformSrcAndDst(const QTransform &t) override;

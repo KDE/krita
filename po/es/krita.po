@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-28 03:40+0000\n"
-"PO-Revision-Date: 2024-04-10 00:25+0100\n"
+"PO-Revision-Date: 2024-08-29 00:09+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.08.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -30784,6 +30784,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Intentando realizar una exportación avanzada con una imagen que contiene una "
+"<b>capa de filtro</b>. La imagen se <b>aplanará</b> antes de cambiar su "
+"tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30792,6 +30795,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Intentando realizar una exportación avanzada con una imagen que contiene una "
+"<b>máscara de filtro</b>. La imagen se <b>aplanará</b> antes de cambiar su "
+"tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30800,6 +30806,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Intentando realizar una exportación avanzada con una imagen que contiene un "
+"<b>estilo de capa</b>. La imagen se <b>aplanará</b> antes de cambiar su "
+"tamaño."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format

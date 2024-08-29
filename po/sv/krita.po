@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-28 03:40+0000\n"
-"PO-Revision-Date: 2024-05-01 07:42+0200\n"
+"PO-Revision-Date: 2024-08-28 17:16+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -30680,6 +30680,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller ett </"
+"b>filterlager</b>. Bilden kommer att <b>plattas ut</b> innan storleken "
+"ändras."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30688,6 +30691,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller en "
+"<b>filtermask</b>. Bilden kommer att <b>plattas ut</b> innan storleken "
+"ändras."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30696,6 +30702,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Försöker utföra en avancerad export med bilden som innehåller en "
+"<b>lagerstil</b>. Bilden kommer att <b>plattas ut</b> innan storleken ändras."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format

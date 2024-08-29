@@ -42,6 +42,7 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
     KoToolRegistry::instance()->add(new KisToolTransformFactory());
     KisTransformMaskParamsFactoryRegistry::instance()->setAnimatedParamsHolderFactory(&createAnimatedParamsHolder);
     KisTransformMaskParamsFactoryRegistry::instance()->addFactory("tooltransformparams", &KisTransformMaskAdapter::fromXML);
+    KisTransformMaskParamsFactoryRegistry::instance()->addFactory("dumbparams", &KisTransformMaskAdapter::fromDumbXML);
     qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
     qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
     qRegisterMetaType<QPainterPath>("QPainterPath");

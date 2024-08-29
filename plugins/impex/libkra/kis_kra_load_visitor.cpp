@@ -408,6 +408,20 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             KisTransformMaskParamsInterfaceSP params =
                 KisTransformMaskParamsFactoryRegistry::instance()->createParams(id, data);
 
+            /**
+             * Workaround for the dumbparams that we used in older versions
+             * of Krita for simple translations. The dumbparams were deprecated
+             * with the proper implementation of the param holder, so
+             * now we should convert the old definition into the new format
+             * somehow.
+             *
+             * See: https://bugs.kde.org/show_bug.cgi?id=492320
+             */
+            if (id == "dumbparams") {
+                const QPointF center = m_image->bounds().center();
+                params->transformSrcAndDst(QTransform::fromTranslate(center.x(), center.y()));
+            }
+
             if (!params) {
                 m_errorMessages << i18n("Could not create transform mask params");
                 return false;

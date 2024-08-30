@@ -1,20 +1,19 @@
 # Translation of krita to Norwegian Nynorsk
 #
 # Gaute Hvoslef Kvalnes <gaute@verdsveven.com>, 1999, 2000, 2003.
-# Karl Ove Hufthammer <karl@huftis.org>, 2008, 2016, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-08 03:19+0000\n"
-"PO-Revision-Date: 2023-07-30 21:46+0200\n"
+"POT-Creation-Date: 2024-08-28 03:40+0000\n"
+"PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 24.11.70\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
@@ -2657,7 +2656,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_dyna_dots.kpp"
 msgid "Special dyna dots"
-msgstr "Spesial, dynaprikar"
+msgstr "Spesial, dynaprikkar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -30631,29 +30630,29 @@ msgid ""
 msgstr ""
 "Fila %1 manglar i %2, og er øydelagd. Prøv å lagra på nytt i ei anna mappe."
 
-#: libs/ui/KisImportExportManager.cpp:321
+#: libs/ui/KisImportExportManager.cpp:323
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Audio"
 msgstr "Opna lyd"
 
-#: libs/ui/KisImportExportManager.cpp:420
+#: libs/ui/KisImportExportManager.cpp:422
 #, kde-format
 msgid "Opening document..."
 msgstr "Opnar dokument …"
 
-#: libs/ui/KisImportExportManager.cpp:488
+#: libs/ui/KisImportExportManager.cpp:490
 #, kde-format
 msgid "Saving document..."
 msgstr "Lagrar dokument …"
 
-#: libs/ui/KisImportExportManager.cpp:582
+#: libs/ui/KisImportExportManager.cpp:584
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
 msgstr "Biletet inneheld <b>assistentar</b>. Desse vert ikkje lagra."
 
-#: libs/ui/KisImportExportManager.cpp:585
+#: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30661,13 +30660,13 @@ msgid ""
 "saved."
 msgstr "Biletet inneheld <b>referansebilete</b>. Desse vert ikkje lagra."
 
-#: libs/ui/KisImportExportManager.cpp:588
+#: libs/ui/KisImportExportManager.cpp:590
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
 msgstr "Biletet inneheld <b>hjelpelinjer</b>. Desse vert ikkje lagra."
 
-#: libs/ui/KisImportExportManager.cpp:591
+#: libs/ui/KisImportExportManager.cpp:593
 #, kde-format
 msgctxt "image conversion warning"
 msgid ""
@@ -30675,37 +30674,61 @@ msgid ""
 "will not be saved."
 msgstr "Biletet inneheld <b>eit tilpassa rutenett</b>. Dette vert ikkje lagra."
 
-#: libs/ui/KisImportExportManager.cpp:596
+#: libs/ui/KisImportExportManager.cpp:611
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"layer</b>. The image will be <b>flattened</b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:615
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>filter "
+"mask</b>. The image will be <b>flattened</b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:626
+#, kde-format
+msgctxt "image conversion warning"
+msgid ""
+"Trying to perform an Advanced Export with the image containing a <b>layer "
+"style</b>. The image will be <b>flattened</b> before resizing."
+msgstr ""
+
+#: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
 msgid "Error: cannot save this image as a %1."
 msgstr "Feil: Kan ikkje lagra biletet som %1."
 
-#: libs/ui/KisImportExportManager.cpp:597
-#: libs/ui/KisImportExportManager.cpp:640
+#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:677
 #, kde-format
 msgid "Reasons:"
 msgstr "Grunnar:"
 
-#: libs/ui/KisImportExportManager.cpp:605
+#: libs/ui/KisImportExportManager.cpp:642
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Export Error"
 msgstr "Krita: Eksporteringsfeil"
 
 # %1 er for eksempel «JPEG-bilete».
-#: libs/ui/KisImportExportManager.cpp:622
+#: libs/ui/KisImportExportManager.cpp:659
 #, kde-format
 msgctxt "Keep the extra space at the end of the sentence, please"
 msgid "Warning: saving as a %1 will lose information from your image.    "
 msgstr ""
 "Åtvaring: Viss du lagrar som %1-fil, vil du mista informasjon i biletet.    "
 
-#: libs/ui/KisImportExportManager.cpp:634
+#: libs/ui/KisImportExportManager.cpp:671
 #, kde-format
 msgid "You will lose information when saving this image as a %1."
 msgstr "Du vil mista informasjon i biletet dersom du lagrar det i %1-formatet."
 
-#: libs/ui/KisImportExportManager.cpp:637
+#: libs/ui/KisImportExportManager.cpp:674
 #, kde-format
 msgid "Reason:"
 msgstr "Grunn:"
@@ -30713,7 +30736,7 @@ msgstr "Grunn:"
 #. i18n: ectx: attribute (title), widget (QWidget, textureOptionsTab)
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
-#: libs/ui/KisImportExportManager.cpp:655
+#: libs/ui/KisImportExportManager.cpp:692
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
@@ -30721,13 +30744,13 @@ msgstr "Grunn:"
 msgid "Options"
 msgstr "Val"
 
-#: libs/ui/KisImportExportManager.cpp:663
+#: libs/ui/KisImportExportManager.cpp:701
 #, kde-format
 msgid "Resize"
 msgstr "Endra storleik"
 
 # Skal ikkje vera punktum på slutten her.
-#: libs/ui/KisImportExportManager.cpp:669
+#: libs/ui/KisImportExportManager.cpp:707
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Lagra òg biletet i Krita-formatet"
@@ -59932,7 +59955,7 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:147
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"

@@ -366,6 +366,11 @@ QString KisShortcutConfiguration::keysToText(const QList<Qt::Key> &keys)
     QString output;
 
     Q_FOREACH (Qt::Key key, keys) {
+#if defined(Q_OS_MAC)
+        // This works for modifier keys on macOS but not other platforms.
+        // They are shown with symbols, so no translation or separators needed.
+        output.append(QKeySequence(key).toString(QKeySequence::NativeText));
+#else
         if (output.size() > 0) {
             output.append(i18nc("Separator in the list of keys for shortcut", " + "));
         }
@@ -392,7 +397,7 @@ QString KisShortcutConfiguration::keysToText(const QList<Qt::Key> &keys)
             output.append(s.toString(QKeySequence::NativeText));
             break;
         }
-
+#endif
     }
 
     if (output.size() == 0) {

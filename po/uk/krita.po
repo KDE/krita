@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-29 01:46+0000\n"
-"PO-Revision-Date: 2024-08-25 09:08+0300\n"
-"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
+"PO-Revision-Date: 2024-08-29 08:59+0300\n"
+"Last-Translator: Fracture dept <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58474,11 +58474,10 @@ msgid "Weighted"
 msgstr "Зважене"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:359
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
-msgstr "Піксель"
+msgstr "Піксельне"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:360
 #, kde-format

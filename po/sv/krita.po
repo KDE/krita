@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-29 01:46+0000\n"
-"PO-Revision-Date: 2024-08-25 07:35+0200\n"
+"PO-Revision-Date: 2024-08-29 20:14+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -57689,11 +57689,10 @@ msgid "Weighted"
 msgstr "Viktad"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:359
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
-msgstr "Bildpunkter"
+msgstr "Bildpunkt"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:360
 #, kde-format

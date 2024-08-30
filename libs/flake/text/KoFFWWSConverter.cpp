@@ -843,7 +843,7 @@ QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         auto counter = childBegin(typographic);
         counter++;
-        bool singleFamily = counter == childEnd(typographic);
+        bool singleFamily = childBegin(typographic) != childEnd(typographic) && std::next(childBegin(typographic)) == childEnd(typographic);
 
         for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
 

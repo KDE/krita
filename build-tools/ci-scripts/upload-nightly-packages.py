@@ -7,7 +7,7 @@ import argparse
 import shutil
 import glob
 
-supportedPlatforms = ['linux', 'windows', 'macos', 'android-x86', 'android-x86_64', 'android-arm64-v8a', 'android-armeabi-v7a']
+supportedPlatforms = ['linux', 'windows', 'macos-universal', 'android-x86', 'android-x86_64', 'android-arm64-v8a', 'android-armeabi-v7a']
 
 # Capture our command line parameters
 parser = argparse.ArgumentParser(description='A script for building Krita Windows package on CI')
@@ -38,7 +38,7 @@ if arguments.platform == 'windows':
 elif arguments.platform == 'linux':
     patterns = ['*.appimage', '*.zsync']
     pass
-elif arguments.platform == 'macos':
+elif arguments.platform == 'macos-universal':
     print('## WARNING: check the pattern for artifacts on macOS!')
     patterns = ['*.dmg']
     pass

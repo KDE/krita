@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-28 03:40+0000\n"
-"PO-Revision-Date: 2024-03-03 09:08+0100\n"
+"PO-Revision-Date: 2024-08-30 07:45+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -30658,6 +30658,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Poskus naprednega izvoza s sliko, ki vsebuje <b>plast filtra</b>. Slika bo "
+"pred spreminjanjem velikosti <b>sploščena</b>."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30666,6 +30668,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Poskus naprednega izvoza s sliko, ki vsebuje <b>masko filtra</b>. Slika bo "
+"pred spreminjanjem velikosti <b>sploščena</b>."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30674,6 +30678,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Poskus naprednega izvoza s sliko, ki vsebuje <b>slog plasti</b>. Slika bo "
+"pred spreminjanjem velikosti <b>sploščena</b>."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -60548,9 +60554,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "Krmilna ročica CPE"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Podprite Krito!"

@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-29 01:46+0000\n"
+"POT-Creation-Date: 2024-08-31 01:46+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -23902,7 +23902,7 @@ msgstr "Okukekeleyo:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:322
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
 #, fuzzy, kde-format
 msgid "Title:"
 msgstr "Idityanisiwe"
@@ -24469,7 +24469,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:408
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, fuzzy, kde-format
 msgid "Source:"
 msgstr "Izinto zobumnini Zolwaleko..."
@@ -26433,7 +26433,7 @@ msgstr "Umfanekiso"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:414
 #, fuzzy, kde-format
 msgid "Name:"
 msgstr "Igama:"
@@ -31286,7 +31286,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisWelcomePageWidget.cpp:161
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "iangile"
@@ -34740,7 +34740,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Email"
 msgstr "Email"
@@ -34753,7 +34753,7 @@ msgstr "i Fax:"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy, kde-format
 msgid "Homepage"
 msgstr "Cima Okubhaliweyo"
@@ -41392,7 +41392,7 @@ msgstr "&Ubude:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:406
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:416
 #, fuzzy, kde-format
 msgid "Date:"
 msgstr "Phinda:"
@@ -43033,7 +43033,7 @@ msgstr "Yongeza Ulwaleko..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 #, kde-format
 msgid "Summary:"
 msgstr ""
@@ -43079,7 +43079,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, fuzzy, kde-format
 msgid "License:"
 msgstr "&Ubude:"
@@ -44785,8 +44785,8 @@ msgstr "Umbala"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy, kde-format
 msgid "Other"
@@ -54018,7 +54018,7 @@ msgid "ACBF Document Info"
 msgstr "Ulwazi olukwixwebhu"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -54062,38 +54062,38 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy
 msgid "Nick Name"
 msgstr "Igama:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy
 msgid "Given Name"
 msgstr "Igama:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy
 msgid "Middle Name"
 msgstr "Imposiso Yolwaleko"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, fuzzy
 msgid "Family Name"
 msgstr "Imposiso Yolwaleko"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:367
 #, fuzzy
 #| msgid "Author"
 msgid "Add Author"
 msgstr "Umbhali"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:369
 #, fuzzy
 msgid "Remove Author"
 msgstr "Susa Iqela"
@@ -54193,17 +54193,17 @@ msgid "v{version}-in this version..."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:525
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
 msgid "Anon"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:447
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:526
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:536
 msgid "John"
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:449
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:528
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:538
 #, fuzzy
 msgid "Doe"
 msgstr "Indlela:"
@@ -54297,373 +54297,373 @@ msgstr ""
 msgid "Packaging CBZ"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 #| msgid "Selection"
 msgid "Science Fiction"
 msgstr "Ukhetho"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Fantasy"
 msgstr "ubomvu obumnyama"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Adventure"
 msgstr "Imilinganiselo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Horror"
 msgstr "Gcina Ulwaleko njengo Mfanekiso..."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Mystery"
 msgstr "Umhla"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Crime"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Military"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Real Life"
 msgstr "Susa Ukhetho"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 #| msgid "Superscript"
 msgid "Superhero"
 msgstr "Okushicilelweyo okuphezulu"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Humor"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Western"
 msgstr "Umhla"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Manga"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Politics"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 #| msgid "Picture"
 msgid "Caricature"
 msgstr "Umfanekiso"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Sports"
 msgstr "Rhweba Umfanekiso..."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "History"
 msgstr "Thabatha"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Biography"
 msgstr "Faka ikhonkco"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Education"
 msgstr "Iqhosha Lokucwangcisa kwakhona"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Computer"
 msgstr "Izinto zobumnini Zolwaleko..."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Religion"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Romance"
 msgstr "Iinketho"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Children"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Non Fiction"
 msgstr "Susa Ukhetho"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Adult"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 #, fuzzy
 msgid "Alternative"
 msgstr "Izixhobo Zokupeyinta"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Artbook"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Writer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Adapter"
 msgstr "Isiqendu"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Artist"
 msgstr "&Isixhobo Somgcwalisi"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #, fuzzy
 msgid "Penciller"
 msgstr "Okumboxo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Inker"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Colorist"
 msgstr "Umbala"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #, fuzzy
 msgid "Letterer"
 msgstr "Ileta ye-US"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #, fuzzy
 msgid "Cover Artist"
 msgstr "Izinto zobumnini Zenjongo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Photographer"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Editor"
 msgstr "Yongeza Isigqumathelo"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #, fuzzy
 msgid "Assistant Editor"
 msgstr "Nyibilikisa"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Designer"
 msgstr "Nyibilikisa"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy
 msgid "Translator"
 msgstr "Uxande"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:255
 #, fuzzy
 msgid "Comic Metadata"
 msgstr "Iibhodi ezinemibala zokuzoba"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:257
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
 msgid "The proper title of the comic."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:270
 msgid "What will you tell others to entice them to read your comic?"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:277
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
 "two or three."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:285
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:304
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:296
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
 msgid "No. "
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:298
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid "Vol. "
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:316
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:326
 #, fuzzy
 msgid "Left to Right"
 msgstr "triangleq"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
 #, fuzzy
 msgid "Right to Left"
 msgstr "Light Pink"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
-msgid "Which page is the cover page? This will be empty if there are no pages."
-msgstr ""
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:323
-#, fuzzy
-msgid "Cover page:"
-msgstr "Iphepha Elilandelayo"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
-#, fuzzy
-msgid "Language:"
-msgstr "iangile"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
-#, fuzzy
-msgid "Reading direction:"
-msgstr "Udityaniso"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:328
-msgid "Genre:"
-msgstr ""
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:329
-#, fuzzy
-msgid "Characters:"
-msgstr "Chartreuse"
-
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
-#, fuzzy
-msgid "Format:"
-msgstr "Eqhelekileyo"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
-#, fuzzy
-msgid "Rating:"
-msgstr "Phinda:"
-
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
-msgid "Series:"
+msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
 #, fuzzy
+msgid "Cover page:"
+msgstr "Iphepha Elilandelayo"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#, fuzzy
+msgid "Language:"
+msgstr "iangile"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#, fuzzy
+msgid "Reading direction:"
+msgstr "Udityaniso"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+msgid "Genre:"
+msgstr ""
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#, fuzzy
+msgid "Characters:"
+msgstr "Chartreuse"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#, fuzzy
+msgid "Format:"
+msgstr "Eqhelekileyo"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
+#, fuzzy
+msgid "Rating:"
+msgstr "Phinda:"
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+msgid "Series:"
+msgstr ""
+
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#, fuzzy
 msgid "Other:"
 msgstr "Ulwaleko"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 #, fuzzy
 msgid "Work"
 msgstr "&Umkhethi Wombala"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
 "inker, etc), email and homepage."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Role"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:376
 #, fuzzy
 #| msgid "Author"
 msgid "Authors"
 msgstr "Umbhali"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:377
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 #, fuzzy
 msgid "Set Today"
 msgstr "Okushicilelweyo okusezantsi"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:378
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
 msgid "Sets the publish date to the current date."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:390
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:400
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
 "conversion."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:395
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
 "the official website url should go here."
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:415
 msgid "City:"
 msgstr "Isixeko:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:417
 msgid "ISBN:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "UUID:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "Database:"
 msgstr ""
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:413
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Publisher"
 msgstr ""

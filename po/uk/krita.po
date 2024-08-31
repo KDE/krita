@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-29 01:46+0000\n"
+"POT-Creation-Date: 2024-08-31 01:46+0000\n"
 "PO-Revision-Date: 2024-08-29 08:59+0300\n"
 "Last-Translator: Fracture dept <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -24303,7 +24303,7 @@ msgstr "Ініціали:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:322
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
 #, kde-format
 msgid "Title:"
 msgstr "Заголовок:"
@@ -24924,7 +24924,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:408
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Source:"
 msgstr "Джерело:"
@@ -26978,7 +26978,7 @@ msgstr "Зберегти нове компонування вікна"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:414
 #, kde-format
 msgid "Name:"
 msgstr "Назва:"
@@ -32172,7 +32172,7 @@ msgstr ""
 "даних з сайта krita.org"
 
 #: libs/ui/KisWelcomePageWidget.cpp:161
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Language"
 msgstr "Мова"
@@ -35943,7 +35943,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Email"
 msgstr "Ел. пошта"
@@ -35955,7 +35955,7 @@ msgstr "Факс"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Homepage"
 msgstr "Домашня сторінка"
@@ -42899,7 +42899,7 @@ msgstr "Права:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:406
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:416
 #, kde-format
 msgid "Date:"
 msgstr "Дата:"
@@ -44585,7 +44585,7 @@ msgstr "Зберегти до:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 #, kde-format
 msgid "Summary:"
 msgstr "Резюме:"
@@ -44630,7 +44630,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, kde-format
 msgid "License:"
 msgstr "Ліцензування:"
@@ -46361,8 +46361,8 @@ msgstr "Коефіцієнти індексування"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Other"
@@ -56148,7 +56148,7 @@ msgid "ACBF Document Info"
 msgstr "Дані щодо документа ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -56196,32 +56196,32 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "Відповідальні за створення файлів CBZ/ACBF."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Nick Name"
 msgstr "Псевдонім"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Given Name"
 msgstr "Ім'я"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Middle Name"
 msgstr "По-батькові"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Family Name"
 msgstr "Прізвище"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:367
 msgid "Add Author"
 msgstr "Додати автора"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:369
 msgid "Remove Author"
 msgstr "Вилучити автора"
 
@@ -56309,17 +56309,17 @@ msgid "v{version}-in this version..."
 msgstr "v{version}-у цій версії…"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:525
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
 msgid "Anon"
 msgstr "Анонім"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:447
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:526
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:536
 msgid "John"
 msgstr "Іван"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:449
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:528
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:538
 msgid "Doe"
 msgstr "Іваненко"
 
@@ -56418,181 +56418,181 @@ msgstr ""
 msgid "Packaging CBZ"
 msgstr "Пакування CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Science Fiction"
 msgstr "Наукова фантастика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Fantasy"
 msgstr "Фентезі"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Adventure"
 msgstr "Пригоди"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Horror"
 msgstr "Жахи"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Mystery"
 msgstr "Таємниці"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Crime"
 msgstr "Детектив"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Military"
 msgstr "Військо"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Real Life"
 msgstr "Дійсність"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Superhero"
 msgstr "Супергерой"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Humor"
 msgstr "Гумор"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Western"
 msgstr "Вестерн"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Manga"
 msgstr "Манга"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Politics"
 msgstr "Політика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Caricature"
 msgstr "Карикатура"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Sports"
 msgstr "Спорт"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "History"
 msgstr "Історія"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Biography"
 msgstr "Біографія"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Education"
 msgstr "Освіта"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Computer"
 msgstr "Комп'ютер"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Religion"
 msgstr "Релігія"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Romance"
 msgstr "Мелодрама"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Children"
 msgstr "Діти"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Non Fiction"
 msgstr "Документалістика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Adult"
 msgstr "Для дорослих"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Alternative"
 msgstr "Альтернатива"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Artbook"
 msgstr "Арт-книга"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Writer"
 msgstr "Сценарист"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Adapter"
 msgstr "Автор адаптації"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Artist"
 msgstr "Художник"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Penciller"
 msgstr "Графічний художник"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Inker"
 msgstr "Контурувальник"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Colorist"
 msgstr "Колорист"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Letterer"
 msgstr "Художник-шрифтовик"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Cover Artist"
 msgstr "Оформлювач"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Photographer"
 msgstr "Фотограф"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Editor"
 msgstr "Редактор"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Assistant Editor"
 msgstr "Помічник редактора"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Designer"
 msgstr "Дизайнер"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Translator"
 msgstr "Перекладач"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:255
 msgid "Comic Metadata"
 msgstr "Метадані коміксу"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:257
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
 msgid "The proper title of the comic."
 msgstr "Відповідний заголовок коміксу."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:270
 msgid "What will you tell others to entice them to read your comic?"
 msgstr "Що ви хочете повідомити для заохочення до читання вашого коміксу?"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:277
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -56602,27 +56602,27 @@ msgstr ""
 "власний жанр. Записи жанрів слід відокремлювати комами. Намагайтеся "
 "вказувати не більше двох-трьох жанрів."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:285
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr ""
 "Імена персонажів, навколо яких побудовано цей комікс. Записи слід "
 "відокремлювати комами."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:304
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "Чи є комікс частиною серії. Вкажіть назву серії і номер коміксу у ній."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:296
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
 msgid "No. "
 msgstr "№ "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:298
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid "Vol. "
 msgstr "Том "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
@@ -56630,61 +56630,61 @@ msgstr ""
 "Інші ключові слова, які не було охоплено попередніми категоріями. Як завжди, "
 "відокремлювати записи слід комами."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:316
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:326
 msgid "Left to Right"
 msgstr "Зліва праворуч"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
 msgid "Right to Left"
 msgstr "Справа ліворуч"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr ""
 "Яка сторінка є сторінкою обкладинки? Цей запис буде порожнім, якщо сторінок "
 "не існує."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:323
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
 msgid "Cover page:"
 msgstr "Сторінка обкладинки:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
 msgid "Language:"
 msgstr "Мова:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 msgid "Reading direction:"
 msgstr "Напрямок читання:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:328
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 msgid "Genre:"
 msgstr "Жанр:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:329
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 msgid "Characters:"
 msgstr "Персонажі:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
 msgid "Format:"
 msgstr "Формат:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 msgid "Rating:"
 msgstr "Оцінка:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Series:"
 msgstr "Варіант:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Other:"
 msgstr "Інше:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Work"
 msgstr "Робота"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -56695,15 +56695,15 @@ msgstr ""
 "(ескізний художник, графік, розфарбовувальник тощо), адреси електронної "
 "пошти та домашні сторінки."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Role"
 msgstr "Роль"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:376
 msgid "Authors"
 msgstr "Автори"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
@@ -56711,15 +56711,15 @@ msgstr ""
 "Назва компанії, групи осіб чи ім'я особи, яка відповідальна за остаточну "
 "версію, яку отримає читач."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:377
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 msgid "Set Today"
 msgstr "Встановити сьогоднішню"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:378
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
 msgid "Sets the publish date to the current date."
 msgstr "Встановлює поточну дату публікації."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
@@ -56727,7 +56727,7 @@ msgstr ""
 "Традиційних видавців завжди вказують разом із містом, де розташовано їхній "
 "офіс."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:390
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:400
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -56737,7 +56737,7 @@ msgstr ""
 "чи такий запис є для коміксів, створення яких щойно розпочато, але такий "
 "запис буде корисним для виконання перетворень коміксів."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:395
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -56747,23 +56747,23 @@ msgstr ""
 "який спосіб слід шукати дані щодо цього джерела. Отже, наприклад, для "
 "адаптованого коміксу з інтернету це адреса офіційного сайта."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:415
 msgid "City:"
 msgstr "Місто:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:417
 msgid "ISBN:"
 msgstr "ISBN:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "UUID:"
 msgstr "UUID:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "Database:"
 msgstr "База даних:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:413
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Publisher"
 msgstr "Видавець"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-29 01:46+0000\n"
+"POT-Creation-Date: 2024-08-31 01:46+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -23860,7 +23860,7 @@ msgstr "縮寫："
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:322
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
 #, kde-format
 msgid "Title:"
 msgstr "名稱："
@@ -24455,7 +24455,7 @@ msgstr "Krita 會根據來源和目標的特性檔案的資訊來自動勾選或
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:408
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
 #, kde-format
 msgid "Source:"
 msgstr "來源："
@@ -26465,7 +26465,7 @@ msgstr "儲存新視窗版面配置"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:404
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:414
 #, kde-format
 msgid "Name:"
 msgstr "名稱："
@@ -31453,7 +31453,7 @@ msgid ""
 msgstr "顯示 Krita 的新聞：這需要透過網際網路從 krita.org 網站檢索資訊"
 
 #: libs/ui/KisWelcomePageWidget.cpp:161
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Language"
 msgstr "語言"
@@ -35064,7 +35064,7 @@ msgstr ""
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Email"
 msgstr "電子信箱"
@@ -35076,7 +35076,7 @@ msgstr "傳真"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Homepage"
 msgstr "首頁"
@@ -41788,7 +41788,7 @@ msgstr "版權："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:406
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:416
 #, kde-format
 msgid "Date:"
 msgstr "日期："
@@ -43436,7 +43436,7 @@ msgstr "儲存到："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:324
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
 #, kde-format
 msgid "Summary:"
 msgstr "摘要："
@@ -43481,7 +43481,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 #, kde-format
 msgid "License:"
 msgstr "許可協議："
@@ -45193,8 +45193,8 @@ msgstr "索引要素"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Other"
@@ -54729,7 +54729,7 @@ msgid "ACBF Document Info"
 msgstr "ACBF 檔案資訊"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:397
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -54774,32 +54774,32 @@ msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "負責產生 CBZ/ACBF 檔案的人員。"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Nick Name"
 msgstr "暱稱"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Given Name"
 msgstr "姓名"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Middle Name"
 msgstr "中間名"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Family Name"
 msgstr "姓氏"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:367
 msgid "Add Author"
 msgstr "新增作者"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:369
 msgid "Remove Author"
 msgstr "移除作者"
 
@@ -54887,17 +54887,17 @@ msgid "v{version}-in this version..."
 msgstr "v{version}-在此版本中…"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:525
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
 msgid "Anon"
 msgstr "匿名"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:447
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:526
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:536
 msgid "John"
 msgstr "張"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:449
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:528
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:538
 msgid "Doe"
 msgstr "三"
 
@@ -54994,181 +54994,181 @@ msgstr ""
 msgid "Packaging CBZ"
 msgstr "正在打包 CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Science Fiction"
 msgstr "科幻"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Fantasy"
 msgstr "玄幻"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Adventure"
 msgstr "冒險"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Horror"
 msgstr "恐怖"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Mystery"
 msgstr "懸疑"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Crime"
 msgstr "犯罪"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Military"
 msgstr "軍事"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Real Life"
 msgstr "現實"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Superhero"
 msgstr "超級英雄"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Humor"
 msgstr "幽默"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Western"
 msgstr "歐美"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Manga"
 msgstr "日式漫畫"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Politics"
 msgstr "政治"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Caricature"
 msgstr "誇張"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Sports"
 msgstr "運動"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "History"
 msgstr "歷史"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Biography"
 msgstr "傳記"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Education"
 msgstr "教育"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Computer"
 msgstr "電腦"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Religion"
 msgstr "宗教"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Romance"
 msgstr "言情"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Children"
 msgstr "兒童"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Non Fiction"
 msgstr "非虛構"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Adult"
 msgstr "成人"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Alternative"
 msgstr "另類"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
 msgid "Artbook"
 msgstr "畫冊"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Writer"
 msgstr "作家"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Adapter"
 msgstr "改編者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Artist"
 msgstr "作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Penciller"
 msgstr "修圖員"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Inker"
 msgstr "描線員"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Colorist"
 msgstr "上色員"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Letterer"
 msgstr "排字員"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Cover Artist"
 msgstr "封面作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Photographer"
 msgstr "攝影師"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Editor"
 msgstr "編輯"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 msgid "Assistant Editor"
 msgstr "助理編輯"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Designer"
 msgstr "設計師"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Translator"
 msgstr "譯者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:255
 msgid "Comic Metadata"
 msgstr "漫畫中繼資料"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:257
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
 msgid "The proper title of the comic."
 msgstr "漫畫的正式標題。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:270
 msgid "What will you tell others to entice them to read your comic?"
 msgstr "您將如何介紹該作品以吸引讀者興趣？"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:277
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -55177,83 +55177,83 @@ msgstr ""
 "作品的類型。預設值來自 ACBF，您也可以填寫自訂類別。用半形逗號分隔不同類別。請"
 "儘量將類別數量控制在兩三個以內。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:285
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr "漫畫中提及的人物名字，用半形逗號分隔不同名字。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:294
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:304
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "如果這是系列作品的其中一集，請輸入系列的名稱和集數。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:296
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
 msgid "No. "
 msgstr "編號"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:298
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid "Vol. "
 msgstr "集數"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:310
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr "不屬於前面所述分類的其他關鍵字，用半形逗號分隔不同關鍵字。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:316
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:326
 msgid "Left to Right"
 msgstr "從左到右"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
 msgid "Right to Left"
 msgstr "從右到左"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr "哪一頁是封面？如果沒有頁面則此項為空。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:323
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
 msgid "Cover page:"
 msgstr "封面頁："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
 msgid "Language:"
 msgstr "語言："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 msgid "Reading direction:"
 msgstr "閱讀方向："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:328
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 msgid "Genre:"
 msgstr "類型："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:329
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 msgid "Characters:"
 msgstr "人物："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
 msgid "Format:"
 msgstr "格式："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
 msgid "Rating:"
 msgstr "評分："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Series:"
 msgstr "系列："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Other:"
 msgstr "其他："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Work"
 msgstr "作品"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -55262,35 +55262,35 @@ msgstr ""
 "下面是為本漫畫做過貢獻的作者表格。您可以設定他們的暱稱、真實姓名、職責、電"
 "郵、網站等。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Role"
 msgstr "職責"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:376
 msgid "Authors"
 msgstr "作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr "負責製作讀者獲取的最終版本的公司、集體或個人。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:377
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
 msgid "Set Today"
 msgstr "設定為今天"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:378
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
 msgid "Sets the publish date to the current date."
 msgstr "將發布日期設定為目前日期。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr "傳統出版社在出處中應標明它們所在的城市。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:390
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:400
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -55299,7 +55299,7 @@ msgstr ""
 "如果在漫畫資料庫中存在該條目，它應該被新增至此。全新作品一般不必考慮此因素，"
 "但它適用與改編作品的場合。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:395
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -55308,23 +55308,23 @@ msgstr ""
 "漫畫是否改編自其他作品，如果是，如何找到原作資訊。例如，對於一組改編自其他網"
 "路漫畫的作品，應該將原作的官方網站 URL 填入這裡。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:415
 msgid "City:"
 msgstr "城市："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:417
 msgid "ISBN:"
 msgstr "ISBN："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:409
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 msgid "UUID:"
 msgstr "UUID："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:411
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 msgid "Database:"
 msgstr "資料庫："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:413
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Publisher"
 msgstr "出版社"

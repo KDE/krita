@@ -30673,6 +30673,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"正在尝试对包含 <b>滤镜图层</b> 的图像进行高级导出。图像的所有图层将在调整大小"
+"之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30681,6 +30683,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"正在尝试对包含 <b>滤镜蒙版</b> 的图像进行高级导出。图像的所有图层将在调整大小"
+"之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30689,6 +30693,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"正在尝试对包含 <b>图层样式</b> 的图像进行高级导出。图像的所有图层将在调整大小"
+"之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -56931,8 +56937,7 @@ msgid "Weighted"
 msgstr "高级 - 自定义平滑参数"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:359
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "像素"

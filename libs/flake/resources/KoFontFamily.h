@@ -55,6 +55,8 @@ public:
     QList<KoSvgText::FontFamilyAxis> axes() const;
     QList<KoSvgText::FontFamilyStyleInfo> styles() const;
 
+    QDateTime lastModified() const;
+
 private:
     struct Private;
     QScopedPointer<Private> d;

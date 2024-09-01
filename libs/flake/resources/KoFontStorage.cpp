@@ -52,7 +52,7 @@ public:
     }
 
     QDateTime lastModified() const override {
-        return QDateTime::fromMSecsSinceEpoch(0);
+        return m_currentResource->lastModified();
     }
 
     bool hasNext() const override {
@@ -68,7 +68,6 @@ public:
     void next() override {
         KoFontFamilyWWSRepresentation rep = m_representationIterator->next();
         m_currentResource = KoFontFamilySP (new KoFontFamily(rep));
-        m_currentResource->updateThumbnail();
     }
 
     QString url() const override {
@@ -133,7 +132,8 @@ QString KoFontStorage::resourceMd5(const QString &url)
 
 bool KoFontStorage::supportsVersioning() const
 {
-    return false;
+    // Even though it doesn't make sense, this needs to support versioning, otherwise the thumbnail is never updated...
+    return true;
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KoFontStorage::resources(const QString &resourceType)
@@ -153,6 +153,7 @@ bool KoFontStorage::isValid() const
 
 bool KoFontStorage::loadVersionedResource(KoResourceSP resource)
 {
-    Q_UNUSED(resource);
-    return false;
+    //Q_UNUSED(resource);
+    resource->updateThumbnail();
+    return true;
 }

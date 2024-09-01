@@ -59,6 +59,7 @@ struct FontFamilyNode {
     QList<QLocale> supportedLanguages;
 
     QStringList otherFiles;
+    QDateTime lastModified;
 
     QHash<QLocale, QString> localizedFontFamilies;
     QHash<QLocale, QString> localizedFontStyle;
@@ -258,6 +259,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
 
     fontFamily.fontFamily = face->family_name;
     fontFamily.fontStyle = face->style_name;
+    fontFamily.lastModified = QFileInfo(fontFamily.fileName).lastModified();
     FontFamilyNode typographicFamily;
     FontFamilyNode wwsFamily;
     bool isWWSFamilyWithoutName = false;
@@ -748,6 +750,9 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                                 wwsChild->otherFiles.append(font->fileName);
                                 wwsChild->otherFiles.append(font->otherFiles);
                             }
+                            if (wwsChild->lastModified < font->lastModified) {
+                                wwsChild->lastModified = font->lastModified;
+                            }
                             break;
                         } else {
                             continue;
@@ -787,6 +792,10 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
 
     for (auto subFamily = childBegin(wws); subFamily != childEnd(wws); subFamily++) {
         KoSvgText::FontFamilyStyleInfo style;
+        if (subFamily == childBegin(wws)
+                || representation.lastModified < subFamily->lastModified) {
+            representation.lastModified = subFamily->lastModified;
+        }
         representation.sampleStrings.insert(subFamily->sampleStrings);
         Q_FOREACH(const QLocale &locale, subFamily->supportedLanguages) {
             if (!representation.supportedLanguages.contains(locale)) {

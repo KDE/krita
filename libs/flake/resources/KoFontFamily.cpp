@@ -25,6 +25,7 @@ const QString COLOR_CLRV1 = "color_clrv1";
 const QString COLOR_SVG = "color_svg";
 const QString SAMPLE_STRING = "sample_string";
 const QString SAMPLE_SVG = "sample_svg";
+const QString LAST_MODIFIED = "last_modified";
 
 struct KoFontFamily::Private {
 };
@@ -98,6 +99,8 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
     addMetaData(LOCALIZED_FONT_FAMILY, localeHashtoVariantMap(representation.localizedFontFamilyNames));
     addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, localeHashtoVariantMap(representation.localizedTypographicFamily));
     addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, localeHashtoVariantMap(representation.localizedTypographicStyles));
+
+    addMetaData(LAST_MODIFIED, representation.lastModified);
 
     QMap<QString, QVariant> samples;
     Q_FOREACH(const QString key, representation.sampleStrings.keys()) {
@@ -253,4 +256,9 @@ QList<KoSvgText::FontFamilyStyleInfo> KoFontFamily::styles() const
         converted.append(val.value<KoSvgText::FontFamilyStyleInfo>());
     }
     return converted;
+}
+
+QDateTime KoFontFamily::lastModified() const
+{
+    return metadata().value(LAST_MODIFIED).toDateTime();
 }

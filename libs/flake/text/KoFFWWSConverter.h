@@ -12,6 +12,7 @@
 
 #include <KoSvgText.h>
 #include <QLocale>
+#include <QDateTime>
 
 /// This struct represents a CSS-compatible font family, containing all
 /// sorts of info useful for the GUI.
@@ -22,6 +23,8 @@ struct KoFontFamilyWWSRepresentation {
     QHash<QLocale, QString> localizedFontFamilyNames;
     QHash<QLocale, QString> localizedTypographicFamily;
     QHash<QLocale, QString> localizedTypographicStyles;
+
+    QDateTime lastModified; ///< Value of the most recently modified font family. Used for updates.
 
     QHash<QString, QString> sampleStrings; /// sample string used to generate the preview;
     QList<QLocale> supportedLanguages;

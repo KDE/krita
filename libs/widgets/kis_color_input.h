@@ -133,6 +133,8 @@ private:
 
     KoColor* m_color;
 
+    QLabel* m_xLabel;
+
     KisHsvColorSlider* m_hSlider;
     KisHsvColorSlider* m_sSlider;
     KisHsvColorSlider* m_xSlider;

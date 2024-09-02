@@ -234,6 +234,7 @@ QWidget* KisFloatColorInput::createInput()
     m_dblNumInput = new KisDoubleParseSpinBox(this);
     m_dblNumInput->setMinimum(0);
     m_dblNumInput->setMaximum(1.0);
+    m_dblNumInput->setSingleStep(0.01);
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(sliderChanged(int)));
     connect(m_dblNumInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
     m_dblNumInput->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);

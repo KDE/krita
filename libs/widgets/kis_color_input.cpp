@@ -453,25 +453,20 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
     , m_mixMode(KisHsvColorSlider::MIX_MODE::HSV)
 {
 
-    QLabel *labels[3];
-    KisHsvColorSlider *sliders[3];
-    KisDoubleParseSpinBox *inputs[3];
-    const char *labelNames[3] = { "H:", "S:", "V:" };
+    const QStringList labelNames = QStringList({
+        i18nc("@label:slider Abbreviation for 'Hue'", "H:"),
+        i18nc("@label:slider Abbreviation for 'Saturation'", "S:"),
+        QString(/* x will get initialized later in setMixMode */) });
     qreal maxValues[3] = { 360, 100, 100 };
-    int labelWidth = 0;
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0,0,0,0);
+    QGridLayout *slidersLayout = new QGridLayout(this);
+    slidersLayout->setContentsMargins(0,0,0,0);
+    slidersLayout->setHorizontalSpacing(1); // less space around the sliders
 
     for (int i = 0; i < 3; i++) {
-        // Slider layout
-        QHBoxLayout *sliderLayout = new QHBoxLayout();
-        sliderLayout->setContentsMargins(0,0,0,0);
-        sliderLayout->setSpacing(1);
-
         // Label
-        QLabel *label = new QLabel(i18n(labelNames[i]), this);
-        sliderLayout->addWidget(label);
+        QLabel *label = new QLabel(labelNames[i], this);
+        slidersLayout->addWidget(label, i, 0);
 
         // Slider itself
         KisHsvColorSlider *slider = new KisHsvColorSlider(Qt::Horizontal, this);
@@ -479,7 +474,7 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
         slider->setMinimum(0);
         slider->setMaximum(maxValues[i]);
         slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sliderLayout->addWidget(slider);
+        slidersLayout->addWidget(slider, i, 1);
 
         // Input box
         KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
@@ -491,39 +486,31 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
         input->setMaximumWidth(60);
 
         slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sliderLayout->addWidget(input);
+        slidersLayout->addWidget(input, i, 2);
 
-        mainLayout->addLayout(sliderLayout);
-
-        // Record max label width
-        labelWidth = qMax(labelWidth, label->sizeHint().width());
-
-        sliders[i] = slider;
-        inputs[i] = input;
-        labels[i] = label;
-    }
-
-    // Align the labels
-    for (int i = 0; i < 3; i++) {
-        labels[i]->setMinimumWidth(labelWidth);
+        switch (i) {
+        case 0:
+            m_hSlider = slider;
+            m_hInput = input;
+        case 1:
+            m_sSlider = slider;
+            m_sInput = input;
+        case 2:
+            m_xLabel = label; // Save the HSX label so we can update it
+            m_xSlider = slider;
+            m_xInput = input;
+        }
     }
 
     // Connect slots
-    connect(sliders[0], SIGNAL(valueChanged(int)), this, SLOT(hueSliderChanged(int)));
-    connect(inputs[0], SIGNAL(valueChanged(double)), this, SLOT(setHue(double)));
-    connect(sliders[1], SIGNAL(valueChanged(int)), this, SLOT(saturationSliderChanged(int)));
-    connect(inputs[1], SIGNAL(valueChanged(double)), this, SLOT(setSaturation(double)));
-    connect(sliders[2], SIGNAL(valueChanged(int)), this, SLOT(valueSliderChanged(int)));
-    connect(inputs[2], SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
+    connect(m_hSlider, SIGNAL(valueChanged(int)), this, SLOT(hueSliderChanged(int)));
+    connect(m_hInput, SIGNAL(valueChanged(double)), this, SLOT(setHue(double)));
+    connect(m_sSlider, SIGNAL(valueChanged(int)), this, SLOT(saturationSliderChanged(int)));
+    connect(m_sInput, SIGNAL(valueChanged(double)), this, SLOT(setSaturation(double)));
+    connect(m_xSlider, SIGNAL(valueChanged(int)), this, SLOT(valueSliderChanged(int)));
+    connect(m_xInput, SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
 
-    m_hSlider = sliders[0];
-    m_hSlider->setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
-    m_sSlider = sliders[1];
-    m_xSlider = sliders[2];
-
-    m_hInput = inputs[0];
-    m_sInput = inputs[1];
-    m_xInput = inputs[2];
+    setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
 
     // Set initial values
     QColor c = m_color->toQColor();
@@ -544,6 +531,23 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
 }
 
 void KisHsvColorInput::setMixMode(KisHsvColorSlider::MIX_MODE mixMode) {
+
+    switch (mixMode) {
+	case KisHsvColorSlider::MIX_MODE::HSL:
+        m_xLabel->setText(i18nc("@label:slider Abbreviation for 'Lightness' of HSL color model", "L:"));
+		break;
+	case KisHsvColorSlider::MIX_MODE::HSY:
+        m_xLabel->setText(i18nc("@label:slider Abbreviation for 'Luma' of HSY color model", "Y:"));
+		break;
+	case KisHsvColorSlider::MIX_MODE::HSI:
+        m_xLabel->setText(i18nc("@label:slider Abbreviation for 'Intensity' of HSI color model", "I:"));
+		break;
+	default: // fallthrough
+	case KisHsvColorSlider::MIX_MODE::HSV:
+        m_xLabel->setText(i18nc("@label:slider Abbreviation for 'Value' of HSV color model", "V:"));
+		break;
+	}
+
 	QColor c = m_color->toQColor();
 	m_mixMode = mixMode;
 	getHsxF(c, &m_h, &m_s, &m_x);

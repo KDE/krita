@@ -46,7 +46,7 @@ if useCcacheForBuilds:
 
 if sys.platform == 'darwin':
     # Ensure we always build Fat-binaries on macOS
-    cmakeCommand.append('-DCMAKE_OSX_ARCHITECTURES=x86_64;arm64')    
+    cmakeCommand.append('-DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"')
 
 
 commandToRun = ' '.join(cmakeCommand)

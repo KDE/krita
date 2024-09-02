@@ -95,42 +95,30 @@ void KisIntegerColorInput::update()
     m_intNumInput->blockSignals(true);
     m_colorSlider->blockSignals(true);
     switch (m_channelInfo->channelValueType()) {
-    case KoChannelInfo::UINT8:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-            m_intNumInput->setValue(round(*(reinterpret_cast<quint8*>(data))*1.0 / 255.0 * 100.0));
-        } else {
-            m_intNumInput->setMaximum(0xFF);
-            m_intNumInput->setValue(*(reinterpret_cast<quint8*>(data)));
-        }
-        m_colorSlider->setValue(*(reinterpret_cast<quint8*>(data)));
+    case KoChannelInfo::UINT8: {
+        quint8 value = *(reinterpret_cast<quint8*>(data));
+        m_intNumInput->setValue(m_usePercentage ? round(value * 100.0 / 0xFF) : value);
+        m_colorSlider->setValue(value);
         *(reinterpret_cast<quint8*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint8*>(dataMax)) = 0xFF;
         break;
-    case KoChannelInfo::UINT16:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-            m_intNumInput->setValue(round(*(reinterpret_cast<quint16*>(data))*1.0 / 65535.0 * 100.0));
-        } else {
-            m_intNumInput->setMaximum(0xFFFF);
-            m_intNumInput->setValue(*(reinterpret_cast<quint16*>(data)));
         }
-        m_colorSlider->setValue(*(reinterpret_cast<quint16*>(data)));
+    case KoChannelInfo::UINT16: {
+        quint16 value = *(reinterpret_cast<quint16*>(data));
+        m_intNumInput->setValue(m_usePercentage ? round(value * 100.0 / 0xFFFF) : value);
+        m_colorSlider->setValue(value);
         *(reinterpret_cast<quint16*>(dataMin)) = 0x0;
         *(reinterpret_cast<quint16*>(dataMax)) = 0xFFFF;
         break;
-    case KoChannelInfo::UINT32:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-            m_intNumInput->setValue(round(*(reinterpret_cast<quint32*>(data))*1.0 / 4294967295.0 * 100.0));
-        } else {
-            m_intNumInput->setMaximum(0xFFFF);
-            m_intNumInput->setValue(*(reinterpret_cast<quint32*>(data)));
-        }
-        m_colorSlider->setValue(*(reinterpret_cast<quint32*>(data)));
+    }
+    case KoChannelInfo::UINT32: {
+        quint32 value = *(reinterpret_cast<quint32*>(data));
+        m_intNumInput->setValue(m_usePercentage ? round(value * 100.0 / 0xFFFF'FFFF) : value);
+        m_colorSlider->setValue(value);
         *(reinterpret_cast<quint32*>(dataMin)) = 0x0;
-        *(reinterpret_cast<quint32*>(dataMax)) = 0xFFFFFFFF;
+        *(reinterpret_cast<quint32*>(dataMax)) = 0xFFFF'FFFF;
         break;
+    }
     default:
         Q_ASSERT(false);
     }
@@ -149,42 +137,32 @@ QWidget* KisIntegerColorInput::createInput()
         KisSpinBoxI18nHelper::setText(m_intNumInput, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     }
 
-    switch (m_channelInfo->channelValueType()) {
-    case KoChannelInfo::UINT8:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-        } else {
-            m_intNumInput->setMaximum(0xFF);
-        }
-        m_colorSlider->setMaximum(0xFF);
-        break;
-    case KoChannelInfo::UINT16:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-        } else {
-            m_intNumInput->setMaximum(0xFFFF);
-        }
-        m_colorSlider->setMaximum(0xFFFF);
-        break;
-    case KoChannelInfo::UINT32:
-        if (m_usePercentage) {
-            m_intNumInput->setMaximum(100);
-        } else {
-            m_intNumInput->setMaximum(0xFFFFFFFF);
-        }
-        m_colorSlider->setMaximum(0xFFFFFFFF);
-        break;
-    default:
-        Q_ASSERT(false);
-    }
+    updateMaximums();
+
     connect(m_colorSlider, SIGNAL(valueChanged(int)), this, SLOT(onColorSliderChanged(int)));
     connect(m_intNumInput, SIGNAL(valueChanged(int)), this, SLOT(onNumInputChanged(int)));
     return m_intNumInput;
 }
 
+void KisIntegerColorInput::updateMaximums()
+{
+    m_intNumInput->clearFocus(); // make sure focus doesn't interfere with updating
+
+    Q_ASSERT(m_channelInfo->channelValueType() == KoChannelInfo::UINT8 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT16 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT32);
+
+    m_intNumInput->blockSignals(true); // prevent clamping from triggering a value update
+    m_intNumInput->setMaximum(m_usePercentage ? 100 : (1 << 8 * m_channelInfo->size()) - 1);
+    m_colorSlider->setMaximum((1 << 8 * m_channelInfo->size()) - 1);
+    m_intNumInput->blockSignals(false);
+}
+
 void KisIntegerColorInput::setPercentageWise(bool val)
 {
     m_usePercentage = val;
+
+    m_intNumInput->clearFocus(); // make sure focus doesn't interfere with updating
 
     if (m_usePercentage) {
         KisSpinBoxI18nHelper::setText(m_intNumInput, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
@@ -192,28 +170,21 @@ void KisIntegerColorInput::setPercentageWise(bool val)
         m_intNumInput->setPrefix("");
         m_intNumInput->setSuffix("");
     }
+
+    updateMaximums();
 }
 
 void KisIntegerColorInput::onColorSliderChanged(int val)
 {
     m_intNumInput->blockSignals(true);
-    if (m_usePercentage) {
-        switch (m_channelInfo->channelValueType()) {
-        case KoChannelInfo::UINT8:
-            m_intNumInput->setValue(round((val*1.0) / 255.0 * 100.0));
-            break;
-        case KoChannelInfo::UINT16:
-            m_intNumInput->setValue(round((val*1.0) / 65535.0 * 100.0));
-            break;
-        case KoChannelInfo::UINT32:
-            m_intNumInput->setValue(round((val*1.0) / 4294967295.0 * 100.0));
-            break;
-        default:
-            Q_ASSERT(false);
-        }
-    } else {
-        m_intNumInput->setValue(val);
-    }
+
+    Q_ASSERT(m_channelInfo->channelValueType() == KoChannelInfo::UINT8 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT16 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT32);
+
+    m_intNumInput->setValue(m_usePercentage ? round(val * 100.0 / ((1 << 8 * m_channelInfo->size()) - 1))
+                                            : val);
+
     m_intNumInput->blockSignals(false);
     setValue(val);
 }
@@ -221,31 +192,17 @@ void KisIntegerColorInput::onColorSliderChanged(int val)
 void KisIntegerColorInput::onNumInputChanged(int val)
 {
     m_colorSlider->blockSignals(true);
-    if (m_usePercentage) {
-        switch (m_channelInfo->channelValueType()) {
-        case KoChannelInfo::UINT8:
-            m_colorSlider->setValue((val*1.0)/100.0 * 255.0);
-            m_colorSlider->blockSignals(false);
-            setValue((val*1.0)/100.0 * 255.0);
-            break;
-        case KoChannelInfo::UINT16:
-            m_colorSlider->setValue((val*1.0)/100.0 * 65535.0);
-            m_colorSlider->blockSignals(false);
-            setValue((val*1.0)/100.0 * 65535.0);
-            break;
-        case KoChannelInfo::UINT32:
-            m_colorSlider->setValue((val*1.0)/100.0 * 4294967295.0);
-            m_colorSlider->blockSignals(false);
-            setValue((val*1.0)/100.0 * 4294967295.0);
-            break;
-        default:
-            Q_ASSERT(false);
-        }
-    } else {
-        m_colorSlider->setValue(val);
-        m_colorSlider->blockSignals(false);
-        setValue(val);
-    }
+
+    Q_ASSERT(m_channelInfo->channelValueType() == KoChannelInfo::UINT8 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT16 ||
+             m_channelInfo->channelValueType() == KoChannelInfo::UINT32);
+
+    m_colorSlider->setValue(m_usePercentage ? val / 100.0 * ((1 << 8 * m_channelInfo->size()) - 1)
+                                            : val);
+
+    m_colorSlider->blockSignals(false);
+    setValue(m_usePercentage ? val / 100.0 * ((1 << 8 * m_channelInfo->size()) - 1)
+                             : val);
 }
 
 KisFloatColorInput::KisFloatColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
@@ -585,13 +542,7 @@ void KisHsvColorInput::sendUpdate()
 
 void KisHsvColorInput::setHue(double x)
 {
-    if (x < 0) {
-        x = 0;
-    }
-
-    if (x > 360) {
-        x = 360;
-    }
+    x = qBound(0.0, x, 360.0);
 
     m_h = x / 360;
     sendUpdate();
@@ -599,13 +550,7 @@ void KisHsvColorInput::setHue(double x)
 
 void KisHsvColorInput::setSaturation(double x)
 {
-    if (x < 0) {
-        x = 0;
-    }
-
-    if (x > 100) {
-        x = 100;
-    }
+    x = qBound(0.0, x, 100.0);
 
     m_s = x / 100;
     sendUpdate();
@@ -613,13 +558,7 @@ void KisHsvColorInput::setSaturation(double x)
 
 void KisHsvColorInput::setValue(double x)
 {
-    if (x < 0) {
-        x = 0;
-    }
-
-    if (x > 100) {
-        x = 100;
-    }
+    x = qBound(0.0, x, 100.0);
 
     m_x = x / 100;
     sendUpdate();

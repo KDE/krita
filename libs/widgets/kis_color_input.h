@@ -57,6 +57,7 @@ public:
     KisIntegerColorInput(QWidget* parent, const KoChannelInfo*, KoColor* color, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), bool usePercentage = false);
 protected:
     QWidget* createInput() override;
+    void updateMaximums();
     void setPercentageWise(bool val) override;
 public Q_SLOTS:
     void setValue(int);

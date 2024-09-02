@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-31 01:46+0000\n"
-"PO-Revision-Date: 2024-08-27 10:16+0200\n"
+"PO-Revision-Date: 2024-08-30 23:21+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -57981,8 +57981,7 @@ msgid "Weighted"
 msgstr "Pesata"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:359
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Pixel"

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-31 01:46+0000\n"
-"PO-Revision-Date: 2024-08-16 10:42+0200\n"
+"PO-Revision-Date: 2024-08-30 08:31+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -31193,6 +31193,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>calque de "
+"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -31201,6 +31203,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>masque de "
+"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -31209,6 +31213,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>style de calque</"
+"b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -58080,8 +58086,6 @@ msgid "Brush preset icon"
 msgstr "Icône de préréglages des brosses"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgid "Workflow Buttons settings"
 msgstr "Configuration des boutons de flux de travail"
 
@@ -58198,10 +58202,8 @@ msgid "Inline"
 msgstr "Intégré"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action Name"
 msgid "Icon files "
-msgstr "Nom de l'action"
+msgstr "Fichiers d'icônes"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
@@ -58209,17 +58211,13 @@ msgid "Color info: "
 msgstr "Information de couleur :"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
-#, fuzzy
-#| msgid "Script files (*.py)"
 msgid "Script files "
-msgstr "Fichier de scripts (*.py)"
+msgstr "Fichier de scripts"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Workflow buttons settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Configuration des boutons de flux de travail"
+msgstr "Boutons de flux de travail"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
@@ -58262,8 +58260,7 @@ msgid "Weighted"
 msgstr "Pondéré"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:359
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Pixel"

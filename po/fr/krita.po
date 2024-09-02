@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-28 03:40+0000\n"
-"PO-Revision-Date: 2024-08-16 10:42+0200\n"
+"PO-Revision-Date: 2024-08-30 08:31+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -30925,6 +30925,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>calque de "
+"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30933,6 +30935,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>masque de "
+"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30941,6 +30945,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Tentative d’exportation avancée d'une image contenant un <b>style de calque</"
+"b>. L’image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format

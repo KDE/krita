@@ -159,7 +159,7 @@ lager::reader<QString> MyPaintCurveRangeModel::yMaxLabel()
 
 lager::reader<qreal> MyPaintCurveRangeModel::yMinValue()
 {
-    return m_normalizedCurve[&NormalizedCurve::yLimit].xform(kiszug::map_muptiply<qreal>(-1.0));
+    return m_normalizedCurve[&NormalizedCurve::yLimit].xform(kiszug::map_multiply<qreal>(-1.0));
 }
 
 lager::reader<qreal> MyPaintCurveRangeModel::yMaxValue()

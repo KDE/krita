@@ -130,7 +130,7 @@ KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionDataCommon>
           lager::with(LAGER_QT(effectiveStrengthValueNorm),
                       strengthRangeNorm.zoom(lager::lenses::first),
                       strengthRangeNorm.zoom(lager::lenses::second))
-            .xform(kiszug::foreach_arg(kiszug::map_muptiply<qreal>(strengthDisplayMultiplier)))}
+            .xform(kiszug::foreach_arg(kiszug::map_multiply<qreal>(strengthDisplayMultiplier)))}
     , LAGER_QT(useCurve) {optionData[&KisCurveOptionDataCommon::useCurve]}
     , LAGER_QT(useSameCurve) {optionData[&KisCurveOptionDataCommon::useSameCurve]}
     , LAGER_QT(curveMode) {optionData[&KisCurveOptionDataCommon::curveMode]}

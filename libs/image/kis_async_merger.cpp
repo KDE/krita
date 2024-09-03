@@ -147,8 +147,6 @@ public:
         QRect srcRect = m_updateRect.translated(-layer->x(), -layer->y());
 
         QRegion prepareRegion(srcRect);
-        prepareRegion -= m_cropRect;
-
 
         /**
          * If a clone has complicated masks, we should prepare additional
@@ -159,6 +157,7 @@ public:
             prepareRegion += needRectOnSource;
         }
 
+        prepareRegion -= m_cropRect;
         if (srcLayer.isNull()) {
             return true;
         }

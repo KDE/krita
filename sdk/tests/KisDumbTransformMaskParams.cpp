@@ -11,7 +11,7 @@
 #include "kis_dom_utils.h"
 #include "kis_node.h"
 #include "kis_painter.h"
-
+#include <kis_perspectivetransform_worker.h>
 
 struct Q_DECL_HIDDEN KisDumbTransformMaskParams::Private
 {
@@ -72,14 +72,17 @@ void KisDumbTransformMaskParams::transformDevice(KisNodeSP node, KisPaintDeviceS
     QPoint dstTopLeft = rc.topLeft();
 
     QTransform t = finalAffineTransform();
-    if (t.isTranslating()) {
+    if (t.type() <= QTransform::TxTranslate) {
         dstTopLeft = t.map(dstTopLeft);
+        KisPainter::copyAreaOptimized(dstTopLeft, src, dst, rc);
     } else if (!t.isIdentity()) {
-        warnKrita << "KisDumbTransformMaskParams::transformDevice does not support this kind of transformation";
-        warnKrita << ppVar(t);
+        KisPerspectiveTransformWorker worker(nullptr, QTransform(), true, 0);
+        worker.setForceSubPixelTranslation(forceSubPixelTranslation);
+        worker.setForwardTransform(t);
+        worker.runPartialDst(src, dst, src->defaultBounds()->bounds());
+    } else {
+        KisPainter::copyAreaOptimized(dstTopLeft, src, dst, rc);
     }
-
-    KisPainter::copyAreaOptimized(dstTopLeft, src, dst, rc);
 }
 
 QString KisDumbTransformMaskParams::id() const

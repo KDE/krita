@@ -481,7 +481,12 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
     if (!m_d->staticCache.isCacheOverridden() &&
         !m_d->recalculatingStaticImage &&
         (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY ||
-         !m_d->staticCache.isCacheValid(params))) {
+         !m_d->staticCache.isCacheValid(params)) &&
+
+        /// clone layers may fetch data outside image bounds,
+        /// that should never cause async refresh, since it will
+        /// cause an infinite loop
+        m_d->paramsHolder->defaultBounds()->imageBorderRect().intersects(rc)) {
 
         if (m_d->testingInterface) {
             m_d->testingInterface->notifyDecorateRectTriggeredStaticImageUpdate();

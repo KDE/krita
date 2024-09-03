@@ -1208,7 +1208,7 @@ set_package_properties(KF5KDcraw PROPERTIES
 ##
 ## Check for freetype
 ##
-find_package(Freetype 2.10.0 REQUIRED)
+find_package(Freetype 2.11.0 REQUIRED)
 set_package_properties(Freetype PROPERTIES
     DESCRIPTION "A library for rendering glyphs"
     URL "https://download.savannah.gnu.org/releases/freetype"

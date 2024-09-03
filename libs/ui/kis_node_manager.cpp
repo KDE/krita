@@ -161,13 +161,11 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
 
         KoShape * shape = view->document()->shapeForNode(node);
 
-        //if (!shape) return false;
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shape, false);
 
         selection->select(shape);
         KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
 
-        //if (!shapeLayer) return false;
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapeLayer, false);
 
         //         shapeLayer->setGeometryProtected(node->userLocked());

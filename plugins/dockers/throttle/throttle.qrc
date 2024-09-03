@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="slider.qml">qml/slider.qml</file>
+    </qresource>
+</RCC>

@@ -381,4 +381,114 @@ void KisCloneLayerTest::testCyclingGroupLayer()
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
 }
 
+#include <kis_transform_mask.h>
+#include <KritaTransformMaskStubs.h>
+#include <KisDumbTransformMaskParams.h>
+#include <KisTransformMaskTestingListener.h>
+
+void KisCloneLayerTest::initTestCase()
+{
+    TestUtil::registerTransformMaskStubs();
+}
+
+void KisCloneLayerTest::testWithSourceUnderTransformMask()
+{
+    /*
+      +-----------------+
+      |root             |
+      |  clone_of_p1 -+ |
+      |  paint 2      | |
+      |  paint 1    <-+ |
+      |    transf1      |
+      +-----------------+
+     */
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(QRect(10,10,100,100), KoColor( Qt::white, colorSpace));
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    image->addNode(paintLayer1, image->root());
+
+    KisTransformMaskTestingListener *listener = new KisTransformMaskTestingListener();
+
+    QTransform transform = QTransform::fromScale(0.1, 0.2);
+    KisTransformMaskSP transf1 = new KisTransformMask(image, "transf1");
+    image->addNode(transf1, paintLayer1);
+    transf1->setTransformParams(KisTransformMaskParamsInterfaceSP(
+        new KisDumbTransformMaskParams(transform)));
+    transf1->setTestingInterface(listener);
+
+    KisPaintDeviceSP device2 = new KisPaintDevice(colorSpace);
+    device2->fill(QRect(20, 20, 10, 10), KoColor( Qt::red, colorSpace));
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8, device2);
+    image->addNode(paintLayer2, image->root());
+
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_p1", OPACITY_OPAQUE_U8);
+    cloneLayer1->setX(10);
+    cloneLayer1->setY(10);
+    image->addNode(cloneLayer1, image->root());
+
+    image->initialRefreshGraph();
+    QTest::qWait(50);
+    image->waitForDone();
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        "tmask_source",
+        "00_initial"));
+
+    transf1->forceUpdateTimedNode();
+    QTest::qWait(50);
+    image->waitForDone();
+    QTest::qWait(50);
+    image->waitForDone();
+
+    QVERIFY(!transf1->hasPendingTimedUpdates());
+
+    {
+        auto stat = listener->stats();
+        listener->clear();
+
+        QVERIFY(stat.decorateRectTriggeredStaticImageUpdate > 0);
+        QCOMPARE(stat.forceUpdateTimedNode, 1);
+        QCOMPARE(stat.slotDelayedStaticImageUpdate, 0);
+        QCOMPARE(stat.recalculateStaticImage, 1);
+    }
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        "tmask_source",
+        "10_transform_mask_initial_static"));
+
+    cloneLayer1->setDirty();
+    QTest::qWait(50);
+    image->waitForDone();
+    QTest::qWait(50);
+    image->waitForDone();
+
+    QVERIFY(!transf1->hasPendingTimedUpdates());
+
+    {
+        auto stat = listener->stats();
+        listener->clear();
+
+        QCOMPARE(stat.decorateRectTriggeredStaticImageUpdate, 0);
+        QCOMPARE(stat.forceUpdateTimedNode, 0);
+        QCOMPARE(stat.slotDelayedStaticImageUpdate, 0);
+        QCOMPARE(stat.recalculateStaticImage, 0);
+    }
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        "tmask_source",
+        "20_final"));
+
+
+}
+
 KISTEST_MAIN(KisCloneLayerTest)

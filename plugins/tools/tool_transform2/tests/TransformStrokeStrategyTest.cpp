@@ -13,7 +13,7 @@
 #include <testutil.h>
 #include "kistest.h"
 #include "kis_transform_mask.h"
-#include "KisTransformMaskTestingInterface.h"
+#include "KisTransformMaskTestingListener.h"
 
 #include "kis_paint_device_debug_utils.h"
 
@@ -38,83 +38,13 @@ void TransformStrokeStrategyTest::initTestCase()
     qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
 }
 
-struct TestingInterface : KisTransformMaskTestingInterface
-{
-    struct Data : boost::equality_comparable<Data>
-    {
-        int forceUpdateTimedNode = 0;
-        int threadSafeForceStaticImageUpdate = 0;
-        int slotDelayedStaticImageUpdate = 0;
-        int decorateRectTriggeredStaticImageUpdate = 0;
-        int recalculateStaticImage = 0;
-
-        bool operator==(const Data &rhs) const {
-            return
-                rhs.forceUpdateTimedNode == forceUpdateTimedNode &&
-                rhs.threadSafeForceStaticImageUpdate == threadSafeForceStaticImageUpdate &&
-                rhs.slotDelayedStaticImageUpdate == slotDelayedStaticImageUpdate &&
-                bool(rhs.decorateRectTriggeredStaticImageUpdate > 0) ==
-                bool(decorateRectTriggeredStaticImageUpdate > 0) &&
-                rhs.recalculateStaticImage == recalculateStaticImage;
-        }
-    };
-
-    void notifyForceUpdateTimedNode() override {
-        QMutexLocker l(&m_mutex);
-        m_data.forceUpdateTimedNode++;
-    }
-    void notifyThreadSafeForceStaticImageUpdate() override {
-        QMutexLocker l(&m_mutex);
-        m_data.threadSafeForceStaticImageUpdate++;
-    }
-    void notifySlotDelayedStaticUpdate() override {
-        QMutexLocker l(&m_mutex);
-        m_data.slotDelayedStaticImageUpdate++;
-    }
-    void notifyDecorateRectTriggeredStaticImageUpdate() override {
-        QMutexLocker l(&m_mutex);
-        m_data.decorateRectTriggeredStaticImageUpdate++;
-    }
-    void notifyRecalculateStaticImage() override {
-        QMutexLocker l(&m_mutex);
-        m_data.recalculateStaticImage++;
-    }
-
-    Data stats() const {
-        QMutexLocker l(&m_mutex);
-        return m_data;
-    }
-    void clear() {
-        QMutexLocker l(&m_mutex);
-        m_data = Data();
-    }
-
-private:
-    mutable QMutex m_mutex;
-    Data m_data;
-};
-
 struct TestPlan {
-    using Data = TestingInterface::Data;
+    using Data = KisTransformMaskTestingListener::Data;
 
     Data initializationPhase;
     Data jobsPhase;
     Data finalizationPhase;
 };
-
-inline QDebug operator<<(QDebug dbg, const TestingInterface::Data &d)
-{
-    dbg.nospace() << "("
-                  << ppVar(d.decorateRectTriggeredStaticImageUpdate) << " "
-                  << ppVar(d.slotDelayedStaticImageUpdate) << " "
-                  << ppVar(d.forceUpdateTimedNode) << " "
-                  << ppVar(d.threadSafeForceStaticImageUpdate) << " "
-                  << ppVar(d.recalculateStaticImage)
-                  << " )";
-
-    return dbg.space();
-}
-
 
 class InplaceStrokeTester : public QObject, public utils::StrokeTester
 {
@@ -159,7 +89,7 @@ protected:
             dev->fill(QRect(310,300, 80, 10), c);
 
             m_transformMask = new KisTransformMask(image, "tmask");
-            m_transformMask->setTestingInterface(new TestingInterface());
+            m_transformMask->setTestingInterface(new KisTransformMaskTestingListener());
             image->addNode(m_transformMask, m_node);
 
             m_transformMask->forceUpdateTimedNode();
@@ -180,17 +110,17 @@ protected:
         LEAVE_FUNCTION();
     }
 
-    TestingInterface* testingInterface() const {
-        TestingInterface *iface = dynamic_cast<TestingInterface*>(m_transformMask->testingInterface());
+    KisTransformMaskTestingListener* testingInterface() const {
+        KisTransformMaskTestingListener *iface = dynamic_cast<KisTransformMaskTestingListener*>(m_transformMask->testingInterface());
         KIS_ASSERT(iface);
         return iface;
     }
 
-    TestingInterface::Data stats() const {
+    KisTransformMaskTestingListener::Data stats() const {
         return testingInterface()->stats();
     }
 
-    TestingInterface::Data takeStats() const {
+    KisTransformMaskTestingListener::Data takeStats() const {
         auto s = testingInterface()->stats();
         testingInterface()->clear();
         return s;
@@ -241,9 +171,9 @@ protected:
     }
 
 
-    void compareStats(const char *title, TestingInterface::Data &expected)
+    void compareStats(const char *title, KisTransformMaskTestingListener::Data &expected)
     {
-        TestingInterface::Data data = takeStats();
+        KisTransformMaskTestingListener::Data data = takeStats();
 
         if (data != expected) {
             qDebug("FAIL: the update stats are not correct as stage \"%s\"", title);
@@ -327,21 +257,21 @@ void TransformStrokeStrategyTest::testLod2()
     tester.m_lodLevel = 2;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 0;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -351,21 +281,21 @@ void TransformStrokeStrategyTest::testLod2()
     }
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 1; // we have one more call due to undo() step in the commands
         init.recalculateStaticImage = 2;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 0;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -384,21 +314,21 @@ void TransformStrokeStrategyTest::testLod2Cancelled()
     tester.m_lodLevel = 2;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 0;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -418,21 +348,21 @@ void TransformStrokeStrategyTest::testLod2ContinueAndCancel()
     tester.m_lodLevel = 2;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 0;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -442,21 +372,21 @@ void TransformStrokeStrategyTest::testLod2ContinueAndCancel()
     }
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 1; // we have one more call due to undo() step in the commands
         init.recalculateStaticImage = 2;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 0;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -475,21 +405,21 @@ void TransformStrokeStrategyTest::testLod0()
     tester.m_lodLevel = 0;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 10000;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -499,21 +429,21 @@ void TransformStrokeStrategyTest::testLod0()
     }
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 1; // we have one more call due to undo() step in the commands
         init.recalculateStaticImage = 2;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 10000;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -532,21 +462,21 @@ void TransformStrokeStrategyTest::testLod0Cancelled()
     tester.m_lodLevel = 0;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 10000;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 1;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -566,21 +496,21 @@ void TransformStrokeStrategyTest::testLod0ContinueAndCancel()
     tester.m_lodLevel = 0;
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 0;
         init.recalculateStaticImage = 0;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 10000;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 0;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;
@@ -590,21 +520,21 @@ void TransformStrokeStrategyTest::testLod0ContinueAndCancel()
     }
 
     {
-        TestingInterface::Data init;
+        KisTransformMaskTestingListener::Data init;
         init.decorateRectTriggeredStaticImageUpdate = 0;
         init.slotDelayedStaticImageUpdate = 0;
         init.forceUpdateTimedNode = 1;
         init.threadSafeForceStaticImageUpdate = 1; // we have one more call due to undo() step in the commands
         init.recalculateStaticImage = 2;
 
-        TestingInterface::Data jobs;
+        KisTransformMaskTestingListener::Data jobs;
         jobs.decorateRectTriggeredStaticImageUpdate = 10000;
         jobs.slotDelayedStaticImageUpdate = 0;
         jobs.forceUpdateTimedNode = 0;
         jobs.threadSafeForceStaticImageUpdate = 0;
         jobs.recalculateStaticImage = 0;
 
-        TestingInterface::Data end;
+        KisTransformMaskTestingListener::Data end;
         end.decorateRectTriggeredStaticImageUpdate = 1;
         end.slotDelayedStaticImageUpdate = 0;
         end.forceUpdateTimedNode = 0;

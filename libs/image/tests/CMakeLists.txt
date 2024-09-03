@@ -39,7 +39,6 @@ kis_add_tests(
     kis_paint_layer_test.cpp
     kis_adjustment_layer_test.cpp
     kis_annotation_test.cpp
-    kis_clone_layer_test.cpp
     kis_convolution_painter_test.cpp
     kis_crop_processing_visitor_test.cpp
     kis_processing_applicator_test.cpp
@@ -136,6 +135,12 @@ kis_add_tests(
 kis_add_test(
     KisMplTest.cpp
     LINK_LIBRARIES kritaimage kritatestsdk kritaglobal
+    NAME_PREFIX "libs-image-"
+    )
+
+kis_add_test(
+    kis_clone_layer_test.cpp
+    LINK_LIBRARIES kritaimage kritatestsdk kritaglobal kritatransformmaskstubs
     NAME_PREFIX "libs-image-"
     )
 

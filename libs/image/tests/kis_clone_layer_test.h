@@ -14,6 +14,8 @@ class KisCloneLayerTest : public QObject
     Q_OBJECT
 private Q_SLOTS:
 
+    void initTestCase();
+
     void testCreation();
     void testOriginalUpdates();
     void testOriginalUpdatesOutOfBounds();
@@ -26,6 +28,8 @@ private Q_SLOTS:
     void testDuplicateGroup();
 
     void testCyclingGroupLayer();
+
+    void testWithSourceUnderTransformMask();
 };
 
 #endif

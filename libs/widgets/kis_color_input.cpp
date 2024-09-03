@@ -302,8 +302,12 @@ void KisFloatColorInput::update()
         Q_ASSERT(false);
     }
 
-    m_dblNumInput->setMinimum(m_minValue);
-    m_dblNumInput->setMaximum(m_maxValue);
+    if (m_minValue != m_dblNumInput->minimum()) {
+        m_dblNumInput->setMinimum(m_minValue);
+    }
+    if (m_maxValue != m_dblNumInput->maximum()) {
+        m_dblNumInput->setMaximum(m_maxValue);
+    }
 
     // ensure at least 3 significant digits are always shown
     int newPrecision = 2 + qMax(qreal(0.0), std::ceil(-std::log10(m_maxValue)));

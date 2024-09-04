@@ -40,7 +40,7 @@ CollapsibleGroupProperty {
         fontSlantSlope = properties.fontStyle.value;
         fontSynthesizeSlant = properties.fontSynthesisStyle;
         fontSynthesizeWeight = properties.fontSynthesisWeight;
-        styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle);
+        styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle.style, properties.fontStyle.value);
         visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
                 || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
                 || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
@@ -90,6 +90,9 @@ CollapsibleGroupProperty {
         properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
     }
 
+    Component.onCompleted: {
+        mainWindow.connectAutoEnabler(fontSlantSpnArea);
+    }
 
     titleItem: RowLayout{
         width: parent.width;
@@ -231,15 +234,24 @@ CollapsibleGroupProperty {
         height: 1;
         Layout.columnSpan: 2;
         }
-        SpinBox {
-            id: fontSlantSpn
-            from: -90;
-            to: 90;
-            editable: true;
+        MouseArea {
+            id: fontSlantSpnArea;
+            function autoEnable() {
+                fontSlant = CssFontStyleModel.StyleOblique;
+            }
             Layout.fillWidth: true;
+            Layout.fillHeight: true;
+            Layout.minimumHeight: fontSlantSpn.height;
+            SpinBox {
+                id: fontSlantSpn
+                from: -90;
+                to: 90;
+                editable: true;
+                enabled: fontSlant == CssFontStyleModel.StyleOblique;
 
-            wheelEnabled: true;
+                wheelEnabled: true;
 
+            }
         }
 
         RevertPropertyButton {

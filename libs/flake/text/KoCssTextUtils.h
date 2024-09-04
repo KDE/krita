@@ -208,6 +208,26 @@ public:
      * @param length the length.
      */
     static void removeText(QString &text, int &start, int length);
+
+    /**
+     * @brief cssSelectFontStyleValue
+     * Select the closest font style value from the list,
+     * following the CSS Fonts selection algorithm.
+     * Note that for slant, this needs to be inverted.
+     * @param values -- values list to search in.
+     * @param targetValue -- the target value to search for.
+     * @param defaultValue -- the (lower-end) default value for the given axis.
+     * @param defaultValueUpper -- the upper-end of the default value,
+     *        for example, for weight this is 100 larger than default,
+     *        for the others it is exactly the same.
+     * @param shouldNotReturnDefault -- used for the slants, as they need to fall back on one another.
+     * @return closest value on this list.
+     */
+    static qreal cssSelectFontStyleValue(const QVector<qreal> &values,
+                                         const qreal &targetValue,
+                                         const qreal &defaultValue,
+                                         const qreal &defaultValueUpper,
+                                         const bool &shouldNotReturnDefault);
 };
 
 #endif // KOCSSTEXTUTILS_H

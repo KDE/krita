@@ -607,6 +607,9 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
                 tags.insert(FT_MAKE_TAG(tag[0], tag[1], tag[2], tag[3]), axisSettings.value(tagName));
             }
         }
+        const FT_Tag ITALIC_TAG = FT_MAKE_TAG('i', 't', 'a', 'l');
+        const FT_Tag SLANT_TAG = FT_MAKE_TAG('s', 'l', 'n', 't');
+        const int axisMultiplier = 65535;
         if (FT_HAS_MULTIPLE_MASTERS(face)) {
             FT_MM_Var *amaster = nullptr;
             FT_Get_MM_Var(face.data(), &amaster);
@@ -616,10 +619,16 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
             for (FT_UInt i = 0; i < amaster->num_axis; i++) {
                 FT_Var_Axis axis = amaster->axis[i];
                 designCoords[i] = axis.def;
-                Q_FOREACH (FT_Tag tag, tags.keys()) {
-                    if (axis.tag == tag) {
-                        designCoords[i] = qBound(axis.minimum, long(tags.value(tag) * 65535), axis.maximum);
-                    }
+                if (tags.contains(axis.tag)) {
+                    designCoords[i] = qBound(axis.minimum, long(tags.value(axis.tag) * axisMultiplier), axis.maximum);
+                } else if (axis.tag == SLANT_TAG
+                           && !tags.contains(SLANT_TAG)
+                           && tags.value(ITALIC_TAG, 0) > 0) {
+                    designCoords[i] = qBound(axis.minimum, long(-11.0 * axisMultiplier), axis.maximum);
+                } else if (axis.tag == ITALIC_TAG
+                           && !tags.contains(ITALIC_TAG)
+                           && !qFuzzyCompare(tags.value(SLANT_TAG, 0), 0)) {
+                    designCoords[i] = qBound(axis.minimum, long(1.0 * axisMultiplier), axis.maximum);
                 }
             }
             FT_Set_Var_Design_Coordinates(face.data(), amaster->num_axis, designCoords.data());

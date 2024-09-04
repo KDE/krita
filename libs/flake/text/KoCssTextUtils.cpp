@@ -573,3 +573,40 @@ void KoCssTextUtils::removeText(QString &text, int &start, int length)
     }
     text.remove(start, end-start);
 }
+
+qreal KoCssTextUtils::cssSelectFontStyleValue(const QVector<qreal> &values, const qreal &targetValue, const qreal &defaultValue, const qreal &defaultValueUpper, const bool &shouldNotReturnDefault)
+{
+    // follow the CSS Fonts selection mechanism.
+    // See https://drafts.csswg.org/css-fonts-4/#font-style-matching
+    QVector<qreal> sortedValues = values;
+    std::sort(sortedValues.begin(), sortedValues.end());
+    qreal selectedValue = defaultValue;
+    auto upper = std::lower_bound(sortedValues.begin(), sortedValues.end(), targetValue);
+    if (upper == sortedValues.end()) {
+        upper--;
+    }
+    auto lower = upper;
+    if (lower != sortedValues.begin() && *lower > targetValue) {
+        lower--;
+    }
+
+    // ... Which wants to select the lower possible selection when the value is below the default.
+    if (targetValue < defaultValue) {
+        selectedValue = *lower;
+    // ... the higher closest value when the value is higher than the default (upper bound)
+    } else if (targetValue > defaultValueUpper) {
+        selectedValue = *upper;
+    } else {
+        // ... and if the value is between the lower and upper default bounds, first higher (within bounds)
+        // then lower, then higher.
+        if (*upper <= defaultValueUpper && *lower != targetValue) {
+            selectedValue = *upper;
+        } else {
+            selectedValue = *lower;
+        }
+    }
+    if (qFuzzyCompare(selectedValue, defaultValue) && shouldNotReturnDefault) {
+        return targetValue;
+    }
+    return selectedValue;
+}

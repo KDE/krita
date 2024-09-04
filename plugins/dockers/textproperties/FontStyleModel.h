@@ -43,7 +43,7 @@ public:
     Q_INVOKABLE QVariantHash axesValues(int row);
 
     /// Find the closest style that represents the current width, weight and stylemode.
-    Q_INVOKABLE int rowForStyle(qreal weight, qreal width, int styleMode);
+    Q_INVOKABLE int rowForStyle(const qreal &weight, const qreal &width, const int &styleMode, const qreal &styleValue);
 
     // QAbstractItemModel interface
 public:

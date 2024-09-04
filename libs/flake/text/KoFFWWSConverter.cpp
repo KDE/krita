@@ -950,7 +950,7 @@ QString KoFFWWSConverter::wwsNameByFamilyName(const QString familyName, bool *fo
     }
     return name;
 }
-
+#include <KoCssTextUtils.h>
 QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, const QString axisTag, const qreal &value, const qreal &defaultValue, const qreal &defaultValueUpper) {
     QVector<FontFamilyNode> candidates;
     QVector<qreal> values;
@@ -979,32 +979,8 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
     }
 
     // follow the CSS Fonts selection mechanism.
-    std::sort(values.begin(), values.end());
-    qreal selectedValue = defaultValue;
-    auto upper = std::lower_bound(values.begin(), values.end(), value);
-    if (upper == values.end()) {
-        upper--;
-    }
-    auto lower = upper;
-    if (lower != values.begin() && *lower > value) {
-        lower--;
-    }
-
-    // ... Which wants to select the lower possible selection when the value is below the default.
-    if (value < defaultValue) {
-        selectedValue = *lower;
-    // ... the higher closest value when the value is higher than the default (upper bound)
-    } else if (value > defaultValueUpper) {
-        selectedValue = *upper;
-    } else {
-        // ... and if the value is between the lower and upper default bounds, first higher (within bounds)
-        // then lower, then higher.
-        if (*upper <= defaultValueUpper && *lower != value) {
-            selectedValue = *upper;
-        } else {
-            selectedValue = *lower;
-        }
-    }
+    bool shouldNotReturnDefault = ((axisTag == ITALIC_TAG || axisTag == SLANT_TAG) && value != defaultValue);
+    qreal selectedValue = KoCssTextUtils::cssSelectFontStyleValue(values, value, defaultValue, defaultValueUpper, shouldNotReturnDefault);
 
     Q_FOREACH (const FontFamilyNode &node, nodes) {
         if (node.axes.keys().contains(axisTag)) {
@@ -1012,7 +988,7 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
             if (axis.value == selectedValue) {
                 candidates.append(node);
             }
-        } else if (value == defaultValue) {
+        } else if (value == defaultValue && !shouldNotReturnDefault) {
             candidates.append(node);
         }
     }

@@ -125,7 +125,7 @@ void KisNewsWidget::toggleNewsLanguage(QString langCode, bool enabled)
         }
     }
 
-    QString feed = QStringLiteral("https://krita.org/%1/index.html").arg(langCode);
+    QString feed = QStringLiteral("https://krita.org/%1/index.xml").arg(langCode);
     if (enabled) {
         m_enabledFeeds.insert(feed);
         if (m_getNews) {

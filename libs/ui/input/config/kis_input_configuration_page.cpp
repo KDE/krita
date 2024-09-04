@@ -20,6 +20,8 @@
 #include "kis_input_profile_model.h"
 #include "kis_input_configuration_page_item.h"
 #include <KoResourcePaths.h>
+#include <kis_config.h>
+#include <kis_signals_blocker.h>
 
 
 #include "kis_icon_utils.h"
@@ -145,7 +147,10 @@ void KisInputConfigurationPage::checkForConflicts()
 
 void KisInputConfigurationPage::setDefaults()
 {
+    KisSignalsBlocker(ui->profileComboBox, KisInputProfileManager::instance());
+
     QDir profileDir(KoResourcePaths::saveLocation("data", "input/", false));
+    KisConfig(false).setCurrentInputProfile("Krita Default");
 
     if (profileDir.exists()) {
         QStringList entries = profileDir.entryList(QStringList() << "*.profile", QDir::Files | QDir::NoDotAndDotDot);
@@ -154,7 +159,10 @@ void KisInputConfigurationPage::setDefaults()
         }
 
         KisInputProfileManager::instance()->loadProfiles();
+        changeCurrentProfile("Krita Default");
+        KisInputProfileManager::instance()->setCurrentProfile(KisInputProfileManager::instance()->profile("Krita Default"));
     }
+    ui->profileComboBox->setCurrentItem("Krita Default");
 }
 
 void KisInputConfigurationPage::editProfilesButtonClicked()

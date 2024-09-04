@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 01:46+0000\n"
+"POT-Creation-Date: 2024-09-04 01:44+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -19167,7 +19167,7 @@ msgid "Clone Layer"
 msgstr "Kloonikiht"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
-#: libs/ui/kis_node_manager.cpp:1594
+#: libs/ui/kis_node_manager.cpp:1592
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Group"
@@ -19213,7 +19213,7 @@ msgid "Transform Mask"
 msgstr "Teisendamismask"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1374
+#: libs/ui/kis_node_manager.cpp:1372
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20960,8 +20960,8 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1298
-#: libs/ui/kis_node_manager.cpp:1361 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1359 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -31121,78 +31121,78 @@ msgstr "Peegelda vaadet"
 msgid "Mirror View Around Canvas"
 msgstr "Peegelda vaadet"
 
-#: libs/ui/kis_node_manager.cpp:483
+#: libs/ui/kis_node_manager.cpp:481
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked"
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/kis_node_manager.cpp:485 libs/ui/kis_node_manager.cpp:510
+#: libs/ui/kis_node_manager.cpp:483 libs/ui/kis_node_manager.cpp:508
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer \"%1\" is locked"
 msgstr "Kiht on lukustatud."
 
-#: libs/ui/kis_node_manager.cpp:538
+#: libs/ui/kis_node_manager.cpp:536
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Liiguta sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:545
+#: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopeeri sõlmed"
 
-#: libs/ui/kis_node_manager.cpp:552
+#: libs/ui/kis_node_manager.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Lisa sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:723
+#: libs/ui/kis_node_manager.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Valikumaskiks teisendamine"
 
-#: libs/ui/kis_node_manager.cpp:770
+#: libs/ui/kis_node_manager.cpp:768
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Võtmekaadrite laadimine asukohast %1 nurjus."
 
-#: libs/ui/kis_node_manager.cpp:771
+#: libs/ui/kis_node_manager.cpp:769
 #, fuzzy, kde-format
 #| msgid "Could not load keyframes from %1."
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Võtmekaadrite laadimine asukohast %1 nurjus."
 
-#: libs/ui/kis_node_manager.cpp:1008
+#: libs/ui/kis_node_manager.cpp:1006
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Sibulakoor nõuab läbipaistva taustaga kihti."
 
-#: libs/ui/kis_node_manager.cpp:1035
+#: libs/ui/kis_node_manager.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Klooni sõlmi"
 
-#: libs/ui/kis_node_manager.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Sõlmede toomine ettepoole"
 
-#: libs/ui/kis_node_manager.cpp:1069
+#: libs/ui/kis_node_manager.cpp:1067
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Sõlmede viimine tahapoole"
 
-#: libs/ui/kis_node_manager.cpp:1089
+#: libs/ui/kis_node_manager.cpp:1087
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Sõlmede eemaldamine"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1103
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -31200,7 +31200,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Peegelda rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1106
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -31208,7 +31208,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Peegelda kihti rõhtsuunas"
 msgstr[1] "Peegelda kihti rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1117
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -31216,7 +31216,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Peegelda püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1122
+#: libs/ui/kis_node_manager.cpp:1120
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -31224,7 +31224,7 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Peegelda kihti püstsuunas"
 msgstr[1] "Peegelda kihti püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1130
+#: libs/ui/kis_node_manager.cpp:1128
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -31232,7 +31232,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Kõigi kihtide peegeldamine rõhtsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1135
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -31240,17 +31240,17 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Kõigi kihtide peegeldamine püstsuunas"
 
-#: libs/ui/kis_node_manager.cpp:1269
+#: libs/ui/kis_node_manager.cpp:1267
 #, kde-format
 msgid "Export \"%1\""
 msgstr "\"%1\" eksport"
 
-#: libs/ui/kis_node_manager.cpp:1299
+#: libs/ui/kis_node_manager.cpp:1297
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Kihi salvestamine nurjus. %1"
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1315
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Layer %1 is not editable"
@@ -31258,24 +31258,24 @@ msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Kiht %1 ei ole muudetav."
 
-#: libs/ui/kis_node_manager.cpp:1341
+#: libs/ui/kis_node_manager.cpp:1339
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Eksport SVG-sse"
 
-#: libs/ui/kis_node_manager.cpp:1361
+#: libs/ui/kis_node_manager.cpp:1359
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "SVG salvestamine nurjus: %1"
 
-#: libs/ui/kis_node_manager.cpp:1387
+#: libs/ui/kis_node_manager.cpp:1385
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Kiht %1 ei ole muudetav."
 
-#: libs/ui/kis_node_manager.cpp:1388
+#: libs/ui/kis_node_manager.cpp:1386
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -31284,50 +31284,50 @@ msgstr ""
 "Eellaskihi \"%1\" alfakanali kirjutamine nurjus.\n"
 "Toimingust loobutakse."
 
-#: libs/ui/kis_node_manager.cpp:1419
+#: libs/ui/kis_node_manager.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Alfa kirjutamine kihti"
 
-#: libs/ui/kis_node_manager.cpp:1542
+#: libs/ui/kis_node_manager.cpp:1540
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Lõika sõlmed"
 
-#: libs/ui/kis_node_manager.cpp:1624
+#: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Kiire rühmitamine"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1633
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Kiirlõikerühm"
 
-#: libs/ui/kis_node_manager.cpp:1642
+#: libs/ui/kis_node_manager.cpp:1640
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Lõikerühm"
 
-#: libs/ui/kis_node_manager.cpp:1643
+#: libs/ui/kis_node_manager.cpp:1641
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskikiht"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1668
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1673
+#: libs/ui/kis_node_manager.cpp:1671
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Iga kihi asetamine omaette, eraldi rühmakihti"
 
-#: libs/ui/kis_node_manager.cpp:1681
+#: libs/ui/kis_node_manager.cpp:1679
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Kiire rühma lõhkumine"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 01:46+0000\n"
+"POT-Creation-Date: 2024-09-04 01:44+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -17898,7 +17898,7 @@ msgid "Clone Layer"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
-#: libs/ui/kis_node_manager.cpp:1594
+#: libs/ui/kis_node_manager.cpp:1592
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17942,7 +17942,7 @@ msgid "Transform Mask"
 msgstr ""
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1374
+#: libs/ui/kis_node_manager.cpp:1372
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19539,8 +19539,8 @@ msgstr "Sumber Daya Lokal"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1298
-#: libs/ui/kis_node_manager.cpp:1361 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1359 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -29041,79 +29041,79 @@ msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 msgid "Mirror View Around Canvas"
 msgstr "Cerminkan Tampilan Sekeliling Kanvas"
 
-#: libs/ui/kis_node_manager.cpp:483
+#: libs/ui/kis_node_manager.cpp:481
 #, kde-format
 msgid "Layer is locked"
 msgstr "Lapisan telah digembok"
 
-#: libs/ui/kis_node_manager.cpp:485 libs/ui/kis_node_manager.cpp:510
+#: libs/ui/kis_node_manager.cpp:483 libs/ui/kis_node_manager.cpp:508
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Lapisan \"%1\" telah digembok"
 
-#: libs/ui/kis_node_manager.cpp:538
+#: libs/ui/kis_node_manager.cpp:536
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:545
+#: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:552
+#: libs/ui/kis_node_manager.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:723
+#: libs/ui/kis_node_manager.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:770
+#: libs/ui/kis_node_manager.cpp:768
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:771
+#: libs/ui/kis_node_manager.cpp:769
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1008
+#: libs/ui/kis_node_manager.cpp:1006
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Onion skin memerlukan lapisan dengan latar belakang transparan."
 
-#: libs/ui/kis_node_manager.cpp:1035
+#: libs/ui/kis_node_manager.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1069
+#: libs/ui/kis_node_manager.cpp:1067
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1089
+#: libs/ui/kis_node_manager.cpp:1087
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1103
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Cerminkan Mask Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29121,12 +29121,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Cerminkan Lapisan Secara Horizontal"
 msgstr[1] "Cerminkan %1 Lapisan Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1117
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Cerminkan Mask Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1122
+#: libs/ui/kis_node_manager.cpp:1120
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29134,99 +29134,99 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Cerminkan Lapisan Secara Vertikal"
 msgstr[1] "Cerminkan %1 Lapisan Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1130
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Cerminkan Semua Lapisan Secara Horizontal"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1135
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Cerminkan Semua Lapisan Secara Vertikal"
 
-#: libs/ui/kis_node_manager.cpp:1269
+#: libs/ui/kis_node_manager.cpp:1267
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Ekspor \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1299
+#: libs/ui/kis_node_manager.cpp:1297
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1315
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1341
+#: libs/ui/kis_node_manager.cpp:1339
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1361
+#: libs/ui/kis_node_manager.cpp:1359
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1387
+#: libs/ui/kis_node_manager.cpp:1385
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1388
+#: libs/ui/kis_node_manager.cpp:1386
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1419
+#: libs/ui/kis_node_manager.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1542
+#: libs/ui/kis_node_manager.cpp:1540
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Potong Simpul"
 
-#: libs/ui/kis_node_manager.cpp:1624
+#: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Kelompok Cepat"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1633
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Kelompok Pengeklipan Cepat"
 
-#: libs/ui/kis_node_manager.cpp:1642
+#: libs/ui/kis_node_manager.cpp:1640
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1643
+#: libs/ui/kis_node_manager.cpp:1641
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1668
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1673
+#: libs/ui/kis_node_manager.cpp:1671
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1681
+#: libs/ui/kis_node_manager.cpp:1679
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Nonkelompok Cepat"

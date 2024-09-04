@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-31 01:46+0000\n"
+"POT-Creation-Date: 2024-09-04 01:44+0000\n"
 "PO-Revision-Date: 2024-08-30 07:44+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -17968,7 +17968,7 @@ msgid "Clone Layer"
 msgstr "Kloniraj plast"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
-#: libs/ui/kis_node_manager.cpp:1594
+#: libs/ui/kis_node_manager.cpp:1592
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18012,7 +18012,7 @@ msgid "Transform Mask"
 msgstr "Preoblikuj masko"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1374
+#: libs/ui/kis_node_manager.cpp:1372
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19609,8 +19609,8 @@ msgstr "Krajevni viri"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1298
-#: libs/ui/kis_node_manager.cpp:1361 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1359 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -29501,79 +29501,79 @@ msgstr "Zrcalni pogled okoli kazalca"
 msgid "Mirror View Around Canvas"
 msgstr "Zrcalni pogled okoli platna"
 
-#: libs/ui/kis_node_manager.cpp:483
+#: libs/ui/kis_node_manager.cpp:481
 #, kde-format
 msgid "Layer is locked"
 msgstr "Plast je zaklenjena"
 
-#: libs/ui/kis_node_manager.cpp:485 libs/ui/kis_node_manager.cpp:510
+#: libs/ui/kis_node_manager.cpp:483 libs/ui/kis_node_manager.cpp:508
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Plast »%1« je zaklenjena"
 
-#: libs/ui/kis_node_manager.cpp:538
+#: libs/ui/kis_node_manager.cpp:536
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Premakni vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:545
+#: libs/ui/kis_node_manager.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopiraj vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:552
+#: libs/ui/kis_node_manager.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Dodaj vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:723
+#: libs/ui/kis_node_manager.cpp:721
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Pretvori v masko izbora"
 
-#: libs/ui/kis_node_manager.cpp:770
+#: libs/ui/kis_node_manager.cpp:768
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Referenčne slike iz dejavne plasti ni mogoče ustvariti."
 
-#: libs/ui/kis_node_manager.cpp:771
+#: libs/ui/kis_node_manager.cpp:769
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Referenčne slike iz vidnega na platnu ni mogoče ustvariti."
 
-#: libs/ui/kis_node_manager.cpp:1008
+#: libs/ui/kis_node_manager.cpp:1006
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Folije zahtevajo plast s prosojnim ozadjem."
 
-#: libs/ui/kis_node_manager.cpp:1035
+#: libs/ui/kis_node_manager.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Podvoji vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1060
+#: libs/ui/kis_node_manager.cpp:1058
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Dvigni vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1069
+#: libs/ui/kis_node_manager.cpp:1067
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Spusti vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1089
+#: libs/ui/kis_node_manager.cpp:1087
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Odstrani vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1103
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Zrcali masko vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1108
+#: libs/ui/kis_node_manager.cpp:1106
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29583,12 +29583,12 @@ msgstr[1] "Zrcali %1 plast vodoravno"
 msgstr[2] "Zrcali %1 plasti vodoravno"
 msgstr[3] "Zrcali %1 plasti vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1117
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Zrcali masko navpično"
 
-#: libs/ui/kis_node_manager.cpp:1122
+#: libs/ui/kis_node_manager.cpp:1120
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29598,50 +29598,50 @@ msgstr[1] "Zrcali %1 plast navpično"
 msgstr[2] "Zrcali %1 plasti navpično"
 msgstr[3] "Zrcali %1 plasti navpično"
 
-#: libs/ui/kis_node_manager.cpp:1130
+#: libs/ui/kis_node_manager.cpp:1128
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrcali vse plasti vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1137
+#: libs/ui/kis_node_manager.cpp:1135
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrcali vse plasti navpično"
 
-#: libs/ui/kis_node_manager.cpp:1269
+#: libs/ui/kis_node_manager.cpp:1267
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Izvoz »%1«"
 
-#: libs/ui/kis_node_manager.cpp:1299
+#: libs/ui/kis_node_manager.cpp:1297
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Plasti ni bilo mogoče shraniti. %1"
 
-#: libs/ui/kis_node_manager.cpp:1317
+#: libs/ui/kis_node_manager.cpp:1315
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Plast nima podatkov o slikovnih točkah"
 
-#: libs/ui/kis_node_manager.cpp:1341
+#: libs/ui/kis_node_manager.cpp:1339
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Izvozi v SVG"
 
-#: libs/ui/kis_node_manager.cpp:1361
+#: libs/ui/kis_node_manager.cpp:1359
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ni bilo mogoče shraniti v SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1387
+#: libs/ui/kis_node_manager.cpp:1385
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Plasti %1 ni mogoče urejati"
 
-#: libs/ui/kis_node_manager.cpp:1388
+#: libs/ui/kis_node_manager.cpp:1386
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29650,49 +29650,49 @@ msgstr ""
 "Kanala alfa nadrejene plasti »%1« ni mogoče zapisati.\n"
 "Operacija bo preklicana."
 
-#: libs/ui/kis_node_manager.cpp:1419
+#: libs/ui/kis_node_manager.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Zapiši alfo v plast"
 
-#: libs/ui/kis_node_manager.cpp:1542
+#: libs/ui/kis_node_manager.cpp:1540
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Izreži vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1624
+#: libs/ui/kis_node_manager.cpp:1622
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Hitro združi"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1633
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Hitro združi z izrezovanjem"
 
-#: libs/ui/kis_node_manager.cpp:1642
+#: libs/ui/kis_node_manager.cpp:1640
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Združi z izrezovanjem"
 
-#: libs/ui/kis_node_manager.cpp:1643
+#: libs/ui/kis_node_manager.cpp:1641
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Plast maske"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1668
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Plasti »%1« ni možno premakniti na novo nadrejeno plast »%2«"
 
-#: libs/ui/kis_node_manager.cpp:1673
+#: libs/ui/kis_node_manager.cpp:1671
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Plasti »%1« ni možno postaviti v korensko plast"
 
-#: libs/ui/kis_node_manager.cpp:1681
+#: libs/ui/kis_node_manager.cpp:1679
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Hitro razdruži"

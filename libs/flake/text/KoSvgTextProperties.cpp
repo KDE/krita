@@ -215,12 +215,13 @@ inline qreal roundToStraightAngle(qreal value)
 
 QVariantHash parseVariantStringList(const QStringList features) {
     QVariantHash settings;
-    QString tag;
     for (int i = 0; i < features.size(); i++) {
         QString feature = features.at(i).trimmed();
-        if ((feature.startsWith('\'') || feature.startsWith('\"')) && feature.size() == 6) {
-            tag = feature.mid(1, 4);
+        if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
+            continue;
         }
+        QString tag = feature.mid(1, 4);
+        feature = feature.remove(0, 6).trimmed();
         bool ok = false;
         double featureVal = feature.toDouble(&ok);
 
@@ -437,7 +438,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-optical-sizing") {
         setProperty(FontOpticalSizingId, value == "auto");
     } else if (command == "font-variation-settings") {
-        setProperty(FontVariationSettingsId, parseVariantStringList(value.split(", ")));
+        setProperty(FontVariationSettingsId, parseVariantStringList(value.split(",")));
     } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
                || command == "text-decoration-position") {
         using namespace KoSvgText;

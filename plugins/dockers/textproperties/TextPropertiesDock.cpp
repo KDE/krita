@@ -233,7 +233,8 @@ void TextPropertiesDock::slotUpdateStylesModel()
     QList<KoSvgText::FontFamilyAxis> axes;
 
     if (!families.isEmpty() && d->fontModel) {
-        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(families.first());
+        QString familyName = wwsFontFamilyName(families.first());
+        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(familyName);
         if (!res.isEmpty()) {
             KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
             if (family) {

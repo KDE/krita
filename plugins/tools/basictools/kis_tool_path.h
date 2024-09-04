@@ -75,12 +75,12 @@ private:
     friend class __KisToolPathLocalTool;
 };
 
-class KisToolPathFactory : public KoToolFactoryBase
+class KisToolPathFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolPathFactory()
-            : KoToolFactoryBase("KisToolPath") {
+            : KisToolPaintFactoryBase("KisToolPath") {
         setToolTip(i18n("Bezier Curve Tool: Shift-mouseclick ends the curve."));
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

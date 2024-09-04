@@ -67,12 +67,12 @@ private:
     friend class __KisToolPencilLocalTool;
 };
 
-class KisToolPencilFactory : public KoToolFactoryBase
+class KisToolPencilFactory : public KisToolPaintFactoryBase
 {
 
 public:
     KisToolPencilFactory()
-        : KoToolFactoryBase("KisToolPencil") {
+        : KisToolPaintFactoryBase("KisToolPencil") {
         setToolTip(i18n("Freehand Path Tool"));
         setSection(ToolBoxSection::Shape);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

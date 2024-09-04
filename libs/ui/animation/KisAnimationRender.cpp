@@ -70,33 +70,48 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         const QString savedFilesMask = exporter.savedFilesMask();
 
         if (encoderOptions.shouldEncodeVideo) {
-            const QString resultFile = encoderOptions.resolveAbsoluteVideoFilePath();
-            KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(resultFile).isAbsolute());
+            const QString videoOutputFilePath = encoderOptions.resolveAbsoluteVideoFilePath();
+            KIS_SAFE_ASSERT_RECOVER_NOOP(QFileInfo(videoOutputFilePath).isAbsolute());
 
-            {
-                const QFileInfo info(resultFile);
-                QDir dir(info.absolutePath());
+            const QFileInfo videoOutputFile(videoOutputFilePath);
+            QDir outputDir(videoOutputFile.absolutePath());
 
-                if (!dir.exists()) {
-                    dir.mkpath(info.absolutePath());
+            if (!outputDir.exists()) {
+                outputDir.mkpath(videoOutputFile.absolutePath());
+            }
+            KIS_SAFE_ASSERT_RECOVER_NOOP(outputDir.exists());
+
+            // If file exists at output path, prompt user for overwrite..
+            bool videoFileWriteAllowed = true;
+            if (videoOutputFile.exists()) {
+                QMessageBox videoOverwritePrompt;
+
+                videoOverwritePrompt.setText(i18n("Overwrite existing video?"));
+                videoOverwritePrompt.setInformativeText(i18n("A file already exists at the path where you want to render your video [%1]... \n\
+                                                              Are you sure you want to overwrite the existing file?", videoOutputFilePath));
+                videoOverwritePrompt.setStandardButtons(QMessageBox::Ok | QMessageBox::Abort);
+
+                videoFileWriteAllowed = videoOverwritePrompt.exec() == QMessageBox::Ok ? true : false;
+            }
+
+            // Write the video..
+            if (videoFileWriteAllowed) {
+                KisImportExportErrorCode result;
+
+                QFile videoOutputFile(videoOutputFilePath);
+                if (!videoOutputFile.open(QIODevice::WriteOnly)) {
+                    qWarning() << "Could not open" << videoOutputFile.fileName() << "for writing! Do you have permission to write to this file?";
+                    result = KisImportExportErrorCannotWrite(videoOutputFile.error());
+                } else {
+                    videoOutputFile.close();
                 }
-                KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
-            }
 
-            KisImportExportErrorCode res;
-            QFile fi(resultFile);
-            if (!fi.open(QIODevice::WriteOnly)) {
-                qWarning() << "Could not open" << fi.fileName() << "for writing!";
-                res = KisImportExportErrorCannotWrite(fi.error());
-            } else {
-                fi.close();
-            }
+                QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
+                result = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
 
-            QScopedPointer<KisAnimationVideoSaver> encoder(new KisAnimationVideoSaver(doc, batchMode));
-            res = encoder->convert(doc, savedFilesMask, encoderOptions, batchMode);
-
-            if (!res.isOk()) {
-                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", res.errorMessage()));
+                if (!result.isOk()) {
+                    QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", result.errorMessage()));
+                }
             }
         }
 

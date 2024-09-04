@@ -512,39 +512,11 @@ bool KisWelcomePageWidget::eventFilter(QObject *watched, QEvent *event)
 
 namespace {
 
-QString mapKi18nLangToNewsLang(const QString &ki18nLang) {
-    if (ki18nLang == "ja") {
-        return QString("jp");
-    }
-    if (ki18nLang == "zh_CN") {
-        return QString("zh");
-    }
-    if (ki18nLang == "zh_TW") {
-        return QString("zh-tw");
-    }
-    if (ki18nLang == "zh_HK") {
-        return QString("zh-hk");
-    }
-    if (ki18nLang == "en" || ki18nLang == "en_US" || ki18nLang == "en_GB") {
-        return QString("en");
-    }
-    return QString();
-};
-
 QString getAutoNewsLang()
 {
     // Get current UI languages:
     const QStringList uiLangs = KLocalizedString::languages();
-
-    QString autoNewsLang;
-    // Iterate UI languages including fallback languages for the first
-    // available news language.
-    Q_FOREACH(const auto &uiLang, uiLangs) {
-        autoNewsLang = mapKi18nLangToNewsLang(uiLang);
-        if (!autoNewsLang.isEmpty()) {
-            break;
-        }
-    }
+    QString autoNewsLang = uiLangs.first();
     if (autoNewsLang.isEmpty()) {
         // If nothing else, use English.
         autoNewsLang = QString("en");
@@ -558,19 +530,36 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
 {
     // Hard-coded news language data:
     // These are languages in which the news items should be regularly
-    // translated into as of 2020-11-07.
+    // translated into as of 04-09-2024.
     // The language display names should not be translated. This reflects
     // the language selection box on the Krita website.
     struct Lang {
         const QString siteCode;
         const QString name;
     };
-    static const std::array<Lang, 5> newsLangs = {{
+    static const std::array<Lang, 22> newsLangs = {{
         {QString("en"), QStringLiteral("English")},
         {QString("jp"), QStringLiteral("日本語")},
         {QString("zh"), QStringLiteral("中文 (简体)")},
         {QString("zh-tw"), QStringLiteral("中文 (台灣正體)")},
         {QString("zh-hk"), QStringLiteral("廣東話 (香港)")},
+        {QString("ca"), QStringLiteral("Català")},
+        {QString("ca@valencia"), QStringLiteral("Català de Valencia")},
+        {QString("cs"), QStringLiteral("Čeština")},
+        {QString("de"), QStringLiteral("Deutsch")},
+        {QString("eo"), QStringLiteral("Esperanto")},
+        {QString("es"), QStringLiteral("Español")},
+        {QString("eu"), QStringLiteral("Euskara")},
+        {QString("fr"), QStringLiteral("Français")},
+        {QString("it"), QStringLiteral("Italiano")},
+        {QString("lt"), QStringLiteral("lietuvių")},
+        {QString("nl"), QStringLiteral("Nederlands")},
+        {QString("pt"), QStringLiteral("Português")},
+        {QString("sk"), QStringLiteral("Slovenský")},
+        {QString("sl"), QStringLiteral("Slovenski")},
+        {QString("sv"), QStringLiteral("Svenska")},
+        {QString("tr"), QStringLiteral("Türkçe")},
+        {QString("uk"), QStringLiteral("English (UK)")}
     }};
 
     static const QString newsLangConfigName = QStringLiteral("FetchNewsLanguages");

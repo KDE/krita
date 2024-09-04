@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 03:40+0000\n"
+"POT-Creation-Date: 2024-09-04 03:10+0000\n"
 "PO-Revision-Date: 2024-08-29 18:17+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -17893,7 +17893,7 @@ msgid "Clone Layer"
 msgstr "Capa clon"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1538
+#: libs/ui/kis_node_manager.cpp:1536
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17937,7 +17937,7 @@ msgid "Transform Mask"
 msgstr "Máscara de transformación"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1316
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19526,8 +19526,8 @@ msgstr "Recursos locais"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1242
-#: libs/ui/kis_node_manager.cpp:1305 libs/ui/KisApplication.cpp:1012
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
@@ -29371,125 +29371,125 @@ msgstr "Vista de espello arredor do cursor"
 msgid "Mirror View Around Canvas"
 msgstr "Vista de espello arredor do lenzo"
 
-#: libs/ui/kis_node_manager.cpp:477
+#: libs/ui/kis_node_manager.cpp:475
 #, kde-format
 msgid "Layer is locked"
 msgstr "A capa está bloqueada"
 
-#: libs/ui/kis_node_manager.cpp:479 libs/ui/kis_node_manager.cpp:504
+#: libs/ui/kis_node_manager.cpp:477 libs/ui/kis_node_manager.cpp:502
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "A capa «%1» está bloqueada"
 
-#: libs/ui/kis_node_manager.cpp:532
+#: libs/ui/kis_node_manager.cpp:530
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Mover nodos"
 
-#: libs/ui/kis_node_manager.cpp:539
+#: libs/ui/kis_node_manager.cpp:537
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Copiar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:546
+#: libs/ui/kis_node_manager.cpp:544
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Engadir nodos"
 
-#: libs/ui/kis_node_manager.cpp:717
+#: libs/ui/kis_node_manager.cpp:715
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Converter nunha máscara de selección"
 
-#: libs/ui/kis_node_manager.cpp:965
+#: libs/ui/kis_node_manager.cpp:963
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "As peles de cebola requiren unha capa con fondo transparente."
 
-#: libs/ui/kis_node_manager.cpp:992
+#: libs/ui/kis_node_manager.cpp:990
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplicar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:1017
+#: libs/ui/kis_node_manager.cpp:1015
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Elevar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:1026
+#: libs/ui/kis_node_manager.cpp:1024
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Baixar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:1046
+#: libs/ui/kis_node_manager.cpp:1044
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Eliminar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:1062
+#: libs/ui/kis_node_manager.cpp:1060
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Capa reflectida en X"
 
-#: libs/ui/kis_node_manager.cpp:1064
+#: libs/ui/kis_node_manager.cpp:1062
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Máscara reflectida de X"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1073
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Capa reflectida en Y"
 
-#: libs/ui/kis_node_manager.cpp:1077
+#: libs/ui/kis_node_manager.cpp:1075
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Máscara reflectida de Y"
 
-#: libs/ui/kis_node_manager.cpp:1085
+#: libs/ui/kis_node_manager.cpp:1083
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Reflectir todas as capas en X"
 
-#: libs/ui/kis_node_manager.cpp:1092
+#: libs/ui/kis_node_manager.cpp:1090
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Reflectir todas as capas en Y"
 
-#: libs/ui/kis_node_manager.cpp:1213
+#: libs/ui/kis_node_manager.cpp:1211
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportar «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1243
+#: libs/ui/kis_node_manager.cpp:1241
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Non foi posíbel gardar a capa. %1"
 
-#: libs/ui/kis_node_manager.cpp:1261
+#: libs/ui/kis_node_manager.cpp:1259
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "O capa non ten datos de píxeles"
 
-#: libs/ui/kis_node_manager.cpp:1285
+#: libs/ui/kis_node_manager.cpp:1283
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportar para SVG"
 
-#: libs/ui/kis_node_manager.cpp:1305
+#: libs/ui/kis_node_manager.cpp:1303
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Non foi posíbel gardar en SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1331
+#: libs/ui/kis_node_manager.cpp:1329
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "A capa %1 non permite edicións"
 
-#: libs/ui/kis_node_manager.cpp:1332
+#: libs/ui/kis_node_manager.cpp:1330
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29498,49 +29498,49 @@ msgstr ""
 "Non é posíbel escribir a canle alfa na capa superior «%1».\n"
 "Cancelarase a operación."
 
-#: libs/ui/kis_node_manager.cpp:1363
+#: libs/ui/kis_node_manager.cpp:1361
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Escribir a alfa nunha capa"
 
-#: libs/ui/kis_node_manager.cpp:1486
+#: libs/ui/kis_node_manager.cpp:1484
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Cortar os nodos"
 
-#: libs/ui/kis_node_manager.cpp:1568
+#: libs/ui/kis_node_manager.cpp:1566
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Grupo rápido"
 
-#: libs/ui/kis_node_manager.cpp:1579
+#: libs/ui/kis_node_manager.cpp:1577
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Grupo rápido de recorte"
 
-#: libs/ui/kis_node_manager.cpp:1586
+#: libs/ui/kis_node_manager.cpp:1584
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grupo de recorte"
 
-#: libs/ui/kis_node_manager.cpp:1587
+#: libs/ui/kis_node_manager.cpp:1585
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Capa de máscara"
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1612
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Non é posíbel mover a capa «%1» á nova superior «%2»"
 
-#: libs/ui/kis_node_manager.cpp:1617
+#: libs/ui/kis_node_manager.cpp:1615
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Non é posíbel mover a capa «%1» á capa raíz"
 
-#: libs/ui/kis_node_manager.cpp:1625
+#: libs/ui/kis_node_manager.cpp:1623
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupar rapidamente"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-08-28 03:40+0000\n"
+"POT-Creation-Date: 2024-09-04 03:10+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -18239,7 +18239,7 @@ msgid "Clone Layer"
 msgstr "Coûtche &djermale"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1538
+#: libs/ui/kis_node_manager.cpp:1536
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -18284,7 +18284,7 @@ msgid "Transform Mask"
 msgstr "Transformer"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1318
+#: libs/ui/kis_node_manager.cpp:1316
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19905,8 +19905,8 @@ msgstr "Fitchîs sourdants:"
 #: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1242
-#: libs/ui/kis_node_manager.cpp:1305 libs/ui/KisApplication.cpp:1012
+#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
+#: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
@@ -29640,192 +29640,192 @@ msgstr "Côper dvins l' imådje"
 msgid "Mirror View Around Canvas"
 msgstr "Côper dvins l' imådje"
 
-#: libs/ui/kis_node_manager.cpp:477
+#: libs/ui/kis_node_manager.cpp:475
 #, fuzzy, kde-format
 msgid "Layer is locked"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:479 libs/ui/kis_node_manager.cpp:504
+#: libs/ui/kis_node_manager.cpp:477 libs/ui/kis_node_manager.cpp:502
 #, fuzzy, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:532
+#: libs/ui/kis_node_manager.cpp:530
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:539
+#: libs/ui/kis_node_manager.cpp:537
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Copyî di"
 
-#: libs/ui/kis_node_manager.cpp:546
+#: libs/ui/kis_node_manager.cpp:544
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "&Rissourses"
 
-#: libs/ui/kis_node_manager.cpp:717
+#: libs/ui/kis_node_manager.cpp:715
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Tchoezi å &rvier"
 
-#: libs/ui/kis_node_manager.cpp:965
+#: libs/ui/kis_node_manager.cpp:963
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:992
+#: libs/ui/kis_node_manager.cpp:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Dobler"
 
-#: libs/ui/kis_node_manager.cpp:1017
+#: libs/ui/kis_node_manager.cpp:1015
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1026
+#: libs/ui/kis_node_manager.cpp:1024
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1046
+#: libs/ui/kis_node_manager.cpp:1044
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Usteyes då &pondeu"
 
-#: libs/ui/kis_node_manager.cpp:1062
+#: libs/ui/kis_node_manager.cpp:1060
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "Coûtche e muroe X"
 
-#: libs/ui/kis_node_manager.cpp:1064
+#: libs/ui/kis_node_manager.cpp:1062
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask X"
 msgstr "Masse muroe X"
 
-#: libs/ui/kis_node_manager.cpp:1075
+#: libs/ui/kis_node_manager.cpp:1073
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "Coûtche muroe Y"
 
-#: libs/ui/kis_node_manager.cpp:1077
+#: libs/ui/kis_node_manager.cpp:1075
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Y"
 msgstr "Masse muroe X"
 
-#: libs/ui/kis_node_manager.cpp:1085
+#: libs/ui/kis_node_manager.cpp:1083
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers X"
 msgstr "Coûtche e muroe X"
 
-#: libs/ui/kis_node_manager.cpp:1092
+#: libs/ui/kis_node_manager.cpp:1090
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Y"
 msgstr "Coûtche muroe Y"
 
-#: libs/ui/kis_node_manager.cpp:1213
+#: libs/ui/kis_node_manager.cpp:1211
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Ebaguer"
 
-#: libs/ui/kis_node_manager.cpp:1243
+#: libs/ui/kis_node_manager.cpp:1241
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/kis_node_manager.cpp:1261
+#: libs/ui/kis_node_manager.cpp:1259
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1285
+#: libs/ui/kis_node_manager.cpp:1283
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Ebaguer"
 
-#: libs/ui/kis_node_manager.cpp:1305
+#: libs/ui/kis_node_manager.cpp:1303
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Dji n' a savou radjouter l' coûtche a l' imådje."
 
-#: libs/ui/kis_node_manager.cpp:1331
+#: libs/ui/kis_node_manager.cpp:1329
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Grandeu del coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1332
+#: libs/ui/kis_node_manager.cpp:1330
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1363
+#: libs/ui/kis_node_manager.cpp:1361
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Ahiver on novea masse ou coûtche"
 
-#: libs/ui/kis_node_manager.cpp:1486
+#: libs/ui/kis_node_manager.cpp:1484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Dobler"
 
-#: libs/ui/kis_node_manager.cpp:1568
+#: libs/ui/kis_node_manager.cpp:1566
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1579
+#: libs/ui/kis_node_manager.cpp:1577
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1586
+#: libs/ui/kis_node_manager.cpp:1584
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Disgrouper"
 
-#: libs/ui/kis_node_manager.cpp:1587
+#: libs/ui/kis_node_manager.cpp:1585
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Côutche &pondeure"
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1612
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1617
+#: libs/ui/kis_node_manager.cpp:1615
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1625
+#: libs/ui/kis_node_manager.cpp:1623
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"

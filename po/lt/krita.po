@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-04 03:10+0000\n"
+"POT-Creation-Date: 2024-09-05 03:10+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -19996,7 +19996,7 @@ msgstr "Valyti resursų failus"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -24164,7 +24164,7 @@ msgid "Start"
 msgstr "Pradėti nuo"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -31830,23 +31830,23 @@ msgstr "Paskutinis puslapis:"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:642
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Ekspozicija"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:733
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:762
 #, kde-format
 msgid "An error occurred during the update"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:768
 #, kde-format
 msgid "Restart is required."
 msgstr ""

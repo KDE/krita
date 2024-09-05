@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-04 03:10+0000\n"
+"POT-Creation-Date: 2024-09-05 03:10+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -19403,7 +19403,7 @@ msgstr "本地资源"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23527,7 +23527,7 @@ msgid "Start"
 msgstr "开始创作"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
 #, kde-format
 msgid "DEV BUILD"
 msgstr "正在运行测试版本"
@@ -31190,23 +31190,23 @@ msgstr "语言"
 msgid "English news is always up to date."
 msgstr "英文资讯内容更加及时和齐全。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:642
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "移除“%1”"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:733
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita 已经推出了新版本。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:762
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "更新时发生错误"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:768
 #, kde-format
 msgid "Restart is required."
 msgstr "需要重启软件。"

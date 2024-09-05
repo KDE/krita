@@ -36,9 +36,11 @@ KisTransparencyMask::~KisTransparencyMask()
 QRect KisTransparencyMask::decorateRect(KisPaintDeviceSP &src,
                                         KisPaintDeviceSP &dst,
                                         const QRect & rc,
-                                        PositionToFilthy maskPos) const
+                                        PositionToFilthy maskPos,
+                                        KisRenderPassFlags flags) const
 {
     Q_UNUSED(maskPos);
+    Q_UNUSED(flags);
 
     if (src != dst) {
         KisPainter::copyAreaOptimized(rc.topLeft(), src, dst, rc);

@@ -52,9 +52,11 @@ void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig, bool check
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
                                   KisPaintDeviceSP &dst,
                                   const QRect & rc,
-                                  PositionToFilthy maskPos) const
+                                  PositionToFilthy maskPos,
+                                  KisRenderPassFlags flags) const
 {
     Q_UNUSED(maskPos);
+    Q_UNUSED(flags);
 
     KisFilterConfigurationSP filterConfig = filter();
 

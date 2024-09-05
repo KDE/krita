@@ -30,6 +30,7 @@ private Q_SLOTS:
     void testCyclingGroupLayer();
 
     void testWithSourceUnderTransformMask();
+    void testWithSourceUnderTwoTransformMasks();
 };
 
 #endif

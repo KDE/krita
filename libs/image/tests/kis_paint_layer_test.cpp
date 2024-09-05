@@ -54,7 +54,7 @@ void KisPaintLayerTest::testProjection()
     Q_ASSERT(layer->hasEffectMasks());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->projectionPlane()->recalculate(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer, KisRenderPassFlag::None);
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
@@ -63,7 +63,7 @@ void KisPaintLayerTest::testProjection()
     layer->setDirty(qimage.rect());
 
     // And now we're going to update the projection, but nothing is dirty yet
-    layer->projectionPlane()->recalculate(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer, KisRenderPassFlag::None);
 
     // Which also means that the projection is no longer the paint device
     QVERIFY(layer->paintDevice().data() != layer->projection().data());
@@ -73,7 +73,7 @@ void KisPaintLayerTest::testProjection()
     QVERIFY(layer->projection().data() != 0);
 
     // The selection is initially empty, so after an update, all pixels are still visible
-    layer->projectionPlane()->recalculate(qimage.rect(), layer);
+    layer->projectionPlane()->recalculate(qimage.rect(), layer, KisRenderPassFlag::None);
 
     // We've inverted the mask, so now nothing is seen
     KisSequentialConstIterator it(layer->projection(), qimage.rect());

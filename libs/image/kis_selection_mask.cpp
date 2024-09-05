@@ -91,10 +91,13 @@ void KisSelectionMask::mergeInMaskInternal(KisPaintDeviceSP projection,
                                            KisSelectionSP effectiveSelection,
                                            const QRect &applyRect,
                                            const QRect &preparedNeedRect,
-                                           KisNode::PositionToFilthy maskPos) const
+                                           KisNode::PositionToFilthy maskPos,
+                                           KisRenderPassFlags flags) const
 {
     Q_UNUSED(maskPos);
     Q_UNUSED(preparedNeedRect);
+    Q_UNUSED(flags);
+
     if (!effectiveSelection) return;
 
     {

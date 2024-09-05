@@ -270,11 +270,13 @@ void KisMask::select(const QRect & rc, quint8 selectedness)
 QRect KisMask::decorateRect(KisPaintDeviceSP &src,
                             KisPaintDeviceSP &dst,
                             const QRect & rc,
-                            PositionToFilthy maskPos) const
+                            PositionToFilthy maskPos,
+                            KisRenderPassFlags flags) const
 {
     Q_UNUSED(src);
     Q_UNUSED(dst);
     Q_UNUSED(maskPos);
+    Q_UNUSED(flags);
     Q_ASSERT_X(0, "KisMask::decorateRect", "Should be overridden by successors");
     return rc;
 }
@@ -284,7 +286,7 @@ bool KisMask::paintsOutsideSelection() const
     return false;
 }
 
-void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos) const
+void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const QRect &needRect, PositionToFilthy maskPos, KisRenderPassFlags flags) const
 {
     if (selection()) {
 
@@ -324,11 +326,11 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect &applyRect, const Q
                 m_d->safeProjection->releaseDevice();
             }
 
-            mergeInMaskInternal(projection, effectiveSelection, applyRect, needRect, maskPos);
+            mergeInMaskInternal(projection, effectiveSelection, applyRect, needRect, maskPos, flags);
         }
 
     } else {
-        mergeInMaskInternal(projection, 0, applyRect, needRect, maskPos);
+        mergeInMaskInternal(projection, 0, applyRect, needRect, maskPos, flags);
     }
 }
 
@@ -336,13 +338,14 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
                                   KisSelectionSP effectiveSelection,
                                   const QRect &applyRect,
                                   const QRect &preparedNeedRect,
-                                  KisNode::PositionToFilthy maskPos) const
+                                  KisNode::PositionToFilthy maskPos,
+                                  KisRenderPassFlags flags) const
 {
     KisCachedPaintDevice::Guard d1(projection, m_d->paintDeviceCache);
     KisPaintDeviceSP cacheDevice = d1.device();
 
     if (effectiveSelection) {
-        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
+        QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos, flags);
 
         // masks don't have any compositing
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
@@ -351,7 +354,7 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
         cacheDevice->makeCloneFromRough(projection, preparedNeedRect);
         projection->clear(preparedNeedRect);
 
-        decorateRect(cacheDevice, projection, applyRect, maskPos);
+        decorateRect(cacheDevice, projection, applyRect, maskPos, flags);
     }
 }
 

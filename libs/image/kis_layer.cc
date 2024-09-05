@@ -637,7 +637,8 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                            KisPaintDeviceSP destination,
                            const QRect &requestedRect,
                            KisNodeSP filthyNode,
-                           KisNodeSP lastNode) const
+                           KisNodeSP lastNode,
+                           KisRenderPassFlags flags) const
 {
     Q_ASSERT(source);
     Q_ASSERT(destination);
@@ -687,7 +688,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
                     applyRects.isEmpty() ? needRect : applyRects.top();
                     
                 PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
-                mask->apply(destination, maskApplyRect, maskNeedRect, maskPosition);
+                mask->apply(destination, maskApplyRect, maskNeedRect, maskPosition, flags);
             }
             Q_ASSERT(applyRects.isEmpty());
         } else {
@@ -706,7 +707,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
 
             Q_FOREACH (const KisEffectMaskSP& mask, masks) {
                 PositionToFilthy maskPosition = calculatePositionToFilthy(mask, filthyNode, const_cast<KisLayer*>(this));
-                mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition);
+                mask->apply(tempDevice, maskApplyRect, maskNeedRect, maskPosition, flags);
 
                 if (!applyRects.isEmpty()) {
                     maskNeedRect = maskApplyRect;
@@ -722,7 +723,7 @@ QRect KisLayer::applyMasks(const KisPaintDeviceSP source,
     return changeRect;
 }
 
-QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
+QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
     QRect updatedRect = rect;
     KisPaintDeviceSP originalDevice = original();
@@ -737,7 +738,7 @@ QRect KisLayer::updateProjection(const QRect& rect, KisNodeSP filthyNode)
         if (!updatedRect.isEmpty()) {
             KisPaintDeviceSP projection = m_d->safeProjection->getDeviceLazy(originalDevice);
             updatedRect = applyMasks(originalDevice, projection,
-                                     updatedRect, filthyNode, 0);
+                                     updatedRect, filthyNode, 0, flags);
         }
     }
 
@@ -767,7 +768,7 @@ void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP la
 
     if (!changeRect.isEmpty()) {
         applyMasks(originalDevice, projection,
-                   changeRect, this, lastNode);
+                   changeRect, this, lastNode, KisRenderPassFlag::NoTransformMaskUpdates);
     }
 }
 

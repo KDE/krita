@@ -71,9 +71,10 @@ void KisLayerStyleFilterProjectionPlane::setStyle(KisLayerStyleFilter *filter, K
     m_d->style = style;
 }
 
-QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+QRect KisLayerStyleFilterProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
     Q_UNUSED(filthyNode);
+    Q_UNUSED(flags);
 
     if (!m_d->sourceLayer || !m_d->filter) {
         warnKrita << "KisLayerStyleFilterProjectionPlane::recalculate(): [BUG] is not initialized";

@@ -513,9 +513,11 @@ bool KisColorizeMask::Private::shouldShowColoring() const
 QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
                                     KisPaintDeviceSP &dst,
                                     const QRect &rect,
-                                    PositionToFilthy maskPos) const
+                                    PositionToFilthy maskPos,
+                                    KisRenderPassFlags flags) const
 {
     Q_UNUSED(maskPos);
+    Q_UNUSED(flags);
 
     if (maskPos == N_ABOVE_FILTHY) {
         // the source layer has changed, we should update the filtered cache!

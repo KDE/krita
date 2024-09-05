@@ -21,6 +21,8 @@
 #include "kis_node.h"
 #include "kis_psd_layer_style.h"
 
+#include "KisRenderPassFlags.h"
+
 template <class T>
 class QStack;
 
@@ -293,7 +295,7 @@ protected:
      * Ask the layer to assemble its data & apply all the effect masks
      * to it.
      */
-    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode);
+    QRect updateProjection(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags);
 
     /**
      * Layers can override this method to get some special behavior
@@ -398,7 +400,9 @@ protected:
     QRect applyMasks(const KisPaintDeviceSP source,
                      KisPaintDeviceSP destination,
                      const QRect &requestedRect,
-                     KisNodeSP filthyNode, KisNodeSP lastNode) const;
+                     KisNodeSP filthyNode,
+                     KisNodeSP lastNode,
+                     KisRenderPassFlags flags) const;
 
     bool canMergeAndKeepBlendOptions(KisLayerSP otherLayer);
 

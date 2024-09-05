@@ -78,7 +78,7 @@ protected:
     void mergeInMaskInternal(KisPaintDeviceSP projection,
                              KisSelectionSP effectiveSelection,
                              const QRect &applyRect, const QRect &preparedNeedRect,
-                             KisNode::PositionToFilthy maskPos) const override;
+                             KisNode::PositionToFilthy maskPos, KisRenderPassFlags flags) const override;
 
     bool paintsOutsideSelection() const override;
 

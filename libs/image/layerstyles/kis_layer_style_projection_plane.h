@@ -24,7 +24,7 @@ public:
 
     ~KisLayerStyleProjectionPlane() override;
 
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags) override;
     void apply(KisPainter *painter, const QRect &rect) override;
 
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;

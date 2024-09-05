@@ -33,9 +33,9 @@ KisLayerProjectionPlane::~KisLayerProjectionPlane()
 {
 }
 
-QRect KisLayerProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+QRect KisLayerProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
-    return m_d->layer->updateProjection(rect, filthyNode);
+    return m_d->layer->updateProjection(rect, filthyNode, flags);
 }
 
 void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode)

@@ -29,9 +29,10 @@ KisMaskProjectionPlane::~KisMaskProjectionPlane()
 {
 }
 
-QRect KisMaskProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+QRect KisMaskProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
     Q_UNUSED(filthyNode);
+    Q_UNUSED(flags);
 
     KIS_ASSERT_RECOVER_NOOP(0 && "KisMaskProjectionPlane::recalculate() is not defined!");
 

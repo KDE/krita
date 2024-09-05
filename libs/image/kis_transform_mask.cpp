@@ -434,14 +434,15 @@ void KisTransformMask::recalculateStaticImage()
      * the layer and after that a special update call (no-filthy) will
      * be issued to pass the changed further through the stack.
      */
-    parentLayer->updateProjection(requestedRect, this);
+    parentLayer->updateProjection(requestedRect, this, KisRenderPassFlag::NoTransformMaskUpdates);
     m_d->recalculatingStaticImage = false;
 }
 
 QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
                                      KisPaintDeviceSP &dst,
                                      const QRect & rc,
-                                     PositionToFilthy maskPos) const
+                                     PositionToFilthy maskPos,
+                                     KisRenderPassFlags flags) const
 {
     Q_ASSERT_X(src != dst, "KisTransformMask::decorateRect",
                "src must be != dst, because we can't create transactions "
@@ -486,7 +487,7 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         /// clone layers may fetch data outside image bounds,
         /// that should never cause async refresh, since it will
         /// cause an infinite loop
-        m_d->paramsHolder->defaultBounds()->imageBorderRect().intersects(rc)) {
+        !flags.testFlag(KisRenderPassFlag::NoTransformMaskUpdates)) {
 
         if (m_d->testingInterface) {
             m_d->testingInterface->notifyDecorateRectTriggeredStaticImageUpdate();

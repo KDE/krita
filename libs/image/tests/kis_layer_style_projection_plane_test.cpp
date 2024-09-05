@@ -68,7 +68,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
         const QRect changeRect = plane.changeRect(rFillRect, KisLayer::N_FILTHY);
         dbgKrita << ppVar(rFillRect) << ppVar(changeRect);
 
-        plane.recalculate(changeRect, layer);
+        plane.recalculate(changeRect, layer, KisRenderPassFlag::None);
 
         KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "02L_recalculate_fill", testName);
 
@@ -100,7 +100,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
             KIS_DUMP_DEVICE_2(projection, imageRect, "05P_apply_clone_after_copy", testName);
         }
 
-        clonedPlane->recalculate(changeRect, clonedLayer);
+        clonedPlane->recalculate(changeRect, clonedLayer, KisRenderPassFlag::None);
 
         KIS_DUMP_DEVICE_2(clonedLayer->projection(), imageRect, "06L_recalculate_clone", testName);
 
@@ -124,7 +124,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "08L_mask_added", testName);
 
-    plane.recalculate(imageRect, layer);
+    plane.recalculate(imageRect, layer, KisRenderPassFlag::None);
 
     KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "09_mask_added_recalculated", testName);
 
@@ -145,7 +145,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         dbgKrita << ppVar(partialSelectionRect) << ppVar(changeRect);
 
-        plane.recalculate(changeRect, layer);
+        plane.recalculate(changeRect, layer, KisRenderPassFlag::None);
 
         KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "11L_recalculate_partial", testName);
 
@@ -164,7 +164,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         dbgKrita << ppVar(updateRect1) << ppVar(changeRect);
 
-        plane.recalculate(changeRect, layer);
+        plane.recalculate(changeRect, layer, KisRenderPassFlag::None);
 
         KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "13recalculate_half1", testName);
 
@@ -180,7 +180,7 @@ void KisLayerStyleProjectionPlaneTest::test(KisPSDLayerStyleSP style, const QStr
 
         dbgKrita << ppVar(updateRect2) << ppVar(changeRect);
 
-        plane.recalculate(changeRect, layer);
+        plane.recalculate(changeRect, layer, KisRenderPassFlag::None);
 
         KIS_DUMP_DEVICE_2(layer->projection(), imageRect, "15L_recalculate_half1", testName);
 

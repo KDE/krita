@@ -41,7 +41,7 @@ public:
      * should recalculate its internal representation. For usual
      * layers it means just calling updateProjection().
      */
-    virtual QRect recalculate(const QRect& rect, KisNodeSP filthyNode) = 0;
+    virtual QRect recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags) = 0;
 
     /**
      * Writes the data of the projection plane onto a global
@@ -93,7 +93,7 @@ public:
 class KisDumbProjectionPlane : public KisAbstractProjectionPlane
 {
 public:
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags) override;
     void apply(KisPainter *painter, const QRect &rect) override;
 
     QRect needRect(const QRect &rect, KisLayer::PositionToFilthy pos) const override;

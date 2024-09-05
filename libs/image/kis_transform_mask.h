@@ -47,7 +47,8 @@ public:
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const override;
+                       PositionToFilthy maskPos,
+                       KisRenderPassFlags flags) const override;
 
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;

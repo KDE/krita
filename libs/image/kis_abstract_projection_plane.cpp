@@ -15,9 +15,10 @@ KisAbstractProjectionPlane::~KisAbstractProjectionPlane()
 {
 }
 
-QRect KisDumbProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+QRect KisDumbProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
     Q_UNUSED(filthyNode);
+    Q_UNUSED(flags);
     return rect;
 }
 

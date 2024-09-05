@@ -218,19 +218,19 @@ KisAbstractProjectionPlaneSP KisLayerStyleProjectionPlane::factoryObject(KisLaye
     return toQShared(new KisLayerStyleProjectionPlane(sourceLayer));
 }
 
-QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode)
+QRect KisLayerStyleProjectionPlane::recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags)
 {
     KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
     QRect result = rect;
 
     if (m_d->style->isEnabled()) {
-        result = sourcePlane->recalculate(stylesNeedRect(rect), filthyNode);
+        result = sourcePlane->recalculate(stylesNeedRect(rect), filthyNode, flags);
 
         Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->allStyles()) {
-            plane->recalculate(rect, filthyNode);
+            plane->recalculate(rect, filthyNode, flags);
         }
     } else {
-        result = sourcePlane->recalculate(rect, filthyNode);
+        result = sourcePlane->recalculate(rect, filthyNode, flags);
     }
 
     return result;

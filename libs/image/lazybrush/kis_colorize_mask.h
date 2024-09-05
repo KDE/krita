@@ -67,7 +67,8 @@ public:
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,
                        const QRect & rc,
-                       PositionToFilthy maskPos) const override;
+                       PositionToFilthy maskPos,
+                       KisRenderPassFlags flags) const override;
 
     void setCurrentColor(const KoColor &color) override;
     void mergeToLayerThreaded(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID, QVector<KisRunnableStrokeJobData *> *jobs) override;

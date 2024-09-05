@@ -14,6 +14,7 @@
 #include "kis_global.h"
 #include "kis_node.h"
 #include "kis_indirect_painting_support.h"
+#include "KisRenderPassFlags.h"
 
 #include <kritaimage_export.h>
 
@@ -187,12 +188,13 @@ protected:
      * Apply the effect the projection using the mask as a selection.
      * Made public in KisEffectMask
      */
-    void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos) const;
+    void apply(KisPaintDeviceSP projection, const QRect & applyRect, const QRect & needRect, PositionToFilthy maskPos, KisRenderPassFlags flags) const;
 
     virtual void mergeInMaskInternal(KisPaintDeviceSP projection,
                                      KisSelectionSP effectiveSelection,
                                      const QRect &applyRect, const QRect &preparedNeedRect,
-                                     PositionToFilthy maskPos) const;
+                                     PositionToFilthy maskPos,
+                                     KisRenderPassFlags flags) const;
 
     /**
      * A special callback for calling selection->updateProjection() during
@@ -204,7 +206,8 @@ protected:
     virtual QRect decorateRect(KisPaintDeviceSP &src,
                                KisPaintDeviceSP &dst,
                                const QRect & rc,
-                               PositionToFilthy maskPos) const;
+                               PositionToFilthy maskPos,
+                               KisRenderPassFlags flags) const;
 
     virtual bool paintsOutsideSelection() const;
 

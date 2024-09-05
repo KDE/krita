@@ -22,7 +22,7 @@ public:
     KisLayerProjectionPlane(KisLayer *layer);
     ~KisLayerProjectionPlane() override;
 
-    QRect recalculate(const QRect& rect, KisNodeSP filthyNode) override;
+    QRect recalculate(const QRect& rect, KisNodeSP filthyNode, KisRenderPassFlags flags) override;
     void apply(KisPainter *painter, const QRect &rect) override;
     void applyMaxOutAlpha(KisPainter *painter, const QRect &rect, KritaUtils::ThresholdMode thresholdMode);
 

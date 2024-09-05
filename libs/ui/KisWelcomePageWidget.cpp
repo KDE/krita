@@ -559,7 +559,7 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
         {QString("sl"), QStringLiteral("Slovenski")},
         {QString("sv"), QStringLiteral("Svenska")},
         {QString("tr"), QStringLiteral("Türkçe")},
-        {QString("uk"), QStringLiteral("English (UK)")}
+        {QString("uk"), QStringLiteral("Українська")}
     }};
 
     static const QString newsLangConfigName = QStringLiteral("FetchNewsLanguages");

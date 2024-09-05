@@ -29,6 +29,9 @@ private Q_SLOTS:
 
     void testCyclingGroupLayer();
 
+    void testUpdatesWhileHidden_data();
+    void testUpdatesWhileHidden();
+
     void testWithSourceUnderTransformMask();
     void testWithSourceUnderTwoTransformMasks();
 };

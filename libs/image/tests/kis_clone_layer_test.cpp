@@ -21,6 +21,10 @@
 #include "kistest.h"
 #include "testutil.h"
 
+// for updates on visibility change tests
+#include "kis_layer_properties_icons.h"
+
+
 void KisCloneLayerTest::testCreation()
 {
     const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
@@ -379,6 +383,175 @@ void KisCloneLayerTest::testCyclingGroupLayer()
 
     testCyclingCase(t, t.cloneOfGroup2, 0, true);
     testCyclingCase(t, t.cloneOfGroup2, t.cloneOfGroup1, false);
+}
+
+void KisCloneLayerTest::testUpdatesWhileHidden_data()
+{
+    QTest::addColumn<bool>("changeP1InVisibleArea");
+    QTest::addColumn<bool>("makeC1Invisible");
+    QTest::addColumn<bool>("makeG2Invisible");
+    QTest::addColumn<bool>("makeG1Invisible");
+
+
+    QTest::newRow("in-all-visible")       << true << false << false << false;
+    QTest::newRow("in-dst-hidden")        << true << true  << false << false;
+    QTest::newRow("in-dst-parent-hidden") << true << false << true  << false;
+    QTest::newRow("in-dst-both-hidden")   << true << true  << true  << false;
+    QTest::newRow("in-src-hidden")        << true << false << false << true ;
+
+    QTest::newRow("out-all-visible")       << false << false << false << false;
+    QTest::newRow("out-dst-hidden")        << false << true  << false << false;
+    QTest::newRow("out-dst-parent-hidden") << false << false << true  << false;
+    // TODO: add a test for reversing the order of unhiding g2 and c1
+    QTest::newRow("out-dst-both-hidden")   << false << true  << true  << false;
+    QTest::newRow("out-src-hidden")        << false << false << false << true ;
+}
+
+
+void KisCloneLayerTest::testUpdatesWhileHidden()
+{
+    /*
+      +-----------------+
+      |root             |
+      | group 1 <-----+ |
+      |  paint 3      | |
+      |  paint 1      | |
+      | group 2       | |
+      |  clone_of_g1 -+ |
+      |  paint 2        |
+      +-----------------+
+     */
+
+    KisImageSP image = createImage();
+    KisNodeSP root = image->root();
+
+    auto findNode = [root] (const QString &name) {
+        KisNodeSP node = KisLayerUtils::findNodeByName(root, name);
+        KIS_ASSERT(node);
+        return node;
+    };
+
+    KisNodeSP paint1 = findNode("paint1");
+    KisNodeSP paint2 = findNode("paint2");
+    KisNodeSP paint3 = findNode("paint3");
+    KisNodeSP clone1 = findNode("clone_of_g1");
+    KisNodeSP group1 = findNode("group1");
+    KisNodeSP group2 = findNode("group2");
+
+    paint2->paintDevice()->fill(QRect(0, 5, 10, 10), KoColor( Qt::red, image->colorSpace()));
+    paint2->paintDevice()->fill(QRect(100, 5, 10, 10), KoColor( Qt::red, image->colorSpace()));
+    paint3->paintDevice()->fill(QRect(5, 0, 10, 10), KoColor( Qt::green, image->colorSpace()));
+    paint3->paintDevice()->fill(QRect(5, 100, 10, 10), KoColor( Qt::green, image->colorSpace()));
+
+    image->initialRefreshGraph();
+
+    QFETCH(bool, changeP1InVisibleArea);
+    QFETCH(bool, makeC1Invisible);
+    QFETCH(bool, makeG2Invisible);
+    QFETCH(bool, makeG1Invisible);
+
+    const QString testName =
+        QString("hidden-%1-%2-%3-%4")
+            .arg(changeP1InVisibleArea ? "p1_in" : "p1_out")
+            .arg(makeC1Invisible ? "c1_off" : "c1_on")
+            .arg(makeG1Invisible ? "g1_off" : "g1_on")
+            .arg(makeG2Invisible ? "g2_off" : "g2_on");
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        testName,
+        "00_initial"));
+
+
+    // TODO: verify no updates after the parent group or layer is hidden
+
+    if (makeC1Invisible) {
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(clone1, KisLayerPropertiesIcons::visible, false, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "10_c1_hidden"));
+    }
+
+    if (makeG2Invisible) {
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(group2, KisLayerPropertiesIcons::visible, false, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "15_g2_hidden"));
+    }
+
+    if (makeG1Invisible) {
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(group1, KisLayerPropertiesIcons::visible, false, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "17_g1_hidden"));
+    }
+
+    const QRect p1ChangeArea = changeP1InVisibleArea ?
+        QRect(100, 30, 7, 7) : QRect(-10, 30, 7, 7);
+    paint1->paintDevice()->fill(p1ChangeArea, KoColor( Qt::blue, image->colorSpace()));
+
+    paint1->setDirty(p1ChangeArea);
+    image->waitForDone();
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        testName,
+        "20_p1_changed"));
+
+    if (makeG1Invisible) {
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(group1, KisLayerPropertiesIcons::visible, true, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "25_g1_revealed"));
+    }
+
+    if (makeG2Invisible) {
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(group2, KisLayerPropertiesIcons::visible, true, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "30_g2_revealed"));
+    }
+
+    if (makeC1Invisible) {
+        /**
+         * TODO: We have some issues with updating a layer outside the image bounds
+         * when its clone is hidden. When the clone is made visible again, this hidden
+         * area is not vidible. To fix this, we need to perform "change-rect-based"-
+         * update instead of "dirty-rect-based"-update. In the current terms, it means
+         * that we should do refreshGraphAsync() on any visibility change. But our system
+         * is not fully designed to encorporate that. We usually keep the content of the
+         * group layers updated, even when the group itself is hidden. So we need to
+         * do a significant design change for that.
+         */
+
+        QEXPECT_FAIL("out-dst-both-hidden", "Will fix in the next release", Continue);
+        QEXPECT_FAIL("out-dst-hidden", "Will fix in the next release", Continue);
+
+        KisLayerPropertiesIcons::setNodePropertyAutoUndo(clone1, KisLayerPropertiesIcons::visible, true, image);
+        image->waitForDone();
+        QVERIFY(TestUtil::checkQImage(
+            image->projection()->convertToQImage(nullptr, image->bounds()),
+            "clone_layer_test",
+            testName,
+            "40_c1_revealed"));
+    }
 }
 
 #include <kis_transform_mask.h>

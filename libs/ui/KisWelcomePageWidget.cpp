@@ -520,7 +520,18 @@ QString getAutoNewsLang()
     if (autoNewsLang.isEmpty()) {
         // If nothing else, use English.
         autoNewsLang = QString("en");
+    } else if (autoNewsLang == "ja") {
+        return QString("jp");
+    } else if (autoNewsLang == "zh_CN") {
+        return QString("zh");
+    } else if (autoNewsLang == "zh_TW") {
+        return QString("zh-tw");
+    } else if (autoNewsLang == "zh_HK") {
+        return QString("zh-hk");
+    } else if (autoNewsLang == "en" || autoNewsLang == "en_US" || autoNewsLang == "en_GB") {
+        return QString("en");
     }
+
     return autoNewsLang;
 }
 

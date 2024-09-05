@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-04 01:44+0000\n"
+"POT-Creation-Date: 2024-09-05 01:44+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -20514,7 +20514,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -20550,7 +20550,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -21544,7 +21544,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -21556,14 +21556,29 @@ msgstr ""
 "%1\n"
 "файлини очиб бўлмади."
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgid "Choose Filter"
+msgid "Overwrite existing video?"
+msgstr "Филтерни танлаш"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Яратиш хатоси"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Текислашни ўзгартириш"
@@ -24652,7 +24667,7 @@ msgid "Start"
 msgstr "Кўча"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -32830,24 +32845,24 @@ msgstr "Матнни қўйиш"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:654
+#: libs/ui/KisWelcomePageWidget.cpp:643
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "&Экспорт қилиш"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:734
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:763
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "An error occurred during the update"
 msgstr "Файлнинг бошини ўқиб бўлмади."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:769
 #, kde-format
 msgid "Restart is required."
 msgstr ""

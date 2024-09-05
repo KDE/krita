@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-04 01:44+0000\n"
+"POT-Creation-Date: 2024-09-05 01:44+0000\n"
 "PO-Revision-Date: 2024-08-29 08:59+0300\n"
 "Last-Translator: Fracture dept <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -19848,7 +19848,7 @@ msgstr "Локальні ресурси"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -19884,7 +19884,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -20841,7 +20841,7 @@ msgstr ""
 "ласка, змініть розміри зображення або обріжте його до експортування."
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -20850,14 +20850,30 @@ msgstr ""
 "Не вдалося обробити анімацію:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Dialog title"
+#| msgid "Overwrite the file?"
+msgid "Overwrite existing video?"
+msgstr "Перезаписати файл?"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Помилка під час обробки"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Не вдалося обробити кадри анімації! Файли результату є неповними."
@@ -23978,7 +23994,7 @@ msgid "Start"
 msgstr "Початок"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
 #, kde-format
 msgid "DEV BUILD"
 msgstr "ЗБІРКА У РОЗРОБЦІ"
@@ -32182,23 +32198,23 @@ msgstr "Мова"
 msgid "English news is always up to date."
 msgstr "Новини англійською є завжди актуальними."
 
-#: libs/ui/KisWelcomePageWidget.cpp:654
+#: libs/ui/KisWelcomePageWidget.cpp:643
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Забути «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:734
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Доступна нова версія Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:763
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Під час спроби оновити програму сталася помилка"
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:769
 #, kde-format
 msgid "Restart is required."
 msgstr "Потрібне перезавантаження."

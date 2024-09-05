@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-04 01:44+0000\n"
+"POT-Creation-Date: 2024-09-05 01:44+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -20214,7 +20214,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:707
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
@@ -20250,7 +20250,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -21207,7 +21207,7 @@ msgstr ""
 "exportálás előtt."
 
 #: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:99
+#: libs/ui/animation/KisAnimationRender.cpp:113
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -21216,14 +21216,30 @@ msgstr ""
 "Nem sikerült renderelni az animációt:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:135
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:89
+#, fuzzy, kde-format
+#| msgctxt "Dialog title"
+#| msgid "Overwrite the file?"
+msgid "Overwrite existing video?"
+msgstr "Felülírja a fájlt?"
+
+#: libs/ui/animation/KisAnimationRender.cpp:90
+#, kde-format
+msgid ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
+msgstr ""
+
+#: libs/ui/animation/KisAnimationRender.cpp:150
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Renderelési hiba"
 
-#: libs/ui/animation/KisAnimationRender.cpp:137
+#: libs/ui/animation/KisAnimationRender.cpp:152
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
@@ -24267,7 +24283,7 @@ msgid "Start"
 msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -32382,23 +32398,23 @@ msgstr "Nyelv:"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:654
+#: libs/ui/KisWelcomePageWidget.cpp:643
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Exportálás"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:734
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:763
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Az új csomag létrehozása nem sikerült."
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:769
 #, kde-format
 msgid "Restart is required."
 msgstr "Újraindítás szükséges."

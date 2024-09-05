@@ -176,7 +176,13 @@ void KisCloneLayer::notifyParentVisibilityChanged(bool value)
     if (!imageSP) {
         return;
     }
-    KisLayer::setDirty(imageSP->bounds());
+    /**
+     * Trigger a full update when the layer is finally
+     * getting transitively-visible
+     */
+    if (value && visible(true)) {
+        KisLayer::setDirty(imageSP->bounds());
+    }
     KisLayer::notifyParentVisibilityChanged(value);
 }
 

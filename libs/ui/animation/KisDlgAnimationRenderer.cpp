@@ -227,16 +227,12 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     }
 
     // Initialize VIDEO render format...
-    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
-        if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
-            m_page->cmbMimetype->setCurrentIndex(i);
+    for (int i = 0; i < m_page->cmbRenderType->count(); ++i) {
+        if (m_page->cmbRenderType->itemData(i).toString() == lastUsedOptions.videoMimeType) {
+            m_page->cmbRenderType->setCurrentIndex(i);
             break;
         }
     }
-
-    // Skipping m_page->cmbRenderType for now, as it depends on the ffmpeg provided.
-
-
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
@@ -417,7 +413,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
     ffmpegEncoderTypes.clear();
 
     // Validate FFmpeg binary and setup FFMpeg...
-    if (validateFFmpeg()) {
+    if (validateFFmpeg(path)) {
         QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
         ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
         ffmpegCodecs = KisFFMpegWrapper::getSupportedCodecs(ffmpegJsonObj);
@@ -714,35 +710,23 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     return options;
 }
 
-bool KisDlgAnimationRenderer::validateFFmpeg(bool warn)
+KisDlgAnimationRenderer::FFmpegValidationResult KisDlgAnimationRenderer::validateFFmpeg(const QString &ffmpegPath)
 {
-    QString ffmpeg = m_page->ffmpegLocation->fileName();
-
-    if (!ffmpeg.isEmpty()) {
-        QFileInfo file(ffmpeg);
-        if (file.exists()) {
+    if (!ffmpegPath.isEmpty()) {
+        QFileInfo ffmpegBinary(ffmpegPath);
+        if (ffmpegBinary.exists() && ffmpegBinary.isExecutable()) {
             QStringList commpressedFormats{"zip", "7z", "tar.bz2"};
             Q_FOREACH(const QString& compressedFormat, commpressedFormats) {
-                if (file.fileName().endsWith(compressedFormat)) {
-                    if (warn) {
-                        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be compressed. Please try to extract FFmpeg from the archive first."));
-                    }
-
-                    return false;
+                if (ffmpegBinary.fileName().endsWith(compressedFormat)) {
+                    return FFmpegValidationResult::COMPRESSED_FORMAT;
                 }
             }
-
-            if (file.isExecutable()) {
-                return true;
-            }
+            return FFmpegValidationResult::VALID;
+        } else if (ffmpegBinary.exists()) {
+            return FFmpegValidationResult::NOT_A_BINARY;
         }
     }
-
-    if (warn) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
-    }
-
-    return false;
+    return FFmpegValidationResult::INVALID;
 }
 
 void KisDlgAnimationRenderer::slotButtonClicked(int button)
@@ -755,7 +739,16 @@ void KisDlgAnimationRenderer::slotButtonClicked(int button)
             return;
         }
         else {
-            if (!validateFFmpeg(true)) return;
+            switch (validateFFmpeg(m_page->ffmpegLocation->fileName())) {
+                case FFmpegValidationResult::COMPRESSED_FORMAT:
+                    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be compressed. Please try to extract FFmpeg from the archive first."));
+                    return;
+                case FFmpegValidationResult::NOT_A_BINARY:
+                    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
+                    return;
+                default:
+                    break;
+            }
         }
     }
     KoDialog::slotButtonClicked(button);

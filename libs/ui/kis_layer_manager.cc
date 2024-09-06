@@ -482,29 +482,35 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
 void KisLayerManager::convertGroupToAnimated()
 {
-    KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
-    if (group.isNull()) return;
-
-    if (!m_view->nodeManager()->canModifyLayer(group)) return;
-
-    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
-    animatedLayer->enableAnimation();
-    KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
-                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
-    KIS_ASSERT_RECOVER_RETURN(contentChannel);
-
-    KisNodeSP child = group->firstChild();
-    int time = 0;
-    while (child) {
-        contentChannel->importFrame(time, child->projection(), NULL);
-        time++;
-
-        child = child->nextSibling();
+    KisGroupLayerSP targetGroup = dynamic_cast<KisGroupLayer*>(activeLayer().data());
+    if (targetGroup.isNull()) {
+        // Try containing group, if it exists...
+        KisNodeSP parent = activeLayer()->parent();
+        if (!parent->parent()) return; // watch out for the root node!
+        targetGroup = dynamic_cast<KisGroupLayer*>(parent.data());
     }
 
-    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to an animated layer"));
-    m_commandsAdapter->addNode(animatedLayer, group->parent(), group);
-    m_commandsAdapter->removeNode(group);
+    if (targetGroup.isNull()) return;
+    if (!m_view->nodeManager()->canModifyLayer(targetGroup)) return;
+
+    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), targetGroup->name(), OPACITY_OPAQUE_U8);
+    animatedLayer->enableAnimation();
+    KisRasterKeyframeChannel *keyframeChannel = dynamic_cast<KisRasterKeyframeChannel*>(
+                animatedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
+    KIS_ASSERT_RECOVER_RETURN(keyframeChannel);
+
+    KisNodeSP childNode = targetGroup->firstChild();
+    int time = 0;
+    while (childNode) {
+        keyframeChannel->importFrame(time, childNode->projection(), NULL);
+        time++;
+
+        childNode = childNode->nextSibling();
+    }
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert Group to Animated Layer"));
+    m_commandsAdapter->addNode(animatedLayer, targetGroup->parent(), targetGroup);
+    m_commandsAdapter->removeNode(targetGroup);
     m_commandsAdapter->endMacro();
 }
 

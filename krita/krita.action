@@ -3021,9 +3021,9 @@
     </Action>
     <Action name="convert_group_to_animated">
       <icon/>
-      <text>Convert group to &amp;animated layer</text>
+      <text>Convert Group to &amp;Animated Layer</text>
       <whatsThis/>
-      <toolTip>Convert child layers into animation frames</toolTip>
+      <toolTip>Converts the child layers of a group into a single layer with multiple frames of animation</toolTip>
       <iconText>Convert child layers into animation frames</iconText>
       <activationFlags>100000</activationFlags>
       <activationConditions>0</activationConditions>

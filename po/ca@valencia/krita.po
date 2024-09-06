@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 01:44+0000\n"
-"PO-Revision-Date: 2024-08-29 17:29+0200\n"
+"POT-Creation-Date: 2024-09-06 02:01+0000\n"
+"PO-Revision-Date: 2024-09-05 12:27+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17148,7 +17148,7 @@ msgstr "Suau"
 msgid "Gaussian"
 msgstr "Gaussià"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "Copia des de"
@@ -17870,12 +17870,12 @@ msgstr "Superposició (estil)"
 msgid "Satin (style)"
 msgstr "Setinat (estil)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Canvia el color del traç clau"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "Elimina el traç clau"
@@ -19659,7 +19659,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -20610,11 +20610,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Voleu sobreescriure el fitxer?"
+msgstr "Voleu sobreescriure el vídeo existent?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20624,6 +20622,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Existix un fitxer al camí cap a on voleu renderitzar el vídeo [%1]… \n"
+"                                                              Segur que "
+"voleu sobreescriure el fitxer existent?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -23733,7 +23734,7 @@ msgid "Start"
 msgstr "Inici"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "CONSTRUCCIÓ DEV"
@@ -31828,23 +31829,23 @@ msgstr "Idioma"
 msgid "English news is always up to date."
 msgstr "Les notícies en anglés sempre estan actualitzades."
 
-#: libs/ui/KisWelcomePageWidget.cpp:643
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oblida «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:734
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Hi ha disponible una versió nova de Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:763
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "S'ha produït un error durant l'actualització"
 
-#: libs/ui/KisWelcomePageWidget.cpp:769
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "Cal reiniciar."
@@ -49462,66 +49463,66 @@ msgstr "No s'ha pogut carregar l'«id» de la màscara de transformació"
 msgid "Could not find transform mask XML element"
 msgstr "No s'ha pogut trobar l'element XML de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:423
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "No s'han pogut crear els paràmetres de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:575
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut trobar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:583
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut carregar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:612
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "No s'ha pogut llegir les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:619
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "No s'han pogut carregar les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:635
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "No s'ha pogut carregar el perfil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:690
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "No s'ha pogut filtrar la configuració %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:731
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "No s'han pogut carregar les metadades per a la capa %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:774
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "No s'ha pogut carregar la selecció amb vectors %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:790
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "No s'ha pogut carregar la selecció ràster %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "No s'han pogut carregar els fotogrames clau des de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:834
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49531,7 +49532,7 @@ msgstr ""
 "línia %2, columna %3\n"
 "Missatge d'error: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:847
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Tipus de canal desconegut de fotograma clau: %1 a %2"

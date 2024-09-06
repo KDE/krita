@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 01:44+0000\n"
+"POT-Creation-Date: 2024-09-06 02:01+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17498,7 +17498,7 @@ msgstr "Suave"
 msgid "Gaussian"
 msgstr "Gaussiano"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "Copiar De"
@@ -18227,12 +18227,12 @@ msgstr "Sobreposição (estilo)"
 msgid "Satin (style)"
 msgstr "Suavização (estilo)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Mudar a Cor do Traço-Chave"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "Remover o Traço-Chave"
@@ -20017,7 +20017,7 @@ msgstr "Recursos Locais"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -24071,7 +24071,7 @@ msgid "Start"
 msgstr "Iniciar"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "VERSÃO DESENV"
@@ -32222,23 +32222,23 @@ msgstr "Língua"
 msgid "English news is always up to date."
 msgstr "As notícias em inglês estão sempre actualizadas."
 
-#: libs/ui/KisWelcomePageWidget.cpp:643
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Esquecer o \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:734
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Está disponível uma nova versão do Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:763
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Ocorreu um erro durante a actualização"
 
-#: libs/ui/KisWelcomePageWidget.cpp:769
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "É necessário reiniciar."
@@ -49933,64 +49933,64 @@ msgstr "Não foi possível carregar o \"id\" da máscara de transformação."
 msgid "Could not find transform mask XML element"
 msgstr "Não foi possível criar os parâmetros da máscara de transformação"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:423
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Não foi possível criar os parâmetros da máscara de transformação"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:575
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Não foi possível encontrar os dados dos pixels das imagens-chave de %1 em %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:583
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Não foi possível carregar os dados dos pixels das imagens-chave de %1 em %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:612
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Não foi possível ler os dados dos pontos: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:619
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Não foi possível carregar os dados dos pontos: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:635
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Não foi possível carregar o perfil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:690
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Não foi possível filtrar a configuração %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:731
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Não foi possível carregar os meta-dados da camada %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:774
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Não foi possível carregar a selecção vectorial %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:790
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Não foi possível carregar os dados rasterizados da selecção %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Não foi possível carregar as imagens-chave de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:834
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49999,7 +49999,7 @@ msgstr ""
 "Erro de processamento no %1, na linha %2 e coluna %3\n"
 "Mensagem de erro: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:847
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "tipo de canal da imagem-chave desconhecido: %1 em %2"

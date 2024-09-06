@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 01:44+0000\n"
+"POT-Creation-Date: 2024-09-06 02:01+0000\n"
 "PO-Revision-Date: 2024-08-01 17:30+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -17944,7 +17944,7 @@ msgstr "Weich"
 msgid "Gaussian"
 msgstr "Gaußsch"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "Kopieren von"
@@ -18697,13 +18697,13 @@ msgstr "Überlagerungsmodus"
 msgid "Satin (style)"
 msgstr "Trennungsstil"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Verbindung ändern"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
@@ -20507,7 +20507,7 @@ msgstr "Lokale Ressourcen"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -24599,7 +24599,7 @@ msgid "Start"
 msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -32738,23 +32738,23 @@ msgstr "Sprache"
 msgid "English news is always up to date."
 msgstr "Englische Neuigkeiten sind immer aktuell."
 
-#: libs/ui/KisWelcomePageWidget.cpp:643
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "„%1“ verwerfen"
 
-#: libs/ui/KisWelcomePageWidget.cpp:734
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:763
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Es ist ein Fehler beim Aktualisieren aufgetreten"
 
-#: libs/ui/KisWelcomePageWidget.cpp:769
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "Ein Neustart ist erforderlich."
@@ -50582,62 +50582,62 @@ msgstr "Kennung der Transformationsmaske kann nicht geladen werden"
 msgid "Could not find transform mask XML element"
 msgstr "Parameter der Transformationsmaske können nicht erstellt werden"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:423
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Parameter der Transformationsmaske können nicht erstellt werden"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:575
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Die Metadaten für Ebene %1 können nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:583
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Die Metadaten für Ebene %1 können nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:612
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Die Pixeldaten können nicht gelesen werden: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:619
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Die Pixeldaten können nicht geladen werden: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:635
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Das Profil %1 kann nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:690
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Die Einstellung %1 kann nicht gefiltert werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:731
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Die Metadaten für Ebene %1 können nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:774
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Die Vektorauswahl %1 kann nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:790
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Die Rasterauswahl %1 kann nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Die Metadaten für Ebene %1 können nicht geladen werden."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:834
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -50646,7 +50646,7 @@ msgstr ""
 "Lesefehler in %1 in Zeile %2, Spalte %3\n"
 "Fehlermeldung: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:847
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Die Metadaten für Ebene %1 können nicht geladen werden."

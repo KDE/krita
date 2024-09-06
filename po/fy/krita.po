@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 01:44+0000\n"
+"POT-Creation-Date: 2024-09-06 02:01+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -17431,7 +17431,7 @@ msgstr "Sêft"
 msgid "Gaussian"
 msgstr "Gaussiaansk:"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, fuzzy, kde-format
 msgid "Copy From"
 msgstr "Ofbylding bysnije"
@@ -18206,13 +18206,13 @@ msgstr "Kromme"
 msgid "Satin (style)"
 msgstr "Sêding"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Ferbining feroarje"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
@@ -20014,7 +20014,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:715
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -24002,7 +24002,7 @@ msgid "Start"
 msgstr "Stjer"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:620
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -31926,23 +31926,23 @@ msgstr "Side plakke"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:643
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "Eksportearje"
 
-#: libs/ui/KisWelcomePageWidget.cpp:734
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:763
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "Selektearje de set fan aktive kanalen."
 
-#: libs/ui/KisWelcomePageWidget.cpp:769
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -49336,62 +49336,62 @@ msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 msgid "Could not find transform mask XML element"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:423
 #, fuzzy, kde-format
 msgid "Could not create transform mask params"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:575
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:583
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:612
 #, fuzzy, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:619
 #, fuzzy, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:635
 #, fuzzy, kde-format
 msgid "Could not load profile: %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:690
 #, fuzzy, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Nije ynstellings %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:731
 #, fuzzy, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:774
 #, fuzzy, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Fektorseleksje"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:790
 #, fuzzy, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:834
 #, fuzzy, kde-format
 #| msgid ""
 #| "Parsing error in %1 at line %2, column %3\n"
@@ -49403,7 +49403,7 @@ msgstr ""
 "Untleedflater yn %1, op regel %2, kolom %3\n"
 "Flatermelding: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:847
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."

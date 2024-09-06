@@ -144,6 +144,43 @@ KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
 
 void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
 {
+    // Initialize FFmpeg location... (!)
+    KisConfig cfg(false);
+    QString cfgFFmpegPath = cfg.ffmpegLocation();
+#ifdef Q_OS_MACOS
+    if (cfgFFmpegPath.isEmpty()) {
+        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
+        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
+    }
+#endif
+
+    // Check known ffmpeg locations..
+    QString likelyFFmpegPath = [&]() {
+        // Check last used
+        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
+            return lastUsedOptions.ffmpegPath;
+        }
+
+        // Check krita config
+        if (!cfgFFmpegPath.isEmpty()) {
+            return cfgFFmpegPath;
+        }
+
+        // Check standard paths
+        QString systemFFmpeg = QStandardPaths::findExecutable("ffmpeg");
+        if (!systemFFmpeg.isEmpty() && QFileInfo(systemFFmpeg).isExecutable()) {
+           return systemFFmpeg;
+        }
+
+        // Find ffmpeg elsewhere...
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
+        return (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
+    }();
+
+    if (!likelyFFmpegPath.isEmpty() && QFileInfo(likelyFFmpegPath).isExecutable()) {
+        setFFmpegPath(likelyFFmpegPath);
+    }
+
     const QString documentPath = m_doc->localFilePath();
 
     // Initialize these settings based on last used configuration when possible..
@@ -174,6 +211,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         m_page->dirRequester->setFileName(lastUsedOptions.directory);
     }
 
+    // Initialize FRAME render format...
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
             m_page->cmbMimetype->setCurrentIndex(i);
@@ -181,11 +219,17 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         }
     }
 
-    // Skipping m_page->cmbRenderType for now, as it depends on the ffmpeg provided.
-
     for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
         if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
             m_page->cmbScaleFilter->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    // Initialize VIDEO render format...
+    for (int i = 0; i < m_page->cmbRenderType->count(); ++i) {
+        if (m_page->cmbRenderType->itemData(i).toString() == lastUsedOptions.videoMimeType) {
+            m_page->cmbRenderType->setCurrentIndex(i);
             break;
         }
     }
@@ -213,33 +257,6 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
         m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
-    }
-
-    // Initialize FFmpeg location... (!)
-    KisConfig cfg(false);
-    QString cfgFFmpegPath = cfg.ffmpegLocation();
-#ifdef Q_OS_MACOS
-    if (cfgFFmpegPath.isEmpty()) {
-        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
-        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
-    }
-#endif
-    QString likelyFFmpegPath = [&]() {
-        if (!cfgFFmpegPath.isEmpty()) {
-            return cfgFFmpegPath;
-        }
-
-        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
-            return lastUsedOptions.ffmpegPath;
-        }
-
-        return QStandardPaths::findExecutable("ffmpeg");
-    }();
-
-    if (likelyFFmpegPath.isEmpty() || !QFileInfo(likelyFFmpegPath).isExecutable()) {
-        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
-
-        likelyFFmpegPath = (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
     }
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
@@ -392,11 +409,14 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
     // and clear out all of the ffmpeg-specific fields to fill post-validation...
     m_page->cmbRenderType->setDisabled(true);
     m_page->bnRenderOptions->setDisabled(true);
+
+    QString previousMimeType = m_page->cmbRenderType->currentData().toString();
+
     m_page->cmbRenderType->clear();
     ffmpegEncoderTypes.clear();
 
     // Validate FFmpeg binary and setup FFMpeg...
-    if (validateFFmpeg()) {
+    if (validateFFmpeg(path)) {
         QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
         ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
         ffmpegCodecs = KisFFMpegWrapper::getSupportedCodecs(ffmpegJsonObj);
@@ -433,6 +453,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
             QStringList supportedMimeTypes = makeVideoMimeTypesList();
             supportedMimeTypes = filterMimeTypeListByAvailableEncoders(supportedMimeTypes);
 
+            int previousMimeTypeIndex = -1;
             Q_FOREACH (const QString &mime, supportedMimeTypes) {
                 QString description = KisMimeDatabase::descriptionForMimeType(mime);
                 if (description.isEmpty()) {
@@ -440,12 +461,19 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
                 }
 
                 m_page->cmbRenderType->addItem(description, mime);
+                if (mime == previousMimeType) {
+                    previousMimeTypeIndex = m_page->cmbRenderType->count() - 1;
+                }
             }
 
             const int indexCount = m_page->cmbRenderType->count();
             if (indexCount > 0) {
-                const int desiredIndex = cfg.readEntry<int>("AnimationRenderer/render_type", 0);
-                m_page->cmbRenderType->setCurrentIndex(desiredIndex % indexCount); // ;P
+                if (previousMimeTypeIndex >= 0) {
+                    m_page->cmbRenderType->setCurrentIndex(previousMimeTypeIndex % indexCount);
+                } else {
+                    m_page->cmbRenderType->setCurrentIndex(0);
+                }
+
                 selectRenderType(m_page->cmbRenderType->currentIndex());
                 m_page->cmbRenderType->setDisabled(false);
                 m_page->bnRenderOptions->setDisabled(false);
@@ -693,35 +721,23 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     return options;
 }
 
-bool KisDlgAnimationRenderer::validateFFmpeg(bool warn)
+KisDlgAnimationRenderer::FFmpegValidationResult KisDlgAnimationRenderer::validateFFmpeg(const QString &ffmpegPath)
 {
-    QString ffmpeg = m_page->ffmpegLocation->fileName();
-
-    if (!ffmpeg.isEmpty()) {
-        QFileInfo file(ffmpeg);
-        if (file.exists()) {
+    if (!ffmpegPath.isEmpty()) {
+        QFileInfo ffmpegBinary(ffmpegPath);
+        if (ffmpegBinary.exists() && ffmpegBinary.isExecutable()) {
             QStringList commpressedFormats{"zip", "7z", "tar.bz2"};
             Q_FOREACH(const QString& compressedFormat, commpressedFormats) {
-                if (file.fileName().endsWith(compressedFormat)) {
-                    if (warn) {
-                        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be compressed. Please try to extract FFmpeg from the archive first."));
-                    }
-
-                    return false;
+                if (ffmpegBinary.fileName().endsWith(compressedFormat)) {
+                    return FFmpegValidationResult::COMPRESSED_FORMAT;
                 }
             }
-
-            if (file.isExecutable()) {
-                return true;
-            }
+            return FFmpegValidationResult::VALID;
+        } else if (ffmpegBinary.exists()) {
+            return FFmpegValidationResult::NOT_A_BINARY;
         }
     }
-
-    if (warn) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
-    }
-
-    return false;
+    return FFmpegValidationResult::INVALID;
 }
 
 void KisDlgAnimationRenderer::slotButtonClicked(int button)
@@ -734,7 +750,16 @@ void KisDlgAnimationRenderer::slotButtonClicked(int button)
             return;
         }
         else {
-            if (!validateFFmpeg(true)) return;
+            switch (validateFFmpeg(m_page->ffmpegLocation->fileName())) {
+                case FFmpegValidationResult::COMPRESSED_FORMAT:
+                    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be compressed. Please try to extract FFmpeg from the archive first."));
+                    return;
+                case FFmpegValidationResult::NOT_A_BINARY:
+                    QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
+                    return;
+                default:
+                    break;
+            }
         }
     }
     KoDialog::slotButtonClicked(button);

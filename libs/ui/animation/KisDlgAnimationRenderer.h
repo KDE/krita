@@ -50,7 +50,6 @@ public:
     KisAnimationRenderingOptions getEncoderOptions() const;
 
 private Q_SLOTS:
-
     void selectRenderType(int i);
     void selectRenderOptions();
     /**
@@ -74,9 +73,16 @@ protected Q_SLOTS:
 
 
 private: 
+    enum FFmpegValidationResult {
+        VALID = 1,
+        INVALID = 0,
+        NOT_A_BINARY = -1,
+        COMPRESSED_FORMAT = -2
+    };
+
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
     void ffmpegWarningCheck();
-    bool validateFFmpeg(bool warn = false);
+    FFmpegValidationResult validateFFmpeg(const QString &ffmpegPath);
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 

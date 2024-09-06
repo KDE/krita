@@ -144,6 +144,43 @@ KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
 
 void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
 {
+    // Initialize FFmpeg location... (!)
+    KisConfig cfg(false);
+    QString cfgFFmpegPath = cfg.ffmpegLocation();
+#ifdef Q_OS_MACOS
+    if (cfgFFmpegPath.isEmpty()) {
+        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
+        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
+    }
+#endif
+
+    // Check known ffmpeg locations..
+    QString likelyFFmpegPath = [&]() {
+        // Check last used
+        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
+            return lastUsedOptions.ffmpegPath;
+        }
+
+        // Check krita config
+        if (!cfgFFmpegPath.isEmpty()) {
+            return cfgFFmpegPath;
+        }
+
+        // Check standard paths
+        QString systemFFmpeg = QStandardPaths::findExecutable("ffmpeg");
+        if (!systemFFmpeg.isEmpty() && QFileInfo(systemFFmpeg).isExecutable()) {
+           return systemFFmpeg;
+        }
+
+        // Find ffmpeg elsewhere...
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
+        return (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
+    }();
+
+    if (!likelyFFmpegPath.isEmpty() && QFileInfo(likelyFFmpegPath).isExecutable()) {
+        setFFmpegPath(likelyFFmpegPath);
+    }
+
     const QString documentPath = m_doc->localFilePath();
 
     // Initialize these settings based on last used configuration when possible..
@@ -174,6 +211,22 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         m_page->dirRequester->setFileName(lastUsedOptions.directory);
     }
 
+    // Initialize FRAME render format...
+    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
+        if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
+            m_page->cmbMimetype->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
+        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
+            m_page->cmbScaleFilter->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    // Initialize VIDEO render format...
     for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
         if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
             m_page->cmbMimetype->setCurrentIndex(i);
@@ -183,12 +236,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
 
     // Skipping m_page->cmbRenderType for now, as it depends on the ffmpeg provided.
 
-    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
-        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
-            m_page->cmbScaleFilter->setCurrentIndex(i);
-            break;
-        }
-    }
+
 
     m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
 
@@ -213,33 +261,6 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     {
         KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
         m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
-    }
-
-    // Initialize FFmpeg location... (!)
-    KisConfig cfg(false);
-    QString cfgFFmpegPath = cfg.ffmpegLocation();
-#ifdef Q_OS_MACOS
-    if (cfgFFmpegPath.isEmpty()) {
-        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
-        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
-    }
-#endif
-    QString likelyFFmpegPath = [&]() {
-        if (!cfgFFmpegPath.isEmpty()) {
-            return cfgFFmpegPath;
-        }
-
-        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
-            return lastUsedOptions.ffmpegPath;
-        }
-
-        return QStandardPaths::findExecutable("ffmpeg");
-    }();
-
-    if (likelyFFmpegPath.isEmpty() || !QFileInfo(likelyFFmpegPath).isExecutable()) {
-        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
-
-        likelyFFmpegPath = (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
     }
 
     m_page->ffmpegLocation->setFileName(likelyFFmpegPath);

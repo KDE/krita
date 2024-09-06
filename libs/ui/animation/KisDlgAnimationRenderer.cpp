@@ -409,6 +409,9 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
     // and clear out all of the ffmpeg-specific fields to fill post-validation...
     m_page->cmbRenderType->setDisabled(true);
     m_page->bnRenderOptions->setDisabled(true);
+
+    QString previousMimeType = m_page->cmbRenderType->currentData().toString();
+
     m_page->cmbRenderType->clear();
     ffmpegEncoderTypes.clear();
 
@@ -450,6 +453,7 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
             QStringList supportedMimeTypes = makeVideoMimeTypesList();
             supportedMimeTypes = filterMimeTypeListByAvailableEncoders(supportedMimeTypes);
 
+            int previousMimeTypeIndex = -1;
             Q_FOREACH (const QString &mime, supportedMimeTypes) {
                 QString description = KisMimeDatabase::descriptionForMimeType(mime);
                 if (description.isEmpty()) {
@@ -457,12 +461,19 @@ void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
                 }
 
                 m_page->cmbRenderType->addItem(description, mime);
+                if (mime == previousMimeType) {
+                    previousMimeTypeIndex = m_page->cmbRenderType->count() - 1;
+                }
             }
 
             const int indexCount = m_page->cmbRenderType->count();
             if (indexCount > 0) {
-                const int desiredIndex = cfg.readEntry<int>("AnimationRenderer/render_type", 0);
-                m_page->cmbRenderType->setCurrentIndex(desiredIndex % indexCount); // ;P
+                if (previousMimeTypeIndex >= 0) {
+                    m_page->cmbRenderType->setCurrentIndex(previousMimeTypeIndex % indexCount);
+                } else {
+                    m_page->cmbRenderType->setCurrentIndex(0);
+                }
+
                 selectRenderType(m_page->cmbRenderType->currentIndex());
                 m_page->cmbRenderType->setDisabled(false);
                 m_page->bnRenderOptions->setDisabled(false);

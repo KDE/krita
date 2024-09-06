@@ -736,7 +736,6 @@ void KisNodeManager::convertNode(const QString &nodeType)
             m_d->view->blockUntilOperationsFinishedForced(m_d->imageView->image());
             m_d->commandsAdapter.undoLastCommand();
         }
-
     } else if (nodeType == "KisFileLayer") {
         m_d->layerManager.convertLayerToFileLayer(activeNode);
     } else {

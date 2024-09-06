@@ -3033,7 +3033,7 @@
     </Action>
     <Action name="convert_to_animated">
       <icon/>
-      <text>Convert to &amp;animated layer</text>
+      <text>Convert to &amp;Animated Layer</text>
       <whatsThis/>
       <toolTip>Convert layer into animation frames</toolTip>
       <iconText>Convert layer into animation frames</iconText>

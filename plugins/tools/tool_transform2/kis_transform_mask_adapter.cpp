@@ -127,9 +127,6 @@ KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromDumbXML(const QDo
         args.translateDstSpace(QPointF(transform.dx(), transform.dy()));
     }
 
-    // bounds rotation cannot be used on transform masks currently
-    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(args.boundsRotation()));
-
     return KisTransformMaskParamsInterfaceSP(
         new KisTransformMaskAdapter(args));
 }

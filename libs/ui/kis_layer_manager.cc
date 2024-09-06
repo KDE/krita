@@ -482,29 +482,29 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
 
 void KisLayerManager::convertGroupToAnimated()
 {
-    KisGroupLayerSP group = dynamic_cast<KisGroupLayer*>(activeLayer().data());
-    if (group.isNull()) return;
+    KisGroupLayerSP originalGroup = dynamic_cast<KisGroupLayer*>(activeLayer().data());
+    if (originalGroup.isNull()) return;
 
-    if (!m_view->nodeManager()->canModifyLayer(group)) return;
+    if (!m_view->nodeManager()->canModifyLayer(originalGroup)) return;
 
-    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), group->name(), OPACITY_OPAQUE_U8);
+    KisPaintLayerSP animatedLayer = new KisPaintLayer(m_view->image(), originalGroup->name(), OPACITY_OPAQUE_U8);
     animatedLayer->enableAnimation();
-    KisRasterKeyframeChannel *contentChannel = dynamic_cast<KisRasterKeyframeChannel*>(
+    KisRasterKeyframeChannel *keyframeChannel = dynamic_cast<KisRasterKeyframeChannel*>(
                 animatedLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
-    KIS_ASSERT_RECOVER_RETURN(contentChannel);
+    KIS_ASSERT_RECOVER_RETURN(keyframeChannel);
 
-    KisNodeSP child = group->firstChild();
+    KisNodeSP childNode = originalGroup->firstChild();
     int time = 0;
-    while (child) {
-        contentChannel->importFrame(time, child->projection(), NULL);
+    while (childNode) {
+        keyframeChannel->importFrame(time, childNode->projection(), NULL);
         time++;
 
-        child = child->nextSibling();
+        childNode = childNode->nextSibling();
     }
 
-    m_commandsAdapter->beginMacro(kundo2_i18n("Convert to an animated layer"));
-    m_commandsAdapter->addNode(animatedLayer, group->parent(), group);
-    m_commandsAdapter->removeNode(group);
+    m_commandsAdapter->beginMacro(kundo2_i18n("Convert Group to Animated Layer"));
+    m_commandsAdapter->addNode(animatedLayer, originalGroup->parent(), originalGroup);
+    m_commandsAdapter->removeNode(originalGroup);
     m_commandsAdapter->endMacro();
 }
 

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 03:10+0000\n"
-"PO-Revision-Date: 2024-08-30 08:31+0200\n"
+"POT-Creation-Date: 2024-09-06 03:50+0000\n"
+"PO-Revision-Date: 2024-09-05 19:47+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -17109,7 +17109,7 @@ msgstr "Doux"
 msgid "Gaussian"
 msgstr "Gaussien"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "Copier depuis"
@@ -17818,12 +17818,12 @@ msgstr "Incrustation (style)"
 msgid "Satin (style)"
 msgstr "Satin (style)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Modifier la couleur de la marque"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "Supprimer la marque de couleur"
@@ -19598,7 +19598,7 @@ msgstr "Ressources locales"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -21539,7 +21539,7 @@ msgstr "Theora"
 #, kde-format
 msgctxt "WEBP codec name"
 msgid "WEBP"
-msgstr "WEBP"
+msgstr "WebP"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:308
 #, kde-format
@@ -23819,7 +23819,7 @@ msgid "Start"
 msgstr "Début"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr "VERSION COMPILÉE DE DÉVELOPPEMENT"
@@ -31726,23 +31726,23 @@ msgstr "Langue"
 msgid "English news is always up to date."
 msgstr "Les nouvelles en anglais sont toujours à jour."
 
-#: libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oublier « %1 »"
 
-#: libs/ui/KisWelcomePageWidget.cpp:733
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Une nouvelle version de Krita est disponible ."
 
-#: libs/ui/KisWelcomePageWidget.cpp:762
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Une erreur est survenue durant la mise à jour."
 
-#: libs/ui/KisWelcomePageWidget.cpp:768
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "Un re-démarrage est nécessaire."
@@ -33955,8 +33955,8 @@ msgid ""
 "and cons of changing your workflow.</p>"
 msgstr ""
 "<p> Pour éviter d'éventuels problèmes de violations de licences, "
-"« LargeRGB » est utilisé (après « Rawtherapee ») comme le nom de base pour "
-"ces profils.<p> Kodak a conçu le Gamut de couleurs « RIMM » / "
+"« LargeRGB » est utilisé (après « RawTherapee ») comme le nom de base pour "
+"ces profils.<p> Kodak a conçu le gamut de couleurs « RIMM » / "
 "« ROMM » (ProPhotoRGB) pour intégrer toutes les couleurs imprimables et les "
 "couleurs plus réelles du monde. Ceci inclut certaines couleurs imaginaires "
 "et exclut certaines comme les bleus et les violets du monde réel, pouvant "
@@ -33965,7 +33965,7 @@ msgstr ""
 "interprétés par des profils d'entrées matricielles de l'appareil.<p> Les "
 "couleurs primaires de « ProPhotoRGB » sont codées en dur dans certains "
 "produits d'Adobe comme « Lightroom » et les « profils » pour des appareils "
-"« Dng-DCP ». Cependant, en plus d'être d'un volume important pour prendre en "
+"« DNG-DCP ». Cependant, en plus d'être d'un volume important pour prendre en "
 "compte un grand nombre de couleurs, ProPhotoRGB n'a aucun mérite participer "
 "que d'être un espace colorimétrique « RGB ». Personnellement, je recommande "
 "les profils « Rec.2020 » ou « ACEScg » au dessus de « ProPhotoRGB ». Mais, "
@@ -36344,7 +36344,7 @@ msgstr "Radians (rad)"
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
-msgstr "frame (f)"
+msgstr "frames (f)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
@@ -43434,7 +43434,7 @@ msgstr "Commentaire"
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
-msgstr "Filtre « G'MIC »"
+msgstr "Filtre « G'Mic »"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
@@ -48805,62 +48805,62 @@ msgstr ""
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Impossible de charger l'identifiant du masque de transformation"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:426
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Impossible de créer les paramètres du masque de transformation"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:578
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Impossible de trouver les données de pixels pour l'image %1 parmi %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:586
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Impossible de charger les données de pixels pour l'image %1 parmi %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:615
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Impossible de lire les données du pixel : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:622
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Impossible de charger les données du pixel : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Impossible de charger le profil : %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Impossible de filtrer la configuration %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:734
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Impossible de charger les métadonnées du calque %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:777
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Impossible de charger la sélection vectorielle %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:793
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Impossible de charger la sélection matricielle %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Impossible de charger les images clés depuis %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48869,7 +48869,7 @@ msgstr ""
 "Erreur d'analyse dans le fichier d'images clés %1 à la ligne %2, colonne %3\n"
 "Message d'erreur : %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:850
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Type inconnu de canal d'image clé : %1 dans %2"
@@ -49608,10 +49608,10 @@ msgid ""
 "artifacts get introduced. <br/>Note: A quality of 100 switches to lossless "
 "compression similar to (but often more efficient than) PNG.</p>"
 msgstr ""
-"<p>Ajuster la qualité de l'image. quality Plus la qualité est réduite, plus "
-"la compression fait apparaître des artefacts.<br/> Remarque : une qualité "
-"avec 100 passes pour une compression avec perte est similaire (mais pas "
-"souvent plus efficace) que le format « png ».</p>"
+"<p>Ajuster la qualité de l'image. Plus la qualité est réduite, plus la "
+"compression fait apparaître des artefacts.<br/> Remarque : une qualité avec "
+"100 passes pour une compression avec perte est similaire (mais pas souvent "
+"plus efficace) que le format « png ».</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
@@ -50272,7 +50272,7 @@ msgid ""
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
 "<title>Réduction de bruit</title><p>Sélectionner ici la méthode de réduction "
-"de bruit à appliquer durant le décode « RAW ».</p><p><ul><li><emphasis "
+"de bruit à appliquer durant le décodage « RAW ».</p><p><ul><li><emphasis "
 "strong='true'>Aucun </emphasis>: aucune réduction de bruit.</"
 "li><li><emphasis strong='true'>Ondelettes</emphasis> : correction par "
 "ondelettes pour supprimer le bruit tout en préservant les détails réels. "
@@ -57280,7 +57280,7 @@ msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
 "using the infinite assistants."
 msgstr ""
-"Ne l'autoriser à n'aimanter que sur une seule ligne d'assistant. Empêche "
+"Ne l'autoriser à s'aimanter que sur une seule ligne d'assistant. Empêche "
 "tout désordre avec l'aimantage lors de l'utilisation d'un grand nombre "
 "d'assistants. "
 
@@ -59964,7 +59964,7 @@ msgstr "Permet de remplir aussi les éléments limitrophes"
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
-msgstr "Méthode d'englobement"
+msgstr "Méthode englobante"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
 #, kde-format

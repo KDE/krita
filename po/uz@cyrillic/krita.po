@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 03:10+0000\n"
+"POT-Creation-Date: 2024-09-06 03:50+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17781,7 +17781,7 @@ msgstr "Филтерни танлаш"
 msgid "Gaussian"
 msgstr "Жорий бўлим"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, fuzzy, kde-format
 #| msgid "Green"
 msgid "Copy From"
@@ -18573,13 +18573,13 @@ msgstr "Тагига чизилган"
 msgid "Satin (style)"
 msgstr "&Услуб"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Текислашни ўзгартириш"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 #, fuzzy
 #| msgid "Remove Template"
 msgctxt "(qtundo-format)"
@@ -20398,7 +20398,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -24641,7 +24641,7 @@ msgid "Start"
 msgstr "Кўча"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -32558,24 +32558,24 @@ msgstr "Матнни қўйиш"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "&Экспорт қилиш"
 
-#: libs/ui/KisWelcomePageWidget.cpp:733
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:762
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "An error occurred during the update"
 msgstr "Файлнинг бошини ўқиб бўлмади."
 
-#: libs/ui/KisWelcomePageWidget.cpp:768
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -49896,80 +49896,80 @@ msgstr ""
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:426
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create transform mask params"
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:578
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:586
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:615
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not read pixel data: %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:622
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load pixel data: %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load profile: %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not filter configuration %1."
 msgstr "%1 топилмади"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:734
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load metadata for layer %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:777
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not load vector selection %1."
 msgstr "Расмни юклаб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:793
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load raster selection %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "Could not load keyframes from %1."
 msgstr "'%1' пакетини ўқиб бўлмади."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
 "Error message: %4"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:850
 #, fuzzy, kde-format
 #| msgid "Could not read the package \"%1\"."
 msgid "unknown keyframe channel type: %1 in %2"

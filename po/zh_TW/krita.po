@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 03:10+0000\n"
+"POT-Creation-Date: 2024-09-06 03:50+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -16950,7 +16950,7 @@ msgstr "柔和"
 msgid "Gaussian"
 msgstr "高斯"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "再製來源"
@@ -17653,12 +17653,12 @@ msgstr "覆蓋 (樣式)"
 msgid "Satin (style)"
 msgstr "光澤 (樣式)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "變更關鍵筆畫色彩"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "移除關鍵筆畫"
@@ -19407,7 +19407,7 @@ msgstr "本機資源"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23510,7 +23510,7 @@ msgid "Start"
 msgstr "開始作業"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr "開發建置版本"
@@ -31183,23 +31183,23 @@ msgstr "語言"
 msgid "English news is always up to date."
 msgstr "英文新聞永遠是最更新的。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "忘記「%1」"
 
-#: libs/ui/KisWelcomePageWidget.cpp:733
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita 有新版可用。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:762
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "更新時發生錯誤"
 
-#: libs/ui/KisWelcomePageWidget.cpp:768
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "需要重新啟動。"
@@ -47805,62 +47805,62 @@ msgstr "此檔案包含有著錯誤來源節點 ID 的再製圖層。此圖層�
 msgid "Could not load \"id\" of the transform mask"
 msgstr "無法載入變形遮罩的「id」資料"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:426
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "無法建立變形遮罩參數"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:578
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "無法為影格 %1 在 %2 中找到關鍵影格像素資料。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:586
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "無法為影格 %1 在 %2 中載入關鍵影格像素資料。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:615
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "無法讀取像素資料：%1。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:622
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "無法載入像素資料：%1。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "無法載入設定檔：%1 。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "無法過濾設定 %1。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:734
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "無法為圖層 %1 載入中繼資料。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:777
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "無法載入向量選取區域 %1。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:793
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "無法載入點陣選取區域 %1。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "無法從 %1 載入關鍵影格。"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -47869,7 +47869,7 @@ msgstr ""
 "在關鍵影格檔案 %1 的第 %2 行第 %3 列發生解析錯誤\n"
 "錯誤訊息：%4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:850
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "未知的關鍵影格通道類型：%1 在 %2 中"

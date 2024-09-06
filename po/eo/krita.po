@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 03:10+0000\n"
+"POT-Creation-Date: 2024-09-06 03:50+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -17010,7 +17010,7 @@ msgstr "Mola"
 msgid "Gaussian"
 msgstr "Gaŭsa"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "Kopii De"
@@ -17719,12 +17719,12 @@ msgstr "Plustavolo (stilo)"
 msgid "Satin (style)"
 msgstr "Sateno (stilo)"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr "Ŝanĝi Koloron de Ŝlosilo"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 msgctxt "(qtundo-format)"
 msgid "Remove Key Stroke"
 msgstr "Forigi Klavopremon"
@@ -19495,7 +19495,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23665,7 +23665,7 @@ msgid "Start"
 msgstr "Komenci"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV KONSTRUO"
@@ -31446,23 +31446,23 @@ msgstr "Lingvo"
 msgid "English news is always up to date."
 msgstr "Anglaj novaĵoj ĉiam estas ĝisdatigitaj."
 
-#: libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Forgesi \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:733
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Nova versio de Krita disponeblas."
 
-#: libs/ui/KisWelcomePageWidget.cpp:762
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Eraro okazis dum la ĝisdatigo"
 
-#: libs/ui/KisWelcomePageWidget.cpp:768
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "Rekomenco estas bezonata."
@@ -48333,62 +48333,62 @@ msgstr ""
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ne eblis ŝargi \"id\" de la transformmasko"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:426
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ne eblis krei transformajn maskajn parametrojn"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:578
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis trovi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:586
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis ŝargi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:615
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Ne eblis legi rastrumerojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:622
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Ne eblis ŝargi pikserajn datumojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Ne eblis ŝargi profilon: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Ne eblis filtri agordon %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:734
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Ne eblis ŝargi metadatumojn por tavolo %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:777
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Ne eblis ŝargi vektoran elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:793
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Ne eblis ŝargi rastruman elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Ne eblis ŝargi ŝlosilkadrojn de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48397,7 +48397,7 @@ msgstr ""
 "analiza eraro en la ĉefkadra dosiero %1 ĉe linio %2, kolumno %3\n"
 "Erara mesaĝo: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:850
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "nekonata ĉefkadra kanaltipo: %1 en %2"

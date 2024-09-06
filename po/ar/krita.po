@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-05 03:10+0000\n"
+"POT-Creation-Date: 2024-09-06 03:50+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17664,7 +17664,7 @@ msgstr "لين"
 msgid "Gaussian"
 msgstr "ضبابي"
 
-#: libs/image/kis_clone_layer.cpp:321
+#: libs/image/kis_clone_layer.cpp:327
 #, kde-format
 msgid "Copy From"
 msgstr "انسخ من"
@@ -18403,12 +18403,12 @@ msgstr "إحلال (نمط)"
 msgid "Satin (style)"
 msgstr "نمط الخطّ"
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:943
+#: libs/image/lazybrush/kis_colorize_mask.cpp:945
 msgctxt "(qtundo-format)"
 msgid "Change Key Stroke Color"
 msgstr ""
 
-#: libs/image/lazybrush/kis_colorize_mask.cpp:968
+#: libs/image/lazybrush/kis_colorize_mask.cpp:970
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Remove Keyframe"
@@ -20243,7 +20243,7 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:714
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -24517,7 +24517,7 @@ msgid "Start"
 msgstr "ابدأ"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:619
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -32435,24 +32435,24 @@ msgstr "اللغة"
 msgid "English news is always up to date."
 msgstr "الأخبار الإنجليزية دائما محدثة."
 
-#: libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "انسَ \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:733
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "إصدارة جديدة من كريتا متوفرة."
 
-#: libs/ui/KisWelcomePageWidget.cpp:762
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, fuzzy, kde-format
 #| msgid "An exception occurred while running the script."
 msgid "An error occurred during the update"
 msgstr "حدث استثناء أثناء تشغيل السّكربت."
 
-#: libs/ui/KisWelcomePageWidget.cpp:768
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "إعادة التّشغيل مطلوبة."
@@ -49585,38 +49585,38 @@ msgstr ""
 msgid "Could not load \"id\" of the transform mask"
 msgstr "تعذّر تحميل ”id“ لقناع التّحويل"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:426
 #, fuzzy, kde-format
 #| msgid "Could not load \"id\" of the transform mask"
 msgid "Could not create transform mask params"
 msgstr "تعذّر تحميل ”id“ لقناع التّحويل"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:578
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "تعذّر تحميل بيانات إطار البكسل المفتاحيّ لإطار %1 في %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:586
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "تعذّر تحميل بيانات إطار البكسل المفتاحيّ لإطار %1 في %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:615
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "تعذّرت قراءة بيانات البكسل: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:622
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "تعذّر تحميل بيانات البكسل: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:638
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "تعذّر تحميل اللاحة: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:693
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not render animation:\n"
@@ -49626,27 +49626,27 @@ msgstr ""
 "تعذّر تصيير الحركة:\n"
 "%1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:734
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "تعذّر تحميل البيانات الوصفيّة للطّبقة %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:777
 #, fuzzy, kde-format
 msgid "Could not load vector selection %1."
 msgstr "تعذّر تحميل التّحديد %1 المتّجهيّ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:793
 #, fuzzy, kde-format
 msgid "Could not load raster selection %1."
 msgstr "تعذّر تحميل التّحديد %1 المتّجهيّ."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "تعذّر تحميل إطارات المفاتيح من %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49655,7 +49655,7 @@ msgstr ""
 "خطأ تحليل في ملفّ الإطارات المفتاحيّة %1 عند سطر %2، عمود %3\n"
 "رسالة الخطأ: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:850
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "نوع قناة الإطار المفتاحيّ مجهولة: %1 في %2"

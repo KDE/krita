@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-06 03:50+0000\n"
+"POT-Creation-Date: 2024-09-07 03:16+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -9509,13 +9509,26 @@ msgctxt "action"
 msgid "Brush Smoothing: Disabled"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:801 krita/krita.action:803 krita/krita.action:804
+#, fuzzy, kde-format
+#| msgid "Document Settings"
+msgctxt "action"
+msgid "Brush Smoothing: Pixel"
+msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
+
+#. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
+#: krita/krita.action:811 krita/krita.action:813 krita/krita.action:814
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgctxt "action"
@@ -9528,7 +9541,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:811 krita/krita.action:813 krita/krita.action:814
+#: krita/krita.action:821 krita/krita.action:823 krita/krita.action:824
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgctxt "action"
@@ -9541,7 +9554,7 @@ msgstr "ਰੇਖਾ ਭਾਰ"
 #. i18n: context: text @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_brush_smoothing), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:823 krita/krita.action:825 krita/krita.action:826
+#: krita/krita.action:833 krita/krita.action:835 krita/krita.action:836
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgctxt "action"
@@ -9554,7 +9567,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:833 krita/krita.action:835 krita/krita.action:836
+#: krita/krita.action:843 krita/krita.action:845 krita/krita.action:846
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgctxt "action"
@@ -9567,7 +9580,7 @@ msgstr "ਰੇਖਾ ਭਾਰ"
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:845 krita/krita.action:847 krita/krita.action:848
+#: krita/krita.action:855 krita/krita.action:857 krita/krita.action:858
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -9580,7 +9593,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:857 krita/krita.action:859 krita/krita.action:860
+#: krita/krita.action:867 krita/krita.action:869 krita/krita.action:870
 #, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
@@ -9592,7 +9605,7 @@ msgstr ""
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:869 krita/krita.action:871 krita/krita.action:872
+#: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -9605,7 +9618,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:881 krita/krita.action:883 krita/krita.action:884
+#: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -9616,7 +9629,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:893 krita/krita.action:896
+#: krita/krita.action:903 krita/krita.action:906
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "action"
@@ -9624,7 +9637,7 @@ msgid "Toggle Snap To Assistants"
 msgstr "ਸੰਭਾਲੋ"
 
 #. i18n: context: toolTip @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:895
+#: krita/krita.action:905
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "action"
@@ -9637,7 +9650,7 @@ msgstr "ਸੰਭਾਲੋ"
 #. i18n: context: text @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (undo_polygon_selection), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
+#: krita/krita.action:913 krita/krita.action:915 krita/krita.action:916
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -9656,7 +9669,7 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 #. i18n: context: text @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_foreground_color_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:913 krita/krita.action:915 krita/krita.action:916
+#: krita/krita.action:923 krita/krita.action:925 krita/krita.action:926
 #: krita/kritamenu.action:498 krita/kritamenu.action:500
 #: krita/kritamenu.action:501
 #, fuzzy, kde-format
@@ -9677,7 +9690,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: text @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_background_color_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:925 krita/krita.action:927 krita/krita.action:928
+#: krita/krita.action:935 krita/krita.action:937 krita/krita.action:938
 #: krita/kritamenu.action:510 krita/kritamenu.action:512
 #: krita/kritamenu.action:513
 #, fuzzy, kde-format
@@ -9698,7 +9711,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: text @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (fill_selection_pattern_opacity), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:937 krita/krita.action:939 krita/krita.action:940
+#: krita/krita.action:947 krita/krita.action:949 krita/krita.action:950
 #: krita/kritamenu.action:522 krita/kritamenu.action:524
 #: krita/kritamenu.action:525
 #, fuzzy, kde-format
@@ -9708,7 +9721,7 @@ msgid "Fill with Pattern (Opacity)"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:949
+#: krita/krita.action:959
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -9719,7 +9732,7 @@ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_selection_to_shape), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:951 krita/krita.action:952
+#: krita/krita.action:961 krita/krita.action:962
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -9727,7 +9740,7 @@ msgid "Convert to Shape"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:961
+#: krita/krita.action:971
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -9735,7 +9748,7 @@ msgid "&Show Global Selection Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:963
+#: krita/krita.action:973
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -9744,7 +9757,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (show-global-selection-mask), Actions (Painting), ActionCollection (Krita)
-#: krita/krita.action:964
+#: krita/krita.action:974
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -9771,7 +9784,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:973 plugins/dockers/logdocker/LogDockerDock.cpp:148
+#: krita/krita.action:983 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:4
@@ -9788,7 +9801,7 @@ msgid "Filters"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:976
+#: krita/krita.action:986
 #, fuzzy, kde-format
 #| msgid "Master Page..."
 msgctxt "action"
@@ -9799,7 +9812,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ..."
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:978 krita/krita.action:979
+#: krita/krita.action:988 krita/krita.action:989
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -9807,7 +9820,7 @@ msgid "Color to Alpha"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:988
+#: krita/krita.action:998
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9818,7 +9831,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_top edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:990 krita/krita.action:991
+#: krita/krita.action:1000 krita/krita.action:1001
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9826,7 +9839,7 @@ msgid "Top Edge Detection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1000
+#: krita/krita.action:1010
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -9837,7 +9850,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1002 krita/krita.action:1003
+#: krita/krita.action:1012 krita/krita.action:1013
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -9845,7 +9858,7 @@ msgid "Index Colors"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1012
+#: krita/krita.action:1022
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -9856,7 +9869,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1014 krita/krita.action:1015
+#: krita/krita.action:1024 krita/krita.action:1025
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -9864,7 +9877,7 @@ msgid "Emboss Horizontal Only"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1024
+#: krita/krita.action:1034
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -9875,7 +9888,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_dodge), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1026 krita/krita.action:1027
+#: krita/krita.action:1036 krita/krita.action:1037
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -9883,7 +9896,7 @@ msgid "Dodge"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1036
+#: krita/krita.action:1046
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgctxt "action"
@@ -9894,7 +9907,7 @@ msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sharpen), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1038 krita/krita.action:1039
+#: krita/krita.action:1048 krita/krita.action:1049
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgctxt "action"
@@ -9902,7 +9915,7 @@ msgid "Sharpen"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1048
+#: krita/krita.action:1058
 #, kde-format
 msgctxt "action"
 msgid "B&urn"
@@ -9912,14 +9925,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1050 krita/krita.action:1051
+#: krita/krita.action:1060 krita/krita.action:1061
 #, kde-format
 msgctxt "action"
 msgid "Burn"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1060
+#: krita/krita.action:1070
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -9930,7 +9943,7 @@ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1062 krita/krita.action:1063
+#: krita/krita.action:1072 krita/krita.action:1073
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -9938,7 +9951,7 @@ msgid "Mean Removal"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1072
+#: krita/krita.action:1082
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9949,7 +9962,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1074 krita/krita.action:1075
+#: krita/krita.action:1084 krita/krita.action:1085
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9957,7 +9970,7 @@ msgid "Gaussian Blur"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1084
+#: krita/krita.action:1094
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9968,7 +9981,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1086 krita/krita.action:1087
+#: krita/krita.action:1096 krita/krita.action:1097
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -9976,7 +9989,7 @@ msgid "Emboss in All Directions"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1096
+#: krita/krita.action:1106
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "action"
@@ -9987,7 +10000,7 @@ msgstr "ਸੰਭਾਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1098 krita/krita.action:1099
+#: krita/krita.action:1108 krita/krita.action:1109
 #, fuzzy, kde-format
 #| msgid "Size"
 msgctxt "action"
@@ -9995,7 +10008,7 @@ msgid "Small Tiles"
 msgstr "ਸਾਈਜ਼"
 
 #. i18n: context: text @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1108
+#: krita/krita.action:1118
 #, kde-format
 msgctxt "action"
 msgid "&Levels..."
@@ -10005,14 +10018,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1110 krita/krita.action:1111
+#: krita/krita.action:1120 krita/krita.action:1121
 #, kde-format
 msgctxt "action"
 msgid "Levels"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1120
+#: krita/krita.action:1130
 #, kde-format
 msgctxt "action"
 msgid "&Sobel..."
@@ -10022,14 +10035,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1122 krita/krita.action:1123
+#: krita/krita.action:1132 krita/krita.action:1133
 #, kde-format
 msgctxt "action"
 msgid "Sobel"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1132
+#: krita/krita.action:1142
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10040,7 +10053,7 @@ msgstr "ਤਬਦੀਲ"
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1134 krita/krita.action:1135
+#: krita/krita.action:1144 krita/krita.action:1145
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10048,7 +10061,7 @@ msgid "Wave"
 msgstr "ਤਬਦੀਲ"
 
 #. i18n: context: text @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1144
+#: krita/krita.action:1154
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10059,14 +10072,14 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1146 krita/krita.action:1147
+#: krita/krita.action:1156 krita/krita.action:1157
 #, kde-format
 msgctxt "action"
 msgid "Motion Blur"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1156
+#: krita/krita.action:1166
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -10077,7 +10090,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_invert), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1158 krita/krita.action:1159
+#: krita/krita.action:1168 krita/krita.action:1169
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -10085,7 +10098,7 @@ msgid "Invert"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1168
+#: krita/krita.action:1178
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10096,7 +10109,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1170 krita/krita.action:1171
+#: krita/krita.action:1180 krita/krita.action:1181
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10104,7 +10117,7 @@ msgid "Color Adjustment curves"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #. i18n: context: text @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1180
+#: krita/krita.action:1190
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10115,7 +10128,7 @@ msgstr "ਤਬਦੀਲ"
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1182 krita/krita.action:1183
+#: krita/krita.action:1192 krita/krita.action:1193
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10123,7 +10136,7 @@ msgid "Pixelize"
 msgstr "ਤਬਦੀਲ"
 
 #. i18n: context: text @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1192
+#: krita/krita.action:1202
 #, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
@@ -10133,7 +10146,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1194 krita/krita.action:1195
+#: krita/krita.action:1204 krita/krita.action:1205
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -10141,7 +10154,7 @@ msgid "Emboss (Laplacian)"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1204
+#: krita/krita.action:1214
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10152,7 +10165,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1206 krita/krita.action:1207
+#: krita/krita.action:1216 krita/krita.action:1217
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10160,7 +10173,7 @@ msgid "Left Edge Detection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1216
+#: krita/krita.action:1226
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10177,7 +10190,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1218 krita/krita.action:1219 krita/kritamenu.action:1645
+#: krita/krita.action:1228 krita/krita.action:1229 krita/kritamenu.action:1645
 #: krita/kritamenu.action:1647 krita/kritamenu.action:1648
 #, kde-format
 msgctxt "action"
@@ -10185,7 +10198,7 @@ msgid "Blur"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1228
+#: krita/krita.action:1238
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10196,14 +10209,14 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1230 krita/krita.action:1231
+#: krita/krita.action:1240 krita/krita.action:1241
 #, kde-format
 msgctxt "action"
 msgid "Raindrops"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1240
+#: krita/krita.action:1250
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10214,7 +10227,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_bottom edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1242 krita/krita.action:1243
+#: krita/krita.action:1252 krita/krita.action:1253
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10222,7 +10235,7 @@ msgid "Bottom Edge Detection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1252
+#: krita/krita.action:1262
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt "action"
@@ -10233,7 +10246,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1254 krita/krita.action:1255
+#: krita/krita.action:1264 krita/krita.action:1265
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt "action"
@@ -10241,7 +10254,7 @@ msgid "Random Noise"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1264
+#: krita/krita.action:1274
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10252,7 +10265,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1266 krita/krita.action:1267
+#: krita/krita.action:1276 krita/krita.action:1277
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10260,7 +10273,7 @@ msgid "Color Balance"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1276
+#: krita/krita.action:1286
 #, kde-format
 msgctxt "action"
 msgid "&Phong Bumpmap..."
@@ -10270,14 +10283,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1278 krita/krita.action:1279
+#: krita/krita.action:1288 krita/krita.action:1289
 #, kde-format
 msgctxt "action"
 msgid "Phong Bumpmap"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1288
+#: krita/krita.action:1298
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -10288,7 +10301,7 @@ msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_desaturate), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1290 krita/krita.action:1291
+#: krita/krita.action:1300 krita/krita.action:1301
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -10296,7 +10309,7 @@ msgid "Desaturate"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1300
+#: krita/krita.action:1310
 #, fuzzy, kde-format
 #| msgid "Master Page..."
 msgctxt "action"
@@ -10307,7 +10320,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ..."
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1302 krita/krita.action:1303
+#: krita/krita.action:1312 krita/krita.action:1313
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10315,7 +10328,7 @@ msgid "Color Transfer"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1312
+#: krita/krita.action:1322
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -10326,7 +10339,7 @@ msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss vertical only), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1314 krita/krita.action:1315
+#: krita/krita.action:1324 krita/krita.action:1325
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -10334,7 +10347,7 @@ msgid "Emboss Vertical Only"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1324
+#: krita/krita.action:1334
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10345,14 +10358,14 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1326 krita/krita.action:1327
+#: krita/krita.action:1336 krita/krita.action:1337
 #, kde-format
 msgctxt "action"
 msgid "Lens Blur"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1336
+#: krita/krita.action:1346
 #, fuzzy, kde-format
 #| msgid "Minimal View"
 msgctxt "action"
@@ -10363,7 +10376,7 @@ msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 #. i18n: context: iconText @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_minimize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1338 krita/krita.action:1339
+#: krita/krita.action:1348 krita/krita.action:1349
 #, fuzzy, kde-format
 #| msgid "Minimal View"
 msgctxt "action"
@@ -10371,7 +10384,7 @@ msgid "Minimize Channel"
 msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 
 #. i18n: context: text @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1348
+#: krita/krita.action:1358
 #, fuzzy, kde-format
 #| msgid "Minimal View"
 msgctxt "action"
@@ -10382,7 +10395,7 @@ msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 #. i18n: context: iconText @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_maximize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1350 krita/krita.action:1351
+#: krita/krita.action:1360 krita/krita.action:1361
 #, fuzzy, kde-format
 #| msgid "Minimal View"
 msgctxt "action"
@@ -10390,7 +10403,7 @@ msgid "Maximize Channel"
 msgstr "ਘੱਟੋ-ਘੱਟ ਝਲਕ"
 
 #. i18n: context: text @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1360
+#: krita/krita.action:1370
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "action"
@@ -10401,7 +10414,7 @@ msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1362 krita/krita.action:1363
+#: krita/krita.action:1372 krita/krita.action:1373
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "action"
@@ -10409,7 +10422,7 @@ msgid "Oilpaint"
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: text @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1372
+#: krita/krita.action:1382
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10420,7 +10433,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_right edge detections), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1374 krita/krita.action:1375
+#: krita/krita.action:1384 krita/krita.action:1385
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10428,7 +10441,7 @@ msgid "Right Edge Detection"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1384
+#: krita/krita.action:1394
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10439,7 +10452,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1386 krita/krita.action:1387
+#: krita/krita.action:1396 krita/krita.action:1397
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10447,7 +10460,7 @@ msgid "Auto Contrast"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #. i18n: context: text @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1396
+#: krita/krita.action:1406
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10458,7 +10471,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1398 krita/krita.action:1399
+#: krita/krita.action:1408 krita/krita.action:1409
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -10466,7 +10479,7 @@ msgid "Round Corners"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1408
+#: krita/krita.action:1418
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10477,7 +10490,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1410 krita/krita.action:1411
+#: krita/krita.action:1420 krita/krita.action:1421
 #, fuzzy, kde-format
 #| msgid "Show master shapes"
 msgctxt "action"
@@ -10485,7 +10498,7 @@ msgid "Unsharp Mask"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
 #. i18n: context: text @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1420
+#: krita/krita.action:1430
 #, kde-format
 msgctxt "action"
 msgid "&Emboss with Variable Depth..."
@@ -10495,14 +10508,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1422 krita/krita.action:1423
+#: krita/krita.action:1432 krita/krita.action:1433
 #, kde-format
 msgctxt "action"
 msgid "Emboss with Variable Depth"
 msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1432
+#: krita/krita.action:1442
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -10513,7 +10526,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1434 krita/krita.action:1435
+#: krita/krita.action:1444 krita/krita.action:1445
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -10521,7 +10534,7 @@ msgid "Emboss Horizontal & Vertical"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1444
+#: krita/krita.action:1454
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt "action"
@@ -10532,7 +10545,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1446 krita/krita.action:1447
+#: krita/krita.action:1456 krita/krita.action:1457
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt "action"
@@ -10540,7 +10553,7 @@ msgid "Random Pick"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1456
+#: krita/krita.action:1466
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10551,7 +10564,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1458 krita/krita.action:1459
+#: krita/krita.action:1468 krita/krita.action:1469
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10559,7 +10572,7 @@ msgid "Gaussian Noise Reduction"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1468
+#: krita/krita.action:1478
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10570,7 +10583,7 @@ msgstr "ਤਬਦੀਲ"
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1470 krita/krita.action:1471
+#: krita/krita.action:1480 krita/krita.action:1481
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -10578,7 +10591,7 @@ msgid "Posterize"
 msgstr "ਤਬਦੀਲ"
 
 #. i18n: context: text @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1480
+#: krita/krita.action:1490
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10589,7 +10602,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1482 krita/krita.action:1483
+#: krita/krita.action:1492 krita/krita.action:1493
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -10597,7 +10610,7 @@ msgid "Wavelet Noise Reducer"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1492
+#: krita/krita.action:1502
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10608,7 +10621,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
-#: krita/krita.action:1494 krita/krita.action:1495
+#: krita/krita.action:1504 krita/krita.action:1505
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "action"
@@ -10616,7 +10629,7 @@ msgid "HSV Adjustment"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #. i18n: context: text @ Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1504
+#: krita/krita.action:1514
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgctxt "action"
@@ -10629,7 +10642,7 @@ msgstr "ਵੇਖਣ ਮੋਡ"
 #. i18n: context: text @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Next Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1507 krita/krita.action:1509 krita/krita.action:1510
+#: krita/krita.action:1517 krita/krita.action:1519 krita/krita.action:1520
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgctxt "action"
@@ -10642,7 +10655,7 @@ msgstr "ਵੇਖਣ ਮੋਡ"
 #. i18n: context: text @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Previous Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1517 krita/krita.action:1519 krita/krita.action:1520
+#: krita/krita.action:1527 krita/krita.action:1529 krita/krita.action:1530
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgctxt "action"
@@ -10655,7 +10668,7 @@ msgstr "ਵੇਖਣ ਮੋਡ"
 #. i18n: context: text @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Normal Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1527 krita/krita.action:1529 krita/krita.action:1530
+#: krita/krita.action:1537 krita/krita.action:1539 krita/krita.action:1540
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10668,7 +10681,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Dissolve Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1539 krita/krita.action:1541 krita/krita.action:1542
+#: krita/krita.action:1549 krita/krita.action:1551 krita/krita.action:1552
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10681,7 +10694,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Behind Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1551 krita/krita.action:1553 krita/krita.action:1554
+#: krita/krita.action:1561 krita/krita.action:1563 krita/krita.action:1564
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10694,7 +10707,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Clear Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1563 krita/krita.action:1565 krita/krita.action:1566
+#: krita/krita.action:1573 krita/krita.action:1575 krita/krita.action:1576
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10707,7 +10720,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Darken Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1575 krita/krita.action:1577 krita/krita.action:1578
+#: krita/krita.action:1585 krita/krita.action:1587 krita/krita.action:1588
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10720,7 +10733,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Multiply Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1587 krita/krita.action:1589 krita/krita.action:1590
+#: krita/krita.action:1597 krita/krita.action:1599 krita/krita.action:1600
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10733,7 +10746,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1599 krita/krita.action:1601 krita/krita.action:1602
+#: krita/krita.action:1609 krita/krita.action:1611 krita/krita.action:1612
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10746,7 +10759,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Burn Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1611 krita/krita.action:1613 krita/krita.action:1614
+#: krita/krita.action:1621 krita/krita.action:1623 krita/krita.action:1624
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10759,7 +10772,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Lighten Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1623 krita/krita.action:1625 krita/krita.action:1626
+#: krita/krita.action:1633 krita/krita.action:1635 krita/krita.action:1636
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10772,7 +10785,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Screen Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1635 krita/krita.action:1637 krita/krita.action:1638
+#: krita/krita.action:1645 krita/krita.action:1647 krita/krita.action:1648
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10785,7 +10798,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1647 krita/krita.action:1649 krita/krita.action:1650
+#: krita/krita.action:1657 krita/krita.action:1659 krita/krita.action:1660
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10798,7 +10811,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Dodge Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1659 krita/krita.action:1661 krita/krita.action:1662
+#: krita/krita.action:1669 krita/krita.action:1671 krita/krita.action:1672
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10811,7 +10824,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1671 krita/krita.action:1673 krita/krita.action:1674
+#: krita/krita.action:1681 krita/krita.action:1683 krita/krita.action:1684
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10824,7 +10837,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1683 krita/krita.action:1685 krita/krita.action:1686
+#: krita/krita.action:1693 krita/krita.action:1695 krita/krita.action:1696
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10837,7 +10850,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1695 krita/krita.action:1697 krita/krita.action:1698
+#: krita/krita.action:1705 krita/krita.action:1707 krita/krita.action:1708
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10850,7 +10863,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1707 krita/krita.action:1709 krita/krita.action:1710
+#: krita/krita.action:1717 krita/krita.action:1719 krita/krita.action:1720
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10863,7 +10876,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Vivid Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1719 krita/krita.action:1721 krita/krita.action:1722
+#: krita/krita.action:1729 krita/krita.action:1731 krita/krita.action:1732
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10876,7 +10889,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Linear Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1731 krita/krita.action:1733 krita/krita.action:1734
+#: krita/krita.action:1741 krita/krita.action:1743 krita/krita.action:1744
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10889,7 +10902,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Pin Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1743 krita/krita.action:1745 krita/krita.action:1746
+#: krita/krita.action:1753 krita/krita.action:1755 krita/krita.action:1756
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10902,7 +10915,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Mix Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1755 krita/krita.action:1757 krita/krita.action:1758
+#: krita/krita.action:1765 krita/krita.action:1767 krita/krita.action:1768
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10915,7 +10928,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Difference Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1767 krita/krita.action:1769 krita/krita.action:1770
+#: krita/krita.action:1777 krita/krita.action:1779 krita/krita.action:1780
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10928,7 +10941,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: text @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Exclusion Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1779 krita/krita.action:1781 krita/krita.action:1782
+#: krita/krita.action:1789 krita/krita.action:1791 krita/krita.action:1792
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10941,7 +10954,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hue Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1791 krita/krita.action:1793 krita/krita.action:1794
+#: krita/krita.action:1801 krita/krita.action:1803 krita/krita.action:1804
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10954,7 +10967,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Saturation Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1803 krita/krita.action:1805 krita/krita.action:1806
+#: krita/krita.action:1813 krita/krita.action:1815 krita/krita.action:1816
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10967,7 +10980,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Color Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1815 krita/krita.action:1817 krita/krita.action:1818
+#: krita/krita.action:1825 krita/krita.action:1827 krita/krita.action:1828
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -10980,7 +10993,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Luminosity Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
-#: krita/krita.action:1827 krita/krita.action:1829 krita/krita.action:1830
+#: krita/krita.action:1837 krita/krita.action:1839 krita/krita.action:1840
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -10988,7 +11001,7 @@ msgid "Select Luminosity Blending Mode"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1839
+#: krita/krita.action:1849
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -10999,7 +11012,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1842 krita/krita.action:1845
+#: krita/krita.action:1852 krita/krita.action:1855
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -11007,7 +11020,7 @@ msgid "Previous Frame"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: toolTip @ Action (previous_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1844
+#: krita/krita.action:1854
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11018,7 +11031,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1854 krita/krita.action:1857
+#: krita/krita.action:1864 krita/krita.action:1867
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11026,7 +11039,7 @@ msgid "Next Frame"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (next_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1856
+#: krita/krita.action:1866
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11037,7 +11050,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1866 krita/krita.action:1869
+#: krita/krita.action:1876 krita/krita.action:1879
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11045,7 +11058,7 @@ msgid "Previous Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (previous_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1868
+#: krita/krita.action:1878
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11056,7 +11069,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1878 krita/krita.action:1881
+#: krita/krita.action:1888 krita/krita.action:1891
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11064,7 +11077,7 @@ msgid "Next Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (next_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1880
+#: krita/krita.action:1890
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11075,7 +11088,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1890 krita/krita.action:1893
+#: krita/krita.action:1900 krita/krita.action:1903
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11083,7 +11096,7 @@ msgid "Previous Matching Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (previous_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1892
+#: krita/krita.action:1902
 #, fuzzy, kde-format
 #| msgid "Change background image"
 msgctxt "action"
@@ -11094,7 +11107,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1902 krita/krita.action:1905
+#: krita/krita.action:1912 krita/krita.action:1915
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11102,7 +11115,7 @@ msgid "Next Matching Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (next_matching_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1904
+#: krita/krita.action:1914
 #, fuzzy, kde-format
 #| msgid "Change background image"
 msgctxt "action"
@@ -11113,7 +11126,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1914 krita/krita.action:1917
+#: krita/krita.action:1924 krita/krita.action:1927
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11121,7 +11134,7 @@ msgid "Previous Unfiltered Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (previous_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1916
+#: krita/krita.action:1926
 #, kde-format
 msgctxt "action"
 msgid "Change time to previous keyframe that has visible onion skin"
@@ -11131,7 +11144,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: text @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1926 krita/krita.action:1929
+#: krita/krita.action:1936 krita/krita.action:1939
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11139,7 +11152,7 @@ msgid "Next Unfiltered Keyframe"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1928
+#: krita/krita.action:1938
 #, kde-format
 msgctxt "action"
 msgid "Change time to next keyframe that has visible onion skin"
@@ -11151,7 +11164,7 @@ msgstr ""
 #. i18n: context: text @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1938 krita/krita.action:1940 krita/krita.action:1941
+#: krita/krita.action:1948 krita/krita.action:1950 krita/krita.action:1951
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -11164,7 +11177,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: text @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (stop_playback), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1950 krita/krita.action:1952 krita/krita.action:1953
+#: krita/krita.action:1960 krita/krita.action:1962 krita/krita.action:1963
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -11172,7 +11185,7 @@ msgid "Stop animation"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1962
+#: krita/krita.action:1972
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11183,7 +11196,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (add_blank_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1964 krita/krita.action:1965
+#: krita/krita.action:1974 krita/krita.action:1975
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11191,7 +11204,7 @@ msgid "Add blank frame"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1974
+#: krita/krita.action:1984
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -11202,7 +11215,7 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1976 krita/krita.action:1977
+#: krita/krita.action:1986 krita/krita.action:1987
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -11215,14 +11228,14 @@ msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 #. i18n: context: text @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1986 krita/krita.action:1988 krita/krita.action:1989
+#: krita/krita.action:1996 krita/krita.action:1998 krita/krita.action:1999
 #, kde-format
 msgctxt "action"
 msgid "Toggle onion skin"
 msgstr ""
 
 #. i18n: context: text @ Action (first_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:1998
+#: krita/krita.action:2008
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -11230,7 +11243,7 @@ msgid "First Frame"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (last_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2009
+#: krita/krita.action:2019
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -11238,7 +11251,7 @@ msgid "Last Frame"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (auto_key), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2020
+#: krita/krita.action:2030
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -11246,7 +11259,7 @@ msgid "Auto Frame Mode"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2031
+#: krita/krita.action:2041
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -11254,14 +11267,14 @@ msgid "Drop Frames"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: toolTip @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2033
+#: krita/krita.action:2043
 #, kde-format
 msgctxt "action"
 msgid "Drop Frames, enable to preserve playback timing."
 msgstr ""
 
 #. i18n: context: text @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2042
+#: krita/krita.action:2052
 #, fuzzy, kde-format
 #| msgid "Grid"
 msgctxt "action"
@@ -11269,7 +11282,7 @@ msgid "Pin to Timeline"
 msgstr "ਗਰਿੱਡ"
 
 #. i18n: context: toolTip @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2044
+#: krita/krita.action:2054
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11278,7 +11291,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2053
+#: krita/krita.action:2063
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11286,7 +11299,7 @@ msgid "Insert Keyframe Left"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2055
+#: krita/krita.action:2065
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11295,7 +11308,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2065
+#: krita/krita.action:2075
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11303,7 +11316,7 @@ msgid "Insert Keyframe Right"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_keyframe_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2067
+#: krita/krita.action:2077
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11312,7 +11325,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2077
+#: krita/krita.action:2087
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11320,14 +11333,14 @@ msgid "Insert Multiple Keyframes"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_multiple_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2079
+#: krita/krita.action:2089
 #, kde-format
 msgctxt "action"
 msgid "Insert several keyframes based on user parameters."
 msgstr ""
 
 #. i18n: context: text @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2089
+#: krita/krita.action:2099
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11335,14 +11348,14 @@ msgid "Remove Frame and Pull"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_frames_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2091
+#: krita/krita.action:2101
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes moving the tail of animation to the left"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2101
+#: krita/krita.action:2111
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgctxt "action"
@@ -11350,14 +11363,14 @@ msgid "Remove Keyframe"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2103
+#: krita/krita.action:2113
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes without moving anything around"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2113
+#: krita/krita.action:2123
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgctxt "action"
@@ -11365,7 +11378,7 @@ msgid "Insert Column Left"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2115
+#: krita/krita.action:2125
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11374,7 +11387,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2125
+#: krita/krita.action:2135
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgctxt "action"
@@ -11382,7 +11395,7 @@ msgid "Insert Column Right"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2127
+#: krita/krita.action:2137
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11391,7 +11404,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2137
+#: krita/krita.action:2147
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgctxt "action"
@@ -11399,14 +11412,14 @@ msgid "Insert Multiple Columns"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_multiple_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2139
+#: krita/krita.action:2149
 #, kde-format
 msgctxt "action"
 msgid "Insert several columns based on user parameters."
 msgstr ""
 
 #. i18n: context: text @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2149
+#: krita/krita.action:2159
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11414,14 +11427,14 @@ msgid "Remove Column and Pull"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_columns_and_pull), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2151
+#: krita/krita.action:2161
 #, kde-format
 msgctxt "action"
 msgid "Remove columns moving the tail of animation to the left"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2161
+#: krita/krita.action:2171
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11429,14 +11442,14 @@ msgid "Remove Column"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2163
+#: krita/krita.action:2173
 #, kde-format
 msgctxt "action"
 msgid "Remove columns without moving anything around"
 msgstr ""
 
 #. i18n: context: text @ Action (insert_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2173
+#: krita/krita.action:2183
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11444,7 +11457,7 @@ msgid "Insert Hold Frame"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2175
+#: krita/krita.action:2185
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11452,7 +11465,7 @@ msgid "Insert a hold frame after every keyframe"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2185
+#: krita/krita.action:2195
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11460,7 +11473,7 @@ msgid "Insert Multiple Hold Frames"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2187
+#: krita/krita.action:2197
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11468,7 +11481,7 @@ msgid "Insert N hold frames after every keyframe"
 msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2197
+#: krita/krita.action:2207
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11476,7 +11489,7 @@ msgid "Remove Hold Frame"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_hold_frame), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2199
+#: krita/krita.action:2209
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11484,7 +11497,7 @@ msgid "Remove a hold frame after every keyframe"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2209
+#: krita/krita.action:2219
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11492,7 +11505,7 @@ msgid "Remove Multiple Hold Frames"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2211
+#: krita/krita.action:2221
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -11500,7 +11513,7 @@ msgid "Remove N hold frames after every keyframe"
 msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2221
+#: krita/krita.action:2231
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgctxt "action"
@@ -11508,7 +11521,7 @@ msgid "Insert Hold Column"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2223
+#: krita/krita.action:2233
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -11516,7 +11529,7 @@ msgid "Insert a hold column into the frame at the current position"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2233
+#: krita/krita.action:2243
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgctxt "action"
@@ -11524,7 +11537,7 @@ msgid "Insert Multiple Hold Columns"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (insert_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2235
+#: krita/krita.action:2245
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -11532,7 +11545,7 @@ msgid "Insert N hold columns into the frame at the current position"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2245
+#: krita/krita.action:2255
 #, fuzzy, kde-format
 #| msgid "Remove point"
 msgctxt "action"
@@ -11540,7 +11553,7 @@ msgid "Remove Hold Column"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_hold_column), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2247
+#: krita/krita.action:2257
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -11548,7 +11561,7 @@ msgid "Remove a hold column from the frame at the current position"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2257
+#: krita/krita.action:2267
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgctxt "action"
@@ -11556,7 +11569,7 @@ msgid "Remove Multiple Hold Columns"
 msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_multiple_hold_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2259
+#: krita/krita.action:2269
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -11564,7 +11577,7 @@ msgid "Remove N hold columns from the frame at the current position"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2269
+#: krita/krita.action:2279
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11572,14 +11585,14 @@ msgid "Add scalar keyframes"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (add_scalar_keyframes), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2271
+#: krita/krita.action:2281
 #, kde-format
 msgctxt "action"
 msgid "Adds keyframe to control scalar property"
 msgstr ""
 
 #. i18n: context: text @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2281
+#: krita/krita.action:2291
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11587,7 +11600,7 @@ msgid "Remove scalar keyframe"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2283
+#: krita/krita.action:2293
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "action"
@@ -11595,7 +11608,7 @@ msgid "Removes the selected scalar keyframe"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (mirror_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2293
+#: krita/krita.action:2303
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -11603,7 +11616,7 @@ msgid "Mirror Frames"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: toolTip @ Action (mirror_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2295
+#: krita/krita.action:2305
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -11611,7 +11624,7 @@ msgid "Mirror frames' position"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (mirror_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2305
+#: krita/krita.action:2315
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgctxt "action"
@@ -11619,7 +11632,7 @@ msgid "Mirror Columns"
 msgstr "ਜ਼ੂਮ"
 
 #. i18n: context: toolTip @ Action (mirror_columns), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2307
+#: krita/krita.action:2317
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -11627,7 +11640,7 @@ msgid "Mirror columns' position"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2317
+#: krita/krita.action:2327
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "action"
@@ -11635,14 +11648,14 @@ msgid "Clear Cache"
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
 #. i18n: context: toolTip @ Action (clear_animation_cache), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2319
+#: krita/krita.action:2329
 #, kde-format
 msgctxt "action"
 msgid "Clear entire animation cache. Useful for debugging."
 msgstr ""
 
 #. i18n: context: text @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2329
+#: krita/krita.action:2339
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -11650,7 +11663,7 @@ msgid "Copy Keyframes"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: toolTip @ Action (copy_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2331
+#: krita/krita.action:2341
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11658,7 +11671,7 @@ msgid "Copy frames to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2341
+#: krita/krita.action:2351
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgctxt "action"
@@ -11666,7 +11679,7 @@ msgid "Clone Keyframes"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
 #. i18n: context: toolTip @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2343
+#: krita/krita.action:2353
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11674,21 +11687,21 @@ msgid "Clone frames to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2353
+#: krita/krita.action:2363
 #, kde-format
 msgctxt "action"
 msgid "Make Unique"
 msgstr ""
 
 #. i18n: context: toolTip @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2355
+#: krita/krita.action:2365
 #, kde-format
 msgctxt "action"
 msgid "Convert clones to unique keyframe instances."
 msgstr ""
 
 #. i18n: context: text @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2365
+#: krita/krita.action:2375
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11696,7 +11709,7 @@ msgid "Cut Keyframes"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2367
+#: krita/krita.action:2377
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11704,7 +11717,7 @@ msgid "Cut frames to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2377
+#: krita/krita.action:2387
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11712,7 +11725,7 @@ msgid "Paste Keyframes"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2379
+#: krita/krita.action:2389
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -11720,7 +11733,7 @@ msgid "Paste frames from clipboard"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2389
+#: krita/krita.action:2399
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -11728,7 +11741,7 @@ msgid "Copy Columns"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: toolTip @ Action (copy_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2391
+#: krita/krita.action:2401
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11736,7 +11749,7 @@ msgid "Copy columns to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2401
+#: krita/krita.action:2411
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -11744,7 +11757,7 @@ msgid "Cut Columns"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: toolTip @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2403
+#: krita/krita.action:2413
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -11752,7 +11765,7 @@ msgid "Cut columns to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2413
+#: krita/krita.action:2423
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -11760,7 +11773,7 @@ msgid "Paste Columns"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: toolTip @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2415
+#: krita/krita.action:2425
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -11768,7 +11781,7 @@ msgid "Paste columns from clipboard"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (set_start_time), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2425
+#: krita/krita.action:2435
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -11776,7 +11789,7 @@ msgid "Set Start Time"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (set_end_time), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2437
+#: krita/krita.action:2447
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgctxt "action"
@@ -11784,14 +11797,14 @@ msgid "Set End Time"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (update_playback_range), Actions (Animation), ActionCollection (Krita)
-#: krita/krita.action:2449
+#: krita/krita.action:2459
 #, kde-format
 msgctxt "action"
 msgid "Update Playback Range"
 msgstr ""
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2461
+#: krita/krita.action:2471
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -11804,7 +11817,7 @@ msgstr "ਪਰਤ"
 #. i18n: context: text @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2464 krita/krita.action:2466 krita/krita.action:2467
+#: krita/krita.action:2474 krita/krita.action:2476 krita/krita.action:2477
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgctxt "action"
@@ -11812,7 +11825,7 @@ msgid "Activate next layer"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
 #. i18n: context: text @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2476
+#: krita/krita.action:2486
 #, kde-format
 msgctxt "action"
 msgid "Activate next sibling layer, skipping over groups."
@@ -11822,7 +11835,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activateNextSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2478 krita/krita.action:2479
+#: krita/krita.action:2488 krita/krita.action:2489
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgctxt "action"
@@ -11835,7 +11848,7 @@ msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 #. i18n: context: text @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2488 krita/krita.action:2490 krita/krita.action:2491
+#: krita/krita.action:2498 krita/krita.action:2500 krita/krita.action:2501
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgctxt "action"
@@ -11843,7 +11856,7 @@ msgid "Activate previous layer"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
 #. i18n: context: text @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2500
+#: krita/krita.action:2510
 #, kde-format
 msgctxt "action"
 msgid "Activate previous sibling layer, skipping over groups."
@@ -11853,7 +11866,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (activatePreviousSiblingLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2502 krita/krita.action:2503
+#: krita/krita.action:2512 krita/krita.action:2513
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgctxt "action"
@@ -11866,7 +11879,7 @@ msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 #. i18n: context: text @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (switchToPreviouslyActiveNode), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2512 krita/krita.action:2514 krita/krita.action:2515
+#: krita/krita.action:2522 krita/krita.action:2524 krita/krita.action:2525
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgctxt "action"
@@ -11874,7 +11887,7 @@ msgid "Activate previously selected layer"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
 #. i18n: context: text @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2524
+#: krita/krita.action:2534
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -11882,7 +11895,7 @@ msgid "Add &Group Layer"
 msgstr "ਪਰਤ"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2526
+#: krita/krita.action:2536
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "action"
@@ -11890,7 +11903,7 @@ msgid "Add a new Group Layer"
 msgstr "ਗਰੁੱਪ"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2527
+#: krita/krita.action:2537
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -11898,7 +11911,7 @@ msgid "Group Layer"
 msgstr "ਪਰਤ"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2536
+#: krita/krita.action:2546
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11906,7 +11919,7 @@ msgid "Add &Clone Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: toolTip @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2538
+#: krita/krita.action:2548
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "action"
@@ -11914,7 +11927,7 @@ msgid "Add a new Clone Layer"
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
 #. i18n: context: iconText @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2539
+#: krita/krita.action:2549
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11922,7 +11935,7 @@ msgid "Clone Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2548
+#: krita/krita.action:2558
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -11930,7 +11943,7 @@ msgid "Add &Vector Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2550
+#: krita/krita.action:2560
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11938,7 +11951,7 @@ msgid "Add a new Vector Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: iconText @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2551
+#: krita/krita.action:2561
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11946,7 +11959,7 @@ msgid "Vector Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2560
+#: krita/krita.action:2570
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -11954,7 +11967,7 @@ msgid "Add &Filter Layer..."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2562
+#: krita/krita.action:2572
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -11962,7 +11975,7 @@ msgid "Add a new Filter Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: iconText @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2563
+#: krita/krita.action:2573
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -11970,7 +11983,7 @@ msgid "Filter Layer"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2572
+#: krita/krita.action:2582
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -11978,7 +11991,7 @@ msgid "Add &Fill Layer..."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2574
+#: krita/krita.action:2584
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "action"
@@ -11986,7 +11999,7 @@ msgid "Add a new Fill Layer"
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
 #. i18n: context: iconText @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2575
+#: krita/krita.action:2585
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -11994,7 +12007,7 @@ msgid "Fill Layer"
 msgstr "ਪਰਤ"
 
 #. i18n: context: text @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2584
+#: krita/krita.action:2594
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12002,7 +12015,7 @@ msgid "Add &File Layer..."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2586
+#: krita/krita.action:2596
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "action"
@@ -12010,7 +12023,7 @@ msgid "Add a new File Layer"
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
 #. i18n: context: iconText @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2587
+#: krita/krita.action:2597
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12018,7 +12031,7 @@ msgid "File Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2596
+#: krita/krita.action:2606
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12026,7 +12039,7 @@ msgid "Add &Transparency Mask"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2598
+#: krita/krita.action:2608
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12034,7 +12047,7 @@ msgid "Add a new Transparency Mask"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: iconText @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2599
+#: krita/krita.action:2609
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12042,7 +12055,7 @@ msgid "Transparency Mask"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2608
+#: krita/krita.action:2618
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12050,7 +12063,7 @@ msgid "Add &Filter Mask..."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2610
+#: krita/krita.action:2620
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12058,7 +12071,7 @@ msgid "Add a new Filter Mask"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: iconText @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2611
+#: krita/krita.action:2621
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12066,7 +12079,7 @@ msgid "Filter Mask"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2620
+#: krita/krita.action:2630
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -12074,7 +12087,7 @@ msgid "Add &Colorize Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2622
+#: krita/krita.action:2632
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -12082,7 +12095,7 @@ msgid "Add a new Colorize Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2623
+#: krita/krita.action:2633
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -12090,7 +12103,7 @@ msgid "Colorize Mask"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2632
+#: krita/krita.action:2642
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -12098,7 +12111,7 @@ msgid "Add &Transform Mask"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2634
+#: krita/krita.action:2644
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -12106,7 +12119,7 @@ msgid "Add a new Transform Mask"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2635
+#: krita/krita.action:2645
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "action"
@@ -12114,7 +12127,7 @@ msgid "Transform Mask"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: context: text @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2644
+#: krita/krita.action:2654
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -12122,7 +12135,7 @@ msgid "Add &Local Selection"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2646
+#: krita/krita.action:2656
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -12130,7 +12143,7 @@ msgid "Add a new Local Selection"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2647
+#: krita/krita.action:2657
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -12138,7 +12151,7 @@ msgid "Local Selection"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2656
+#: krita/krita.action:2666
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12149,7 +12162,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2658 krita/krita.action:2659
+#: krita/krita.action:2668 krita/krita.action:2669
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12157,7 +12170,7 @@ msgid "Isolate Active Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2668
+#: krita/krita.action:2678
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12168,7 +12181,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2670 krita/krita.action:2671
+#: krita/krita.action:2680 krita/krita.action:2681
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12176,7 +12189,7 @@ msgid "Isolate Active Group"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2680
+#: krita/krita.action:2690
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12187,7 +12200,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2682 krita/krita.action:2683
+#: krita/krita.action:2692 krita/krita.action:2693
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12195,7 +12208,7 @@ msgid "Toggle layer lock"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2692
+#: krita/krita.action:2702
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12206,7 +12219,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2694 krita/krita.action:2695
+#: krita/krita.action:2704 krita/krita.action:2705
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12214,7 +12227,7 @@ msgid "Toggle layer visibility"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2704
+#: krita/krita.action:2714
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12222,7 +12235,7 @@ msgid "Toggle Layer Soloing"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2706
+#: krita/krita.action:2716
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -12231,7 +12244,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2707
+#: krita/krita.action:2717
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12239,7 +12252,7 @@ msgid "Toggle layer soloing"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2716
+#: krita/krita.action:2726
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12250,7 +12263,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2718 krita/krita.action:2719
+#: krita/krita.action:2728 krita/krita.action:2729
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12258,7 +12271,7 @@ msgid "Toggle layer alpha"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2728
+#: krita/krita.action:2738
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12269,7 +12282,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2730 krita/krita.action:2731
+#: krita/krita.action:2740 krita/krita.action:2741
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12277,7 +12290,7 @@ msgid "Toggle layer alpha inheritance"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2740
+#: krita/krita.action:2750
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12285,7 +12298,7 @@ msgid "Add &Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2742
+#: krita/krita.action:2752
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12293,7 +12306,7 @@ msgid "Add a new Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2743
+#: krita/krita.action:2753
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12301,7 +12314,7 @@ msgid "Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2752
+#: krita/krita.action:2762
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12312,7 +12325,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2754 krita/krita.action:2755
+#: krita/krita.action:2764 krita/krita.action:2765
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12320,7 +12333,7 @@ msgid "New layer from visible"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2764
+#: krita/krita.action:2774
 #, fuzzy, kde-format
 #| msgid "Delete the current page"
 msgctxt "action"
@@ -12331,7 +12344,7 @@ msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2766 krita/krita.action:2767
+#: krita/krita.action:2776 krita/krita.action:2777
 #, fuzzy, kde-format
 #| msgid "Delete the current page"
 msgctxt "action"
@@ -12339,7 +12352,7 @@ msgid "Duplicate Layer or Mask"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2776
+#: krita/krita.action:2786
 #, fuzzy, kde-format
 #| msgid "Delete page"
 #| msgid_plural "Delete pages"
@@ -12351,7 +12364,7 @@ msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2778 krita/krita.action:2779
+#: krita/krita.action:2788 krita/krita.action:2789
 #, fuzzy, kde-format
 #| msgid "Delete page"
 #| msgid_plural "Delete pages"
@@ -12360,7 +12373,7 @@ msgid "Cut Selection to New Layer"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2788
+#: krita/krita.action:2798
 #, fuzzy, kde-format
 #| msgid "Delete page"
 #| msgid_plural "Delete pages"
@@ -12372,7 +12385,7 @@ msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2790 krita/krita.action:2791
+#: krita/krita.action:2800 krita/krita.action:2801
 #, fuzzy, kde-format
 #| msgid "Delete page"
 #| msgid_plural "Delete pages"
@@ -12381,7 +12394,7 @@ msgid "Copy Selection to New Layer"
 msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2800
+#: krita/krita.action:2810
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -12392,7 +12405,7 @@ msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2802 krita/krita.action:2803
+#: krita/krita.action:2812 krita/krita.action:2813
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -12400,7 +12413,7 @@ msgid "Copy layer to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2812
+#: krita/krita.action:2822
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12411,7 +12424,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2814 krita/krita.action:2815
+#: krita/krita.action:2824 krita/krita.action:2825
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -12419,7 +12432,7 @@ msgid "Cut layer to clipboard"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2824
+#: krita/krita.action:2834
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12430,7 +12443,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2826 krita/krita.action:2827
+#: krita/krita.action:2836 krita/krita.action:2837
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12441,7 +12454,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2836 krita/krita.action:2839
+#: krita/krita.action:2846 krita/krita.action:2849
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "action"
@@ -12449,7 +12462,7 @@ msgid "Quick Group"
 msgstr "ਗਰੁੱਪ"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2838
+#: krita/krita.action:2848
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
@@ -12459,7 +12472,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2848 krita/krita.action:2851
+#: krita/krita.action:2858 krita/krita.action:2861
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "action"
@@ -12467,7 +12480,7 @@ msgid "Quick Ungroup"
 msgstr "ਗਰੁੱਪ"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2850
+#: krita/krita.action:2860
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
@@ -12477,7 +12490,7 @@ msgstr ""
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2860 krita/krita.action:2863
+#: krita/krita.action:2870 krita/krita.action:2873
 #, fuzzy, kde-format
 #| msgid "Group"
 msgctxt "action"
@@ -12485,14 +12498,14 @@ msgid "Quick Clipping Group"
 msgstr "ਗਰੁੱਪ"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2862
+#: krita/krita.action:2872
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
 msgstr ""
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2872
+#: krita/krita.action:2882
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -12503,7 +12516,7 @@ msgstr "ਪਰਤ"
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2874 krita/krita.action:2875
+#: krita/krita.action:2884 krita/krita.action:2885
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12511,7 +12524,7 @@ msgid "Select all layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2884
+#: krita/krita.action:2894
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12522,7 +12535,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2886 krita/krita.action:2887
+#: krita/krita.action:2896 krita/krita.action:2897
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12530,7 +12543,7 @@ msgid "Select all visible layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2896
+#: krita/krita.action:2906
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12541,7 +12554,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2898 krita/krita.action:2899
+#: krita/krita.action:2908 krita/krita.action:2909
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12549,7 +12562,7 @@ msgid "Select all locked layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2908
+#: krita/krita.action:2918
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12560,7 +12573,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2910 krita/krita.action:2911
+#: krita/krita.action:2920 krita/krita.action:2921
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12568,7 +12581,7 @@ msgid "Select all invisible layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2920
+#: krita/krita.action:2930
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12579,7 +12592,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2922 krita/krita.action:2923
+#: krita/krita.action:2932 krita/krita.action:2933
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12587,7 +12600,7 @@ msgid "Select all unlocked layers"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2932
+#: krita/krita.action:2942
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12598,7 +12611,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2934 krita/krita.action:2935
+#: krita/krita.action:2944 krita/krita.action:2945
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12606,7 +12619,7 @@ msgid "Save Layer/Mask"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2944
+#: krita/krita.action:2954
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -12617,7 +12630,7 @@ msgstr "ਪਰਤ"
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2946 krita/krita.action:2947
+#: krita/krita.action:2956 krita/krita.action:2957
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -12625,7 +12638,7 @@ msgid "Save Vector Layer as SVG"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2956
+#: krita/krita.action:2966
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -12636,7 +12649,7 @@ msgstr "ਪਰਤ"
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2958 krita/krita.action:2959
+#: krita/krita.action:2968 krita/krita.action:2969
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "action"
@@ -12644,7 +12657,7 @@ msgid "Save Group Layers"
 msgstr "ਪਰਤ"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2968
+#: krita/krita.action:2978
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -12655,7 +12668,7 @@ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2970 krita/krita.action:2971
+#: krita/krita.action:2980 krita/krita.action:2981
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -12663,7 +12676,7 @@ msgid "Convert child layers into animation frames"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2980
+#: krita/krita.action:2990
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -12674,7 +12687,7 @@ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2982 krita/krita.action:2983
+#: krita/krita.action:2992 krita/krita.action:2993
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "action"
@@ -12682,7 +12695,7 @@ msgid "Convert layer into animation frames"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2992
+#: krita/krita.action:3002
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12690,14 +12703,14 @@ msgid "to &File Layer..."
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2994
+#: krita/krita.action:3004
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
 msgstr ""
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2995
+#: krita/krita.action:3005
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -12705,7 +12718,7 @@ msgid "Convert to File Layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3004
+#: krita/krita.action:3014
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "action"
@@ -12716,7 +12729,7 @@ msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3006 krita/krita.action:3007
+#: krita/krita.action:3016 krita/krita.action:3017
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgctxt "action"
@@ -12724,7 +12737,7 @@ msgid "Import Layer"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3016
+#: krita/krita.action:3026
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12735,7 +12748,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3018 krita/krita.action:3019
+#: krita/krita.action:3028 krita/krita.action:3029
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12743,7 +12756,7 @@ msgid "as Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3028
+#: krita/krita.action:3038
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12754,7 +12767,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3030 krita/krita.action:3031
+#: krita/krita.action:3040 krita/krita.action:3041
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12762,7 +12775,7 @@ msgid "as Transparency Mask"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3040
+#: krita/krita.action:3050
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12773,7 +12786,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3042 krita/krita.action:3043
+#: krita/krita.action:3052 krita/krita.action:3053
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12781,7 +12794,7 @@ msgid "as Filter Mask"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3052
+#: krita/krita.action:3062
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -12792,7 +12805,7 @@ msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3054 krita/krita.action:3055
+#: krita/krita.action:3064 krita/krita.action:3065
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -12800,7 +12813,7 @@ msgid "as Selection Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3064
+#: krita/krita.action:3074
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgctxt "action"
@@ -12811,7 +12824,7 @@ msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3066 krita/krita.action:3067
+#: krita/krita.action:3076 krita/krita.action:3077
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -12819,7 +12832,7 @@ msgid "to Paint Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3076
+#: krita/krita.action:3086
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12830,7 +12843,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3078 krita/krita.action:3079
+#: krita/krita.action:3088 krita/krita.action:3089
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12838,7 +12851,7 @@ msgid "to Transparency Mask"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: context: text @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3088
+#: krita/krita.action:3098
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12849,7 +12862,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3090 krita/krita.action:3091
+#: krita/krita.action:3100 krita/krita.action:3101
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12857,7 +12870,7 @@ msgid "to Filter Mask"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3100
+#: krita/krita.action:3110
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "action"
@@ -12868,7 +12881,7 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3102 krita/krita.action:3103
+#: krita/krita.action:3112 krita/krita.action:3113
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgctxt "action"
@@ -12876,7 +12889,7 @@ msgid "to Selection Mask"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3112
+#: krita/krita.action:3122
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgctxt "action"
@@ -12887,7 +12900,7 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3114 krita/krita.action:3115
+#: krita/krita.action:3124 krita/krita.action:3125
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgctxt "action"
@@ -12895,7 +12908,7 @@ msgid "Alpha into Mask"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
 #. i18n: context: text @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3124
+#: krita/krita.action:3134
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -12906,7 +12919,7 @@ msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3126 krita/krita.action:3127
+#: krita/krita.action:3136 krita/krita.action:3137
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -12914,7 +12927,7 @@ msgid "Write as Alpha"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: text @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3136
+#: krita/krita.action:3146
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "action"
@@ -12925,7 +12938,7 @@ msgstr "ਸੰਭਾਲੋ"
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3138 krita/krita.action:3139
+#: krita/krita.action:3148 krita/krita.action:3149
 #, fuzzy, kde-format
 #| msgid "Save"
 msgctxt "action"
@@ -12933,7 +12946,7 @@ msgid "Save Merged"
 msgstr "ਸੰਭਾਲੋ"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3148
+#: krita/krita.action:3158
 #, fuzzy, kde-format
 #| msgid "Script Manager..."
 msgctxt "action"
@@ -12944,7 +12957,7 @@ msgstr "ਸਕ੍ਰਿਪਟ ਮੈਨੇਜਰ..."
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3150 krita/krita.action:3151
+#: krita/krita.action:3160 krita/krita.action:3161
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -12952,7 +12965,7 @@ msgid "Split Layer"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3160
+#: krita/krita.action:3170
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "action"
@@ -12963,7 +12976,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3162 krita/krita.action:3163
+#: krita/krita.action:3172 krita/krita.action:3173
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "action"
@@ -12971,7 +12984,7 @@ msgid "Wavelet Decompose"
 msgstr "ਤਬਦੀਲ"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3172
+#: krita/krita.action:3182
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -12982,7 +12995,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3174 krita/krita.action:3175
+#: krita/krita.action:3184 krita/krita.action:3185
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -12990,7 +13003,7 @@ msgid "Mirror Layer Horizontally"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3184
+#: krita/krita.action:3194
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -13001,7 +13014,7 @@ msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3186 krita/krita.action:3187
+#: krita/krita.action:3196 krita/krita.action:3197
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -13009,7 +13022,7 @@ msgid "Mirror Layer Vertically"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3196
+#: krita/krita.action:3206
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13020,7 +13033,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3198 krita/krita.action:3199
+#: krita/krita.action:3208 krita/krita.action:3209
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13028,7 +13041,7 @@ msgid "Rotate Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3208
+#: krita/krita.action:3218
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13039,7 +13052,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3210 krita/krita.action:3211
+#: krita/krita.action:3220 krita/krita.action:3221
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13047,7 +13060,7 @@ msgid "Rotate Layer 90° to the Right"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3220
+#: krita/krita.action:3230
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13058,7 +13071,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3222 krita/krita.action:3223
+#: krita/krita.action:3232 krita/krita.action:3233
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13066,7 +13079,7 @@ msgid "Rotate Layer 90° to the Left"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3232
+#: krita/krita.action:3242
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13077,7 +13090,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3234 krita/krita.action:3235
+#: krita/krita.action:3244 krita/krita.action:3245
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13085,7 +13098,7 @@ msgid "Rotate Layer 180°"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3244
+#: krita/krita.action:3254
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13096,7 +13109,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3246 krita/krita.action:3247
+#: krita/krita.action:3256 krita/krita.action:3257
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13104,7 +13117,7 @@ msgid "Scale Layer to new Size"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3256
+#: krita/krita.action:3266
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13115,7 +13128,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3258 krita/krita.action:3259
+#: krita/krita.action:3268 krita/krita.action:3269
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13123,7 +13136,7 @@ msgid "Shear Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3268
+#: krita/krita.action:3278
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -13134,7 +13147,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3270 krita/krita.action:3271
+#: krita/krita.action:3280 krita/krita.action:3281
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -13142,7 +13155,7 @@ msgid "Mirror All Layers Horizontally"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3280
+#: krita/krita.action:3290
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -13153,7 +13166,7 @@ msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3282 krita/krita.action:3283
+#: krita/krita.action:3292 krita/krita.action:3293
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "action"
@@ -13161,7 +13174,7 @@ msgid "Mirror All Layers Vertically"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3292
+#: krita/krita.action:3302
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13172,7 +13185,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3294 krita/krita.action:3295
+#: krita/krita.action:3304 krita/krita.action:3305
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13180,7 +13193,7 @@ msgid "Rotate All Layers"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3304
+#: krita/krita.action:3314
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13191,7 +13204,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3306 krita/krita.action:3307
+#: krita/krita.action:3316 krita/krita.action:3317
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13199,7 +13212,7 @@ msgid "Rotate All Layers 90° to the Right"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3316
+#: krita/krita.action:3326
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13210,7 +13223,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3318 krita/krita.action:3319
+#: krita/krita.action:3328 krita/krita.action:3329
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13218,7 +13231,7 @@ msgid "Rotate All Layers 90° to the Left"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3328
+#: krita/krita.action:3338
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13229,7 +13242,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3330 krita/krita.action:3331
+#: krita/krita.action:3340 krita/krita.action:3341
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13237,7 +13250,7 @@ msgid "Rotate All Layers 180°"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3340
+#: krita/krita.action:3350
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13248,7 +13261,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3342 krita/krita.action:3343
+#: krita/krita.action:3352 krita/krita.action:3353
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13256,7 +13269,7 @@ msgid "Scale All Layers to new Size"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3352
+#: krita/krita.action:3362
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13267,7 +13280,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3354 krita/krita.action:3355
+#: krita/krita.action:3364 krita/krita.action:3365
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13275,7 +13288,7 @@ msgid "Shear All Layers"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3364
+#: krita/krita.action:3374
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13286,7 +13299,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3366 krita/krita.action:3367
+#: krita/krita.action:3376 krita/krita.action:3377
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13294,7 +13307,7 @@ msgid "Offset Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3376
+#: krita/krita.action:3386
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13305,7 +13318,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3378 krita/krita.action:3379
+#: krita/krita.action:3388 krita/krita.action:3389
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13313,7 +13326,7 @@ msgid "Clones Array"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3388
+#: krita/krita.action:3398
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -13324,7 +13337,7 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3390 krita/krita.action:3391
+#: krita/krita.action:3400 krita/krita.action:3401
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt "action"
@@ -13332,7 +13345,7 @@ msgid "Edit metadata"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3400
+#: krita/krita.action:3410
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgctxt "action"
@@ -13343,7 +13356,7 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3402 krita/krita.action:3403
+#: krita/krita.action:3412 krita/krita.action:3413
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgctxt "action"
@@ -13351,7 +13364,7 @@ msgid "Histogram"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3412
+#: krita/krita.action:3422
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13362,7 +13375,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3414 krita/krita.action:3415
+#: krita/krita.action:3424 krita/krita.action:3425
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13370,7 +13383,7 @@ msgid "Convert Layer Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424
+#: krita/krita.action:3434
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -13381,7 +13394,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3436 krita/krita.action:3437
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -13389,7 +13402,7 @@ msgid "Merge with Layer Below"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436
+#: krita/krita.action:3446
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13400,7 +13413,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3448 krita/krita.action:3449
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13408,7 +13421,7 @@ msgid "Flatten Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448
+#: krita/krita.action:3458
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13419,7 +13432,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3460 krita/krita.action:3461
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13427,7 +13440,7 @@ msgid "Flatten image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3470
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "action"
@@ -13438,7 +13451,7 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3472 krita/krita.action:3473
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "action"
@@ -13451,7 +13464,7 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
+#: krita/krita.action:3482 krita/krita.action:3484 krita/krita.action:3485
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -13464,7 +13477,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
+#: krita/krita.action:3494 krita/krita.action:3496 krita/krita.action:3497
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -13477,7 +13490,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
+#: krita/krita.action:3506 krita/krita.action:3508 krita/krita.action:3509
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13485,7 +13498,7 @@ msgid "Rename current layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3508
+#: krita/krita.action:3518
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13496,7 +13509,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3510 krita/krita.action:3511
+#: krita/krita.action:3520 krita/krita.action:3521
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13507,7 +13520,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3520 krita/krita.action:3522
+#: krita/krita.action:3530 krita/krita.action:3532
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13518,7 +13531,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3532
+#: krita/krita.action:3540 krita/krita.action:3542
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13526,7 +13539,7 @@ msgid "Move Layer or Mask Down"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540
+#: krita/krita.action:3550
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -13537,7 +13550,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3552 krita/krita.action:3553
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "Layer Properties"
@@ -13545,7 +13558,7 @@ msgid "Properties"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552
+#: krita/krita.action:3562
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -13553,7 +13566,7 @@ msgid "Set Copy F&rom..."
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3554
+#: krita/krita.action:3564
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -13565,7 +13578,7 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3555
+#: krita/krita.action:3565
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -18026,7 +18039,7 @@ msgstr "ਸਾਈਜ਼"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:388
+#: plugins/tools/basictools/kis_tool_brush.cc:389
 #: plugins/tools/basictools/kis_tool_fill.cc:577
 #: plugins/tools/basictools/kis_tool_fill.cc:588
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
@@ -60686,13 +60699,13 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:177
+#: plugins/tools/basictools/kis_tool_brush.cc:178
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgid "Sample count:"
 msgstr "ਵੇਖਣ ਮੋਡ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:188
+#: plugins/tools/basictools/kis_tool_brush.cc:189
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt ""
@@ -60700,78 +60713,78 @@ msgctxt ""
 msgid "Distance:"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:345
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:347
+#: plugins/tools/basictools/kis_tool_brush.cc:348
 #, fuzzy, kde-format
 #| msgid "Height"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "ਉਚਾਈ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:348
+#: plugins/tools/basictools/kis_tool_brush.cc:349
 #, fuzzy, kde-format
 #| msgid "Collection"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "ਭੰਡਾਰ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:350
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Brush Smoothing:"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:376
+#: plugins/tools/basictools/kis_tool_brush.cc:377
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Delay:"
 msgstr "ਤਬਦੀਲ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:381
+#: plugins/tools/basictools/kis_tool_brush.cc:382
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:385
+#: plugins/tools/basictools/kis_tool_brush.cc:386
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:392
+#: plugins/tools/basictools/kis_tool_brush.cc:393
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Finish line:"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:406
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgid "Stroke Ending:"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:422
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Smooth Pressure"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:428
+#: plugins/tools/basictools/kis_tool_brush.cc:429
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -60779,43 +60792,43 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:433
+#: plugins/tools/basictools/kis_tool_brush.cc:434
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgid "Scalable Distance"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:449
+#: plugins/tools/basictools/kis_tool_brush.cc:450
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Snap to Assistants"
 msgstr "ਸੰਭਾਲੋ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:451
+#: plugins/tools/basictools/kis_tool_brush.cc:452
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:456
+#: plugins/tools/basictools/kis_tool_brush.cc:457
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Assistant Magnetism"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:463
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Magnetism:"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:465
+#: plugins/tools/basictools/kis_tool_brush.cc:466
 #, fuzzy, kde-format
 #| msgid "Show master shapes"
 msgid "Snap to Single Line"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:468
+#: plugins/tools/basictools/kis_tool_brush.cc:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -60823,13 +60836,13 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:473
+#: plugins/tools/basictools/kis_tool_brush.cc:474
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:476
+#: plugins/tools/basictools/kis_tool_brush.cc:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"

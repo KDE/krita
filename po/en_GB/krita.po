@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 01:45+0000\n"
-"PO-Revision-Date: 2024-08-24 12:13+0100\n"
+"PO-Revision-Date: 2024-09-07 12:26+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -9138,11 +9138,10 @@ msgstr "Brush Smoothing: Disabled"
 #. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Brush Smoothing:"
+msgstr "Brush Smoothing: Pixel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12008,12 +12007,10 @@ msgstr "Save Group Layers"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
-msgstr "Convert group to &animated layer"
+msgstr "Convert Group to &Animated Layer"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
@@ -12023,6 +12020,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Converts the child layers of a group into a single layer with multiple "
+"frames of animation"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12033,12 +12032,10 @@ msgstr "Convert child layers into animation frames"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
-msgstr "Convert to &animated layer"
+msgstr "Convert to &Animated Layer"
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -20633,11 +20630,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Overwrite the file?"
+msgstr "Overwrite existing video?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20647,6 +20642,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"A file already exists at the path where you want to render your video "
+"[%1]... \n"
+"                                                              Are you sure "
+"you want to overwrite the existing file?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -29420,12 +29419,9 @@ msgid "Change Clone Layer"
 msgstr "Change Clone Layer"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Convert group to &animated layer"
+msgstr "Convert Group to Animated Layer"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
@@ -30985,46 +30981,34 @@ msgstr ""
 "will not be saved."
 
 #: libs/ui/KisImportExportManager.cpp:611
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a "
-#| "<b>filter layer</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"layer</b>. The image will be <b>flattened<b> before resizing."
+"layer</b>. The image will be <b>flattened</b> before resizing."
 
 #: libs/ui/KisImportExportManager.cpp:615
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a "
-#| "<b>filter mask</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
-"mask</b>. The image will be <b>flattened<b> before resizing."
+"mask</b>. The image will be <b>flattened</b> before resizing."
 
 #: libs/ui/KisImportExportManager.cpp:626
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Trying to perform an Advanced Export with the image containing a <b>layer "
-#| "style</b>. The image will be <b>flattened<b> before resizing."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
-"style</b>. The image will be <b>flattened<b> before resizing."
+"style</b>. The image will be <b>flattened</b> before resizing."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -57697,8 +57681,7 @@ msgid "Weighted"
 msgstr "Weighted"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:360
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Pixel"

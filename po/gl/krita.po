@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 01:45+0000\n"
-"PO-Revision-Date: 2024-09-06 16:23+0200\n"
+"PO-Revision-Date: 2024-09-07 10:41+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -9165,11 +9165,10 @@ msgstr "Suavizado do pincel: desactivado"
 #. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Suavizado do pincel:"
+msgstr "Suavizado do pincel: píxel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12036,9 +12035,7 @@ msgstr "Gardar as capas de grupo"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Converter o grupo nunha capa &animada"
@@ -12051,6 +12048,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Converte as capas dun grupo nunha única capa con varios fotogramas de "
+"animación."
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12061,9 +12060,7 @@ msgstr "Converter as capas subordinadas en fotogramas de animación"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
 msgstr "Converter nunha capa &animada"
@@ -29482,9 +29479,6 @@ msgid "Change Clone Layer"
 msgstr "Cambiar a capa clon"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
 msgstr "Converter o grupo nunha capa &animada"

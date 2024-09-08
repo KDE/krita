@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 01:45+0000\n"
-"PO-Revision-Date: 2024-09-05 09:59+0200\n"
+"PO-Revision-Date: 2024-09-07 14:45+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -9175,11 +9175,10 @@ msgstr "Penseelstreek vloeiend maken: uitgeschakeld"
 #. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Penseelstreek vloeiend maken:"
+msgstr "Gladstrijken met penseel: Pixel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12052,12 +12051,10 @@ msgstr "Gegroepeerde lagen opslaan"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
-msgstr "Groep naar een geanimeerde laag omzetten"
+msgstr "Groep naar een ge&animeerde laag omzetten"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
@@ -12067,6 +12064,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Converteert de onderliggende lagen van een groep in een enkele laag met "
+"meerdere frames met animatie"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12077,12 +12076,10 @@ msgstr "Dochterlagen naar animatieframes converteren"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
-msgstr "Naar geanimeerde laag omzetten"
+msgstr "Naar ge&animeerde laag converteren"
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -29543,12 +29540,9 @@ msgid "Change Clone Layer"
 msgstr "Kloonlaag wijzigen"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Groep naar een geanimeerde laag omzetten"
+msgstr "Groep naar een geanimeerde laag converteren"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format

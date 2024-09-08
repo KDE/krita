@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 01:45+0000\n"
-"PO-Revision-Date: 2024-09-05 19:47+0200\n"
+"PO-Revision-Date: 2024-09-06 09:30+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -20730,11 +20730,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Écraser le fichier ?"
+msgstr "Écraser la vidéo existante ?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20744,6 +20742,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Un fichier existe déjà à l'emplacement où vous souhaitez effectuer le rendu "
+"de votre vidéo [%1]... \n"
+"                                                              Êtes-vous sûr "
+"de vouloir écraser le fichier existant ?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152

@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 01:45+0000\n"
-"PO-Revision-Date: 2024-09-05 04:22+0100\n"
+"PO-Revision-Date: 2024-09-07 13:10+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -9147,11 +9147,10 @@ msgstr "Suavidad del pincel: desactivada"
 #. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Suavidad del pincel:"
+msgstr "Suavidad del pincel: píxel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9163,7 +9162,7 @@ msgstr "Suavidad del pincel:"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "Suavidad del pincel: estabilizante"
+msgstr "Suavidad del pincel: estabilizador"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -12023,9 +12022,7 @@ msgstr "Guardar capas de grupo"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Convertir grupo a capa &animada"
@@ -12038,6 +12035,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Convierte las capas hijas de un grupo en una única capa con múltiples "
+"fotogramas de animación"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12048,9 +12047,7 @@ msgstr "Convertir capas hijas en fotogramas de animación"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
 msgstr "Convertir en capa &animada"
@@ -29516,12 +29513,9 @@ msgid "Change Clone Layer"
 msgstr "Cambiar capa de clonación"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Convertir grupo a capa &animada"
+msgstr "Convertir grupo a capa animada"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format

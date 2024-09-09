@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-07 03:16+0000\n"
-"PO-Revision-Date: 2024-08-01 17:30+0200\n"
+"PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -8943,11 +8943,10 @@ msgstr "Ausgewähltes Bildschirmfoto entfernen"
 
 #. i18n: context: text @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:291
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color"
-msgstr "Wählen Sie eine Farbe"
+msgstr "Farbe von Bildschirm &auswählen"
 
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -8962,11 +8961,10 @@ msgstr "Hintergrundfarbe vom zusammengeführten Bild übernehmen"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:294
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Wählen Sie eine Farbe"
+msgstr "Farbe von Bildschirm auswählen"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:301
@@ -23859,22 +23857,25 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
+"Zeitstempel des Tablet-Treibers für die Pinselgeschwindigkeit verwenden "
+"(kann bei der Verwendung der WinTab Tablet API schwerwiegende Artefakte "
+"verursachen)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1308
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
+"Zeitstempel des Tablet-Treibers für die Pinselgeschwindigkeit verwenden"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1318
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
-msgstr[0] "Maximale Pinselgröße"
-msgstr[1] "Maximale Pinselgröße"
+msgstr[0] "Maximale Pinselgeschwindigkeit: {n} px/ms"
+msgstr[1] "Maximale Pinselgeschwindigkeit: {n} px/ms"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -25066,11 +25067,10 @@ msgstr ""
 #: libs/ui/forms/wdgconvertcolorspace.ui:99
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "ICC profile rendering intent"
 msgid "Saturation"
-msgstr "Sättigungserhaltend"
+msgstr "Sättigung"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:127
@@ -25197,6 +25197,8 @@ msgid ""
 "Enforce palette colors: always select the nearest color from the active "
 "palette."
 msgstr ""
+"Farben der Palette erzwingen: immer die naheliegendste Farbe der aktiven "
+"Palette verwenden."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:153
@@ -25267,10 +25269,9 @@ msgstr "Rendering-Methode"
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
 #: libs/ui/forms/wdgcolorsettings.ui:297
 #: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Annotation Shape"
+#, kde-format
 msgid "Adaptation State:"
-msgstr "Anmerkungen-Objekt"
+msgstr "Anpassungszustand:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
 #: libs/ui/forms/wdgcolorsettings.ui:311
@@ -28143,10 +28144,9 @@ msgstr "Formular"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
-#, fuzzy, kde-format
-#| msgid "Number of Palette Presets:"
+#, kde-format
 msgid "Maximum Number of Brush Presets:"
-msgstr "Anzahl der Paletten-Voreinstellungen:"
+msgstr "Maximale Anzahl an Pinselvoreinstellungen:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseDynamicSlotCount)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:49
@@ -28156,52 +28156,46 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Palette Size:"
-msgstr "Farbpalette"
+msgstr "Palettengröße:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:82
-#, fuzzy, kde-format
-#| msgid "Color Selector"
+#, kde-format
 msgid "Color Selector:"
-msgstr "Farbwähler"
+msgstr "Farbwähler:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
-#, fuzzy, kde-format
-#| msgid "Triangle Color Selector"
+#, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "Dreieckiger Farbwähler"
+msgstr "sRGB-Dreiecksauswähler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
-#, fuzzy, kde-format
-#| msgid "Hide Shade Selector"
+#, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Farbtonwähler ausblenden"
+msgstr "Wide-Gamut-Auswähler"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selector Size:"
-msgstr "Größe der Vergrößerungsauswahl:"
+msgstr "Farbauswählergröße:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowColorHistory)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:126
-#, fuzzy, kde-format
-#| msgid "Show Color Histor&y"
+#, kde-format
 msgid "Show Color History Ring"
-msgstr "&Farbverlauf anzeigen"
+msgstr "Farbwahlverlaufsring anzeigen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRotationTrack)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:136
-#, fuzzy, kde-format
-#| msgid "Saturation Rings:"
+#, kde-format
 msgid "Show Rotation Ring"
-msgstr "Sättigungsringe:"
+msgstr "Drehring anzeigen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -28664,6 +28658,8 @@ msgid ""
 "Use mouse events for right- and middle-clicks (workaround for convertible "
 "devices, needs restart)"
 msgstr ""
+"Mausereignisse für Rechts- und Mittelklick verwenden (Workaround für "
+"Convertibles, erfordert Neustart)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intMaxAllowedBrushSpeed)
 #: libs/ui/forms/wdgtabletsettings.ui:200
@@ -34214,16 +34210,12 @@ msgid "Manufacturer: %1"
 msgstr "Min Leuchtdichte: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:394
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "What is the copyright? These are from embedded strings from the icc "
-#| "profile, so they default to english."
-#| msgid "Copyright: "
+#, kde-format
 msgctxt ""
 "What is the copyright? These are from embedded strings from the icc profile, "
 "so they default to english."
 msgid "Copyright: %1"
-msgstr "Copyright: "
+msgstr "Copyright: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:402
 #, kde-format
@@ -34911,11 +34903,9 @@ msgid "Rename the brush preset"
 msgstr "Pinselvoreinstellungen umbenennen"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:222
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Brush Editor"
+#, kde-format
 msgid "Detach Brush Editor"
-msgstr "Pinseleditor anzeigen"
+msgstr "Pinseleditor lösen"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:548
 #, fuzzy, kde-format
@@ -38372,11 +38362,13 @@ msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr ""
+"Die Helligkeit geht von Schwarz zu Weiß, wobei mittleres Grau der am "
+"stärksten gesättigten Farbe entspricht."
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
-msgstr ""
+msgstr "Die Intensität entspricht der Summe der RGB-Komponenten"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
 #, kde-format
@@ -38384,6 +38376,8 @@ msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
 msgstr ""
+"Luma(Y') wird durch seine Koeffizienten gewichtet, die einstellbar sind. Die "
+"Standardwerte sind auf „rec 709“ eingestellt."
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:35
 #, kde-format
@@ -38427,10 +38421,9 @@ msgstr "Farbwähler anzeigen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:97
-#, fuzzy, kde-format
-#| msgid "Color &Model Type: "
+#, kde-format
 msgid "Color Model Type"
-msgstr "Typ des Farb&modells:"
+msgstr "Typ des Farbmodells"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientBox)
 #. i18n: ectx: property (title), widget (QGroupBox, lumaCoefficientGroupbox)
@@ -38474,10 +38467,10 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, useCustomColorForBackground)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
-#, fuzzy, kde-format
-#| msgid "Remove currently selected background"
+#, kde-format
 msgid "Use custom color for selector background."
-msgstr "Aktuell ausgewählten Hintergrund entfernen"
+msgstr ""
+"Benutzerdefinierte Farbe für den Hintergrund des Farbwählers verwenden."
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233

@@ -61,11 +61,10 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 
     addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing");
-    addSmoothingAction(KisSmoothingOptions::SIMPLE_PIXEL_SMOOTHING, "set_simple_pixel_smoothing");
     addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing");
-    addSmoothingAction(KisSmoothingOptions::PIXEL_PERFECT, "set_simple_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing");
+    addSmoothingAction(KisSmoothingOptions::PIXEL_PERFECT, "set_pixel_perfect_smoothing");
 }
 
 KisToolBrush::~KisToolBrush()
@@ -122,60 +121,18 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_cmbSmoothingType->setCurrentIndex(index);
     }
 
-    switch (index) {
-    case 0:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
-        showControl(m_sliderSmoothnessDistance, false);
-        showControl(m_sliderTailAggressiveness, false);
-        showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, false);
-        showControl(m_sliderDelayDistance, false);
-        showControl(m_chkFinishStabilizedCurve, false);
-        showControl(m_chkStabilizeSensors, false);
-        break;
-    case 1:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
-        showControl(m_sliderSmoothnessDistance, false);
-        showControl(m_sliderTailAggressiveness, false);
-        showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, false);
-        showControl(m_sliderDelayDistance, false);
-        showControl(m_chkFinishStabilizedCurve, false);
-        showControl(m_chkStabilizeSensors, false);
-        break;
-    case 2:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
-        showControl(m_sliderSmoothnessDistance, true);
-        showControl(m_sliderTailAggressiveness, true);
-        showControl(m_chkSmoothPressure, true);
-        showControl(m_chkUseScalableDistance, true);
-        showControl(m_sliderDelayDistance, false);
-        showControl(m_chkFinishStabilizedCurve, false);
-        showControl(m_chkStabilizeSensors, false);
-        break;
-    case 3:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::PIXEL_PERFECT);
-        showControl(m_sliderSmoothnessDistance, false);
-        showControl(m_sliderTailAggressiveness, false);
-        showControl(m_chkSmoothPressure, false);
-        showControl(m_chkUseScalableDistance, false);
-        showControl(m_sliderDelayDistance, false);
-        showControl(m_chkFinishStabilizedCurve, false);
-        showControl(m_chkStabilizeSensors, false);
-        break;
-    case 4:
-    default:
-        smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
-        showControl(m_sliderSmoothnessDistance, true);
-        showControl(m_sliderTailAggressiveness, false);
-        showControl(m_chkSmoothPressure, false);
-        showControl(m_sliderDelayDistance, true);
-        showControl(m_chkFinishStabilizedCurve, true);
-        showControl(m_chkStabilizeSensors, true);
+    smoothingOptions()->setSmoothingType((KisSmoothingOptions::SmoothingType) index);
 
-        // scalable distance option is disabled due to bug 421314
-        showControl(m_chkUseScalableDistance, false);
-    }
+    showControl(m_sliderSmoothnessDistance, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType()||
+                                             KisSmoothingOptions::STABILIZER  == smoothingOptions()->smoothingType()));
+    showControl(m_sliderTailAggressiveness, (KisSmoothingOptions::WEIGHTED_SMOOTHING  == smoothingOptions()->smoothingType()));
+    showControl(m_chkSmoothPressure, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType()));
+    showControl(m_chkUseScalableDistance, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType() /*||
+                                           KisSmoothingOptions::STABILIZER  == smoothingOptions()->smoothingType()*/)); // scalable distance option is disabled due to bug 421314
+    showControl(m_sliderDelayDistance, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
+    showControl(m_chkFinishStabilizedCurve, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
+    showControl(m_chkStabilizeSensors, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
+
     updateSmoothnessDistanceLabel();
 
     Q_EMIT smoothingTypeChanged();
@@ -357,8 +314,8 @@ QWidget * KisToolBrush::createOptionWidget()
                                  << i18nc("@item:inlistbox Brush Smoothing", "None")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Basic")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
-                                 << i18nc("@item:inlistbox Brush Smoothing", "Pixel")
-                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Pixel"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:"), optionsWidget));
 
@@ -520,9 +477,10 @@ QList<QAction *> KisToolBrushFactory::createActionsImpl()
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
     actions << actionRegistry->makeQAction("set_no_brush_smoothing", this);
-    actions << actionRegistry->makeQAction("set_simple_pixel_smoothing", this);
+    actions << actionRegistry->makeQAction("set_simple_brush_smoothing", this);
     actions << actionRegistry->makeQAction("set_weighted_brush_smoothing", this);
     actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_pixel_perfect_smoothing", this);
     actions << actionRegistry->makeQAction("toggle_assistant", this);
 
     return actions;

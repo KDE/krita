@@ -20,7 +20,6 @@ public:
     enum SmoothingType {
         NO_SMOOTHING = 0,
         SIMPLE_SMOOTHING,
-        SIMPLE_PIXEL_SMOOTHING,
         WEIGHTED_SMOOTHING,
         STABILIZER,
         PIXEL_PERFECT

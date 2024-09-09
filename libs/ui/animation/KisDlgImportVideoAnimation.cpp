@@ -235,8 +235,13 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
                                                , "Extracted %1 frames from %2 video.", "[progress]", "[suffix]");
 
         QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
+
         ffmpeg->startNonBlocking(ffmpegSettings);
-        ffmpeg->waitForFinished();
+
+        bool ffmpegSuccess = ffmpeg->waitForFinished();
+        if (!ffmpegSuccess) {
+            return RenderedFrames();
+        }
 
         frameFileList = directory.entryList(QStringList() << "output_*.png",QDir::Files);
         frameFileList.replaceInStrings("output_", directory.absolutePath() + QDir::separator() + "output_");
@@ -274,8 +279,13 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
                 }
             }
         });
+
         ffmpeg->startNonBlocking(ffmpegSettings);
-        ffmpeg->waitForFinished();
+
+        bool ffmpegSuccess = ffmpeg->waitForFinished();
+        if (!ffmpegSuccess) {
+            return RenderedFrames();
+        }
 
         dbgFile << "Assign to frames:" << ppVar(frameTimeList);
     }

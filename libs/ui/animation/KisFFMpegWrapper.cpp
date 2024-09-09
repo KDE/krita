@@ -128,6 +128,8 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
             m_progress->setRange(0, 100);
         }
         
+        connect(m_progress.data(), SIGNAL(canceled()), m_process.data(), SLOT(kill()));
+
         m_progress->show();
         
         dbgFile << "Open progress dialog!";
@@ -190,11 +192,15 @@ KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings 
     }
 }
 
-void KisFFMpegWrapper::waitForFinished(int msecs)
+bool KisFFMpegWrapper::waitForFinished(int msecs)
 {
-    if (!m_process) return;
+    if (!m_process) return false;
 
-    if (m_process->waitForStarted(msecs)) m_process->waitForFinished(msecs);
+    if (m_process->waitForStarted(msecs)) {
+        return (m_process->waitForFinished(msecs) && m_process->exitStatus() == QProcess::ExitStatus::NormalExit);
+    }
+
+    return false;
 }
 
 void KisFFMpegWrapper::updateProgressDialog(int progressValue) {

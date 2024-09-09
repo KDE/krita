@@ -165,13 +165,13 @@ float rerange(float value, float oldMin, float oldMax, float newMin, float newMa
 
 RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
 {
-    RenderedFrames info;
-    QStringList &frameFileList = info.renderedFrameFiles;
-    QList<int> &frameTimeList = info.renderedFrameTargetTimes;
+    RenderedFrames frames;
+    QStringList &frameFileList = frames.renderedFrameFiles;
+    QList<int> &frameTimeList = frames.renderedFrameTargetTimes;
 
     if ( !directory.mkpath(".") ) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Failed to create a work directory, make sure you have write permission"));
-        return info;
+        return frames;
     }
 
     QStringList args;
@@ -186,10 +186,11 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
                                   "If you want to edit a clip larger than 100 frames, consider using a real video editor, like Kdenlive (https://kdenlive.org)."),
                                  QMessageBox::Ok | QMessageBox::Cancel,
                                  QMessageBox::Cancel) == QMessageBox::Cancel) {
-            return info;
+            return frames;
         }
     }
 
+    // Setup FFMpeg Command Args...
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
          << "-i" << m_videoInfo.file;
 
@@ -283,7 +284,7 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
          QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Failed to export frames from video"));
     }
 
-    return info;
+    return frames;
 }
 
 

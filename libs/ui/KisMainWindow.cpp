@@ -2173,9 +2173,7 @@ void KisMainWindow::importVideoAnimation()
                 document->image()->animationInterface()->setDocumentRangeStartFrame(0);
                 document->image()->animationInterface()->setDocumentRangeEndFrame(totalFrames);
             }
-
         } else {
-
             const int width = documentInfoList[5].toInt();
             const int height = documentInfoList[6].toInt();
             const double resolution = documentInfoList[7].toDouble();
@@ -2205,9 +2203,7 @@ void KisMainWindow::importVideoAnimation()
             document->image()->animationInterface()->setDocumentRangeStartFrame(0);
             document->image()->animationInterface()->setDocumentRangeEndFrame(totalFrames);
 
-
             this->showDocument(document);
-
         }
 
         KoUpdaterPtr updater =

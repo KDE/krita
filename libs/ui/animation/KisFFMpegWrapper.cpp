@@ -195,7 +195,6 @@ void KisFFMpegWrapper::waitForFinished(int msecs)
     if (!m_process) return;
 
     if (m_process->waitForStarted(msecs)) m_process->waitForFinished(msecs);
-
 }
 
 void KisFFMpegWrapper::updateProgressDialog(int progressValue) {

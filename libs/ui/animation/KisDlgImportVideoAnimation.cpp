@@ -190,7 +190,6 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
         }
     }
 
-
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
          << "-i" << m_videoInfo.file;
 
@@ -222,7 +221,6 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
     config->setProperty("ffprobe_path", ffprobeInfo["path"].toString());
 
     saveLastUsedConfiguration("ANIMATION_EXPORT", config);
-
 
     {
         KisFFMpegWrapperSettings ffmpegSettings;

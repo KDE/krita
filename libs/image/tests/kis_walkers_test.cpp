@@ -69,7 +69,12 @@ protected:
         }
     }
 
-    void registerNeedRect(KisProjectionLeafSP node, NodePosition position) override {
+    void registerNeedRect(KisProjectionLeafSP node, NodePosition position,
+                          KisRenderPassFlags renderFlags,
+                          const QRect &cropRect) override {
+        Q_UNUSED(renderFlags)
+        Q_UNUSED(cropRect)
+
         QString postfix;
 
         if(!node->isLayer()) {
@@ -623,19 +628,19 @@ void KisWalkersTest::checkNotification(const KisMergeWalker::CloneNotification &
     QCOMPARE(notification.m_dirtyRect, rect);
 }
 
-    /*
-      +--------------+
-      |root          |
-      | paint 3 <--+ |
-      | cplx  2    | |
-      | group <--+ | |
-      |  cplx  1 | | |
-      |  paint 2 | | |
-      | clone 2 -+ | |
-      | clone 1 ---+ |
-      | paint 1      |
-      +--------------+
-     */
+/*
+  +--------------+
+  |root          |
+  | paint 3 <--+ |
+  | cplx  2    | |
+  | group <--+ | |
+  |  cplx  1 | | |
+  |  paint 2 | | |
+  | clone 2 -+ | |
+  | clone 1 ---+ |
+  | paint 1      |
+  +--------------+
+ */
 
 void KisWalkersTest::testCloneNotificationsVisiting()
 {
@@ -681,6 +686,86 @@ void KisWalkersTest::testCloneNotificationsVisiting()
         const KisMergeWalker::CloneNotificationsVector vector = walker.cloneNotifications();
         QCOMPARE(vector.size(), 1);
         checkNotification(vector[0], "group", QRect(7,7,16,16));
+    }
+}
+
+/*
+  +--------------+
+  |root          |
+  | paint 3 <--+ |
+  | cplx  2    | |
+  | group <--+ | |
+  |  cplx  1 | | |
+  |  paint 2 | | |
+  | clone 2 -+ | |
+  | clone 1 ---+ |
+  | paint 1      |
+  +--------------+
+ */
+
+void KisWalkersTest::testCloneSourceVisiting_data()
+{
+    QTest::addColumn<bool>("useFullRefreshWalker");
+
+    QTest::newRow("full-refresh") << true;
+    QTest::newRow("merge") << false;
+}
+
+void KisWalkersTest::testCloneSourceVisiting()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 512, 512, colorSpace, "walker test");
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer2 = new KisPaintLayer(image, "paint2", OPACITY_OPAQUE_U8);
+    KisLayerSP paintLayer3 = new KisPaintLayer(image, "paint3", OPACITY_OPAQUE_U8);
+
+    KisLayerSP groupLayer = new KisGroupLayer(image, "group", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer1 = new ComplexRectsLayer(image, "cplx1", OPACITY_OPAQUE_U8);
+    KisLayerSP complexRectsLayer2 = new ComplexRectsLayer(image, "cplx2", OPACITY_OPAQUE_U8);
+
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer3, image, "clone1", OPACITY_OPAQUE_U8);
+    KisLayerSP cloneLayer2 = new KisCloneLayer(groupLayer, image, "clone2", OPACITY_OPAQUE_U8);
+
+    cloneLayer2->setX(100);
+
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(cloneLayer1, image->rootLayer());
+    image->addNode(cloneLayer2, image->rootLayer());
+    image->addNode(groupLayer, image->rootLayer());
+    image->addNode(complexRectsLayer2, image->rootLayer());
+    image->addNode(paintLayer3, image->rootLayer());
+
+    image->addNode(paintLayer2, groupLayer);
+    image->addNode(complexRectsLayer1, groupLayer);
+
+    QRect testRect(10,10,10,10);
+    QRect cropRect(0,0,507,507);
+
+    QFETCH(bool, useFullRefreshWalker);
+
+    if (useFullRefreshWalker) {
+        KisFullRefreshWalker walker(cropRect);
+        QString order("root,paint3,cplx2,group,clone2,clone1,paint1,clone2,"
+                      "group,cplx1,paint2");
+        QStringList orderList = order.split(',');
+        QRect accessRect(-107, -7, 237, 44);
+
+        reportStartWith("clone2");
+        walker.collectRects(cloneLayer2, testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+    } else {
+        KisMergeWalker walker(cropRect);
+        QString order("root,paint3,cplx2,group,clone2,clone1,paint1");
+        QStringList orderList = order.split(',');
+        QRect accessRect = QRect(0, 0, 130, 30);
+
+        reportStartWith("clone2");
+        walker.collectRects(cloneLayer2, testRect);
+        verifyResult(walker, orderList, accessRect, true, true);
+
+        const KisMergeWalker::CloneNotificationsVector vector = walker.cloneNotifications();
+        QCOMPARE(vector.size(), 0);
     }
 }
 

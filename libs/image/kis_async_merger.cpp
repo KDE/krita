@@ -48,11 +48,9 @@
 class KisUpdateOriginalVisitor : public KisNodeVisitor
 {
 public:
-    KisUpdateOriginalVisitor(const QRect &updateRect, KisPaintDeviceSP projection, const QRect &cropRect, KisRenderPassFlags flags)
+    KisUpdateOriginalVisitor(const QRect &updateRect, KisPaintDeviceSP projection)
         : m_updateRect(updateRect),
-          m_cropRect(cropRect),
-          m_projection(projection),
-          m_parentFlags(flags)
+          m_projection(projection)
         {
         }
 
@@ -139,38 +137,7 @@ public:
         return true;
     }
 
-    bool visit(KisCloneLayer *layer) override {
-        QRect emptyRect;
-        KisRefreshSubtreeWalker walker(emptyRect, KisRefreshSubtreeWalker::NoFilthyMode);
-        KisAsyncMerger merger;
-        merger.setRenderFlags(m_parentFlags | KisRenderPassFlag::NoTransformMaskUpdates);
-
-        KisLayerSP srcLayer = layer->copyFrom();
-        QRect srcRect = m_updateRect.translated(-layer->x(), -layer->y());
-
-        QRegion prepareRegion(srcRect);
-
-        /**
-         * If a clone has complicated masks, we should prepare additional
-         * source area to ensure the rect is prepared.
-         */
-        QRect needRectOnSource = layer->needRectOnSourceForMasks(srcRect);
-        if (!needRectOnSource.isEmpty()) {
-            prepareRegion += needRectOnSource;
-        }
-
-        prepareRegion -= m_cropRect;
-        if (srcLayer.isNull()) {
-            return true;
-        }
-
-        auto rect = prepareRegion.begin();
-        while (rect != prepareRegion.end()) {
-            walker.collectRects(srcLayer,*rect);
-            merger.startMerge(walker, false);
-            rect++;
-        }
-
+    bool visit(KisCloneLayer*) override {
         return true;
     }
 
@@ -195,9 +162,7 @@ public:
 
 private:
     QRect m_updateRect;
-    QRect m_cropRect;
     KisPaintDeviceSP m_projection;
-    KisRenderPassFlags m_parentFlags;
 };
 
 
@@ -228,7 +193,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         QRect applyRect = item.m_applyRect;
 
         if (currentLeaf->isRoot()) {
-            currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), m_renderFlags);
+            currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), item.m_renderFlags);
             continue;
         }
 
@@ -237,11 +202,9 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
 
             DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentLeaf, applyRect);
             KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                     m_currentProjection,
-                                                     walker.cropRect(),
-                                                     m_renderFlags);
+                                                     m_currentProjection);
             currentLeaf->accept(originalVisitor);
-            currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node(), m_renderFlags);
+            currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node(), item.m_renderFlags);
 
             continue;
         }
@@ -252,15 +215,13 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         }
 
         KisUpdateOriginalVisitor originalVisitor(applyRect,
-                                                 m_currentProjection,
-                                                 walker.cropRect(),
-                                                 m_renderFlags);
+                                                 m_currentProjection);
 
         if(item.m_position & KisMergeWalker::N_FILTHY) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY", currentLeaf, applyRect);
             if (currentLeaf->shouldBeRendered()) {
                 currentLeaf->accept(originalVisitor);
-                currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), m_renderFlags);
+                currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), item.m_renderFlags);
             }
         }
         else if(item.m_position & KisMergeWalker::N_ABOVE_FILTHY) {
@@ -268,14 +229,14 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
             if(currentLeaf->dependsOnLowerNodes()) {
                 if (currentLeaf->shouldBeRendered()) {
                     currentLeaf->accept(originalVisitor);
-                    currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node(), m_renderFlags);
+                    currentLeaf->projectionPlane()->recalculate(applyRect, currentLeaf->node(), item.m_renderFlags);
                 }
             }
         }
         else if(item.m_position & KisMergeWalker::N_FILTHY_PROJECTION) {
             DEBUG_NODE_ACTION("Updating", "N_FILTHY_PROJECTION", currentLeaf, applyRect);
             if (currentLeaf->shouldBeRendered()) {
-                currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), m_renderFlags);
+                currentLeaf->projectionPlane()->recalculate(applyRect, walker.startNode(), item.m_renderFlags);
             }
         }
         else /*if(item.m_position & KisMergeWalker::N_BELOW_FILTHY)*/ {
@@ -374,14 +335,4 @@ void KisAsyncMerger::doNotifyClones(KisBaseRectsWalker &walker) {
     for(it = vector.begin(); it != vector.end(); ++it) {
         (*it).notify();
     }
-}
-
-KisRenderPassFlags KisAsyncMerger::renderFlags() const
-{
-    return m_renderFlags;
-}
-
-void KisAsyncMerger::setRenderFlags(const KisRenderPassFlags &newRenderFlags)
-{
-    m_renderFlags = newRenderFlags;
 }

@@ -232,6 +232,8 @@ private Q_SLOTS:
     void testComplexGroupVisiting();
     void testComplexAccessVisiting();
     void testCloneNotificationsVisiting();
+    void testCloneSourceVisiting_data();
+    void testCloneSourceVisiting();
     void testRefreshSubtreeVisiting();
     void testFullRefreshVisiting();
     void testCachedVisiting();

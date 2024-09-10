@@ -194,6 +194,7 @@ set(kritaimage_LIB_SRCS
    kis_cached_gradient_shape_strategy.cpp
    kis_polygonal_gradient_shape_strategy.cpp
    kis_iterator_ng.cpp
+   kis_base_rects_walker.cpp
    kis_async_merger.cpp
    kis_merge_walker.cc
    kis_updater_context.cpp

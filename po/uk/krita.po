@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-07 01:45+0000\n"
+"POT-Creation-Date: 2024-09-10 01:45+0000\n"
 "PO-Revision-Date: 2024-09-07 21:00+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -18575,7 +18575,7 @@ msgid "Radiance RGBE Image"
 msgstr "зображення Radiance RGBE"
 
 #: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2214
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "Імпортувати кадри"
@@ -19873,13 +19873,13 @@ msgstr "Локальні ресурси"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
@@ -19897,8 +19897,8 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
-#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
-#: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20403,7 +20403,7 @@ msgid "Delete resource"
 msgstr "Вилучити ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2633
+#: libs/ui/KisMainWindow.cpp:2629
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20899,7 +20899,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Не вдалося обробити кадри анімації! Файли результату є неповними."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2241
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr ""
@@ -21014,7 +21014,7 @@ msgstr " кд/с"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:654
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
@@ -21033,7 +21033,7 @@ msgid "Current Document"
 msgstr "Поточний документ"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:619
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -21078,7 +21078,7 @@ msgstr ""
 "скористатися справжнім відеоредактором, наприклад Kdenlive (https://kdenlive."
 "org)."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:235
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -21086,59 +21086,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "Видобуто %1 кадрів з відео %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Не вдалося експортувати кадри з відео"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
 msgid "Select your Video File"
 msgstr "Виберіть відеофайл"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Ширина: %1 пк"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Висота: %1 пк"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:388
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Основні кольори: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Перенесення кольорів: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:394
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Тривалість: %1 с"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Кількість кадрів: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "Частота кадрів: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -21148,7 +21148,7 @@ msgstr ""
 "*<font size='0.5em'><em>*У файлі неправильно вказано частоту кадрів. Змінено "
 "для перегляду повної тривалості</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:496
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -21158,13 +21158,13 @@ msgstr ""
 "<b>Увага!</b> Ви намагаєтеся імпортувати %1 кадрів. Максимальна можлива "
 "кількість імпортованих кадрів — %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:503
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr "Скористайтеся <a href=\"https://kdenlive.org\">відеоредактором</a>!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:508
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -21174,7 +21174,7 @@ msgstr ""
 "На вашому комп'ютері недостатньо пам'яті для завантаження такої кількості "
 "кадрів."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -21182,7 +21182,7 @@ msgid ""
 msgstr ""
 "Дані займуть половину доступної пам'яті — редагування значно ускладниться."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:525
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -21192,54 +21192,54 @@ msgstr ""
 "У Krita не передбачено підтримки кривої передавання відео (%1), її буде "
 "завантажено як лінійну."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:558
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:560
 #, kde-format
 msgid "Open FFProbe"
 msgstr "Відкрити FFProbe"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "Некоректний FFProbe!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:581
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "Відкрити FFMpeg"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "Некоректний FFMpeg!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "Не знайдено FFMpeg!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "У вашій версії FFMpeg не передбачено підтримки цього формату"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Не вдалося знайти потік відеоданих!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Не вдалося завантажити відомості щодо відео"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:354
+#: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "Аварійне завершення роботи FFMpeg"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:666
+#: libs/ui/animation/KisFFMpegWrapper.cpp:671
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -23030,7 +23030,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Введіть назву нового стилю"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31653,7 +31653,7 @@ msgstr ""
 "\n"
 "Доступні лише ваші локальні ресурси."
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31662,40 +31662,40 @@ msgstr ""
 "Не вдалося завершити імпортування анімації:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2198
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Не вдалося створити документ. Імпортування анімації перервано."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Імпортувати робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "С&творити робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Створити робочий простір…"
 
-#: libs/ui/KisMainWindow.cpp:2687
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2690
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2859
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31704,19 +31704,19 @@ msgstr ""
 "Додаток керування кольорами LittleCMS для Krita не встановлено. Зараз Krita "
 "завершить роботу."
 
-#: libs/ui/KisMainWindow.cpp:2875
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Помилка під час встановлення"
 
-#: libs/ui/KisMainWindow.cpp:2985
+#: libs/ui/KisMainWindow.cpp:2981
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Теми"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3040
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Розширюваний заповнювач"

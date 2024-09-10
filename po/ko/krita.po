@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-07 01:45+0000\n"
+"POT-Creation-Date: 2024-09-10 01:45+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -19271,7 +19271,7 @@ msgid "Radiance RGBE Image"
 msgstr "이미지 교체"
 
 #: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2214
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "프레임 가져오기"
@@ -20568,13 +20568,13 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
@@ -20592,8 +20592,8 @@ msgstr "로컬 리소스"
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
-#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
-#: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -21110,7 +21110,7 @@ msgid "Delete resource"
 msgstr "리소스 삭제"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2633
+#: libs/ui/KisMainWindow.cpp:2629
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -21600,7 +21600,7 @@ msgstr ""
 "애니메이션 프레임을 렌더링할 수 없습니다! 출력 파일이 완전하지 않습니다."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2241
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "애니메이션 렌더"
@@ -21723,7 +21723,7 @@ msgstr ""
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:654
 #, fuzzy, kde-format
 #| msgid " s"
 msgctxt "Second as a unit following a value, like 60 s"
@@ -21744,7 +21744,7 @@ msgid "Current Document"
 msgstr "현재 문서"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:619
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -21787,7 +21787,7 @@ msgstr ""
 "100프레임보다 긴 클립을 편집하려면 Kdenlive(https://kdenlive.org)와 같은 실"
 "제 비디오 편집기를 사용하는 것이 좋습니다."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:235
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -21795,60 +21795,60 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "%2 비디오에서 프레임 %1개를 추출했습니다."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "비디오에서 프레임을 내보낼 수 없음"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
 msgid "Select your Video File"
 msgstr "내 비디오 파일 선택"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "너비: %1픽셀"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "높이: %1픽셀"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:388
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "색역: %1"
 
 # https://shana.pe.kr/shanaencoder_tip/80753
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "변환 특성: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:394
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "시간: %1초"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "프레임: %1개"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -21858,7 +21858,7 @@ msgstr ""
 "*<font size='0.5em'><em>*파일의 FPS가 잘못되었습니다. 전체 시간을 알 수 있도"
 "록 수정되었습니다</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:496
 #, fuzzy, kde-format
 #| msgctxt "part of warning in video importer."
 #| msgid ""
@@ -21871,14 +21871,14 @@ msgid ""
 msgstr ""
 "경고, 프레임 %1개를 가져오려고 합니다. 최대 %2개까지 가져올 수 있습니다."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:503
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
 "대신 <a href=\"https://kdenlive.org\">비디오 편집기</a>를 사용하십시오!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:508
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -21888,14 +21888,14 @@ msgstr ""
 "메모리가 부족하여 해당 프레임 분량을 불러올 수 없습니다. 컴퓨터에 과부하가 걸"
 "릴 것입니다."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "This will take over half the available memory, editing will be difficult."
 msgstr "사용 가능한 메모리의 절반 이상을 차지하며 편집이 어려울 것입니다."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:525
 #, fuzzy, kde-format
 #| msgctxt "part of warning in video importer."
 #| msgid ""
@@ -21908,54 +21908,54 @@ msgid ""
 msgstr ""
 "Krita에서 비디오 변환 곡선(%1)을 지원하지 않습니다. 선형으로 불러옵니다"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:558
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:560
 #, kde-format
 msgid "Open FFProbe"
 msgstr "FFProbe 열기"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe가 잘못되었습니다!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:581
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "FFMpeg 열기"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFMpeg가 잘못되었습니다!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "FFMpeg를 찾을 수 없습니다!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "FFMpeg 버전에서 이 형식을 지원하지 않음"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "비디오 스트림을 찾을 수 없습니다!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #, kde-format
 msgid "Failed to load video information"
 msgstr "비디오 정보를 불러올 수 없음"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:354
+#: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFMpeg가 충돌함"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:666
+#: libs/ui/animation/KisFFMpegWrapper.cpp:671
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -23749,7 +23749,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "새 스타일의 이름을 입력하십시오"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32338,7 +32338,7 @@ msgstr ""
 "\n"
 "로컬 리소스만 사용할 수 있습니다."
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -32347,40 +32347,40 @@ msgstr ""
 "애니메이션 가져오기를 완료할 수 없음:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2198
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "새 문서를 만들 수 없습니다. 애니메이션 가져오기를 중단합니다."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "작업 공간 가져오기(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "새 작업 공간(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "새 작업 공간..."
 
-#: libs/ui/KisMainWindow.cpp:2687
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2690
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2859
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -32389,19 +32389,19 @@ msgstr ""
 "Krita LittleCMS 색 관리 플러그인이 설치되어 있지 않습니다. Krita를 종료합니"
 "다."
 
-#: libs/ui/KisMainWindow.cpp:2875
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "설치 오류"
 
-#: libs/ui/KisMainWindow.cpp:2985
+#: libs/ui/KisMainWindow.cpp:2981
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "테마(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3040
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "확장 가능한 구분자"

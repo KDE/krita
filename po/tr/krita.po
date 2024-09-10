@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-07 01:45+0000\n"
+"POT-Creation-Date: 2024-09-10 01:45+0000\n"
 "PO-Revision-Date: 2024-09-07 14:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -18312,7 +18312,7 @@ msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE Görseli"
 
 #: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2214
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "Kareler içe aktar"
@@ -19607,13 +19607,13 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
@@ -19631,8 +19631,8 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
-#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
-#: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20136,7 +20136,7 @@ msgid "Delete resource"
 msgstr "Özkaynağı sil"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2633
+#: libs/ui/KisMainWindow.cpp:2629
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20616,7 +20616,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2241
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "Canlandırmayı Sun"
@@ -20728,7 +20728,7 @@ msgstr " FPS"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:654
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
@@ -20747,7 +20747,7 @@ msgid "Current Document"
 msgstr "Geçerli Belge"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:619
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -20789,7 +20789,7 @@ msgstr ""
 "100 kareden daha büyük bir klip düzenlemek istiyorsanız Kdenlive (https://"
 "kdenlive.org) gibi gerçek bir video düzenleyicisini kullanmayı düşünün."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:235
 #, kde-format
 msgctxt ""
 "FFMPEG animated video import message. arg1: frame progress number. arg2: "
@@ -20797,59 +20797,59 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "%2 videodan %1 kare çıkarıldı."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
 #, kde-format
 msgid "Failed to export frames from video"
 msgstr "Videodan kareler çıkarılamadı"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, kde-format
 msgid "Select your Video File"
 msgstr "Video dosyası seç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Genişlik: %1 pks"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Uzunluk: %1 pks"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:388
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Ana renkler: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Renk aktar: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:394
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Süre: %1 sn"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "Kareler: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS: %1"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -20859,7 +20859,7 @@ msgstr ""
 "*<font size='0.5em'><em>*Dosyadaki FPS doğru değil. Tüm süreyi görmek için "
 "değiştirildi</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:496
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20869,7 +20869,7 @@ msgstr ""
 "<b>Uyarı:</b> %1 kare içe aktarmaya çalışıyorsunuz; ancak içe "
 "aktarabileceğiniz en fazla sayı %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:503
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
@@ -20877,7 +20877,7 @@ msgstr ""
 "Bunun yerine bir <a href=\"https://kdenlive.org\">video düzenleyicisi</a> "
 "kullanın!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:508
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20887,7 +20887,7 @@ msgstr ""
 "Bu kadar çok kareyi yüklemek için yeterli belleğiniz yok. Bilgisayar aşırı "
 "yüklenir."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20896,7 +20896,7 @@ msgstr ""
 "Bu işlem, kullanılabilir belleğin yarısından fazlasını alır; düzenleme "
 "işlemi yavaşlayabilir."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:525
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -20905,54 +20905,54 @@ msgid ""
 msgstr ""
 "Krita, video aktarım eğrisini desteklemiyor (%1), doğrusal olarak yüklenecek."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:558
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:560
 #, kde-format
 msgid "Open FFProbe"
 msgstr "FFProbe Aç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, kde-format
 msgid "FFProbe is invalid!"
 msgstr "FFProbe geçersiz!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:581
 #, kde-format
 msgid "Open FFMpeg"
 msgstr "FFmpeg Aç"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, kde-format
 msgid "FFMpeg is invalid!"
 msgstr "FFmpeg geçersiz!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "FFmpeg bulunamadı!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
 #, kde-format
 msgid "Your FFMpeg version does not support this format"
 msgstr "Kurulu FFmpeg sürümü, bu biçimi desteklemiyor"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
 #, kde-format
 msgid "No video stream could be found!"
 msgstr "Video akışı bulunamadı!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #, kde-format
 msgid "Failed to load video information"
 msgstr "Video bilgisi yüklenemedi"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:354
+#: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, kde-format
 msgid "FFMpeg Crashed"
 msgstr "FFmpeg Çöktü"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:666
+#: libs/ui/animation/KisFFMpegWrapper.cpp:671
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -22718,7 +22718,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Yeni biçem adını gir"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31179,7 +31179,7 @@ msgstr ""
 "\n"
 "Yalnızca yerel özkaynaklar kullanılabiliyor."
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31188,59 +31188,59 @@ msgstr ""
 "Canlandırma içe aktarma bitirilemedi:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2198
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Yeni belge oluşturulamadı. Canlandırma içe aktarma iptal edildi."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Çalışma Alanı İçe Aktar…"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Yeni Çalışma Alanı…"
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Yeni Çalışma Alanı…"
 
-#: libs/ui/KisMainWindow.cpp:2687
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2690
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2859
+#: libs/ui/KisMainWindow.cpp:2855
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "Krita LittleCMS renk yönetimi eklentisi yüklü değil. Krita kapanacak."
 
-#: libs/ui/KisMainWindow.cpp:2875
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Kurulum hatası"
 
-#: libs/ui/KisMainWindow.cpp:2985
+#: libs/ui/KisMainWindow.cpp:2981
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temalar"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3040
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Genişleyen Boşluk"

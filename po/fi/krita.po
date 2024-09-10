@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-07 01:45+0000\n"
+"POT-Creation-Date: 2024-09-10 01:45+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -19565,7 +19565,7 @@ msgid "Radiance RGBE Image"
 msgstr "Korvaa kuva"
 
 #: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
-#: libs/ui/KisMainWindow.cpp:2214
+#: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
 msgstr "Tuo ruutuja"
@@ -20932,13 +20932,13 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:173
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
@@ -20956,8 +20956,8 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
-#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
-#: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -21499,7 +21499,7 @@ msgid "Delete resource"
 msgstr "Poista resurssi"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2633
+#: libs/ui/KisMainWindow.cpp:2629
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -22019,7 +22019,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Animointikuvien hahmonnus epäonnistui!"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2241
+#: libs/ui/KisMainWindow.cpp:2237
 #, kde-format
 msgid "Render Animation"
 msgstr "Hahmonna animaatio"
@@ -22144,7 +22144,7 @@ msgstr ""
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:645
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:654
 #, fuzzy, kde-format
 #| msgid "0 s"
 msgctxt "Second as a unit following a value, like 60 s"
@@ -22166,7 +22166,7 @@ msgid "Current Document"
 msgstr "Oma tiedosto"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:106
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:610
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:619
 #, kde-format
 msgctxt "Video importer: fps of the document you're importing into"
 msgid ""
@@ -22211,7 +22211,7 @@ msgstr ""
 "Jos haluat muokata yli 100 sadan leikettä, käytä mieluummin oikeaa "
 "videomuokkainta kuten Kdenliveä (https://kdenlive.org/)."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:235
 #, fuzzy, kde-format
 #| msgid "Select file to use as dynamic file layer."
 msgctxt ""
@@ -22220,66 +22220,66 @@ msgctxt ""
 msgid "Extracted %1 frames from %2 video."
 msgstr "Valitse tiedosto, jota käytetään dynaamisena tiedostotasona."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:285
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:294
 #, fuzzy, kde-format
 #| msgid "Select file to use as dynamic file layer."
 msgid "Failed to export frames from video"
 msgstr "Valitse tiedosto, jota käytetään dynaamisena tiedostotasona."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:348
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:357
 #, fuzzy, kde-format
 msgid "Select your Video File"
 msgstr "Kiertotilan käyttö"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:374
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
 #, fuzzy, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
 msgstr "Leveys:"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:375
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
 #, fuzzy, kde-format
 #| msgid "Length: "
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
 msgstr "Pituus: "
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:388
 #, fuzzy, kde-format
 #| msgid "Color matrix"
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
 msgstr "Värimatriisi"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:382
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, fuzzy, kde-format
 #| msgid "Color Transfer"
 msgctxt "video importer: video file statistics"
 msgid "Color Transfer: %1"
 msgstr "Värin siirto…"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:385
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:394
 #, fuzzy, kde-format
 #| msgid "Duration:"
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
 msgstr "Kesto:"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:386
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
 #, fuzzy, kde-format
 #| msgid "frame"
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
 msgstr "ruutu"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:387
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
 #, fuzzy, kde-format
 #| msgid "FPS:"
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
 msgstr "FPS:"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid ""
@@ -22289,7 +22289,7 @@ msgstr ""
 "*<font size='0.5em'><em>*Tiedoston FPS ei ole oikein. Muutettiin, jotta koko "
 "kesto näkyisi</em></font>"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:496
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -22298,14 +22298,14 @@ msgid ""
 msgstr ""
 "<b>VAROITUS:</b> yrität tuoda %1 kuvaa, mutta enin tuotava määrä on %2."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:503
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
 "Käytä mieluummin <a href=\"https://kdenlive.org/\">videomuokkainta</a>!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:508
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
@@ -22313,14 +22313,14 @@ msgid ""
 "overloaded."
 msgstr "Muisti ei riitä näin monen kuvan lataamiseen: tietokone ylikuormittuu."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "This will take over half the available memory, editing will be difficult."
 msgstr "Tämä vie puolet saatavilla olevasta muistista: muokkaus vaikeutuu."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:525
 #, fuzzy, kde-format
 #| msgid "Krita does not support the OpenDocument file format."
 msgctxt "part of warning in video importer."
@@ -22329,62 +22329,62 @@ msgid ""
 "linear."
 msgstr "Krita ei tue OpenDocument-tiedostomuotoa."
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:558
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:560
 #, fuzzy, kde-format
 #| msgid "Dynamic Brush"
 msgid "Open FFProbe"
 msgstr "Dynaaminen sivellin"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:563
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
 #, fuzzy, kde-format
 #| msgid "The URL is invalid"
 msgid "FFProbe is invalid!"
 msgstr "Osoite on virheellinen"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:570
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:572
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:579
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:581
 #, fuzzy, kde-format
 #| msgid "Open File"
 msgid "Open FFMpeg"
 msgstr "Avaa tiedosto"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:584
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:593
 #, fuzzy, kde-format
 #| msgid "The URL is invalid"
 msgid "FFMpeg is invalid!"
 msgstr "Osoite on virheellinen"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:591
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:600
 #, kde-format
 msgid "No FFMpeg found!"
 msgstr "FFMpegiä ei löytynyt!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:658
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:667
 #, fuzzy, kde-format
 #| msgid "Krita does not support this file format"
 msgid "Your FFMpeg version does not support this format"
 msgstr "Krita ei tue tätä tiedostomuotoa"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:698
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:707
 #, fuzzy, kde-format
 #| msgid "No 'text' node found!"
 msgid "No video stream could be found!"
 msgstr "”text”-solmua ei löytynyt!"
 
-#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
+#: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #, fuzzy, kde-format
 #| msgid "Failed to download remote file"
 msgid "Failed to load video information"
 msgstr "Etätiedoston lataus epäonnistui"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:354
+#: libs/ui/animation/KisFFMpegWrapper.cpp:359
 #, fuzzy, kde-format
 #| msgid "FF&Mpeg: "
 msgid "FFMpeg Crashed"
 msgstr "FF&Mpeg"
 
-#: libs/ui/animation/KisFFMpegWrapper.cpp:666
+#: libs/ui/animation/KisFFMpegWrapper.cpp:671
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
@@ -24174,7 +24174,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Anna uuden tyylin nimi"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2644
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -32949,7 +32949,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2217
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -32958,41 +32958,41 @@ msgstr ""
 "Ei voitu tuoda\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2198
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Animointikuvien hahmonnus epäonnistui!"
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Tuo työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Uusi työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Uusi työtila…"
 
-#: libs/ui/KisMainWindow.cpp:2687
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2690
+#: libs/ui/KisMainWindow.cpp:2686
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2859
+#: libs/ui/KisMainWindow.cpp:2855
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -33004,19 +33004,19 @@ msgstr ""
 "Calligran LittleCMS-värinhallintaliitännäistä ei ole asennettu. Krita "
 "lopetetaan nyt."
 
-#: libs/ui/KisMainWindow.cpp:2875
+#: libs/ui/KisMainWindow.cpp:2871
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Asennusvirhe"
 
-#: libs/ui/KisMainWindow.cpp:2985
+#: libs/ui/KisMainWindow.cpp:2981
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "T&eemat"
 
-#: libs/ui/KisMainWindow.cpp:3044
+#: libs/ui/KisMainWindow.cpp:3040
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

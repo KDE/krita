@@ -61,7 +61,6 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 
     addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing");
-    addSmoothingAction(KisSmoothingOptions::SIMPLE_PIXEL_SMOOTHING, "set_simple_pixel_smoothing");
     addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing");

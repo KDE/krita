@@ -267,13 +267,11 @@
         <file>light_rotation-reset.svg</file>
         <file alias="light_reset_canvas_rotation.svg">light_rotation-reset.svg</file>
         <file>light_smoothing-basic.svg</file>
-        <file>light_smoothing-pixel.svg</file>
         <file>light_smoothing-no.svg</file>
         <file>light_smoothing-stabilizer.svg</file>
         <file>light_smoothing-weighted.svg</file>
         <file>dark_smoothing-basic.svg</file>
         <file>dark_smoothing-no.svg</file>
-        <file>dark_smoothing-pixel.svg</file>
         <file>dark_smoothing-stabilizer.svg</file>
         <file>dark_smoothing-weighted.svg</file>
         <file>light_merge-layer-below.svg</file>

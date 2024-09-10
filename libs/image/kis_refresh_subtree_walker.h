@@ -46,44 +46,39 @@ protected:
     KisRefreshSubtreeWalker() {}
 
 
-    QRect calculateChangeRect(KisProjectionLeafSP startWith,
-                              const QRect &requestedRect) {
+    static
+    std::pair<QRect, bool>
+    calculateChangeRect(KisProjectionLeafSP startWith,
+                        const QRect &requestedRect) {
 
         if(!startWith->isLayer())
-            return requestedRect;
+            return std::make_pair(requestedRect, false);
 
-        QRect childrenRect;
-        QRect tempRect = requestedRect;
+        QRect finalChangeRect = requestedRect;
         bool changeRectVaries = false;
 
         KisProjectionLeafSP currentLeaf = startWith->firstChild();
-        KisProjectionLeafSP prevLeaf;
-        KisProjectionLeafSP nextLeaf;
 
-        while(currentLeaf) {
-            nextLeaf = currentLeaf->nextSibling();
+        while (currentLeaf) {
+            if (currentLeaf->isLayer() && currentLeaf->shouldBeRendered()) {
+                QRect leafRect;
 
-            if(currentLeaf->isLayer() && currentLeaf->shouldBeRendered()) {
-                tempRect |= calculateChangeRect(currentLeaf, requestedRect);
+                std::tie(leafRect, changeRectVaries) =
+                    calculateChangeRect(currentLeaf, requestedRect);
 
-                if(!changeRectVaries)
-                    changeRectVaries = tempRect != requestedRect;
-
-                childrenRect = tempRect;
-                prevLeaf = currentLeaf;
+                finalChangeRect |= leafRect;
             }
 
-            currentLeaf = nextLeaf;
+            currentLeaf = currentLeaf->nextSibling();
         }
 
-        tempRect |= startWith->projectionPlane()->changeRect(requestedRect | childrenRect);
+        finalChangeRect |= startWith->projectionPlane()->changeRect(finalChangeRect);
 
-        if(!changeRectVaries)
-            changeRectVaries = tempRect != requestedRect;
+        if (!changeRectVaries) {
+            changeRectVaries = finalChangeRect != requestedRect;
+        }
 
-        setExplicitChangeRect(tempRect, changeRectVaries);
-
-        return tempRect;
+        return std::make_pair(finalChangeRect, changeRectVaries);
     }
 
     void startTrip(KisProjectionLeafSP startWith) override {
@@ -113,7 +108,7 @@ protected:
              */
             if (extraUpdateLeaf) {
                 NodePosition pos = N_EXTRA | calculateNodePosition(extraUpdateLeaf);
-                registerNeedRect(extraUpdateLeaf, pos);
+                registerNeedRect(extraUpdateLeaf, pos, KisRenderPassFlag::None);
 
                 /**
                  * In normal walkers we register notifications
@@ -127,37 +122,15 @@ protected:
             }
         }
 
-        /**
-         * If the node is not renderable and we don't care about hidden groups,
-         * e.g. when generating animation frames, then just skip the entire group.
-         */
-        if (m_flags & SkipNonRenderableNodes && !startWith->shouldBeRendered()) return;
-
-
-        KisProjectionLeafSP currentLeaf = startWith->lastChild();
-        while(currentLeaf) {
-            NodePosition pos = (m_flags & NoFilthyMode ? N_ABOVE_FILTHY : N_FILTHY) |
-                calculateNodePosition(currentLeaf);
-            registerNeedRect(currentLeaf, pos);
-
-            // see a comment above
-            registerCloneNotification(currentLeaf->node(), pos);
-            currentLeaf = currentLeaf->prevSibling();
+        SubtreeVisitFlags subtreeFlags = SubtreeVisitFlag::None;
+        if (m_flags & SkipNonRenderableNodes) {
+            subtreeFlags |= SubtreeVisitFlag::SkipNonRenderableNodes;
+        }
+        if (m_flags & NoFilthyMode) {
+            subtreeFlags |= SubtreeVisitFlag::NoFilthyMode;
         }
 
-        /**
-         * In no-filthy mode we just recompose the root layer
-         * without entering any subgroups
-         */
-        if (m_flags & NoFilthyMode) return;
-
-        currentLeaf = startWith->lastChild();
-        while(currentLeaf) {
-            if(currentLeaf->canHaveChildLayers()) {
-                startTrip(currentLeaf);
-            }
-            currentLeaf = currentLeaf->prevSibling();
-        }
+        visitSubtreeTopToBottom(startWith, subtreeFlags, KisRenderPassFlag::None, cropRect());
     }
 
 private:

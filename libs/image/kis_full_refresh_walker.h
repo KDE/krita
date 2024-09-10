@@ -72,19 +72,23 @@ public:
              */
 
             if(isStartLeaf(leaf)&& !leaf->isRoot()) {
-                KisRefreshSubtreeWalker::calculateChangeRect(leaf, requestedRect());
+                QRect changeRect;
+                bool changeRectVaries = false;
+                std::tie(changeRect, changeRectVaries) =
+                    KisRefreshSubtreeWalker::calculateChangeRect(leaf, requestedRect());
+                setExplicitChangeRect(changeRect, changeRectVaries);
             }
             else {
                 KisMergeWalker::registerChangeRect(leaf, position);
             }
         }
     }
-    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position) override {
+    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position, KisRenderPassFlags renderFlags, const QRect &cropRect) override {
         if(m_currentUpdateType == FULL_REFRESH) {
-            KisRefreshSubtreeWalker::registerNeedRect(leaf, position);
+            KisRefreshSubtreeWalker::registerNeedRect(leaf, position, renderFlags, cropRect);
         }
         else {
-            KisMergeWalker::registerNeedRect(leaf, position);
+            KisMergeWalker::registerNeedRect(leaf, position, renderFlags, cropRect);
         }
     }
     void adjustMasksChangeRect(KisProjectionLeafSP firstMask) override {

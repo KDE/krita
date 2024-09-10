@@ -18,9 +18,6 @@ class KRITAIMAGE_EXPORT KisAsyncMerger
 public:
     void startMerge(KisBaseRectsWalker &walker, bool notifyClones = true);
 
-    KisRenderPassFlags renderFlags() const;
-    void setRenderFlags(const KisRenderPassFlags &newRenderFlags);
-
 private:
     inline void resetProjection();
     inline void setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection);
@@ -53,11 +50,6 @@ private:
      * setupProjection()
      */
     KisPaintDeviceSP m_cachedPaintDevice;
-
-    /**
-     * The flags that should be used while rendering process
-     */
-    KisRenderPassFlags m_renderFlags = KisRenderPassFlag::None;
 };
 
 

@@ -97,9 +97,19 @@ public:
          * the projection.
          */
         QRect m_applyRect;
+
+        KisRenderPassFlags m_renderFlags = KisRenderPassFlag::None;
     };
 
     typedef QStack<JobItem> LeafStack;
+
+    enum SubtreeVisitFlag {
+        None = 0x0,
+        SkipNonRenderableNodes = 0x1,
+        NoFilthyMode = 0x2,
+    };
+
+    Q_DECLARE_FLAGS(SubtreeVisitFlags, SubtreeVisitFlag);
 
 public:
     KisBaseRectsWalker()
@@ -123,6 +133,7 @@ public:
         m_startNode = node;
         m_levelOfDetail = getNodeLevelOfDetail(startLeaf);
         startTrip(startLeaf);
+        addCloneSourceRegenerationJobs();
     }
 
     inline void recalculate(const QRect& requestedRect) {
@@ -261,13 +272,13 @@ protected:
         //m_requestedRect = QRect();
     }
 
-    inline void pushJob(KisProjectionLeafSP leaf, NodePosition position, QRect applyRect) {
-        JobItem item = {leaf, position, applyRect};
+    inline void pushJob(KisProjectionLeafSP leaf, NodePosition position, QRect applyRect, KisRenderPassFlags flags) {
+        JobItem item = {leaf, position, applyRect, flags};
         m_mergeTask.push(item);
     }
 
-    inline QRect cropThisRect(const QRect& rect) {
-        return m_cropRect.isValid() ? rect & m_cropRect : rect;
+    inline QRect cropThisRect(const QRect& rect, const QRect &cropRect) {
+        return cropRect.isValid() ? rect & cropRect : rect;
     }
 
     /**
@@ -289,7 +300,7 @@ protected:
 
         QRect currentChangeRect = leaf->projectionPlane()->changeRect(m_resultChangeRect,
                                                                       convertPositionToFilthy(position));
-        currentChangeRect = cropThisRect(currentChangeRect);
+        currentChangeRect = cropThisRect(currentChangeRect, m_cropRect);
 
         if(!m_changeRectVaries)
             m_changeRectVaries = currentChangeRect != m_resultChangeRect;
@@ -316,10 +327,15 @@ protected:
         }
     }
 
+    void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position, KisRenderPassFlags flags) {
+        registerNeedRect(leaf, position, flags, m_cropRect);
+    }
+
     /**
      * Called for every node we meet on a backward way of the trip.
      */
-    virtual void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position) {
+    virtual void registerNeedRect(KisProjectionLeafSP leaf, NodePosition position,
+                                  KisRenderPassFlags flags, const QRect &cropRect) {
         // We do not work with masks here. It is KisLayer's job.
         if(!leaf->isLayer()) return;
 
@@ -331,11 +347,15 @@ protected:
             bool parentNeedRectFound = false;
             QRect parentNeedRect;
 
-            Q_FOREACH(const JobItem &job, m_mergeTask) {
-                if (job.m_leaf == leaf->parent()) {
+            for (auto it = std::make_reverse_iterator(m_mergeTask.end());
+                 it != std::make_reverse_iterator(m_mergeTask.begin());
+                 ++it) {
+
+                if (it->m_leaf == leaf->parent()) {
                     parentNeedRect =
-                        job.m_leaf->projectionPlane()->needRectForOriginal(job.m_applyRect);
+                        it->m_leaf->projectionPlane()->needRectForOriginal(it->m_applyRect);
                     parentNeedRectFound = true;
+                    break;
                 }
             }
 
@@ -354,11 +374,11 @@ protected:
         if (!leaf->shouldBeRendered()) {
             if (!m_lastNeedRect.isEmpty()) {
                 // push a dumb job to fit state machine requirements
-                pushJob(leaf, position, m_lastNeedRect);
+                pushJob(leaf, position, m_lastNeedRect, flags);
             }
         } else if(position & (N_FILTHY | N_ABOVE_FILTHY | N_EXTRA)) {
             if(!m_lastNeedRect.isEmpty())
-                pushJob(leaf, position, m_lastNeedRect);
+                pushJob(leaf, position, m_lastNeedRect, flags);
             //else /* Why push empty rect? */;
 
             m_resultAccessRect |= leaf->projectionPlane()->accessRect(m_lastNeedRect,
@@ -366,19 +386,19 @@ protected:
 
             m_lastNeedRect = leaf->projectionPlane()->needRect(m_lastNeedRect,
                                                                convertPositionToFilthy(position));
-            m_lastNeedRect = cropThisRect(m_lastNeedRect);
+            m_lastNeedRect = cropThisRect(m_lastNeedRect, cropRect);
             m_childNeedRect = m_lastNeedRect;
         }
         else if(position & (N_BELOW_FILTHY | N_FILTHY_PROJECTION)) {
             if(!m_lastNeedRect.isEmpty()) {
-                pushJob(leaf, position, m_lastNeedRect);
+                pushJob(leaf, position, m_lastNeedRect, flags);
 
                 m_resultAccessRect |= leaf->projectionPlane()->accessRect(m_lastNeedRect,
                                                                           convertPositionToFilthy(position));
 
                 m_lastNeedRect = leaf->projectionPlane()->needRect(m_lastNeedRect,
                                                                    convertPositionToFilthy(position));
-                m_lastNeedRect = cropThisRect(m_lastNeedRect);
+                m_lastNeedRect = cropThisRect(m_lastNeedRect, cropRect);
             }
         }
         else {
@@ -435,6 +455,9 @@ protected:
 
         return checksum;
     }
+
+    void addCloneSourceRegenerationJobs();
+    void visitSubtreeTopToBottom(KisProjectionLeafSP startWith, SubtreeVisitFlags flags, KisRenderPassFlags renderFlags, const QRect &cropRect);
 
 private:
     inline int getNodeLevelOfDetail(KisProjectionLeafSP leaf) {
@@ -501,6 +524,8 @@ private:
 
     int m_levelOfDetail {0};
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisBaseRectsWalker::SubtreeVisitFlags);
 
 #endif /* __KIS_BASE_RECTS_WALKER_H */
 

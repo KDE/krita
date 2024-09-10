@@ -76,7 +76,7 @@ void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask, KisMergeW
     NodePosition positionToFilthy =
         (flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
         calculateNodePosition(parentLayer);
-    registerNeedRect(parentLayer, positionToFilthy);
+    registerNeedRect(parentLayer, positionToFilthy, KisRenderPassFlag::None);
 
     if(prevLeaf)
         visitLowerNode(prevLeaf);
@@ -94,14 +94,14 @@ void KisMergeWalker::visitHigherNode(KisProjectionLeafSP leaf, NodePosition posi
     else if (leaf->parent())
         startTripImpl(leaf->parent(), DEFAULT);
 
-    registerNeedRect(leaf, positionToFilthy);
+    registerNeedRect(leaf, positionToFilthy, KisRenderPassFlag::None);
 }
 
 void KisMergeWalker::visitLowerNode(KisProjectionLeafSP leaf)
 {
     NodePosition position =
         N_BELOW_FILTHY | calculateNodePosition(leaf);
-    registerNeedRect(leaf, position);
+    registerNeedRect(leaf, position, KisRenderPassFlag::None);
 
     KisProjectionLeafSP prevLeaf = leaf->prevSibling();
     if (prevLeaf)

@@ -10,6 +10,11 @@ import org.krita.flake.text 1.0
 
 ComboBox {
     id: familyCmb;
+    property var sourceModel;
+    property TagFilterProxyModelQmlWrapper modelWrapper : TagFilterProxyModelQmlWrapper{
+        sourceModel: sourceModel;
+    };
+    model: modelWrapper.model;
 
     Component {
         id: fontDelegate
@@ -135,9 +140,8 @@ ComboBox {
                     model: fontResourceView.tagModel;
                     textRole: "display";
                     Layout.fillWidth: true;
-                    onActivated: {
-                        mainWindow.slotFontTagActivated(currentIndex);
-                    }
+                    currentIndex: modelWrapper.currentTag;
+                    onActivated: modelWrapper.currentTag = currentIndex;
                 }
 
             }
@@ -161,12 +165,14 @@ ComboBox {
                     id: search;
                     placeholderText: i18nc("@info:placeholder", "Search...");
                     Layout.fillWidth: true;
-                    onTextEdited: mainWindow.slotFontSearchTextChanged(text);
+                    text: modelWrapper.searchText;
+                    onTextEdited: modelWrapper.searchText = text;
                 }
                 CheckBox {
                     id: opticalSizeCbx
                     text: i18nc("@option:check", "Search in tag")
-                    onCheckedChanged: mainWindow.slotFontSearchInTag(checked);
+                    onCheckedChanged: modelWrapper.searchInTag = checked;
+                    checked: modelWrapper.searchInTag;
                 }
             }
         }

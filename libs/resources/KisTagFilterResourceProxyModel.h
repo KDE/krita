@@ -68,6 +68,12 @@ public:
      */
     void setTagFilter(const KisTagSP tag);
 
+    /**
+     * @brief currentTagFilter
+     * @return return the current tag that's being used to filter.
+     */
+    KisTagSP currentTagFilter() const;
+
 
     void setStorageFilter(bool useFilter, int storageId);
 
@@ -80,6 +86,8 @@ public:
     void setSearchText(const QString& searchText);
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
+
+    bool filterInCurrentTag() const;
 
     bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds);
     bool untagResources(const KisTagSP tag, const QVector<int> &resourceIds);

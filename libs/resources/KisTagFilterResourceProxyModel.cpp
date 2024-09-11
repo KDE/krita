@@ -217,6 +217,11 @@ void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
     updateTagFilter();
 }
 
+KisTagSP KisTagFilterResourceProxyModel::currentTagFilter() const
+{
+    return d->currentTagFilter;
+}
+
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
 {
     Q_EMIT beforeFilterChanges();
@@ -304,6 +309,11 @@ void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentT
 {
     d->filteringWithinCurrentTag = filterInCurrentTag;
     updateTagFilter();
+}
+
+bool KisTagFilterResourceProxyModel::filterInCurrentTag() const
+{
+    return d->filteringWithinCurrentTag;
 }
 
 bool KisTagFilterResourceProxyModel::tagResources(const KisTagSP tag, const QVector<int> &resourceIds)

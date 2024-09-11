@@ -29,7 +29,7 @@ CollapsibleGroupProperty {
     onFontFamiliesChanged: {
         if (blockSignals) {
             if (fontFamilies.length >0) {
-                mainFamilyCmb.currentIndex = mainFamilyCmb.find(mainWindow.wwsFontFamilyName(fontFamilies[0]));
+                mainFamilyCmb.updateCurrentIndex();
             }
             familyListView.model = fontFamilies;
         } else {
@@ -52,7 +52,7 @@ CollapsibleGroupProperty {
         }
         FontResourceDropdown {
             id: mainFamilyCmb;
-            model: fontFamilyModel;
+            sourceModel: fontFamilyModel;
             Layout.fillWidth: true;
             onActivated: {
                 if (fontFamilies.length >0) {
@@ -60,6 +60,13 @@ CollapsibleGroupProperty {
                 } else {
                     fontFamilies = [ currentText ];
                 }
+            }
+            Connections {
+                target: mainFamilyCmb.modelWrapper;
+                function onModelSortUpdated() { mainFamilyCmb.updateCurrentIndex() }
+            }
+            function updateCurrentIndex() {
+                currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[0]))
             }
         }
 
@@ -93,12 +100,25 @@ CollapsibleGroupProperty {
                     width: parent.width;
                     property int dIndex: index;
                     FontResourceDropdown {
-                        model: fontFamilyModel;
+                        id: fontCmb;
+                        sourceModel: fontFamilyModel;
                         Layout.fillWidth: true;
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = currentText;
                         }
-                        Component.onCompleted: currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]));
+                        Component.onCompleted: {
+                            if (fontListDelegate.dIndex === 0) {
+                                modelWrapper = mainFamilyCmb.modelWrapper;
+                            }
+                            updateCurrentIndex();
+                        }
+                        Connections {
+                            target: fontCmb.modelWrapper;
+                            function onModelSortUpdated() { fontCmb.updateCurrentIndex() }
+                        }
+                        function updateCurrentIndex() {
+                            currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]))
+                        }
                     }
                     ToolButton {
                         id: removeFont;

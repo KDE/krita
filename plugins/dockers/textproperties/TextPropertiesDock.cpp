@@ -19,6 +19,7 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisStaticInitializer.h>
+#include <kis_signal_compressor.h>
 
 #include <KLocalizedContext>
 
@@ -44,6 +45,103 @@
 #include "FontAxesModel.h"
 #include "KoShapeQtQuickLabel.h"
 
+/**
+ * @brief The TagFilterProxyModelQmlWrapper class
+ *
+ * This class wraps around KisTagFilterResourceProxyModel, providing properties,
+ * signal compressors and handling setting the source model.
+ */
+class TagFilterProxyModelQmlWrapper : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QAbstractItemModel *model READ model NOTIFY modelChanged)
+    Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged)
+    Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
+    Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
+    Q_PROPERTY(bool searchInTag READ searchInTag WRITE setSearchInTag NOTIFY searchInTagChanged)
+public:
+    TagFilterProxyModelQmlWrapper(QObject *parent = nullptr): QObject(parent)
+      , m_tagFilterProxyModel(new KisTagFilterResourceProxyModel(ResourceType::FontFamilies, this))
+      , m_compressor(100, KisSignalCompressor::POSTPONE) {
+        m_tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
+        m_tagModel = new KisTagModel(ResourceType::FontFamilies, this);
+        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(setSearchTextOnModel()));
+    }
+
+    void tagActivated(int row) {
+        if (row == currentTag()) {
+            return;
+        }
+        QModelIndex idx = m_tagModel->index(row, 0);
+        if (idx.isValid()) {
+            m_tagFilterProxyModel->setTagFilter(m_tagModel->tagForIndex(idx));
+            emit activeTagChanged();
+            emit modelSortUpdated();
+        }
+    }
+    QString searchText() const {
+        return m_currentSearchText;
+    }
+    void setSearchText(const QString &text) {
+        if (m_currentSearchText == text) {
+            return;
+        }
+        m_currentSearchText = text;
+        emit searchTextChanged();
+        m_compressor.start();
+    }
+
+    QAbstractItemModel *model() {
+        return m_tagFilterProxyModel;
+    }
+
+    QAbstractItemModel *sourceModel() const {
+        return m_tagFilterProxyModel->sourceModel();
+    }
+    void setSourceModel(QAbstractItemModel *newSourceModel) {
+        if (newSourceModel != m_tagFilterProxyModel->sourceModel()) {
+            m_tagFilterProxyModel->setSourceModel(newSourceModel);
+            emit sourceModelChanged();
+            emit modelChanged();
+            emit modelSortUpdated();
+        }
+    }
+
+    int currentTag() const {
+        return m_tagModel->indexForTag(m_tagFilterProxyModel->currentTagFilter()).row();
+    }
+
+    void setSearchInTag(bool newSearchInTag) {
+        if (m_tagFilterProxyModel->filterInCurrentTag() != newSearchInTag) {
+            m_tagFilterProxyModel->setFilterInCurrentTag(newSearchInTag);
+            emit searchInTagChanged();
+            emit modelSortUpdated();
+        }
+    }
+
+    bool searchInTag() {
+        return m_tagFilterProxyModel->filterInCurrentTag();
+    }
+
+Q_SIGNALS:
+    void sourceModelChanged();
+    void modelChanged();
+    void searchTextChanged();
+    void activeTagChanged();
+    void searchInTagChanged();
+    void modelSortUpdated();
+
+private Q_SLOTS:
+    void setSearchTextOnModel() {
+        m_tagFilterProxyModel->setSearchText(m_currentSearchText);
+        emit modelSortUpdated();
+    }
+private:
+    KisTagFilterResourceProxyModel *m_tagFilterProxyModel {nullptr};
+    KisTagModel *m_tagModel{nullptr};
+    KisSignalCompressor m_compressor;
+    QString m_currentSearchText;
+};
+
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<KoSvgTextPropertiesModel>("org.krita.flake.text", 1, 0, "KoSvgTextPropertiesModel");
@@ -58,6 +156,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
     qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
+    qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
 }
 
 
@@ -95,7 +194,6 @@ struct TextPropertiesDock::Private
     FontStyleModel stylesModel;
     FontAxesModel axesModel;
     KisAllResourcesModel *fontModel{nullptr};
-    KisTagFilterResourceProxyModel *fontTagFilterProxyModel {nullptr};
     KisTagModel *tagModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
@@ -126,9 +224,6 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setMinimumHeight(100);
 
     d->fontModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
-    d->fontTagFilterProxyModel = new KisTagFilterResourceProxyModel(ResourceType::FontFamilies);
-    d->fontTagFilterProxyModel->setSourceModel(d->fontModel);
-    d->fontTagFilterProxyModel->sort(KisAbstractResourceModel::Name);
     d->tagModel = new KisTagModel(ResourceType::FontFamilies);
 
     QList<QLocale> locales;
@@ -144,7 +239,7 @@ TextPropertiesDock::TextPropertiesDock()
 
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
-    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontTagFilterProxyModel));
+    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontModel));
     m_quickWidget->rootContext()->setContextProperty("fontTagModel", QVariant::fromValue(d->tagModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
@@ -256,24 +351,6 @@ void TextPropertiesDock::slotUpdateAxesValues()
     if (d->axesModel.axisValues() == d->textModel->axisValues())
         return;
     d->textModel->setaxisValues(d->axesModel.axisValues());
-}
-
-void TextPropertiesDock::slotFontTagActivated(int row)
-{
-    QModelIndex idx = d->tagModel->index(row, 0);
-    if (idx.isValid()) {
-        d->fontTagFilterProxyModel->setTagFilter(d->tagModel->tagForIndex(idx));
-    }
-}
-
-void TextPropertiesDock::slotFontSearchTextChanged(const QString &text)
-{
-    d->fontTagFilterProxyModel->setSearchText(text);
-}
-
-void TextPropertiesDock::slotFontSearchInTag(const bool checked)
-{
-    d->fontTagFilterProxyModel->setFilterInCurrentTag(checked);
 }
 
 #include <KoFontRegistry.h>

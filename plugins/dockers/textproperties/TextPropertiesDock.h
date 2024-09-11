@@ -34,9 +34,6 @@ public Q_SLOTS:
     void slotTextPropertiesChanged();
     void slotUpdateStylesModel();
     void slotUpdateAxesValues();
-    void slotFontTagActivated(int row);
-    void slotFontSearchTextChanged(const QString &text);
-    void slotFontSearchInTag(const bool checked);
     QString wwsFontFamilyName(QString familyName);
     void connectAutoEnabler(QObject *watched);
 

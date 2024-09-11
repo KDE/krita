@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:45+0000\n"
+"POT-Creation-Date: 2024-09-11 01:44+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -9839,12 +9839,12 @@ msgctxt "action"
 msgid "Brush Smoothing: Disabled"
 msgstr "손떨림 보정: 사용 안 함"
 
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
 #, fuzzy, kde-format
 #| msgid "Brush Smoothing:"
@@ -17822,7 +17822,7 @@ msgstr "크기"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:401
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -23692,7 +23692,7 @@ msgstr "레이어 속성"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1513 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
-#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
@@ -36395,11 +36395,54 @@ msgstr "두께:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:335
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
 msgstr "색상 이름:"
+
+#: libs/widgets/kis_color_input.cpp:419
+#, fuzzy, kde-format
+#| msgid "H:"
+msgctxt "@label:slider Abbreviation for 'Hue'"
+msgid "H:"
+msgstr "H:"
+
+#: libs/widgets/kis_color_input.cpp:420
+#, fuzzy, kde-format
+#| msgid "OS:"
+msgctxt "@label:slider Abbreviation for 'Saturation'"
+msgid "S:"
+msgstr "OS:"
+
+#: libs/widgets/kis_color_input.cpp:499
+#, fuzzy, kde-format
+#| msgid "URL:"
+msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
+msgid "L:"
+msgstr "URL:"
+
+#: libs/widgets/kis_color_input.cpp:502
+#, fuzzy, kde-format
+#| msgid "Y:"
+msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
+msgid "Y:"
+msgstr "Y:"
+
+#: libs/widgets/kis_color_input.cpp:505
+#, fuzzy, kde-format
+#| msgid "ID:"
+msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
+msgid "I:"
+msgstr "ID:"
+
+#: libs/widgets/kis_color_input.cpp:509
+#, fuzzy, kde-format
+#| msgctxt "Value (Keep short!)"
+#| msgid "Val:"
+msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
+msgid "V:"
+msgstr "값:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -59098,90 +59141,90 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "자유형 브러시 획 그리기"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:146
 #, kde-format
 msgid "Sample count:"
 msgstr "샘플 개수:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:200
+#: plugins/tools/basictools/kis_tool_brush.cc:157
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "거리:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:357
+#: plugins/tools/basictools/kis_tool_brush.cc:314
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "없음"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:315
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "기본"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:359
+#: plugins/tools/basictools/kis_tool_brush.cc:316
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "가중치 있음"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:360
+#: plugins/tools/basictools/kis_tool_brush.cc:317
+#, kde-format
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Stabilizer"
+msgstr "안정화 도구"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:318
 #, fuzzy, kde-format
 #| msgid "Pixel"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "픽셀"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:361
-#, kde-format
-msgctxt "@item:inlistbox Brush Smoothing"
-msgid "Stabilizer"
-msgstr "안정화 도구"
-
-#: plugins/tools/basictools/kis_tool_brush.cc:363
+#: plugins/tools/basictools/kis_tool_brush.cc:320
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "손떨림 보정:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgid "Delay:"
 msgstr "지연:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "브러시 획 긋기를 지연시켜 선을 부드럽게 합니다"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:355
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "다음 반지름 내에서 브러시 동작 방지"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Finish line:"
 msgstr "선 닫기:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:375
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "센서 안정화:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:427
+#: plugins/tools/basictools/kis_tool_brush.cc:384
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "선 끝내기:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:391
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "부드러운 압력"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:441
+#: plugins/tools/basictools/kis_tool_brush.cc:398
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59191,39 +59234,39 @@ msgstr ""
 "거리 자동 조정은 확대/축소 단계를 고려하여 선택한 확대/축소 단계에 관계 없이 "
 "시각적으로 거리를 일정하게 만듭니다"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:403
 #, kde-format
 msgid "Scalable Distance"
 msgstr "거리 자동 조정"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "도우미에 스냅"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "이 도구를 사용하기 전에 도우미를 추가해야 합니다."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "도우미 자력"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:432
 #, kde-format
 msgid "Magnetism:"
 msgstr "자력:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:435
 #, fuzzy, kde-format
 #| msgid "Snap Single:"
 msgid "Snap to Single Line"
 msgstr "단독 스냅:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:438
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -59237,14 +59280,14 @@ msgstr ""
 "단 하나의 도우미에게만 스냅할 수 있도록 하고, 무한 도우미를 사용하는 동안 스"
 "냅이 지저분해지는 것을 방지합니다."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:443
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, fuzzy, kde-format
 #| msgid "Eraser"
 msgid "Snap Eraser"
 msgstr "지우개"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:489
+#: plugins/tools/basictools/kis_tool_brush.cc:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -67956,9 +67999,6 @@ msgstr "참조 이미지 도구"
 #~ msgid "W:"
 #~ msgstr "W:"
 
-#~ msgid "H:"
-#~ msgstr "H:"
-
 #~ msgid "Effect Region"
 #~ msgstr "효과 영역"
 
@@ -69271,9 +69311,6 @@ msgstr "참조 이미지 도구"
 
 #~ msgid "Annotation:"
 #~ msgstr "주석:"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
 
 #~ msgid "User-defined 1:"
 #~ msgstr "사용자 정의 1:"

@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:45+0000\n"
-"PO-Revision-Date: 2024-08-30 23:21+0200\n"
+"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"PO-Revision-Date: 2024-09-07 19:40+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -9118,18 +9118,17 @@ msgctxt "action"
 msgid "Brush Smoothing: Disabled"
 msgstr "Smussatura pennello: disabilitata"
 
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Smussatura pennello:"
+msgstr "Smussatura pennello: pixel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12010,9 +12009,7 @@ msgstr "Salva livelli di gruppo"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Converti il gruppo in livello &animato"
@@ -12025,6 +12022,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Converte i livelli figli di un gruppo in un unico livello con più fotogrammi "
+"di animazione"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12035,9 +12034,7 @@ msgstr "Converti i livelli figli in fotogrammi di animazione"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
 msgstr "Converti in livello &animato"
@@ -16936,7 +16933,7 @@ msgstr "Dimensione"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:401
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -20647,13 +20644,10 @@ msgstr ""
 "Impossibile eseguire la resa animazione:\n"
 "%1"
 
-# O 'Pennello Sovrascrivi?'
 #: libs/ui/animation/KisAnimationRender.cpp:89
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Sovrascrivere il file?"
+msgstr "Sovrascrivere il video esistente?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:90
 #, kde-format
@@ -20663,6 +20657,9 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"Esiste già un file nel percorso in cui vuoi eseguire la resa del [%1]... \n"
+"                                                              Vuoi davvero "
+"sovrascrivere il file esistente?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:150
 #: libs/ui/animation/KisAnimationRender.cpp:152
@@ -22733,7 +22730,7 @@ msgstr "Proprietà del livello"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1513 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
-#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
@@ -29504,12 +29501,9 @@ msgid "Change Clone Layer"
 msgstr "Cambia livello dei cloni"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Converti il gruppo in livello &animato"
+msgstr "Converti gruppo in livello animato"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
@@ -35373,11 +35367,54 @@ msgstr "Spessore:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:335
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
 msgstr "Nome del colore:"
+
+#: libs/widgets/kis_color_input.cpp:419
+#, fuzzy, kde-format
+#| msgid "H:"
+msgctxt "@label:slider Abbreviation for 'Hue'"
+msgid "H:"
+msgstr "A:"
+
+#: libs/widgets/kis_color_input.cpp:420
+#, fuzzy, kde-format
+#| msgid "OS:"
+msgctxt "@label:slider Abbreviation for 'Saturation'"
+msgid "S:"
+msgstr "Sistema operativo:"
+
+#: libs/widgets/kis_color_input.cpp:499
+#, fuzzy, kde-format
+#| msgid "L"
+msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
+msgid "L:"
+msgstr "L"
+
+#: libs/widgets/kis_color_input.cpp:502
+#, fuzzy, kde-format
+#| msgid "Y:"
+msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
+msgid "Y:"
+msgstr "Y:"
+
+#: libs/widgets/kis_color_input.cpp:505
+#, fuzzy, kde-format
+#| msgid "ID:"
+msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
+msgid "I:"
+msgstr "ID:"
+
+#: libs/widgets/kis_color_input.cpp:509
+#, fuzzy, kde-format
+#| msgctxt "Value (Keep short!)"
+#| msgid "Val:"
+msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
+msgid "V:"
+msgstr "Val:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -57993,89 +58030,89 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Tratto pennello a mano libera"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:146
 #, kde-format
 msgid "Sample count:"
 msgstr "Conteggio campioni:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:200
+#: plugins/tools/basictools/kis_tool_brush.cc:157
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Distanza:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:357
+#: plugins/tools/basictools/kis_tool_brush.cc:314
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Nessuna"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:315
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Di base"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:359
+#: plugins/tools/basictools/kis_tool_brush.cc:316
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Pesata"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:360
-#, kde-format
-msgctxt "@item:inlistbox Brush Smoothing"
-msgid "Pixel"
-msgstr "Pixel"
-
-#: plugins/tools/basictools/kis_tool_brush.cc:361
+#: plugins/tools/basictools/kis_tool_brush.cc:317
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Stabilizzatore"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:363
+#: plugins/tools/basictools/kis_tool_brush.cc:318
+#, kde-format
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Pixel"
+msgstr "Pixel"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:320
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Smussatura pennello:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgid "Delay:"
 msgstr "Ritardo:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Ritarda il tratto del pennello per creare una linea più smussata"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:355
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Raggio dove il pennello è bloccato"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Finish line:"
 msgstr "Linea di fine:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:375
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Stabilizza sensori:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:427
+#: plugins/tools/basictools/kis_tool_brush.cc:384
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Fine del tratto:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:391
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pressione smussata"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:441
+#: plugins/tools/basictools/kis_tool_brush.cc:398
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58086,38 +58123,38 @@ msgstr ""
 "visivamente costante la distanza, qualsiasi sia il livello di ingrandimento "
 "scelto"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:403
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Distanza scalabile"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Aggancia ad assistenti"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Devi aggiungere degli assistenti affinché questo strumento funzioni."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Magnetismo assistente"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:432
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetismo:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:435
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Aggancia alla singola linea"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -58127,13 +58164,13 @@ msgstr ""
 "Permette un solo aggancio a una singola linea assistente, in modo da "
 "prevenire confusione tra gli agganci quando usi infiniti assistenti."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:443
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Aggancio gomma"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:489
+#: plugins/tools/basictools/kis_tool_brush.cc:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -66727,9 +66764,6 @@ msgstr "Strumento Immagini di riferimento"
 
 #~ msgid "W:"
 #~ msgstr "L:"
-
-#~ msgid "H:"
-#~ msgstr "A:"
 
 #~ msgid "Effect Region"
 #~ msgstr "Regione dell'effetto"
@@ -109315,9 +109349,6 @@ msgstr "Strumento Immagini di riferimento"
 
 #~ msgid "LMS Cone Space (32-bit float/channel)"
 #~ msgstr "Spazio conico LMS (32 bit a virgola mobile per canale)"
-
-#~ msgid "L"
-#~ msgstr "L"
 
 #~ msgid "S"
 #~ msgstr "S"

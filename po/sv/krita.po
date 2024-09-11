@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:45+0000\n"
+"POT-Creation-Date: 2024-09-11 01:44+0000\n"
 "PO-Revision-Date: 2024-09-07 07:48+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -9121,12 +9121,12 @@ msgctxt "action"
 msgid "Brush Smoothing: Disabled"
 msgstr "Penselutjämning: Inaktiverad"
 
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
 #, kde-format
 msgctxt "action"
@@ -16915,7 +16915,7 @@ msgstr "Storlek"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:401
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -22692,7 +22692,7 @@ msgstr "Lageregenskaper"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1513 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
-#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
@@ -35227,11 +35227,54 @@ msgstr "Tjocklek:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:335
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
 msgstr "Färgnamn:"
+
+#: libs/widgets/kis_color_input.cpp:419
+#, fuzzy, kde-format
+#| msgid "H:"
+msgctxt "@label:slider Abbreviation for 'Hue'"
+msgid "H:"
+msgstr "H:"
+
+#: libs/widgets/kis_color_input.cpp:420
+#, fuzzy, kde-format
+#| msgid "OS:"
+msgctxt "@label:slider Abbreviation for 'Saturation'"
+msgid "S:"
+msgstr "Operativsystem:"
+
+#: libs/widgets/kis_color_input.cpp:499
+#, fuzzy, kde-format
+#| msgid "URL:"
+msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
+msgid "L:"
+msgstr "Webbadress:"
+
+#: libs/widgets/kis_color_input.cpp:502
+#, fuzzy, kde-format
+#| msgid "Y:"
+msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
+msgid "Y:"
+msgstr "Y:"
+
+#: libs/widgets/kis_color_input.cpp:505
+#, fuzzy, kde-format
+#| msgid "ID:"
+msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
+msgid "I:"
+msgstr "Identifikation:"
+
+#: libs/widgets/kis_color_input.cpp:509
+#, fuzzy, kde-format
+#| msgctxt "Value (Keep short!)"
+#| msgid "Val:"
+msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
+msgid "V:"
+msgstr "Värde:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -57695,89 +57738,89 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Frihandsdrag med pensel"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:146
 #, kde-format
 msgid "Sample count:"
 msgstr "Samplingsantal:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:200
+#: plugins/tools/basictools/kis_tool_brush.cc:157
 #, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Avstånd:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:357
+#: plugins/tools/basictools/kis_tool_brush.cc:314
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Ingen"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:315
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Grundläggande"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:359
+#: plugins/tools/basictools/kis_tool_brush.cc:316
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Viktad"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:360
-#, kde-format
-msgctxt "@item:inlistbox Brush Smoothing"
-msgid "Pixel"
-msgstr "Bildpunkt"
-
-#: plugins/tools/basictools/kis_tool_brush.cc:361
+#: plugins/tools/basictools/kis_tool_brush.cc:317
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Stabilisator"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:363
+#: plugins/tools/basictools/kis_tool_brush.cc:318
+#, kde-format
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Pixel"
+msgstr "Bildpunkt"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:320
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Penselutjämning:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
 msgid "Delay:"
 msgstr "Fördröjning:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Fördröj penseldragen för att göra linjen jämnare"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:355
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Radie där penseln är blockerad"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, kde-format
 msgid "Finish line:"
 msgstr "Avsluta linje:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:375
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Stabilisera sensorer:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:427
+#: plugins/tools/basictools/kis_tool_brush.cc:384
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Dragslut:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:391
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Jämt tryck"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:441
+#: plugins/tools/basictools/kis_tool_brush.cc:398
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -57787,38 +57830,38 @@ msgstr ""
 "Skalbart avstånd tar hänsyn till zoomnivå och gör avståndet visuellt "
 "konstant vilken zoomnivå som än väljes."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:403
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Skalbart avstånd"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Lås till guider"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Guider måste läggas till innan verktyget fungerar."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Magnetismguide"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:432
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetism:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:435
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Lås till en enskild linje"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -57828,13 +57871,13 @@ msgstr ""
 "Gör så att den bara låser till en enskild guidelinje, vilket förhindrar en "
 "låsningsröra när oändliga guider används."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:443
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Lås radergummi"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:489
+#: plugins/tools/basictools/kis_tool_brush.cc:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -66152,9 +66195,6 @@ msgstr "Referensbildverktyg"
 #~ msgid "W:"
 #~ msgstr "B:"
 
-#~ msgid "H:"
-#~ msgstr "H:"
-
 #~ msgid "Effect Region"
 #~ msgstr "Effektområde"
 
@@ -67613,9 +67653,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Annotation:"
 #~ msgstr "Kommentar:"
-
-#~ msgid "URL:"
-#~ msgstr "Webbadress:"
 
 #~ msgid "User-defined 1:"
 #~ msgstr "Användardefinierad 1:"

@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-10 01:45+0000\n"
+"POT-Creation-Date: 2024-09-11 01:44+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -9476,12 +9476,12 @@ msgctxt "action"
 msgid "Brush Smoothing: Disabled"
 msgstr "Ρυθμίσεις πινέλου"
 
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: text @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: toolTip @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
-#. i18n: context: iconText @ Action (set_simple_pixel_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
 #, fuzzy, kde-format
 msgctxt "action"
@@ -17372,7 +17372,7 @@ msgstr "Μέγεθος"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:401
+#: plugins/tools/basictools/kis_tool_brush.cc:358
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -23383,7 +23383,7 @@ msgstr "Ιδιότητες στρώματος"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1513 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
-#: libs/widgets/kis_color_input.cpp:149 libs/widgets/kis_color_input.cpp:190
+#: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
@@ -35821,11 +35821,52 @@ msgstr "Πάχος:"
 msgid "%1:"
 msgstr "%1:"
 
-#: libs/widgets/kis_color_input.cpp:373
+#: libs/widgets/kis_color_input.cpp:335
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
 msgid "Color name:"
 msgstr "Όνομα χρώματος:"
+
+#: libs/widgets/kis_color_input.cpp:419
+#, fuzzy, kde-format
+#| msgid "H:"
+msgctxt "@label:slider Abbreviation for 'Hue'"
+msgid "H:"
+msgstr "H:"
+
+#: libs/widgets/kis_color_input.cpp:420
+#, fuzzy, kde-format
+#| msgid "S"
+msgctxt "@label:slider Abbreviation for 'Saturation'"
+msgid "S:"
+msgstr "S"
+
+#: libs/widgets/kis_color_input.cpp:499
+#, fuzzy, kde-format
+#| msgid "URL:"
+msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
+msgid "L:"
+msgstr "URL:"
+
+#: libs/widgets/kis_color_input.cpp:502
+#, fuzzy, kde-format
+#| msgid "Y:"
+msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
+msgid "Y:"
+msgstr "Y:"
+
+#: libs/widgets/kis_color_input.cpp:505
+#, fuzzy, kde-format
+#| msgid "D:"
+msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
+msgid "I:"
+msgstr "D:"
+
+#: libs/widgets/kis_color_input.cpp:509
+#, kde-format
+msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
+msgid "V:"
+msgstr ""
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, fuzzy, kde-format
@@ -58942,94 +58983,94 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Ελεύθερη πινελιά"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:189
+#: plugins/tools/basictools/kis_tool_brush.cc:146
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample count:"
 msgstr "Δείγματα"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:200
+#: plugins/tools/basictools/kis_tool_brush.cc:157
 #, fuzzy, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
 msgstr "Απόσταση: "
 
-#: plugins/tools/basictools/kis_tool_brush.cc:357
+#: plugins/tools/basictools/kis_tool_brush.cc:314
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Κανένα"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:315
 #, fuzzy, kde-format
 #| msgid "Basic"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Βασικό"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:359
+#: plugins/tools/basictools/kis_tool_brush.cc:316
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Ύψος:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:360
+#: plugins/tools/basictools/kis_tool_brush.cc:317
+#, fuzzy, kde-format
+msgctxt "@item:inlistbox Brush Smoothing"
+msgid "Stabilizer"
+msgstr "Σταθερές"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:318
 #, fuzzy, kde-format
 #| msgid "Pixel"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Εικονοστοιχείο"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:361
-#, fuzzy, kde-format
-msgctxt "@item:inlistbox Brush Smoothing"
-msgid "Stabilizer"
-msgstr "Σταθερές"
-
-#: plugins/tools/basictools/kis_tool_brush.cc:363
+#: plugins/tools/basictools/kis_tool_brush.cc:320
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "Ρυθμίσεις πινέλου"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:389
+#: plugins/tools/basictools/kis_tool_brush.cc:346
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "Προβολή"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:394
+#: plugins/tools/basictools/kis_tool_brush.cc:351
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:355
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:405
+#: plugins/tools/basictools/kis_tool_brush.cc:362
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "&Τερματισμός συνεχούς γραμμής"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:375
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Σταθερές"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:427
+#: plugins/tools/basictools/kis_tool_brush.cc:384
 #, fuzzy, kde-format
 msgid "Stroke Ending:"
 msgstr "διάρκεια πινελιάς"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:434
+#: plugins/tools/basictools/kis_tool_brush.cc:391
 #, fuzzy, kde-format
 msgid "Smooth Pressure"
 msgstr "Πίεση"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:441
+#: plugins/tools/basictools/kis_tool_brush.cc:398
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59037,18 +59078,18 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:403
 #, fuzzy, kde-format
 msgid "Scalable Distance"
 msgstr "Απόσταση θέματος:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:462
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, fuzzy, kde-format
 msgid "Snap to Assistants"
 msgstr "Βοηθός:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:464
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, fuzzy, kde-format
 #| msgid "You need to add Ruler Assistants before this tool will work."
 msgid "You need to add Assistants before this tool will work."
@@ -59056,23 +59097,23 @@ msgstr ""
 "Χρειάζεται να προσθέσετε βοηθητικούς κανόνες πριν λειτουργήσει το εργαλείο "
 "αυτό."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:469
+#: plugins/tools/basictools/kis_tool_brush.cc:426
 #, fuzzy, kde-format
 msgid "Assistant Magnetism"
 msgstr "Μαγνητισμός:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:475
+#: plugins/tools/basictools/kis_tool_brush.cc:432
 #, fuzzy, kde-format
 #| msgid "Magnetify"
 msgid "Magnetism:"
 msgstr "Μαγνητισμός"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:478
+#: plugins/tools/basictools/kis_tool_brush.cc:435
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "Γωνία διάτμησης X:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:438
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59080,14 +59121,14 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:443
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, fuzzy, kde-format
 #| msgid "Eraser"
 msgid "Snap Eraser"
 msgstr "Γόμα"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:489
+#: plugins/tools/basictools/kis_tool_brush.cc:446
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -67695,9 +67736,6 @@ msgstr "Εικόνες αναφοράς"
 #~ msgid "W:"
 #~ msgstr "W:"
 
-#~ msgid "H:"
-#~ msgstr "H:"
-
 #~ msgid "Effect Region"
 #~ msgstr "Περιοχή εφέ"
 
@@ -68921,9 +68959,6 @@ msgstr "Εικόνες αναφοράς"
 
 #~ msgid "Annotation:"
 #~ msgstr "Σχόλιο:"
-
-#~ msgid "URL:"
-#~ msgstr "URL:"
 
 #~ msgid "User-defined 1:"
 #~ msgstr "User-defined 1:"
@@ -97259,9 +97294,6 @@ msgstr "Εικόνες αναφοράς"
 
 #~ msgid "LMS Cone Space (32-bit float/channel)"
 #~ msgstr "LMS Cone Space (32-bit δεκαδικός/κανάλι)"
-
-#~ msgid "S"
-#~ msgstr "S"
 
 #~ msgid "Long Middle Short Cone Space (32-bit float/channel)"
 #~ msgstr "Long Middle Short Cone Space (32-bit δεκαδικός/κανάλι)"

@@ -249,7 +249,6 @@ void CompositionDockerDock::exportImageClicked()
         dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         path = dialog.filename();
 
-
         if (path.isNull()) return;
 
         if (!path.endsWith('/')) {
@@ -352,7 +351,6 @@ void CompositionDockerDock::exportAnimationClicked()
         dialog.setCaption(i18n("Select a Directory"));
         dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
         path = dialog.filename();
-
 
         if (path.isNull()) return;
 

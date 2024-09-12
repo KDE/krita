@@ -78,7 +78,7 @@ void LayerGroupSwitcher::moveIntoNextGroup()
             }
         }
     }
-    image->refreshGraph();
+    image->refreshGraphAsync();
 
 }
 
@@ -119,7 +119,7 @@ void LayerGroupSwitcher::moveIntoPreviousGroup()
             }
         }
     }
-    image->refreshGraph();
+    image->refreshGraphAsync();
 }
 
 #include "layergroupswitcher.moc"

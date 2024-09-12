@@ -2218,7 +2218,9 @@ void KisMainWindow::importVideoAnimation()
         }
 
         activeView()->canvasBase()->refetchDataFromImage();
-        document->image()->refreshGraph();
+        document->image()->refreshGraphAsync();
+        document->image()->waitForDone();
+
     }
 }
 

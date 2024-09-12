@@ -58,7 +58,9 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
         dev2->fill(rc2, KoColor(Qt::green, dev1->colorSpace()));
         QCOMPARE(dev2->exactBounds(), rc2);
 
-        p.image->refreshGraph();
+        p.image->refreshGraphAsync();
+        p.image->waitForDone();
+
         checkFrame(i, p.image, 0, false, rc1 | rc2);
     }
 
@@ -84,7 +86,8 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
         dev2->fill(rc4, KoColor(Qt::green, dev2->colorSpace()));
         QCOMPARE(dev2->exactBounds(), rc4);
 
-        p.image->refreshGraph();
+        p.image->refreshGraphAsync();
+        p.image->waitForDone();
         checkFrame(i, p.image, 10, false, rc3 | rc4);
     }
 
@@ -200,7 +203,7 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
 
     KisKeyframeChannel *rasterChannel = layer2->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     rasterChannel->addKeyframe(10, &parentCommand);
-    p.image->refreshGraph();
+    p.image->initialRefreshGraph();
 
     m_image = p.image;
     connect(p.image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameDone()), Qt::DirectConnection);

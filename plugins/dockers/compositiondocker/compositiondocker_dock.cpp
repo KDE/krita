@@ -298,8 +298,8 @@ void CompositionDockerDock::exportImageClicked()
             // d) Export Image.
             // This task can then be threaded to work in parallel.
             composition->apply();
+            image->refreshGraphAsync();
             image->waitForDone();
-            image->refreshGraph();
 
             QRect r = image->bounds();
 
@@ -313,7 +313,7 @@ void CompositionDockerDock::exportImageClicked()
             gc.bitBlt(QPoint(0, 0), image->rootLayer()->projection(), r);
             dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-            dst->refreshGraph();
+            dst->refreshGraphAsync();
             dst->waitForDone();
 
             d->setFileBatchMode(true);
@@ -326,8 +326,8 @@ void CompositionDockerDock::exportImageClicked()
 
         currentComposition->apply();
 
+        image->refreshGraphAsync();
         image->waitForDone();
-        image->refreshGraph();
     }
 
 }
@@ -375,8 +375,8 @@ void CompositionDockerDock::exportAnimationClicked()
                 continue;
 
             composition->apply();
+            image->refreshGraphAsync();
             image->waitForDone();
-            image->refreshGraph();
 
             KisTimeSpan range = image->animationInterface()->documentPlaybackRange();
 
@@ -395,8 +395,8 @@ void CompositionDockerDock::exportAnimationClicked()
         }
 
         currentComposition->apply();
+        image->refreshGraphAsync();
         image->waitForDone();
-        image->refreshGraph();
     }
 }
 

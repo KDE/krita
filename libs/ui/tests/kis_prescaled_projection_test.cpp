@@ -389,7 +389,8 @@ void KisPrescaledProjectionTest::testUpdates()
                                   "cleared"));
 
     t.layer->setVisible(true);
-    t.image->refreshGraph();
+    t.image->refreshGraphAsync();
+    t.image->waitForDone();
 
     // Update incrementally
 

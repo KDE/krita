@@ -68,13 +68,15 @@ public:
 
     struct CloneNotification {
         CloneNotification() {}
-        CloneNotification(KisNodeSP node, const QRect &dirtyRect)
+        CloneNotification(KisNodeSP node, const QRect &dirtyRect,
+                          bool dontInvalidateFrames)
             : m_layer(qobject_cast<KisLayer*>(node.data())),
-              m_dirtyRect(dirtyRect) {}
+              m_dirtyRect(dirtyRect),
+            m_dontInvalidateFrames(dontInvalidateFrames) {}
 
         void notify() {
             Q_ASSERT(m_layer); // clones are possible for layers only
-            m_layer->updateClones(m_dirtyRect);
+            m_layer->updateClones(m_dirtyRect, m_dontInvalidateFrames);
         }
 
     private:
@@ -82,6 +84,7 @@ public:
 
         KisLayerSP m_layer;
         QRect m_dirtyRect;
+        bool m_dontInvalidateFrames {false};
     };
 
     typedef QVector<CloneNotification> CloneNotificationsVector;
@@ -170,6 +173,14 @@ public:
         return
             m_nodeChecksum == calculateChecksum(m_startNode->projectionLeaf(), m_requestedRect) &&
             m_graphChecksum == m_startNode->graphSequenceNumber();
+    }
+
+    inline void setClonesDontInvalidateFrames(bool value) {
+        m_clonesDontInvalidateFrames = value;
+    }
+
+    inline bool clonesDontInvalidateFrames() const {
+        return m_clonesDontInvalidateFrames;
     }
 
     inline void setCropRect(QRect cropRect) {
@@ -323,7 +334,7 @@ protected:
 
         if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION | N_EXTRA)) {
             m_cloneNotifications.append(
-                CloneNotification(node, m_resultUncroppedChangeRect));
+                CloneNotification(node, m_resultUncroppedChangeRect, m_clonesDontInvalidateFrames));
         }
     }
 
@@ -523,6 +534,8 @@ private:
     QRect m_lastNeedRect;
 
     int m_levelOfDetail {0};
+
+    bool m_clonesDontInvalidateFrames {false};
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisBaseRectsWalker::SubtreeVisitFlags);

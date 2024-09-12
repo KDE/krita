@@ -143,7 +143,7 @@ void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);
     } else if (m_d->type == CURRENT_FRAME) {
         m_d->interface->blockFrameInvalidation(true);
-        m_d->interface->updatesFacade()->refreshGraphAsync(KisNodeSP());
+        m_d->interface->updatesFacade()->refreshGraphAsync(KisNodeSP(), KisProjectionUpdateFlag::DontInvalidateFrames);
     }
 }
 

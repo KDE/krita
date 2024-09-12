@@ -9,6 +9,7 @@
 #include "kritaimage_export.h"
 
 #include <QScopedPointer>
+#include <KisProjectionUpdateFlags.h>
 
 class KisTimeSpan;
 class KisNode;
@@ -86,7 +87,7 @@ public:
     /**
      * Inform the model that a node has been changed (setDirty)
      */
-    virtual void requestProjectionUpdate(KisNode * node, const QVector<QRect> &rects, bool resetAnimationCache);
+    virtual void requestProjectionUpdate(KisNode * node, const QVector<QRect> &rects, KisProjectionUpdateFlags flags);
 
     virtual void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
 

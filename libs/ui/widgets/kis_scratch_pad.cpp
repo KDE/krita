@@ -48,8 +48,8 @@ public:
     {
     }
 
-    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override {
-        KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
+    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, KisProjectionUpdateFlags flags) override {
+        KisNodeGraphListener::requestProjectionUpdate(node, rects, flags);
 
         QMutexLocker locker(&m_lock);
 

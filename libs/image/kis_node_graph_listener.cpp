@@ -88,7 +88,7 @@ void KisNodeGraphListener::notifySelectionChanged()
 {
 }
 
-void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QVector<QRect> &/*rects*/, bool /*resetAnimationCache*/)
+void KisNodeGraphListener::requestProjectionUpdate(KisNode * /*node*/, const QVector<QRect> &/*rects*/, KisProjectionUpdateFlags /*flags*/)
 {
 }
 

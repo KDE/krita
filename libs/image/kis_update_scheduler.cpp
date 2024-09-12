@@ -138,40 +138,26 @@ void KisUpdateScheduler::progressUpdate()
     }
 }
 
-void KisUpdateScheduler::updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect)
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags)
 {
-    m_d->updatesQueue.addUpdateJob(node, rects, cropRect, currentLevelOfDetail());
+    m_d->updatesQueue.addUpdateJob(node, rects, cropRect, currentLevelOfDetail(), flags);
+    processQueues();
+}
+
+void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rects, const QRect &cropRect, KisProjectionUpdateFlags flags)
+{
+    m_d->updatesQueue.addFullRefreshJob(root, rects, cropRect, currentLevelOfDetail(), flags);
     processQueues();
 }
 
 void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect)
 {
-    m_d->updatesQueue.addUpdateJob(node, rc, cropRect, currentLevelOfDetail());
-    processQueues();
+    updateProjection(node, {rc}, cropRect, KisProjectionUpdateFlag::None);
 }
 
-void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QVector<QRect>& rects, const QRect &cropRect)
+void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
 {
-    m_d->updatesQueue.addUpdateNoFilthyJob(node, rects, cropRect, currentLevelOfDetail());
-    processQueues();
-}
-
-void KisUpdateScheduler::updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect)
-{
-    m_d->updatesQueue.addUpdateNoFilthyJob(node, rc, cropRect, currentLevelOfDetail());
-    processQueues();
-}
-
-void KisUpdateScheduler::fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rects, const QRect &cropRect)
-{
-    m_d->updatesQueue.addFullRefreshJob(root, rects, cropRect, currentLevelOfDetail());
-    processQueues();
-}
-
-void KisUpdateScheduler::fullRefreshAsyncNoFilthy(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect)
-{
-    m_d->updatesQueue.addFullRefreshNoFilthyJob(root, rects, cropRect, currentLevelOfDetail());
-    processQueues();
+    fullRefreshAsync(root, {rc}, cropRect, KisProjectionUpdateFlag::None);
 }
 
 void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)

@@ -281,6 +281,11 @@ public:
     QPointF axesCenter;
     bool allowMasksOnRootNode = false;
 
+    void requestProjectionUpdateImpl(KisNode *node,
+                                     const QVector<QRect> &rects,
+                                     const QRect &cropRect,
+                                     KisProjectionUpdateFlags flags);
+
     bool tryCancelCurrentStrokeAsync();
 
     void notifyProjectionUpdatedInPatches(const QRect &rc, QVector<KisRunnableStrokeJobData *> &jobs);
@@ -2139,22 +2144,7 @@ void KisImage::initialRefreshGraph()
     waitForDone();
 }
 
-void KisImage::refreshGraphAsync(KisNodeSP root, UpdateFlags flags)
-{
-    refreshGraphAsync(root, bounds(), bounds(), flags);
-}
-
-void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, UpdateFlags flags)
-{
-    refreshGraphAsync(root, rc, bounds(), flags);
-}
-
-void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, UpdateFlags flags)
-{
-    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect, flags);
-}
-
-void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, UpdateFlags flags)
+void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags)
 {
     if (!root) root = m_d->rootLayer;
 
@@ -2173,50 +2163,11 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
         }
     }
 
-    m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
-
-    if (flags & NoFilthyUpdate) {
-        m_d->scheduler.fullRefreshAsyncNoFilthy(root, rects, cropRect);
-    } else {
-        m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
-    }
-}
-
-
-void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect)
-{
-    requestProjectionUpdateNoFilthy(pseudoFilthy, rc, cropRect, true);
-}
-
-void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool resetAnimationCache)
-{
-    requestProjectionUpdateNoFilthy(pseudoFilthy, QVector<QRect>({rc}), cropRect, resetAnimationCache);
-}
-
-void KisImage::requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache)
-{
-    KIS_ASSERT_RECOVER_RETURN(pseudoFilthy);
-
-    /**
-     * We iterate through the filters in a reversed way. It makes the most nested filters
-     * to execute first.
-     */
-    for (auto it = m_d->projectionUpdatesFilters.rbegin();
-         it != m_d->projectionUpdatesFilters.rend();
-         ++it) {
-
-        KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
-
-        if ((*it)->filterProjectionUpdateNoFilthy(this, pseudoFilthy.data(), rects, cropRect, resetAnimationCache)) {
-            return;
-        }
+    if (!flags.testFlag(KisProjectionUpdateFlag::DontInvalidateFrames)) {
+        m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
     }
 
-    if (resetAnimationCache) {
-        m_d->animationInterface->notifyNodeChanged(pseudoFilthy.data(), rects, false);
-    }
-
-    m_d->scheduler.updateProjectionNoFilthy(pseudoFilthy, rects, cropRect);
+    m_d->scheduler.fullRefreshAsync(root, rects, cropRect, flags);
 }
 
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
@@ -2353,16 +2304,18 @@ void KisImage::notifySelectionChanged()
     }
 }
 
-void KisImage::requestProjectionUpdateImpl(KisNode *node,
-                                           const QVector<QRect> &rects,
-                                           const QRect &cropRect)
+void KisImage::KisImagePrivate::
+    requestProjectionUpdateImpl(KisNode *node,
+                                const QVector<QRect> &rects,
+                                const QRect &cropRect,
+                                KisProjectionUpdateFlags flags)
 {
     if (rects.isEmpty()) return;
 
-    m_d->scheduler.updateProjection(node, rects, cropRect);
+    scheduler.updateProjection(node, rects, cropRect, flags);
 }
 
-void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache)
+void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, KisProjectionUpdateFlags flags)
 {
     /**
      * We iterate through the filters in a reversed way. It makes the most nested filters
@@ -2374,12 +2327,12 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
 
         KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
 
-        if ((*it)->filter(this, node, rects, resetAnimationCache)) {
+        if ((*it)->filter(this, node, rects, flags)) {
             return;
         }
     }
 
-    if (resetAnimationCache) {
+    if (!flags.testFlag(KisProjectionUpdateFlag::DontInvalidateFrames)) {
         m_d->animationInterface->notifyNodeChanged(node, rects, false);
     }
 
@@ -2389,7 +2342,9 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
      * finished. And having some more updates for the stroke not
      * supporting the wrap-around mode will not make much harm.
      */
-    if (m_d->wrapAroundModePermitted) {
+    if (m_d->wrapAroundModePermitted && !flags.testFlag(KisProjectionUpdateFlag::NoFilthy)) {
+        /// TODO: Remove the no-filthy condition. I have no idea, why it is present.
+        ///       Or replace it with an assert. (DK)
         QVector<QRect> allSplitRects;
 
         const QRect boundRect = effectiveLodBounds();
@@ -2398,13 +2353,13 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
             allSplitRects.append(splitRect);
         }
 
-        requestProjectionUpdateImpl(node, allSplitRects, boundRect);
+        m_d->requestProjectionUpdateImpl(node, allSplitRects, boundRect, flags);
 
     } else {
-        requestProjectionUpdateImpl(node, rects, bounds());
+        m_d->requestProjectionUpdateImpl(node, rects, bounds(), flags);
     }
 
-    KisNodeGraphListener::requestProjectionUpdate(node, rects, resetAnimationCache);
+    KisNodeGraphListener::requestProjectionUpdate(node, rects, flags);
 }
 
 void KisImage::invalidateFrames(const KisTimeSpan &range, const QRect &rect)

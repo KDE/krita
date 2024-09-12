@@ -76,7 +76,7 @@ void KisRecalculateTransformMaskJob::run()
         }
     } else {
         /**
-         * When we call requestProjectionUpdateNoFilthy() on a layer,
+         * When we call NoFilthy update on a layer,
          * its masks' change rect is not counted, because it is considered
          * to be N_ABOVE_FILTHY. Therefore, we should expand the dirty
          * rect manually to get the correct update
@@ -86,7 +86,10 @@ void KisRecalculateTransformMaskJob::run()
 
         updateRect |= m_extraUpdateRect;
 
-        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
+        // Should there be a case where this is flushed?
+        image->requestProjectionUpdate(layer.data(), {updateRect},
+                                       KisProjectionUpdateFlag::NoFilthy |
+                                           KisProjectionUpdateFlag::DontInvalidateFrames);
     }
 }
 

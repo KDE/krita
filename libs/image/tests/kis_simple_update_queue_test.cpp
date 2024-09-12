@@ -215,23 +215,31 @@ void KisSimpleUpdateQueueTest::testMixingTypes()
     KisTestableSimpleUpdateQueue queue;
     KisWalkersList& walkersList = queue.getWalkersList();
 
-    queue.addUpdateJob(paintLayer, dirtyRect1, imageRect, 0);
-    queue.addFullRefreshJob(paintLayer, dirtyRect2, imageRect, 0);
-    queue.addFullRefreshJob(paintLayer, dirtyRect3, imageRect, 0);
-    queue.addUpdateNoFilthyJob(paintLayer, dirtyRect1, imageRect, 0);
-    queue.addFullRefreshNoFilthyJob(paintLayer, {dirtyRect1}, imageRect, 0);
+    queue.addUpdateJob(paintLayer, {dirtyRect1}, imageRect, 0, KisProjectionUpdateFlag::None);
+    queue.addFullRefreshJob(paintLayer, {dirtyRect2}, imageRect, 0, KisProjectionUpdateFlag::None);
+    queue.addFullRefreshJob(paintLayer, {dirtyRect3}, imageRect, 0, KisProjectionUpdateFlag::None);
+    queue.addUpdateJob(paintLayer, {dirtyRect1}, imageRect, 0, KisProjectionUpdateFlag::NoFilthy);
+    queue.addFullRefreshJob(paintLayer, {dirtyRect1}, imageRect, 0, KisProjectionUpdateFlag::NoFilthy);
+    queue.addUpdateJob(paintLayer, {dirtyRect1}, imageRect, 0, KisProjectionUpdateFlag::DontInvalidateFrames);
+    queue.addFullRefreshJob(paintLayer, {dirtyRect1}, imageRect, 0, KisProjectionUpdateFlag::DontInvalidateFrames);
 
-    QCOMPARE(walkersList.size(), 4);
+    QCOMPARE(walkersList.size(), 6);
 
     QVERIFY(checkWalker(walkersList[0], QRect(0,0,200,200)));
     QVERIFY(checkWalker(walkersList[1], QRect(0,0,220,220)));
     QVERIFY(checkWalker(walkersList[2], QRect(0,0,200,200)));
     QVERIFY(checkWalker(walkersList[3], QRect(0,0,200,200)));
+    QVERIFY(checkWalker(walkersList[4], QRect(0,0,200,200)));
+    QVERIFY(checkWalker(walkersList[5], QRect(0,0,200,200)));
 
     QCOMPARE(walkersList[0]->type(), KisBaseRectsWalker::UPDATE);
     QCOMPARE(walkersList[1]->type(), KisBaseRectsWalker::FULL_REFRESH);
     QCOMPARE(walkersList[2]->type(), KisBaseRectsWalker::UPDATE_NO_FILTHY);
     QCOMPARE(walkersList[3]->type(), KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY);
+    QCOMPARE(walkersList[4]->type(), KisBaseRectsWalker::UPDATE);
+    QCOMPARE(walkersList[4]->clonesDontInvalidateFrames(), true);
+    QCOMPARE(walkersList[5]->type(), KisBaseRectsWalker::FULL_REFRESH);
+    QCOMPARE(walkersList[5]->clonesDontInvalidateFrames(), true);
 }
 
 void KisSimpleUpdateQueueTest::testSpontaneousJobsCompression()

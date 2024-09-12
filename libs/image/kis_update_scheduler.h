@@ -15,6 +15,7 @@
 #include "kis_stroke_strategy_factory.h"
 #include "kis_strokes_queue_undo_result.h"
 #include "KisLodPreferences.h"
+#include "KisProjectionUpdateFlags.h"
 
 class QRect;
 class KoProgressProxy;
@@ -124,13 +125,17 @@ public:
      */
     void unblockUpdates();
 
-    void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect);
+    void updateProjection(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags);
+    void fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rects, const QRect &cropRect, KisProjectionUpdateFlags flags);
+
+    // simplified override for testing purposes
     void updateProjection(KisNodeSP node, const QRect &rc, const QRect &cropRect);
-    void updateProjectionNoFilthy(KisNodeSP node, const QVector<QRect>& rects, const QRect &cropRect);
-    void updateProjectionNoFilthy(KisNodeSP node, const QRect& rc, const QRect &cropRect);
-    void fullRefreshAsync(KisNodeSP root, const QVector<QRect>& rc, const QRect &cropRect);
-    void fullRefreshAsyncNoFilthy(KisNodeSP root, const QVector<QRect>& rects, const QRect &cropRect);
+
+    // simplified override for testing purposes
+    void fullRefreshAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
+
     void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
+
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     bool hasUpdatesRunning() const;

@@ -25,16 +25,6 @@ public:
     };
     using SharedDataSP = QSharedPointer<SharedData>;
 
-    struct SuspendFrameInvalidationHandle {
-    public:
-        SuspendFrameInvalidationHandle(class KisImageAnimationInterface* interface);
-        ~SuspendFrameInvalidationHandle();
-
-    private:
-        KisImageAnimationInterface* m_interface;
-    };
-
-
 public:
     KisSuspendProjectionUpdatesStrokeStrategy(KisImageWSP image, bool suspend, SharedDataSP sharedData);
     ~KisSuspendProjectionUpdatesStrokeStrategy() override;

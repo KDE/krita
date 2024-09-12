@@ -72,7 +72,7 @@ struct MoveNodeStruct {
 
     void doRedoUpdates() {
         if (oldParent && !suppressOldParentRefresh) {
-            image->refreshGraphAsync(oldParent, KisImage::NoFilthyUpdate);
+            image->refreshGraphAsync(oldParent, KisProjectionUpdateFlag::NoFilthy);
         }
 
         if (newParent && oldParent != newParent) {
@@ -82,7 +82,7 @@ struct MoveNodeStruct {
 
     void doUndoUpdates() {
         if (newParent && !suppressNewParentRefresh) {
-            image->refreshGraphAsync(newParent, KisImage::NoFilthyUpdate);
+            image->refreshGraphAsync(newParent, KisProjectionUpdateFlag::NoFilthy);
         }
 
         if (oldParent && oldParent != newParent) {

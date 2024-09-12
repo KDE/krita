@@ -14,31 +14,21 @@ KisProjectionUpdatesFilter::~KisProjectionUpdatesFilter()
 {
 }
 
-bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache)
+bool KisDropAllProjectionUpdatesFilter::filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, KisProjectionUpdateFlags flags)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
     Q_UNUSED(rects);
-    Q_UNUSED(resetAnimationCache);
+    Q_UNUSED(flags);
     return true;
 }
 
-bool KisDropAllProjectionUpdatesFilter::filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect, KisUpdatesFacade::UpdateFlags flags)
+bool KisDropAllProjectionUpdatesFilter::filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
     Q_UNUSED(rects);
     Q_UNUSED(cropRect);
     Q_UNUSED(flags);
-    return true;
-}
-
-bool KisDropAllProjectionUpdatesFilter::filterProjectionUpdateNoFilthy(KisImage *image, KisNode *pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache)
-{
-    Q_UNUSED(image);
-    Q_UNUSED(pseudoFilthy);
-    Q_UNUSED(rects);
-    Q_UNUSED(cropRect);
-    Q_UNUSED(resetAnimationCache);
     return true;
 }

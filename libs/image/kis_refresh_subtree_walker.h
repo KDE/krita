@@ -18,7 +18,8 @@ public:
         None = 0x0,
         SkipNonRenderableNodes = 0x1,
         NoFilthyMode = 0x2,
-        DontAdjustChangeRect = 0x4
+        DontAdjustChangeRect = 0x4,
+        ClonesDontInvalidateFrames = 0x8
     };
 
     Q_DECLARE_FLAGS(Flags, Flag);
@@ -28,6 +29,7 @@ public:
         : m_flags(flags)
     {
         setCropRect(cropRect);
+        setClonesDontInvalidateFrames(flags.testFlag(ClonesDontInvalidateFrames));
     }
 
     UpdateType type() const override {

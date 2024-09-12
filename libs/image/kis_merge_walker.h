@@ -24,10 +24,13 @@ public:
      * update all the higher-level nodes. Used by KisTransformMask
      * regeneration code.
      */
-    enum Flags {
+    enum Flag {
         DEFAULT = 0,
-        NO_FILTHY
+        NO_FILTHY = 0x1,
+        CLONES_DONT_INVALIDATE_FRAMES = 0x2
     };
+
+    Q_DECLARE_FLAGS(Flags, Flag)
 
     KisMergeWalker(QRect cropRect, Flags flags = DEFAULT);
 
@@ -75,6 +78,7 @@ private:
     const Flags m_flags;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisMergeWalker::Flags)
 
 #endif /* __KIS_MERGE_WALKER_H */
 

@@ -20,7 +20,7 @@ public:
 public:
     KisFullRefreshWalker(QRect cropRect, Flags flags = None)
         : KisRefreshSubtreeWalker(cropRect, flags | DontAdjustChangeRect),
-          KisMergeWalker(cropRect, NO_FILTHY)
+          KisMergeWalker(cropRect, NO_FILTHY | (flags.testFlag(ClonesDontInvalidateFrames) ? CLONES_DONT_INVALIDATE_FRAMES : DEFAULT))
     {
     }
 

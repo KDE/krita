@@ -82,7 +82,7 @@ public: // KisNodeGraphListener implementation
     void nodeCollapsedChanged(KisNode *node) override;
     void invalidateAllFrames() override;
     void notifySelectionChanged() override;
-    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
+    void requestProjectionUpdate(KisNode *node, const QVector<QRect> &rects, KisProjectionUpdateFlags flags) override;
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect) override;
     void requestTimeSwitch(int time) override;
     KisNode* graphOverlayNode() const override;
@@ -791,8 +791,10 @@ public:
      */
     KisProofingConfigurationSP proofingConfiguration() const;
 
-public Q_SLOTS:
+
     bool startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolateGroup);
+
+public Q_SLOTS:
     void stopIsolatedMode();
 
 public:
@@ -966,7 +968,7 @@ Q_SIGNALS:
      */
     void sigInternalStopIsolatedModeRequested();
 
-public Q_SLOTS:
+public:
     KisCompositeProgressProxy* compositeProgressProxy();
 
     bool isIdle(bool allowLocked = false);
@@ -1135,11 +1137,8 @@ public Q_SLOTS:
      */
     KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const override;
 
-
-    void refreshGraphAsync(KisNodeSP root = KisNodeSP(), UpdateFlags flags = None) override;
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc, UpdateFlags flags = None) override;
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, UpdateFlags flags = None) override;
-    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, UpdateFlags flags = None) override;
+    using KisUpdatesFacade::refreshGraphAsync;
+    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None) override;
 
     /**
      * Triggers synchronous recomposition of the projection
@@ -1147,21 +1146,6 @@ public Q_SLOTS:
     void refreshGraph(KisNodeSP root = KisNodeSP());
     void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
-
-    /**
-     * Initiate a stack regeneration skipping the recalculation of the
-     * filthy node's projection.
-     *
-     * Works exactly as pseudoFilthy->setDirty() with the only
-     * exception that pseudoFilthy::updateProjection() will not be
-     * called. That is used by KisRecalculateTransformMaskJob to avoid
-     * cyclic dependencies.
-     */
-    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect);
-
-    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QRect &rc, const QRect &cropRect, const bool notifyFrameChange );
-
-    void requestProjectionUpdateNoFilthy(KisNodeSP pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache);
 
     /**
      * Adds a spontaneous job to the updates queue.
@@ -1179,6 +1163,8 @@ public Q_SLOTS:
      * there are no updates left at all, please use barrier jobs instead.
      */
     bool hasUpdatesRunning() const override;
+
+public Q_SLOTS:
 
     /**
      * This method is called by the UI (*not* by the creator of the
@@ -1266,10 +1252,6 @@ private:
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
 
     void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
-
-    void requestProjectionUpdateImpl(KisNode *node,
-                                     const QVector<QRect> &rects,
-                                     const QRect &cropRect);
 
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);

@@ -60,10 +60,10 @@ public:
         m_clonesList.removeOne(cloneLayer);
     }
 
-    void setDirty(const QRect &rect) {
+    void setDirty(const QRect &rect, bool dontInvalidateFrames) {
         Q_FOREACH (KisCloneLayerSP clone, m_clonesList) {
             if (clone) {
-                clone->setDirtyOriginal(rect);
+                clone->setDirtyOriginal(rect, dontInvalidateFrames);
             }
         }
     }
@@ -481,9 +481,9 @@ bool KisLayer::hasClones() const
     return m_d->clonesList.hasClones();
 }
 
-void KisLayer::updateClones(const QRect &rect)
+void KisLayer::updateClones(const QRect &rect, bool dontInvalidateFrames)
 {
-    m_d->clonesList.setDirty(rect);
+    m_d->clonesList.setDirty(rect, dontInvalidateFrames);
 }
 
 void KisLayer::notifyChildMaskChanged()

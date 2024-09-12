@@ -146,45 +146,45 @@ bool KisSimpleUpdateQueue::processOneJob(KisUpdaterContext &updaterContext)
     return jobAdded;
 }
 
-void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QVector<QRect> &rects, const QRect& cropRect, int levelOfDetail)
+void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, int levelOfDetail, KisProjectionUpdateFlags flags)
 {
-    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
+    KisBaseRectsWalker::UpdateType type =
+        !flags.testFlag(KisProjectionUpdateFlag::NoFilthy) ?
+        KisBaseRectsWalker::UPDATE :
+        KisBaseRectsWalker::UPDATE_NO_FILTHY;
+
+    addJob(node, rects, cropRect, levelOfDetail,
+           type,
+           flags.testFlag(KisProjectionUpdateFlag::DontInvalidateFrames));
+}
+
+void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, int levelOfDetail, KisProjectionUpdateFlags flags)
+{
+    KisBaseRectsWalker::UpdateType type =
+        !flags.testFlag(KisProjectionUpdateFlag::NoFilthy) ?
+        KisBaseRectsWalker::FULL_REFRESH :
+        KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY;
+
+    addJob(node, rects, cropRect, levelOfDetail,
+           type,
+           flags.testFlag(KisProjectionUpdateFlag::DontInvalidateFrames));
 }
 
 void KisSimpleUpdateQueue::addUpdateJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE);
-}
-
-void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QVector<QRect>& rects, const QRect& cropRect, int levelOfDetail)
-{
-    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
-}
-
-void KisSimpleUpdateQueue::addUpdateNoFilthyJob(KisNodeSP node, const QRect& rc, const QRect& cropRect, int levelOfDetail)
-{
-    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::UPDATE_NO_FILTHY);
+    addUpdateJob(node, {rc}, cropRect, levelOfDetail, KisProjectionUpdateFlag::None);
 }
 
 void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QRect &rc, const QRect& cropRect, int levelOfDetail)
 {
-    addJob(node, {rc}, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
-}
-
-void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QVector<QRect>& rects, const QRect& cropRect, int levelOfDetail)
-{
-    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
-}
-
-void KisSimpleUpdateQueue::addFullRefreshNoFilthyJob(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, int levelOfDetail)
-{
-    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY);
+    addFullRefreshJob(node, {rc}, cropRect, levelOfDetail, KisProjectionUpdateFlag::None);
 }
 
 void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
                                   const QRect& cropRect,
                                   int levelOfDetail,
-                                  KisBaseRectsWalker::UpdateType type)
+                                  KisBaseRectsWalker::UpdateType type,
+                                  bool dontInvalidateFrames)
 {
     QList<KisBaseRectsWalkerSP> walkers;
 
@@ -193,19 +193,39 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
 
         KisBaseRectsWalkerSP walker;
 
-        if(trySplitJob(node, rc, cropRect, levelOfDetail, type)) continue;
-        if(tryMergeJob(node, rc, cropRect, levelOfDetail, type)) continue;
+        if(trySplitJob(node, rc, cropRect, levelOfDetail, type, dontInvalidateFrames)) continue;
+        if(tryMergeJob(node, rc, cropRect, levelOfDetail, type, dontInvalidateFrames)) continue;
 
         if (type == KisBaseRectsWalker::UPDATE) {
-            walker = new KisMergeWalker(cropRect, KisMergeWalker::DEFAULT);
+            KisMergeWalker::Flags flags = KisMergeWalker::DEFAULT;
+            if (dontInvalidateFrames) {
+                flags |= KisMergeWalker::CLONES_DONT_INVALIDATE_FRAMES;
+            }
+
+            walker = new KisMergeWalker(cropRect, flags);
         }
         else if (type == KisBaseRectsWalker::FULL_REFRESH)  {
-            walker = new KisFullRefreshWalker(cropRect);
+            KisFullRefreshWalker::Flags flags = KisFullRefreshWalker::None;
+            if (dontInvalidateFrames) {
+                flags |= KisFullRefreshWalker::ClonesDontInvalidateFrames;
+            }
+
+            walker = new KisFullRefreshWalker(cropRect, flags);
         }
         else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
-            walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
+            KisMergeWalker::Flags flags = KisMergeWalker::NO_FILTHY;
+            if (dontInvalidateFrames) {
+                flags |= KisMergeWalker::CLONES_DONT_INVALIDATE_FRAMES;
+            }
+
+            walker = new KisMergeWalker(cropRect, flags);
         }
         else if (type == KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY)  {
+            KisFullRefreshWalker::Flags flags = KisFullRefreshWalker::NoFilthyMode;
+            if (dontInvalidateFrames) {
+                flags |= KisFullRefreshWalker::ClonesDontInvalidateFrames;
+            }
+
             walker = new KisFullRefreshWalker(cropRect, KisFullRefreshWalker::NoFilthyMode);
         }
         /* else if(type == KisBaseRectsWalker::UNSUPPORTED) fatalKrita; */
@@ -257,7 +277,8 @@ qint32 KisSimpleUpdateQueue::sizeMetric() const
 bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
                                        const QRect& cropRect,
                                        int levelOfDetail,
-                                       KisBaseRectsWalker::UpdateType type)
+                                       KisBaseRectsWalker::UpdateType type,
+                                       bool dontInvalidateFrames)
 {
     if(rc.width() <= m_patchWidth || rc.height() <= m_patchHeight)
         return false;
@@ -282,7 +303,7 @@ bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
     }
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!splitRects.isEmpty());
-    addJob(node, splitRects, cropRect, levelOfDetail, type);
+    addJob(node, splitRects, cropRect, levelOfDetail, type, dontInvalidateFrames);
 
     return true;
 }
@@ -290,7 +311,8 @@ bool KisSimpleUpdateQueue::trySplitJob(KisNodeSP node, const QRect& rc,
 bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
                                        const QRect& cropRect,
                                        int levelOfDetail,
-                                       KisBaseRectsWalker::UpdateType type)
+                                       KisBaseRectsWalker::UpdateType type,
+                                       bool dontInvalidateFrames)
 {
     QMutexLocker locker(&m_lock);
 
@@ -312,6 +334,7 @@ bool KisSimpleUpdateQueue::tryMergeJob(KisNodeSP node, const QRect& rc,
 
         if(item->startNode() != node) continue;
         if(item->type() != type) continue;
+        if(item->clonesDontInvalidateFrames() != dontInvalidateFrames) continue;
         if(item->cropRect() != cropRect) continue;
         if(item->levelOfDetail() != levelOfDetail) continue;
 
@@ -352,6 +375,7 @@ void KisSimpleUpdateQueue::collectJobs(KisBaseRectsWalkerSP &baseWalker,
         if(item == baseWalker) continue;
         if(item->type() != baseWalker->type()) continue;
         if(item->startNode() != baseWalker->startNode()) continue;
+        if(item->clonesDontInvalidateFrames() != baseWalker->clonesDontInvalidateFrames()) continue;
         if(item->cropRect() != baseWalker->cropRect()) continue;
         if(item->levelOfDetail() != baseWalker->levelOfDetail()) continue;
 

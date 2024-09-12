@@ -98,7 +98,7 @@ public:
      * This function is called by the original to notify
      * us that it is dirty
      */
-    void setDirtyOriginal(const QRect &rect);
+    void setDirtyOriginal(const QRect &rect, bool dontInvalidateFrames);
 
     QRect needRectOnSourceForMasks(const QRect &rc) const;
 

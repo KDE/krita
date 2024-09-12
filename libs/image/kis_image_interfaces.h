@@ -9,6 +9,7 @@
 
 #include "kis_types.h"
 #include <kritaimage_export.h>
+#include <KisProjectionUpdateFlags.h>
 
 class QRect;
 class KisStrokeStrategy;
@@ -48,24 +49,16 @@ public:
     virtual void disableDirtyRequests() = 0;
     virtual void enableDirtyRequests() = 0;
 
-    enum UpdateFlag {
-        None = 0x0,
-        NoFilthyUpdate = 0x1
-    };
-    Q_DECLARE_FLAGS(UpdateFlags, UpdateFlag)
-
-    virtual void refreshGraphAsync(KisNodeSP root, UpdateFlags flags = None) = 0;
-    virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, UpdateFlags flags = None) = 0;
-    virtual void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, UpdateFlags flags = None) = 0;
-    virtual void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rc, const QRect &cropRect, UpdateFlags flags = None) = 0;
+    void refreshGraphAsync(KisNodeSP root = nullptr, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None);
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None);
+    virtual void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rc, const QRect &cropRect, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None) = 0;
 
     virtual KisProjectionUpdatesFilterCookie addProjectionUpdatesFilter(KisProjectionUpdatesFilterSP filter) = 0;
     virtual KisProjectionUpdatesFilterSP removeProjectionUpdatesFilter(KisProjectionUpdatesFilterCookie cookie) = 0;
     virtual KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const = 0;
 
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KisUpdatesFacade::UpdateFlags);
 
 class KRITAIMAGE_EXPORT KisProjectionUpdateListener
 {

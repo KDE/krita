@@ -13,6 +13,7 @@ KisMergeWalker::KisMergeWalker(QRect cropRect,  Flags flags)
     : m_flags(flags)
 {
     setCropRect(cropRect);
+    setClonesDontInvalidateFrames(flags.testFlag(CLONES_DONT_INVALIDATE_FRAMES));
 }
 
 KisMergeWalker::~KisMergeWalker()
@@ -21,7 +22,7 @@ KisMergeWalker::~KisMergeWalker()
 
 KisBaseRectsWalker::UpdateType KisMergeWalker::type() const
 {
-    return m_flags == DEFAULT ? KisBaseRectsWalker::UPDATE : KisBaseRectsWalker::UPDATE_NO_FILTHY;
+    return !m_flags.testFlag(NO_FILTHY) ? KisBaseRectsWalker::UPDATE : KisBaseRectsWalker::UPDATE_NO_FILTHY;
 }
 
 void KisMergeWalker::startTripImpl(KisProjectionLeafSP startLeaf, KisMergeWalker::Flags flags)
@@ -32,7 +33,7 @@ void KisMergeWalker::startTripImpl(KisProjectionLeafSP startLeaf, KisMergeWalker
     }
 
     visitHigherNode(startLeaf,
-                    flags == DEFAULT ? N_FILTHY : N_ABOVE_FILTHY);
+                    !flags.testFlag(NO_FILTHY) ? N_FILTHY : N_ABOVE_FILTHY);
 
     KisProjectionLeafSP prevLeaf = startLeaf->prevSibling();
     if(prevLeaf)
@@ -74,7 +75,7 @@ void KisMergeWalker::startTripWithMask(KisProjectionLeafSP filthyMask, KisMergeW
         startTripImpl(parentLayer->parent(), DEFAULT);
 
     NodePosition positionToFilthy =
-        (flags == DEFAULT ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
+        (!flags.testFlag(NO_FILTHY) ? N_FILTHY_PROJECTION : N_ABOVE_FILTHY) |
         calculateNodePosition(parentLayer);
     registerNeedRect(parentLayer, positionToFilthy, KisRenderPassFlag::None);
 

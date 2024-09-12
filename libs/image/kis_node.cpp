@@ -589,7 +589,7 @@ void KisNode::setDirty()
 void KisNode::setDirty(const QVector<QRect> &rects)
 {
     if(m_d->graphListener) {
-        m_d->graphListener->requestProjectionUpdate(this, rects, true);
+        m_d->graphListener->requestProjectionUpdate(this, rects, KisProjectionUpdateFlag::None);
     }
 }
 
@@ -616,7 +616,7 @@ void KisNode::setDirtyDontResetAnimationCache(const QRect &rect)
 void KisNode::setDirtyDontResetAnimationCache(const QVector<QRect> &rects)
 {
     if(m_d->graphListener) {
-        m_d->graphListener->requestProjectionUpdate(this, rects, false);
+        m_d->graphListener->requestProjectionUpdate(this, rects, KisProjectionUpdateFlag::DontInvalidateFrames);
     }
 }
 

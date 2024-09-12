@@ -153,7 +153,7 @@ void KisCloneLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     KisPainter::copyAreaOptimized(rect.topLeft(), original, projection, copyRect);
 }
 
-void KisCloneLayer::setDirtyOriginal(const QRect &rect)
+void KisCloneLayer::setDirtyOriginal(const QRect &rect, bool dontInvalidateFrames)
 {
     /**
      * The original will be updated when the clone becomes visible
@@ -167,7 +167,11 @@ void KisCloneLayer::setDirtyOriginal(const QRect &rect)
      *        "copyOriginalToProjection" coordinate system. Now
      *        everything is done in "original()" space.
      */
-    KisLayer::setDirty(rect);
+    if (!dontInvalidateFrames) {
+        KisLayer::setDirty(rect);
+    } else {
+        KisLayer::setDirtyDontResetAnimationCache(rect);
+    }
 }
 
 void KisCloneLayer::notifyParentVisibilityChanged(bool value)

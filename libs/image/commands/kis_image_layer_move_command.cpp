@@ -60,7 +60,7 @@ void KisImageLayerMoveCommand::redo()
     }
 
     if (m_doUpdates) {
-        image->refreshGraphAsync(m_prevParent, KisImage::NoFilthyUpdate);
+        image->refreshGraphAsync(m_prevParent, KisProjectionUpdateFlag::NoFilthy);
         if (m_newParent != m_prevParent) {
             m_layer->setDirty(image->bounds());
         }
@@ -76,7 +76,7 @@ void KisImageLayerMoveCommand::undo()
     image->moveNode(m_layer, m_prevParent, m_prevAbove);
 
     if (m_doUpdates) {
-        image->refreshGraphAsync(m_newParent, KisImage::NoFilthyUpdate);
+        image->refreshGraphAsync(m_newParent, KisProjectionUpdateFlag::NoFilthy);
         if (m_newParent != m_prevParent) {
             m_layer->setDirty(image->bounds());
         }

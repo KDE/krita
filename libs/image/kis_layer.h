@@ -210,7 +210,7 @@ public:
     /**
      * It is called by the async merger after projection update is done
      */
-    void updateClones(const QRect &rect);
+    void updateClones(const QRect &rect, bool dontInvalidateFrames);
 
     /**
      * Informs this layers that its masks might have changed.

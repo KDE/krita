@@ -134,8 +134,6 @@ public:
     // simplified override for testing purposes
     void fullRefreshAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect);
 
-    void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
-
     void addSpontaneousJob(KisSpontaneousJob *spontaneousJob);
 
     bool hasUpdatesRunning() const;

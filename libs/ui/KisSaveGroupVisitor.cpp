@@ -102,7 +102,7 @@ bool KisSaveGroupVisitor::visit(KisGroupLayer *layer)
           gc.bitBlt(QPoint(0, 0), layer->projection(), r);
           dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-          dst->refreshGraph();
+          dst->initialRefreshGraph();
         }
 
         QString path = m_path + "/" + m_baseName + "_" + layer->name().replace(' ', '_') + '.' + m_extension;

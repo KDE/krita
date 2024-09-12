@@ -142,7 +142,7 @@ void KisBaseNodeTest::testOpacityKeyframing()
     context.layer->paintDevice()->fill(context.imageRect, originalColor);
 
     // Regenerate projection..
-    context.image->refreshGraph();
+    context.image->initialRefreshGraph();
 
     {   // Before A (Opacity should be the same as A!)
         context.image->animationInterface()->switchCurrentTimeAsync(0);

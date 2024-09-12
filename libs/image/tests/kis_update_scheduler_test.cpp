@@ -76,7 +76,8 @@ void KisUpdateSchedulerTest::testMerge()
      * Test synchronous Full Refresh
      */
 
-    scheduler.fullRefresh(rootLayer, image->bounds(), image->bounds());
+    scheduler.fullRefreshAsync(rootLayer, image->bounds(), image->bounds());
+    scheduler.waitForDone();
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultFRProjection = rootLayer->projection()->convertToQImage(0);

@@ -66,7 +66,7 @@ bool Imagesplit::saveAsImage(const QRect &imgSize, const QString &mimeType, cons
       gc.bitBlt(QPoint(0, 0), image->projection(), imgSize);
 
       dst->addNode(paintLayer, KisNodeSP(0));
-      dst->refreshGraph();
+      dst->initialRefreshGraph();
     }
     document->setFileBatchMode(true);
     if (!document->exportDocumentSync(url, mimeType.toLatin1())) {

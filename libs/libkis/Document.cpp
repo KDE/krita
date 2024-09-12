@@ -822,7 +822,9 @@ bool Document::tryBarrierLock()
 void Document::refreshProjection()
 {
     if (!d->document || !d->document->image()) return;
-    d->document->image()->refreshGraph();
+    d->document->image()->refreshGraphAsync();
+    d->document->image()->waitForDone();
+
 }
 
 QList<qreal> Document::horizontalGuides() const

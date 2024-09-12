@@ -183,7 +183,7 @@ void KisImageTest::testConvertImageColorSpace()
     image->addNode(paint1, image->root());
     image->addNode(blur1, image->root());
 
-    image->refreshGraph();
+    image->initialRefreshGraph();
 
     const KoColorSpace *cs16 = KoColorSpaceRegistry::instance()->rgb16();
     image->convertImageColorSpace(cs16,
@@ -200,7 +200,8 @@ void KisImageTest::testConvertImageColorSpace()
     QVERIFY(*cs16 == *paint1->compositeOp()->colorSpace());
     QVERIFY(*cs16 == *blur1->compositeOp()->colorSpace());
 
-    image->refreshGraph();
+    image->refreshGraphAsync();
+    image->waitForDone();
 }
 
 void KisImageTest::testAssignImageProfile()

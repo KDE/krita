@@ -1136,10 +1136,13 @@ public:
     void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, KisProjectionUpdateFlags flags = KisProjectionUpdateFlag::None) override;
 
     /**
-     * Triggers synchronous recomposition of the projection
+     * Triggers synchronous recomposition of the projection on the document
+     * opening, i.e. with the cropRect set to null. Unlimited crop rect
+     * forces the clone layers to regenerate all its sources.
+     *
+     * WARNING: If you are not loading a multilayered document, consider using
+     *          refreshGraphAsync() instead, possibly coupled with waitForDone().
      */
-    void refreshGraph(KisNodeSP root = KisNodeSP());
-    void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void initialRefreshGraph();
 
     /**

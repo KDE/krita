@@ -135,7 +135,7 @@ void KisCloneLayerTest::testOriginalRefresh()
 
     QCOMPARE(root->projection()->exactBounds(), nullRect);
 
-    image->refreshGraph();
+    image->refreshGraphAsync();
     image->waitForDone();
 
     const QRect expectedRect(10,10,110,110);
@@ -175,7 +175,7 @@ void KisCloneLayerTest::testRemoveSourceLayer()
     }
 
     // Are we crashing?
-    image->refreshGraph();
+    image->refreshGraphAsync();
     image->waitForDone();
 }
 

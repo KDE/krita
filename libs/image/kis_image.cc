@@ -2104,19 +2104,6 @@ void KisImage::requestStrokeEndActiveNode()
     Q_EMIT sigStrokeEndRequested();
 }
 
-void KisImage::refreshGraph(KisNodeSP root)
-{
-    refreshGraph(root, bounds(), bounds());
-}
-
-void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRect)
-{
-    if (!root) root = m_d->rootLayer;
-
-    m_d->animationInterface->notifyNodeChanged(root.data(), rc, true);
-    m_d->scheduler.fullRefresh(root, rc, cropRect);
-}
-
 void KisImage::initialRefreshGraph()
 {
     /**

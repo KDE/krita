@@ -33,8 +33,7 @@ protected:
     void initImage(KisImageWSP image, KisNodeSP activeNode) override {
         QImage src(QString(FILES_DATA_DIR) + '/' + "carrot.png");
         activeNode->original()->convertFromQImage(src, 0);
-
-        image->refreshGraph();
+        image->initialRefreshGraph();
     }
 
     KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,

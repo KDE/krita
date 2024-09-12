@@ -94,7 +94,8 @@ void TestChannel::testReadWritePixelData()
     QByteArray ba = greenChan->pixelData(rc);
     ba.fill('\x80', 4);
     greenChan->setPixelData(ba, rc);
-    image->refreshGraph();
+    image->refreshGraphAsync();
+    image->waitForDone();
     QColor c;
     layer->paintDevice()->pixel(0, 0, &c);
     QVERIFY(c == QColor(255, 128, 0));

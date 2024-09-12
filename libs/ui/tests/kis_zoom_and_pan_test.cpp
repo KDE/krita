@@ -50,7 +50,7 @@ public:
         m_mainWindow = KisPart::instance()->createMainWindow();
         m_view = new KisView(m_doc, m_mainWindow->viewManager(), m_mainWindow);
 
-        m_image->refreshGraph();
+        m_image->initialRefreshGraph();
 
         m_mainWindow->show();
     }

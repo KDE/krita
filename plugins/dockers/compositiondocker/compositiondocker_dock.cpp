@@ -389,7 +389,9 @@ void CompositionDockerDock::exportAnimationClicked()
             exportOptions.directory = QString("%1/%2").arg(path, composition->name());
             exportOptions.wantsOnlyUniqueFrameSequence = true;
 
-            KisAnimationRender::render(m_canvas->viewManager()->document(), m_canvas->viewManager(), exportOptions);
+            bool success = KisAnimationRender::render(m_canvas->viewManager()->document(), m_canvas->viewManager(), exportOptions);
+
+            if (!success) break;
         }
 
         currentComposition->apply();

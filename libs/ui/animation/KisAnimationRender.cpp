@@ -24,7 +24,7 @@
 
 #include "KisVideoSaver.h"
 
-void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, KisAnimationRenderingOptions encoderOptions) {
+bool KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, KisAnimationRenderingOptions encoderOptions) {
     const QString frameMimeType = encoderOptions.frameMimeType;
     const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
@@ -42,10 +42,12 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
     if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
             QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Matroska (.mkv) ";
+
             qWarning() << type <<"requires width and height to be even, resize and try again!";
             doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
-            return;
+
+            return false;
         }
     }
 
@@ -59,9 +61,10 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
                                                encoderOptions.frameExportConfig);
     exporter.setBatchMode(batchMode);
 
-
     KisAsyncAnimationFramesSaveDialog::Result result =
         exporter.regenerateRange(viewManager->mainWindow()->viewManager());
+
+    bool delayReturnSuccess = (result == KisAsyncAnimationFramesSaveDialog::RenderComplete);
 
     // the folder could have been read-only or something else could happen
     if ((encoderOptions.shouldEncodeVideo || encoderOptions.wantsOnlyUniqueFrameSequence) &&
@@ -111,6 +114,8 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
                 if (!result.isOk()) {
                     QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", result.errorMessage()));
+
+                    delayReturnSuccess = false; // Delay return to clean up exported frames.
                 }
             }
         }
@@ -118,17 +123,15 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         //File cleanup
         QDir d(framesDirectory);
 
-        if (encoderOptions.shouldDeleteSequence) {
-
+        if (encoderOptions.shouldDeleteSequence || delayReturnSuccess == false) {
             QStringList savedFiles = exporter.savedFiles();
+
             Q_FOREACH(const QString &f, savedFiles) {
                 if (d.exists(f)) {
                     d.remove(f);
                 }
             }
-
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
-
             const QStringList fileNames = exporter.savedFiles();
             const QStringList uniqueFrameNames = exporter.savedUniqueFiles();
 
@@ -137,7 +140,6 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
                     d.remove(f);
                 }
             }
-
         }
 
         QStringList paletteFiles = d.entryList(QStringList() << "KritaTempPalettegen_*.png", QDir::Files);
@@ -145,12 +147,13 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
         Q_FOREACH(const QString &f, paletteFiles) {
             d.remove(f);
         }
-
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderTimedOut) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), "Animation frame rendering has timed out. Output files are incomplete.\nTry to increase \"Frame Rendering Timeout\" or reduce \"Frame Rendering Clones Limit\" in Krita settings");
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), i18n("Failed to render animation frames! Output files are incomplete."));
-    }
+    } 
+
+    return delayReturnSuccess;
 }
 
 bool KisAnimationRender::mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode)

@@ -15,8 +15,10 @@ class KisDocument;
 class KisViewManager;
 
 namespace KisAnimationRender {
-
-    KRITAUI_EXPORT void render(KisDocument *doc, KisViewManager* viewManager, KisAnimationRenderingOptions encoderOptions);
+    /** Render an animation to file on disk.
+     *  returns TRUE on success, FALSE on error or cancelation.
+    **/
+    KRITAUI_EXPORT bool render(KisDocument *doc, KisViewManager* viewManager, KisAnimationRenderingOptions encoderOptions);
 
     bool mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode);
     bool hasEvenDimensions(int width, int height);

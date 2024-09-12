@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"POT-Creation-Date: 2024-09-12 01:44+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -19795,8 +19795,8 @@ msgstr "&Gwaredu Plygell"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:749
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:755
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
@@ -20593,7 +20593,7 @@ msgstr "Amnewid Testun"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -20759,27 +20759,27 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr "Erfyn Trawsffurfio"
 
-#: libs/ui/animation/KisAnimationRender.cpp:46
+#: libs/ui/animation/KisAnimationRender.cpp:47
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #, fuzzy, kde-format
 msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr "Ffurfweddu..."
 
-#: libs/ui/animation/KisAnimationRender.cpp:89
+#: libs/ui/animation/KisAnimationRender.cpp:92
 #, fuzzy, kde-format
 msgid "Overwrite existing video?"
 msgstr "&Priodweddau"
 
-#: libs/ui/animation/KisAnimationRender.cpp:90
+#: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -20788,15 +20788,15 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:150
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:151
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 #| msgid "Export Layer"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Allforio Haen"
 
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Creu %1 newydd "
@@ -38517,17 +38517,17 @@ msgid "Insert Name"
 msgstr "Enw'r haen:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:351
 #, fuzzy, kde-format
 msgid "Select a Directory"
 msgstr "Hirsgwar"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, fuzzy, kde-format
 msgid "Exporting Compositions..."
 msgstr "Dim cyfansoddiad"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, fuzzy, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Dim cyfansoddiad"

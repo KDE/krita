@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"POT-Creation-Date: 2024-09-12 01:44+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19707,8 +19707,8 @@ msgstr "Recursos locais"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:749
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:755
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
@@ -20525,7 +20525,7 @@ msgstr "Substituir (sobrescrever) tag"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -20679,7 +20679,7 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr "Ativar ferramenta de transformação"
 
-#: libs/ui/animation/KisAnimationRender.cpp:46
+#: libs/ui/animation/KisAnimationRender.cpp:47
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
@@ -20688,8 +20688,8 @@ msgstr ""
 "%1 requer largura e altura para serem números pares. Redimensione ou corte a "
 "imagem antes de exportar."
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -20698,14 +20698,14 @@ msgstr ""
 "Não foi possível renderizar a animação:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:89
+#: libs/ui/animation/KisAnimationRender.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "Dialog title"
 #| msgid "Overwrite the file?"
 msgid "Overwrite existing video?"
 msgstr "Sobrescrever o arquivo?"
 
-#: libs/ui/animation/KisAnimationRender.cpp:90
+#: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -20714,14 +20714,14 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:150
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:151
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "Erro de renderização"
 
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
@@ -39516,18 +39516,18 @@ msgid "Insert Name"
 msgstr "Inserir nome"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:351
 #, kde-format
 msgid "Select a Directory"
 msgstr "Selecione uma pasta"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, fuzzy, kde-format
 #| msgid "Export Composition"
 msgid "Exporting Compositions..."
 msgstr "Exportar composição"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, fuzzy, kde-format
 #| msgid "Export Composition"
 msgid "Exporting composition: %1..."

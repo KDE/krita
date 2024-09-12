@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"POT-Creation-Date: 2024-09-12 01:44+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -20439,8 +20439,8 @@ msgstr "يحمّل حزم الموارد..."
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:749
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:755
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
@@ -21306,7 +21306,7 @@ msgstr "استبدل (الاختصار R)"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -21468,15 +21468,15 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr "فعّل أداة رسم الخطوط"
 
-#: libs/ui/animation/KisAnimationRender.cpp:46
+#: libs/ui/animation/KisAnimationRender.cpp:47
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #, kde-format
 msgid ""
 "Could not render animation:\n"
@@ -21485,14 +21485,14 @@ msgstr ""
 "تعذّر تصيير الحركة:\n"
 "%1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:89
+#: libs/ui/animation/KisAnimationRender.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "Dialog title"
 #| msgid "Overwrite the file?"
 msgid "Overwrite existing video?"
 msgstr "استبدال الملف؟"
 
-#: libs/ui/animation/KisAnimationRender.cpp:90
+#: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -21501,15 +21501,15 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:150
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:151
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "خطأ تحليل"
 
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 #| msgid "Failed to render animation frames!"
 msgid "Failed to render animation frames! Output files are incomplete."
@@ -40215,18 +40215,18 @@ msgid "Insert Name"
 msgstr "أدرِج اسمًا"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:351
 #, kde-format
 msgid "Select a Directory"
 msgstr "اختر دليلًا"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, fuzzy, kde-format
 #| msgid "Export Composition"
 msgid "Exporting Compositions..."
 msgstr "صدّر التّراكب"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, fuzzy, kde-format
 #| msgid "Export Composition"
 msgid "Exporting composition: %1..."

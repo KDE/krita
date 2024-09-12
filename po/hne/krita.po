@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"POT-Creation-Date: 2024-09-12 01:44+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -19952,8 +19952,8 @@ msgstr "स्रोत फाइल मन ल:"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:749
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:755
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
@@ -20763,7 +20763,7 @@ msgstr "परत मेटाव"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -20930,27 +20930,27 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr "सक्रिय परत"
 
-#: libs/ui/animation/KisAnimationRender.cpp:46
+#: libs/ui/animation/KisAnimationRender.cpp:47
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #, fuzzy, kde-format
 msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr "नवा कान्फिगरेसन %1"
 
-#: libs/ui/animation/KisAnimationRender.cpp:89
+#: libs/ui/animation/KisAnimationRender.cpp:92
 #, fuzzy, kde-format
 msgid "Overwrite existing video?"
 msgstr "प्रीसेट संपादित करव"
 
-#: libs/ui/animation/KisAnimationRender.cpp:90
+#: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -20959,15 +20959,15 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:150
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:151
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 #| msgid "Parsing error"
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr "पारसिंग गलती"
 
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, fuzzy, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "नवा मास्क या परत बनाव"
@@ -38932,17 +38932,17 @@ msgid "Insert Name"
 msgstr "परत के नाम:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:351
 #, fuzzy, kde-format
 msgid "Select a Directory"
 msgstr "कोई चतुर्भुजीय छेत्र चुनव"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, fuzzy, kde-format
 msgid "Exporting Compositions..."
 msgstr "कम्पोजिट मोड"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, fuzzy, kde-format
 msgid "Exporting composition: %1..."
 msgstr "कम्पोजिट मोड"

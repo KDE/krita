@@ -114,25 +114,37 @@ private:
     }
 
     void updateClones(KisNodeSP node) {
-        // simple tail-recursive iteration
+        /**
+         * TODO: completely remove these clone updates code
+         *       in Krita 6
+         *
+         * These updates should actually be issued by
+         * KisBaseRectsWalker::registerCloneNotification(), so
+         * we disable then for now. If no reports about broken
+         * clones arrive until Krita 6, just remove this
+         * (deprecated?) code.
+         */
 
-        KisNodeSP prevNode = node->lastChild();
-        while(prevNode) {
-            updateClones(prevNode);
-            prevNode = prevNode->prevSibling();
-        }
+        if (qEnvironmentVariableIsSet("KRITA_ENABLE_CLONE_UPDATES_IN_APPLICATOR")) {
+            // simple tail-recursive iteration
+            KisNodeSP prevNode = node->lastChild();
+            while(prevNode) {
+                updateClones(prevNode);
+                prevNode = prevNode->prevSibling();
+            }
 
-        Q_FOREACH(KisNodeSP node, m_nodes) {
-            KisLayer *layer = qobject_cast<KisLayer*>(node.data());
-            if(layer && layer->hasClones()) {
-                Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
-                    if(!clone) continue;
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                KisLayer *layer = qobject_cast<KisLayer*>(node.data());
+                if(layer && layer->hasClones()) {
+                    Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
+                        if(!clone) continue;
 
-                    QPoint offset(clone->x(), clone->y());
-                    QRegion dirtyRegion(m_image->bounds());
-                    dirtyRegion -= m_image->bounds().translated(offset);
+                        QPoint offset(clone->x(), clone->y());
+                        QRegion dirtyRegion(m_image->bounds());
+                        dirtyRegion -= m_image->bounds().translated(offset);
 
-                    clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
+                        clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
+                    }
                 }
             }
         }

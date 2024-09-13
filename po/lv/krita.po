@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -17006,7 +17006,7 @@ msgid "Node Rename"
 msgstr "&Nosaukums:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17135,7 +17135,7 @@ msgstr "Mīkstāk"
 msgid "Gaussian"
 msgstr "Troksnis"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, fuzzy, kde-format
 msgid "Copy From"
 msgstr "(dokumenta) kopija Zaļš"
@@ -17224,135 +17224,135 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Imports, importēt Attēls"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "Izlase Kasīklis"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "fons"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Slānis"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Attēls"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Jauns &grupas slānis..."
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maska"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Mērogs Attēls"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Attēla izšķirtspēja"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Mērogs Slānis"
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotēt Attēls"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 #, fuzzy
 #| msgid "Create Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Izveidot masku"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Rotēt Slānis"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Izmainīt Panelis Reverss"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Slānis"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Attēls"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pārveidot attēla tipu"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Pielietot profilu"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Pielietot profilu"
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -18317,7 +18317,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Atvērt Avīze Dokumenti"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -19637,7 +19637,7 @@ msgstr "Avots:"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20146,7 +20146,7 @@ msgid "Delete resource"
 msgstr "Dzēst tekstu"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20602,7 +20602,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Izveidot jaunu slāni"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "Krāsu pāreja:"
@@ -22724,7 +22724,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ievadiet grupas nosaukumu:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30679,54 +30679,54 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Izveidot jaunu slāni"
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Krāsu telpa:"
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Slānis Kļūda"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

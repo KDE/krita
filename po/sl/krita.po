@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
-"PO-Revision-Date: 2024-08-30 07:45+0200\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
+"PO-Revision-Date: 2024-09-11 22:43+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -16872,7 +16872,7 @@ msgid "Node Rename"
 msgstr "Preimenuj vozlišče"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Spremeni velikost slike"
@@ -16993,7 +16993,7 @@ msgstr "Mehko"
 msgid "Gaussian"
 msgstr "Po Gaussu"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "Kopiraj iz"
@@ -17091,115 +17091,115 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Prepusti skozi"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, kde-format
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Maska izbora"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Ozadje"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Plast slikanja"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Obreži sliko"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Obreži plast"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Obreži masko"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Spremeni merilo slike"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Spremeni ločljivost slike"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Spremeni merilo plasti"
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Zavrti sliko"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Zavrti masko"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Zavrti plast"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Ostriži masko"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Ostriži plast"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ostriži sliko"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pretvori barvni prostor plasti"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pretvori barvni prostor slike"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pretvori barvni prostor projekcije"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodeli profil plasti"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"
@@ -18151,7 +18151,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Dokument CSV"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Import frames"
@@ -19467,7 +19467,7 @@ msgstr "Krajevni viri"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19969,7 +19969,7 @@ msgid "Delete resource"
 msgstr "Izbriši vir"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20427,7 +20427,7 @@ msgstr ""
 "Upodabljanje sličic animacije ni uspelo! Izhodne datoteke so nepopolne."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, kde-format
 msgid "Render Animation"
 msgstr "Upodobi animacijo"
@@ -22631,7 +22631,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Vnesite novo ime sloga"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30900,35 +30900,35 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Ustvarjanje novega dokumenta ni uspelo. Uvoz animacije je prekinjen."
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Uvozi delovne površine ..."
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30937,19 +30937,19 @@ msgstr ""
 "Vstavek za upravljanje barv Krita LittleCMS ni nameščen. Krita se bo zdaj "
 "zaprla."
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Napaka pri namestitvi"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teme"
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Razširitveni razmikalnik"
@@ -34890,46 +34890,40 @@ msgid "Color name:"
 msgstr "Ime barve:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "Obarvanost:"
+msgstr "H (O):"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "Operacijski sistem:"
+msgstr "S (N):"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "L (S):"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
-msgstr "Y:"
+msgstr "Y (luma):"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Vredn:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -60596,9 +60590,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#, fuzzy
-#~| msgid "Brush Smoothing:"
-#~ msgctxt "action"
-#~ msgid "Brush Smoothing: Pixel"
-#~ msgstr "Glajenje čopiča:"

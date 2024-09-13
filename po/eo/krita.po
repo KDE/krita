@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16889,7 +16889,7 @@ msgid "Node Rename"
 msgstr "Nod-Alinomigo"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Regrandigi Bildon"
@@ -17010,7 +17010,7 @@ msgstr "Mola"
 msgid "Gaussian"
 msgstr "Gaŭsa"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "Kopii De"
@@ -17108,115 +17108,115 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Trapasi"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, kde-format
 msgid "Imported Image"
 msgstr "Importita Bildo"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Elekta Masko"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fono"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Pentra Tavolo"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Tondi Bildon"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Stuci Tavolon"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Stuci Maskon"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skali Bildon"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Ŝanĝi Bilddistingivon"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotacii Bildon"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotacii Maskon"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Tondi Maskon"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Tondi Bildon"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Konverti Tavolan Kolorspacon"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konverti Bilda Koloraspacon"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konverti Projekcian Koloraspacon"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Atribui Profilon al Tavolo"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Asigni Profilon"
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Stuci Elektojn"
@@ -18174,7 +18174,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV Dokumento"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Import frames"
@@ -19490,7 +19490,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19992,7 +19992,7 @@ msgid "Delete resource"
 msgstr "Forigi rimedon"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20452,7 +20452,7 @@ msgstr ""
 "Malsukcesis bildigi animaciajn kadrojn! Eligdosieroj estas nekompletaj."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, kde-format
 msgid "Render Animation"
 msgstr "Redoni Animacion"
@@ -22657,7 +22657,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Enigi novan stilnomon"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30899,35 +30899,35 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Malsukcesis krei novan dokumenton. Animacia importo ĉesigita."
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importi Laborspacon..."
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nova Laborspaco..."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nova Laborspaco..."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30936,19 +30936,19 @@ msgstr ""
 "La kromadministrado de koloro Krita LittleCMS ne estas instalita. Krita "
 "ĉesos nun."
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Instala eraro"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "E&tosoj"
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Vastiĝanta Spacer"

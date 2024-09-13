@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
 "PO-Revision-Date: 2024-09-12 01:40+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -16928,7 +16928,7 @@ msgid "Node Rename"
 msgstr "Cambiar nombre del nodo"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Redimensionar imagen"
@@ -17049,7 +17049,7 @@ msgstr "Suave"
 msgid "Gaussian"
 msgstr "Gaussiano"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "Copiar de"
@@ -17147,115 +17147,115 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Atravesar"
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, kde-format
 msgid "Imported Image"
 msgstr "Imagen importada"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
 msgstr "Máscara de selección"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fondo"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Capa de pintura"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Recortar imagen"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Recortar capa"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Recortar máscara"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Escalar imagen"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Cambiar la resolución de la imagen"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "Escalar capa"
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotar imagen"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Rotar máscara"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "Rotar capa"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Proyectar máscara"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "Proyectar capa"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Proyectar imagen"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Convertir el espacio de color de la capa"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Convertir el espacio de colores de la imagen"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Convertir el espacio de colores de la proyección"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Asignar perfil a capa"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Asignar perfil"
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Recortar las selecciones"
@@ -18213,7 +18213,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Documento CSV"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Import frames"
@@ -19531,7 +19531,7 @@ msgstr "Recursos locales"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20035,7 +20035,7 @@ msgid "Delete resource"
 msgstr "Borrar recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20495,7 +20495,7 @@ msgstr ""
 "salida están incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, kde-format
 msgid "Render Animation"
 msgstr "Renderizar animación"
@@ -22710,7 +22710,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Introduzca nuevo nombre de estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31030,35 +31030,35 @@ msgstr ""
 "No se ha podido crear un documento nuevo. Se ha interrumpido la importación "
 "de la animación."
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar espacio de trabajo..."
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nuevo espacio de trabajo..."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nuevo espacio de trabajo..."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31067,19 +31067,19 @@ msgstr ""
 "El complemento de gestión de color LittleCMS de Krita no está instalado. "
 "Krita saldrá ahora."
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Error de instalación"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Separador de expansión"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17314,7 +17314,7 @@ msgid "Node Rename"
 msgstr "नाव :"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "प्रतिमेचा आकार बदला"
@@ -17447,7 +17447,7 @@ msgstr "मृदू"
 msgid "Gaussian"
 msgstr "गॉसियन अंधुकपणा"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "पासून प्रत करा"
@@ -17536,19 +17536,19 @@ msgstr "मिशेल"
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "प्रतिमा आयात करा"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "निवड नाही"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17556,119 +17556,119 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "पार्श्वभूमी"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "रंगाचा स्तर (&P)"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "प्रतिमा कापा"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "समूह स्तर (&G)"
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "मुखवटा सौम्य बनवा"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "शीयर प्रतिमा"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "प्रतिमेचे रेझोल्युशन ठरवा"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "स्तर चढवा"
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "प्रतिमा फिरवा"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 #, fuzzy
 #| msgid "Rotate Canvas"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "कॅनव्हास फिरवा"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "स्तर फिरवा"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 #, fuzzy
 #| msgid "Unsharp Mask"
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "मुखवटा सौम्य बनवा"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "स्तर विभागा"
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "शीयर प्रतिमा"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "प्रतिमेच्या रंगाची जागा बदला"
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "प्रतिमेच्या रंगाची जागा बदला"
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "प्रक्षेपणाच्या रंगाची जागा बदला"
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 #, fuzzy
 #| msgid "Right to left"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "उजवीकडुन डावीकडे"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 #, fuzzy
 #| msgid "Open Color Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "खुली रंग रूपरेषा"
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -18656,7 +18656,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "नवीन दस्तऐवजात उघडा"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -20057,7 +20057,7 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20582,7 +20582,7 @@ msgid "Delete resource"
 msgstr "संसाधन काढून टाका"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -21061,7 +21061,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "कार्य तयार करण्यात अपयश"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "कल"
@@ -23251,7 +23251,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "पूर्वनिश्चीत उतरणी"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31468,35 +31468,35 @@ msgstr "नवीन संयोजना %1"
 msgid "Failed to create new document. Animation import aborted."
 msgstr "कार्य तयार करण्यात अपयश"
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -31508,19 +31508,19 @@ msgstr ""
 "The Calligra LittleCMS color management plugin स्थापित केलेली नाही. क्रिटा आता "
 "बंद होईल."
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "प्रतिष्ठापना त्रुटी"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

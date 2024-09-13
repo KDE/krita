@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 03:11+0000\n"
+"POT-Creation-Date: 2024-09-13 03:21+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -16909,7 +16909,7 @@ msgid "Node Rename"
 msgstr "שם:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:852
+#: libs/image/kis_image.cc:857
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17036,7 +17036,7 @@ msgstr "&לבן"
 msgid "Gaussian"
 msgstr "כחול"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, fuzzy, kde-format
 msgid "Copy From"
 msgstr "ירוק"
@@ -17125,132 +17125,132 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:382
+#: libs/image/kis_image.cc:387
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "ייצוא תמונה"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
 msgstr "בחירה"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "רקע"
 
-#: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:757 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&שכבה"
 
-#: libs/image/kis_image.cc:851
+#: libs/image/kis_image.cc:856
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "שכבה לתמונה"
 
-#: libs/image/kis_image.cc:947
+#: libs/image/kis_image.cc:952
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "שינוי קנה מידה של שכבה..."
 
-#: libs/image/kis_image.cc:948
+#: libs/image/kis_image.cc:953
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "אלפא"
 
-#: libs/image/kis_image.cc:985
+#: libs/image/kis_image.cc:990
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "תמונה חדשה"
 
-#: libs/image/kis_image.cc:986
+#: libs/image/kis_image.cc:991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "כפתור איפוס"
 
-#: libs/image/kis_image.cc:1033
+#: libs/image/kis_image.cc:1038
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "שינוי קנה מידה של שכבה..."
 
-#: libs/image/kis_image.cc:1158
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "שינוי שם התמונה"
 
-#: libs/image/kis_image.cc:1164
+#: libs/image/kis_image.cc:1169
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "זוויות:"
 
-#: libs/image/kis_image.cc:1166
+#: libs/image/kis_image.cc:1171
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "ה&סר שכבה"
 
-#: libs/image/kis_image.cc:1247
+#: libs/image/kis_image.cc:1252
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "מחיקת טקסט"
 
-#: libs/image/kis_image.cc:1250
+#: libs/image/kis_image.cc:1255
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "שינוי קנה מידה של שכבה..."
 
-#: libs/image/kis_image.cc:1257
+#: libs/image/kis_image.cc:1262
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "תמונה חדשה"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
-#: libs/image/kis_image.cc:1326
+#: libs/image/kis_image.cc:1331
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
-#: libs/image/kis_image.cc:1327
+#: libs/image/kis_image.cc:1332
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "הוס&פת תמונה בתור שכבה..."
 
-#: libs/image/kis_image.cc:1385
+#: libs/image/kis_image.cc:1390
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "יישור אוטומטי"
 
-#: libs/image/kis_image.cc:1426
+#: libs/image/kis_image.cc:1431
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "מאפייני שכבה..."
 
-#: libs/image/kis_image.cc:2495
+#: libs/image/kis_image.cc:2437
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -18206,7 +18206,7 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "מסמך"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2114
 #: libs/ui/KisMainWindow.cpp:2197
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -19523,7 +19523,7 @@ msgstr "ה&סר שכבה"
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
 #: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2817 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20028,7 +20028,7 @@ msgid "Delete resource"
 msgstr "מחיקת טקסט"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20481,7 +20481,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "יצירת שכבה חדשה"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2224
+#: libs/ui/KisMainWindow.cpp:2226
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "עירוב:"
@@ -22590,7 +22590,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "הזן שם לקבוצה:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30486,54 +30486,54 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "יצירת שכבה חדשה"
 
-#: libs/ui/KisMainWindow.cpp:2603
+#: libs/ui/KisMainWindow.cpp:2605
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2620
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2624
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "&בוחר צבעים"
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2668
 #, fuzzy, kde-format
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2669
+#: libs/ui/KisMainWindow.cpp:2671
 #, fuzzy, kde-format
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2840
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2856
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "שגיאת שכבה"
 
-#: libs/ui/KisMainWindow.cpp:2964
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3023
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

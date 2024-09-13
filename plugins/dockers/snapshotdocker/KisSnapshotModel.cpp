@@ -17,6 +17,7 @@
 #include <KisViewManager.h>
 #include <kis_node_manager.h>
 #include <kis_name_server.h>
+#include <kis_image_signal_router.h>
 
 struct KisSnapshotModel::Private
 {
@@ -59,7 +60,12 @@ bool KisSnapshotModel::Private::switchToDocument(QPointer<KisDocument> doc)
         KisDocument *curDoc = curDocument();
         if (curDoc && doc) {
             curDoc->copyFromDocument(*doc);
-            view->viewManager()->nodeManager()->slotNonUiActivatedNode(curDoc->preActivatedNode());
+            /**
+             * Node activation should happen not directly via the GUI,
+             * but via KisImage signal, since this signal gets synchronized
+             * via KisSynchronizedConnection in the node model
+             */
+            curDoc->image()->signalRouter()->emitNotification(ComplexNodeReselectionSignal(curDoc->preActivatedNode(), {}));
         }
         // FIXME: more things need to be done
         return true;

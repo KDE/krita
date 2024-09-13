@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 01:44+0000\n"
+"POT-Creation-Date: 2024-09-13 01:49+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -17081,7 +17081,7 @@ msgid "Node Rename"
 msgstr "ชื่อ:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:832
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17212,7 +17212,7 @@ msgstr "&ขาว"
 msgid "Gaussian"
 msgstr "แปรงแบบเส้นตาราง"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "คัดลอกจาก"
@@ -17301,13 +17301,13 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:402
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "นำเข้ารูปภาพ"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17315,117 +17315,117 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "พื้นหลัง"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "เลเยอร์"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:831
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "ครอบตัดภาพ"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:927
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "เพิ่มเลเยอร์..."
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:928
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "อัลฟา"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:965
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "ปรับขนาดภาพ"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:966
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "การเลือก"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1016
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "ปรับขนาดเลเยอร์"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1155
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "ลบรูปภาพ"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1165
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "มุม:"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1168
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "&ลบเลเยอร์"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1269
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "เปลี่ยนประเภทของรายการ"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1273
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "เพิ่มเลเยอร์..."
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "สร้างภาพใหม่"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1298
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "แปลงชนิดภาพ"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1349
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "แปลงชนิดภาพ"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1350
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "แปลงชนิดภาพ"
 
-#: libs/image/kis_image.cc:1403
+#: libs/image/kis_image.cc:1408
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "การจัดวาง"
 
-#: libs/image/kis_image.cc:1444
+#: libs/image/kis_image.cc:1449
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "คุณสมบัติเลเยอร์..."
 
-#: libs/image/kis_image.cc:2511
+#: libs/image/kis_image.cc:2453
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -18403,7 +18403,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "ลบรูปภาพ"
 
-#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -19738,7 +19738,7 @@ msgstr "รูปภาพ"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20256,7 +20256,7 @@ msgid "Delete resource"
 msgstr "ลบ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2631
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20725,7 +20725,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "สร้างเลเยอร์ใหม่"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2239
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "ไล่ระดับสี:"
@@ -22745,7 +22745,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "เติมชื่อกลุ่ม"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30890,56 +30890,56 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "สร้างเลเยอร์ใหม่"
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2622
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "เครื่องมือเ&ลือกสี"
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "เครื่องมือเ&ลือกสี"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "เครื่องมือเ&ลือกสี"
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2685
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2688
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1%"
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2857
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2873
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "การติดตั้งมีข้อผิดพลาด"
 
-#: libs/ui/KisMainWindow.cpp:2981
+#: libs/ui/KisMainWindow.cpp:2983
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3040
+#: libs/ui/KisMainWindow.cpp:3042
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

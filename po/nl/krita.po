@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 01:44+0000\n"
+"POT-Creation-Date: 2024-09-13 01:49+0000\n"
 "PO-Revision-Date: 2024-09-11 10:44+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -17102,7 +17102,7 @@ msgid "Node Rename"
 msgstr "Node hernoemen"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:832
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Afbeeldingsgrootte wijzigen"
@@ -17223,7 +17223,7 @@ msgstr "Zacht"
 msgid "Gaussian"
 msgstr "Gaussiaans"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "Kopiëren van"
@@ -17321,49 +17321,49 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Doorgeven"
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:402
 #, kde-format
 msgid "Imported Image"
 msgstr "Geïmporteerde afbeelding"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Achtergrond"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "Tekenlaag"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:831
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Afbeelding bijsnijden"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:927
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Laag bijsnijden"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:928
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Masker bijsnijden"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Afbeelding verschalen"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:966
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Afbeeldingsresolutie wijzigen"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1016
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17371,17 +17371,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Laag schalen"
 msgstr[1] "%1 lagen schalen"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1155
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Afbeelding draaien"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1165
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Masker draaien"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1168
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17389,12 +17389,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Laag draaien"
 msgstr[1] "%1 lagen draaien"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1269
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Masker schuintrekken"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1273
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17402,37 +17402,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Laag schuintrekken"
 msgstr[1] "%1 lagen schuintrekken"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Afbeelding schuintrekken"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1298
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Kleurruimte van laag converteren"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1349
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Kleurruimte van de afbeelding converteren"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1350
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Kleurruimte van de projectie converteren"
 
-#: libs/image/kis_image.cc:1403
+#: libs/image/kis_image.cc:1408
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profiel aan laag toewijzen"
 
-#: libs/image/kis_image.cc:1444
+#: libs/image/kis_image.cc:1449
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profiel toewijzen"
 
-#: libs/image/kis_image.cc:2511
+#: libs/image/kis_image.cc:2453
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Selecties afsnijden"
@@ -18408,7 +18408,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE-afbeelding"
 
-#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
@@ -19733,7 +19733,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20238,7 +20238,7 @@ msgid "Delete resource"
 msgstr "Hulpbron verwijderen"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2631
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20719,7 +20719,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Animatieframes renderen is mislukt! Uitvoerbestanden zijn onvolledig."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2239
 #, kde-format
 msgid "Render Animation"
 msgstr "Animatie renderen"
@@ -22831,7 +22831,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Nieuwe stijlnaam invoeren"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31367,35 +31367,35 @@ msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Nieuw document aanmaken is mislukt. Importeren van animatie afgebroken."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Werkruimte &importeren..."
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nieuwe werkruimte..."
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nieuwe werkruimte..."
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2685
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2857
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31404,19 +31404,19 @@ msgstr ""
 "De Krita LittleCMS plugin voor kleurbeheer is niet geïnstalleerd. Krita zal "
 "nu stoppen."
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2873
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Fout bij installeren"
 
-#: libs/ui/KisMainWindow.cpp:2981
+#: libs/ui/KisMainWindow.cpp:2983
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Thema's"
 
-#: libs/ui/KisMainWindow.cpp:3040
+#: libs/ui/KisMainWindow.cpp:3042
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Scheiding uitbreiden"

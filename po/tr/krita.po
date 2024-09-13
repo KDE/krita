@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-12 01:44+0000\n"
+"POT-Creation-Date: 2024-09-13 01:49+0000\n"
 "PO-Revision-Date: 2024-09-11 13:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -17010,7 +17010,7 @@ msgid "Node Rename"
 msgstr "Düğümü Yeniden Adlandır"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:832
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Görseli Yeniden Boyutlandır"
@@ -17131,7 +17131,7 @@ msgstr "Yumuşak"
 msgid "Gaussian"
 msgstr "Gauss"
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr "Kopyalanma Yeri"
@@ -17229,49 +17229,49 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Geçiş"
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:402
 #, kde-format
 msgid "Imported Image"
 msgstr "İçe Aktarılmış Görsel"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Arka Plan"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "Boya Katmanı"
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:831
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Görseli Kırp"
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:927
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Katmanı Kırp"
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:928
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maskeyi Kırp"
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Görseli Ölçekle"
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:966
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Görsel Çözünürlüğünü Değiştir"
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1016
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17279,17 +17279,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Katmanı Ölçekle"
 msgstr[1] "%1 Katmanı Ölçekle"
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1155
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Görseli Döndür"
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1165
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maskeyi Döndür"
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1168
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17297,12 +17297,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Katmanı Döndür"
 msgstr[1] "%1 Katmanı Döndür"
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1269
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maskeyi Kırk"
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1273
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17310,37 +17310,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Katmanı Kırk"
 msgstr[1] "%1 Katmanı Kırk"
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Görseli Kırk"
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1298
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Katman Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1349
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Görsel Renk Uzayı Dönüştür"
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1350
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Yansıma Renk Uzayını Dönüştür"
 
-#: libs/image/kis_image.cc:1403
+#: libs/image/kis_image.cc:1408
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Katmana Profil Ata"
 
-#: libs/image/kis_image.cc:1444
+#: libs/image/kis_image.cc:1449
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil Ata"
 
-#: libs/image/kis_image.cc:2511
+#: libs/image/kis_image.cc:2453
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seçimleri Kırp"
@@ -18311,7 +18311,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE Görseli"
 
-#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
@@ -19632,7 +19632,7 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20136,7 +20136,7 @@ msgid "Delete resource"
 msgstr "Özkaynağı sil"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2631
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20616,7 +20616,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Canlandırma kareleri sunulamadı! Çıktı dosyaları eksik."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2239
 #, kde-format
 msgid "Render Animation"
 msgstr "Canlandırmayı Sun"
@@ -22718,7 +22718,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Yeni biçem adını gir"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31193,54 +31193,54 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Yeni belge oluşturulamadı. Canlandırma içe aktarma iptal edildi."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Çalışma Alanı İçe Aktar…"
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Yeni Çalışma Alanı…"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Yeni Çalışma Alanı…"
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2685
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2857
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "Krita LittleCMS renk yönetimi eklentisi yüklü değil. Krita kapanacak."
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2873
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Kurulum hatası"
 
-#: libs/ui/KisMainWindow.cpp:2981
+#: libs/ui/KisMainWindow.cpp:2983
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temalar"
 
-#: libs/ui/KisMainWindow.cpp:3040
+#: libs/ui/KisMainWindow.cpp:3042
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Genişleyen Boşluk"

@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 03:21+0000\n"
+"POT-Creation-Date: 2024-09-14 03:28+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -40031,7 +40031,7 @@ msgstr ""
 msgid "Small Color Selector"
 msgstr "گزینش مشابه"
 
-#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:178
+#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, kde-format
 msgctxt "snapshot names, e.g. \"Snapshot 1\""
 msgid "Snapshot %1"

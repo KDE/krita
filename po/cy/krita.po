@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 03:21+0000\n"
+"POT-Creation-Date: 2024-09-14 03:28+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -39638,7 +39638,7 @@ msgstr ""
 msgid "Small Color Selector"
 msgstr "Gludo Detholiad"
 
-#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:178
+#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, fuzzy, kde-format
 #| msgid "KSnapshot"
 msgctxt "snapshot names, e.g. \"Snapshot 1\""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-13 03:21+0000\n"
+"POT-Creation-Date: 2024-09-14 03:28+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -39778,7 +39778,7 @@ msgstr "低性能警告。录像工具无法及时写入所有帧。请尝试增
 msgid "Small Color Selector"
 msgstr "小型拾色器"
 
-#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:178
+#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, kde-format
 msgctxt "snapshot names, e.g. \"Snapshot 1\""
 msgid "Snapshot %1"

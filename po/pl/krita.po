@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 03:28+0000\n"
-"PO-Revision-Date: 2024-07-28 09:29+0200\n"
+"PO-Revision-Date: 2024-09-14 12:42+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -30769,6 +30769,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>warstwę filtrującą</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą "
+"jego rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30777,6 +30780,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>maskę filtrującą</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą jego "
+"rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30785,6 +30791,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>warstwę stylu</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą jego "
+"rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -35001,47 +35010,40 @@ msgid "Color name:"
 msgstr "Nazwa barwy:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "H:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "WYS.:"
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "System:"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
-#, fuzzy, kde-format
-#| msgid "URL:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr "Adres URL:"
+msgstr "L:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Wartość:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format

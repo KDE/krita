@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 01:55+0000\n"
-"PO-Revision-Date: 2024-08-24 12:22+0200\n"
+"PO-Revision-Date: 2024-09-14 12:42+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -9169,11 +9169,10 @@ msgstr "Wygładzanie pędzla: Wyłączone"
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Wygładzanie pędzla:"
+msgstr "Wygładzanie pędzla: Piksel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -12041,9 +12040,7 @@ msgstr "Zapisz grupy warstw"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Przekształć grupę na warstwę &animowaną"
@@ -12056,6 +12053,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Przekształca warstwy podrzędne grupy na pojedynczą warstwę z wieloma "
+"klatkami animacji"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12066,9 +12065,7 @@ msgstr "Przekształć warstwy podrzędne na klatki &animowane"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
 msgstr "Przekształć na warstwę &animowaną"
@@ -20676,11 +20673,9 @@ msgstr ""
 "%1"
 
 #: libs/ui/animation/KisAnimationRender.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Zastąpić plik?"
+msgstr "Zastąpić istniejące nagranie?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
@@ -20690,6 +20685,10 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
+"W ścieżce, do której chcesz zapisać swoje nagranie istnieje już plik "
+"[%1]... \n"
+"                                                              Czy na pewno "
+"go zastąpić?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
@@ -29504,12 +29503,9 @@ msgid "Change Clone Layer"
 msgstr "Zmień powieloną warstwę"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Przekształć grupę na warstwę &animowaną"
+msgstr "Przekształć grupę na warstwę animowaną"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
@@ -31079,6 +31075,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>warstwę filtrującą</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą "
+"jego rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -31087,6 +31086,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>maskę filtrującą</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą jego "
+"rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -31095,6 +31097,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Próbowanie wykonania Rozbudowanego Eksportowania na obrazie, zawierającym "
+"<b>warstwę stylu</b>. Obraz zostanie <b>spłaszczony</b> przez zmianą jego "
+"rozmiaru."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -35349,47 +35354,40 @@ msgid "Color name:"
 msgstr "Nazwa barwy:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "H:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "WYS.:"
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "System:"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
-#, fuzzy, kde-format
-#| msgid "URL:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr "Adres URL:"
+msgstr "L:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Wartość:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -57751,14 +57749,10 @@ msgid "Python files (*.py)"
 msgstr "Plik Python (*.py)"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Custom options"
 msgid "Custom icon"
-msgstr "Własne ustawienia"
+msgstr "Własna ikona"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
-#, fuzzy
-#| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "Ikona narzędzia"
 
@@ -57767,10 +57761,8 @@ msgid "Brush preset icon"
 msgstr "Ikona nastawy pędzla"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
-#, fuzzy
-#| msgid "Group settings"
 msgid "Workflow Buttons settings"
-msgstr "Ustawienia grupy"
+msgstr "Ustawienia przycisków obiegu pracy"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
 msgid "Selected button:"
@@ -57778,15 +57770,15 @@ msgstr "Zaznaczony przycisk:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
 msgid "Add a workflow button"
-msgstr ""
+msgstr "Dodaj przycisk obiegu pracy"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
 msgid "Move selected workflow button to the left"
-msgstr ""
+msgstr "Przesuń zaznaczony przycisk obiegu pracy na lewo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
 msgid "Move selected workflow button to the right"
-msgstr ""
+msgstr "Przesuń zaznaczony przycisk obiegu pracy na prawo"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
 msgid "Delete selected workflow button"
@@ -57809,20 +57801,16 @@ msgid "Select the custom icon"
 msgstr "Wybierz własną ikonę"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
-#, fuzzy
-#| msgid "Internal Pool:"
 msgid "Enter a Tooltip:"
-msgstr "Wewnętrzny zasobnik:"
+msgstr "Wpisz podpowiedź:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
 msgid "Tooltip text"
 msgstr "Tekst podpowiedzi"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
-#, fuzzy
-#| msgid "Select a Color"
 msgid "Select a tool:"
-msgstr "Wybierz barwę"
+msgstr "Wybierz narzędzie:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
 msgid "Select a brush preset:"
@@ -57850,7 +57838,7 @@ msgstr "Wyczyść barwę pierwszoplanową"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
 msgid "Color model ; depth ; profile ; components"
-msgstr ""
+msgstr "Model barwy ; głębia ; profil ; składowe"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
 msgid "Select background color:"
@@ -57869,61 +57857,46 @@ msgid "Select a script file:"
 msgstr "Wybierz plik skryptu:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
-#, fuzzy
-#| msgid "Select path"
 msgid "Script path"
-msgstr "Wybierz ścieżkę"
+msgstr "Ścieżka skryptu"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
 msgid "Buttons size:"
 msgstr "Rozmiar przycisku:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
-#, fuzzy
-#| msgid "Sort by position"
 msgid "Settings button position:"
-msgstr "Uszereguj wg położenia"
+msgstr "Położenie przycisku ustawień:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
-#, fuzzy
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "Dół"
+msgstr "Dolny pasek"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
-#, fuzzy
-#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#| msgid "Inline"
 msgid "Inline"
 msgstr "W treści"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
-#, fuzzy
-#| msgid "Action file"
 msgid "Icon files "
-msgstr "Plik działań"
+msgstr "Pliki ikon "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
-#, fuzzy
-#| msgid "Coloring:"
 msgid "Color info: "
-msgstr "Kolor"
+msgstr "Szczegóły barwy: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 msgid "Script files "
 msgstr "Pliki skryptowe"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
-#| msgid "Group settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Ustawienia grupy"
+msgstr "Przyciski obiegu pracy"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
-msgstr ""
+msgstr "Otwórz okno ustawień przycisków obiegu pracy"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
@@ -57967,8 +57940,7 @@ msgid "Stabilizer"
 msgstr "Stabilizowanie"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:318
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Piksel"

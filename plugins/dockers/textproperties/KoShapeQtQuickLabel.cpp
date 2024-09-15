@@ -78,7 +78,7 @@ QString KoShapeQtQuickLabel::svgData() const
 
 void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 {
-    qreal max = qMax(20.0*imageScale(), qMax(width()-(d->imagePadding*2), height()-(d->imagePadding*2)));
+    qreal max = qMax(20.0*imageScale(), qMin(width()-(d->imagePadding*2), height()-(d->imagePadding*2)));
     setImplicitHeight(max);
     if (d->svgData == newSvgData)
         return;

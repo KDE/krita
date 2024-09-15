@@ -10,19 +10,38 @@ import org.krita.flake.text 1.0
 
 ComboBox {
     id: familyCmb;
+    wheelEnabled: true;
+
+    //--- Model setup. ---//
     property var sourceModel;
     property TagFilterProxyModelQmlWrapper modelWrapper : TagFilterProxyModelQmlWrapper{
         sourceModel: sourceModel;
     };
     model: modelWrapper.model;
+    textRole: "name";
 
+    //--- Delegate setup. ---//
     Component {
         id: fontDelegate
         ItemDelegate {
+            id: fontDelegateItem;
             required property var model;
-
+            property string fontName: model.name;
+            width: fontResourceView.listWidth;
             highlighted: familyCmb.highlightedIndex === model.index;
-            contentItem: KoShapeQtQuickLabel{
+
+            Component.onCompleted: {
+                var localizedDict = model.metadata.localized_font_family;
+                for (var i in locales) {
+                    var key = locales[i];
+                    if (key in localizedDict) {
+                        fontName = localizedDict[key];
+                        break;
+                    }
+                }
+            }
+
+            contentItem: KoShapeQtQuickLabel {
                 id: fontFamilyDelegate;
                 property bool colorBitmap : model.metadata.color_bitmap;
                 property bool colorCLRV0 : model.metadata.color_clrv0;
@@ -30,25 +49,14 @@ ComboBox {
                 property bool colorSVG : model.metadata.color_svg;
                 property bool isVariable : model.metadata.is_variable;
                 property int type : model.metadata.font_type;
-                property string fontName: model.name;
-
-                Layout.fillWidth: true;
-                svgData: model.metadata.sample_svg;
+                property string fontName: fontDelegateItem.fontName;
+                width: parent.width;
+                height: nameLabel.height * 5;
                 imageScale: 3;
                 imagePadding: nameLabel.height;
+                svgData: model.metadata.sample_svg;
                 foregroundColor: sysPalette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
-
-                Component.onCompleted: {
-                    var localizedDict = model.metadata.localized_font_family;
-                    for (var i in locales) {
-                        var key = locales[i];
-                        if (key in localizedDict) {
-                            fontName = localizedDict[key];
-                            break;
-                        }
-                    }
-                }
 
                 Label {
                     id: nameLabel;
@@ -104,15 +112,30 @@ ComboBox {
                     }
                 }
             }
-            width: fontResourceView.listWidth;
-            background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
+            background: Rectangle {
+                color: highlighted? familyCmb.palette.highlight:"transparent";
+            }
+
+            MouseArea {
+                acceptedButtons: Qt.RightButton;
+                anchors.fill: parent;
+                //preventStealing: true;
+                onClicked: openContextMenu(mouse.x, mouse.y);
+                //onPressAndHold: openContextMenu(mouse.x, mouse.y);
+
+                function openContextMenu(x, y) {
+                    tagActionsContextMenu.resourceName = fontDelegateItem.fontName;
+                    tagActionsContextMenu.resourceIndex = model.index;
+                    tagActionsContextMenu.x = x;
+                    tagActionsContextMenu.y = y;
+                    tagActionsContextMenu.visible = true;
+                }
+            }
         }
     }
-
-
-    textRole: "name";
-
     delegate: fontDelegate;
+
+    //--- Pop up setup ---//
     popup: Popup {
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
@@ -125,7 +148,7 @@ ComboBox {
             id: fontResourceView;
             fontModel: familyCmb.delegateModel;
             tagModel: fontTagModel;
-            currentIndex: familyCmb.highlightedIndex;
+            currentIndex: familyCmb.currentIndex;
             clip:true;
             property var fontModel;
             property var tagModel;
@@ -175,8 +198,87 @@ ComboBox {
                     checked: modelWrapper.searchInTag;
                 }
             }
+
+            //--- Tag Setup ---//
+            Menu {
+                id: tagActionsContextMenu;
+                property int resourceIndex: -1;
+                property string resourceName: "";
+                Label {
+                    id: resourceLabel;
+                    text: tagActionsContextMenu.resourceName;
+                }
+
+                Menu {
+                    id: assignToTag;
+                    title: i18nc("@title:menu", "Assign to Tag");
+                    // submenus can't have icons in qml...
+                    //icon: "qrc:///light_list-add.svg";
+                    height: contentChildren.height;
+                    ListView {
+                        id: tagAddView;
+                        model: fontTagModel;
+                        height: contentHeight;
+                        width: parent.width;
+                        delegate: ItemDelegate {
+                            width: tagAddView.width;
+                            text: model.display;
+                            onClicked: {
+                                modelWrapper.tagResource(model.index, tagActionsContextMenu.resourceIndex);
+                                tagActionsContextMenu.close();
+                            }
+                        }
+                    }
+                    MenuSeparator {}
+                    RowLayout {
+                        TextField {
+                            id: newTagName;
+                            placeholderText: i18nc("@info:placeholder", "New Tag Name...");
+                            Layout.fillWidth: true;
+                        }
+                        ToolButton {
+                            icon.source: "qrc:///light_list-add.svg";
+                            icon.color: palette.text;
+                            onClicked:  {
+                                modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
+                                tagActionsContextMenu.visible = false;
+                            }
+                        }
+                    }
+
+                }
+                MenuSeparator {}
+                Action {
+                    enabled: tagFilter.currentIndex != 0;
+                    id: removeFromThisTag;
+                    text: i18nc("@action:inmenu", "Remove from this tag");
+                    icon.source: "qrc:///16_light_list-remove.svg";
+                }
+
+                Menu {
+                    id: removeFromTag;
+                    title: i18nc("@title:menu", "Remove from other tag");
+                    ListView {
+                        id: tagRemoveView;
+                        model: fontTagModel;
+                        height: contentHeight;
+                        width: parent.width;
+                        delegate: ItemDelegate {
+                            width: tagRemoveView.width;
+                            text: model.display;
+                            onClicked: {
+                                modelWrapper.untagResource(model.index, tagActionsContextMenu.resourceIndex);
+                                tagActionsContextMenu.visible = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
         palette: familyCmb.palette;
+
+
     }
-    wheelEnabled: true;
+
+
 }

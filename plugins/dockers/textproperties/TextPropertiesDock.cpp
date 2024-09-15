@@ -28,6 +28,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
+#include <KisTagResourceModel.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -120,6 +121,48 @@ public:
 
     bool searchInTag() {
         return m_tagFilterProxyModel->filterInCurrentTag();
+    }
+
+    Q_INVOKABLE void addNewTag(QString newTagName, int resourceIndex = -1) {
+        KisTagSP tagsp = m_tagModel->tagForUrl(newTagName);
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        if (tagsp.isNull()) {
+            QVector<KoResourceSP> vec;
+            tagsp = m_tagModel->addTag(newTagName, false, vec);
+
+        }
+        // TODO: figure out how to get a tag reactivated again, without doing too much code duplication :|
+        if (resourceIdx.isValid()) {
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
+        }
+
+    }
+
+    Q_INVOKABLE void tagResource(int tagIndex, int resourceIndex) {
+        QModelIndex idx = m_tagModel->index(tagIndex, 0);
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        KisTagSP tagsp;
+        if (idx.isValid()) {
+            tagsp = m_tagModel->tagForIndex(idx);
+        }
+        if (tagsp && resourceIdx.isValid()) {
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
+        }
+    }
+
+    Q_INVOKABLE void untagResource(int tagIndex, int resourceIndex) {
+        QModelIndex idx = m_tagModel->index(tagIndex, 0);
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        KisTagSP tagsp;
+        if (idx.isValid()) {
+            tagsp = m_tagModel->tagForIndex(idx);
+        }
+        if (tagsp && resourceIdx.isValid()) {
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            m_tagFilterProxyModel->untagResources(tagsp, {resourceId});
+        }
     }
 
 Q_SIGNALS:

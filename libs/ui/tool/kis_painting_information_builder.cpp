@@ -79,6 +79,11 @@ QPointF KisPaintingInformationBuilder::documentToImage(const QPointF &point)
     return point;
 }
 
+QPointF KisPaintingInformationBuilder::imageToDocument(const QPointF &point)
+{
+    return point;
+}
+
 QPointF KisPaintingInformationBuilder::imageToView(const QPointF &point)
 {
     return point;
@@ -134,7 +139,7 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                          const KoPointerEvent *event,
                                                          bool isStrokeStarted)
 {
-    qreal perspective = calculatePerspective(imagePoint);
+    const qreal perspective = calculatePerspective(imageToDocument(imagePoint));
 
     const qreal speed = !isStrokeStarted && event ?
         m_speedSmoother->getNextSpeed(imageToView(imagePoint), event->time()) :
@@ -186,6 +191,11 @@ QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &p
     return m_converter->documentToImage(point);
 }
 
+QPointF KisConverterPaintingInformationBuilder::imageToDocument(const QPointF &point)
+{
+    return m_converter->imageToDocument(point);
+}
+
 QPointF KisConverterPaintingInformationBuilder::imageToView(const QPointF &point)
 {
     return m_converter->imageToWidget(point);
@@ -221,6 +231,13 @@ KisToolFreehandPaintingInformationBuilder::KisToolFreehandPaintingInformationBui
 QPointF KisToolFreehandPaintingInformationBuilder::documentToImage(const QPointF &point)
 {
     return m_tool->convertToPixelCoord(point);
+}
+
+QPointF KisToolFreehandPaintingInformationBuilder::imageToDocument(const QPointF &point)
+{
+    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(m_tool->canvas());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(canvas, point);
+    return canvas->coordinatesConverter()->imageToDocument(point);
 }
 
 QPointF KisToolFreehandPaintingInformationBuilder::imageToView(const QPointF &point)

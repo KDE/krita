@@ -401,9 +401,13 @@ void KisTransformMask::recalculateStaticImage()
      * updateProjection() is assuming that the requestedRect takes
      * into account all the change rects of all the masks. Usually,
      * this work is done by the walkers.
+     *
+     * NOTE: we should use layer's exact bounds, not its original
+     * paint device's exact bounds; it is necessary because the layer
+     * may have onion skins, which are a part of layer's bounds.
      */
     QRect requestedRect =
-        parentLayer->changeRect(parentLayer->original()->exactBounds());
+        parentLayer->changeRect(parentLayer->exactBounds());
 
 
     QRect bounds;

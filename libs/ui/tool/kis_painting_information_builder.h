@@ -47,6 +47,7 @@ protected Q_SLOTS:
 protected:
     virtual QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint);
     virtual QPointF documentToImage(const QPointF &point);
+    virtual QPointF imageToDocument(const QPointF &point);
     virtual QPointF imageToView(const QPointF &point);
     virtual qreal calculatePerspective(const QPointF &documentPoint);
 
@@ -82,6 +83,7 @@ public:
 
 protected:
     QPointF documentToImage(const QPointF &point) override;
+    QPointF imageToDocument(const QPointF &point) override;
     QPointF imageToView(const QPointF &point) override;
 
     qreal canvasRotation() const override;
@@ -101,6 +103,7 @@ public:
 
 protected:
     QPointF documentToImage(const QPointF &point) override;
+    QPointF imageToDocument(const QPointF &point) override;
     QPointF imageToView(const QPointF &point) override;
     QPointF adjustDocumentPoint(const QPointF &point, const QPointF &startPoint) override;
     qreal calculatePerspective(const QPointF &documentPoint) override;

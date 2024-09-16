@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-14 01:55+0000\n"
-"PO-Revision-Date: 2024-09-05 12:27+0200\n"
+"PO-Revision-Date: 2024-09-11 10:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -9104,11 +9104,10 @@ msgstr "Suavitat del pinzell: Desactivada"
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Suavitat del pinzell:"
+msgstr "Suavitat del pinzell: Píxel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -11979,9 +11978,7 @@ msgstr "Guarda les capes de grup"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3024
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Convertix un grup a una capa &animada"
@@ -11994,6 +11991,8 @@ msgid ""
 "Converts the child layers of a group into a single layer with multiple "
 "frames of animation"
 msgstr ""
+"Convertix les capes filles d'un grup en una capa individual amb diversos "
+"fotogrames d'animació"
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3027
@@ -12004,9 +12003,7 @@ msgstr "Convertix les capes filles en fotogrames d'animació"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to &animated layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
 msgstr "Convertix a una capa &animada"
@@ -29482,12 +29479,9 @@ msgid "Change Clone Layer"
 msgstr "Canvia la capa clonada"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert group to &animated layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "Convertix un grup a una capa &animada"
+msgstr "Convertix un grup a una capa animada"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
@@ -35338,46 +35332,40 @@ msgid "Color name:"
 msgstr "Nom del color:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "To:"
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "SO:"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "L:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Val:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -62212,7 +62200,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Convert to an animated layer"
-#~ msgstr "Convertix a una capa animada"

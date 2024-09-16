@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-11 01:44+0000\n"
+"POT-Creation-Date: 2024-09-14 01:55+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -16956,7 +16956,7 @@ msgid "Node Rename"
 msgstr ""
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:827
+#: libs/image/kis_image.cc:832
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -17077,7 +17077,7 @@ msgstr ""
 msgid "Gaussian"
 msgstr ""
 
-#: libs/image/kis_clone_layer.cpp:327
+#: libs/image/kis_clone_layer.cpp:331
 #, kde-format
 msgid "Copy From"
 msgstr ""
@@ -17166,49 +17166,49 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:397
+#: libs/image/kis_image.cc:402
 #, kde-format
 msgid "Imported Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr ""
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:826
+#: libs/image/kis_image.cc:831
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:922
+#: libs/image/kis_image.cc:927
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:923
+#: libs/image/kis_image.cc:928
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 
-#: libs/image/kis_image.cc:960
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:961
+#: libs/image/kis_image.cc:966
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 
-#: libs/image/kis_image.cc:1011
+#: libs/image/kis_image.cc:1016
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17216,17 +17216,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/image/kis_image.cc:1150
+#: libs/image/kis_image.cc:1155
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:1160
+#: libs/image/kis_image.cc:1165
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 
-#: libs/image/kis_image.cc:1163
+#: libs/image/kis_image.cc:1168
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17234,12 +17234,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/image/kis_image.cc:1264
+#: libs/image/kis_image.cc:1269
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 
-#: libs/image/kis_image.cc:1268
+#: libs/image/kis_image.cc:1273
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17247,37 +17247,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/image/kis_image.cc:1275
+#: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:1293
+#: libs/image/kis_image.cc:1298
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1344
+#: libs/image/kis_image.cc:1349
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1345
+#: libs/image/kis_image.cc:1350
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1403
+#: libs/image/kis_image.cc:1408
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:1444
+#: libs/image/kis_image.cc:1449
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 
-#: libs/image/kis_image.cc:2511
+#: libs/image/kis_image.cc:2453
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -18218,7 +18218,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -19504,8 +19504,8 @@ msgstr ""
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:749
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:755
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:758
@@ -19536,7 +19536,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20038,7 +20038,7 @@ msgid "Delete resource"
 msgstr ""
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2631
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20291,7 +20291,7 @@ msgstr ""
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -20445,27 +20445,27 @@ msgctxt "(qtundo-format)"
 msgid "Activate transform tool"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:46
+#: libs/ui/animation/KisAnimationRender.cpp:47
 #, kde-format
 msgid ""
 "%1 requires width and height to be even numbers.  Please resize or crop the "
 "image before exporting."
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:47
-#: libs/ui/animation/KisAnimationRender.cpp:113
+#: libs/ui/animation/KisAnimationRender.cpp:48
+#: libs/ui/animation/KisAnimationRender.cpp:116
 #, kde-format
 msgid ""
 "Could not render animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:89
+#: libs/ui/animation/KisAnimationRender.cpp:92
 #, kde-format
 msgid "Overwrite existing video?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:90
+#: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
 msgid ""
 "A file already exists at the path where you want to render your video "
@@ -20474,20 +20474,20 @@ msgid ""
 "you want to overwrite the existing file?"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:150
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:151
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, kde-format
 msgctxt "@title:window"
 msgid "Rendering error"
 msgstr ""
 
-#: libs/ui/animation/KisAnimationRender.cpp:152
+#: libs/ui/animation/KisAnimationRender.cpp:153
 #, kde-format
 msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2239
 #, kde-format
 msgid "Render Animation"
 msgstr ""
@@ -22485,7 +22485,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -30514,54 +30514,54 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2685
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2688
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2857
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2873
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2981
+#: libs/ui/KisMainWindow.cpp:2983
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3040
+#: libs/ui/KisMainWindow.cpp:3042
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -38016,17 +38016,17 @@ msgid "Insert Name"
 msgstr ""
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:351
 #, kde-format
 msgid "Select a Directory"
 msgstr ""
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr ""
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr ""
@@ -39693,7 +39693,7 @@ msgstr ""
 msgid "Small Color Selector"
 msgstr ""
 
-#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:178
+#: plugins/dockers/snapshotdocker/KisSnapshotModel.cpp:184
 #, kde-format
 msgctxt "snapshot names, e.g. \"Snapshot 1\""
 msgid "Snapshot %1"

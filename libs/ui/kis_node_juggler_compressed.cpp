@@ -718,7 +718,7 @@ KisNodeJugglerCompressed::KisNodeJugglerCompressed(const KUndo2MagicString &acti
     connect(&m_d->compressor, SIGNAL(timeout()), SLOT(slotUpdateTimeout()));
 
     connect(m_d->image, SIGNAL(sigStrokeCancellationRequested()), SLOT(slotEndStrokeRequested()));
-    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotCancelStrokeRequested()));
+    connect(m_d->image, SIGNAL(sigUndoDuringStrokeRequested()), SLOT(slotUndoDuringStrokeRequested()));
     connect(m_d->image, SIGNAL(sigStrokeEndRequestedActiveNodeFiltered()), SLOT(slotEndStrokeRequested()));
     connect(m_d->image, SIGNAL(sigAboutToBeDeleted()), SLOT(slotImageAboutToBeDeleted()));
 
@@ -909,20 +909,34 @@ void KisNodeJugglerCompressed::slotEndStrokeRequested()
     end();
 }
 
-void KisNodeJugglerCompressed::slotCancelStrokeRequested()
+void KisNodeJugglerCompressed::slotUndoDuringStrokeRequested()
 {
     if (!m_d->isStarted) return;
 
-    m_d->applicator->cancel();
-    cleanup();
+    /**
+     * When the user presses Cltr+Z during the process of layer removal
+     * we should **end** the process and pass execution process back to
+     * the undo stack to make it undone. If we just cancel the action,
+     * then no redo action will be created (see bug 491186).
+     *
+     * So we just wait till the end of the action and return back
+     * to the undo stack.
+     */
+
+    KisImageSP image = m_d->image;
+    end();
+    image->waitForDone();
 }
 
 void KisNodeJugglerCompressed::slotImageAboutToBeDeleted()
 {
     if (!m_d->isStarted) return;
 
-    m_d->applicator->end();
-    cleanup();
+    /**
+     * We should start a proper end() routine with updates
+     * to avoid an assert about missing updates
+     */
+    end();
 }
 
 bool KisNodeJugglerCompressed::isEnded() const

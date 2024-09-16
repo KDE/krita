@@ -54,6 +54,7 @@
 #include "kis_image_config.h"
 #include "KisFutureUtils.h"
 #include "KisBatchUpdateLayerModificationCommand.h"
+#include "commands_new/KisChangeCloneLayersCommand.h"
 
 
 namespace KisLayerUtils {
@@ -937,6 +938,24 @@ namespace Private {
                 addCommandImpl(new KisImageLayerMoveCommand(image, mask, replacementNode->node, replacementNode->node->lastChild(), false));
                 addCommandImpl(new KisActivateSelectionMaskCommand(mask, false));
             }
+
+            // relink all the clone layers onto the new replacement node
+            if (replacementNode->relinkClones) {
+                QList<KisCloneLayerWSP> clones;
+
+                Q_FOREACH (KisNodeSP node, removedNodes) {
+                    KisLayerSP originalSource = dynamic_cast<KisLayer*>(node.data());
+                    if (originalSource) {
+                        clones.append(originalSource->registeredClones());
+                    }
+                }
+
+                KisLayerSP finalSource = dynamic_cast<KisLayer*>(replacementNode->node.data());
+
+                if (finalSource && !clones.isEmpty()) {
+                    addCommandImpl(new KisChangeCloneLayersCommand(implicitCastList<KisCloneLayerSP>(clones), finalSource));
+                }
+            }
         }
 
         while (!removedNodes.isEmpty()) {
@@ -1135,8 +1154,8 @@ namespace Private {
     }
 
     struct CleanUpNodes : private RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
-        CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter)
-            : m_info(info), m_putAfter(putAfter) {}
+        CleanUpNodes(MergeDownInfoBaseSP info, KisNodeSP putAfter, bool relinkClones = false)
+            : m_info(info), m_putAfter(putAfter), m_relinkClones(relinkClones) {}
 
         static void findPerfectParent(KisNodeList nodesToDelete, KisNodeSP &putAfter, KisNodeSP &parent) {
             if (!putAfter) {
@@ -1232,7 +1251,8 @@ namespace Private {
                                              parent,
                                              m_putAfter,
                                              true, false,
-                                             m_info->selectionMasks}));
+                                             m_info->selectionMasks,
+                                             m_relinkClones}));
             }
 
 
@@ -1246,6 +1266,7 @@ namespace Private {
     private:
         MergeDownInfoBaseSP m_info;
         KisNodeSP m_putAfter;
+        bool m_relinkClones {false};
     };
 
     SwitchFrameCommand::SharedStorage::~SharedStorage() {
@@ -1940,7 +1961,7 @@ namespace Private {
 
             //applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
             if (cleanupNodes){
-                applicator.applyCommand(new CleanUpNodes(info, putAfter),
+                applicator.applyCommand(new CleanUpNodes(info, putAfter, flattenSingleLayer),
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             } else {

@@ -165,7 +165,6 @@ set(kritaui_LIB_SRCS
     kis_canvas_controls_manager.cpp
     kis_multinode_property.cpp
     KisWelcomePageWidget.cpp
-    KisChangeCloneLayersCommand.cpp
     KisUiFont.cpp
     KisIdleTasksManager.cpp
     KisIdleTaskStrokeStrategy.cpp

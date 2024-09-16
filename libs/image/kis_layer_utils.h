@@ -150,8 +150,21 @@ namespace KisLayerUtils
     public:
         virtual ~RemoveNodeHelper();
     protected:
+        struct ReplacementNode;
         virtual void addCommandImpl(KUndo2Command *cmd) = 0;
+
+        struct ReplacementNode {
+            KisNodeSP node;
+            KisNodeSP parent;
+            KisNodeSP putAfter;
+            bool doRedoUpdates = true;
+            bool doUndoUpdates = true;
+            QVector<KisSelectionMaskSP> selectionMasks;
+        };
+
         void safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image);
+        void safeReplaceMultipleNodes(KisNodeList removedNodes, KisImageSP image,
+                                      std::optional<ReplacementNode> replacementNode);
     private:
         bool checkIsSourceForClone(KisNodeSP src, const KisNodeList &nodes);
         static bool scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove);

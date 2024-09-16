@@ -88,6 +88,7 @@ struct KisAnimTimelineFramesModel::Private
 
     bool layerEditable(int row) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
+
         if (!dummy) return true;
         
         if (image->isIsolatingLayer()) {
@@ -99,9 +100,11 @@ struct KisAnimTimelineFramesModel::Private
 
     bool frameExists(int row, int column) const {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
+
         if (!dummy) return false;
 
         KisKeyframeChannel *primaryChannel = dummy->node()->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+
         return (primaryChannel && primaryChannel->keyframeAt(column));
     }
 
@@ -123,6 +126,7 @@ struct KisAnimTimelineFramesModel::Private
     bool specialKeyframeExists(int row, int column) {
         KisNodeDummy *dummy = converter->dummyFromRow(row);
         if (!dummy) return false;
+
         Q_FOREACH(KisKeyframeChannel *channel, dummy->node()->keyframeChannels()) {
             if (channel->id() != KisKeyframeChannel::Raster.id() && channel->keyframeAt(column)) {
                 return true;
@@ -391,41 +395,41 @@ QVariant KisAnimTimelineFramesModel::data(const QModelIndex &index, int role) co
     if(!m_d->dummiesFacade) return QVariant();
 
     switch (role) {
-    case ActiveLayerRole: {
-        return index.row() == m_d->activeLayerIndex;
-    }
-    case FrameEditableRole: {
-        return m_d->layerEditable(index.row());
-    }
-    case FrameHasContent: {
-        return m_d->frameHasContent(index.row(), index.column());
-    }
-    case FrameExistsRole: {
-        return m_d->frameExists(index.row(), index.column());
-    }
-    case SpecialKeyframeExists: {
-        return m_d->specialKeyframeExists(index.row(), index.column());
-    }
-    case FrameColorLabelIndexRole: {
-        int label = m_d->frameColorLabel(index.row(), index.column());
-        return label > 0 ? label : QVariant();
-    }
-    case Qt::DisplayRole: {
-        return m_d->layerName(index.row());
-    }
-    case Qt::TextAlignmentRole: {
-        return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
-    }
-    case Qt::UserRole + KisAbstractResourceModel::LargeThumbnail: {
-        KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
-        if (!dummy) {
-            return  QVariant();
+        case ActiveLayerRole: {
+            return index.row() == m_d->activeLayerIndex;
         }
-        const int maxSize = 200;
+        case FrameEditableRole: {
+            return m_d->layerEditable(index.row());
+        }
+        case FrameHasContent: {
+            return m_d->frameHasContent(index.row(), index.column());
+        }
+        case FrameExistsRole: {
+            return m_d->frameExists(index.row(), index.column());
+        }
+        case SpecialKeyframeExists: {
+            return m_d->specialKeyframeExists(index.row(), index.column());
+        }
+        case FrameColorLabelIndexRole: {
+            int label = m_d->frameColorLabel(index.row(), index.column());
+            return label > 0 ? label : QVariant();
+        }
+        case Qt::DisplayRole: {
+            return m_d->layerName(index.row());
+        }
+        case Qt::TextAlignmentRole: {
+            return QVariant(Qt::AlignHCenter | Qt::AlignVCenter);
+        }
+        case Qt::UserRole + KisAbstractResourceModel::LargeThumbnail: {
+            KisNodeDummy *dummy = m_d->converter->dummyFromRow(index.row());
+            if (!dummy) {
+                return  QVariant();
+            }
+            const int maxSize = 200;
 
-        QImage image(dummy->node()->createThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
-        return image;
-    }
+            QImage image(dummy->node()->createThumbnailForFrame(maxSize, maxSize, index.column(), Qt::KeepAspectRatio));
+            return image;
+        }
     }
 
     return ModelWithExternalNotifications::data(index, role);
@@ -436,30 +440,30 @@ bool KisAnimTimelineFramesModel::setData(const QModelIndex &index, const QVarian
     if (!index.isValid() || !m_d->dummiesFacade) return false;
 
     switch (role) {
-    case ActiveLayerRole: {
-        if (value.toBool() &&
-            index.row() != m_d->activeLayerIndex) {            
-            int prevLayer = m_d->activeLayerIndex;
-            m_d->activeLayerIndex = index.row();
+        case ActiveLayerRole: {
+            if (value.toBool() &&
+                index.row() != m_d->activeLayerIndex) {
+                int prevLayer = m_d->activeLayerIndex;
+                m_d->activeLayerIndex = index.row();
 
-            Q_EMIT dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
-            Q_EMIT dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
+                Q_EMIT dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
+                Q_EMIT dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
 
-            Q_EMIT headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
-            Q_EMIT headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
+                Q_EMIT headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
+                Q_EMIT headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
 
-            KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
-            KIS_ASSERT_RECOVER(dummy) { return true; }
+                KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
+                KIS_ASSERT_RECOVER(dummy) { return true; }
 
-            Q_EMIT requestCurrentNodeChanged(dummy->node());
-            Q_EMIT sigEnsureRowVisible(m_d->activeLayerIndex);
+                Q_EMIT requestCurrentNodeChanged(dummy->node());
+                Q_EMIT sigEnsureRowVisible(m_d->activeLayerIndex);
+            }
+            break;
         }
-        break;
-    }
-    case FrameColorLabelIndexRole: {
-        m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
-    }
-        break;
+        case FrameColorLabelIndexRole: {
+            m_d->setFrameColorLabel(index.row(), index.column(), value.toInt());
+        }
+            break;
     }
 
     return ModelWithExternalNotifications::setData(index, value, role);
@@ -471,69 +475,69 @@ QVariant KisAnimTimelineFramesModel::headerData(int section, Qt::Orientation ori
 
     if (orientation == Qt::Vertical) {
         switch (role) {
-        case ActiveLayerRole:
-            return section == m_d->activeLayerIndex;
-        case Qt::DisplayRole: {
-            QVariant value = headerData(section, orientation, Qt::ToolTipRole);
-            if (!value.isValid()) return value;
+            case ActiveLayerRole:
+                return section == m_d->activeLayerIndex;
+            case Qt::DisplayRole: {
+                QVariant value = headerData(section, orientation, Qt::ToolTipRole);
+                if (!value.isValid()) return value;
 
-            QString name = value.toString();
-            const int maxNameSize = 13;
+                QString name = value.toString();
+                const int maxNameSize = 13;
 
-            if (name.size() > maxNameSize) {
-                name = QString("%1...").arg(name.left(maxNameSize));
+                if (name.size() > maxNameSize) {
+                    name = QString("%1...").arg(name.left(maxNameSize));
+                }
+
+                return name;
             }
-
-            return name;
-        }
-        case Qt::ForegroundRole: {
-            // WARNING: this role doesn't work for header views! Use
-            //          bold font to show isolated mode instead!
-            return QVariant();
-        }
-        case Qt::FontRole: {
-            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
-            if (!dummy) return QVariant();
-            KisNodeSP node = dummy->node();
-
-            QFont baseFont;
-            if (node->projectionLeaf()->isDroppedNode()) {
-                baseFont.setStrikeOut(true);
-            } else if (m_d->image && m_d->image->isolationRootNode() &&
-                       KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
-                baseFont.setBold(true);
-            }
-            return baseFont;
-        }
-        case Qt::ToolTipRole: {
-            return m_d->layerName(section);
-        }
-        case TimelinePropertiesRole: {
-            return QVariant::fromValue(m_d->layerProperties(section));
-        }
-        case OtherLayersRole: {
-            TimelineNodeListKeeper::OtherLayersList list =
-                m_d->converter->otherLayersList();
-
-            return QVariant::fromValue(list);
-        }
-        case PinnedToTimelineRole: {
-            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
-            if (!dummy) return QVariant();
-            return dummy->node()->isPinnedToTimeline();
-        }
-        case Qt::BackgroundRole: {
-            int label = m_d->layerColorLabel(section);
-            if (label > 0) {
-                KisNodeViewColorScheme scm;
-                QColor color = scm.colorFromLabelIndex(label);
-                QPalette pal = qApp->palette();
-                color = KisPaintingTweaks::blendColors(color, pal.color(QPalette::Button), 0.3);
-                return QBrush(color);
-            } else {
+            case Qt::ForegroundRole: {
+                // WARNING: this role doesn't work for header views! Use
+                //          bold font to show isolated mode instead!
                 return QVariant();
             }
-        }
+            case Qt::FontRole: {
+                KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+                if (!dummy) return QVariant();
+                KisNodeSP node = dummy->node();
+
+                QFont baseFont;
+                if (node->projectionLeaf()->isDroppedNode()) {
+                    baseFont.setStrikeOut(true);
+                } else if (m_d->image && m_d->image->isolationRootNode() &&
+                           KisNodeModel::belongsToIsolatedGroup(m_d->image, node, m_d->dummiesFacade)) {
+                    baseFont.setBold(true);
+                }
+                return baseFont;
+            }
+            case Qt::ToolTipRole: {
+                return m_d->layerName(section);
+            }
+            case TimelinePropertiesRole: {
+                return QVariant::fromValue(m_d->layerProperties(section));
+            }
+            case OtherLayersRole: {
+                TimelineNodeListKeeper::OtherLayersList list =
+                    m_d->converter->otherLayersList();
+
+                return QVariant::fromValue(list);
+            }
+            case PinnedToTimelineRole: {
+                KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+                if (!dummy) return QVariant();
+                return dummy->node()->isPinnedToTimeline();
+            }
+            case Qt::BackgroundRole: {
+                int label = m_d->layerColorLabel(section);
+                if (label > 0) {
+                    KisNodeViewColorScheme scm;
+                    QColor color = scm.colorFromLabelIndex(label);
+                    QPalette pal = qApp->palette();
+                    color = KisPaintingTweaks::blendColors(color, pal.color(QPalette::Button), 0.3);
+                    return QBrush(color);
+                } else {
+                    return QVariant();
+                }
+            }
         }
     }
 
@@ -546,23 +550,23 @@ bool KisAnimTimelineFramesModel::setHeaderData(int section, Qt::Orientation orie
 
     if (orientation == Qt::Vertical) {
         switch (role) {
-        case ActiveLayerRole: {
-            setData(index(section, 0), value, role);
-            break;
-        }
-        case TimelinePropertiesRole: {
-            KisAnimTimelineFramesModel::PropertyList props = value.value<KisAnimTimelineFramesModel::PropertyList>();
+            case ActiveLayerRole: {
+                setData(index(section, 0), value, role);
+                break;
+            }
+            case TimelinePropertiesRole: {
+                KisAnimTimelineFramesModel::PropertyList props = value.value<KisAnimTimelineFramesModel::PropertyList>();
 
-            int result = m_d->setLayerProperties(section, props);
-            Q_EMIT headerDataChanged (Qt::Vertical, section, section);
-            return result;
-        }
-        case PinnedToTimelineRole: {
-            KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
-            if (!dummy) return false;
-            dummy->node()->setPinnedToTimeline(value.toBool());
-            return true;
-        }
+                int result = m_d->setLayerProperties(section, props);
+                Q_EMIT headerDataChanged (Qt::Vertical, section, section);
+                return result;
+            }
+            case PinnedToTimelineRole: {
+                KisNodeDummy *dummy = m_d->converter->dummyFromRow(section);
+                if (!dummy) return false;
+                dummy->node()->setPinnedToTimeline(value.toBool());
+                return true;
+            }
         }
     }
 
@@ -885,7 +889,6 @@ bool KisAnimTimelineFramesModel::createFrame(const QModelIndexList &dstIndex)
         KisAnimUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Raster.id(), cell.second, false, parentCommand);
     }
 
-
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
@@ -1062,7 +1065,6 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
                                         parentCommand.data());
     }
 
-
     KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand.take(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
@@ -1083,6 +1085,7 @@ QString KisAnimTimelineFramesModel::audioChannelFileName() const
 void KisAnimTimelineFramesModel::setAudioChannelFileName(const QFileInfo &fileName)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(document());
+
     QVector<QFileInfo> tracks;
     if (fileName.exists()) {
         tracks << fileName;

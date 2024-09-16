@@ -821,7 +821,6 @@ void KisAnimTimelineFramesView::slotRealignScrollBars() {
     hBar->setMaximumWidth(desiredScrollArea.width());
     hBar->setMinimumWidth(desiredScrollArea.width());
 
-
     vBar->parentWidget()->layout()->setAlignment(Qt::AlignBottom);
     vBar->setMaximumHeight(desiredScrollArea.height());
     vBar->setMinimumHeight(desiredScrollArea.height());
@@ -887,8 +886,8 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
         if (event->button() == Qt::RightButton) {
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
-//            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
-//            m_d->zoomDragButton->beginZoom(event->pos(), staticPoint);
+            //            qreal staticPoint = index.isValid() ? index.column() : currentIndex().column();
+            //            m_d->zoomDragButton->beginZoom(event->pos(), staticPoint);
         } else if (event->button() == Qt::LeftButton) {
             m_d->initialDragPanPos = event->pos();
             m_d->initialDragPanValue =
@@ -999,8 +998,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             m_d->model->setLastClickedIndex(index);
         }
 
-        m_d->lastPressedPosition =
-                QPoint(horizontalOffset(), verticalOffset()) + event->pos();
+        m_d->lastPressedPosition = QPoint(horizontalOffset(), verticalOffset()) + event->pos();
         m_d->lastPressedModifier = event->modifiers();
 
         m_d->initialDragPanPos = event->pos();
@@ -1038,10 +1036,8 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
     }
 
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-
         if (e->buttons() & Qt::RightButton) {
-
-//            m_d->zoomDragButton->continueZoom(e->pos());
+            // m_d->zoomDragButton->continueZoom(e->pos());
         } else if (e->buttons() & Qt::LeftButton) {
 
             QPoint diff = e->pos() - m_d->initialDragPanPos;
@@ -1058,6 +1054,7 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             horizontalScrollBar()->setValue(offset.x());
             verticalScrollBar()->setValue(offset.y() / height);
         }
+
         e->accept();
     } else if (e->buttons() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(e->pos()));
@@ -1067,6 +1064,7 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             // The offset of the headers is needed to get the correct position inside the view.
             m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
         }
+
         e->accept();
     } else {
         m_d->model->setScrubState(true);
@@ -1134,7 +1132,6 @@ void KisAnimTimelineFramesView::startDrag(Qt::DropActions supportedActions)
             }
         }
     } else {
-
         /**
          * Workaround for Qt5's bug: if we start a dragging action right during
          * Shift-selection, Qt will get crazy. We cannot workaround it easily,
@@ -1700,13 +1697,18 @@ QPixmap KisAnimTimelineFramesView::Private::renderToPixmap(const QModelIndexList
 {
     Q_ASSERT(r);
     QItemViewPaintPairs paintPairs = draggablePaintPairs(indexes, r);
+
     if (paintPairs.isEmpty())
         return QPixmap();
+
     QPixmap pixmap(r->size());
     pixmap.fill(Qt::transparent);
+
     QPainter painter(&pixmap);
+
     QStyleOptionViewItem option = viewOptionsV4();
     option.state |= QStyle::State_Selected;
+
     for (int j = 0; j < paintPairs.count(); ++j) {
         option.rect = paintPairs.at(j).first.translated(-r->topLeft());
         const QModelIndex &current = paintPairs.at(j).second;
@@ -1714,15 +1716,18 @@ QPixmap KisAnimTimelineFramesView::Private::renderToPixmap(const QModelIndexList
 
         q->itemDelegate(current)->paint(&painter, option, current);
     }
+
     return pixmap;
 }
 
 void resizeToMinimalSize(QAbstractButton *w, int minimalSize)
 {
     QSize buttonSize = w->sizeHint();
+
     if (buttonSize.height() > minimalSize) {
         buttonSize = QSize(minimalSize, minimalSize);
     }
+
     w->resize(buttonSize);
 }
 

@@ -81,7 +81,6 @@
 #include <KisSynchronizedConnection.h>
 
 struct KisNodeManager::Private {
-
     Private(KisNodeManager *_q, KisViewManager *v)
         : q(_q)
         , view(v)
@@ -156,7 +155,6 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
         layerManager.activateLayer(0);
         previouslyActiveNode = q->activeNode();
     } else {
-
         previouslyActiveNode = q->activeNode();
 
         KoShape * shape = view->document()->shapeForNode(node);
@@ -184,6 +182,8 @@ bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
     }
     return true;
 }
+
+//=====================================================================================
 
 KisNodeManager::KisNodeManager(KisViewManager *view)
     : m_d(new Private(this, view))
@@ -846,7 +846,6 @@ void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
                 << "KritaFill/KisToolFill"
                 << "KritaFill/KisToolGradient";
 
-
         KisSelectionMask *selectionMask = dynamic_cast<KisSelectionMask*>(node.data());
         const bool nodeHasVectorAbilities = node->inherits("KisShapeLayer") ||
                 (selectionMask && selectionMask->selection()->hasShapeSelection());
@@ -1361,7 +1360,6 @@ void KisNodeManager::saveVectorLayerAsImage()
 
 void KisNodeManager::slotSplitAlphaIntoMask()
 {
-
     KisNodeSP node = activeNode();
     if (!canModifyLayer(node)) return;
 

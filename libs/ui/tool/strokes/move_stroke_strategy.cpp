@@ -477,9 +477,6 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     }
 }
 
-#include "kis_selection_mask.h"
-#include "kis_selection.h"
-
 void MoveStrokeStrategy::doCanvasUpdate(bool forceUpdate)
 {
     if (!forceUpdate &&

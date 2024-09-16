@@ -172,6 +172,7 @@ namespace KisLayerUtils
             bool doRedoUpdates = true;
             bool doUndoUpdates = true;
             QVector<KisSelectionMaskSP> selectionMasks;
+            bool relinkClones = false;
         };
 
         void safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image);

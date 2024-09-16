@@ -14,7 +14,7 @@
 #include <kis_signals_blocker.h>
 
 #include "KisViewManager.h"
-#include "KisChangeCloneLayersCommand.h"
+#include <commands_new/KisChangeCloneLayersCommand.h>
 
 struct KisDlgChangeCloneSource::Private
 {

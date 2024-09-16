@@ -7,10 +7,11 @@
 #ifndef KIS_CHANGE_CLONE_LAYERS_COMMAND_H_
 #define KIS_CHANGE_CLONE_LAYERS_COMMAND_H_
 
+#include <kritaimage_export.h>
 #include <kundo2command.h>
 #include "kis_types.h"
 
-class KisChangeCloneLayersCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisChangeCloneLayersCommand : public KUndo2Command
 {
 
 public:

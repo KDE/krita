@@ -2119,6 +2119,38 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
 {
     if (!root) root = m_d->rootLayer;
 
+    QVector<QRect> requestedRects = rects;
+
+    KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(root.data());
+    if (group && group->passThroughMode()) {
+        /**
+         * We cannot regenerate a pass-through group, since it is not present in
+         * the layers stack. Instead we should delegate this regeneration pass
+         * to the parent group.
+         *
+         * We should also take into account the change rect of all the layers that lay
+         * above the "dirty" pass-through group (i.e. convert the change rect of the
+         * child into a change rect of the parent). That is required for a case,
+         * when threre are adjustment layers laying above the pass-through group.
+         */
+        QVector<QRect> changeRects = requestedRects;
+        KisProjectionLeafSP leaf = root->projectionLeaf()->nextSibling();
+        while (leaf) {
+            if (!leaf->shouldBeRendered()) continue;
+
+            for (auto it = changeRects.begin(); it != changeRects.end(); ++it) {
+                *it = leaf->projectionPlane()->changeRect(*it, leaf->node() == root ? KisNode::N_FILTHY : KisNode::N_ABOVE_FILTHY);
+            }
+
+            leaf = leaf->nextSibling();
+        }
+
+        std::swap(requestedRects, changeRects);
+        root = group->parent();
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(root);
+    }
+
     /**
      * We iterate through the filters in a reversed way. It makes the most nested filters
      * to execute first.
@@ -2129,16 +2161,16 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
 
         KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
 
-        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect, flags)) {
+        if ((*it)->filterRefreshGraph(this, root.data(), requestedRects, cropRect, flags)) {
             return;
         }
     }
 
     if (!flags.testFlag(KisProjectionUpdateFlag::DontInvalidateFrames)) {
-        m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
+        m_d->animationInterface->notifyNodeChanged(root.data(), requestedRects, true);
     }
 
-    m_d->scheduler.fullRefreshAsync(root, rects, cropRect, flags);
+    m_d->scheduler.fullRefreshAsync(root, requestedRects, cropRect, flags);
 }
 
 void KisImage::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)

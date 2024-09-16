@@ -342,6 +342,7 @@ PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(const PerspectiveEllips
     , KisPaintingAssistant(rhs, handleMap)
     , d(new Private())
 {
+    updateCache();
 }
 
 KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
@@ -603,6 +604,7 @@ bool PerspectiveEllipseAssistant::contains(const QPointF &point) const
 
 qreal PerspectiveEllipseAssistant::distance(const QPointF &point) const
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(d->cacheValid);
     return PerspectiveBasedAssistantHelper::distanceInGrid(d->cache, point);
 }
 

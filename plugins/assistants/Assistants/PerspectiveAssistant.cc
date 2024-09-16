@@ -40,6 +40,7 @@ PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap
     , m_cachedTransform(rhs.m_cachedTransform)
     , m_cachedPolygon(rhs.m_cachedPolygon)
     , m_cacheValid(rhs.m_cacheValid)
+    , m_cache(rhs.m_cache)
 {
     for (int i = 0; i < 4; ++i) {
         m_cachedPoints[i] = rhs.m_cachedPoints[i];
@@ -129,6 +130,7 @@ bool PerspectiveAssistant::contains(const QPointF& pt) const
 
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_cacheValid);
     return PerspectiveBasedAssistantHelper::distanceInGrid(m_cache, pt);
 }
 

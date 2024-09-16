@@ -1269,9 +1269,6 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
 
     if (filename.isEmpty()) return;
 
-
-    if (filename.isEmpty()) return;
-
     QString mimefilter = KisMimeDatabase::mimeTypeForFile(filename, false);
 
     QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());

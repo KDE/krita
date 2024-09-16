@@ -187,26 +187,13 @@ QString KoFontFamily::typographicFamily() const
     return metadata().value(TYPOGRAPHIC_NAME).toString();
 }
 
-QString KoFontFamily::translatedFontName(QList<QLocale> locales) const
+QString KoFontFamily::translatedFontName(QStringList locales) const
 {
-    QHash<QString, QVariant> names = metadata().value(LOCALIZED_FONT_FAMILY).toHash();
+    QMap<QString, QVariant> names = metadata().value(LOCALIZED_FONT_FAMILY).toMap();
     QString name = filename();
-    Q_FOREACH(const QLocale locale, locales) {
-        if (names.keys().contains(locale.bcp47Name())) {
-            name = names.value(locale.bcp47Name()).toString();
-            break;
-        }
-    }
-    return name;
-}
-
-QString KoFontFamily::translatedTypographicName(QList<QLocale> locales) const
-{
-    QHash<QString, QVariant> names = metadata().value(LOCALIZED_TYPOGRAPHIC_NAME).toHash();
-    QString name = QString();
-    Q_FOREACH(const QLocale locale, locales) {
-        if (names.keys().contains(locale.bcp47Name())) {
-            name = names.value(locale.bcp47Name()).toString();
+    Q_FOREACH(const QString locale, locales) {
+        if (names.keys().contains(locale)) {
+            name = names.value(locale).toString();
             break;
         }
     }

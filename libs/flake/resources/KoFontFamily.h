@@ -38,8 +38,8 @@ public:
     /// Returns the typographic family name, if any.
     QString typographicFamily() const;
 
-    QString translatedFontName(QList<QLocale> locales) const;
-    QString translatedTypographicName(QList<QLocale> locales) const;
+    /// Return the translated name for a given locale...
+    QString translatedFontName(QStringList locales) const;
 
     /// Font is variable
     bool isVariable() const;

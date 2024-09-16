@@ -26,20 +26,9 @@ ComboBox {
         ItemDelegate {
             id: fontDelegateItem;
             required property var model;
-            property string fontName: model.name;
+            property string fontName: modelWrapper.localizedNameForIndex(model.index, locales, model.name);
             width: fontResourceView.listWidth;
             highlighted: familyCmb.highlightedIndex === model.index;
-
-            Component.onCompleted: {
-                var localizedDict = model.metadata.localized_font_family;
-                for (var i in locales) {
-                    var key = locales[i];
-                    if (key in localizedDict) {
-                        fontName = localizedDict[key];
-                        break;
-                    }
-                }
-            }
 
             contentItem: KoShapeQtQuickLabel {
                 id: fontFamilyDelegate;
@@ -115,28 +104,13 @@ ComboBox {
             background: Rectangle {
                 color: highlighted? familyCmb.palette.highlight:"transparent";
             }
-
-            MouseArea {
-                acceptedButtons: Qt.RightButton;
-                anchors.fill: parent;
-                //preventStealing: true;
-                onClicked: openContextMenu(mouse.x, mouse.y);
-                //onPressAndHold: openContextMenu(mouse.x, mouse.y);
-
-                function openContextMenu(x, y) {
-                    tagActionsContextMenu.resourceName = fontDelegateItem.fontName;
-                    tagActionsContextMenu.resourceIndex = model.index;
-                    tagActionsContextMenu.x = x;
-                    tagActionsContextMenu.y = y;
-                    tagActionsContextMenu.visible = true;
-                }
-            }
         }
     }
     delegate: fontDelegate;
 
     //--- Pop up setup ---//
     popup: Popup {
+        id: familyCmbPopup;
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
         width: contentWidth;
@@ -165,6 +139,117 @@ ComboBox {
                     Layout.fillWidth: true;
                     currentIndex: modelWrapper.currentTag;
                     onActivated: modelWrapper.currentTag = currentIndex;
+                }
+
+                Button {
+                    id: tagMenuButton;
+                    icon.source: "qrc:///light_bookmarks.svg";
+                    text: i18nc("@label:button", "Tag");
+                    onClicked: hideShowMenu();
+                    function hideShowMenu() {
+                        if (!tagActionsContextMenu.visible) {
+                            tagActionsContextMenu.resourceIndex = familyCmb.highlightedIndex;
+                            tagActionsContextMenu.popup(tagMenuButton,
+                                                        tagActionsContextMenu.width - tagMenuButton.width,
+                                                        tagMenuButton.height - 1);
+                        } else {
+                            tagActionsContextMenu.dismiss();
+                        }
+                    }
+
+                    //--- Tag Setup ---//
+                    Menu {
+                        id: tagActionsContextMenu;
+                        property int resourceIndex: -1;
+                        property alias resourceName: resourceLabel.text;
+                        property var resourceTaggedModel : [];
+                        enabled: resourceIndex >= 0;
+                        onResourceIndexChanged: {
+                            resourceName = modelWrapper.localizedNameForIndex(resourceIndex, locales);
+                            updateResourceTaggedModel();
+                        }
+                        function updateResourceTaggedModel() {
+                            resourceTaggedModel = modelWrapper.taggedResourceModel(tagActionsContextMenu.resourceIndex);
+                        }
+
+                        modal: true;
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+                        Label {
+                            id: resourceLabel;
+                        }
+
+                        Menu {
+                            id: assignToTag;
+                            title: i18nc("@title:menu", "Assign to Tag");
+                            height: contentChildren.height;
+                            ListView {
+                                id: tagAddView;
+                                model: tagActionsContextMenu.resourceTaggedModel;
+                                height: contentHeight;
+                                width: parent.width;
+                                delegate: ItemDelegate {
+                                    width: tagAddView.width;
+                                    text: modelData.name;
+                                    visible: modelData.visible && !modelData.enabled;
+                                    height: visible? implicitContentHeight: 0;
+                                    onClicked: {
+                                        modelWrapper.tagResource(modelData.value, tagActionsContextMenu.resourceIndex);
+                                        tagActionsContextMenu.updateResourceTaggedModel();
+                                        tagActionsContextMenu.close();
+                                    }
+                                }
+                            }
+                            MenuSeparator {}
+                            RowLayout {
+                                TextField {
+                                    id: newTagName;
+                                    placeholderText: i18nc("@info:placeholder", "New Tag Name...");
+                                    Layout.fillWidth: true;
+                                }
+                                ToolButton {
+                                    icon.source: "qrc:///light_list-add.svg";
+                                    icon.color: palette.text;
+                                    onClicked:  {
+                                        modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
+                                        newTagName.text = "";
+                                        tagActionsContextMenu.updateResourceTaggedModel();
+                                        tagActionsContextMenu.dismiss();
+                                    }
+                                }
+                            }
+
+                        }
+                        MenuSeparator {}
+                        Action {
+                            enabled: modelWrapper.showResourceTagged(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
+                            id: removeFromThisTag;
+                            text: i18nc("@action:inmenu", "Remove from this tag");
+                            icon.source: "qrc:///16_light_list-remove.svg";
+                            onTriggered: modelWrapper.untagResource(modelWrapper.currentTag, tagActionsContextMenu.resourceIndex);
+                        }
+
+                        Menu {
+                            id: removeFromTag;
+                            title: i18nc("@title:menu", "Remove from other tag");
+                            ListView {
+                                id: tagRemoveView;
+                                model: tagActionsContextMenu.resourceTaggedModel;
+                                height: contentHeight;
+                                width: parent.width;
+                                delegate: ItemDelegate {
+                                    width: tagRemoveView.width;
+                                    text: modelData.name;
+                                    visible: modelData.visible && modelData.enabled;
+                                    height: visible? implicitContentHeight: 0;
+                                    onClicked: {
+                                        modelWrapper.untagResource(modelData.value, tagActionsContextMenu.resourceIndex);
+                                        tagActionsContextMenu.updateResourceTaggedModel();
+                                        tagActionsContextMenu.dismiss()
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
             }
@@ -199,81 +284,7 @@ ComboBox {
                 }
             }
 
-            //--- Tag Setup ---//
-            Menu {
-                id: tagActionsContextMenu;
-                property int resourceIndex: -1;
-                property string resourceName: "";
-                Label {
-                    id: resourceLabel;
-                    text: tagActionsContextMenu.resourceName;
-                }
 
-                Menu {
-                    id: assignToTag;
-                    title: i18nc("@title:menu", "Assign to Tag");
-                    // submenus can't have icons in qml...
-                    //icon: "qrc:///light_list-add.svg";
-                    height: contentChildren.height;
-                    ListView {
-                        id: tagAddView;
-                        model: fontTagModel;
-                        height: contentHeight;
-                        width: parent.width;
-                        delegate: ItemDelegate {
-                            width: tagAddView.width;
-                            text: model.display;
-                            onClicked: {
-                                modelWrapper.tagResource(model.index, tagActionsContextMenu.resourceIndex);
-                                tagActionsContextMenu.close();
-                            }
-                        }
-                    }
-                    MenuSeparator {}
-                    RowLayout {
-                        TextField {
-                            id: newTagName;
-                            placeholderText: i18nc("@info:placeholder", "New Tag Name...");
-                            Layout.fillWidth: true;
-                        }
-                        ToolButton {
-                            icon.source: "qrc:///light_list-add.svg";
-                            icon.color: palette.text;
-                            onClicked:  {
-                                modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
-                                tagActionsContextMenu.visible = false;
-                            }
-                        }
-                    }
-
-                }
-                MenuSeparator {}
-                Action {
-                    enabled: tagFilter.currentIndex != 0;
-                    id: removeFromThisTag;
-                    text: i18nc("@action:inmenu", "Remove from this tag");
-                    icon.source: "qrc:///16_light_list-remove.svg";
-                }
-
-                Menu {
-                    id: removeFromTag;
-                    title: i18nc("@title:menu", "Remove from other tag");
-                    ListView {
-                        id: tagRemoveView;
-                        model: fontTagModel;
-                        height: contentHeight;
-                        width: parent.width;
-                        delegate: ItemDelegate {
-                            width: tagRemoveView.width;
-                            text: model.display;
-                            onClicked: {
-                                modelWrapper.untagResource(model.index, tagActionsContextMenu.resourceIndex);
-                                tagActionsContextMenu.visible = false;
-                            }
-                        }
-                    }
-                }
-            }
         }
         palette: familyCmb.palette;
 

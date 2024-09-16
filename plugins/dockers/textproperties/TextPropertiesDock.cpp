@@ -68,7 +68,7 @@ public:
         connect(&m_compressor, SIGNAL(timeout()), this, SLOT(setSearchTextOnModel()));
     }
 
-    void tagActivated(int row) {
+    void tagActivated(const int &row) {
         if (row == currentTag()) {
             return;
         }
@@ -111,7 +111,7 @@ public:
         return m_tagModel->indexForTag(m_tagFilterProxyModel->currentTagFilter()).row();
     }
 
-    void setSearchInTag(bool newSearchInTag) {
+    void setSearchInTag(const bool &newSearchInTag) {
         if (m_tagFilterProxyModel->filterInCurrentTag() != newSearchInTag) {
             m_tagFilterProxyModel->setFilterInCurrentTag(newSearchInTag);
             emit searchInTagChanged();
@@ -123,7 +123,7 @@ public:
         return m_tagFilterProxyModel->filterInCurrentTag();
     }
 
-    Q_INVOKABLE void addNewTag(QString newTagName, int resourceIndex = -1) {
+    Q_INVOKABLE void addNewTag(const QString &newTagName, const int &resourceIndex = -1) {
         KisTagSP tagsp = m_tagModel->tagForUrl(newTagName);
         QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
         if (tagsp.isNull()) {
@@ -133,13 +133,13 @@ public:
         }
         // TODO: figure out how to get a tag reactivated again, without doing too much code duplication :|
         if (resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
             m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
         }
 
     }
 
-    Q_INVOKABLE void tagResource(int tagIndex, int resourceIndex) {
+    Q_INVOKABLE void tagResource(const int &tagIndex, const int &resourceIndex) {
         QModelIndex idx = m_tagModel->index(tagIndex, 0);
         QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
         KisTagSP tagsp;
@@ -147,12 +147,12 @@ public:
             tagsp = m_tagModel->tagForIndex(idx);
         }
         if (tagsp && resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
             m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
         }
     }
 
-    Q_INVOKABLE void untagResource(int tagIndex, int resourceIndex) {
+    Q_INVOKABLE void untagResource(const int &tagIndex, const int &resourceIndex) {
         QModelIndex idx = m_tagModel->index(tagIndex, 0);
         QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
         KisTagSP tagsp;
@@ -160,9 +160,63 @@ public:
             tagsp = m_tagModel->tagForIndex(idx);
         }
         if (tagsp && resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, KisResourceModel::Id).toInt();
+            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
             m_tagFilterProxyModel->untagResources(tagsp, {resourceId});
         }
+    }
+
+    Q_INVOKABLE QString localizedNameForIndex(const int &resourceIndex, const QStringList &locales, const QString &fallBack = "") {
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        QString name = fallBack;
+        if (resourceIdx.isValid()) {
+            name = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Name).toString();
+            QMap<QString, QVariant> metadata = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
+            QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
+            Q_FOREACH(const QString locale, locales) {
+                if (localizedNames.keys().contains(locale)) {
+                    name = localizedNames.value(locale).toString();
+                    break;
+                }
+            }
+        }
+        return name;
+    }
+
+    Q_INVOKABLE QVariantList taggedResourceModel (const int &resourceIndex) const {
+        QVariantList taggedResourceModel;
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        KisTagSP tagsp;
+        for (int i = 0; i< m_tagModel->rowCount(); i++) {
+            QModelIndex idx = m_tagModel->index(i, 0);
+            tagsp = m_tagModel->tagForIndex(idx);
+            bool visible = tagsp->id() >= 0;
+            bool enabled = false;
+            if (resourceIdx.isValid()) {
+                int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
+                enabled = m_tagFilterProxyModel->isResourceTagged(tagsp, resourceId) > 0 && visible;
+            }
+            QVariantMap tag {{"name", tagsp->name()}, {"value", i}, {"visible", visible}, {"enabled", enabled} };
+            taggedResourceModel.append(tag);
+        }
+        return taggedResourceModel;
+    }
+
+    Q_INVOKABLE bool showResourceTagged(const int &tagIndex, const int &resourceIndex) const {
+        QModelIndex idx = m_tagModel->index(tagIndex, 0);
+        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
+        KisTagSP tagsp;
+        if (idx.isValid()) {
+            tagsp = m_tagModel->tagForIndex(idx);
+        }
+        if (tagsp) {
+            if (tagsp->id() < 0) return false;
+            return true;
+            if (resourceIdx.isValid()) {
+                int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
+                return m_tagFilterProxyModel->isResourceTagged(tagsp, resourceId);
+            }
+        }
+        return false;
     }
 
 Q_SIGNALS:

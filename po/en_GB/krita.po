@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
 "PO-Revision-Date: 2024-09-15 10:51+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -17040,7 +17040,7 @@ msgid "Reselect"
 msgstr "Reselect"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17077,6 +17077,12 @@ msgstr "Change Layer Style"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Switch current time"
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Change Clone Layers"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17382,7 +17388,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assign Profile"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Crop Selections"
@@ -17536,63 +17542,63 @@ msgstr "Error"
 msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, kde-format
 msgid "Merged"
 msgstr "Merged"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Merge Down"
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, kde-format
 msgid "Copy of"
 msgstr "Copy of"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Change projection colour"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Merge Selected Nodes"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "New From Visible"
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visible"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Merge Selection Masks"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flatten Layer"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flatten Image"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Split Alpha into a Mask"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Convert to a Paint Layer"
@@ -18019,7 +18025,7 @@ msgid "Clone Layer"
 msgstr "Clone Layer"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18063,7 +18069,7 @@ msgid "Transform Mask"
 msgstr "Transform Mask"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19663,8 +19669,8 @@ msgstr "Local Resources"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -23364,12 +23370,6 @@ msgstr ""
 "Estimated: %3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Change Clone Layers"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -29600,37 +29600,37 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Could not create a reference image from the visible canvas."
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Onion skins require a layer with transparent background."
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplicate Nodes"
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Raise Nodes"
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Lower Nodes"
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Remove Nodes"
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Mirror Mask Horizontally"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29638,12 +29638,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Mirror Layer Horizontally"
 msgstr[1] "Mirror %1 Layers Horizontally"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Mirror Mask Vertically"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29651,50 +29651,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Mirror Layer Vertically"
 msgstr[1] "Mirror %1 Layers Vertically"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Mirror All Layers Horizontally"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Mirror All Layers Vertically"
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Export \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Could not save the layer. %1"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Layer has no pixel data"
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Export to SVG"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Could not save to SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Layer %1 is not editable"
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29703,49 +29703,49 @@ msgstr ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Write Alpha into a Layer"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Cut Nodes"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Quick Group"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Quick Clipping Group"
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Clipping Group"
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Mask Layer"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Cannot move layer \"%1\" into new parent \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Cannot move layer \"%1\" into the root layer"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Quick Ungroup"
@@ -37604,7 +37604,7 @@ msgstr "Perspective assistant"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37616,7 +37616,7 @@ msgstr "Perspective"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspective Ellipse assistant"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspective Ellipse"
@@ -38590,12 +38590,12 @@ msgstr "Real FPS:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "Frames dropped:\t%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Dropped frames are not available in this Krita instance"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -38603,8 +38603,8 @@ msgid_plural "Add %1 blank frames"
 msgstr[0] "Add blank frame"
 msgstr[1] "Add %1 blank frames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -38623,30 +38623,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Zoom Timeline. Hold down and drag left or right."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Insert or Remove Hold Frames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Enter number of frames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edit Frames:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Keyframes"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

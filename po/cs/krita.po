@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
-"PO-Revision-Date: 2024-08-30 16:26+0200\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
+"PO-Revision-Date: 2024-09-03 08:46+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -8231,7 +8231,7 @@ msgstr "Zobrazit editor štětců"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Presets"
-msgstr "Zobrazit předvolby štětců"
+msgstr "Zobrazit přednastavení štětců"
 
 #. i18n: context: text @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
@@ -8948,7 +8948,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Next Favourite Preset"
-msgstr "Následující oblíbená předvolba"
+msgstr "Následující oblíbené přednastavení"
 
 #. i18n: context: text @ Action (previous_favorite_preset), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (previous_favorite_preset), Actions (Painting), ActionCollection (Krita)
@@ -8960,7 +8960,7 @@ msgstr "Následující oblíbená předvolba"
 #, kde-format
 msgctxt "action"
 msgid "Previous Favourite Preset"
-msgstr "Předchozí oblíbená předvolba"
+msgstr "Předchozí oblíbená přednastavení"
 
 #. i18n: context: text @ Action (previous_preset), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (previous_preset), Actions (Painting), ActionCollection (Krita)
@@ -8972,7 +8972,7 @@ msgstr "Předchozí oblíbená předvolba"
 #, kde-format
 msgctxt "action"
 msgid "Switch to Previous Preset"
-msgstr "Přepnout na předchozí předvolbu"
+msgstr "Přepnout na předchozí přednastavení"
 
 #. i18n: context: text @ Action (BrushesAndStuff), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (BrushesAndStuff), Actions (Painting), ActionCollection (Krita)
@@ -9118,11 +9118,10 @@ msgstr "Vyhlazování štětce: Vypnuto"
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Brush Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Vyhlazování štětce:"
+msgstr ""
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -11997,11 +11996,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgid "Convert to Path"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
-msgstr "Převést na cestu"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -16988,7 +16986,7 @@ msgid "Reselect"
 msgstr "Znovu vybrat"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17024,6 +17022,12 @@ msgstr "Změnit styl vrstvy"
 #: libs/image/commands_new/kis_switch_current_time_command.cpp:15
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
+msgstr ""
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
 msgstr ""
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
@@ -17324,7 +17328,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Přiřadit profil"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Ořezat výběr"
@@ -17478,63 +17482,63 @@ msgstr "Chyba"
 msgid "Anti-aliasing"
 msgstr "Vyhlazování"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, kde-format
 msgid "Merged"
 msgstr "Sloučeno"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, kde-format
 msgid "Copy of"
 msgstr "Kopie"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Viditelná"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Sloučit masky výběru"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Zploštit vrstvu"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Sloučit obraz"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -17942,7 +17946,7 @@ msgid "Clone Layer"
 msgstr "Klonovat vrstvu"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17986,7 +17990,7 @@ msgid "Transform Mask"
 msgstr "Maska transformace"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -18065,7 +18069,7 @@ msgstr ""
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Brush Preset"
-msgstr "Předvolba štětce Krita"
+msgstr "Přednastavení štětce Krita"
 
 #: libs/koplugin/KisMimeDatabase.cpp:189
 #, kde-format
@@ -19570,8 +19574,8 @@ msgstr ""
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -19873,7 +19877,7 @@ msgstr "Neplatný"
 #, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
-msgstr "Předvolby štětců"
+msgstr "Přednastavení štětců"
 
 #: libs/resources/KisResourceTypes.cpp:44
 #, kde-format
@@ -20511,11 +20515,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "Přepsat soubor?"
+msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
@@ -23129,12 +23131,6 @@ msgid ""
 "%4"
 msgstr ""
 
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr ""
-
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
 msgctxt "@info:tooltip"
@@ -23356,7 +23352,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:70
 #, kde-format
 msgid "Save New Brush Preset"
-msgstr "Uložit novou předvolbu štětce"
+msgstr "Uložit nové přednastavení štětce"
 
 #: libs/ui/dialogs/KisDlgSavePreset.cpp:79
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:75
@@ -24004,7 +24000,7 @@ msgstr "Absolutní kolorimetrický"
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:24
 #, kde-format
 msgid "Edit presets"
-msgstr "Upravit předvolby"
+msgstr "Upravit přednastavení"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonBookmarkCurrent)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:48
@@ -24907,7 +24903,7 @@ msgstr ""
 #: libs/ui/forms/wdgfilterselector.ui:130
 #, kde-format
 msgid "Edit Presets"
-msgstr "Upravit předvolby"
+msgstr "Upravit přednastavení"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:137
@@ -26390,7 +26386,7 @@ msgstr "Editor štětců"
 #: libs/ui/forms/wdgpaintopsettings.ui:130
 #, kde-format
 msgid "Current brush preset"
-msgstr "Současná předvolba štětce"
+msgstr "Současné přednastavení štětce"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
@@ -26417,19 +26413,19 @@ msgstr ""
 #: libs/ui/forms/wdgpaintopsettings.ui:340
 #, kde-format
 msgid "Save New Brush Preset..."
-msgstr "Uložit novou předvolbu štětce..."
+msgstr "Uložit nové přednastavení štětce..."
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:359
 #, kde-format
 msgid "Overwrite Brush Preset"
-msgstr "Přepsat předvolbu štětce"
+msgstr "Přepsat přednastavení štětce"
 
 #. i18n: ectx: property (text), widget (QLabel, presetsSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:427
 #, kde-format
 msgid "Presets"
-msgstr "Předvolby"
+msgstr "Přednastavení"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:444
@@ -26991,7 +26987,7 @@ msgstr "Formulář"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:32
 #, kde-format
 msgid "Maximum Number of Brush Presets:"
-msgstr "Maximální počet předvoleb štětců:"
+msgstr "Maximální počet přednastavení štětců:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseDynamicSlotCount)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:49
@@ -29148,37 +29144,37 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29187,12 +29183,12 @@ msgstr[0] "Zrcadlit vrstvu vodorovně"
 msgstr[1] "Zrcadlit %1 vrstvy vodorovně"
 msgstr[2] "Zrcadlit %1 vrstev vodorovně"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29201,99 +29197,99 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportovat \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportovat do SVG"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Nelze uložit do svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Vrstvu %1 nelze upravovat"
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Zapsat alfu fo vrstvy"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Rychlé seskupení"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskovat vrstvu"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rychlé zrušení seskupení"
@@ -29340,7 +29336,7 @@ msgstr "Úprava nastavení štětce"
 #: libs/ui/kis_paintop_box.cc:128
 #, kde-format
 msgid "Choose brush preset"
-msgstr "Zvolte předvolbu štětce"
+msgstr "Zvolte přednastavení štětce"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
@@ -29690,7 +29686,7 @@ msgstr "Zvětšení: %1 %"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
-msgstr "Předvolby štětců"
+msgstr "Přednastavení štětců"
 
 #: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
 #: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
@@ -34390,18 +34386,16 @@ msgid "Color name:"
 msgstr "Název barvy:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "Tón:"
+msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "OS:"
+msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
@@ -34410,26 +34404,22 @@ msgid "L:"
 msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
-msgstr "Y:"
+msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Hod:"
+msgstr ""
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -36747,7 +36737,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -36759,7 +36749,7 @@ msgstr "Perspektiva"
 msgid "Perspective Ellipse assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektivní elipsa"
@@ -37724,12 +37714,12 @@ msgstr "Reálné FPS:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -37738,8 +37728,8 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -37759,30 +37749,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, kde-format
 msgid "Edit Frames:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Klíčové snímky"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -39080,12 +39070,12 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "Předvolby štětců"
+msgstr "Přednastavení štětců"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
 #, kde-format
 msgid "Brush Preset History"
-msgstr "Historie předvoleb štětců"
+msgstr "Historie přednastavení štětců"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:61
 #, kde-format
@@ -40913,7 +40903,7 @@ msgstr "Vzdálenost"
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:298
 #, kde-format
 msgid "Column Preference"
-msgstr "Předvolba sloupce"
+msgstr "Přednastavení sloupce"
 
 #: plugins/extensions/colorrange/colorrange.xmlgui:4
 #, kde-format
@@ -42905,7 +42895,7 @@ msgstr "Štětce"
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #, kde-format
 msgid "Brush Presets"
-msgstr "Předvolby štětců"
+msgstr "Přednastavení štětců"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:37
 #, kde-format
@@ -46539,7 +46529,7 @@ msgstr ""
 #: plugins/generators/seexpr/wdgseexpr.ui:244
 #, kde-format
 msgid "Overwrite Preset"
-msgstr "Přepsat předvolbu"
+msgstr "Přepsat přednastavení"
 
 #. i18n: ectx: property (text), widget (QLabel, newPresetNameLabel)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:35
@@ -55788,70 +55778,70 @@ msgstr "Deset štětců"
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "Aktivovat předvolbu štětce 1"
+msgstr "Aktivovat přednastavení štětce 1"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "Aktivovat předvolbu štětce 2"
+msgstr "Aktivovat přednastavení štětce 2"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "Aktivovat předvolbu štětce 3"
+msgstr "Aktivovat přednastavení štětce 3"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "Aktivovat předvolbu štětce 4"
+msgstr "Aktivovat přednastavení štětce 4"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "Aktivovat předvolbu štětce 5"
+msgstr "Aktivovat přednastavení štětce 5"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "Aktivovat předvolbu štětce 6"
+msgstr "Aktivovat přednastavení štětce 6"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "Aktivovat předvolbu štětce 7"
+msgstr "Aktivovat přednastavení štětce 7"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "Aktivovat předvolbu štětce 8"
+msgstr "Aktivovat přednastavení štětce 8"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "Aktivovat předvolbu štětce 9"
+msgstr "Aktivovat přednastavení štětce 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "Aktivovat předvolbu štětce 10"
+msgstr "Aktivovat přednastavení štětce 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
 msgid "Ten Brushes"
@@ -56015,7 +56005,7 @@ msgstr "Ikona nástroje"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
 msgid "Brush preset icon"
-msgstr "Ikona předvoleb štětců"
+msgstr "Ikona přednastavení štětců"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
 msgid "Workflow Buttons settings"

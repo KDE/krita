@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -17368,7 +17368,7 @@ msgid "Reselect"
 msgstr "Panaikinti pažymėjimą"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17410,6 +17410,13 @@ msgstr "Konvertuoti sluoksnio tipą"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Išsaugoti dabartinius dydžius"
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "&Filtro sluoksnis..."
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
@@ -17742,7 +17749,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Atverti spalvų profilį"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17907,73 +17914,73 @@ msgstr "Veidrodis"
 msgid "Anti-aliasing"
 msgstr "Vertikalūs tarpai:"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Paveikslėlis"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Parinktys"
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Kopijuoti"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Keisti prisijungimą"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Pašalinti pažymėtą spalvą"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 #, fuzzy
 #| msgid "No profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nėra profilio"
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Matomas"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Žymėjimo veiksena"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Suploti paveikslėlį"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Suploti paveikslėlį"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa parinktys"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -18418,7 +18425,7 @@ msgid "Clone Layer"
 msgstr "&Klonuoti sluoksnį"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -18465,7 +18472,7 @@ msgid "Transform Mask"
 msgstr "Transformuoti mazgą"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20154,8 +20161,8 @@ msgstr "Valyti resursų failus"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -23857,13 +23864,6 @@ msgid ""
 "\n"
 "%4"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "&Filtro sluoksnis..."
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -30012,42 +30012,42 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Dubliuoti"
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "&Dailinko įrankiai"
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "&Dailinko įrankiai"
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "&Dailinko įrankiai"
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Atspindėti sluoksnį horizontaliai"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -30057,13 +30057,13 @@ msgstr[1] "Atspindėti sluoksnį horizontaliai"
 msgstr[2] "Atspindėti sluoksnį horizontaliai"
 msgstr[3] "Atspindėti sluoksnį horizontaliai"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Atspindėti sluoksnį vertikaliai"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -30073,105 +30073,105 @@ msgstr[1] "Atspindėti sluoksnį vertikaliai"
 msgstr[2] "Atspindėti sluoksnį vertikaliai"
 msgstr[3] "Atspindėti sluoksnį vertikaliai"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Atspindėti sluoksnį horizontaliai"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Atspindėti sluoksnį vertikaliai"
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Ekspozicija"
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Sluoksnis yra užrakintas."
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Ekspozicija"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Monitoriaus profilis: "
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Sluoksnis yra užrakintas."
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "&Piešimo sluoksnis"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Dubliuoti"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Išgrupuoti"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Išgrupuoti"
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Pašalinti sluoksnį"
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Piešimo sluoksnis"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
@@ -37813,7 +37813,7 @@ msgstr "Perspektyvos pagalbininkas"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37826,7 +37826,7 @@ msgstr "Perspektyva"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektyvos pagalbininkas"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "Perspective Ellipse"
@@ -38826,12 +38826,12 @@ msgstr ""
 msgid "Frames dropped:\t%1%"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -38841,8 +38841,8 @@ msgstr[1] "Įterpti pavadinimą"
 msgstr[2] "Įterpti pavadinimą"
 msgstr[3] "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "(qtundo-format)"
@@ -38864,32 +38864,32 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Įveskite grupės pavadinimą:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Išsaugoti dabartinius dydžius"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Įterpti pavadinimą"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

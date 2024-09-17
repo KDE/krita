@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17941,7 +17941,7 @@ msgid "Reselect"
 msgstr "다시 선택"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17978,6 +17978,12 @@ msgstr "레이어 스타일 변경"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "현재 시간 전환"
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "복제 레이어 변경"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -18286,7 +18292,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "프로필 할당"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "선택 자르기"
@@ -18440,63 +18446,63 @@ msgstr "오류"
 msgid "Anti-aliasing"
 msgstr "앤티에일리어싱"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, kde-format
 msgid "Merged"
 msgstr "병합됨"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "아래 병합"
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, kde-format
 msgid "Copy of"
 msgstr "사본"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "투영 색상 변경"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "선택한 노드 병합"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "보이는 항목에서 새로 만들기"
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "보이기"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "선택 마스크 병합"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "레이어 병합"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "이미지 병합"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "알파를 마스크로 분할"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "칠하기 레이어로 변환"
@@ -18929,7 +18935,7 @@ msgid "Clone Layer"
 msgstr "복제 레이어"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18973,7 +18979,7 @@ msgid "Transform Mask"
 msgstr "변형 마스크"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20580,8 +20586,8 @@ msgstr "로컬 리소스"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -24359,12 +24365,6 @@ msgstr ""
 "예상: %3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "복제 레이어 변경"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -30692,32 +30692,32 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "클립보드에서 참조 이미지를 불러올 수 없음"
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "어니언 스킨을 사용하려면 투명한 배경이 있는 레이어가 필요합니다."
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "노드 복제"
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "노드 앞으로 가져오기"
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "노드 뒤로 보내기"
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "노드 삭제"
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -30725,7 +30725,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -30734,7 +30734,7 @@ msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "레이어 좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -30742,7 +30742,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -30751,7 +30751,7 @@ msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "레이어 상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -30759,7 +30759,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "모든 레이어 좌우 반전"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -30767,40 +30767,40 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "모든 레이어 상하 반전"
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, kde-format
 msgid "Export \"%1\""
 msgstr "\"%1\" 내보내기"
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "레이어를 저장할 수 없습니다. %1"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "레이어에 픽셀 데이터가 없음"
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "SVG로 내보내기"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "SVG로 저장할 수 없습니다: %1"
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "%1 레이어를 편집할 수 없음"
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30809,50 +30809,50 @@ msgstr ""
 "부모 레이어 \"%1\"의 알파 채널에 쓸 수 없습니다.\n"
 "작업이 취소됩니다."
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "알파값을 레이어에 기록"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "노드 자르기"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "빠른 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "빠른 클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "마스크 레이어"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "개별 레이어를 각각의 그룹 레이어 아래에 두기"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "빠른 그룹 해제"
@@ -38775,7 +38775,7 @@ msgstr "원근법 도우미"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -38788,7 +38788,7 @@ msgstr "원근법"
 msgid "Perspective Ellipse assistant"
 msgstr "원근법 도우미"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 #| msgid "Perspective Grid Tool"
 msgid "Perspective Ellipse"
@@ -39777,12 +39777,12 @@ msgstr "실제 FPS:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "손실된 프레임:\t%1\\%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "이 Krita 인스턴스에서는 손실된 프레임을 사용할 수 없습니다"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Add blank frame"
@@ -39791,8 +39791,8 @@ msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "빈 프레임 추가"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -39812,30 +39812,30 @@ msgstr ""
 "타임라인 크기를 조정합니다. 마우스 단추를 누르고 왼쪽이나 오른쪽으로 드래그하"
 "십시오."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "고정 프레임 삽입 또는 삭제"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "프레임 개수를 입력하십시오"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, kde-format
 msgid "Edit Frames:"
 msgstr "프레임 편집:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "키프레임"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

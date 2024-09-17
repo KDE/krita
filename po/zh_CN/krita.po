@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16953,7 +16953,7 @@ msgid "Reselect"
 msgstr "重新选择"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -16990,6 +16990,12 @@ msgstr "更改图层样式"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "切换当前时间"
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "更改克隆图层"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17286,7 +17292,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "色彩特性文件指定"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "裁剪选区"
@@ -17440,63 +17446,63 @@ msgstr "错误"
 msgid "Anti-aliasing"
 msgstr "抗锯齿：边缘平滑"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, kde-format
 msgid "Merged"
 msgstr "合并"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "向下合并图层"
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, kde-format
 msgid "Copy of"
 msgstr "副本"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "更改视图色彩空间"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "合并选中的节点"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "用可见内容新建"
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "可见"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "合并选区蒙版"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "合并图层效果"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "合并整个图像"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "拆分透明度到蒙版"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "转换为颜料图层"
@@ -17913,7 +17919,7 @@ msgid "Clone Layer"
 msgstr "克隆图层"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17957,7 +17963,7 @@ msgid "Transform Mask"
 msgstr "变形蒙版"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19548,8 +19554,8 @@ msgstr "本地资源"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -23212,12 +23218,6 @@ msgstr ""
 "预计时间：%3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "更改克隆图层"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -29338,99 +29338,99 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "无法从可见图层创建参考图像。"
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "绘图纸外观只能在背景透明的图层上发挥作用。"
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "复制图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "上移图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "下移图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "删除图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "翻转蒙版 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "翻转 %1 个图层 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "翻转蒙版 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
 msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "翻转 %1 个图层 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "翻转所有图层 (水平)"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "翻转所有图层 (垂直)"
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, kde-format
 msgid "Export \"%1\""
 msgstr "导出“%1”"
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "无法保存图层。%1"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "图层不含像素数据"
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "导出为 SVG"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "无法保存为 SVG：%1"
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "图层 %1 不可编辑"
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29439,49 +29439,49 @@ msgstr ""
 "无法写入主图层的透明度通道 \"%1\"。\n"
 "操作将被取消。"
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "写入透明度到图层"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "剪切图层节点"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "图层编组"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "剪贴编组"
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "剪贴编组"
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "蒙版图层"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "无法将图层“%1“移动到新的上级图层“%2“之下"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "无法将图层“%1“移动到根图层之下"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "移出编组"
@@ -37183,7 +37183,7 @@ msgstr "透视辅助尺"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37195,7 +37195,7 @@ msgstr "透视"
 msgid "Perspective Ellipse assistant"
 msgstr "透视椭圆辅助尺"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "透视椭圆"
@@ -38175,20 +38175,20 @@ msgstr "真实帧频：%1"
 msgid "Frames dropped:\t%1%"
 msgstr "跳过帧数：%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "跳帧在此 Krita 实例中不可用。"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
 msgstr[0] "添加 %1 空白关键帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -38206,30 +38206,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "缩放时间轴 - 按住此按钮并左右拖拽。"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "插入或移除定格帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "输入帧数"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, kde-format
 msgid "Edit Frames:"
 msgstr "编辑帧："
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "关键帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

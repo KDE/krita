@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 01:55+0000\n"
+"POT-Creation-Date: 2024-09-17 01:52+0000\n"
 "PO-Revision-Date: 2024-09-11 22:44+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -17004,7 +17004,7 @@ msgid "Reselect"
 msgstr "Ponovno izberi"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2019
+#: libs/image/kis_layer_utils.cpp:2040
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17041,6 +17041,12 @@ msgstr "Spremeni slog plasti"
 msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Preklopi trenutni čas"
+
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Spremeni klonirane plasti"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17352,7 +17358,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2453
+#: libs/image/kis_image.cc:2485
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"
@@ -17506,63 +17512,63 @@ msgstr "Napaka"
 msgid "Anti-aliasing"
 msgstr "Glajenje robov"
 
-#: libs/image/kis_layer_utils.cpp:625
+#: libs/image/kis_layer_utils.cpp:626
 #, kde-format
 msgid "Merged"
 msgstr "Spojeno"
 
-#: libs/image/kis_layer_utils.cpp:1423
+#: libs/image/kis_layer_utils.cpp:1444
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Spoji s spodnjim"
 
-#: libs/image/kis_layer_utils.cpp:1671
+#: libs/image/kis_layer_utils.cpp:1692
 #, kde-format
 msgid "Copy of"
 msgstr "Kopija"
 
-#: libs/image/kis_layer_utils.cpp:1744
+#: libs/image/kis_layer_utils.cpp:1765
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Spremeni barvo projekcije"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Spoji izbrana vozlišča"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:2009
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Novo iz vidnega"
 
-#: libs/image/kis_layer_utils.cpp:1989
+#: libs/image/kis_layer_utils.cpp:2010
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Vidno"
 
-#: libs/image/kis_layer_utils.cpp:2068
+#: libs/image/kis_layer_utils.cpp:2089
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Spoji maske izbora"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2113
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Splošči plast"
 
-#: libs/image/kis_layer_utils.cpp:2108
+#: libs/image/kis_layer_utils.cpp:2129
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Splošči sliko"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Razdeli alfo v masko"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Pretvori v plast za slikanje"
@@ -17987,7 +17993,7 @@ msgid "Clone Layer"
 msgstr "Kloniraj plast"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1591
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18031,7 +18037,7 @@ msgid "Transform Mask"
 msgstr "Preoblikuj masko"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1371
+#: libs/ui/kis_node_manager.cpp:1366
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19628,8 +19634,8 @@ msgstr "Krajevni viri"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1295
-#: libs/ui/kis_node_manager.cpp:1358 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
+#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
@@ -23332,12 +23338,6 @@ msgstr ""
 "Ocenjeno: %3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Spremeni klonirane plasti"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -29579,37 +29579,37 @@ msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Referenčne slike iz vidnega na platnu ni mogoče ustvariti."
 
-#: libs/ui/kis_node_manager.cpp:1005
+#: libs/ui/kis_node_manager.cpp:1004
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Folije zahtevajo plast s prosojnim ozadjem."
 
-#: libs/ui/kis_node_manager.cpp:1032
+#: libs/ui/kis_node_manager.cpp:1031
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Podvoji vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1057
+#: libs/ui/kis_node_manager.cpp:1056
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Dvigni vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1066
+#: libs/ui/kis_node_manager.cpp:1065
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Spusti vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1086
+#: libs/ui/kis_node_manager.cpp:1085
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Odstrani vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1102
+#: libs/ui/kis_node_manager.cpp:1101
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Zrcali masko vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1105
+#: libs/ui/kis_node_manager.cpp:1104
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29619,12 +29619,12 @@ msgstr[1] "Zrcali %1 plast vodoravno"
 msgstr[2] "Zrcali %1 plasti vodoravno"
 msgstr[3] "Zrcali %1 plasti vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1116
+#: libs/ui/kis_node_manager.cpp:1115
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Zrcali masko navpično"
 
-#: libs/ui/kis_node_manager.cpp:1119
+#: libs/ui/kis_node_manager.cpp:1118
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29634,50 +29634,50 @@ msgstr[1] "Zrcali %1 plast navpično"
 msgstr[2] "Zrcali %1 plasti navpično"
 msgstr[3] "Zrcali %1 plasti navpično"
 
-#: libs/ui/kis_node_manager.cpp:1127
+#: libs/ui/kis_node_manager.cpp:1126
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrcali vse plasti vodoravno"
 
-#: libs/ui/kis_node_manager.cpp:1134
+#: libs/ui/kis_node_manager.cpp:1133
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrcali vse plasti navpično"
 
-#: libs/ui/kis_node_manager.cpp:1266
+#: libs/ui/kis_node_manager.cpp:1265
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Izvoz »%1«"
 
-#: libs/ui/kis_node_manager.cpp:1296
+#: libs/ui/kis_node_manager.cpp:1292
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Plasti ni bilo mogoče shraniti. %1"
 
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1310
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Plast nima podatkov o slikovnih točkah"
 
-#: libs/ui/kis_node_manager.cpp:1338
+#: libs/ui/kis_node_manager.cpp:1334
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Izvozi v SVG"
 
-#: libs/ui/kis_node_manager.cpp:1358
+#: libs/ui/kis_node_manager.cpp:1354
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Ni bilo mogoče shraniti v SVG: %1"
 
-#: libs/ui/kis_node_manager.cpp:1384
+#: libs/ui/kis_node_manager.cpp:1379
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Plasti %1 ni mogoče urejati"
 
-#: libs/ui/kis_node_manager.cpp:1385
+#: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29686,49 +29686,49 @@ msgstr ""
 "Kanala alfa nadrejene plasti »%1« ni mogoče zapisati.\n"
 "Operacija bo preklicana."
 
-#: libs/ui/kis_node_manager.cpp:1416
+#: libs/ui/kis_node_manager.cpp:1411
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Zapiši alfo v plast"
 
-#: libs/ui/kis_node_manager.cpp:1539
+#: libs/ui/kis_node_manager.cpp:1534
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Izreži vozlišča"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1616
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Hitro združi"
 
-#: libs/ui/kis_node_manager.cpp:1632
+#: libs/ui/kis_node_manager.cpp:1627
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Hitro združi z izrezovanjem"
 
-#: libs/ui/kis_node_manager.cpp:1639
+#: libs/ui/kis_node_manager.cpp:1634
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Združi z izrezovanjem"
 
-#: libs/ui/kis_node_manager.cpp:1640
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Plast maske"
 
-#: libs/ui/kis_node_manager.cpp:1667
+#: libs/ui/kis_node_manager.cpp:1662
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Plasti »%1« ni možno premakniti na novo nadrejeno plast »%2«"
 
-#: libs/ui/kis_node_manager.cpp:1670
+#: libs/ui/kis_node_manager.cpp:1665
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Plasti »%1« ni možno postaviti v korensko plast"
 
-#: libs/ui/kis_node_manager.cpp:1678
+#: libs/ui/kis_node_manager.cpp:1673
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Hitro razdruži"
@@ -37627,7 +37627,7 @@ msgstr "Pomočnik za perspektivo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37639,7 +37639,7 @@ msgstr "Perspektiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Pomočnik za elipso v perspektivi"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Elipsa v perspektivi"
@@ -38613,12 +38613,12 @@ msgstr "Realne sl/s:\t%1"
 msgid "Frames dropped:\t%1%"
 msgstr "Izpuščene sličice:\t%1%"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:699
 #, kde-format
 msgid "Dropped frames are not available in this Krita instance"
 msgstr "Izpuščene sličice niso na voljo v tem primerku Krita"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:876
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:880
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
@@ -38628,8 +38628,8 @@ msgstr[1] "Dodaj %1 prazni sličici"
 msgstr[2] "Dodaj %1 prazne sličice"
 msgstr[3] "Dodaj %1 praznih sličic"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
-#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:925
+#: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:973
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Insert frame"
@@ -38650,30 +38650,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Povečaj časovnico. Držite pritisnjeno in povlecite levo ali desno."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Vstavi ali izbriši zadržane sličice"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Vnesite število sličic"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Uredi sličice:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ključne sličice"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

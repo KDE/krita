@@ -13,6 +13,7 @@ install(TARGETS kritajxlimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 set(kritajxlexport_SOURCES
     JPEGXLExport.cpp
     kis_wdg_options_jpegxl.cpp
+    kis_jpegxl_export_tools.h
 )
 
 ki18n_wrap_ui(kritajxlexport_SOURCES kis_wdg_options_jpegxl.ui )

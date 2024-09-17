@@ -33,6 +33,7 @@
 #include <KoConfig.h>
 #include <KoDocumentInfo.h>
 #include <KoProperties.h>
+#include <KoUpdater.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
 #include <filter/kis_filter_registry.h>
@@ -54,299 +55,9 @@
 #include <kis_time_span.h>
 
 #include "kis_wdg_options_jpegxl.h"
+#include "kis_jpegxl_export_tools.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_jxl_export.json", registerPlugin<JPEGXLExport>();)
-
-namespace JXLCMYK
-{
-template<typename CSTrait>
-inline QByteArray
-writeCMYKPixels(bool isTrichromatic, int chPos, const int width, const int height, KisHLineConstIteratorSP it)
-{
-    const int channels = isTrichromatic ? 3 : 1;
-    const int chSize = static_cast<int>(CSTrait::pixelSize / 5);
-    const int pxSize = chSize * channels;
-    const int chOffset = chPos * chSize;
-
-    QByteArray res;
-    res.resize(width * height * pxSize);
-
-    quint8 *ptr = reinterpret_cast<quint8 *>(res.data());
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            const quint8 *src = it->rawDataConst();
-
-            if (isTrichromatic) {
-                for (int i = 0; i < channels; i++) {
-                    std::memcpy(ptr, src + (i * chSize), chSize);
-                    ptr += chSize;
-                }
-            } else {
-                std::memcpy(ptr, src + chOffset, chSize);
-                ptr += chSize;
-            }
-
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-    return res;
-}
-
-template<typename... Args>
-inline QByteArray writeCMYKLayer(const KoID &id, Args &&...args)
-{
-    if (id == Integer8BitsColorDepthID) {
-        return writeCMYKPixels<KoCmykU8Traits>(std::forward<Args>(args)...);
-    } else if (id == Integer16BitsColorDepthID) {
-        return writeCMYKPixels<KoCmykU16Traits>(std::forward<Args>(args)...);
-#ifdef HAVE_OPENEXR
-    } else if (id == Float16BitsColorDepthID) {
-        return writeCMYKPixels<KoCmykF16Traits>(std::forward<Args>(args)...);
-#endif
-    } else if (id == Float32BitsColorDepthID) {
-        return writeCMYKPixels<KoCmykF32Traits>(std::forward<Args>(args)...);
-    } else {
-        KIS_ASSERT_X(false, "JPEGXLExport::writeLayer", "unsupported bit depth!");
-        return QByteArray();
-    }
-}
-} // namespace JXLCMYK
-
-namespace HDR
-{
-template<ConversionPolicy policy>
-ALWAYS_INLINE float applyCurveAsNeeded(float value)
-{
-    if (policy == ConversionPolicy::ApplyPQ) {
-        return applySmpte2048Curve(value);
-    } else if (policy == ConversionPolicy::ApplyHLG) {
-        return applyHLGCurve(value);
-    } else if (policy == ConversionPolicy::ApplySMPTE428) {
-        return applySMPTE_ST_428Curve(value);
-    }
-    return value;
-}
-
-template<typename CSTrait,
-         bool swap,
-         bool convertToRec2020,
-         bool isLinear,
-         ConversionPolicy conversionPolicy,
-         typename DestTrait,
-         bool removeOOTF>
-inline QByteArray writeLayer(const int width,
-                             const int height,
-                             KisHLineConstIteratorSP it,
-                             float hlgGamma,
-                             float hlgNominalPeak,
-                             const KoColorSpace *cs)
-{
-    const int channels = static_cast<int>(CSTrait::channels_nb);
-    QVector<float> pixelValues(channels);
-    QVector<qreal> pixelValuesLinear(channels);
-    const KoColorProfile *profile = cs->profile();
-    const QVector<qreal> lCoef = cs->lumaCoefficients();
-    double *src = pixelValuesLinear.data();
-    float *dst = pixelValues.data();
-
-    QByteArray res;
-    res.resize(width * height * static_cast<int>(DestTrait::pixelSize));
-
-    quint8 *ptr = reinterpret_cast<quint8 *>(res.data());
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            CSTrait::normalisedChannelsValue(it->rawDataConst(), pixelValues);
-            if (!convertToRec2020 && !isLinear) {
-                for (int i = 0; i < channels; i++) {
-                    src[i] = static_cast<double>(dst[i]);
-                }
-                profile->linearizeFloatValue(pixelValuesLinear);
-                for (int i = 0; i < channels; i++) {
-                    dst[i] = static_cast<float>(src[i]);
-                }
-            }
-
-            if (conversionPolicy == ConversionPolicy::ApplyHLG && removeOOTF) {
-                removeHLGOOTF(dst, lCoef.constData(), hlgGamma, hlgNominalPeak);
-            }
-
-            for (int ch = 0; ch < channels; ch++) {
-                if (ch == CSTrait::alpha_pos) {
-                    dst[ch] = applyCurveAsNeeded<ConversionPolicy::KeepTheSame>(
-                        dst[ch]);
-                } else {
-                    dst[ch] = applyCurveAsNeeded<conversionPolicy>(dst[ch]);
-                }
-            }
-
-            if (swap) {
-                std::swap(dst[0], dst[2]);
-            }
-
-            DestTrait::fromNormalisedChannelsValue(ptr, pixelValues);
-
-            ptr += DestTrait::pixelSize;
-
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-
-    return res;
-}
-
-template<typename CSTrait, bool swap>
-inline QByteArray writeLayerNoConversion(const int width,
-                                         const int height,
-                                         KisHLineConstIteratorSP it,
-                                         float hlgGamma,
-                                         float hlgNominalPeak,
-                                         const KoColorSpace *cs)
-{
-    Q_UNUSED(hlgGamma);
-    Q_UNUSED(hlgNominalPeak);
-    Q_UNUSED(cs);
-
-    const int channels = static_cast<int>(CSTrait::channels_nb);
-    QVector<float> pixelValues(channels);
-    QVector<qreal> pixelValuesLinear(channels);
-
-    QByteArray res;
-    res.resize(width * height * static_cast<int>(CSTrait::pixelSize));
-
-    quint8 *ptr = reinterpret_cast<quint8 *>(res.data());
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            auto *dst = reinterpret_cast<typename CSTrait::channels_type *>(ptr);
-
-            std::memcpy(dst, it->rawDataConst(), CSTrait::pixelSize);
-
-            if (swap) {
-                std::swap(dst[0], dst[2]);
-            }
-
-            ptr += CSTrait::pixelSize;
-
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-
-    return res;
-}
-
-template<typename CSTrait,
-         bool swap,
-         bool convertToRec2020,
-         bool isLinear,
-         ConversionPolicy linearizePolicy,
-         typename DestTrait,
-         bool removeOOTF,
-         typename... Args>
-ALWAYS_INLINE auto writeLayerSimplify(Args &&...args)
-{
-    if (linearizePolicy != ConversionPolicy::KeepTheSame) {
-        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, removeOOTF>(
-            std::forward<Args>(args)...);
-    } else {
-        return writeLayerNoConversion<CSTrait, swap>(std::forward<Args>(args)...);
-    }
-}
-
-template<typename CSTrait,
-         bool swap,
-         bool convertToRec2020,
-         bool isLinear,
-         ConversionPolicy linearizePolicy,
-         typename DestTrait,
-         typename... Args>
-ALWAYS_INLINE auto writeLayerWithPolicy(bool removeOOTF, Args &&...args)
-{
-    if (removeOOTF) {
-        return writeLayerSimplify<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, true>(
-            std::forward<Args>(args)...);
-    } else {
-        return writeLayerSimplify<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, false>(
-            std::forward<Args>(args)...);
-    }
-}
-
-template<typename CSTrait, bool swap, bool convertToRec2020, bool isLinear, typename... Args>
-ALWAYS_INLINE auto writeLayerWithLinear(ConversionPolicy linearizePolicy, Args &&...args)
-{
-    if (linearizePolicy == ConversionPolicy::ApplyHLG) {
-        return writeLayerWithPolicy<CSTrait,
-                                    swap,
-                                    convertToRec2020,
-                                    isLinear,
-                                    ConversionPolicy::ApplyHLG,
-                                    KoBgrU16Traits>(std::forward<Args>(args)...);
-    } else if (linearizePolicy == ConversionPolicy::ApplyPQ) {
-        return writeLayerWithPolicy<CSTrait,
-                                    swap,
-                                    convertToRec2020,
-                                    isLinear,
-                                    ConversionPolicy::ApplyPQ,
-                                    KoBgrU16Traits>(std::forward<Args>(args)...);
-    } else if (linearizePolicy == ConversionPolicy::ApplySMPTE428) {
-        return writeLayerWithPolicy<CSTrait,
-                                    swap,
-                                    convertToRec2020,
-                                    isLinear,
-                                    ConversionPolicy::ApplySMPTE428,
-                                    KoBgrU16Traits>(std::forward<Args>(args)...);
-    } else {
-        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::KeepTheSame, CSTrait>(
-            std::forward<Args>(args)...);
-    }
-}
-
-template<typename CSTrait, bool swap, bool convertToRec2020, typename... Args>
-ALWAYS_INLINE auto writeLayerWithRec2020(bool isLinear, Args &&...args)
-{
-    if (isLinear) {
-        return writeLayerWithLinear<CSTrait, swap, convertToRec2020, true>(std::forward<Args>(args)...);
-    } else {
-        return writeLayerWithLinear<CSTrait, swap, convertToRec2020, false>(std::forward<Args>(args)...);
-    }
-}
-
-template<typename CSTrait, bool swap, typename... Args>
-ALWAYS_INLINE auto writeLayerWithSwap(bool convertToRec2020, Args &&...args)
-{
-    if (convertToRec2020) {
-        return writeLayerWithRec2020<CSTrait, swap, true>(std::forward<Args>(args)...);
-    } else {
-        return writeLayerWithRec2020<CSTrait, swap, false>(std::forward<Args>(args)...);
-    }
-}
-
-template<typename... Args>
-inline auto writeLayer(const KoID &id, Args &&...args)
-{
-    if (id == Integer8BitsColorDepthID) {
-        return writeLayerWithSwap<KoBgrU8Traits, true>(std::forward<Args>(args)...);
-    } else if (id == Integer16BitsColorDepthID) {
-        return writeLayerWithSwap<KoBgrU16Traits, true>(std::forward<Args>(args)...);
-#ifdef HAVE_OPENEXR
-    } else if (id == Float16BitsColorDepthID) {
-        return writeLayerWithSwap<KoBgrF16Traits, false>(std::forward<Args>(args)...);
-#endif
-    } else if (id == Float32BitsColorDepthID) {
-        return writeLayerWithSwap<KoBgrF32Traits, false>(std::forward<Args>(args)...);
-    } else {
-        KIS_ASSERT_X(false, "JPEGXLExport::writeLayer", "unsupported bit depth!");
-        return QByteArray();
-    }
-}
-} // namespace HDR
 
 JPEGXLExport::JPEGXLExport(QObject *parent, const QVariantList &)
     : KisImportExportFilter(parent)
@@ -435,6 +146,14 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                                                              TRC_PROPHOTO,
                                                                              TRC_A98};
     const bool isSupportedTRC = std::find(supportedTRC.begin(), supportedTRC.end(), gamma) != supportedTRC.end();
+
+#if JPEGXL_NUMERIC_VERSION >= JPEGXL_COMPUTE_NUMERIC_VERSION(0, 10, 1)
+    JXLExpTool::JxlOutputProcessor processor(io);
+    if (JXL_ENC_SUCCESS != JxlEncoderSetOutputProcessor(enc.get(), processor.getOutputProcessor())) {
+        errFile << "JxlEncoderSetOutputProcessor failed";
+        return ImportExportCodes::InternalError;
+    }
+#endif
 
     const JxlPixelFormat pixelFormat = [&]() {
         JxlPixelFormat pixelFormat{};
@@ -968,6 +687,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 return header;
             }();
 
+            int frameNum = 0;
             for (const auto i : times) {
                 frameHeader->duration = [&]() {
                     const auto nextKeyframe = frames->nextKeyframeTime(i);
@@ -1027,6 +747,23 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     errFile << "JxlEncoderAddImageFrame @" << i << "failed";
                     return ImportExportCodes::InternalError;
                 }
+
+#if JPEGXL_NUMERIC_VERSION >= JPEGXL_COMPUTE_NUMERIC_VERSION(0, 10, 1)
+                if (updater() && updater()->interrupted()) {
+                    warnFile << "Save cancelled";
+                    return ImportExportCodes::Cancelled;
+                }
+                const int progress = (frameNum * 100) / times.size();
+                setProgress(progress);
+                frameNum++;
+                if (frames->nextKeyframeTime(i) == -1) {
+                    JxlEncoderCloseInput(enc.get());
+                }
+                if (JxlEncoderFlushInput(enc.get()) != JXL_ENC_SUCCESS) {
+                    errFile << "JxlEncoderFlushInput failed";
+                    return ImportExportCodes::InternalError;
+                }
+#endif
             }
         } else {
             auto frameHeader = std::make_unique<JxlFrameHeader>();
@@ -1034,6 +771,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
             // (On layered export) Convert group layer to paint layer to preserve
             // out-of-bound pixels so that it won't get clipped to canvas size
+            quint32 lastValidLayer = 0;
             if (!flattenLayers) {
                 for (quint32 pos = 0; pos < image->root()->childCount(); pos++) {
                     KisNodeSP node = image->root()->at(pos);
@@ -1042,6 +780,9 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                         && layer->visible()) {
                         dbgFile << "Flattening layer" << node->name();
                         KisLayerUtils::flattenLayer(image, layer);
+                    }
+                    if (node && node->visible() && !node->isFakeNode()) {
+                        lastValidLayer = pos;
                     }
                 }
                 image->waitForDone();
@@ -1111,12 +852,12 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                 dev->createHLineConstIteratorNG(layerBounds.x(), layerBounds.y(), layerBounds.width());
 
                             // interleaved CMY buffer
-                            return JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                           true,
-                                                           0,
-                                                           layerBounds.width(),
-                                                           layerBounds.height(),
-                                                           it);
+                            return JXLExpTool::writeCMYKLayer(cs->colorDepthId(),
+                                                              true,
+                                                              0,
+                                                              layerBounds.width(),
+                                                              layerBounds.height(),
+                                                              it);
                         }
                         // blast it wholesale
                         QByteArray p;
@@ -1202,19 +943,19 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     KisHLineConstIteratorSP it =
                         dev->createHLineConstIteratorNG(layerBounds.x(), layerBounds.y(), layerBounds.width());
 
-                    const QByteArray chaK = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                                    false,
-                                                                    3,
-                                                                    layerBounds.width(),
-                                                                    layerBounds.height(),
-                                                                    it);
+                    const QByteArray chaK = JXLExpTool::writeCMYKLayer(cs->colorDepthId(),
+                                                                       false,
+                                                                       3,
+                                                                       layerBounds.width(),
+                                                                       layerBounds.height(),
+                                                                       it);
                     it->resetRowPos();
-                    const QByteArray chaA = JXLCMYK::writeCMYKLayer(cs->colorDepthId(),
-                                                                    false,
-                                                                    4,
-                                                                    layerBounds.width(),
-                                                                    layerBounds.height(),
-                                                                    it);
+                    const QByteArray chaA = JXLExpTool::writeCMYKLayer(cs->colorDepthId(),
+                                                                       false,
+                                                                       4,
+                                                                       layerBounds.width(),
+                                                                       layerBounds.height(),
+                                                                       it);
 
                     if (JxlEncoderSetExtraChannelBuffer(frameSettings,
                                                         &pixelFormat,
@@ -1236,6 +977,26 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     }
                 }
 
+#if JPEGXL_NUMERIC_VERSION >= JPEGXL_COMPUTE_NUMERIC_VERSION(0, 10, 1)
+                if (updater() && updater()->interrupted()) {
+                    warnFile << "Save cancelled";
+                    return ImportExportCodes::Cancelled;
+                }
+                const int progress = (pos * 100) / image->root()->childCount();
+                setProgress(progress);
+                if ((pos == lastValidLayer && !flattenLayers) || flattenLayers) {
+                    JxlEncoderCloseInput(enc.get());
+                }
+                if (JxlEncoderFlushInput(enc.get()) != JXL_ENC_SUCCESS) {
+                    errFile << "JxlEncoderFlushInput failed";
+                    return ImportExportCodes::InternalError;
+                }
+                if (flattenLayers) {
+                    break;
+                }
+            }
+        }
+#else
                 // Quit loop if flatten is active
                 if (flattenLayers) {
                     break;
@@ -1263,6 +1024,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             errFile << "JxlEncoderProcessOutput failed";
             return ImportExportCodes::ErrorWhileWriting;
         }
+#endif
     }
 
     return ImportExportCodes::OK;

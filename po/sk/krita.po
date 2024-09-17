@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -17289,6 +17289,12 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Prepnúť aktuálny čas"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Zmeniť klonované vrstvy"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
 msgctxt "The category of color adjustment filters, like levels. Verb."
@@ -17488,7 +17494,7 @@ msgstr "Prechod cez"
 msgid "Imported Image"
 msgstr "Importovaný obrázok"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17592,7 +17598,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Priradiť profil"
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Orezať výbery"
@@ -17736,63 +17742,63 @@ msgstr "Otvoriť súbor"
 msgid "Error"
 msgstr "Chyba"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, kde-format
 msgid "Merged"
 msgstr "Zlúčené"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Zlúčiť nižšie"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, kde-format
 msgid "Copy of"
 msgstr "Kópia z"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Zmeniť farbu projekcie"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Zlúčiť vybrané uzly"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nová z viditeľnej"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Viditeľná"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Zlúčiť masky výberu"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Zarovnať vrstvu"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Rozdeliť alfu do masky"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Previesť na vrstvu maľovania"
@@ -23799,12 +23805,6 @@ msgstr ""
 "Odhadované: %3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Zmeniť klonované vrstvy"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -38024,7 +38024,7 @@ msgstr "Perspektívny asistent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -38037,7 +38037,7 @@ msgstr "Perspektíva"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektívny asistent"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 #| msgid "Perspective Grid Tool"
 msgid "Perspective Ellipse"

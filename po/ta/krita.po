@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16976,6 +16976,13 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "நிகழ்வுள்ள நிறத்தை மேல்லுள்ளதாக்கு"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "அலங்காரம்"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
 #| msgid "Adjust"
@@ -17168,7 +17175,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "உருவத்தை இறக்குமதிசெய்"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17288,7 +17295,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17433,72 +17440,72 @@ msgstr "வெளிர் பச்சை"
 msgid "Error"
 msgstr "அடுக்கிலிருந்து உருவம் வரை"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "சிகப்பு நகல்"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Alpha"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "பச்சை நகல்"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "உள்ளடக்கத்தை மாற்று"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "உருவத்தை நீக்கு"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "&பெயர்:"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "பார்வை"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "தேர்ந்தெடுப்பு அழிப்பான்"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "உருவத்தை ஒன்றுசேர்"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "உருவத்தை ஒன்றுசேர்"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alpha"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -23272,13 +23279,6 @@ msgid ""
 "\n"
 "%4"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "அலங்காரம்"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -36519,7 +36519,7 @@ msgstr "அழிக்கும் கருவி"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -36531,7 +36531,7 @@ msgstr "அழிக்கும் கருவி"
 msgid "Perspective Ellipse assistant"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "அழிக்கும் கருவி"

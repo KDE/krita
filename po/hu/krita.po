@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -17328,6 +17328,15 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "A jelenlegi méretek mentése"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Filter"
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Szűrő módosítása"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
 #| msgid "Adjust"
@@ -17529,7 +17538,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Kép importálása"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17655,7 +17664,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil meghatározása"
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17810,73 +17819,73 @@ msgstr "Fájl megnyitása"
 msgid "Error"
 msgstr "Hiba"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Másolás egyesítve"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Pontok törlése"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "%1 másolata"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Kapcsolat módosítása"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "A kijelölt szín eltávolítása"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy
 #| msgid "New Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Új profil"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Látható"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Kijelölési maszk hozzáadása"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Réteg lapítása"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Kép lapítása"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa beállítások"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -23891,15 +23900,6 @@ msgid ""
 "\n"
 "%4"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Filter"
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Szűrő módosítása"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -37750,7 +37750,7 @@ msgstr "Perspektíva asszisztens"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37763,7 +37763,7 @@ msgstr "Perspektíva"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektíva asszisztens"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"

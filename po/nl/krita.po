@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2024-09-11 10:44+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -16950,6 +16950,12 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Verwissel huidige tijd"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Kloonlagen wijzigen"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
 msgctxt "The category of color adjustment filters, like levels. Verb."
@@ -17148,7 +17154,7 @@ msgstr "Doorgeven"
 msgid "Imported Image"
 msgstr "Geïmporteerde afbeelding"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17251,7 +17257,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profiel toewijzen"
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Selecties afsnijden"
@@ -17395,63 +17401,63 @@ msgstr "Bestand openen"
 msgid "Error"
 msgstr "Fout"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, kde-format
 msgid "Merged"
 msgstr "Samengevoegd"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Samenvoegen ongedaan maken"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, kde-format
 msgid "Copy of"
 msgstr "Kopiëren van"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Projectiekleur wijzigen"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Geselecteerde nodes samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nieuwe uit zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Selectiemaskers samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Laag waar andere lagen in terecht komen"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Afbeelding plat maken"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa naar een masker splitsen"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Naar een tekenlaag omzetten"
@@ -23350,12 +23356,6 @@ msgstr ""
 "Geschat: %3\n"
 "\n"
 "%4"
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Kloonlagen wijzigen"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -37357,7 +37357,7 @@ msgstr "Perspectiefassistent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37369,7 +37369,7 @@ msgstr "Perspectief"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistent voor perspectiefellips"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspectiefellips"

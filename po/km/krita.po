@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -17154,6 +17154,13 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "លុប​សកម្មភាព​​បច្ចុប្បន្ន"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "ផ្លាស់ប្ដូរ​តម្រង"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
 #| msgid "Adjust"
@@ -17354,7 +17361,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "នាំ​ចូល​រូបភាព"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17478,7 +17485,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "ផ្ដល់​ទម្រង់​"
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17628,72 +17635,72 @@ msgstr "ជ្រើស​តំបន់​ធ្វើ​ការ​"
 msgid "Error"
 msgstr "ឆ្លុះ"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "បាន​បញ្ចូល​ចូល​គ្នា​ច្បាប់​ចម្លង"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "ចំណុច​ជម្រះ"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "ចម្លង​ពី"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "បម្លែង​ចន្លោះ​ពណ៌​នៃ​ការ​បញ្ចាំង"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "យក​ពណ៌​ដែល​បាន​ជ្រើស​ចេញ​"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ឈ្មោះ ៖"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "មើល​ឃើញ"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "ជម្រើស​មូលដ្ឋាន"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "ធ្វើ​រូបភាព​ឲ្យ​រាបស្មើ"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "ធ្វើ​រូបភាព​ឲ្យ​រាបស្មើ"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ជម្រើស​​អាល់ហ្វា"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -23537,13 +23544,6 @@ msgid ""
 "\n"
 "%4"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "ផ្លាស់ប្ដូរ​តម្រង"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -36973,7 +36973,7 @@ msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -36986,7 +36986,7 @@ msgstr "យថា​ទស្សន៍"
 msgid "Perspective Ellipse assistant"
 msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"

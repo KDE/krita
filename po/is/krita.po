@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-14 03:28+0000\n"
+"POT-Creation-Date: 2024-09-17 03:31+0000\n"
 "PO-Revision-Date: 2018-01-04 15:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -17242,6 +17242,13 @@ msgctxt "(qtundo-format)"
 msgid "Switch current time"
 msgstr "Fylla með mynstri"
 
+#: libs/image/commands_new/KisChangeCloneLayersCommand.cpp:19
+#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Clone Layers"
+msgstr "Kvarða lag"
+
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
 msgctxt "The category of color adjustment filters, like levels. Verb."
@@ -17434,7 +17441,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Innflutt mynd"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17561,7 +17568,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Litasnið sem vantar"
 
-#: libs/image/kis_image.cc:2437
+#: libs/image/kis_image.cc:2469
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17708,54 +17715,54 @@ msgstr "Opna skrá"
 msgid "Error"
 msgstr "Villa: "
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:620
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Blandað"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1438
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Tvinna niður"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1686
 #, kde-format
 msgid "Copy of"
 msgstr "Afrita af"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1759
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Breyta tengingu"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1983
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Kvarða lag"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nafn:"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1991
 #, fuzzy, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Sýnilegt"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2069
 #, fuzzy
 #| msgid "Selection Mask"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Valhula"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2092
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Flatten image"
@@ -17763,20 +17770,20 @@ msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Fletja mynd"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2105
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Fletja mynd"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2329
 #, fuzzy
 #| msgid "Alpha mask"
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alpha maski"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2355
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Paste Layer"
@@ -23594,13 +23601,6 @@ msgid ""
 "\n"
 "%4"
 msgstr ""
-
-#: libs/ui/dialogs/KisDlgChangeCloneSource.cpp:28
-#: libs/ui/KisChangeCloneLayersCommand.cpp:19
-#, fuzzy
-msgctxt "(qtundo-format)"
-msgid "Change Clone Layers"
-msgstr "Kvarða lag"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:55
 #, kde-format
@@ -37100,7 +37100,7 @@ msgstr "Málaratól"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -37113,7 +37113,7 @@ msgstr "Sjónarhorn"
 msgid "Perspective Ellipse assistant"
 msgstr "Málaratól"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:631
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "Málaratól"

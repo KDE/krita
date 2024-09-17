@@ -28,6 +28,10 @@
 #include "kis_node_dummies_graph.h"
 #include "KisImportExportManager.h"
 #include "KisImageBarrierLock.h"
+#include <commands/kis_image_layer_add_command.h>
+#include <commands/kis_image_layer_move_command.h>
+#include <kis_processing_applicator.h>
+
 
 #include <KoProperties.h>
 #include <KoStore.h>
@@ -455,7 +459,8 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
                                    bool copyNode,
                                    KisNodeInsertionAdapter *nodeInsertionAdapter,
                                    bool changeOffset,
-                                   QPointF offset)
+                                   QPointF offset,
+                                   KisProcessingApplicator *applicator)
 {
     QList<KisNodeSP> nodes = loadNodesFast(data, image, shapeController, copyNode /* IN-OUT */);
 
@@ -482,12 +487,35 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(parentDummy, false);
 
     KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
-    if (copyNode) {
-        nodeInsertionAdapter->addNodes(nodes, parentDummy->node(), aboveThisNode);
-    }
-    else {
-        Q_ASSERT(nodes.first()->graphListener() == image.data());
-        nodeInsertionAdapter->moveNodes(nodes, parentDummy->node(), aboveThisNode);
+
+    if (!applicator) {
+        if (copyNode) {
+            nodeInsertionAdapter->addNodes(nodes, parentDummy->node(), aboveThisNode);
+        }
+        else {
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(nodes.first()->graphListener() == image.data(), false);
+            nodeInsertionAdapter->moveNodes(nodes, parentDummy->node(), aboveThisNode);
+        }
+    } else {
+        {
+            if (copyNode) {
+                KisNodeSP prevNode = aboveThisNode;
+                Q_FOREACH (KisNodeSP node, nodes) {
+                    applicator->applyCommand(
+                        new KisImageLayerAddCommand(image, node, parentDummy->node(), prevNode));
+                    prevNode = node;
+                }
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(nodes.first()->graphListener() == image.data(), false);
+
+                KisNodeSP prevNode = aboveThisNode;
+                Q_FOREACH (KisNodeSP node, nodes) {
+                    applicator->applyCommand(
+                        new KisImageLayerMoveCommand(image, node, parentDummy->node(), prevNode));
+                    prevNode = node;
+                }
+            }
+        }
     }
 
     const bool hasDelayedNodes =

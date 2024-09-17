@@ -248,8 +248,22 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
             return offset;
         }();
 
-        view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
-                                                      offsetTopLeft);
+
+        if (view->selection()) {
+            /// TODO: we are relying on a sticky translated string from KisImageLayerAddCommand
+            ///       change the string after Krita 5.2.5
+            KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Add Layer"));
+            KUndo2Command *deselectCmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
+            ap->applyCommand(deselectCmd);
+            view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
+                                                          offsetTopLeft,
+                                                          ap);
+            endAction(ap, KisOperationConfiguration(id()).toXML());
+        } else {
+            view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
+                                                          offsetTopLeft);
+        }
+
         return;
     }
 
@@ -296,10 +310,12 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         KisProcessingApplicator *ap = beginAction(view, cmd->text());
         ap->applyCommand(cmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
         
-        if (KisConfig(true).activateTransformToolAfterPaste()) {
+        if (view->selection()) {
             KUndo2Command *deselectCmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
             ap->applyCommand(deselectCmd, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
-            
+        }
+
+        if (KisConfig(true).activateTransformToolAfterPaste()) {
             KUndo2Command *transformToolCmd = new KisTransformToolActivationCommand(view);
             ap->applyCommand(transformToolCmd, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
         }
@@ -339,6 +355,11 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     if (!clip) return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+    if (viewManager->selection()) {
+        KUndo2Command *deselectCmd = new KisDeselectActiveSelectionCommand(viewManager->selection(), image);
+        KisProcessingApplicator::runSingleCommandStroke(viewManager->image(), deselectCmd);
+    }
 
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(viewManager->canvasBase(), "KisToolTransform"));
     KIS_ASSERT(tool);

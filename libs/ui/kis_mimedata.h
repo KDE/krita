@@ -17,6 +17,7 @@ class KisShapeController;
 class KisNodeDummy;
 class KisNodeInsertionAdapter;
 class KisNodeGraphListener;
+class KisProcessingApplicator;
 
 /**
  * KisMimeData implements delayed retrieval of nodes for d&d and copy/paste.
@@ -95,7 +96,8 @@ public:
                                  bool copyNode,
                                  KisNodeInsertionAdapter *nodeInsertionAdapter,
                                  bool changeOffset = false,
-                                 QPointF offset = QPointF());
+                                 QPointF offset = QPointF(),
+                                 KisProcessingApplicator *applicator = nullptr);
 
 protected:
 

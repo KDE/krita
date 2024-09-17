@@ -1493,7 +1493,7 @@ void KisNodeManager::copyLayersToClipboard()
     KisClipboard::instance()->setLayers(nodes, m_d->view->image(), true);
 }
 
-void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset)
+void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset, KisProcessingApplicator *applicator)
 {
     const QMimeData *data = KisClipboard::instance()->layersMimeData();
     if (!data) return;
@@ -1519,7 +1519,8 @@ void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset)
                                   copyNode,
                                   nodeInsertionAdapter(),
                                   changeOffset,
-                                  offset);
+                                  offset,
+                                  applicator);
 }
 
 bool KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,

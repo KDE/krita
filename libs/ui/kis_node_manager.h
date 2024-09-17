@@ -30,6 +30,7 @@ class KisNodeInsertionAdapter;
 class KisNodeDisplayModeAdapter;
 class KisNodeJugglerCompressed;
 class KoProperties;
+class KisProcessingApplicator;
 
 /**
  * The node manager passes requests for new layers or masks on to the mask and layer
@@ -239,7 +240,7 @@ public Q_SLOTS:
 
     void cutLayersToClipboard();
     void copyLayersToClipboard();
-    void pasteLayersFromClipboard(bool changeOffset = false, QPointF offset = QPointF());
+    void pasteLayersFromClipboard(bool changeOffset = false, QPointF offset = QPointF(), KisProcessingApplicator *applicator = nullptr);
 
     void createQuickGroup();
     void createQuickClippingGroup();

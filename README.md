@@ -14,12 +14,12 @@ If you are reading this on GitHub, be aware that this is just a mirror. Our real
 
 ### Repository Status
 
-For branch: `master`
+For branch: `krita/5.2`
 
-| Freeze type    | Status                      |
-|----------------|-----------------------------|
-| Feature Freeze | no freeze, features allowed |
-| String Freeze  | no freeze, strings allowed  |
+| Freeze type    | Status                                                               |
+|----------------|----------------------------------------------------------------------|
+| Feature Freeze | freeze, features are not allowed                                     |
+| String Freeze  | freeze, all new strings must go through mailto:kde-i18n-doc@kde.org  |
 
 
 ### User Manual

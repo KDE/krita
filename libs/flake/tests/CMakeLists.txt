@@ -55,7 +55,7 @@ target_compile_definitions(TestSvgParserRoundTrip PRIVATE USE_ROUND_TRIP)
 
 ############## broken tests ###############
 
-krita_add_broken_unit_test(TestPointMergeCommand.cpp
+kis_add_test(TestPointMergeCommand.cpp
     TEST_NAME TestPointMergeCommand
     LINK_LIBRARIES kritaflake kritatestsdk
     NAME_PREFIX "libs-flake-")

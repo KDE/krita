@@ -12,6 +12,7 @@
 #include <QImage>
 #include <QScopedPointer>
 #include <QSharedPointer>
+#include <QIODevice>
 
 #include <KoResource.h>
 #include <KoID.h>

@@ -18,6 +18,8 @@
 
 #include <html/HtmlSavingContext.h>
 
+#include <kis_global.h>
+
 HtmlWriter::HtmlWriter(const QList<KoShape*> &toplevelShapes)
     : m_toplevelShapes(toplevelShapes)
 {
@@ -34,7 +36,7 @@ bool HtmlWriter::save(QIODevice &outputDevice)
     }
 
     QTextStream htmlStream(&outputDevice);
-    htmlStream.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(htmlStream);
 
     // header
     htmlStream << QLatin1String("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" "

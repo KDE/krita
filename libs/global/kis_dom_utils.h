@@ -16,10 +16,8 @@
 #include <QLocale>
 #include <QColor>
 #include <QIODevice>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-#include <QStringConverter>
-#endif
 
+#include "kis_global.h"
 #include <klocalizedstring.h>
 
 #include "kritaglobal_export.h"
@@ -40,11 +38,7 @@ namespace KisDomUtils {
     inline QString toString(float value) {
         QString str;
         QTextStream stream;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        stream.setCodec("UTF-8");
-#else
-        stream.setEncoding(QStringConverter::Utf8);
-#endif
+        KisGlobal::setUtf8OnStream(stream);
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(FLT_DIG);
         stream << value;
@@ -54,11 +48,7 @@ namespace KisDomUtils {
     inline QString toString(double value) {
         QString str;
         QTextStream stream;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        stream.setCodec("UTF-8");
-#else
-        stream.setEncoding(QStringConverter::Utf8);
-#endif
+        KisGlobal::setUtf8OnStream(stream);
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(15);
         stream << value;

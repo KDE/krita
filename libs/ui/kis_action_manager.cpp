@@ -423,7 +423,7 @@ void KisActionManager::dumpActionFlags()
     QFile data("actions.txt");
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&data);
-        out.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(out);
 
         Q_FOREACH (KisAction* action, d->actions) {
             KisAction::ActivationFlags flags = action->activationFlags();

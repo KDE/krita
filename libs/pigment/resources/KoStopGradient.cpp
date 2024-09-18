@@ -636,7 +636,7 @@ QString KoStopGradient::saveSvgGradient() const
 bool KoStopGradient::saveToDevice(QIODevice* dev) const
 {
     QTextStream stream(dev);
-    stream.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(stream);
     stream << saveSvgGradient();
 
     return true;

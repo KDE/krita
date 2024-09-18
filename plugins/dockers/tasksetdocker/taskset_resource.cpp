@@ -13,6 +13,7 @@
 #include <QByteArray>
 
 #include <kis_debug.h>
+#include <kis_global.h>
 
 #define TASKSET_VERSION 1
 
@@ -88,7 +89,7 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
     doc.appendChild(root);
 
     QTextStream textStream(io);
-    textStream.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(textStream);
     doc.save(textStream, 4);
 
     KoResource::saveToDevice(io);

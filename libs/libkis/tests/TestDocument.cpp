@@ -366,7 +366,7 @@ void TestDocument::testAnnotations()
     QBuffer buf;
     buf.open(QBuffer::WriteOnly);
     QTextStream in(&buf);
-    in.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(in);
     in << "AnnotationTest";
     buf.close();
 

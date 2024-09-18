@@ -9,6 +9,7 @@
 
 #include <QDomDocument>
 #include <QDataStream>
+#include <QIODevice>
 
 class Q_DECL_HIDDEN KoProperties::Private
 {

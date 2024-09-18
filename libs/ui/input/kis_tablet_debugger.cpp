@@ -152,7 +152,7 @@ QString KisTabletDebugger::eventToString(const QKeyEvent &ev, const QString &pre
 {
     QString string;
     QTextStream s(&string);
-    s.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
 
@@ -168,7 +168,7 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
 {
     QString string;
     QTextStream s(&string);
-    s.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
@@ -182,7 +182,7 @@ QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &p
 {
     QString string;
     QTextStream s(&string);
-    s.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
 
@@ -203,7 +203,7 @@ QString KisTabletDebugger::eventToString(const QEvent &ev, const QString &prefix
 {
     QString string;
     QTextStream s(&string);
-    s.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
 
@@ -215,7 +215,7 @@ template <class Event>
 {
     QString string;
     QTextStream s(&string);
-    s.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);

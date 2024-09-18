@@ -43,12 +43,12 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        out.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
@@ -95,12 +95,12 @@ bool testFilter(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        out.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         const bool validConfig = kfc->fromXML(s);
@@ -151,12 +151,12 @@ bool testFilterWithSelections(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        out.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);

@@ -25,7 +25,7 @@ QMLConverter::~QMLConverter()
 KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
-    out.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(out);
     out << "import QtQuick 1.1" << "\n\n";
     out << "Rectangle {\n";
     writeInt(out, 1, "width", image->width());

@@ -13,6 +13,7 @@
 #include <QStandardPaths>
 
 #include <kis_debug.h>
+#include <kis_global.h>
 
 #include "kis_splash_screen.h"
 #include "ui_wdgaboutapplication.h"
@@ -51,7 +52,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(fileDevelopers.exists());
     if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream developersText(&fileDevelopers);
-        developersText.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(developersText);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         authors.append(developersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
 #else
@@ -113,7 +114,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(fileCredits.exists());
     if (fileCredits.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream creditsText(&fileCredits);
-        creditsText.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(creditsText);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', Qt::SkipEmptyParts)) {
@@ -158,7 +159,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     Q_ASSERT(licenseFile.exists());
     if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream licenseText(&licenseFile);
-        licenseText.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(licenseText);
         license.append(licenseText.readAll());
     }
     license.append("</pre></body></html>");
@@ -167,7 +168,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     QFile thirdPartyFile(":/libraries.txt");
     if (thirdPartyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream thirdPartyText(&thirdPartyFile);
-        thirdPartyText.setCodec("UTF-8");
+        KisGlobal::setUtf8OnStream(thirdPartyText);
 
         QString thirdPartyHtml = i18n("<html>"
                                       "<head/>"

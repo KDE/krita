@@ -42,6 +42,7 @@
 #include <QSvgGenerator>
 
 #include <kis_debug.h>
+#include <kis_global.h>
 
 SvgWriter::SvgWriter(const QList<KoShapeLayer*> &layers)
     : m_writeInlineImages(true)
@@ -85,7 +86,7 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
     }
 
     QTextStream svgStream(&outputDevice);
-    svgStream.setCodec("UTF-8");
+    KisGlobal::setUtf8OnStream(svgStream);
 
     // standard header:
     svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << Qt::endl;

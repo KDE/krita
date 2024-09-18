@@ -25,6 +25,7 @@
 #include "KisUsageLogger.h"
 
 #include <kis_layer_utils.h>
+#include <kis_global.h>
 
 class FileSystemWatcherWrapper : public QObject
 {
@@ -140,7 +141,7 @@ private Q_SLOTS:
                 if (shouldSpitWarning) {
                     QString message;
                     QTextStream log(&message);
-                    log.setCodec("UTF-8");
+                    KisGlobal::setUtf8OnStream(log);
 
                     log << "WARNING: couldn't reconnect to a removed file layer's file (" << path << "). File is not available for " << absenceTimeMSec / 1000 << " seconds";
 

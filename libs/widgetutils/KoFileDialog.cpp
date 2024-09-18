@@ -587,7 +587,7 @@ void KoFileDialog::onFilterSelected(const QString &filter)
     // with extension added but no write permissions granted.
 #ifndef Q_OS_ANDROID
     QFileDialog::FileMode mode = d->fileDialog->fileMode();
-    if (mode != QFileDialog::FileMode::Directory && mode != QFileDialog::FileMode::DirectoryOnly) {
+    if (mode != QFileDialog::Directory && !d->fileDialog->testOption(QFileDialog::ShowDirsOnly)) {
         // we do not need suffixes for directories
         if (d->suffixes.contains(filter)) {
             QString suffix = d->suffixes[filter];

@@ -36,7 +36,7 @@ QIcon KisFileIconProvider::icon(const QFileInfo &fi) const
     if (KisPreviewFileDialog::s_iconCreator && KisPreviewFileDialog::s_iconCreator->createFileIcon(fi.filePath(), icon, m_devicePixelRatioF, QSize(512, 512))) {
         return icon;
     }
-    return QFileIconProvider::icon(fi.path());
+    return QFileIconProvider::icon(fi);
 }
 
 KisPreviewFileDialog::KisPreviewFileDialog(QWidget *parent, const QString &caption, const QString &directory, const QString &filter)

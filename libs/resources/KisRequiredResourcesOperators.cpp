@@ -16,7 +16,7 @@
 
 bool KisRequiredResourcesOperators::detail::isLocalResourcesStorage(KisResourcesInterfaceSP resourcesInterface)
 {
-    return resourcesInterface.dynamicCast<KisLocalStrokeResources>();
+    return !resourcesInterface.dynamicCast<KisLocalStrokeResources>().isNull();
 }
 
 void KisRequiredResourcesOperators::detail::assertInGuiThread()

@@ -12,6 +12,15 @@ If you are reading this on GitHub, be aware that this is just a mirror. Our real
 
 ![Picture](https://krita.org/images/hero-image-50.webp)
 
+### Repository Status
+
+For branch: `master`
+
+| Freeze type    | Status                      |
+|----------------|-----------------------------|
+| Feature Freeze | no freeze, features allowed |
+| String Freeze  | no freeze, strings allowed  |
+
 
 ### User Manual
 https://docs.krita.org/en/user_manual.html

@@ -23,40 +23,48 @@
 
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::CssLengthPercentage>("KoSvgText::CssLengthPercentage");
+    qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
+    qRegisterMetaType<KoSvgText::AutoLengthPercentage>("KoSvgText::AutoLengthPercentage");
+    qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
+    qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
+    qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
+    qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
+    qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KoSvgText::CssLengthPercentage>();
     QMetaType::registerDebugStreamOperator<KoSvgText::CssLengthPercentage>();
 
-    qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
     QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
 
-    qRegisterMetaType<KoSvgText::AutoLengthPercentage>("KoSvgText::AutoLengthPercentage");
+
     QMetaType::registerEqualsComparator<KoSvgText::AutoLengthPercentage>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoLengthPercentage>();
 
-    qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
+
     QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
     QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
 
-    qRegisterMetaType<KoSvgText::StrokeProperty>("KoSvgText::StrokeProperty");
+
     QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
     QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
 
-    qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
+
     QMetaType::registerEqualsComparator<KoSvgText::TextTransformInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::TextTransformInfo>();
 
-    qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
+
     QMetaType::registerEqualsComparator<KoSvgText::TextIndentInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::TextIndentInfo>();
 
-    qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
+
     QMetaType::registerEqualsComparator<KoSvgText::TabSizeInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::TabSizeInfo>();
 
-    qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
     QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
+#endif
 }
 
 namespace KoSvgText {

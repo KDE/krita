@@ -9,7 +9,9 @@
 
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoResourceCacheInterfaceSP>("KoResourceCacheInterfaceSP");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KoResourceCacheInterfaceSP>();
+#endif
 }
 
 KoResourceCacheInterface::~KoResourceCacheInterface()

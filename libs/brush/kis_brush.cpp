@@ -47,7 +47,9 @@
 
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisBrushSP>("KisBrushSP");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KisBrushSP>();
+#endif
 }
 
 const QString KisBrush::brushTypeMetaDataKey = "image-based-brush";

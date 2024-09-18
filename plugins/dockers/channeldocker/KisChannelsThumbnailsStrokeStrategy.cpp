@@ -14,7 +14,9 @@
 
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<QVector<QImage>>("QVector<QImage>");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<QVector<QImage>>();
+#endif
 }
 
 void KisChannelsThumbnailsStrokeStrategy::reportThumbnailGenerationCompleted(KisPaintDeviceSP device, const QRect &rect)

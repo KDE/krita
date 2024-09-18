@@ -56,7 +56,9 @@ struct DefaultKoColorInitializer
          * We want KoColor to be comparable inside QVariant,
          * so we should generate comparators.
          */
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QMetaType::registerEqualsComparator<KoColor>();
+#endif
     }
 
     ~DefaultKoColorInitializer() {

@@ -590,7 +590,7 @@ bool KisResourceLocator::importWillOverwriteResource(const QString &resourceType
 
     const KoResourceSP existingResource = storage->resource(resourceUrl);
 
-    return existingResource;
+    return !existingResource.isNull();
 }
 
 bool KisResourceLocator::exportResource(KoResourceSP resource, QIODevice *device)

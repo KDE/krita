@@ -10,8 +10,11 @@
 
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgTextPropertyData>("KoSvgTextPropertyData");
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KoSvgTextPropertyData>();
     QMetaType::registerDebugStreamOperator<KoSvgTextPropertyData>();
+#endif
 }
 
 QDebug operator<<(QDebug dbg, const KoSvgTextPropertyData &prop)

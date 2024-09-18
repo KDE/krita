@@ -6,10 +6,11 @@
 #ifndef KIS_KRA_LOADER_H
 #define KIS_KRA_LOADER_H
 
-class QString;
-class QStringList;
 
+#include <QStringList>
+#include <QString>
 #include "QDomDocument"
+
 class KoStore;
 
 class KisDocument;

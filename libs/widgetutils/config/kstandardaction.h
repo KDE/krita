@@ -10,9 +10,9 @@
 #include <kritawidgetutils_export.h>
 #include <kstandardshortcut.h>
 #include <QList>
+#include <QStringList>
 
 class QObject;
-class QStringList;
 class QWidget;
 class QAction;
 class KRecentFilesAction;

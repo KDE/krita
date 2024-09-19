@@ -14,7 +14,6 @@
 #include <QPainterPath>
 #include <QRect>
 #include <QDomElement>
-#include <QtConcurrentMap>
 #include <QByteArray>
 #include <QBuffer>
 #include <QFile>

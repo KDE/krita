@@ -1,6 +1,6 @@
+#include <QtMath>
 #include <QObject>
 #include <QThread>
-#include <QtConcurrent>
 #include <QList>
 #include <QVector>
 #include <QVariant>

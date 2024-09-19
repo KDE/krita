@@ -28,7 +28,6 @@
 #include <kis_lod_transform.h>
 #include <kis_paintop_plugin_utils.h>
 #include "krita_utils.h"
-#include <QtConcurrent>
 #include "kis_algebra_2d.h"
 #include <KisDabRenderingExecutor.h>
 #include <KisDabCacheUtils.h>

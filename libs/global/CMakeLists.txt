@@ -69,7 +69,6 @@ generate_export_header(kritaglobal BASE_NAME kritaglobal)
 target_link_libraries(kritaglobal 
     PUBLIC
         kritaversion
-        Qt${QT_MAJOR_VERSION}::Concurrent 
         Qt${QT_MAJOR_VERSION}::Core 
         Qt${QT_MAJOR_VERSION}::Gui 
         Qt${QT_MAJOR_VERSION}::Widgets 

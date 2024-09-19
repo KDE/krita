@@ -10,7 +10,7 @@
 
 #include <QTimer>
 #include <QMutex>
-#include <QtConcurrent>
+#include <QStack>
 
 #include "kis_config.h"
 #include "kis_config_notifier.h"

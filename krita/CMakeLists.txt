@@ -109,8 +109,7 @@ target_link_libraries(krita
                       Qt${QT_MAJOR_VERSION}::Xml
                       Qt${QT_MAJOR_VERSION}::Network
                       Qt${QT_MAJOR_VERSION}::PrintSupport
-                      Qt${QT_MAJOR_VERSION}::Svg
-                      Qt${QT_MAJOR_VERSION}::Concurrent)
+                      Qt${QT_MAJOR_VERSION}::Svg)
 if(HAVE_KCRASH)
     target_link_libraries(krita PRIVATE KF${KF_MAJOR}::Crash)
 endif()

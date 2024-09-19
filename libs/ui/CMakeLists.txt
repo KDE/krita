@@ -687,6 +687,7 @@ target_link_libraries(kritaui
         KF${KF_MAJOR}::ItemViews
 
         Qt${QT_MAJOR_VERSION}::Network
+        Qt${QT_MAJOR_VERSION}::Concurrent
 
         Eigen3::Eigen
         Boost::boost

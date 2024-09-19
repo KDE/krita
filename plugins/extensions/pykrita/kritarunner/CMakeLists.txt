@@ -16,7 +16,6 @@ set(kritarunner_PRIVATE_LINK_LIBS
     Qt${QT_MAJOR_VERSION}::Network
     Qt${QT_MAJOR_VERSION}::PrintSupport
     Qt${QT_MAJOR_VERSION}::Svg
-    Qt${QT_MAJOR_VERSION}::Concurrent
 )
 
 if(WIN32)

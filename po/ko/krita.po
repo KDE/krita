@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 01:52+0000\n"
+"POT-Creation-Date: 2024-09-19 01:47+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17903,6 +17903,7 @@ msgstr "선택 해제"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -18935,7 +18936,7 @@ msgid "Clone Layer"
 msgstr "복제 레이어"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1586
+#: libs/ui/kis_node_manager.cpp:1587
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -20532,7 +20533,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:1400
 #: libs/pigment/resources/KoColorSet.cpp:1483
 #: libs/pigment/resources/KoColorSet.cpp:1892
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -21537,18 +21538,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "모양 붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:608
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(붙여넣기)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, kde-format
 msgid "Pasted"
 msgstr "붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "스타일 붙여넣기"
@@ -30538,7 +30539,7 @@ msgstr "파일 레이어로 변환"
 msgid "New Filter Layer"
 msgstr "새 필터 레이어"
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:324
 #, kde-format
 msgid "Fill Layer"
 msgstr "채우기 레이어"
@@ -30819,40 +30820,40 @@ msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "노드 자르기"
 
-#: libs/ui/kis_node_manager.cpp:1616
+#: libs/ui/kis_node_manager.cpp:1617
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "빠른 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1627
+#: libs/ui/kis_node_manager.cpp:1628
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "빠른 클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1634
+#: libs/ui/kis_node_manager.cpp:1635
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "클리핑 그룹"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1636
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "마스크 레이어"
 
-#: libs/ui/kis_node_manager.cpp:1662
+#: libs/ui/kis_node_manager.cpp:1663
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1665
+#: libs/ui/kis_node_manager.cpp:1666
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "개별 레이어를 각각의 그룹 레이어 아래에 두기"
 
-#: libs/ui/kis_node_manager.cpp:1673
+#: libs/ui/kis_node_manager.cpp:1674
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "빠른 그룹 해제"

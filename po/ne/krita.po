@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 01:52+0000\n"
+"POT-Creation-Date: 2024-09-19 01:47+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -17193,6 +17193,7 @@ msgstr "चयन हटाउनुहोस्"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -18277,7 +18278,7 @@ msgid "Clone Layer"
 msgstr "नयाँ क्लोन तह"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1586
+#: libs/ui/kis_node_manager.cpp:1587
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -19890,7 +19891,7 @@ msgstr "अनुकूल"
 #: libs/pigment/resources/KoColorSet.cpp:1400
 #: libs/pigment/resources/KoColorSet.cpp:1483
 #: libs/pigment/resources/KoColorSet.cpp:1892
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -20881,18 +20882,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "आकारप्लेट सिर्जन गर्।नुहोस्"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:608
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(टाँसियो)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "रङ्गिन"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -29580,7 +29581,7 @@ msgstr "यसबाट हालको तह रूपान्तरण ग�
 msgid "New Filter Layer"
 msgstr "फिल्टर मास्क..."
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:324
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "फिल्टर ग्यालेरी"
@@ -29859,43 +29860,43 @@ msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "नक्कल गर्नुहोस्"
 
-#: libs/ui/kis_node_manager.cpp:1616
+#: libs/ui/kis_node_manager.cpp:1617
 #, fuzzy
 #| msgid "Duplicate Brush"
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "नक्कली ब्रुस"
 
-#: libs/ui/kis_node_manager.cpp:1627
+#: libs/ui/kis_node_manager.cpp:1628
 #, fuzzy
 #| msgid "Duplicate Brush"
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "नक्कली ब्रुस"
 
-#: libs/ui/kis_node_manager.cpp:1634
+#: libs/ui/kis_node_manager.cpp:1635
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "तह हटाउनुहोस्"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1636
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "तह रङ्याउनुहोस्"
 
-#: libs/ui/kis_node_manager.cpp:1662
+#: libs/ui/kis_node_manager.cpp:1663
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1665
+#: libs/ui/kis_node_manager.cpp:1666
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1673
+#: libs/ui/kis_node_manager.cpp:1674
 #, fuzzy
 #| msgid "Duplicate Brush"
 msgctxt "(qtundo-format)"

@@ -48,8 +48,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 03:31+0000\n"
-"PO-Revision-Date: 2024-09-03 08:46+0200\n"
+"POT-Creation-Date: 2024-09-19 03:18+0000\n"
+"PO-Revision-Date: 2024-09-17 15:19+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -57,7 +57,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16813,6 +16813,7 @@ msgstr "Zrušit výběr"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17788,7 +17789,7 @@ msgid "Clone Layer"
 msgstr "Klonovat vrstvu"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1536
+#: libs/ui/kis_node_manager.cpp:1537
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -19351,7 +19352,7 @@ msgstr "Ven"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20307,18 +20308,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Vložit tvary"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(vloženo)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, kde-format
 msgid "Pasted"
 msgstr "Vloženo"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr ""
@@ -28754,7 +28755,7 @@ msgstr ""
 msgid "New Filter Layer"
 msgstr "Nová vrstva filtrů"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:324
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vyplnit vrstvu"
@@ -28999,39 +29000,39 @@ msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1566
+#: libs/ui/kis_node_manager.cpp:1567
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Rychlé seskupení"
 
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1585
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1585
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskovat vrstvu"
 
-#: libs/ui/kis_node_manager.cpp:1612
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1615
+#: libs/ui/kis_node_manager.cpp:1616
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1624
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rychlé zrušení seskupení"
@@ -34054,37 +34055,37 @@ msgstr "Název barvy:"
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr ""
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr ""
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "L:"
 
 #: libs/widgets/kis_color_input.cpp:502
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
-msgstr ""
+msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr ""
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr ""
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format

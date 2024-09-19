@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 03:31+0000\n"
+"POT-Creation-Date: 2024-09-19 03:18+0000\n"
 "PO-Revision-Date: 2024-09-11 10:02+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -16844,6 +16844,7 @@ msgstr "Desselecciona"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17846,7 +17847,7 @@ msgid "Clone Layer"
 msgstr "Capa clonada"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1536
+#: libs/ui/kis_node_manager.cpp:1537
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -19428,7 +19429,7 @@ msgstr "Allunya"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20405,18 +20406,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Enganxa les formes"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(enganxat)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, kde-format
 msgid "Pasted"
 msgstr "Enganxat"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Enganxa l'estil"
@@ -29241,7 +29242,7 @@ msgstr "Converteix a una capa de fitxer"
 msgid "New Filter Layer"
 msgstr "Capa de filtratge nova"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:324
 #, kde-format
 msgid "Fill Layer"
 msgstr "Capa d'emplenat"
@@ -29487,39 +29488,39 @@ msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Retalla nodes"
 
-#: libs/ui/kis_node_manager.cpp:1566
+#: libs/ui/kis_node_manager.cpp:1567
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Agrupa ràpid"
 
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Agrupa ràpid de retall"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1585
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Grup de retall"
 
-#: libs/ui/kis_node_manager.cpp:1585
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Capa de màscara"
 
-#: libs/ui/kis_node_manager.cpp:1612
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "No s'ha pogut moure la capa «%1» a dins el pare nou «%2»"
 
-#: libs/ui/kis_node_manager.cpp:1615
+#: libs/ui/kis_node_manager.cpp:1616
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "No s'ha pogut moure la capa «%1» a dins la capa arrel."
 
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1624
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupa ràpid"

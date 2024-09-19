@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 03:31+0000\n"
+"POT-Creation-Date: 2024-09-19 03:18+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -17023,6 +17023,7 @@ msgstr ""
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -18148,7 +18149,7 @@ msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1536
+#: libs/ui/kis_node_manager.cpp:1537
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -19728,7 +19729,7 @@ msgstr "Выходной"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20718,18 +20719,18 @@ msgstr ""
 "Вставка форм\n"
 "вставку форм"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(вставлено)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, kde-format
 msgid "Pasted"
 msgstr "Вставлено"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr ""
@@ -29595,7 +29596,7 @@ msgstr ""
 msgid "New Filter Layer"
 msgstr "Новый фильтрующий слой"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:324
 #, kde-format
 msgid "Fill Layer"
 msgstr "Заливаемый слой"
@@ -29891,43 +29892,43 @@ msgstr ""
 "Вырезание узлов\n"
 "вырезание узлов"
 
-#: libs/ui/kis_node_manager.cpp:1566
+#: libs/ui/kis_node_manager.cpp:1567
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr ""
 "Быстрая группировка\n"
 "быструю группировку"
 
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1578
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 "Быстрая группировка в макетную группу\n"
 "быструю группировку в макетную группу"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1585
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Макетная группа"
 
-#: libs/ui/kis_node_manager.cpp:1585
+#: libs/ui/kis_node_manager.cpp:1586
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Маскирующий слой"
 
-#: libs/ui/kis_node_manager.cpp:1612
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Не удалось переместить слой «%1» в новый родительский слой «%2»"
 
-#: libs/ui/kis_node_manager.cpp:1615
+#: libs/ui/kis_node_manager.cpp:1616
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Не удалось переместить слой «%1» в корневой слой"
 
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1624
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr ""

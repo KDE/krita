@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-17 03:31+0000\n"
+"POT-Creation-Date: 2024-09-19 03:18+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -16864,6 +16864,7 @@ msgstr "Odabir"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/ui/actions/KisPasteActionFactories.cpp:255
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -17904,7 +17905,7 @@ msgid "Clone Layer"
 msgstr "Novi Sloj"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
-#: libs/ui/kis_node_manager.cpp:1536
+#: libs/ui/kis_node_manager.cpp:1537
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -19478,7 +19479,7 @@ msgstr "Izlaz"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:359
+#: libs/ui/actions/KisPasteActionFactories.cpp:380
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -20454,18 +20455,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Stvori predložak"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:286
+#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
 #, fuzzy, kde-format
 msgid "(pasted)"
 msgstr "/Uredi/Ubaci u"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:364
+#: libs/ui/actions/KisPasteActionFactories.cpp:385
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "/Uredi/Ubaci u"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:419
+#: libs/ui/actions/KisPasteActionFactories.cpp:440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -28879,7 +28880,7 @@ msgstr "Koristi trenutni uzorak"
 msgid "New Filter Layer"
 msgstr "&Bijela"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:324
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "&Bijela"
@@ -29153,41 +29154,41 @@ msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Dupliciraj Sloj"
 
-#: libs/ui/kis_node_manager.cpp:1566
+#: libs/ui/kis_node_manager.cpp:1567
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Dupliciraj Sloj"
 
-#: libs/ui/kis_node_manager.cpp:1577
+#: libs/ui/kis_node_manager.cpp:1578
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Dupliciraj Sloj"
 
-#: libs/ui/kis_node_manager.cpp:1584
+#: libs/ui/kis_node_manager.cpp:1585
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Ukloni masku"
 
-#: libs/ui/kis_node_manager.cpp:1585
+#: libs/ui/kis_node_manager.cpp:1586
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "&Sloj"
 
-#: libs/ui/kis_node_manager.cpp:1612
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1615
+#: libs/ui/kis_node_manager.cpp:1616
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1623
+#: libs/ui/kis_node_manager.cpp:1624
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"

@@ -936,6 +936,83 @@ void KisForestTest::testCopyForest()
 
 }
 
+void KisForestTest::testSwapForest()
+{
+    /**
+     * 0 1
+     *   2
+     *   3
+     **/
+
+    KisForest<int> forest1;
+
+    auto it0 = forest1.insert(childBegin(forest1), 0);
+
+    auto it1 = forest1.insert(childEnd(it0), 1);
+    auto it2 = forest1.insert(childEnd(it0), 2);
+    auto it3 = forest1.insert(childEnd(it0), 3);
+
+    QVERIFY(testForestIteration(begin(forest1),
+                                end(forest1),
+                                {0, 1, 2, 3}));
+
+    KisForest<int> forest2;
+
+    QVERIFY(testForestIteration(begin(forest2),
+                                end(forest2),
+                                {}));
+
+
+    forest1.swap(forest2);
+
+    QVERIFY(testForestIteration(begin(forest1),
+                                end(forest1),
+                                {}));
+
+    QVERIFY(testForestIteration(begin(forest2),
+                                end(forest2),
+                                {0, 1, 2, 3}));
+
+    /**
+     * After swapping the containers the iterators are guaranteed to be valid still,
+     * as per normal C++ convention.
+     */
+    QCOMPARE(childBegin(forest2), it0);
+    QCOMPARE(childBegin(it0), it1);
+    QCOMPARE(std::next(childBegin(it0)), it2);
+    QCOMPARE(std::next(std::next(childBegin(it0))), it3);
+}
+
+void KisForestTest::testForestEmpty()
+{
+    KisForest<int> forest;
+
+    /**
+     * 0 1
+     *   2
+     *   3
+     **/
+
+
+    QVERIFY(forest.empty());
+
+    auto it0 = forest.insert(childBegin(forest), 0);
+
+    [[maybe_unused]] auto it1 = forest.insert(childEnd(it0), 1);
+    [[maybe_unused]] auto it2 = forest.insert(childEnd(it0), 2);
+    [[maybe_unused]] auto it3 = forest.insert(childEnd(it0), 3);
+
+    QVERIFY(testForestIteration(begin(forest),
+                                end(forest),
+                                {0, 1, 2, 3}));
+
+    QVERIFY(!forest.empty());
+
+    forest.erase(it0);
+
+    QVERIFY(forest.empty());
+}
+
 void KisForestTest::testSiblingsOnEndIterator()
 {
     KisForest<int> forest;

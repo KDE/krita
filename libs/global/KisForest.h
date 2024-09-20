@@ -817,6 +817,14 @@ public:
     using depth_first_tail_iterator = DepthFirstIterator<T, Leave, false>;
     using const_depth_first_tail_iterator = DepthFirstIterator<T, Leave, true>;
 
+    bool empty() const {
+        return !m_root.firstChild;
+    }
+
+    void swap(Forest &other) {
+        std::swap(m_root, other.m_root);
+    }
+
     iterator begin() {
         return beginImpl(*this);
     }

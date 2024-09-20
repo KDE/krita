@@ -39,6 +39,8 @@ private Q_SLOTS:
     void testConversionsFromEnd();
 
     void testCopyForest();
+    void testSwapForest();
+    void testForestEmpty();
 
     void testSiblingsOnEndIterator();
     void testParentIterator();

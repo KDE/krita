@@ -13,11 +13,11 @@ endif()
 
 include(KritaAddBrokenUnitTest)
 
-set(KisRandomGeneratorDemoSources kis_random_generator_demo.cpp kimageframe.cpp)
-ki18n_wrap_ui(KisRandomGeneratorDemoSources kis_random_generator_demo.ui)
-add_executable(KisRandomGeneratorDemo ${KisRandomGeneratorDemoSources})
-target_link_libraries(KisRandomGeneratorDemo kritaimage)
-ecm_mark_as_test(KisRandomGeneratorDemo)
+set(KisRandomGenerator2DDemoSources KisRandomGenerator2DDemo.cpp kimageframe.cpp)
+ki18n_wrap_ui(KisRandomGenerator2DDemoSources KisRandomGenerator2DDemo.ui)
+add_executable(KisRandomGenerator2DDemo ${KisRandomGenerator2DDemoSources})
+target_link_libraries(KisRandomGenerator2DDemo kritaimage)
+ecm_mark_as_test(KisRandomGenerator2DDemo)
 
 
 kis_add_tests(
@@ -112,7 +112,7 @@ kis_add_tests(
     kis_image_animation_interface_test.cpp
     kis_walkers_test.cpp
     kis_cage_transform_worker_test.cpp
-    kis_random_generator_test.cpp
+    KisRandomGenerator2DTest.cpp
     kis_keyframing_test.cpp
     kis_time_span_test.cpp
     kis_filter_mask_test.cpp
@@ -161,5 +161,5 @@ if(APPLE)
     set_property(TARGET kis_image_animation_interface_test PROPERTY MACOSX_BUNDLE ON)
     set_property(TARGET kis_cage_transform_worker_test PROPERTY MACOSX_BUNDLE ON)
 
-    macos_test_fixrpath(KisRandomGeneratorDemo)
+    macos_test_fixrpath(KisRandomGenerator2DDemo)
 endif()

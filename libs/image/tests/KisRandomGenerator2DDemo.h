@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_RANDOM_GENERATOR_DEMO_H
-#define KIS_RANDOM_GENERATOR_DEMO_H
+#ifndef KIS_RANDOM_GENERATOR_2D_DEMO_H
+#define KIS_RANDOM_GENERATOR_2D_DEMO_H
 
-#include "ui_kis_random_generator_demo.h"
+#include "ui_KisRandomGenerator2DDemo.h"
 
 class Noise {
 public:
@@ -27,12 +27,12 @@ private:
     quint64 _min, _max, _sum;
 };
 
-class KisRandomGeneratorDemo: public QWidget, Ui::NoiseDemoUi
+class KisRandomGenerator2DDemo: public QWidget, Ui::NoiseDemoUi
 {
     Q_OBJECT
 public:
-    KisRandomGeneratorDemo(QWidget* parent = 0);
-    ~KisRandomGeneratorDemo() override;
+    KisRandomGenerator2DDemo(QWidget* parent = 0);
+    ~KisRandomGenerator2DDemo() override;
 
 public Q_SLOTS:
     void updateNoise();

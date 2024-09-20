@@ -2,8 +2,8 @@
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kis_random_generator_demo.h"
-#include "../kis_random_generator.h"
+#include "KisRandomGenerator2DDemo.h"
+#include "KisRandomGenerator2D.h"
 
 #include <ctime>
 #include <cstdlib>
@@ -24,7 +24,7 @@ Noise::~Noise()
 
 void Noise::update(quint64 seed, int shift, int cutoff, bool chR, bool chG, bool chB)
 {
-    KisRandomGenerator rand(seed);
+    KisRandomGenerator2D rand(seed);
     int h[256][256] = { { 0 } };
     int m = 0;
 
@@ -93,7 +93,7 @@ const int WIDTH = 1024;
 const int HEIGHT = 1024;
 Noise noise(WIDTH, HEIGHT);
 
-KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent)
+KisRandomGenerator2DDemo::KisRandomGenerator2DDemo(QWidget* parent) : QWidget(parent)
 {
     _noUpdate = true;
     setupUi(this);
@@ -108,11 +108,11 @@ KisRandomGeneratorDemo::KisRandomGeneratorDemo(QWidget* parent) : QWidget(parent
     updateNoise();
 }
 
-KisRandomGeneratorDemo::~KisRandomGeneratorDemo()
+KisRandomGenerator2DDemo::~KisRandomGenerator2DDemo()
 {
 }
 
-void KisRandomGeneratorDemo::updateNoise()
+void KisRandomGenerator2DDemo::updateNoise()
 {
     if (_noUpdate)
         return;
@@ -142,7 +142,7 @@ void KisRandomGeneratorDemo::updateNoise()
 int main(int argc, char **argv)
 {
     QApplication app(argc, argv);
-    KisRandomGeneratorDemo *demo = new KisRandomGeneratorDemo;
+    KisRandomGenerator2DDemo *demo = new KisRandomGenerator2DDemo;
     demo->show();
     return app.exec();
 }

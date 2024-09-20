@@ -4,19 +4,19 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_random_generator_test.h"
+#include "KisRandomGenerator2DTest.h"
 
 #include <simpletest.h>
-#include "kis_random_generator.h"
+#include "KisRandomGenerator2D.h"
 
 #include <math.h>
 
 #include "kis_debug.h"
 
-void KisRandomGeneratorTest::twoSeeds(quint64 seed1, quint64 seed2)
+void KisRandomGenerator2DTest::twoSeeds(quint64 seed1, quint64 seed2)
 {
-    KisRandomGenerator rand1(seed1);
-    KisRandomGenerator rand2(seed2);
+    KisRandomGenerator2D rand1(seed1);
+    KisRandomGenerator2D rand2(seed2);
     for (int y = 0; y < 100; y++) {
         for (int x = 0; x < 100; x++) {
             QVERIFY(rand1.randomAt(x, y) != rand2.randomAt(x, y));
@@ -24,7 +24,7 @@ void KisRandomGeneratorTest::twoSeeds(quint64 seed1, quint64 seed2)
     }
 }
 
-void KisRandomGeneratorTest::twoSeeds()
+void KisRandomGenerator2DTest::twoSeeds()
 {
     twoSeeds(140, 1405);
     twoSeeds(140515215, 232351521LL);
@@ -35,9 +35,9 @@ void KisRandomGeneratorTest::twoSeeds()
 }
 
 
-void KisRandomGeneratorTest::twoCalls(quint64 seed)
+void KisRandomGenerator2DTest::twoCalls(quint64 seed)
 {
-    KisRandomGenerator rand1(seed);
+    KisRandomGenerator2D rand1(seed);
     for (int y = 0; y < 100; y++) {
         for (int x = 0; x < 100; x++) {
             dbgKrita <<  rand1.randomAt(x, y) << rand1.randomAt(x, y);
@@ -47,7 +47,7 @@ void KisRandomGeneratorTest::twoCalls(quint64 seed)
     }
 }
 
-void KisRandomGeneratorTest::twoCalls()
+void KisRandomGenerator2DTest::twoCalls()
 {
     twoCalls(5023325165LL);
     twoCalls(751461346LL);
@@ -57,10 +57,10 @@ void KisRandomGeneratorTest::twoCalls()
     twoCalls(6013413451550LL);
 }
 
-void KisRandomGeneratorTest::testConstantness(quint64 seed)
+void KisRandomGenerator2DTest::testConstantness(quint64 seed)
 {
-    KisRandomGenerator rand1(seed);
-    KisRandomGenerator rand2(seed);
+    KisRandomGenerator2D rand1(seed);
+    KisRandomGenerator2D rand2(seed);
     for (int y = 0; y < 100; y++) {
         for (int x = 0; x < 100; x++) {
             QCOMPARE(rand1.randomAt(x, y), rand2.randomAt(x, y));
@@ -70,7 +70,7 @@ void KisRandomGeneratorTest::testConstantness(quint64 seed)
 }
 
 
-void KisRandomGeneratorTest::testConstantness()
+void KisRandomGenerator2DTest::testConstantness()
 {
     testConstantness(50);
     testConstantness(75);
@@ -82,11 +82,11 @@ void KisRandomGeneratorTest::testConstantness()
 
 #include <iostream>
 
-void KisRandomGeneratorTest::testEvolution()
+void KisRandomGenerator2DTest::testEvolution()
 {
     int counter = 0;
 
-    KisRandomGenerator randg(10000);
+    KisRandomGenerator2D randg(10000);
     for (int y = 0; y < 1024; y++) {
         for (int x = 0; x < 1024; x++) {
             quint64 number = randg.randomAt(x, y);
@@ -107,4 +107,4 @@ void KisRandomGeneratorTest::testEvolution()
     QVERIFY(counter == 0);
 }
 
-SIMPLE_TEST_MAIN(KisRandomGeneratorTest)
+SIMPLE_TEST_MAIN(KisRandomGenerator2DTest)

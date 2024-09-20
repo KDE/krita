@@ -6,8 +6,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef _KIS_RANDOM_GENERATOR_H_
-#define _KIS_RANDOM_GENERATOR_H_
+#ifndef _KIS_RANDOM_GENERATOR_2D_H_
+#define _KIS_RANDOM_GENERATOR_2D_H_
 
 #include <kritaimage_export.h>
 
@@ -20,14 +20,14 @@
  * needs to always get the same random value at each run, or else the result will constantly
  * changes when used as an adjustment layer.
  */
-class KRITAIMAGE_EXPORT KisRandomGenerator
+class KRITAIMAGE_EXPORT KisRandomGenerator2D
 {
 public:
     /**
      * Creates a new instance of a random generator with the given seed.
      */
-    KisRandomGenerator(quint64 seed);
-    ~KisRandomGenerator();
+    KisRandomGenerator2D(quint64 seed);
+    ~KisRandomGenerator2D();
     /**
      * @return the constant random value corresponding to a given pixel, the value is between 0
      *         and RAND_MAX

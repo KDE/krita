@@ -7,7 +7,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_random_generator.h"
+#include "KisRandomGenerator2D.h"
 
 /* Mac OS X doesn't define a number of UINT* macros without this before stdlib.h */
 #define __STDC_LIMIT_MACROS
@@ -31,21 +31,21 @@ inline quint64 part(quint64 n1, quint64 n2, int p)
     return quint64(salt[i][j]) << b;
 }
 
-struct Q_DECL_HIDDEN KisRandomGenerator::Private {
+struct Q_DECL_HIDDEN KisRandomGenerator2D::Private {
     quint64 seed;
 };
 
-KisRandomGenerator::KisRandomGenerator(quint64 seed) : d(new Private)
+KisRandomGenerator2D::KisRandomGenerator2D(quint64 seed) : d(new Private)
 {
     d->seed = seed;
 }
 
-KisRandomGenerator::~KisRandomGenerator()
+KisRandomGenerator2D::~KisRandomGenerator2D()
 {
     delete d;
 }
 
-quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
+quint64 KisRandomGenerator2D::randomAt(qint64 x, qint64 y)
 {
     const quint64 kxa = 427140578808118991LL;
     const quint64 kya = 166552399647317237LL;
@@ -69,7 +69,7 @@ quint64 KisRandomGenerator::randomAt(qint64 x, qint64 y)
     return v;
 }
 
-double KisRandomGenerator::doubleRandomAt(qint64 x, qint64 y)
+double KisRandomGenerator2D::doubleRandomAt(qint64 x, qint64 y)
 {
     return randomAt(x, y) / (double)UINT64_MAX;
 }

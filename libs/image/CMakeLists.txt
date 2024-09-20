@@ -276,7 +276,7 @@ set(kritaimage_LIB_SRCS
    kis_processing_information.cpp
    kis_properties_configuration.cc
    kis_random_accessor_ng.cpp
-   kis_random_generator.cc
+   KisRandomGenerator2D.cpp
    kis_random_sub_accessor.cpp
    kis_wrapped_random_accessor.cpp
    kis_selection.cc

@@ -25,7 +25,7 @@
 #include <kis_layer.h>
 #include <filter/kis_filter_registry.h>
 #include <kis_global.h>
-#include <kis_random_generator.h>
+#include <KisRandomGenerator2D.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_category_ids.h>
@@ -111,10 +111,10 @@ void KisFilterNoise::processImpl(KisPaintDeviceSP device,
         seedBlue = config->getInt("seedBlue", seedBlue);
     }
 
-    KisRandomGenerator randt(seedThreshold);
-    KisRandomGenerator randr(seedRed);
-    KisRandomGenerator randg(seedGreen);
-    KisRandomGenerator randb(seedBlue);
+    KisRandomGenerator2D randt(seedThreshold);
+    KisRandomGenerator2D randr(seedRed);
+    KisRandomGenerator2D randg(seedGreen);
+    KisRandomGenerator2D randb(seedBlue);
 
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
 

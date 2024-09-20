@@ -27,7 +27,7 @@
 #include <kis_layer.h>
 #include <kis_paint_device.h>
 #include <kis_random_accessor_ng.h>
-#include <kis_random_generator.h>
+#include <KisRandomGenerator2D.h>
 #include <kis_selection.h>
 #include <kis_types.h>
 #include <filter/kis_filter_category_ids.h>
@@ -83,9 +83,9 @@ void KisFilterRandomPick::processImpl(KisPaintDeviceSP device,
         seedH = config->getInt("seedH", seedH);
         seedV = config->getInt("seedV", seedV);
     }
-    KisRandomGenerator randT(seedThreshold);
-    KisRandomGenerator randH(seedH);
-    KisRandomGenerator randV(seedV);
+    KisRandomGenerator2D randT(seedThreshold);
+    KisRandomGenerator2D randH(seedH);
+    KisRandomGenerator2D randV(seedV);
 
     KisSequentialIteratorProgress dstIt(device, applyRect, progressUpdater);
     KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG();

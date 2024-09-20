@@ -9,7 +9,7 @@
 #include "KisDitherUtil.h"
 
 #include <kis_filter_configuration.h>
-#include <kis_random_generator.h>
+#include <KisRandomGenerator2D.h>
 #include <KisResourcesInterface.h>
 
 KisDitherUtil::KisDitherUtil()
@@ -70,7 +70,7 @@ qreal KisDitherUtil::threshold(const QPoint &pos)
         threshold = (m_patternUseAlpha ? color.alphaF() : color.lightnessF());
     }
     else if (m_thresholdMode == ThresholdMode::Noise) {
-        KisRandomGenerator random(m_noiseSeed);
+        KisRandomGenerator2D random(m_noiseSeed);
         threshold = random.doubleRandomAt(pos.x(), pos.y());
     }
     else threshold = 0.5;

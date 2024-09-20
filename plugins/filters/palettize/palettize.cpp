@@ -19,7 +19,7 @@
 #include <KisResourceItemChooser.h>
 #include <KoColorSet.h>
 #include <KoPattern.h>
-#include <kis_random_generator.h>
+#include <KisRandomGenerator2D.h>
 #include <KisDitherUtil.h>
 #include <KisGlobalResourcesInterface.h>
 #include <KoResourceLoadResult.h>

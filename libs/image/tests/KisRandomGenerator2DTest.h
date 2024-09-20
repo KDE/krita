@@ -4,12 +4,12 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_RANDOM_GENERATOR_TEST_H
-#define KIS_RANDOM_GENERATOR_TEST_H
+#ifndef KIS_RANDOM_GENERATOR_2D_TEST_H
+#define KIS_RANDOM_GENERATOR_2D_TEST_H
 
 #include <simpletest.h>
 
-class KisRandomGeneratorTest : public QObject
+class KisRandomGenerator2DTest : public QObject
 {
     Q_OBJECT
 

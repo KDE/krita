@@ -786,9 +786,11 @@ endmacro()
 
 # overcome some platform incompatibilities
 if(WIN32)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
-    add_definitions(-D_USE_MATH_DEFINES)
-    add_definitions(-DNOMINMAX)
+    if (MSVC)
+        include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
+        add_definitions(-D_USE_MATH_DEFINES)
+        add_definitions(-DNOMINMAX)
+    endif()
 endif()
 
 # set custom krita plugin installdir

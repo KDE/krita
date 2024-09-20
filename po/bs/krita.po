@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-19 01:47+0000\n"
+"POT-Creation-Date: 2024-09-20 01:55+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16513,13 +16513,13 @@ msgstr "Olovka"
 msgid "Line"
 msgstr "Linija"
 
-#: libs/brush/kis_auto_brush.cpp:454 libs/brush/KisBrushModel.cpp:81
+#: libs/brush/kis_auto_brush.cpp:453 libs/brush/KisBrushModel.cpp:81
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
 msgstr ""
 
-#: libs/brush/kis_auto_brush.cpp:458 libs/brush/KisBrushModel.cpp:85
+#: libs/brush/kis_auto_brush.cpp:457 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
@@ -17515,7 +17515,7 @@ msgid "Node Rename"
 msgstr "Novo ime"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:832
+#: libs/image/kis_image.cc:831
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Promjeni dimenzije slike"
@@ -17757,13 +17757,13 @@ msgstr "Mičel"
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:402
+#: libs/image/kis_image.cc:401
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "Uvezi sliku"
 
-#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17771,37 +17771,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadina"
 
-#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:731 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Slikarski sloj"
 
-#: libs/image/kis_image.cc:831
+#: libs/image/kis_image.cc:830
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Saseci sliku"
 
-#: libs/image/kis_image.cc:927
+#: libs/image/kis_image.cc:926
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Isijeci sloj"
 
-#: libs/image/kis_image.cc:928
+#: libs/image/kis_image.cc:927
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maska odsjecanja"
 
-#: libs/image/kis_image.cc:965
+#: libs/image/kis_image.cc:964
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skaliraj sliku"
 
-#: libs/image/kis_image.cc:966
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Promijeni rezoluciju slike"
 
-#: libs/image/kis_image.cc:1016
+#: libs/image/kis_image.cc:1015
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -17812,19 +17812,19 @@ msgstr[0] "Skaliraj sloj"
 msgstr[1] "Skaliraj sloj"
 msgstr[2] "Skaliraj sloj"
 
-#: libs/image/kis_image.cc:1155
+#: libs/image/kis_image.cc:1154
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotiraj sliku"
 
-#: libs/image/kis_image.cc:1165
+#: libs/image/kis_image.cc:1164
 #, fuzzy
 #| msgid "Rotate Canvas"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Okreni platno"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1167
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -17835,7 +17835,7 @@ msgstr[0] "Okreni sloj"
 msgstr[1] "Okreni sloj"
 msgstr[2] "Okreni sloj"
 
-#: libs/image/kis_image.cc:1269
+#: libs/image/kis_image.cc:1268
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -17843,7 +17843,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Kresanje oblika"
 
-#: libs/image/kis_image.cc:1273
+#: libs/image/kis_image.cc:1272
 #, fuzzy, kde-format
 #| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
@@ -17853,42 +17853,42 @@ msgstr[0] "Smakni sloj"
 msgstr[1] "Smakni sloj"
 msgstr[2] "Smakni sloj"
 
-#: libs/image/kis_image.cc:1280
+#: libs/image/kis_image.cc:1279
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Smakni sliku"
 
-#: libs/image/kis_image.cc:1298
+#: libs/image/kis_image.cc:1297
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "&Pretvori prostor sloja slike..."
 
-#: libs/image/kis_image.cc:1349
+#: libs/image/kis_image.cc:1348
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertuj prostor boja slike"
 
-#: libs/image/kis_image.cc:1350
+#: libs/image/kis_image.cc:1349
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertuj prostor boja projekcije"
 
-#: libs/image/kis_image.cc:1408
+#: libs/image/kis_image.cc:1407
 #, fuzzy
 #| msgid "Assign to tag"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodjela za oznaku"
 
-#: libs/image/kis_image.cc:1449
+#: libs/image/kis_image.cc:1448
 #, fuzzy
 #| msgid "Open Color Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Otvor profil boje"
 
-#: libs/image/kis_image.cc:2485
+#: libs/image/kis_image.cc:2484
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Kropaj izbore"

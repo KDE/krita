@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-19 01:47+0000\n"
+"POT-Creation-Date: 2024-09-20 01:55+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16059,13 +16059,13 @@ msgstr "நீள்வட்ட கருவி"
 msgid "Line"
 msgstr "சரிவான கலப்பு"
 
-#: libs/brush/kis_auto_brush.cpp:454 libs/brush/KisBrushModel.cpp:81
+#: libs/brush/kis_auto_brush.cpp:453 libs/brush/KisBrushModel.cpp:81
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
 msgstr ""
 
-#: libs/brush/kis_auto_brush.cpp:458 libs/brush/KisBrushModel.cpp:85
+#: libs/brush/kis_auto_brush.cpp:457 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
@@ -17090,7 +17090,7 @@ msgid "Node Rename"
 msgstr "&பெயர்:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:832
+#: libs/image/kis_image.cc:831
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17314,55 +17314,55 @@ msgstr "மிட்ஷெல்"
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:402
+#: libs/image/kis_image.cc:401
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "உருவத்தை இறக்குமதிசெய்"
 
-#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "பின்னணி"
 
-#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:731 libs/ui/kis_layer_manager.cc:661
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&அடுக்கு"
 
-#: libs/image/kis_image.cc:831
+#: libs/image/kis_image.cc:830
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "அடுக்கிலிருந்து உருவம் வரை"
 
-#: libs/image/kis_image.cc:927
+#: libs/image/kis_image.cc:926
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&அடுக்கை வெட்டு..."
 
-#: libs/image/kis_image.cc:928
+#: libs/image/kis_image.cc:927
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Alpha"
 
-#: libs/image/kis_image.cc:965
+#: libs/image/kis_image.cc:964
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "பிம்பத்தை வெட்டு"
 
-#: libs/image/kis_image.cc:966
+#: libs/image/kis_image.cc:965
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "பிம்பத்  தெளிவுத்திறன்"
 
-#: libs/image/kis_image.cc:1016
+#: libs/image/kis_image.cc:1015
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17370,19 +17370,19 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "அடுக்கை அளவாக்கு "
 msgstr[1] "அடுக்கை அளவாக்கு "
 
-#: libs/image/kis_image.cc:1155
+#: libs/image/kis_image.cc:1154
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "பிம்பத்தை சுற்று"
 
-#: libs/image/kis_image.cc:1165
+#: libs/image/kis_image.cc:1164
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "உருவகைகள்"
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1167
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17390,13 +17390,13 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "&அடுக்கை சுழற்று"
 msgstr[1] "&அடுக்கை சுழற்று"
 
-#: libs/image/kis_image.cc:1269
+#: libs/image/kis_image.cc:1268
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "உரையை அழி"
 
-#: libs/image/kis_image.cc:1273
+#: libs/image/kis_image.cc:1272
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17404,43 +17404,43 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "&அடுக்கை வெட்டு..."
 msgstr[1] "&அடுக்கை வெட்டு..."
 
-#: libs/image/kis_image.cc:1280
+#: libs/image/kis_image.cc:1279
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "பிம்பத்தை வெட்டு"
 
-#: libs/image/kis_image.cc:1298
+#: libs/image/kis_image.cc:1297
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "உருவத்தை அடுக்காக நுழை..."
 
-#: libs/image/kis_image.cc:1349
+#: libs/image/kis_image.cc:1348
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "உருவத்தை அடுக்காக நுழை..."
 
-#: libs/image/kis_image.cc:1350
+#: libs/image/kis_image.cc:1349
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "உருவத்தை அடுக்காக நுழை..."
 
-#: libs/image/kis_image.cc:1408
+#: libs/image/kis_image.cc:1407
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "தானியக்கி சீரமை"
 
-#: libs/image/kis_image.cc:1449
+#: libs/image/kis_image.cc:1448
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/image/kis_image.cc:2485
+#: libs/image/kis_image.cc:2484
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"

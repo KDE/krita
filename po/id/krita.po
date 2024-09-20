@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-19 01:47+0000\n"
+"POT-Creation-Date: 2024-09-20 01:55+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -16001,13 +16001,13 @@ msgstr "Pensil"
 msgid "Line"
 msgstr "Garis"
 
-#: libs/brush/kis_auto_brush.cpp:454 libs/brush/KisBrushModel.cpp:81
+#: libs/brush/kis_auto_brush.cpp:453 libs/brush/KisBrushModel.cpp:81
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Density recommended value 100.0"
 msgstr ""
 
-#: libs/brush/kis_auto_brush.cpp:458 libs/brush/KisBrushModel.cpp:85
+#: libs/brush/kis_auto_brush.cpp:457 libs/brush/KisBrushModel.cpp:85
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
@@ -16983,7 +16983,7 @@ msgid "Node Rename"
 msgstr ""
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:832
+#: libs/image/kis_image.cc:831
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -17199,49 +17199,49 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:402
+#: libs/image/kis_image.cc:401
 #, kde-format
 msgid "Imported Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:728 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Latar belakang"
 
-#: libs/image/kis_image.cc:732 libs/ui/kis_layer_manager.cc:661
+#: libs/image/kis_image.cc:731 libs/ui/kis_layer_manager.cc:661
 #, kde-format
 msgid "Paint Layer"
 msgstr "Lapisan Lukis"
 
-#: libs/image/kis_image.cc:831
+#: libs/image/kis_image.cc:830
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Pangkas Gambar"
 
-#: libs/image/kis_image.cc:927
+#: libs/image/kis_image.cc:926
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Pangkas Lapisan"
 
-#: libs/image/kis_image.cc:928
+#: libs/image/kis_image.cc:927
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Pangkas Mask"
 
-#: libs/image/kis_image.cc:965
+#: libs/image/kis_image.cc:964
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skala Gambar"
 
-#: libs/image/kis_image.cc:966
+#: libs/image/kis_image.cc:965
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 
-#: libs/image/kis_image.cc:1016
+#: libs/image/kis_image.cc:1015
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17249,17 +17249,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/image/kis_image.cc:1155
+#: libs/image/kis_image.cc:1154
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:1165
+#: libs/image/kis_image.cc:1164
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr ""
 
-#: libs/image/kis_image.cc:1168
+#: libs/image/kis_image.cc:1167
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17267,12 +17267,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rotasi Lapisan"
 msgstr[1] "Rotasikan Lapisan %1"
 
-#: libs/image/kis_image.cc:1269
+#: libs/image/kis_image.cc:1268
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr ""
 
-#: libs/image/kis_image.cc:1273
+#: libs/image/kis_image.cc:1272
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17280,37 +17280,37 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/image/kis_image.cc:1280
+#: libs/image/kis_image.cc:1279
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Cukur Gambar"
 
-#: libs/image/kis_image.cc:1298
+#: libs/image/kis_image.cc:1297
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Konversikan Ruang Warna Lapisan"
 
-#: libs/image/kis_image.cc:1349
+#: libs/image/kis_image.cc:1348
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konversikan Ruang Warna Gambar"
 
-#: libs/image/kis_image.cc:1350
+#: libs/image/kis_image.cc:1349
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr ""
 
-#: libs/image/kis_image.cc:1408
+#: libs/image/kis_image.cc:1407
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr ""
 
-#: libs/image/kis_image.cc:1449
+#: libs/image/kis_image.cc:1448
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr ""
 
-#: libs/image/kis_image.cc:2485
+#: libs/image/kis_image.cc:2484
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Pangkas Pemilihan"

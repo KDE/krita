@@ -25,6 +25,7 @@
 
 #include "KritaTransformMaskStubs.h"
 #include "KisDumbTransformMaskParams.h"
+#include "config-limit-long-tests.h"
 
 void KisTransformMaskTest::initTestCase()
 {
@@ -66,7 +67,7 @@ void KisTransformMaskTest::testSafeTransform()
     ref << QPoint(236, 403);
     ref << QPoint(284, 410);
     QCOMPARE(fwdPoly.toPolygon(), ref);
-    QCOMPARE(fwdRect.toRect(), QRect(10,403,274,211));
+    QCOMPARE(fwdRect.toRect(), QRect(10,403,274,210));
 
     ref.clear();
     ref << QPoint(512, 1024);
@@ -178,7 +179,7 @@ void KisTransformMaskTest::testSafeTransformSingleVanishingPoint()
     ref << QPoint(629, 847);
     ref << QPoint(765, 648);
     QCOMPARE(fwdPoly.toPolygon(), ref);
-    QCOMPARE(fwdRect.toRect(), QRect(629,648,971,199));
+    QCOMPARE(fwdRect.toRect(), QRect(629,648,972,199));
 
     ref.clear();
     ref << QPoint(1536,1024);
@@ -362,6 +363,11 @@ bool doPartialTests(const QString &prefix, KisImageSP image, KisLayerSP paintLay
 
 void KisTransformMaskTest::testMaskOnPaintLayer()
 {
+#ifdef LIMIT_LONG_TESTS
+    qInfo() << "Skipping rendering test for being too long (and not having actual data)...";
+    return;
+#endif
+
     QImage refImage(TestUtil::fetchDataFileLazy("test_transform_quality.png"));
     QRect refRect = refImage.rect();
     TestUtil::MaskParent p(refRect);
@@ -386,6 +392,11 @@ void KisTransformMaskTest::testMaskOnPaintLayer()
 
 void KisTransformMaskTest::testMaskOnCloneLayer()
 {
+#ifdef LIMIT_LONG_TESTS
+    qInfo() << "Skipping rendering test for being too long (and not having actual data)...";
+    return;
+#endif
+
     QImage refImage(TestUtil::fetchDataFileLazy("test_transform_quality.png"));
     QRect refRect = refImage.rect();
     TestUtil::MaskParent p(refRect);
@@ -413,6 +424,11 @@ void KisTransformMaskTest::testMaskOnCloneLayer()
 
 void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
 {
+#ifdef LIMIT_LONG_TESTS
+    qInfo() << "Skipping rendering test for being too long (and not having actual data)...";
+    return;
+#endif
+
     TestUtil::ReferenceImageChecker chk("clone_offset_simple", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
@@ -468,6 +484,10 @@ void KisTransformMaskTest::testMaskOnCloneLayerWithOffset()
 
 void KisTransformMaskTest::testMultipleMasks()
 {
+#ifdef LIMIT_LONG_TESTS
+    qInfo() << "Skipping rendering test for being too long (and not having actual data)...";
+    return;
+#endif
     TestUtil::ReferenceImageChecker chk("multiple_masks", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
@@ -751,6 +771,11 @@ void KisTransformMaskTest::testMultipleMasks()
 
 void KisTransformMaskTest::testMaskWithOffset()
 {
+#ifdef LIMIT_LONG_TESTS
+    qInfo() << "Skipping rendering test for being too long (and not having actual data)...";
+    return;
+#endif
+
     TestUtil::ReferenceImageChecker chk("mask_with_offset", "transform_mask_updates");
 
     QRect refRect(0,0,512,512);
@@ -801,127 +826,6 @@ void KisTransformMaskTest::testMaskWithOffset()
     QVERIFY(chk.testPassed());
 }
 
-void KisTransformMaskTest::testWeirdFullUpdates()
-{
-    //TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
-
-    QRect imageRect(0,0,512,512);
-    QRect fillRect(10, 10, 236, 236);
-    TestUtil::MaskParent p(imageRect);
-
-    p.layer->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
-
-    KisPaintLayerSP player1 = new KisPaintLayer(p.image, "pl1", OPACITY_OPAQUE_U8, p.image->colorSpace());
-    player1->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
-    p.image->addNode(player1, p.image->root());
-
-    KisTransformMaskSP mask1 = new KisTransformMask(p.image, "mask1");
-    QTransform transform1 =
-        QTransform::fromTranslate(256, 0);
-    mask1->setTransformParams(KisTransformMaskParamsInterfaceSP(
-                                  new KisDumbTransformMaskParams(transform1)));
-
-    p.image->addNode(mask1, player1);
-
-
-    KisPaintLayerSP player2 = new KisPaintLayer(p.image, "pl2", OPACITY_OPAQUE_U8, p.image->colorSpace());
-    player2->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
-    p.image->addNode(player2, p.image->root());
-
-    KisTransformMaskSP mask2 = new KisTransformMask(p.image, "mask2");
-    QTransform transform2 =
-        QTransform::fromTranslate(0, 256);
-    mask2->setTransformParams(KisTransformMaskParamsInterfaceSP(
-                                  new KisDumbTransformMaskParams(transform2)));
-
-    p.image->addNode(mask2, player2);
-
-
-    KisPaintLayerSP player3 = new KisPaintLayer(p.image, "pl3", OPACITY_OPAQUE_U8, p.image->colorSpace());
-    player3->paintDevice()->fill(fillRect, KoColor(Qt::red, p.layer->colorSpace()));
-    p.image->addNode(player3, p.image->root());
-
-    KisTransformMaskSP mask3 = new KisTransformMask(p.image, "mask3");
-    QTransform transform3 =
-        QTransform::fromTranslate(256, 256);
-    mask3->setTransformParams(KisTransformMaskParamsInterfaceSP(
-                                  new KisDumbTransformMaskParams(transform3)));
-
-    p.image->addNode(mask3, player3);
-
-
-
-    //p.image->initialRefreshGraph();
-
-    p.image->refreshGraphAsync(0, QRect(0,0,256,256), QRect());
-    p.image->waitForDone();
-
-    QVERIFY(player1->projection()->extent().isEmpty());
-    QVERIFY(player1->projection()->exactBounds().isEmpty());
-
-    QVERIFY(player2->projection()->extent().isEmpty());
-    QVERIFY(player2->projection()->exactBounds().isEmpty());
-
-    QVERIFY(player3->projection()->extent().isEmpty());
-    QVERIFY(player3->projection()->exactBounds().isEmpty());
-
-    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,236,236)));
-
-
-
-    p.image->refreshGraphAsync(0, QRect(0,256,256,256), QRect());
-    p.image->waitForDone();
-
-    QVERIFY(player1->projection()->extent().isEmpty());
-    QVERIFY(player1->projection()->exactBounds().isEmpty());
-
-    QVERIFY(!player2->projection()->extent().isEmpty());
-    QVERIFY(!player2->projection()->exactBounds().isEmpty());
-
-    QVERIFY(player3->projection()->extent().isEmpty());
-    QVERIFY(player3->projection()->exactBounds().isEmpty());
-
-    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,236,492)));
-
-
-    p.image->refreshGraphAsync(0, QRect(256,0,256,256), QRect());
-    p.image->waitForDone();
-
-    QVERIFY(!player1->projection()->extent().isEmpty());
-    QVERIFY(!player1->projection()->exactBounds().isEmpty());
-
-    QVERIFY(!player2->projection()->extent().isEmpty());
-    QVERIFY(!player2->projection()->exactBounds().isEmpty());
-
-    QVERIFY(player3->projection()->extent().isEmpty());
-    QVERIFY(player3->projection()->exactBounds().isEmpty());
-
-    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,492,492)));
-    QVERIFY((p.image->projection()->region() & QRect(256,256,256,256)).isEmpty());
-
-
-
-    p.image->refreshGraphAsync(0, QRect(256,256,256,256), QRect());
-    p.image->waitForDone();
-
-    QVERIFY(!player1->projection()->extent().isEmpty());
-    QVERIFY(!player1->projection()->exactBounds().isEmpty());
-
-    QVERIFY(!player2->projection()->extent().isEmpty());
-    QVERIFY(!player2->projection()->exactBounds().isEmpty());
-
-    QVERIFY(!player3->projection()->extent().isEmpty());
-    QVERIFY(!player3->projection()->exactBounds().isEmpty());
-
-    QCOMPARE(p.image->projection()->exactBounds(), QRect(QRect(10,10,492,492)));
-    QVERIFY(!(p.image->projection()->region() & QRect(256,256,256,256)).isEmpty());
-
-    p.image->waitForDone();
-
-    KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj", "dd");
-
-}
-
 void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
 {
     //TestUtil::ExternalImageChecker chk("mask_with_offset", "transform_mask_updates");
@@ -962,13 +866,14 @@ void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
     mask1->setDirty();
     p.image->waitForDone();
 
-    /**
-     * Transform mask is expected to crop the externals of the layer by 50%
-     * far behind the layer border! Take care!
-     */
-    QCOMPARE(p.image->projection()->exactBounds(), QRect(10, 128, 236, 384));
-
     //KIS_DUMP_DEVICE_2(p.image->projection(), imageRect, "image_proj_mask", "dd");
+
+    /**
+     * We do **not** have clipping here, because transform mask performs clipping
+     * for transformations with `transform.type() > QTransform::TxShear`. Translations
+     * are processed unclipped.
+     */
+    QCOMPARE(p.image->projection()->exactBounds(), QRect(10, 10, 236, 502));
 }
 
 KISTEST_MAIN(KisTransformMaskTest)

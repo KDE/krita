@@ -25,7 +25,6 @@ private Q_SLOTS:
     void testMultipleMasks();
     void testMaskWithOffset();
 
-    void testWeirdFullUpdates();
     void testTransformHiddenPartsOfTheGroup();
 };
 

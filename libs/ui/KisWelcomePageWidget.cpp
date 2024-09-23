@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2018 Scott Petrovic <scottpetrovic@gmail.com>
  * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
@@ -82,6 +83,10 @@ QLabel* KisWelcomePageWidget::donationBannerImage {nullptr};
 
 #ifdef Q_OS_WIN
 #include <KisWindowsPackageUtils.h>
+#endif
+
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
 #endif
 
 // Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
@@ -423,6 +428,14 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
 #ifdef Q_OS_ANDROID
     // donationLink->setStyleSheet(blendedStyle);
     // donationLink->setText(QString(i18n("Get your Krita Supporter Badge here!")));
+#endif
+
+#ifdef Q_OS_MACOS
+    // MACOS store version should not contain external links
+    if (KisMacosEntitlements().sandbox()) {
+        supportKritaLink->hide();
+        supportKritaIcon->hide();
+    }
 #endif
 }
 

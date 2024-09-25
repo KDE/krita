@@ -65,6 +65,9 @@ macos-build:
     - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-sign.log
     - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-notarize.log
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos-universal --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee dmg-publish.log
+  after_script:
+    # try to fetch signing errors from the task log
+    - if [[ -e /tmp/task-debug.log ]]; then mv /tmp/task-debug.log $CI_PROJECT_DIR/; fi
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 macos-nightly:

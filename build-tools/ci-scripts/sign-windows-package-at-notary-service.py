@@ -30,5 +30,5 @@ with open("files-to-sign.txt", 'w') as toSign:
                 filePath = os.path.join(rootPath, fileName)
                 print(filePath, file=toSign)
 
-commandToRun = "python.exe -u ci-notary-service/signwindowsbinaries.py --config %KRITACI_WINDOWS_SIGN_CONFIG% --files-from files-to-sign.txt"
+commandToRun = f"python.exe -u ci-notary-service/signwindowsbinaries.py --config {KRITACI_WINDOWS_SIGN_CONFIG} --files-from files-to-sign.txt"
 subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )

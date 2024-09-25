@@ -638,10 +638,10 @@ if args.pre_zip_hook:
     print("Running pre-zip hook...")
     if args.pre_zip_hook.endswith('.cmd'):
         subprocess.run(["cmd", "/c", args.pre_zip_hook,
-                       f"{pkg_root}\\"], check=True)
+                       f"{pkg_root}\\"], stdout=sys.stdout, stderr=sys.stderr, shell=True, check=True)
     elif args.pre_zip_hook.endswith('.py'):
         subprocess.run([sys.executable, "-u", args.pre_zip_hook,
-                       f"{pkg_root}\\"], check=True)
+                       f"{pkg_root}\\"], stdout=sys.stdout, stderr=sys.stderr, shell=True, check=True)
     else:
         warnings.warn("ERROR: pre-zip hook has unknown format!")
         sys.exit(102)

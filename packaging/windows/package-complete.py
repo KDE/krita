@@ -236,7 +236,7 @@ if not args.no_interactive:
     print("")
 
 # Initialize clean PATH
-os.environ["PATH"] = r"%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0" + "\\"
+os.environ["PATH"] = fr"{os.environ['SystemRoot']}\system32;{os.environ['SystemRoot']};{os.environ['SystemRoot']}\System32\Wbem;{os.environ['SystemRoot']}\System32\WindowsPowerShell\v1.0" + "\\"
 os.environ["PATH"] = fr"{os.environ['MINGW_BIN_DIR']};{DEPS_INSTALL_DIR}\bin;{os.environ['PATH']}"
 
 

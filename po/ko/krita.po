@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-20 01:55+0000\n"
+"POT-Creation-Date: 2024-09-25 01:49+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20605,7 +20605,7 @@ msgstr "로컬 리소스"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -24724,7 +24724,7 @@ msgid "Start"
 msgstr "시작"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
 #, kde-format
 msgid "DEV BUILD"
 msgstr "개발 빌드"
@@ -24765,43 +24765,43 @@ msgid "Community"
 msgstr "커뮤니티"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:389
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:394
 #, kde-format
 msgid "User Manual"
 msgstr "사용자 설명서"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:392
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:397
 #, kde-format
 msgid "Support Krita"
 msgstr "Krita 지원"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:401
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:406
 #, kde-format
 msgid "Powered by KDE"
 msgstr "KDE에서 지원함"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:398
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:403
 #, kde-format
 msgid "Source Code"
 msgstr "소스 코드"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:386
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:391
 #, kde-format
 msgid "Getting Started"
 msgstr "시작하기"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:383
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:388
 #, kde-format
 msgid "User Community"
 msgstr "사용자 커뮤니티"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:395
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Krita Website"
 msgstr "Krita 웹사이트"
@@ -24861,7 +24861,7 @@ msgid "Show details"
 msgstr "자세한 정보 표시"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:403
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:408
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -29758,161 +29758,161 @@ msgid "%1 Button"
 msgid_plural "%1 Buttons"
 msgstr[0] "%1 단추"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:370
+#: libs/ui/input/kis_shortcut_configuration.cpp:375
 #, kde-format
 msgctxt "Separator in the list of keys for shortcut"
 msgid " + "
 msgstr " + "
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:375
+#: libs/ui/input/kis_shortcut_configuration.cpp:380
 #, kde-format
 msgctxt "Ctrl key"
 msgid "Ctrl"
 msgstr "Ctrl"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:379
+#: libs/ui/input/kis_shortcut_configuration.cpp:384
 #, kde-format
 msgctxt "Meta key"
 msgid "Meta"
 msgstr "Meta"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:383
+#: libs/ui/input/kis_shortcut_configuration.cpp:388
 #, kde-format
 msgctxt "Alt key"
 msgid "Alt"
 msgstr "Alt"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:387
+#: libs/ui/input/kis_shortcut_configuration.cpp:392
 #, kde-format
 msgctxt "Shift key"
 msgid "Shift"
 msgstr "Shift"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:399
+#: libs/ui/input/kis_shortcut_configuration.cpp:404
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
 msgstr "없음"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:409
+#: libs/ui/input/kis_shortcut_configuration.cpp:414
 #, kde-format
 msgid "Mouse Wheel Up"
 msgstr "마우스 휠 위로"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:413
+#: libs/ui/input/kis_shortcut_configuration.cpp:418
 #, kde-format
 msgid "Mouse Wheel Down"
 msgstr "마우스 휠 아래로"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:417
+#: libs/ui/input/kis_shortcut_configuration.cpp:422
 #, kde-format
 msgid "Mouse Wheel Left"
 msgstr "마우스 휠 왼쪽으로"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:421
+#: libs/ui/input/kis_shortcut_configuration.cpp:426
 #, kde-format
 msgid "Mouse Wheel Right"
 msgstr "마우스 휠 오른쪽으로"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:425
+#: libs/ui/input/kis_shortcut_configuration.cpp:430
 #, kde-format
 msgid "Trackpad Pan"
 msgstr "트랙패드 팬"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:429
+#: libs/ui/input/kis_shortcut_configuration.cpp:434
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
 msgstr "없음"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:441
+#: libs/ui/input/kis_shortcut_configuration.cpp:446
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:457
+#: libs/ui/input/kis_shortcut_configuration.cpp:462
 #, kde-format
 msgctxt "%1 = modifier keys in shortcut; %2 = mouse wheel buttons in shortcut"
 msgid "%1 + %2"
 msgstr "%1 + %2"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:471
+#: libs/ui/input/kis_shortcut_configuration.cpp:476
 #, fuzzy, kde-format
 #| msgid "Picture"
 msgid "Pinch Gesture"
 msgstr "그림"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:473
+#: libs/ui/input/kis_shortcut_configuration.cpp:478
 #, fuzzy, kde-format
 #| msgctxt "Shortcut type"
 #| msgid "Gesture"
 msgid "Pan Gesture"
 msgstr "제스처"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:475
+#: libs/ui/input/kis_shortcut_configuration.cpp:480
 #, fuzzy, kde-format
 #| msgid "Rotate hue"
 msgid "Rotate Gesture"
 msgstr "색조 회전"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:477
+#: libs/ui/input/kis_shortcut_configuration.cpp:482
 #, kde-format
 msgid "Smart Zoom Gesture"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:480
+#: libs/ui/input/kis_shortcut_configuration.cpp:485
 #, kde-format
 msgid "One Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:482
+#: libs/ui/input/kis_shortcut_configuration.cpp:487
 #, kde-format
 msgid "Two Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:484
+#: libs/ui/input/kis_shortcut_configuration.cpp:489
 #, kde-format
 msgid "Three Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:486
+#: libs/ui/input/kis_shortcut_configuration.cpp:491
 #, kde-format
 msgid "Four Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:488
+#: libs/ui/input/kis_shortcut_configuration.cpp:493
 #, kde-format
 msgid "Five Finger Tap"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:490
+#: libs/ui/input/kis_shortcut_configuration.cpp:495
 #, fuzzy, kde-format
 #| msgid "On Click Drag"
 msgid "One Finger Drag"
 msgstr "클릭 드래그"
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:492
+#: libs/ui/input/kis_shortcut_configuration.cpp:497
 #, kde-format
 msgid "Two Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:494
+#: libs/ui/input/kis_shortcut_configuration.cpp:499
 #, kde-format
 msgid "Three Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:496
+#: libs/ui/input/kis_shortcut_configuration.cpp:501
 #, kde-format
 msgid "Four Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:498
+#: libs/ui/input/kis_shortcut_configuration.cpp:503
 #, kde-format
 msgid "Five Finger Drag"
 msgstr ""
 
-#: libs/ui/input/kis_shortcut_configuration.cpp:501
+#: libs/ui/input/kis_shortcut_configuration.cpp:506
 #, fuzzy, kde-format
 #| msgctxt "Shortcut type"
 #| msgid "Gesture"
@@ -31105,13 +31105,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "불투명 선택"
 
-#: libs/ui/kis_splash_screen.cpp:151
+#: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:175
+#: libs/ui/kis_splash_screen.cpp:179
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -31119,58 +31119,89 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">최근 파일</span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:215
+#: libs/ui/kis_splash_screen.cpp:222
 #, fuzzy, kde-format
 #| msgid ""
-#| "<html><head/><body><p align=\"center\"><span style=\" color:%1;"
-#| "\"><b>Links</b></span></p><p><a href=\"https://krita.org/support-us/"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</"
-#| "span></a></p><p><a href=\"https://docs.krita.org/Category:Getting_Started"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p><p><a href=\"https://forum.kde."
-#| "org/viewforum.php?f=136\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">User Community</span></a></p><p><a href=\"https://quickgit."
-#| "kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Source Code</span></a></p><p><a href=\"https://store.steampowered."
-#| "com/app/280680/\"><span style=\" text-decoration: underline; color:%1;"
-#| "\">Krita on Steam</span></a></p></body></html>"
-msgid ""
-"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
-"org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
-"\">Support Krita's Development!</span></a></p><p><a href=\"https://docs."
-"krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita Website</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
-"href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
-"invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
-"color:%1;\">Source Code</span></a></p><p><a href=\"https://api.kde.org/krita/"
-"html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting API</span></a></p><p><a href=\"https://scripting.krita.org/"
-"lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting School</span></a></p></td></table></body></html>"
+#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#| "b></p>"
+msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" color:%1;\"><b>링크</"
-"b></span></p><p><a href=\"https://krita.org/support-us/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita 지원</span></a></p><p><a href="
-"\"https://docs.krita.org/Category:Getting_Started\"><span style=\" text-"
-"decoration: underline; color:%1;\">시작하기</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">설명서</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita 웹사이트</span></a></p><p><a "
-"href=\"https://forum.kde.org/viewforum.php?f=136\"><span style=\" text-"
-"decoration: underline; color:%1;\">사용자 커뮤니티</span></a></p><p><a href="
-"\"https://quickgit.kde.org/?p=krita.git\"><span style=\" text-decoration: "
-"underline; color:%1;\">소스 코드</span></a></p><p><a href=\"https://store."
-"steampowered.com/app/280680/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Steam의 Krita</span></a></p></body></html>"
+"<html><head/><body><p><b><span style=\" color:%1;\">최근 파일</span></b></p>"
+
+#: libs/ui/kis_splash_screen.cpp:226
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Support Krita's Development!</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:229
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
+"span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:231
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:233
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#| "b></p>"
+msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+msgstr ""
+"<html><head/><body><p><b><span style=\" color:%1;\">최근 파일</span></b></p>"
+
+#: libs/ui/kis_splash_screen.cpp:234
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">User Community</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:235
+#, kde-format
+msgid ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Source Code</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:236
+#, kde-format
+msgid ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:237
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
+#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
+#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
+#| "Scripting School</span></a>!</p></body></html>"
+msgid ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
+msgstr ""
+"<html><head/><body><p>Krita 스크립트를 작성하는 방법을 익히고 싶다면 <a href="
+"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
+"decoration: underline; color:#2980b9;\">Krita Scripting School</span></a> 페"
+"이지를 참조하세요!</p></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -32886,12 +32917,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "익명"
 
-#: libs/ui/KisWelcomePageWidget.cpp:156
+#: libs/ui/KisWelcomePageWidget.cpp:161
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "뉴스 및 새 릴리스 확인 활성화"
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -32900,34 +32931,34 @@ msgstr ""
 "Krita 뉴스 표시: 인터넷으로 krita.org 웹사이트에 연결해서 정보를 다운로드해"
 "야 합니다"
 
-#: libs/ui/KisWelcomePageWidget.cpp:161
+#: libs/ui/KisWelcomePageWidget.cpp:166
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 #, kde-format
 msgid "Language"
 msgstr "언어"
 
-#: libs/ui/KisWelcomePageWidget.cpp:162
+#: libs/ui/KisWelcomePageWidget.cpp:167
 #, kde-format
 msgid "English news is always up to date."
 msgstr "영어 뉴스는 항상 최신 뉴스를 포함합니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:654
+#: libs/ui/KisWelcomePageWidget.cpp:667
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\" 잊기"
 
-#: libs/ui/KisWelcomePageWidget.cpp:745
+#: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "새 Krita 버전을 사용할 수 있습니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:774
+#: libs/ui/KisWelcomePageWidget.cpp:787
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "업데이트 중 오류 발생"
 
-#: libs/ui/KisWelcomePageWidget.cpp:780
+#: libs/ui/KisWelcomePageWidget.cpp:793
 #, kde-format
 msgid "Restart is required."
 msgstr "다시 시작해야 합니다."
@@ -63479,6 +63510,60 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#, fuzzy
+#~| msgid ""
+#~| "<html><head/><body><p align=\"center\"><span style=\" color:%1;"
+#~| "\"><b>Links</b></span></p><p><a href=\"https://krita.org/support-us/"
+#~| "\"><span style=\" text-decoration: underline; color:%1;\">Support Krita</"
+#~| "span></a></p><p><a href=\"https://docs.krita.org/Category:Getting_Started"
+#~| "\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#~| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
+#~| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
+#~| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+#~| "color:%1;\">Krita Website</span></a></p><p><a href=\"https://forum.kde."
+#~| "org/viewforum.php?f=136\"><span style=\" text-decoration: underline; "
+#~| "color:%1;\">User Community</span></a></p><p><a href=\"https://quickgit."
+#~| "kde.org/?p=krita.git\"><span style=\" text-decoration: underline; color:"
+#~| "%1;\">Source Code</span></a></p><p><a href=\"https://store.steampowered."
+#~| "com/app/280680/\"><span style=\" text-decoration: underline; color:%1;"
+#~| "\">Krita on Steam</span></a></p></body></html>"
+#~ msgid ""
+#~ "<html><head/><body><table width=\"100%\" cellpadding="
+#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
+#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
+#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
+#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
+#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
+#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
+#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
+#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
+#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
+#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
+#~ "School</span></a></p></td></table></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p align=\"center\"><span style=\" color:%1;\"><b>링크"
+#~ "</b></span></p><p><a href=\"https://krita.org/support-us/\"><span style="
+#~ "\" text-decoration: underline; color:%1;\">Krita 지원</span></a></p><p><a "
+#~ "href=\"https://docs.krita.org/Category:Getting_Started\"><span style=\" "
+#~ "text-decoration: underline; color:%1;\">시작하기</span></a></p><p><a href="
+#~ "\"https://docs.krita.org/\"><span style=\" text-decoration: underline; "
+#~ "color:%1;\">설명서</span></a></p><p><a href=\"https://krita.org/\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">Krita 웹사이트</span></"
+#~ "a></p><p><a href=\"https://forum.kde.org/viewforum.php?f=136\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">사용자 커뮤니티</span></"
+#~ "a></p><p><a href=\"https://quickgit.kde.org/?p=krita.git\"><span style=\" "
+#~ "text-decoration: underline; color:%1;\">소스 코드</span></a></p><p><a "
+#~ "href=\"https://store.steampowered.com/app/280680/\"><span style=\" text-"
+#~ "decoration: underline; color:%1;\">Steam의 Krita</span></a></p></body></"
+#~ "html>"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Convert to an animated layer"

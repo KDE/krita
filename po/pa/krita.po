@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-19 03:18+0000\n"
+"POT-Creation-Date: 2024-09-25 03:15+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -21073,7 +21073,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -25453,7 +25453,7 @@ msgid "Start"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:643
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -25497,46 +25497,46 @@ msgid "Community"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:389
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:394
 #, kde-format
 msgid "User Manual"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:392
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:397
 #, kde-format
 msgid "Support Krita"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:401
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:406
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:398
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:403
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgid "Source Code"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:386
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:391
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Getting Started"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:383
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:388
 #, fuzzy, kde-format
 #| msgid "Insert slide"
 msgid "User Community"
 msgstr "ਸਲਾਈਡ ਸ਼ਾਮਲ"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:395
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:400
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Krita Website"
@@ -25605,7 +25605,7 @@ msgid "Show details"
 msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:403
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:408
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -31853,40 +31853,84 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/ui/kis_splash_screen.cpp:151
+#: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:175
+#: libs/ui/kis_splash_screen.cpp:179
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
 "p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:215
+#: libs/ui/kis_splash_screen.cpp:222
+#, kde-format
+msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
 msgid ""
-"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
-"org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
-"\">Support Krita's Development!</span></a></p><p><a href=\"https://docs."
-"krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita Website</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
-"href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
-"invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
-"color:%1;\">Source Code</span></a></p><p><a href=\"https://api.kde.org/krita/"
-"html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting API</span></a></p><p><a href=\"https://scripting.krita.org/"
-"lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting School</span></a></p></td></table></body></html>"
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Support Krita's Development!</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:229
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
+"span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:231
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:233
+#, kde-format
+msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:234
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">User Community</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:235
+#, kde-format
+msgid ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Source Code</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:236
+#, kde-format
+msgid ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:237
+#, kde-format
+msgid ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
 
 #: libs/ui/kis_statusbar.cc:88
@@ -33700,43 +33744,43 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:156
+#: libs/ui/KisWelcomePageWidget.cpp:161
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:161
+#: libs/ui/KisWelcomePageWidget.cpp:166
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Language"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/KisWelcomePageWidget.cpp:162
+#: libs/ui/KisWelcomePageWidget.cpp:167
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:666
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Forget \"%1\""
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -33746,7 +33790,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr ""

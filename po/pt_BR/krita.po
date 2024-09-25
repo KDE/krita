@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-19 03:18+0000\n"
+"POT-Creation-Date: 2024-09-25 03:15+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19536,7 +19536,7 @@ msgstr "Recursos locais"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -23765,7 +23765,7 @@ msgid "Start"
 msgstr "Iniciar"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:643
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -23806,43 +23806,43 @@ msgid "Community"
 msgstr "Comunidade"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:389
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:394
 #, kde-format
 msgid "User Manual"
 msgstr "Manual do Usuário"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:392
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:397
 #, kde-format
 msgid "Support Krita"
 msgstr "Apoiando o Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:401
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:406
 #, kde-format
 msgid "Powered by KDE"
 msgstr "Desenvolvido pela KDE"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:398
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:403
 #, kde-format
 msgid "Source Code"
 msgstr "Código-fonte"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:386
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:391
 #, kde-format
 msgid "Getting Started"
 msgstr "Começando"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:383
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:388
 #, kde-format
 msgid "User Community"
 msgstr "Comunidade de Usuários"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:395
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:400
 #, kde-format
 msgid "Krita Website"
 msgstr "Site do Krita"
@@ -23902,7 +23902,7 @@ msgid "Show details"
 msgstr "Mostrar detalhes"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:403
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:408
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -29866,13 +29866,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Seleção opaca"
 
-#: libs/ui/kis_splash_screen.cpp:151
+#: libs/ui/kis_splash_screen.cpp:155
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr "Arte de: %1"
 
-#: libs/ui/kis_splash_screen.cpp:175
+#: libs/ui/kis_splash_screen.cpp:179
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -29881,67 +29881,91 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Arquivos recentes</"
 "span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:215
+#: libs/ui/kis_splash_screen.cpp:222
 #, fuzzy, kde-format
 #| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
-msgid ""
-"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
-"org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
-"\">Support Krita's Development!</span></a></p><p><a href=\"https://docs."
-"krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Getting Started</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Krita Website</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p><p><a "
-"href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">User Community</span></a></p><p><a href=\"https://"
-"invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
-"color:%1;\">Source Code</span></a></p><p><a href=\"https://api.kde.org/krita/"
-"html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting API</span></a></p><p><a href=\"https://scripting.krita.org/"
-"lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
-"\">Scripting School</span></a></p></td></table></body></html>"
+#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#| "b></p>"
+msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
-"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Usando o Krita</b></span></p><p><a href=\"https://"
-"krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;"
-"\">Apoie o desenvolvimento do Krita!</span></a></p><p><a href=\"https://docs."
-"krita.org/en/user_manual/getting_started.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Começando</span></a></p><p><a href="
-"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
-"%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
-"text-decoration: underline; color:%1;\">Website do Krita</span></a></p></"
-"td><td><p><span style=\" color:%1;\"><b>Codificando o Krita</b></span></"
-"p><p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
-"underline; color:%1;\">Comunidade de usuários</span></a></p><p><a href="
-"\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
-"underline; color:%1;\">Código fonte</span></a></p><p><a href=\"https://api."
-"kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span "
-"style=\" text-decoration: underline; color:%1;\">API de script</span></a></"
-"p><p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:%1;\">Escola de Scripting</span></"
-"a></p></td></table></body></html>"
+"<html><head/><body><p><b><span style=\" color:%1;\">Arquivos recentes</"
+"span></b></p>"
+
+#: libs/ui/kis_splash_screen.cpp:226
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Support Krita's Development!</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:229
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
+"span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:230
+#, kde-format
+msgid ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Manual</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:231
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita Website</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:233
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
+#| "b></p>"
+msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
+msgstr ""
+"<html><head/><body><p><b><span style=\" color:%1;\">Arquivos recentes</"
+"span></b></p>"
+
+#: libs/ui/kis_splash_screen.cpp:234
+#, kde-format
+msgid ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">User Community</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:235
+#, kde-format
+msgid ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Source Code</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:236
+#, kde-format
+msgid ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+msgstr ""
+
+#: libs/ui/kis_splash_screen.cpp:237
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
+#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
+#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
+#| "Scripting School</span></a>!</p></body></html>"
+msgid ""
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
+msgstr ""
+"<html><head/><body><p>Se você quiser aprender como escrever scripts do "
+"Krita, verifique o <a href=\"https://scripting.krita.org/lessons/introduction"
+"\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
+"Scripting School (Escola de Scripts do Krita)</span></a>!</p></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -31674,12 +31698,12 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr "Anônimo"
 
-#: libs/ui/KisWelcomePageWidget.cpp:156
+#: libs/ui/KisWelcomePageWidget.cpp:161
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr "Ative as notícias e verifique se há novos lançamentos"
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
+#: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
@@ -31688,34 +31712,34 @@ msgstr ""
 "Mostre notícias sobre Krita: isso precisa da Internet para recuperar "
 "informações do site krita.org"
 
-#: libs/ui/KisWelcomePageWidget.cpp:161
+#: libs/ui/KisWelcomePageWidget.cpp:166
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Language"
 msgstr "Idioma"
 
-#: libs/ui/KisWelcomePageWidget.cpp:162
+#: libs/ui/KisWelcomePageWidget.cpp:167
 #, kde-format
 msgid "English news is always up to date."
 msgstr "As notícias em inglês estão sempre atualizadas."
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:666
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Esquecer \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "A nova versão do Krita está disponível."
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:786
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Ocorreu um erro durante a atualização"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
 msgstr "A reinicialização é necessária."
@@ -61209,6 +61233,70 @@ msgstr "Ferramenta Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta Imagens de Referência"
+
+#, fuzzy
+#~| msgid ""
+#~| "<html><head/><body><table width=\"100%\" cellpadding="
+#~| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
+#~| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#~| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
+#~| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
+#~| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#~| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
+#~| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
+#~| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+#~| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
+#~| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists."
+#~| "org\"><span style=\" text-decoration: underline; color:%1;\">User "
+#~| "Community</span></a></p><p><a href=\"https://invent.kde.org/graphics/"
+#~| "krita\"><span style=\" text-decoration: underline; color:%1;\">Source "
+#~| "Code</span></a></p><p><a href=\"https://api.kde.org/appscomplete-api/"
+#~| "krita-apidocs/libs/libkis/html/index.html\"><span style=\" text-"
+#~| "decoration: underline; color:%1;\">Scripting API</span></a></p><p><a "
+#~| "href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
+#~| "text-decoration: underline; color:%1;\">Scripting School</span></a></p></"
+#~| "td></table></body></html>"
+#~ msgid ""
+#~ "<html><head/><body><table width=\"100%\" cellpadding="
+#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
+#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
+#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
+#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
+#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
+#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
+#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
+#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
+#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
+#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
+#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
+#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
+#~ "School</span></a></p></td></table></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><table width=\"100%\" cellpadding="
+#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Usando o Krita</b></"
+#~ "span></p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
+#~ "decoration: underline; color:%1;\">Apoie o desenvolvimento do Krita!</"
+#~ "span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
+#~ "getting_started.html\"><span style=\" text-decoration: underline; color:"
+#~ "%1;\">Começando</span></a></p><p><a href=\"https://docs.krita.org/"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">Manual</span></"
+#~ "a></p><p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
+#~ "underline; color:%1;\">Website do Krita</span></a></p></td><td><p><span "
+#~ "style=\" color:%1;\"><b>Codificando o Krita</b></span></p><p><a href="
+#~ "\"https://krita-artists.org\"><span style=\" text-decoration: underline; "
+#~ "color:%1;\">Comunidade de usuários</span></a></p><p><a href=\"https://"
+#~ "invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
+#~ "underline; color:%1;\">Código fonte</span></a></p><p><a href=\"https://"
+#~ "api.kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">API de script</"
+#~ "span></a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
+#~ "\"><span style=\" text-decoration: underline; color:%1;\">Escola de "
+#~ "Scripting</span></a></p></td></table></body></html>"
 
 #, fuzzy
 #~| msgid "Brush Smoothing:"

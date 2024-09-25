@@ -73,6 +73,8 @@ variables:
       - "**/appium_artifact_*"
       - "*.log"
       - "_packaging/*.log"
+      # Logs from MacOS signer/notarizer
+      - "_dmg/*.log"
     reports:
       junit: JUnitTestResults.xml
       coverage_report:

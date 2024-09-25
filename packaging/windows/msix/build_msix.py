@@ -168,7 +168,7 @@ if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe*"):
 
 print("\n=== Step 1: Generate resources.pri ===")
 
-commandToRun = r'"%MAKEPRI%" new /pr "%SCRIPT_DIR%\pkg" /mn "%SCRIPT_DIR%\manifest.xml" /cf "%SCRIPT_DIR%\priconfig.xml" /o /of "%OUTPUT_DIR%\resources.pri"'
+commandToRun = fr'"{environ["MAKEPRI"]}" new /pr "{environ["SCRIPT_DIR"]}\pkg" /mn "{environ["SCRIPT_DIR"]}\manifest.xml" /cf "{environ["SCRIPT_DIR"]}\priconfig.xml" /o /of "{environ["OUTPUT_DIR"]}\resources.pri"'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
@@ -230,7 +230,7 @@ The arguments stands for:
     /p <output package name>: Specifies the app package or bundle.
 """
 
-commandToRun = r'"%MAKEAPPX%" pack /v /f "%OUTPUT_DIR%\mapping.txt" /p "%OUTPUT_DIR%\krita.msix" /o'
+commandToRun = fr'"{environ["MAKEAPPX"]}" pack /v /f "{environ["OUTPUT_DIR"]}\mapping.txt" /p "{environ["OUTPUT_DIR"]}\krita.msix" /o'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
@@ -241,7 +241,7 @@ print(f"\nMSIX generated as {environ['OUTPUT_DIR']}\\krita.msix")
 
 if environ.get('SIGNTOOL_SIGN_FLAGS'):
     print("Signing MSIX...")
-    commandToRun = r'"%SIGNTOOL%" sign %SIGNTOOL_SIGN_FLAGS% /fd sha256 "%OUTPUT_DIR%\krita.msix"'
+    commandToRun = fr'"{environ["SIGNTOOL"]}" sign {environ["SIGNTOOL_SIGN_FLAGS"]} /fd sha256 "{environ["OUTPUT_DIR"]}\krita.msix"'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:

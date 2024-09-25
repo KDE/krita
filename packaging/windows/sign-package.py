@@ -45,14 +45,14 @@ for rootPath, dirs, files in os.walk(pkg_root):
         if fileName.endswith(('.exe', '.com', '.dll', '.pyd')):
             filePath = os.path.join(rootPath, fileName)
             # Check for existing signature
-            commandToRun = f'"%SIGNTOOL%" verify /q /pa "{filePath}"'
+            commandToRun = f'"{environ["SIGNTOOL"]}" verify /q /pa "{filePath}"'
             try:
                 subprocess.check_call(commandToRun, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, shell=True)
             except subprocess.CalledProcessError as status:
                 if status.returncode == 1:
                     print(f"Signing {filePath}")
                     try:
-                        commandToRun = f'"%SIGNTOOL%" sign %SIGNTOOL_SIGN_FLAGS% "{filePath}"'
+                        commandToRun = f'"{environ["SIGNTOOL"]}" sign {environ["SIGNTOOL_SIGN_FLAGS"]} "{filePath}"'
                         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
                     except subprocess.CalledProcessError as status:
                         print(f"ERROR: Got exit code {status.returncode} from signtool!")

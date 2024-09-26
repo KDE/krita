@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-25 03:15+0000\n"
+"POT-Creation-Date: 2024-09-26 03:16+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -17118,7 +17118,7 @@ msgstr "De-selektearje"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:255
+#: libs/ui/actions/KisPasteActionFactories.cpp:254
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -19801,7 +19801,7 @@ msgstr "Oanpast"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:380
+#: libs/ui/actions/KisPasteActionFactories.cpp:379
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -19853,7 +19853,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
@@ -20792,18 +20792,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Foarmen plakke"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:286
-#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:285
+#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(plakt)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:385
+#: libs/ui/actions/KisPasteActionFactories.cpp:384
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "Pastels"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:440
+#: libs/ui/actions/KisPasteActionFactories.cpp:439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -29244,7 +29244,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Filter wizigje"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:698
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-25 03:15+0000\n"
+"POT-Creation-Date: 2024-09-26 03:16+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17708,7 +17708,7 @@ msgstr "선택 해제"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:255
+#: libs/ui/actions/KisPasteActionFactories.cpp:254
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -20309,7 +20309,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:380
+#: libs/ui/actions/KisPasteActionFactories.cpp:379
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20360,7 +20360,7 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
@@ -21316,18 +21316,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "모양 붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:286
-#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:285
+#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(붙여넣기)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:385
+#: libs/ui/actions/KisPasteActionFactories.cpp:384
 #, kde-format
 msgid "Pasted"
 msgstr "붙여넣기"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:440
+#: libs/ui/actions/KisPasteActionFactories.cpp:439
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "스타일 붙여넣기"
@@ -30016,7 +30016,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "파일 레이어 변경"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:698
 #, kde-format
 msgid ""
 "Could not open %2.\n"

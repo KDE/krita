@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-25 01:49+0000\n"
+"POT-Creation-Date: 2024-09-26 01:47+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -17390,7 +17390,7 @@ msgstr "Kijelölés megszüntetése"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:255
+#: libs/ui/actions/KisPasteActionFactories.cpp:254
 #: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -20206,7 +20206,7 @@ msgstr "Ki"
 #: libs/pigment/resources/KoColorSet.cpp:1400
 #: libs/pigment/resources/KoColorSet.cpp:1483
 #: libs/pigment/resources/KoColorSet.cpp:1892
-#: libs/ui/actions/KisPasteActionFactories.cpp:380
+#: libs/ui/actions/KisPasteActionFactories.cpp:379
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20257,7 +20257,7 @@ msgstr "Erőforráscsomagok kezelése…"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -21202,18 +21202,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Alakzatok beillesztése"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:286
-#: libs/ui/actions/KisPasteActionFactories.cpp:387 libs/ui/KisView.cpp:608
+#: libs/ui/actions/KisPasteActionFactories.cpp:285
+#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(beillesztett)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:385
+#: libs/ui/actions/KisPasteActionFactories.cpp:384
 #, kde-format
 msgid "Pasted"
 msgstr "Beillesztett"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:440
+#: libs/ui/actions/KisPasteActionFactories.cpp:439
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -29817,7 +29817,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Szűrő módosítása"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:700
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"

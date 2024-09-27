@@ -60,7 +60,8 @@ if not environ.get('SIGNTOOL'):
     print("ERROR: signtool not found")
     sys.exit(1)
 
-environ['SCRIPT_DIR'] = sys.argv[0]
+scriptDir = os.path.realpath(os.path.dirname( os.path.realpath(__file__) ))
+
 try:
     os.mkdir(environ['OUTPUT_DIR'])
 except FileExistsError:
@@ -168,7 +169,7 @@ if os.path.isfile(fr"{environ['KRITA_DIR']}\uninstall.exe*"):
 
 print("\n=== Step 1: Generate resources.pri ===")
 
-commandToRun = fr'"{environ["MAKEPRI"]}" new /pr "{environ["SCRIPT_DIR"]}\pkg" /mn "{environ["SCRIPT_DIR"]}\manifest.xml" /cf "{environ["SCRIPT_DIR"]}\priconfig.xml" /o /of "{environ["OUTPUT_DIR"]}\resources.pri"'
+commandToRun = fr'"{environ["MAKEPRI"]}" new /pr "{scriptDir}\pkg" /mn "{scriptDir}\manifest.xml" /cf "{scriptDir}\priconfig.xml" /o /of "{environ["OUTPUT_DIR"]}\resources.pri"'
 try:
     subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
 except subprocess.CalledProcessError:
@@ -180,7 +181,7 @@ print("=== Step 1 done. ===")
 
 print("\n=== Step 2: Generate file mapping list ===")
 
-environ['ASSETS_DIR'] = fr"{environ['SCRIPT_DIR']}\pkg\Assets"
+environ['ASSETS_DIR'] = fr"{scriptDir}\pkg\Assets"
 environ['MAPPING_OUT'] = fr"{environ['OUTPUT_DIR']}\mapping.txt"
 
 OUT_TEMP_NAME = ""
@@ -189,7 +190,7 @@ with tempfile.NamedTemporaryFile(mode='w', delete=False) as OUT_TEMP:
     print(f"Writing list to temporary file {OUT_TEMP_NAME}")
 
     print("[Files]", file=OUT_TEMP)
-    print(fr'"{environ["SCRIPT_DIR"]}\manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
+    print(fr'"{scriptDir}\manifest.xml" "AppxManifest.xml"', file=OUT_TEMP)
     print(fr'"{environ["OUTPUT_DIR"]}\resources.pri" "Resources.pri"', file=OUT_TEMP)
 
     # Krita application files:

@@ -9,7 +9,7 @@
 
 // Check GCC
 #ifdef __GNUC__
-  #if defined (__x86_64__) || defined (__ppc64__)
+  #if defined (__x86_64__) || defined (__ppc64__) || defined (__aarch64__)
     #define ENV64BIT
   #else
     #define ENV32BIT

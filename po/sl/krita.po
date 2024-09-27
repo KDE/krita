@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-26 01:47+0000\n"
-"PO-Revision-Date: 2024-09-11 22:44+0200\n"
+"PO-Revision-Date: 2024-09-26 10:22+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29992,14 +29992,9 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedavne datoteke</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Uporaba Krite</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
@@ -30007,6 +30002,8 @@ msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Podprite razvoj Krite!</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:229
 #, kde-format
@@ -30015,6 +30012,9 @@ msgid ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
 "span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Prvi koraki</"
+"span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:230
 #, kde-format
@@ -30022,6 +30022,8 @@ msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Priročnik</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
@@ -30029,16 +30031,13 @@ msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Spletišče Krita</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedavne datoteke</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Pisanje kode za Krito</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -30046,6 +30045,8 @@ msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">Skupnost uporabnikov</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
@@ -30053,6 +30054,8 @@ msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Izvorna koda</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
@@ -30060,22 +30063,19 @@ msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">API za skriptno izvajanje</span></"
+"a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
-"<html><head/><body><p>Če se želite naučiti pisati skripte Krita, si oglejte "
-"<a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
-"text-decoration: underline; color:#2980b9;\">Šolo pisanja skriptov Krita</"
-"span></a> (v angleškem jeziku)!</p></body></html>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Šolo pisanja skriptov Krita</"
+"span></a></p>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -62027,45 +62027,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Kako uporabljati Krito</"
-#~ "b></span></p><p><a href=\"https://krita.org/support-us/\"><span style=\" "
-#~ "text-decoration: underline; color:%1;\">Podprite razvoj Krite!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/sl/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Prvi "
-#~ "koraki</span></a></p><p><a href=\"https://docs.krita.org/sl/\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Priročnik</span></a></"
-#~ "p><p><a href=\"https://krita.org/sl/\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Spletišče Krita</span></a></p></td><td><p><span "
-#~ "style=\" color:%1;\"><b>Programiranje Krite</b></span></p><p><a href="
-#~ "\"https://krita-artists.org\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Skupnost uporabnikov</span></a></p><p><a href=\"https://"
-#~ "invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Izvorna koda</span></a></p><p><a href=\"https://"
-#~ "api.kde.org/krita/html/classKrita.html\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">API za skripte</span></a></p><p><a href=\"https://"
-#~ "scripting.krita.org/lessons/introduction\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Šola pisanja skriptov</span></a></p></"
-#~ "td></table></body></html>"

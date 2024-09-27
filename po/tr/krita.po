@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-09-26 01:47+0000\n"
-"PO-Revision-Date: 2024-09-25 19:26+0300\n"
+"PO-Revision-Date: 2024-09-26 21:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9068,7 +9068,7 @@ msgstr "Seçim Kipi: Değiştir"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Weighted"
-msgstr "Fırça yumuşatma: Ağırlıklı"
+msgstr "Fırça pürüzsüzleştirme: Ağırlıklı"
 
 #. i18n: context: text @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9080,7 +9080,7 @@ msgstr "Fırça yumuşatma: Ağırlıklı"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr "Fırça yumuşatma: Kapalı"
+msgstr "Fırça pürüzsüzleştirme: Kapalı"
 
 #. i18n: context: text @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9092,7 +9092,7 @@ msgstr "Fırça yumuşatma: Kapalı"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "Fırça yumuşatma: Piksel"
+msgstr "Fırça pürüzsüzleştirme: Piksel"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9104,7 +9104,7 @@ msgstr "Fırça yumuşatma: Piksel"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr "Fırça yumuşatma: Dengeleyici"
+msgstr "Fırça pürüzsüzleştirme: Dengeleyici"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9128,7 +9128,7 @@ msgstr "Fırça Boyutunu Küçült"
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr "Fırça yumuşatma: Temel"
+msgstr "Fırça pürüzsüzleştirme: Temel"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -52076,7 +52076,7 @@ msgstr "Bağlantı çizgisini boya"
 #: plugins/paintops/curvebrush/wdgcurveoptions.ui:59
 #, kde-format
 msgid "Smoothing"
-msgstr "Yumuşatma"
+msgstr "Pürüzsüzleştirme"
 
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:35
 #, kde-format
@@ -57772,7 +57772,7 @@ msgstr "Piksel"
 #: plugins/tools/basictools/kis_tool_brush.cc:320
 #, kde-format
 msgid "Brush Smoothing:"
-msgstr "Fırça yumuşatma:"
+msgstr "Fırça pürüzsüzleştirme:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format

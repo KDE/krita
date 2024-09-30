@@ -605,37 +605,37 @@ msgstr "08 凹凸"
 #, kde-format
 msgctxt "./krita/data/patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr "09 クロスハッチ(描写)"
+msgstr "09 クロスハッチ (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/09b_drawed-CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr "09b 交差する線(描写)"
+msgstr "09b 交差する線 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr "10 点状(描写)"
+msgstr "10 点状 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 毛皮(描写)"
+msgstr "11 毛皮 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr "12 縦線(描写)"
+msgstr "12 縦線 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr "13 渦巻(描写)"
+msgstr "13 渦巻 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -755,14 +755,14 @@ msgstr "細かな砂"
 #, kde-format
 msgctxt "./krita/data/patterns/Stars_Sized.png"
 msgid "Stars Sized"
-msgstr "星(標準サイズ)"
+msgstr "星 (標準サイズ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr "a) 消しゴム(丸)"
+msgstr "a) 消しゴム (丸)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -927,7 +927,7 @@ msgstr "VFX ペイント"
 #, kde-format
 msgctxt "./krita/data/windowlayouts/Cockpit (laptop mode).kwl"
 msgid "Cockpit (laptop mode)"
-msgstr "コックピット(ラップトップモード)"
+msgstr "コックピット (ラップトップモード)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -976,49 +976,49 @@ msgstr "分裂補色"
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/c)_Pencil_1_Sketch_(mypaint).myb"
 msgid "c) Pencil 1 Sketch (mypaint)"
-msgstr "c) 鉛筆1 スケッチ(mypaint)"
+msgstr "c) 鉛筆1 スケッチ (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/c)_Pencil_2b_(mypaint).myb"
 msgid "c) Pencil 2b (mypaint)"
-msgstr "c) 鉛筆2b(mypaint)"
+msgstr "c) 鉛筆2b (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/d)_Ink_pen_(mypaint).myb"
 msgid "d) Ink pen (mypaint)"
-msgstr "d) インクペン(mypaint)"
+msgstr "d) インクペン (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Medium_(mypaint).myb"
 msgid "e) Marker Medium (mypaint)"
-msgstr "e) マーカー(中)(mypaint)"
+msgstr "e) マーカー (中) (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Plain_(mypaint).myb"
 msgid "e) Marker Plain (mypaint)"
-msgstr "e) マーカー(平)(mypaint)"
+msgstr "e) マーカー (平) (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Knife_Plus_(mypaint).myb"
 msgid "i) Wet Knife Plus (mypaint)"
-msgstr "i) ウェットナイフプラス(mypaint)"
+msgstr "i) ウェットナイフプラス (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/i)_Wet_Paint_Plus_(mypaint).myb"
 msgid "i) Wet Paint Plus (mypaint)"
-msgstr "i) ウェットペイントプラス(mypaint)"
+msgstr "i) ウェットペイントプラス (mypaint)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1784,7 +1784,7 @@ msgstr "レーキテクスチャ02"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/texture-a.png"
 msgid "texture-a"
-msgstr "テクスチャa"
+msgstr "テクスチャ a"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2656,7 +2656,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sparkle_wet.kpp"
 msgid "Sparkle wet"
-msgstr "煌めき(湿)"
+msgstr "煌めき (湿)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2664,7 +2664,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sparkle_wet_soft.kpp"
 msgid "Sparkle wet soft"
-msgstr "煌めき(湿・柔)"
+msgstr "煌めき (湿・柔)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2672,7 +2672,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_FuzzyColor.kpp"
 msgid "Special FuzzyColor"
-msgstr "特殊(ぼやけた色)"
+msgstr "特殊 (ぼやけた色)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2680,7 +2680,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_dyna_dots.kpp"
 msgid "Special dyna dots"
-msgstr "特殊(動的な点々)"
+msgstr "特殊 (動的な点々)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2688,7 +2688,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_particles_crazy.kpp"
 msgid "Special particles crazy"
-msgstr "特殊(粒子・狂乱)"
+msgstr "特殊 (粒子・狂乱)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2696,7 +2696,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_mix_cells.kpp"
 msgid "Splat mix cells"
-msgstr "弾け(セルの混色)"
+msgstr "弾け (セルの混色)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2704,7 +2704,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_texture.kpp"
 msgid "Splat texture"
-msgstr "弾け(テクスチャ)"
+msgstr "弾け (テクスチャ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2712,7 +2712,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_texture_2.kpp"
 msgid "Splat texture 2"
-msgstr "弾け(テクスチャ2)"
+msgstr "弾け (テクスチャ2)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2720,7 +2720,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splat_wet_cells.kpp"
 msgid "Splat wet cells"
-msgstr "弾け(湿ったセル)"
+msgstr "弾け (湿ったセル)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2728,7 +2728,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Splatter_thin.kpp"
 msgid "Splatter thin"
-msgstr "飛沫(細)"
+msgstr "飛沫 (細)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2736,7 +2736,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Sponge_texture.kpp"
 msgid "Sponge texture"
-msgstr "スポンジ(テクスチャ)"
+msgstr "スポンジ (テクスチャ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2744,7 +2744,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Spray_splat.kpp"
 msgid "Spray splat"
-msgstr "スプレー(はじけ)"
+msgstr "スプレー (はじけ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2752,7 +2752,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_basic.kpp"
 msgid "Tangent normal basic"
-msgstr "違和感(通常・基本)"
+msgstr "違和感 (通常・基本)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2760,7 +2760,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_drawing_angle.kpp"
 msgid "Tangent normal drawing angle"
-msgstr "違和感(通常・角度)"
+msgstr "違和感 (通常・角度)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2768,7 +2768,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_hairy.kpp"
 msgid "Tangent normal hairy"
-msgstr "違和感(通常・毛羽立ち)"
+msgstr "違和感 (通常・毛羽立ち)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2776,7 +2776,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_pixel.kpp"
 msgid "Tangent normal pixel"
-msgstr "違和感(通常・ピクセル)"
+msgstr "違和感 (通常・ピクセル)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2784,7 +2784,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Tangent_normal_y_inverted.kpp"
 msgid "Tangent normal y inverted"
-msgstr "違和感(通常・Y軸反転)"
+msgstr "違和感 (通常・Y軸反転)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2816,7 +2816,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Textured_tilt.kpp"
 msgid "Textured tilt"
-msgstr "テクスチャ(傾斜)"
+msgstr "テクスチャ (傾斜)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2949,7 +2949,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/06_hard-grain."
 "png"
 msgid "06 hard-grain"
-msgstr "06 粒(硬)"
+msgstr "06 粒 (硬)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2957,7 +2957,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/07_big-grain."
 "png"
 msgid "07 big-grain"
-msgstr "07 粒(大)"
+msgstr "07 粒 (大)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3531,7 +3531,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_chisel_dense.png"
 msgid "bristles chisel dense"
-msgstr "ブラシ(平・密)"
+msgstr "ブラシ (平・密)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3539,7 +3539,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_dense.png"
 msgid "bristles circle dense"
-msgstr "ブラシ(丸・密)"
+msgstr "ブラシ (丸・密)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3547,7 +3547,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_medium.png"
 msgid "bristles circle medium"
-msgstr "ブラシ(丸・普通)"
+msgstr "ブラシ (丸・普通)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3555,7 +3555,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_sparse.png"
 msgid "bristles circle sparse"
-msgstr "ブラシ(丸・薄)"
+msgstr "ブラシ (丸・薄)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3563,7 +3563,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_variable.svg"
 msgid "bristles circle variable"
-msgstr "ブラシ(丸・可変)"
+msgstr "ブラシ (丸・可変)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3586,7 +3586,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_round_hard.png"
 msgid "chalk round hard"
-msgstr "チョーク(丸・硬)"
+msgstr "チョーク (丸・硬)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3602,7 +3602,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chisel_dense_smear.png"
 msgid "chisel dense smear"
-msgstr "ブラシ(平・密・シミ)"
+msgstr "ブラシ (平・密・シミ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3610,7 +3610,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_eroded."
 "png"
 msgid "chisel eroded"
-msgstr "ブラシ(平・浸食)"
+msgstr "ブラシ (平・浸食)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3618,14 +3618,14 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_knife."
 "gbr"
 msgid "chisel_knife"
-msgstr "ナイフ(平)"
+msgstr "ナイフ (平)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_soft.png"
 msgid "chisel soft"
-msgstr "ブラシ(平・柔)"
+msgstr "ブラシ (平・柔)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3633,7 +3633,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_streaks."
 "png"
 msgid "chisel streaks"
-msgstr "ブラシ(平・縞)"
+msgstr "ブラシ (平・縞)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3676,56 +3676,56 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/leaves-"
 "scattered.svg"
 msgid "leaves-scattered"
-msgstr "葉(散逸)"
+msgstr "葉 (散逸)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/oil_bristle.png"
 msgid "oil bristle"
-msgstr "ブラシ(油絵)"
+msgstr "ブラシ (油絵)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/oil_knife.png"
 msgid "oil knife"
-msgstr "ナイフ(油絵)"
+msgstr "ナイフ (油絵)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/plain_rake.png"
 msgid "plain rake"
-msgstr "レーキ(普通)"
+msgstr "レーキ (普通)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_dense.png"
 msgid "rake dense"
-msgstr "レーヒ(密)"
+msgstr "レーヒ (密)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_dotted.png"
 msgid "rake dotted"
-msgstr "レーキ(点々)"
+msgstr "レーキ (点々)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_flat.png"
 msgid "rake flat"
-msgstr "レーキ(平)"
+msgstr "レーキ (平)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rake_sparse.png"
 msgid "rake sparse"
-msgstr "レーキ(まばら)"
+msgstr "レーキ (まばら)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3790,7 +3790,7 @@ msgstr "煌めき"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_blob.png"
 msgid "spike blob"
-msgstr "棘(シミ)"
+msgstr "棘 (シミ)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3798,7 +3798,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/spike_eroded."
 "png"
 msgid "spike eroded"
-msgstr "棘(浸食)"
+msgstr "棘 (浸食)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3820,7 +3820,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_eroded."
 "png"
 msgid "square eroded"
-msgstr "長方形(浸食)"
+msgstr "長方形 (浸食)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3828,7 +3828,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/square_rough."
 "png"
 msgid "square rough"
-msgstr "長方形(粗)"
+msgstr "長方形 (粗)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3836,7 +3836,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "square_rough_lightgrey.png"
 msgid "square rough lightgrey"
-msgstr "長方形(粗・薄い灰色)"
+msgstr "長方形 (粗・薄い灰色)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4982,7 +4982,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/09_drawed_crosshatched.png"
 msgid "09 drawed crosshatched"
-msgstr "09 クロスハッチ(描写)"
+msgstr "09 クロスハッチ (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4990,7 +4990,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/09b_drawed-"
 "CrossedLines.png"
 msgid "09b drawed-CrossedLines"
-msgstr "09b 交差する線(描写)"
+msgstr "09b 交差する線 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4998,7 +4998,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/10_drawed_dotted.png"
 msgid "10 drawed dotted"
-msgstr "10 点線(描写)"
+msgstr "10 点線 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5006,7 +5006,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/11_drawed_furry.png"
 msgid "11 drawed furry"
-msgstr "11 毛皮(描写)"
+msgstr "11 毛皮 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5014,7 +5014,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/12_drawed_vertical.png"
 msgid "12 drawed vertical"
-msgstr "12 縦線(描写)"
+msgstr "12 縦線 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5022,7 +5022,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:"
 "patterns/13_drawed_swirl.png"
 msgid "13 drawed swirl"
-msgstr "13 渦巻(描写)"
+msgstr "13 渦巻 (描写)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5604,7 +5604,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_fractal_Brownian_Motion.kse"
 msgid "Wolthera's Color fractal Brownian Motion"
-msgstr "Wolthera の色付きフラクタル(ブラウン運動)"
+msgstr "Wolthera の色付きフラクタル (ブラウン運動)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6747,7 +6747,7 @@ msgstr "見本"
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/web.gpl"
 msgid "Web"
-msgstr "Webセーフカラー"
+msgstr "Web セーフカラー"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bamboo_leaves_random.gih:1
@@ -8440,7 +8440,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr "スクリーンの色を抽出(キャンバスの実際の色を抽出)"
+msgstr "スクリーンの色を抽出 (キャンバスの実際の色を抽出)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:311
@@ -23107,17 +23107,17 @@ msgstr "最大全フレーム輝度: %1"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1795
 #, kde-format
 msgid "Red Primary: %1, %2"
-msgstr "三原色(赤): %1, %2"
+msgstr "三原色 (赤): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1796
 #, kde-format
 msgid "Green Primary: %1, %2"
-msgstr "三原色(緑): %1, %2"
+msgstr "三原色 (緑): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1797
 #, kde-format
 msgid "Blue Primary: %1, %2"
-msgstr "三原色(青): %1, %2"
+msgstr "三原色 (青): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1798
 #, kde-format
@@ -24732,7 +24732,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr "ダイレクト(推奨)"
+msgstr "ダイレクト (推奨)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
@@ -25409,7 +25409,7 @@ msgstr "ペースト後に変形ツールをアクティブ化"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr "Zoom の段階(2の累乗)"
+msgstr "Zoom の段階 (2の累乗)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -25439,13 +25439,13 @@ msgstr "減算 (Krita 5.2+)"
 #: libs/ui/forms/wdggeneralsettings.ui:839
 #, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "加算（Krita 5.1以前のバージョン）"
+msgstr "加算 (Krita 5.1以前のバージョン)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
 #, kde-format
 msgid "CMYK blending mode (needs restart):"
-msgstr "CMYK 混色モード(再起動が必要になります):"
+msgstr "CMYK 混色モード (再起動が必要になります):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:855
@@ -25590,7 +25590,7 @@ msgstr "貼り付け"
 #, kde-format
 msgid "Prefer downloading the original source (this requires Internet access)"
 msgstr ""
-"オリジナルのダウンロードを優先する(インターネットへのアクセスが必要です)"
+"オリジナルのダウンロードを優先する (インターネットへのアクセスが必要です)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteNote)
 #: libs/ui/forms/wdggeneralsettings.ui:1063
@@ -25617,7 +25617,7 @@ msgstr ""
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
 msgstr ""
-"ローカルのコピーを優先する(利用可能な場合。メタデータが失われる恐れがありま"
+"ローカルのコピーを優先する (利用可能な場合。メタデータが失われる恐れがありま"
 "す)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
@@ -25627,8 +25627,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
-"付随する sRGB ビットマップを貼り付ける(ファイルシステムやインターネットへのア"
-"クセスは必要ありませんが、メタデータは失われます)"
+"付随する sRGB ビットマップを貼り付ける (ファイルシステムやインターネットへの"
+"アクセスは必要ありませんが、メタデータは失われます)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1091
@@ -26337,7 +26337,7 @@ msgid ""
 "do you want to interpret this data?"
 msgstr ""
 "貼り付けようとしている画像データには色プロファイル情報がありません。このデー"
-"タをどのように解釈しますか?"
+"タをどのように解釈しますか？"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
@@ -26729,7 +26729,7 @@ msgid ""
 "do you want to use?"
 msgstr ""
 "貼り付けようとしている画像には複数のフォーマットがあります。どれを使用します"
-"か?"
+"か？"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdgPasteFormat.ui:66
@@ -27022,8 +27022,8 @@ msgid ""
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>パフォーマンスログが有効な時、Krita は時間情報を "
-"<tt>&lt;作業ディレクトリ&gt;/log</tt> フォルダーに保存します(作業ディレクトリ"
-"とは自動保存が保存されている場所です)。もし何か問題が発生してそのトラブルを"
+"<tt>&lt;作業ディレクトリ&gt;/log</tt> フォルダーに保存します (作業ディレクト"
+"リとは自動保存が保存されている場所です)。もし何か問題が発生してそのトラブルを"
 "我々開発に報告してくださる場合には、このオプションを有効にしてディレクトリの"
 "中の文字列をバグ報告に添付してください。</p></body></html>"
 
@@ -28433,32 +28433,32 @@ msgstr "カーソル位置の下にあるレイヤーを選択"
 #: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "最も上のレイヤーを選択(選択範囲を置換)"
+msgstr "最も上のレイヤーを選択 (選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
 #, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "全てのレイヤーを選択(選択範囲を置換)"
+msgstr "全てのレイヤーを選択 (選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "メニューから選択(選択範囲を置換)"
+msgstr "メニューから選択 (選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr "最も上のレイヤーを選択(選択範囲に追加)"
+msgstr "最も上のレイヤーを選択 (選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
 #, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "全てのレイヤーを選択(選択範囲に追加)"
+msgstr "全てのレイヤーを選択 (選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "メニューから選択(選択範囲に追加)"
+msgstr "メニューから選択 (選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
 #, kde-format
@@ -33785,10 +33785,10 @@ msgid ""
 "integer). Many editing operations produce better results in linear gamma "
 "color spaces.</p>"
 msgstr ""
-"<p>「-g10.icc」で終わる色プロファイルはガンマ値が線形(ガンマ=1.0、「リニアラ"
-"イト」など)のプロファイルであり、高ビット深度(16ビット浮動点、16ビット整数、"
-"32ビット浮動点、32ビット整数)での編集時のみ使用するべきです。多くの編集操作で"
-"線形ガンマ値色空間の方が良好な結果を出力できます。</p>"
+"<p>「-g10.icc」で終わる色プロファイルはガンマ値が線形 (ガンマ=1.0、「リニアラ"
+"イト」など) のプロファイルであり、高ビット深度 (16ビット浮動点、16ビット整"
+"数、32ビット浮動点、32ビット整数) での編集時のみ使用するべきです。多くの編集"
+"操作で線形ガンマ値色空間の方が良好な結果を出力できます。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
@@ -33811,9 +33811,9 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 "<p>「-srgbtrc.icc」、「-g22.icc」、「-bt709.icc」で終わるプロファイルは知覚的"
-"に均一なトーン応答曲線(TRC)を持ちますが、近似であり正確に同一ではありません。"
-"ProPhotoRGB のガンマ値=1.8のトーン応答曲線は知覚的な均一にはあまり近似してい"
-"ません。</p>"
+"に均一なトーン応答曲線 (TRC) を持ちますが、近似であり正確に同一ではありませ"
+"ん。ProPhotoRGB のガンマ値=1.8のトーン応答曲線は知覚的な均一にはあまり近似し"
+"ていません。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
@@ -34744,7 +34744,7 @@ msgstr "繰り返し"
 #: libs/ui/widgets/KoFillConfigWidget.ui:285
 #, kde-format
 msgid "Reflect"
-msgstr "繰り返し(交互)"
+msgstr "繰り返し (交互)"
 
 #. i18n: ectx: property (text), widget (QLabel, stopColorLabel)
 #: libs/ui/widgets/KoFillConfigWidget.ui:358
@@ -35136,7 +35136,7 @@ msgstr "強度:"
 #: libs/widgets/KisSpinboxHSXSelector.cpp:83
 #, kde-format
 msgid "Luma:"
-msgstr "ガンマ補正輝度(ルマ):"
+msgstr "ガンマ補正輝度 (ルマ):"
 
 #: libs/widgets/KisTagSelectionWidget.cpp:60
 #, kde-format
@@ -37562,8 +37562,8 @@ msgid ""
 "Saturation, in turn, goes from the most saturated color to white, gray or "
 "black."
 msgstr ""
-"明度(Value)は黒から白、または黒から最も彩度の高い色まで変化します。彩度は、最"
-"も彩度の高い色から白、グレー、黒に変わります。"
+"明度 (Value) は黒から白、または黒から最も彩度の高い色まで変化します。彩度は、"
+"最も彩度の高い色から白、グレー、黒に変わります。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:271
 #, kde-format
@@ -37571,12 +37571,13 @@ msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
 "saturated color."
 msgstr ""
-"輝度(Lightness)は黒から白に変化し、中間のグレーは最も彩度の高い色になります。"
+"輝度 (Lightness) は黒から白に変化し、中間のグレーは最も彩度の高い色になりま"
+"す。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
-msgstr "強度(Intensity)は RGB 諸要素の総和となります。"
+msgstr "強度 (Intensity) は RGB 諸要素の総和となります。"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
 #, kde-format
@@ -37584,8 +37585,8 @@ msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
 "values are set to 'rec 709'."
 msgstr ""
-"ガンマ補正輝度(ルマY')は設定可能なその係数によって重みづけられます。デフォル"
-"トの数値は「rec 709」に設定されています"
+"ガンマ補正輝度 (ルマY') は設定可能なその係数によって重みづけられます。デフォ"
+"ルトの数値は「rec 709」に設定されています"
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:35
 #, kde-format
@@ -38440,8 +38441,8 @@ msgstr "右 / 後"
 #, kde-format
 msgid "Activate the Select Shapes Tool to arrange objects."
 msgstr ""
-"オブジェクトを整列するには、形状選択ツール(Select Shapes Tool)をアクティブに"
-"します。"
+"オブジェクトを整列するには、形状選択ツール (Select Shapes Tool) をアクティブ"
+"にします。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/arrangedocker/arrange_docker_widget.ui:90
@@ -39026,7 +39027,7 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 "有効にすると、レイヤー名の横に合成情報を表示します。\n"
-"無効にすると、レイヤー名の下に表示します(十分なスペースがある場合)。"
+"無効にすると、レイヤー名の下に表示します (十分なスペースがある場合)。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
 #, kde-format
@@ -39237,7 +39238,7 @@ msgstr "白:"
 #: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
 msgid "LUT Management"
-msgstr "ルックアップテーブル(LUT)管理"
+msgstr "ルックアップテーブル (LUT) 管理"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:102
 #, kde-format
@@ -39282,8 +39283,8 @@ msgid ""
 "Exposure and Gamma corrections are disabled in Internal mode. Switch to OCIO "
 "mode to use them"
 msgstr ""
-"内部モードでは露出とガンマ補正は無効です。これらを使用するにはOCIOモードに切"
-"り替えてください"
+"内部モードでは露出とガンマ補正は無効です。これらを使用するには OCIO モードに"
+"切り替えてください"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
@@ -40274,7 +40275,7 @@ msgstr "色空間を設定"
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:69
 #, kde-format
 msgid "Use percentage"
-msgstr "パーセンテージ(%)を使用"
+msgstr "パーセンテージ (%) を使用"
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:25
 #, kde-format
@@ -41469,7 +41470,7 @@ msgstr "データベースのバージョン:"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
 #, kde-format
 msgid "Krita version:"
-msgstr "Krita のバージョン"
+msgstr "Krita のバージョン:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
@@ -43334,8 +43335,8 @@ msgid ""
 "A resources bundle, an ASL or an ABR file with the same name already exists "
 "in the resources folder:"
 msgstr ""
-"同じ名前のリソースバンドルや ASL ファイル、 ABR ファイルが既にリソースフォル"
-"ダに存在します:"
+"同じ名前のリソースバンドルや ASL ファイル、ABR ファイルが既にリソースフォルダ"
+"に存在します:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:120
 #, kde-format
@@ -43914,7 +43915,7 @@ msgstr "スロープ、オフセット、パワー(&S)..."
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
 msgid "Slope, Offset, Power(ASC-CDL)"
-msgstr "スロープ、オフセット、パワー(ASC-CDL)"
+msgstr "スロープ、オフセット、パワー (ASC-CDL)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
@@ -44250,7 +44251,7 @@ msgstr "輝度"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:234
 #, kde-format
 msgid "Luma"
-msgstr "ガンマ補正輝度(ルマY')"
+msgstr "ガンマ補正輝度 (ルマ)"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:231
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:36
@@ -44417,13 +44418,13 @@ msgstr "色相/彩度/強度"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:74
 #, kde-format
 msgid "Hue/Saturation/Luma"
-msgstr "色相/彩度/ガンマ補正輝度(ルマ)"
+msgstr "色相/彩度/ガンマ補正輝度 (ルマ)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
 #, kde-format
 msgid "Blue Chroma/Red Chroma/Luma"
-msgstr "青クロマ/赤クロマ/ガンマ補正輝度(ルマ)"
+msgstr "青クロマ/赤クロマ/ガンマ補正輝度 (ルマ)"
 
 #. i18n: ectx: property (text), widget (QLabel, hLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:93
@@ -47378,7 +47379,7 @@ msgstr "色プロファイルの共有"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:143
 #, kde-format
 msgid "Advanced quality"
-msgstr "拡張(品質)"
+msgstr "拡張 (品質)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:176
@@ -47544,7 +47545,7 @@ msgstr "このアニメーションは 240fps 以上のフレームレートを�
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
-msgstr "通常(低品質の場合のみ)"
+msgstr "通常 (低品質の場合のみ)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:20
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
@@ -47599,7 +47600,7 @@ msgstr "8x8 下方標本化周波数変換"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr "デフォルト(エンコーダが選択)"
+msgstr "デフォルト (エンコーダが選択)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
@@ -47634,13 +47635,13 @@ msgstr "有効"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr "VarDCT モード(写真など)"
+msgstr "VarDCT モード (写真など)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr "モジュラーモード(ロスレス画像など)"
+msgstr "モジュラーモード (ロスレス画像など)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
 #, kde-format
@@ -48087,8 +48088,8 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
-"エッジ保存フィルタレベル、-1 から 3 までの値を使用します。デフォルト(エンコー"
-"ダが選択) は -1、強度を設定するには 0 から 3 を使用します。"
+"エッジ保存フィルタレベル、-1 から 3 までの値を使用します。デフォルト (エン"
+"コーダが選択) は -1、強度を設定するには 0 から 3 を使用します。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:485
@@ -49067,7 +49068,7 @@ msgstr ""
 #: plugins/impex/png/kis_wdg_options_png.ui:184
 #, kde-format
 msgid "Store alpha channel (transparency)"
-msgstr "アルファチャンネル(透過)を格納する"
+msgstr "アルファチャンネル (透過) を格納する"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:194
@@ -49216,13 +49217,13 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
-"<title>RGB を4色として補間</title><p>既定値では、すべての(4色目の)緑のピクセ"
-"ルが同じであると仮定されます。偶数行の緑のピクセルが奇数行よりも紫外光に対し"
-"て感度が高い場合、この違いによって出力にメッシュパターンが発生します。このオ"
-"プションを使用すると、画像細部の損失を最小限に抑えて この問題を解決できます。"
-"</p><p>このオプションを使用すると、画像に若干のブラーがかかりますが、偽の2x2"
-"メッシュパターンを VNG 品質の方法で削除したり、AHD 品質の方法で混ぜる必要がな"
-"くなります。</p>"
+"<title>RGB を4色として補間</title><p>既定値では、すべての (4色目の) 緑のピク"
+"セルが同じであると仮定されます。偶数行の緑のピクセルが奇数行よりも紫外光に対"
+"して感度が高い場合、この違いによって出力にメッシュパターンが発生します。この"
+"オプションを使用すると、画像細部の損失を最小限に抑えて この問題を解決できま"
+"す。</p><p>このオプションを使用すると、画像に若干のブラーがかかりますが、偽の"
+"2x2メッシュパターンを VNG 品質の方法で削除したり、AHD 品質の方法で混ぜる必要"
+"がなくなります。</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:299
 #, kde-format
@@ -49438,7 +49439,7 @@ msgstr ""
 "のみ使用できます。</p><p><ul><li><emphasis strong='true'>DCB</emphasis>: 補間"
 "された色フィルタを強化するをオンにします。</li><li><emphasis "
 "strong='true'>VCD & AHD</emphasis>: シャープネスを向上させるために、拡張され"
-"た効果的な色補間(EECI)リファインを有効にします。</li></ul></p>"
+"た効果的な色補間 (EECI) リファインを有効にします。</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
@@ -49597,7 +49598,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
-msgstr "露出の修正(E.V)"
+msgstr "露出の修正 (E.V)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:522
 #, kde-format
@@ -50162,7 +50163,7 @@ msgid ""
 "data instead of normal TIFF data?"
 msgstr ""
 "TIFF 画像に有効な PSD データが埋め込まれています。通常の TIFF データの代わり"
-"に PSD データを使用しますか?"
+"に PSD データを使用しますか？"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -50672,7 +50673,7 @@ msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
 "coding (0 = no degradation, 100 = maximum possible degradation)."
 msgstr ""
-"予測モードのコーディングで 512KB の制限に合わせるために許容される品質の劣化"
+"予測モードのコーディングで 512KB の制限に合わせるために許容される品質の劣化 "
 "(0 = 劣化なし, 100 = 劣化最大)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
@@ -53243,12 +53244,12 @@ msgstr "カスタム"
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
 #, kde-format
 msgid "Fine Speed"
-msgstr "速度（機敏）"
+msgstr "速度 (機敏)"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
 #, kde-format
 msgid "Gross Speed"
-msgstr "速度（鈍重）"
+msgstr "速度 (鈍重)"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:21
 #, kde-format
@@ -53268,7 +53269,7 @@ msgstr "方向"
 #, kde-format
 msgctxt "Pen tilt declination"
 msgid "Declination"
-msgstr "偏角:"
+msgstr "偏角"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:24
 #, kde-format
@@ -53279,7 +53280,7 @@ msgstr "昇順"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
 #, kde-format
 msgid "Radius Logarithmic"
-msgstr "半径（対数）"
+msgstr "半径 (対数)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
 #, kde-format
@@ -53305,12 +53306,12 @@ msgstr "アンチエイリアシング"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, kde-format
 msgid "Elliptical Dab Angle"
-msgstr "楕円描点（角度）"
+msgstr "楕円描点 (角度)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
 #, kde-format
 msgid "Elliptical Dab Ratio"
-msgstr "楕円描点（比率）"
+msgstr "楕円描点 (比率)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
 #, kde-format
@@ -53345,12 +53346,12 @@ msgstr "明度変化"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
 #, kde-format
 msgid "Change Color HSL S"
-msgstr "彩度変化(HSL)"
+msgstr "彩度変化 (HSL)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:142
 #, kde-format
 msgid "Change Color HSV S"
-msgstr "彩度変化(HSV)"
+msgstr "彩度変化 (HSV)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
 #, kde-format
@@ -53365,22 +53366,22 @@ msgstr "ポスタリゼーション段階"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr "速度ガンマ（機敏）"
+msgstr "速度ガンマ (機敏)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
 msgid "Gross Speed Gamma"
-msgstr "速度ガンマ（鈍重）"
+msgstr "速度ガンマ (鈍重)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr "速度（機敏）の遅さ"
+msgstr "速度 (機敏) の遅さ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
 msgid "Gross Speed Slowness"
-msgstr "速度（鈍重）の遅さ"
+msgstr "速度 (鈍重) の遅さ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
 #, kde-format
@@ -53462,7 +53463,7 @@ msgstr "ぼかしの持続"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
 #, kde-format
 msgid "Smudge Bucket"
-msgstr "ぼかし（バケツ）"
+msgstr "ぼかし (バケツ)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
 #, kde-format
@@ -53472,7 +53473,7 @@ msgstr "ぼかしの透明度"
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
 #, kde-format
 msgid "Stroke Duration log"
-msgstr "描線の持続（対数）"
+msgstr "描線の持続 (対数)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
 #, kde-format
@@ -53498,7 +53499,7 @@ msgstr "カスタム入力の遅さ"
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
 #, kde-format
 msgid "Radius Logarithmic:"
-msgstr "半径（対数）:"
+msgstr "半径 (対数):"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
@@ -53871,7 +53872,7 @@ msgstr "描点間隔:"
 #, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
-msgstr "スプレー範囲のランダム化"
+msgstr "スプレー範囲のランダム化:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
@@ -55501,7 +55502,7 @@ msgstr "要約担当"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Art copyist"
-msgstr "（職業としての）模写担当"
+msgstr "(職業としての) 模写担当"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Actor"
@@ -56936,8 +56937,8 @@ msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
-"ドラッグすると、最初の領域と類似している色の領域のみを塗りつぶします（線画を"
-"塗りつぶすのに便利です）"
+"ドラッグすると、最初の領域と類似している色の領域のみを塗りつぶします (線画を"
+"塗りつぶすのに便利です)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
@@ -57655,8 +57656,8 @@ msgstr ""
 "<html><head/><body><p>「グローバル座標」モードでは、幅および高さには、シェイ"
 "プを回転した場合や その他の変換が行われた場合でも、画像に位置合わせされた座標"
 "で 形状のバウンディングボックスのサイズが表示されます。</p><p>\"グローバル座"
-"標\"モードが無効の場合、 幅および高さフィールドには、変換を適用する前の形状"
-"の \"ローカル\"サイズが表示されます。</p></body></html>"
+"標\"モードが無効の場合、幅および高さフィールドには、変換を適用する前の形状の "
+"\"ローカル\"サイズが表示されます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
@@ -60504,56 +60505,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Krita を使う</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Krita を支援する!</span></a></p><p><a "
-#~ "href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Krita を始める</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Manual</span></a></p><p><a href="
-#~ "\"https://krita.org/\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Krita ウェブサイト</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Krita を開発</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">ユーザコミュニ"
-#~ "ティ</span></a></p><p><a href=\"https://invent.kde.org/graphics/krita"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">ソースコード</"
-#~ "span></a></p><p><a href=\"https://api.kde.org/krita/html/classKrita.html"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">スクリプティン"
-#~ "グ API</span></a></p><p><a href=\"https://scripting.krita.org/lessons/"
-#~ "introduction\"><span style=\" text-decoration: underline; color:%1;\">スク"
-#~ "リプトの学習</span></a></p></td></table></body></html>"
-
-#, fuzzy
-#~| msgid "Brush Smoothing:"
-#~ msgctxt "action"
-#~ msgid "Brush Smoothing: Pixel"
-#~ msgstr "手ブレ補正:"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "CPU スロット"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Krita を支援してください!"

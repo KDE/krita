@@ -1,6 +1,10 @@
 ########### install files ###############
 
 install(FILES
+A1__300_ppi_.predefinedimage
+A1__600_ppi_.predefinedimage
+A2__300_ppi_.predefinedimage
+A2__600_ppi_.predefinedimage
 A3__300_ppi_.predefinedimage
 A3__600_ppi_.predefinedimage
 A4__300_ppi_.predefinedimage

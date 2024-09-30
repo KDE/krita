@@ -214,7 +214,8 @@ done
 
 ## == FFMPEG Dependencies and Resources ==
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libav*.s* $APPDIR/usr/lib/
-cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libpostproc*.s* $APPDIR/usr/lib/
+## TODO: remove (libpostproc is disabled in our builds of ffmpeg)
+##cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libpostproc*.s* $APPDIR/usr/lib/
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libsw*.s* $APPDIR/usr/lib/
 cp -av $DEPS_INSTALL_PREFIX/bin/ff* $APPDIR/usr/bin/
 
@@ -228,9 +229,10 @@ for BIN in $APPDIR/usr/lib/libav*.s*; do
   FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
 done;
 
-for BIN in $APPDIR/usr/lib/libpostproc*; do
-  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
-done;
+## TODO: remove (libpostproc is disabled in our builds of ffmpeg)
+#for BIN in $APPDIR/usr/lib/libpostproc*; do
+#  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
+#done;
 
 for BIN in $APPDIR/usr/lib/libsw*.s*; do
   FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"

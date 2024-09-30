@@ -2151,10 +2151,10 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
         QVector<QRect> changeRects = requestedRects;
         KisProjectionLeafSP leaf = root->projectionLeaf()->nextSibling();
         while (leaf) {
-            if (!leaf->shouldBeRendered()) continue;
-
-            for (auto it = changeRects.begin(); it != changeRects.end(); ++it) {
-                *it = leaf->projectionPlane()->changeRect(*it, leaf->node() == root ? KisNode::N_FILTHY : KisNode::N_ABOVE_FILTHY);
+            if (leaf->shouldBeRendered()) {
+                for (auto it = changeRects.begin(); it != changeRects.end(); ++it) {
+                    *it = leaf->projectionPlane()->changeRect(*it, leaf->node() == root ? KisNode::N_FILTHY : KisNode::N_ABOVE_FILTHY);
+                }
             }
 
             leaf = leaf->nextSibling();

@@ -18,7 +18,7 @@ configure_file(
 install(
     FILES
         ${CMAKE_CURRENT_BINARY_DIR}/manifest.xml
-        ${CMAKE_CURRENT_LIST_DIR}/build_msix.cmd
+        ${CMAKE_CURRENT_LIST_DIR}/build_msix.py
         ${CMAKE_CURRENT_LIST_DIR}/priconfig.xml
     DESTINATION
         ${CMAKE_INSTALL_PREFIX}/krita-msix

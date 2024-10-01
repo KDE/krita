@@ -69,7 +69,7 @@ Steps (if running manually):
    it, including replacing the `@`-substitutions.
 4. Start a command prompt in this dir, then run
    `set KRITA_DIR=C:\path\where\you\extracted\the\Krita\files`, and then run
-   `build_msix.cmd`.
+   `build_msix.py`.
     - If you need to specify the keyfile and password used to sign the MSIX
       file, execute the following command before running the final script:
         ```

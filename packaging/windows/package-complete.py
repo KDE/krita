@@ -122,29 +122,12 @@ if not os.environ.get("MINGW_BIN_DIR"):
         os.environ['MINGW_BIN_DIR'] = os.path.dirname(os.environ['MINGW_BIN_DIR_MAKE_EXE'])
 print(f"mingw-w64: {os.environ['MINGW_BIN_DIR']}")
         
-HAVE_FXC_EXE = None
-
 # Windows SDK is needed for windeployqt to get d3dcompiler_xx.dll
+# If we don't define this variable, windeployqt will fetch the library
+# from  %WINDIR%\system32, which is not supposed to be redistributable
 if os.environ.get("WindowsSdkDir") is None and os.environ.get("ProgramFiles(x86)") is not None:
     os.environ["WindowsSdkDir"] = "{}\\Windows Kits\\10".format(
         os.environ["ProgramFiles(x86)"])
-if os.path.isdir(os.environ["WindowsSdkDir"]):
-    f = os.environ["WindowsSdkDir"]
-    if os.path.isfile(f"{f}\\bin\\d\\fxc.exe"):
-        os.environ["HAVE_FXC_EXE"] = True
-    else:
-        delims = glob.glob(f"{f}\\bin\\10.*")
-        for f in delims:
-            if os.path.isfile(f"{f}\\x64\\fxc.exe"):
-                HAVE_FXC_EXE = True
-if HAVE_FXC_EXE is None:
-    os.environ["WindowsSdkDir"] = None
-    warnings.warn("Windows SDK 10 with fxc.exe not found")
-    warnings.warn(
-        "If Qt was built with ANGLE (dynamic OpenGL) support, the package might not work properly on some systems!")
-else:
-    print(
-        f"Windows SDK 10 with fxc.exe found on {os.environ['WindowsSdkDir']}")
 
 KRITA_SRC_DIR = None
 

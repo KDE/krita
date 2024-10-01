@@ -120,7 +120,7 @@ if KRITA_SRC_DIR is None:
     if os.path.dirname(_temp).endswith("\\packaging\\windows"):
         _base = pathlib.PurePath(_temp)
         if os.path.isfile(f"{_base.parents[2]}\\CMakeLists.txt"):
-            if os.path.isfile(f"{_base.parents[2]}\\3rdparty\\CMakeLists.txt"):
+            if os.path.isfile(f"{_base.parents[2]}\\libs\\version\\kritaversion.h.cmake"):
                 KRITA_SRC_DIR = os.path.realpath(_base.parents[2])
                 print("Script is running inside Krita source dir")
 

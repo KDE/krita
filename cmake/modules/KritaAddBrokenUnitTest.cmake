@@ -148,3 +148,47 @@ endmacro()
 macro(kis_add_test)
     KRITA_ADD_UNIT_TEST(${ARGV})
 endmacro()
+
+function(kis_add_tests_maybe_broken)
+    set(options)
+    set(oneValueArgs BROKEN_IF NOT_BROKEN_IF)
+    set(multiValueArgs)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    list(FIND ARGV "BROKEN_IF" __broken_if_found)
+    list(FIND ARGV "NOT_BROKEN_IF" __not_broken_if_found)
+
+    if ((NOT __broken_if_found EQUAL -1) AND (NOT __not_broken_if_found EQUAL -1))
+        message(FATAL_ERROR "kis_add_test_maybe_broken: BROKEN_IF and NOT_BROKEN_IF cannot be used at the same time!")
+    endif()
+
+    if((NOT __broken_if_found EQUAL -1 AND ARG_BROKEN_IF) OR (NOT __not_broken_if_found EQUAL -1 AND NOT ARG_NOT_BROKEN_IF))
+        set(_extra_args BROKEN)
+    else()
+        set(_extra_args)
+    endif()
+
+    KRITA_ADD_UNIT_TESTS(${ARG_UNPARSED_ARGUMENTS} ${_extra_args})
+endfunction()
+
+function(kis_add_test_maybe_broken)
+    set(options)
+    set(oneValueArgs BROKEN_IF NOT_BROKEN_IF)
+    set(multiValueArgs)
+    cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    list(FIND ARGV "BROKEN_IF" __broken_if_found)
+    list(FIND ARGV "NOT_BROKEN_IF" __not_broken_if_found)
+
+    if ((NOT __broken_if_found EQUAL -1) AND (NOT __not_broken_if_found EQUAL -1))
+        message(FATAL_ERROR "kis_add_test_maybe_broken: BROKEN_IF and NOT_BROKEN_IF cannot be used at the same time!")
+    endif()
+
+    if((NOT __broken_if_found EQUAL -1 AND ARG_BROKEN_IF) OR (NOT __not_broken_if_found EQUAL -1 AND NOT ARG_NOT_BROKEN_IF))
+        set(_extra_args BROKEN)
+    else()
+        set(_extra_args)
+    endif()
+
+    KRITA_ADD_UNIT_TEST(${ARG_UNPARSED_ARGUMENTS} ${_extra_args})
+endfunction()

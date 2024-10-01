@@ -29551,14 +29551,9 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedávné soubory</span></"
-"b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
@@ -29590,14 +29585,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Nedávné soubory</span></"
-"b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -60306,45 +60296,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Použití aplikace Krita</"
-#~ "b></span></p><p><a href=\"https://krita.org/support-us/\"><span style=\" "
-#~ "text-decoration: underline; color:%1;\">Podpořte vývoj aplikace Krita.</"
-#~ "span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
-#~ "getting_started.html\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Začínáme</span></a></p><p><a href=\"https://docs.krita.org/\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Manuál</span></a></"
-#~ "p><p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Webové stránky Krita</span></a></p></"
-#~ "td><td><p><span style=\" color:%1;\"><b>Programování aplikace Krita</b></"
-#~ "span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Komunita uživatelů</span></a></p><p><a "
-#~ "href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Zdrojové kódy</span></a></p><p><a href="
-#~ "\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Skriptovací API</span></a></p><p><a "
-#~ "href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
-#~ "text-decoration: underline; color:%1;\">Škola skriptování</span></a></p></"
-#~ "td></table></body></html>"

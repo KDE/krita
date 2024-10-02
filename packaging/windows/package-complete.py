@@ -362,9 +362,27 @@ elif IS_LLVM_MINGW:
     # The toolchain does not include all of the DLLs in the compiler bin dir,
     # so we need to copy them from the cross target bin dir.
     if not IS_x64:
+        asanLibName ='libclang_rt.asan_dynamic-i386'
         os.environ['STDLIBS_DIR'] = fr"{os.environ['MINGW_BIN_DIR']}\..\i686-w64-mingw32\bin"
     else:
+        asanLibName = 'libclang_rt.asan_dynamic-x86_64'
         os.environ['STDLIBS_DIR'] = fr"{os.environ['MINGW_BIN_DIR']}\..\x86_64-w64-mingw32\bin"
+
+    output = subprocess.check_output(fr"{OBJDUMP} -p {KRITA_INSTALL_DIR}\bin\krita.exe", shell=True, text=True)
+
+    if re.search(asanLibName, output):
+        print('The package contains ASAN, packaging the ASAN runtime as well!')
+        os.environ['STDLIBS'] = f'{os.environ["STDLIBS"]} {asanLibName}'
+
+        symbolizerBinaries = ['libLLVM-18.dll', 'llvm-symbolizer.exe']
+        for file in symbolizerBinaries:
+            filePath = os.path.join(os.environ['MINGW_BIN_DIR'], file)
+
+            print(f'Copying symbolizer lib: {filePath}')
+            shutil.copy(filePath, fr"{pkg_root}\bin")
+    else:
+        print('No ASAN was found in the Krita binary, skipping its packaging...')
+
 else:
     if not IS_x64:
 		# mingw-w64 x86
@@ -374,7 +392,10 @@ else:
         os.environ['STDLIBS'] = "libgcc_s_seh-1 libgomp-1 libstdc++-6 libwinpthread-1"
 
 for lib in os.environ['STDLIBS'].split(" "):
-    shutil.copy(fr"{os.environ['STDLIBS_DIR']}\{lib}.dll", fr"{pkg_root}\bin")
+    libPath = fr"{os.environ['STDLIBS_DIR']}\{lib}.dll"
+    # libssp-0 is not present in clang18
+    if lib != 'libssp-0' or os.path.isfile(libPath):
+        shutil.copy(libPath, fr"{pkg_root}\bin")
 
 print("\nCopying files...")
 # krita.exe
@@ -383,13 +404,13 @@ shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.com", f"{pkg_root}\\bin\\")
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb"):
     shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
 # kritarunner.exe
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
-if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb"):
-    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
+    if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb"):
+        shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
+                    f"{pkg_root}\\bin\\")
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.com",
                 f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.com",
-            f"{pkg_root}\\bin\\")
-
 if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
     shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe", f"{pkg_root}\\bin\\")
     subprocess.run(["xcopy", "/S", "/Y", "/I",
@@ -634,11 +655,13 @@ print("\nPackaging stripped binaries...")
 subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",
                f"{pkg_name}.zip", f"{pkg_root}\\", "-xr!*.debug"], check=True)
 print("--------\n")
-print("Packaging debug info...")
-# (note that the top-level package dir is not included)
-subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",
-               f"{pkg_name}-dbg.zip", "-r", f"{pkg_root}\\*.debug"], check=True)
-print("--------\n")
+
+if not os.environ.get('KRITACI_SKIP_DEBUG_PACKAGE', '0').lower() in ['true', '1', 'on']:
+    print("Packaging debug info...")
+    # (note that the top-level package dir is not included)
+    subprocess.run([os.environ["SEVENZIP_EXE"], "a", "-tzip",
+                f"{pkg_name}-dbg.zip", "-r", f"{pkg_root}\\*.debug"], check=True)
+    print("--------\n")
 
 print("\n")
 print(f"Krita packaged as {pkg_name}.zip")

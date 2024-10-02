@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 01:47+0000\n"
+"POT-Creation-Date: 2024-10-02 01:49+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -16979,7 +16979,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "브러시 임의성 권장 값 0.0"
 
-#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:757 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -17291,22 +17291,22 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "하위 경로 삭제"
 
-#: libs/flake/html/HtmlWriter.cpp:70
+#: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
 msgstr "KoShapeLayer를 HTML로 저장하는 것은 구현되어 있지 않습니다!"
 
-#: libs/flake/html/HtmlWriter.cpp:74
+#: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
 msgstr "KoShapeLayer를 HTML로 변환하는 것은 구현되어 있지 않습니다!"
 
-#: libs/flake/html/HtmlWriter.cpp:80
+#: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
 msgstr "HTML로 저장할 수 없음"
 
-#: libs/flake/html/HtmlWriter.cpp:84
+#: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
 msgstr "%1을(를) HTML로 저장할 수 없음"
@@ -23369,34 +23369,34 @@ msgstr "이미지 경계"
 msgid "Image Center"
 msgstr "이미지 중앙"
 
-#: libs/ui/dialogs/kis_about_application.cpp:33
+#: libs/ui/dialogs/kis_about_application.cpp:34
 #, kde-format
 msgid "About Krita"
 msgstr "Krita 정보"
 
-#: libs/ui/dialogs/kis_about_application.cpp:44
+#: libs/ui/dialogs/kis_about_application.cpp:45
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">만든 사람들</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Yeheun Shin,이정희,박신조"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "syh0091@gmail.com,daemul72@gmail.com,kde@peremen.name"
 
-#: libs/ui/dialogs/kis_about_application.cpp:73
+#: libs/ui/dialogs/kis_about_application.cpp:74
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\">번역자</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:86
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -23410,7 +23410,7 @@ msgstr ""
 "자세한 정보는 <a href=\"http://www.kde.or.kr\">http://www.kde.or.kr</a>(한국 "
 "KDE 사용자 모임)을 방문해 주십시오.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:94
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -23425,12 +23425,12 @@ msgid ""
 "asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:107
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">특별히 감사</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:133
+#: libs/ui/dialogs/kis_about_application.cpp:134
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -23439,7 +23439,7 @@ msgstr ""
 ".</p><p><i>Krita 개발에 조언, 아이콘, 브러시 세트 등을 지원해 주셔서 감사합니"
 "다.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:137
+#: libs/ui/dialogs/kis_about_application.cpp:138
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23471,7 +23471,7 @@ msgstr ""
 "전의 상용 소프트웨어로는 상업적인 목적으로 작품을 사용하지 못하는 것과 대비됩"
 "니다.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:172
+#: libs/ui/dialogs/kis_about_application.cpp:173
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 01:47+0000\n"
+"POT-Creation-Date: 2024-10-02 01:49+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -16021,7 +16021,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "筆刷隨機度建議值為 0.0"
 
-#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:757 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16328,22 +16328,22 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "移除子路徑"
 
-#: libs/flake/html/HtmlWriter.cpp:70
+#: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
 msgstr "將 KoShapeGroup 儲存為 HTML 的功能尚未實現！"
 
-#: libs/flake/html/HtmlWriter.cpp:74
+#: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
 msgstr "將 KoShapeGroup 儲存為 HTML 的功能尚未實現！"
 
-#: libs/flake/html/HtmlWriter.cpp:80
+#: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
 msgstr "儲存到 html 失敗"
 
-#: libs/flake/html/HtmlWriter.cpp:84
+#: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
 msgstr "無法將 %1 儲存到 html"
@@ -22243,23 +22243,23 @@ msgstr "影像邊框"
 msgid "Image Center"
 msgstr "影像中心"
 
-#: libs/ui/dialogs/kis_about_application.cpp:33
+#: libs/ui/dialogs/kis_about_application.cpp:34
 #, kde-format
 msgid "About Krita"
 msgstr "關於 Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:44
+#: libs/ui/dialogs/kis_about_application.cpp:45
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">開發者</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Tyson Tan, Guo Yunhe, Yi-Jyun Pan, Alvin Wong, Bise Chen, 楊景貴"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22267,12 +22267,12 @@ msgstr ""
 "tysontan@tysontan.com, i@guoyunhe.me, pan93412@gmail.com, alvin@alvinhc.com, "
 "bise.chen@gmail.com, issacsopp@gmail.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:73
+#: libs/ui/dialogs/kis_about_application.cpp:74
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\">翻譯者</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:86
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22284,7 +22284,7 @@ msgstr ""
 "更多有關 KDE 國際化的資訊，可以瀏覽 <a href=\"http://l10n.kde.org\">http://"
 "l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:94
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22299,12 +22299,12 @@ msgid ""
 "asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:107
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">特別鳴謝</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:133
+#: libs/ui/dialogs/kis_about_application.cpp:134
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22313,7 +22313,7 @@ msgstr ""
 "</p><p>感謝上面各位人士為 Krita 的開發提供的建議、圖示、筆刷以及其他的點點滴"
 "滴。</p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:137
+#: libs/ui/dialogs/kis_about_application.cpp:138
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22343,7 +22343,7 @@ msgstr ""
 "p><p>Krita 通過 GPL 協議賦予使用者上述自由，任何人無權剝奪。Krita 不會像一些"
 "商業軟體那樣對試用版或教育版軟體的商用場景進行限制。</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:172
+#: libs/ui/dialogs/kis_about_application.cpp:173
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "

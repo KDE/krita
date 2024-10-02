@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 01:47+0000\n"
+"POT-Creation-Date: 2024-10-02 01:49+0000\n"
 "PO-Revision-Date: 2024-09-27 16:52+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -16134,7 +16134,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "Penseelschommeling aanbevolen waarde 0.0"
 
-#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:757 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16440,22 +16440,22 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Subpad verwijderen"
 
-#: libs/flake/html/HtmlWriter.cpp:70
+#: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
 msgstr "KoShapeLayer naar html opslaan is nog niet geïmplementeerd!"
 
-#: libs/flake/html/HtmlWriter.cpp:74
+#: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
 msgstr "KoShapeLayer naar html is nog niet geïmplementeerd!"
 
-#: libs/flake/html/HtmlWriter.cpp:80
+#: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
 msgstr "opslaan naar html is mislukt"
 
-#: libs/flake/html/HtmlWriter.cpp:84
+#: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
 msgstr "Kan %1 niet opslaan naar html"
@@ -22434,24 +22434,24 @@ msgstr "Grenzen van afbeelding"
 msgid "Image Center"
 msgstr "Centrum van afbeelding"
 
-#: libs/ui/dialogs/kis_about_application.cpp:33
+#: libs/ui/dialogs/kis_about_application.cpp:34
 #, kde-format
 msgid "About Krita"
 msgstr "Over Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:44
+#: libs/ui/dialogs/kis_about_application.cpp:45
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Gemaakt door</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "de Vries,Bram Schoenmakers,Maarten Rütten,Sander Koning,Freek de Kruijf"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22459,12 +22459,12 @@ msgstr ""
 "rinsedevries@kde.nl,bramschoenmakers@kde.nl,,sanderkoning@kde.nl,"
 "freekdekruijf@kde.nl"
 
-#: libs/ui/dialogs/kis_about_application.cpp:73
+#: libs/ui/dialogs/kis_about_application.cpp:74
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Vertalers</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:86
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22478,7 +22478,7 @@ msgstr ""
 "vertaling van KDE is te vinden op http://l10n.kde.org/.</p> <p> Komt u een "
 "foutje tegen in een vertaling? Meld dit op http://www.kde.nl/bugs</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:94
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22503,12 +22503,12 @@ msgstr ""
 "href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
 "body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:107
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Met dank aan</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:133
+#: libs/ui/dialogs/kis_about_application.cpp:134
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22517,7 +22517,7 @@ msgstr ""
 ".</p><p><i>Voor het ondersteunen van de ontwikkeling van Krita met advies, "
 "pictogrammen, sets penselen en meer.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:137
+#: libs/ui/dialogs/kis_about_application.cpp:138
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22551,7 +22551,7 @@ msgstr ""
 "probeer- of educatieve versies van commerciële software die u zullen "
 "verbieden uw werk in commerciële situaties te gebruiken.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:172
+#: libs/ui/dialogs/kis_about_application.cpp:173
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 01:47+0000\n"
+"POT-Creation-Date: 2024-10-02 01:49+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16525,7 +16525,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr ""
 
-#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:757 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16845,24 +16845,24 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Ukloni podputanju"
 
-#: libs/flake/html/HtmlWriter.cpp:70
+#: libs/flake/html/HtmlWriter.cpp:72
 #, fuzzy, kde-format
 #| msgid "Sorry, this output mode is not implemented"
 msgid "Saving KoShapeLayer to html is not implemented yet!"
 msgstr "Oprostite, izlazni način nije implementiran"
 
-#: libs/flake/html/HtmlWriter.cpp:74
+#: libs/flake/html/HtmlWriter.cpp:76
 #, fuzzy, kde-format
 #| msgid "Sorry, this output mode is not implemented"
 msgid "KoShapeGroup to html is not implemented yet!"
 msgstr "Oprostite, izlazni način nije implementiran"
 
-#: libs/flake/html/HtmlWriter.cpp:80
+#: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
 msgstr ""
 
-#: libs/flake/html/HtmlWriter.cpp:84
+#: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
 msgstr ""
@@ -23189,23 +23189,23 @@ msgstr "Slike"
 msgid "Image Center"
 msgstr "Centar"
 
-#: libs/ui/dialogs/kis_about_application.cpp:33
+#: libs/ui/dialogs/kis_about_application.cpp:34
 #, kde-format
 msgid "About Krita"
 msgstr "O Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:44
+#: libs/ui/dialogs/kis_about_application.cpp:45
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Kreirao</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Elvedin Turkovic,Samir Ribić,Emrah Dautbegovic,Vedran Ljubovic"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -23213,13 +23213,13 @@ msgstr ""
 "eturkovic4@etf.unsa.ba,samir.ribic@etf.unsa.ba,edautbegov1@etf.unsa.ba,"
 "vljubovic@smartnet.ba"
 
-#: libs/ui/dialogs/kis_about_application.cpp:73
+#: libs/ui/dialogs/kis_about_application.cpp:74
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\">Zahvale</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:86
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -23228,7 +23228,7 @@ msgid ""
 "org</a></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:94
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -23243,12 +23243,12 @@ msgid ""
 "asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:107
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Zahvale</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:133
+#: libs/ui/dialogs/kis_about_application.cpp:134
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -23257,7 +23257,7 @@ msgstr ""
 ".</p><p><i>Za podršku Krita razvoju s savjetima, ikonama, skupovima četki i "
 "drugo.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:137
+#: libs/ui/dialogs/kis_about_application.cpp:138
 #, fuzzy, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23291,7 +23291,7 @@ msgstr ""
 "obrazovnim verzijama komercijalnog softvera koji će zabraniti vaš rad u "
 "komercijalnim situacijama. </ P> <br/> <hr /> <pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:172
+#: libs/ui/dialogs/kis_about_application.cpp:173
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "

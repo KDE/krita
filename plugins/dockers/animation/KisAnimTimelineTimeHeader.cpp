@@ -593,6 +593,15 @@ int KisAnimTimelineTimeHeader::estimateFirstVisibleColumn()
     return ceil(qreal(m_d->offset) / sectionWidth);
 }
 
+void KisAnimTimelineTimeHeader::zoomToFitFrameRange(int start, int end)
+{
+    const int PADDING = 2;
+    qreal lengthSections = (end + PADDING) - start;
+    qreal desiredZoom = width() / lengthSections;
+
+    setZoom(desiredZoom / m_d->unitSectionSize);
+}
+
 void KisAnimTimelineTimeHeader::mouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_d->model)

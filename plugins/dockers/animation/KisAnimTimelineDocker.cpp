@@ -437,8 +437,24 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->titlebar->volumeSlider->setValue(m_d->framesModel->audioVolume() * 100.0);
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
+
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));
+
+        connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigDocumentRangeChanged, this, [this]() {
+            if (!m_d->canvas || !m_d->canvas->image()) return;
+
+            KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+            int start = animInterface->documentPlaybackRange().start();
+            int end = animInterface->documentPlaybackRange().end();
+
+            m_d->titlebar->sbStartFrame->setValue(start);
+            m_d->titlebar->sbEndFrame->setValue(end);
+
+            m_d->framesView->slotFitViewToFrameRange(0, end); // TODO: fit from start to end, instead of 0 to end.
+        });
 
         connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
         connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
@@ -455,17 +471,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                 this, &KisAnimTimelineDocker::updatePlaybackStatistics);
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
-
-        connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigPlaybackRangeChanged, this, [this]() {
-            if (!m_d->canvas || !m_d->canvas->image()) return;
-
-            KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-
-            m_d->titlebar->sbStartFrame->setValue(animInterface->documentPlaybackRange().start());
-            m_d->titlebar->sbEndFrame->setValue(animInterface->documentPlaybackRange().end());
-        });
-
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
 
         m_d->controlsModel.connectAnimationState(m_d->canvas->animationState());
     }

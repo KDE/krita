@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-02 01:49+0000\n"
-"PO-Revision-Date: 2024-09-27 16:52+0200\n"
+"PO-Revision-Date: 2024-10-02 16:31+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -41104,7 +41104,7 @@ msgstr "HSY"
 #: plugins/dockers/specificcolorselector/specificcolorselector_dock.cc:22
 #, kde-format
 msgid "Specific Color Selector"
-msgstr "Bepaalde kleurenkiezer"
+msgstr "Specifieke kleurenkiezer"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44

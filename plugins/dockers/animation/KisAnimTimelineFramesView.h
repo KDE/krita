@@ -127,6 +127,7 @@ public Q_SLOTS:
     void slotUpdateDragInfiniteFramesCount();
     void slotRealignScrollBars();
     void slotEnsureRowVisible(int row);
+    void slotFitViewToFrameRange(int start, int end);
 
     void calculateActiveLayerSelectedTimes(const QModelIndexList &selection);
 

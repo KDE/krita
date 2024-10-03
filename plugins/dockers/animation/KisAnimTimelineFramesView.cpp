@@ -842,6 +842,17 @@ void KisAnimTimelineFramesView::slotEnsureRowVisible(int row)
     });
 }
 
+void KisAnimTimelineFramesView::slotFitViewToFrameRange(int start, int end)
+{
+    QModelIndex startIndex = currentIndex().siblingAtColumn(start);
+    if (!startIndex.isValid() || start < 0) return;
+
+    KIS_ASSERT(start == 0); //TODO: forcing start to 0 for now, next let's scroll bar to also fit starting value correctly.
+
+    m_d->horizontalRuler->zoomToFitFrameRange(start, end);
+    //scrollTo(startIndex, ScrollHint::PositionAtBottom);
+}
+
 void KisAnimTimelineFramesView::calculateActiveLayerSelectedTimes(const QModelIndexList &selection)
 {
     QSet<int> activeLayerSelectedTimes;

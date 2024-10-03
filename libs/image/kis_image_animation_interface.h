@@ -252,6 +252,7 @@ Q_SIGNALS:
 
     void sigFramerateChanged();
     void sigPlaybackRangeChanged();
+    void sigDocumentRangeChanged();
 
     void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
     void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);

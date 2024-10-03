@@ -151,7 +151,7 @@ void KisImageAnimationInterface::setDocumentRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->documentRange = range;
-    Q_EMIT sigPlaybackRangeChanged();
+    Q_EMIT sigDocumentRangeChanged();
 }
 
 void KisImageAnimationInterface::setDocumentRangeStartFrame(int column)

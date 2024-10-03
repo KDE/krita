@@ -565,56 +565,57 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\easy-install.pth"):
         os.remove(f)
 
-print("\nSplitting debug info from binaries...")
+if not os.environ.get('KRITACI_SKIP_SPLIT_DEBUG', '0').lower() in ['true', '1', 'on']:
+    print("\nSplitting debug info from binaries...")
 
-def split_debug(arg1, arg2):
-    print(f"Splitting debug info of {arg2}")
-    commandToRun = f"objcopy --only-keep-debug {arg1} {arg1}.debug"
-    try:
+    def split_debug(arg1, arg2):
+        print(f"Splitting debug info of {arg2}")
+        commandToRun = f"objcopy --only-keep-debug {arg1} {arg1}.debug"
+        try:
+            subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+        except subprocess.CalledProcessError as status:
+            return status.returncode
+        # If the debug file is small enough then consider there being no debug info.
+        # Discard these files since they somehow make gdb crash.
+        if os.path.getsize(f"{arg1}.debug") <= 2048:
+            print(f"Discarding {arg2}.debug")
+            os.remove(f"{arg1}.debug")
+            return 0
+        debugDir = os.path.dirname(arg1)+".debug"
+        if not os.path.isdir(debugDir):
+            os.mkdir(debugDir)
+        shutil.move(f"{arg1}.debug", debugDir+"\\")
+        commandToRun = f"strip --strip-debug {arg1}"
         subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
-    except subprocess.CalledProcessError as status:
-        return status.returncode
-    # If the debug file is small enough then consider there being no debug info.
-    # Discard these files since they somehow make gdb crash.
-    if os.path.getsize(f"{arg1}.debug") <= 2048:
-        print(f"Discarding {arg2}.debug")
-        os.remove(f"{arg1}.debug")
+        # Add debuglink
+        # FIXME: There is a problem with gdb that cause it to output this warning
+        # FIXME: "warning: section .gnu_debuglink not found in xxx.debug"
+        # FIXME: I tried adding a link to itself but this kills drmingw :(
+        commandToRun = fr'objcopy --add-gnu-debuglink="{debugDir}\{os.path.basename(arg1)}.debug" {arg1}'
+        try:
+            subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
+        except subprocess.CalledProcessError as status:
+            return status.returncode
         return 0
-    debugDir = os.path.dirname(arg1)+".debug"
-    if not os.path.isdir(debugDir):
-        os.mkdir(debugDir)
-    shutil.move(f"{arg1}.debug", debugDir+"\\")
-    commandToRun = f"strip --strip-debug {arg1}"
-    subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
-    # Add debuglink
-    # FIXME: There is a problem with gdb that cause it to output this warning
-    # FIXME: "warning: section .gnu_debuglink not found in xxx.debug"
-    # FIXME: I tried adding a link to itself but this kills drmingw :(
-    commandToRun = fr'objcopy --add-gnu-debuglink="{debugDir}\{os.path.basename(arg1)}.debug" {arg1}'
-    try:
-        subprocess.check_call(commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True)
-    except subprocess.CalledProcessError as status:
-        return status.returncode
-    return 0
 
-split_debug(fr"{pkg_root}\bin\krita.exe", r"bin\krita.exe")
-split_debug(fr"{pkg_root}\bin\krita.com", r"bin\krita.com")
-split_debug(fr"{pkg_root}\bin\kritarunner.exe", r"bin\kritarunner.exe")
-split_debug(fr"{pkg_root}\bin\kritarunner.com", r"bin\kritarunner.com")
-# Find all DLLs
-files = glob.glob(fr"{pkg_root}\**\*.dll", recursive=True)
-for f in files:
-    split_debug(f, os.path.relpath(f, pkg_root))
-# Find all Python native modules
-files = glob.glob(fr"{pkg_root}\share\krita\pykrita\**\*.pyd", recursive=True)
-for f in files:
-    split_debug(f, os.path.relpath(f, pkg_root))
-files = glob.glob(fr"{pkg_root}\lib\krita-python-libs\**\*.pyd", recursive=True)
-for f in files:
-    split_debug(f, os.path.relpath(f, pkg_root))
-files = glob.glob(fr"{pkg_root}\lib\site-packages\**\*.pyd", recursive=True)
-for f in files:
-    split_debug(f, os.path.relpath(f, pkg_root))
+    split_debug(fr"{pkg_root}\bin\krita.exe", r"bin\krita.exe")
+    split_debug(fr"{pkg_root}\bin\krita.com", r"bin\krita.com")
+    split_debug(fr"{pkg_root}\bin\kritarunner.exe", r"bin\kritarunner.exe")
+    split_debug(fr"{pkg_root}\bin\kritarunner.com", r"bin\kritarunner.com")
+    # Find all DLLs
+    files = glob.glob(fr"{pkg_root}\**\*.dll", recursive=True)
+    for f in files:
+        split_debug(f, os.path.relpath(f, pkg_root))
+    # Find all Python native modules
+    files = glob.glob(fr"{pkg_root}\share\krita\pykrita\**\*.pyd", recursive=True)
+    for f in files:
+        split_debug(f, os.path.relpath(f, pkg_root))
+    files = glob.glob(fr"{pkg_root}\lib\krita-python-libs\**\*.pyd", recursive=True)
+    for f in files:
+        split_debug(f, os.path.relpath(f, pkg_root))
+    files = glob.glob(fr"{pkg_root}\lib\site-packages\**\*.pyd", recursive=True)
+    for f in files:
+        split_debug(f, os.path.relpath(f, pkg_root))
 
 
 if args.pre_zip_hook:

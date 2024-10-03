@@ -437,6 +437,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->titlebar->volumeSlider->setValue(m_d->framesModel->audioVolume() * 100.0);
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
+
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));
 
@@ -464,8 +466,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
             m_d->titlebar->sbStartFrame->setValue(animInterface->documentPlaybackRange().start());
             m_d->titlebar->sbEndFrame->setValue(animInterface->documentPlaybackRange().end());
         });
-
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
 
         m_d->controlsModel.connectAnimationState(m_d->canvas->animationState());
     }

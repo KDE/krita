@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:49+0000\n"
+"POT-Creation-Date: 2024-10-04 01:49+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -39217,22 +39217,22 @@ msgstr "Пустой AutoKey"
 msgid "AutoKey Duplicate"
 msgstr "Дубликат AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:531
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включить для сохранения времени воспроизведения."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:539
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Эффективная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реальная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Кадров пропущено:\t%1%"
@@ -39290,30 +39290,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Масштаб временной шкалы. Удерживайте и перетащите влево или вправо."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Вставка или удаление стоп-кадров"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Укажите количество кадров"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Изменить кадры:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ключевые кадры"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

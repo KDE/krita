@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:49+0000\n"
+"POT-Creation-Date: 2024-10-04 01:49+0000\n"
 "PO-Revision-Date: 2024-09-15 10:51+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -38616,22 +38616,22 @@ msgstr "AutoKey Blank"
 msgid "AutoKey Duplicate"
 msgstr "AutoKey Duplicate"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:531
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Enable to preserve playback timing."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:539
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Effective FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Real FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Frames dropped:\t%1%"
@@ -38669,30 +38669,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Zoom Timeline. Hold down and drag left or right."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Insert or Remove Hold Frames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Enter number of frames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edit Frames:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Keyframes"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

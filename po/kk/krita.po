@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-02 01:49+0000\n"
+"POT-Creation-Date: 2024-10-04 01:49+0000\n"
 "PO-Revision-Date: 2013-10-24 03:51+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -39266,22 +39266,22 @@ msgstr ""
 msgid "AutoKey Duplicate"
 msgstr "Көшірмесін жасау"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:531
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:539
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""
@@ -39318,32 +39318,32 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Атауын ендіру"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Топтың атауы:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Қазіргі өлшемдерін сақтау"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Атауын ендіру"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

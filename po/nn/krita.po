@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 01:47+0000\n"
+"POT-Creation-Date: 2024-10-04 01:49+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16073,7 +16073,7 @@ msgctxt "PaintOp instant preview limitation"
 msgid "Brush Randomness recommended value 0.0"
 msgstr "Tilrådd tilfeldigverdi: 0,0"
 
-#: libs/brush/kis_brush.cpp:755 libs/brush/KisBrushModel.cpp:76
+#: libs/brush/kis_brush.cpp:757 libs/brush/KisBrushModel.cpp:76
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Spacing > 0.5, consider disabling Instant Preview"
@@ -16380,22 +16380,22 @@ msgctxt "(qtundo-format)"
 msgid "Remove subpath"
 msgstr "Fjern delbane"
 
-#: libs/flake/html/HtmlWriter.cpp:70
+#: libs/flake/html/HtmlWriter.cpp:72
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
 msgstr "Lagring av KoShapeLayer til HTML-format er ikkje støtta enno."
 
-#: libs/flake/html/HtmlWriter.cpp:74
+#: libs/flake/html/HtmlWriter.cpp:76
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
 msgstr "KoShapeLayer til HTML-format er ikkje støtta enno"
 
-#: libs/flake/html/HtmlWriter.cpp:80
+#: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
 msgstr "Feil ved lagring til HTML"
 
-#: libs/flake/html/HtmlWriter.cpp:84
+#: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
 msgstr "Klarte ikkje lagra %1 til HTML"
@@ -22368,34 +22368,34 @@ msgstr "Biletgrenser"
 msgid "Image Center"
 msgstr "Biletmidte"
 
-#: libs/ui/dialogs/kis_about_application.cpp:33
+#: libs/ui/dialogs/kis_about_application.cpp:34
 #, kde-format
 msgid "About Krita"
 msgstr "Om Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:44
+#: libs/ui/dialogs/kis_about_application.cpp:45
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Laga av</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:67
+#: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Karl Ove Hufthammer"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "karl@huftis.org"
 
-#: libs/ui/dialogs/kis_about_application.cpp:73
+#: libs/ui/dialogs/kis_about_application.cpp:74
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Omsetjarar</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:85
+#: libs/ui/dialogs/kis_about_application.cpp:86
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22416,7 +22416,7 @@ msgstr ""
 "p><p>Du finn meir informasjon om internasjonalisering av KDE-programma på <a "
 "href=\"https://l10n.kde.org/\">https://l10n.kde.org/</a>.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:94
+#: libs/ui/dialogs/kis_about_application.cpp:95
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p "
@@ -22431,12 +22431,12 @@ msgid ""
 "src=\":/asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:106
+#: libs/ui/dialogs/kis_about_application.cpp:107
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Takk til</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:133
+#: libs/ui/dialogs/kis_about_application.cpp:134
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22445,7 +22445,7 @@ msgstr ""
 ".</p><p><i>For å støtta Krita-utviklinga med råd, ikon, penselsamlingar og "
 "anna.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:137
+#: libs/ui/dialogs/kis_about_application.cpp:138
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22480,7 +22480,7 @@ msgstr ""
 "vare, som gjerne forbyr deg å bruka det du lagar med program­vara kommersielt."
 "</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:172
+#: libs/ui/dialogs/kis_about_application.cpp:173
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -38616,22 +38616,22 @@ msgstr "Autonøkkelbilete tomt"
 msgid "AutoKey Duplicate"
 msgstr "Autonøkkelbilete duplikat"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:531
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Slå på for å sikra rett avspelingsfart."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:539
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Effektive bilete/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:535
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Ekte bilete/s:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Animasjonsbilete hoppa over:\t%1 %"
@@ -38669,30 +38669,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Forstørrings-tidslinje. Trykk og dra til venstre eller høgre."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1497
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Set inn / fjern haldbilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Skriv inn talet på bilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1605
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Rediger animasjonsbilete:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1632
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Nøkkelbilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1640
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

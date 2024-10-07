@@ -1431,6 +1431,11 @@ namespace Private {
 
         // XXX: this breaks if we allow free mixing of masks and layers
         KisLayerSP prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
+
+        while (prevLayer && prevLayer->isFakeNode()) {
+            prevLayer = qobject_cast<KisLayer*>(prevLayer->prevSibling().data());
+        }
+
         if (!prevLayer) return;
 
         if (!layer->visible() && !prevLayer->visible()) {

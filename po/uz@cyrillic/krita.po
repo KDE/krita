@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:49+0000\n"
+"POT-Creation-Date: 2024-10-08 01:47+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17782,7 +17782,7 @@ msgid "Reselect"
 msgstr "&Тиклаш"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2040
+#: libs/image/kis_layer_utils.cpp:2045
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 #| msgid "&Select..."
@@ -18334,70 +18334,70 @@ msgstr "&Бўйига"
 msgid "Merged"
 msgstr "Бўш жой"
 
-#: libs/image/kis_layer_utils.cpp:1444
+#: libs/image/kis_layer_utils.cpp:1449
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Матнни ўчириш"
 
-#: libs/image/kis_layer_utils.cpp:1692
+#: libs/image/kis_layer_utils.cpp:1697
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Ташкилот"
 
-#: libs/image/kis_layer_utils.cpp:1765
+#: libs/image/kis_layer_utils.cpp:1770
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Текислашни ўзгартириш"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Ҳужжатни яратиш"
 
-#: libs/image/kis_layer_utils.cpp:2009
+#: libs/image/kis_layer_utils.cpp:2014
 #, fuzzy
 #| msgid "Variable"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Ўзгарувчи"
 
-#: libs/image/kis_layer_utils.cpp:2010
+#: libs/image/kis_layer_utils.cpp:2015
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Ўзгарувчи"
 
-#: libs/image/kis_layer_utils.cpp:2089
+#: libs/image/kis_layer_utils.cpp:2094
 #, fuzzy
 #| msgid "Location:"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Манзили:"
 
-#: libs/image/kis_layer_utils.cpp:2113
+#: libs/image/kis_layer_utils.cpp:2118
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Намунани яратиш"
 
-#: libs/image/kis_layer_utils.cpp:2129
+#: libs/image/kis_layer_utils.cpp:2134
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Матнни қўйиш"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Тўлдириш мосламалари"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2386
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

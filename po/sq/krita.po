@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:49+0000\n"
+"POT-Creation-Date: 2024-10-08 01:47+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -17040,7 +17040,7 @@ msgid "Reselect"
 msgstr "&Përzgjidhni"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2040
+#: libs/image/kis_layer_utils.cpp:2045
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17562,66 +17562,66 @@ msgstr "Horizonti 1"
 msgid "Merged"
 msgstr "..."
 
-#: libs/image/kis_layer_utils.cpp:1444
+#: libs/image/kis_layer_utils.cpp:1449
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Objektivi:"
 
-#: libs/image/kis_layer_utils.cpp:1692
+#: libs/image/kis_layer_utils.cpp:1697
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Vijat"
 
-#: libs/image/kis_layer_utils.cpp:1765
+#: libs/image/kis_layer_utils.cpp:1770
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Përzgjedhje"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Përzgjedhje"
 
-#: libs/image/kis_layer_utils.cpp:2009
+#: libs/image/kis_layer_utils.cpp:2014
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Imazhi"
 
-#: libs/image/kis_layer_utils.cpp:2010
+#: libs/image/kis_layer_utils.cpp:2015
 #, fuzzy, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Shtresat"
 
-#: libs/image/kis_layer_utils.cpp:2089
+#: libs/image/kis_layer_utils.cpp:2094
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Përzgjedhje"
 
-#: libs/image/kis_layer_utils.cpp:2113
+#: libs/image/kis_layer_utils.cpp:2118
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Shtresat"
 
-#: libs/image/kis_layer_utils.cpp:2129
+#: libs/image/kis_layer_utils.cpp:2134
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Rrotullo Imazhin"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Teksti"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2386
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

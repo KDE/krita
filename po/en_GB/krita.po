@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:49+0000\n"
+"POT-Creation-Date: 2024-10-08 01:47+0000\n"
 "PO-Revision-Date: 2024-09-15 10:51+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -17041,7 +17041,7 @@ msgid "Reselect"
 msgstr "Reselect"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2040
+#: libs/image/kis_layer_utils.cpp:2045
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17548,58 +17548,58 @@ msgstr "Anti-aliasing"
 msgid "Merged"
 msgstr "Merged"
 
-#: libs/image/kis_layer_utils.cpp:1444
+#: libs/image/kis_layer_utils.cpp:1449
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Merge Down"
 
-#: libs/image/kis_layer_utils.cpp:1692
+#: libs/image/kis_layer_utils.cpp:1697
 #, kde-format
 msgid "Copy of"
 msgstr "Copy of"
 
-#: libs/image/kis_layer_utils.cpp:1765
+#: libs/image/kis_layer_utils.cpp:1770
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Change projection colour"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Merge Selected Nodes"
 
-#: libs/image/kis_layer_utils.cpp:2009
+#: libs/image/kis_layer_utils.cpp:2014
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "New From Visible"
 
-#: libs/image/kis_layer_utils.cpp:2010
+#: libs/image/kis_layer_utils.cpp:2015
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visible"
 
-#: libs/image/kis_layer_utils.cpp:2089
+#: libs/image/kis_layer_utils.cpp:2094
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Merge Selection Masks"
 
-#: libs/image/kis_layer_utils.cpp:2113
+#: libs/image/kis_layer_utils.cpp:2118
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flatten Layer"
 
-#: libs/image/kis_layer_utils.cpp:2129
+#: libs/image/kis_layer_utils.cpp:2134
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flatten Image"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Split Alpha into a Mask"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2386
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Convert to a Paint Layer"

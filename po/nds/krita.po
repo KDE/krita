@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:49+0000\n"
+"POT-Creation-Date: 2024-10-08 01:47+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -17430,7 +17430,7 @@ msgid "Reselect"
 msgstr "Nieg Köör"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2040
+#: libs/image/kis_layer_utils.cpp:2045
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17977,68 +17977,68 @@ msgstr "Kantstreken"
 msgid "Merged"
 msgstr "Tosamenföhrt koperen"
 
-#: libs/image/kis_layer_utils.cpp:1444
+#: libs/image/kis_layer_utils.cpp:1449
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Pünkt leddig maken"
 
-#: libs/image/kis_layer_utils.cpp:1692
+#: libs/image/kis_layer_utils.cpp:1697
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Koperen vun"
 
-#: libs/image/kis_layer_utils.cpp:1765
+#: libs/image/kis_layer_utils.cpp:1770
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Verbinnen ännern"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Utsöcht Klöör wegdoon"
 
-#: libs/image/kis_layer_utils.cpp:2009
+#: libs/image/kis_layer_utils.cpp:2014
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Profil"
 
-#: libs/image/kis_layer_utils.cpp:2010
+#: libs/image/kis_layer_utils.cpp:2015
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Sichtbor"
 
-#: libs/image/kis_layer_utils.cpp:2089
+#: libs/image/kis_layer_utils.cpp:2094
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Köörmask..."
 
-#: libs/image/kis_layer_utils.cpp:2113
+#: libs/image/kis_layer_utils.cpp:2118
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Laag glattmaken"
 
-#: libs/image/kis_layer_utils.cpp:2129
+#: libs/image/kis_layer_utils.cpp:2134
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Bild glattmaken"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alphaoptschonen"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2386
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

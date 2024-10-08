@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-04 01:49+0000\n"
+"POT-Creation-Date: 2024-10-08 01:47+0000\n"
 "PO-Revision-Date: 2024-09-26 10:22+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -17005,7 +17005,7 @@ msgid "Reselect"
 msgstr "Ponovno izberi"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2040
+#: libs/image/kis_layer_utils.cpp:2045
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17518,58 +17518,58 @@ msgstr "Glajenje robov"
 msgid "Merged"
 msgstr "Spojeno"
 
-#: libs/image/kis_layer_utils.cpp:1444
+#: libs/image/kis_layer_utils.cpp:1449
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Spoji s spodnjim"
 
-#: libs/image/kis_layer_utils.cpp:1692
+#: libs/image/kis_layer_utils.cpp:1697
 #, kde-format
 msgid "Copy of"
 msgstr "Kopija"
 
-#: libs/image/kis_layer_utils.cpp:1765
+#: libs/image/kis_layer_utils.cpp:1770
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Spremeni barvo projekcije"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Spoji izbrana vozlišča"
 
-#: libs/image/kis_layer_utils.cpp:2009
+#: libs/image/kis_layer_utils.cpp:2014
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Novo iz vidnega"
 
-#: libs/image/kis_layer_utils.cpp:2010
+#: libs/image/kis_layer_utils.cpp:2015
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Vidno"
 
-#: libs/image/kis_layer_utils.cpp:2089
+#: libs/image/kis_layer_utils.cpp:2094
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Spoji maske izbora"
 
-#: libs/image/kis_layer_utils.cpp:2113
+#: libs/image/kis_layer_utils.cpp:2118
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Splošči plast"
 
-#: libs/image/kis_layer_utils.cpp:2129
+#: libs/image/kis_layer_utils.cpp:2134
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Splošči sliko"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Razdeli alfo v masko"
 
-#: libs/image/kis_layer_utils.cpp:2381
+#: libs/image/kis_layer_utils.cpp:2386
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Pretvori v plast za slikanje"

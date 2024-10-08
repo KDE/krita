@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.7.1'
     }
 }
 
@@ -37,7 +37,7 @@ ext {
     qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
 }
 
-task configure() {
+tasks.register('configure') {
     doLast {
         if (abi == null && !project.hasProperty("abi")) {
             logger.error('ANDROID_ABI not specified using the default one instead: arm64-v8a')
@@ -51,7 +51,8 @@ task configure() {
     }
 }
 
-task writeConfig(type: WriteProperties) {
+tasks.register('writeConfig', WriteProperties) {
+    dependsOn('configure')
     outputFile = file("gradle.properties")
     def gradleProperties = new Properties()
     outputFile.withInputStream { gradleProperties.load(it) }
@@ -63,30 +64,34 @@ task writeConfig(type: WriteProperties) {
 
 // copy libs(plugins) which start with krita*.so and rename
 // them to start with `lib_`
-task copyLibs(type: Copy) {
+tasks.register('copyLibs', Copy) {
+    dependsOn('configure')
     from "$installPrefix/lib"
     into "libs/$abi"
-    rename ('^krita(.*).so$', 'lib_krita$1.so')
+    rename('^krita(.*).so$', 'lib_krita$1.so')
 }
 
 // copy MLT plugins and rename
 // them to start with `lib_`
-task copyMltPlugins(type: Copy) {
+tasks.register('copyMltPlugins', Copy) {
+    dependsOn('configure', 'copyLibs')
     from "$installPrefix/lib/mlt-7"
     into "libs/$abi"
-    rename ('^libmlt(.*).so$', 'lib_mltplugin_$1.so')
+    rename('^libmlt(.*).so$', 'lib_mltplugin_$1.so')
 }
 
-task copyFonts(type: Copy) {
-    from "$installPrefix/etc"
-    into 'assets/etc/'
-    include '**'
-}
-
-task copySDLJar(type: Copy) {
+tasks.register('copySDLJar', Copy) {
+    dependsOn('configure')
     from "$installPrefix/jar"
     into 'libs/'
     include 'SDL2Android.jar'
+}
+
+tasks.register('copyFonts', Copy) {
+    dependsOn('configure')
+    from "$installPrefix/etc"
+    into 'assets/etc/'
+    include '**'
 }
 
 /*
@@ -94,20 +99,23 @@ task copySDLJar(type: Copy) {
  * to be specific. That's why we copy manually and then delete the partial
  * one it creates
  */
-task copyAssets(type: Copy) {
+tasks.register('copyAssets', Copy) {
+    dependsOn('configure')
     from "$installPrefix/share/"
     into 'assets/'
     include '**'
 }
 
-task copyLocaleFiles(type: Copy) {
+tasks.register('copyLocaleFiles', Copy) {
+    dependsOn('configure', 'copyAssets')
     from "$installPrefix/share/locale"
     from "$installPrefix/translations"
     into 'assets/locale/'
     include '**'
 }
 
-task copyExtraMltFiles(type: Copy) {
+tasks.register('copyExtraMltFiles', Copy) {
+    dependsOn('configure', 'copyAssets')
     from "$installPrefix/share/mlt-7"
     into 'assets/mlt-7'
     include '**'
@@ -117,7 +125,8 @@ task copyExtraMltFiles(type: Copy) {
  * Remove "share" folder in assets. It is copied both manually and by
  * androiddeployqt(reason in copyAssets task).
  */
-task removeDuplicateAssets(type: Delete) {
+tasks.register('removeDuplicateAssets', Delete) {
+    dependsOn('configure', 'copyFonts', 'copyAssets', 'copyLocaleFiles', 'copyExtraMltFiles')
     delete "assets/share"
 }
 
@@ -126,7 +135,7 @@ def isPackagingAPK() {
 }
 
 android {
-    compileSdkVersion androidCompileSdkVersion.toInteger()
+    namespace = "org.krita"
 
     ndkPath ndkpath
 
@@ -170,15 +179,6 @@ android {
         }
     }
 
-    // This is needed because, gradle by default ignores hidden assets.
-    aaptOptions {
-        ignoreAssetsPattern "!.foajasoie"
-    }
-
-    lintOptions {
-        abortOnError false
-    }
-
     project.ext.constant = 5
 
     def versionMajor    = 5
@@ -193,6 +193,9 @@ android {
     def versionRelease  = 0
 
     defaultConfig {
+        compileSdk androidCompileSdkVersion.toInteger()
+        ndkVersion "27.2.12479018"
+
         targetSdkVersion 34
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
@@ -200,8 +203,21 @@ android {
         def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }
+    buildFeatures {
+        renderScript true
+        aidl true
+    }
 
-    preBuild.dependsOn(configure)
+    // This is needed because, gradle by default ignores hidden assets.
+    androidResources {
+        ignoreAssetsPattern '!.foajasoie'
+    }
+
+    lint {
+        abortOnError false
+    }
+
+
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
@@ -212,10 +228,13 @@ android {
     configure.finalizedBy(copySDLJar)
     configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
+
+    preBuild.dependsOn(configure)
+    preBuild.dependsOn(copyLibs, copyMltPlugins, copyFonts, copyAssets, copyLocaleFiles, copySDLJar, copyExtraMltFiles, removeDuplicateAssets)
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:6.0.1'
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'com.android.billingclient:billing:7.1.1'
+    implementation 'androidx.annotation:annotation:1.9.0'
     implementation files("libs/SDL2Android.jar")
 }

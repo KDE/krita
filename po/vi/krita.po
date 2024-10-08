@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 03:16+0000\n"
+"POT-Creation-Date: 2024-10-08 03:15+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -17227,7 +17227,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Nhập ảnh"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2025
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17503,67 +17503,67 @@ msgstr "Cắt ảnh"
 msgid "Merged"
 msgstr "xanh da trời"
 
-#: libs/image/kis_layer_utils.cpp:1438
+#: libs/image/kis_layer_utils.cpp:1443
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "tuỳ chọn"
 
-#: libs/image/kis_layer_utils.cpp:1686
+#: libs/image/kis_layer_utils.cpp:1691
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "xanh nước biển"
 
-#: libs/image/kis_layer_utils.cpp:1759
+#: libs/image/kis_layer_utils.cpp:1764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Thay đổi Liên hệ"
 
-#: libs/image/kis_layer_utils.cpp:1983
+#: libs/image/kis_layer_utils.cpp:1988
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Xoá Màu được chọn"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Tên:"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Nhìn thấy"
 
-#: libs/image/kis_layer_utils.cpp:2069
+#: libs/image/kis_layer_utils.cpp:2074
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Phóng Phần chọn"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2097
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Làm phẳng ảnh"
 
-#: libs/image/kis_layer_utils.cpp:2105
+#: libs/image/kis_layer_utils.cpp:2110
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Làm phẳng ảnh"
 
-#: libs/image/kis_layer_utils.cpp:2329
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Cấu hình Alpha"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

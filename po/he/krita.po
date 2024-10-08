@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 03:16+0000\n"
+"POT-Creation-Date: 2024-10-08 03:15+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -17138,7 +17138,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "ייצוא תמונה"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2025
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17408,66 +17408,66 @@ msgstr "שכבה לתמונה"
 msgid "Merged"
 msgstr "כחול"
 
-#: libs/image/kis_layer_utils.cpp:1438
+#: libs/image/kis_layer_utils.cpp:1443
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "אלפא"
 
-#: libs/image/kis_layer_utils.cpp:1686
+#: libs/image/kis_layer_utils.cpp:1691
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "ירוק"
 
-#: libs/image/kis_layer_utils.cpp:1759
+#: libs/image/kis_layer_utils.cpp:1764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "שינוי הזחה"
 
-#: libs/image/kis_layer_utils.cpp:1983
+#: libs/image/kis_layer_utils.cpp:1988
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "הזז בחירה"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "שם:"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "גלוי"
 
-#: libs/image/kis_layer_utils.cpp:2069
+#: libs/image/kis_layer_utils.cpp:2074
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "בחירה"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2097
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "שכפל תמונה"
 
-#: libs/image/kis_layer_utils.cpp:2105
+#: libs/image/kis_layer_utils.cpp:2110
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "שכפל תמונה"
 
-#: libs/image/kis_layer_utils.cpp:2329
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "אלפא"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 03:16+0000\n"
+"POT-Creation-Date: 2024-10-08 03:15+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -17262,7 +17262,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Import Imej"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2025
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17538,67 +17538,67 @@ msgstr "Ricik Imej"
 msgid "Merged"
 msgstr "Salin Merah"
 
-#: libs/image/kis_layer_utils.cpp:1438
+#: libs/image/kis_layer_utils.cpp:1443
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Topeng alfa"
 
-#: libs/image/kis_layer_utils.cpp:1686
+#: libs/image/kis_layer_utils.cpp:1691
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Salin Hijau"
 
-#: libs/image/kis_layer_utils.cpp:1759
+#: libs/image/kis_layer_utils.cpp:1764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Ubah Inden"
 
-#: libs/image/kis_layer_utils.cpp:1983
+#: libs/image/kis_layer_utils.cpp:1988
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Alih Keluar Segmen"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "&Profil:"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Dapat dilihat "
 
-#: libs/image/kis_layer_utils.cpp:2069
+#: libs/image/kis_layer_utils.cpp:2074
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Pemadam Pemilihan"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2097
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Imej Rata"
 
-#: libs/image/kis_layer_utils.cpp:2105
+#: libs/image/kis_layer_utils.cpp:2110
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Imej Rata"
 
-#: libs/image/kis_layer_utils.cpp:2329
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Topeng alfa"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

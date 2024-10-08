@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-09-26 03:16+0000\n"
+"POT-Creation-Date: 2024-10-08 03:15+0000\n"
 "PO-Revision-Date: 2024-08-17 23:11+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -17218,7 +17218,7 @@ msgstr "Zeharkatu"
 msgid "Imported Image"
 msgstr "Inportatutako irudia"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2020
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2025
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17471,58 +17471,58 @@ msgstr "Errorea"
 msgid "Merged"
 msgstr "Bateratuta"
 
-#: libs/image/kis_layer_utils.cpp:1438
+#: libs/image/kis_layer_utils.cpp:1443
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Bateratu beherako"
 
-#: libs/image/kis_layer_utils.cpp:1686
+#: libs/image/kis_layer_utils.cpp:1691
 #, kde-format
 msgid "Copy of"
 msgstr "Honen kopia,"
 
-#: libs/image/kis_layer_utils.cpp:1759
+#: libs/image/kis_layer_utils.cpp:1764
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Aldatu proiekzio-kolorea"
 
-#: libs/image/kis_layer_utils.cpp:1983
+#: libs/image/kis_layer_utils.cpp:1988
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Bateratu hautatutako nodoak"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Berria ikusgai dagoenetik abiatuta"
 
-#: libs/image/kis_layer_utils.cpp:1991
+#: libs/image/kis_layer_utils.cpp:1996
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Ikusgai"
 
-#: libs/image/kis_layer_utils.cpp:2069
+#: libs/image/kis_layer_utils.cpp:2074
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Bateratu hautapen maskarak"
 
-#: libs/image/kis_layer_utils.cpp:2092
+#: libs/image/kis_layer_utils.cpp:2097
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Berdindu geruza"
 
-#: libs/image/kis_layer_utils.cpp:2105
+#: libs/image/kis_layer_utils.cpp:2110
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Berdindu irudia"
 
-#: libs/image/kis_layer_utils.cpp:2329
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Zatitu alfa maskara batean"
 
-#: libs/image/kis_layer_utils.cpp:2355
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Bihurtu margo-geruza"

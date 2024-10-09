@@ -8,17 +8,28 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
-ComboBox {
+Button {
     id: familyCmb;
     wheelEnabled: true;
 
     //--- Model setup. ---//
-    property var sourceModel;
+
     property TagFilterProxyModelQmlWrapper modelWrapper : TagFilterProxyModelQmlWrapper{
-        sourceModel: sourceModel;
+        id: modelWrapperId;
     };
-    model: modelWrapper.model;
-    textRole: "name";
+    text: modelWrapper.resourceFilename;
+    property int highlightedIndex;
+    onClicked: {
+        if (familyCmbPopup.visible) {
+            familyCmbPopup.close();
+        } else {
+            familyCmbPopup.open();
+        }
+    }
+    signal activated();
+    onActivated: {
+        familyCmbPopup.close();
+    }
 
     //--- Delegate setup. ---//
     Component {
@@ -26,24 +37,32 @@ ComboBox {
         ItemDelegate {
             id: fontDelegateItem;
             required property var model;
-            property string fontName: modelWrapper.localizedNameForIndex(model.index, locales, model.name);
+            property string fontName: model.name;
+            /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
+            /// the metadata from the modelwrapper.
+            property var meta: familyCmb.modelWrapper.metadataForIndex(model.index);
             width: fontResourceView.listWidth;
             highlighted: familyCmb.highlightedIndex === model.index;
 
+            Component.onCompleted: {
+                fontName = familyCmb.modelWrapper.localizedNameForIndex(model.index, locales, model.name);
+            }
+
             contentItem: KoShapeQtQuickLabel {
                 id: fontFamilyDelegate;
-                property bool colorBitmap : model.metadata.color_bitmap;
-                property bool colorCLRV0 : model.metadata.color_clrv0;
-                property bool colorCLRV1 : model.metadata.color_clrv1;
-                property bool colorSVG : model.metadata.color_svg;
-                property bool isVariable : model.metadata.is_variable;
-                property int type : model.metadata.font_type;
+                property alias meta: fontDelegateItem.meta;
+                property bool colorBitmap : meta.color_bitmap;
+                property bool colorCLRV0 : meta.color_clrv0;
+                property bool colorCLRV1 : meta.color_clrv1;
+                property bool colorSVG : meta.color_svg;
+                property bool isVariable : meta.is_variable;
+                property int type : meta.font_type;
                 property string fontName: fontDelegateItem.fontName;
                 width: parent.width;
                 height: nameLabel.height * 5;
                 imageScale: 3;
                 imagePadding: nameLabel.height;
-                svgData: model.metadata.sample_svg;
+                svgData: meta.sample_svg;
                 foregroundColor: sysPalette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
 
@@ -104,12 +123,32 @@ ComboBox {
             background: Rectangle {
                 color: highlighted? familyCmb.palette.highlight:"transparent";
             }
+
+            MouseArea {
+                acceptedButtons: Qt.RightButton | Qt.LeftButton;
+                anchors.fill: parent;
+                hoverEnabled: true;
+                onClicked: {
+                    if (mouse.button === Qt.RightButton) {
+                        openContextMenu(mouse.x, mouse.y);
+                    } else {
+                        familyCmb.modelWrapper.currentIndex = fontDelegateItem.model.index;
+                        familyCmb.activated();
+                    }
+                }
+                onHoveredChanged: familyCmb.highlightedIndex = fontDelegateItem.model.index;
+
+                function openContextMenu(x, y) {
+                    tagActionsContextMenu.resourceIndex = fontDelegateItem.model.index;
+                    tagActionsContextMenu.popup()
+                }
+
+            }
         }
     }
-    delegate: fontDelegate;
 
     //--- Pop up setup ---//
-    popup: Popup {
+    Popup {
         id: familyCmbPopup;
         y: familyCmb.height - 1;
         x: familyCmb.width - width;
@@ -120,25 +159,22 @@ ComboBox {
         contentItem:
             ColumnLayout {
             id: fontResourceView;
-            fontModel: familyCmb.delegateModel;
-            tagModel: fontTagModel;
-            currentIndex: familyCmb.currentIndex;
             clip:true;
-            property var fontModel;
-            property var tagModel;
-            property alias currentIndex : view.currentIndex;
+            property alias fontModel : view.model;
+            property alias tagModel: tagFilter.model;
             property alias listWidth : view.width;
+            fontModel: familyCmb.modelWrapper.model;
+            tagModel: familyCmb.modelWrapper.tagModel;
 
             RowLayout {
                 id: tagAndConfig;
 
                 ComboBox {
                     id: tagFilter;
-                    model: fontResourceView.tagModel;
                     textRole: "display";
                     Layout.fillWidth: true;
-                    currentIndex: modelWrapper.currentTag;
-                    onActivated: modelWrapper.currentTag = currentIndex;
+                    currentIndex: familyCmb.modelWrapper.currentTag;
+                    onActivated: familyCmb.modelWrapper.currentTag = currentIndex;
                 }
 
                 Button {
@@ -171,6 +207,10 @@ ComboBox {
                         function updateResourceTaggedModel() {
                             resourceTaggedModel = modelWrapper.taggedResourceModel(tagActionsContextMenu.resourceIndex);
                         }
+                        function updateAndDismiss() {
+                            updateResourceTaggedModel();
+                            dismiss();
+                        }
 
                         modal: true;
                         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
@@ -187,15 +227,16 @@ ComboBox {
                                 model: tagActionsContextMenu.resourceTaggedModel;
                                 height: contentHeight;
                                 width: parent.width;
+
                                 delegate: ItemDelegate {
                                     width: tagAddView.width;
                                     text: modelData.name;
                                     visible: modelData.visible && !modelData.enabled;
                                     height: visible? implicitContentHeight: 0;
+
                                     onClicked: {
                                         modelWrapper.tagResource(modelData.value, tagActionsContextMenu.resourceIndex);
-                                        tagActionsContextMenu.updateResourceTaggedModel();
-                                        tagActionsContextMenu.close();
+                                        tagActionsContextMenu.updateAndDismiss();
                                     }
                                 }
                             }
@@ -212,8 +253,7 @@ ComboBox {
                                     onClicked:  {
                                         modelWrapper.addNewTag(newTagName.text, tagActionsContextMenu.resourceIndex);
                                         newTagName.text = "";
-                                        tagActionsContextMenu.updateResourceTaggedModel();
-                                        tagActionsContextMenu.dismiss();
+                                        tagActionsContextMenu.updateAndDismiss();
                                     }
                                 }
                             }
@@ -243,15 +283,13 @@ ComboBox {
                                     height: visible? implicitContentHeight: 0;
                                     onClicked: {
                                         modelWrapper.untagResource(modelData.value, tagActionsContextMenu.resourceIndex);
-                                        tagActionsContextMenu.updateResourceTaggedModel();
-                                        tagActionsContextMenu.dismiss()
+                                        tagActionsContextMenu.updateAndDismiss()
                                     }
                                 }
                             }
                         }
                     }
                 }
-
             }
             Frame {
                 Layout.minimumHeight: font.pixelSize*3;
@@ -262,7 +300,8 @@ ComboBox {
                 ListView {
                     anchors.fill: parent;
                     id: view;
-                    model: fontResourceView.fontModel;
+                    currentIndex: familyCmb.modelWrapper.currentIndex;
+                    delegate: fontDelegate;
                     ScrollBar.vertical: ScrollBar {
                     }
                 }
@@ -283,13 +322,8 @@ ComboBox {
                     checked: modelWrapper.searchInTag;
                 }
             }
-
-
         }
         palette: familyCmb.palette;
 
-
     }
-
-
 }

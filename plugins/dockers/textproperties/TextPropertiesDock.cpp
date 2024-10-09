@@ -19,16 +19,13 @@
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
 #include <KisStaticInitializer.h>
-#include <kis_signal_compressor.h>
 
 #include <KLocalizedContext>
 
 #include <KoResourcePaths.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
-#include <KisTagFilterResourceProxyModel.h>
 #include <KisTagModel.h>
-#include <KisTagResourceModel.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -45,199 +42,7 @@
 #include "FontStyleModel.h"
 #include "FontAxesModel.h"
 #include "KoShapeQtQuickLabel.h"
-
-/**
- * @brief The TagFilterProxyModelQmlWrapper class
- *
- * This class wraps around KisTagFilterResourceProxyModel, providing properties,
- * signal compressors and handling setting the source model.
- */
-class TagFilterProxyModelQmlWrapper : public QObject {
-    Q_OBJECT
-    Q_PROPERTY(QAbstractItemModel *model READ model NOTIFY modelChanged)
-    Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged)
-    Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
-    Q_PROPERTY(int currentTag READ currentTag WRITE tagActivated NOTIFY activeTagChanged)
-    Q_PROPERTY(bool searchInTag READ searchInTag WRITE setSearchInTag NOTIFY searchInTagChanged)
-public:
-    TagFilterProxyModelQmlWrapper(QObject *parent = nullptr): QObject(parent)
-      , m_tagFilterProxyModel(new KisTagFilterResourceProxyModel(ResourceType::FontFamilies, this))
-      , m_compressor(100, KisSignalCompressor::POSTPONE) {
-        m_tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
-        m_tagModel = new KisTagModel(ResourceType::FontFamilies, this);
-        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(setSearchTextOnModel()));
-    }
-
-    void tagActivated(const int &row) {
-        if (row == currentTag()) {
-            return;
-        }
-        QModelIndex idx = m_tagModel->index(row, 0);
-        if (idx.isValid()) {
-            m_tagFilterProxyModel->setTagFilter(m_tagModel->tagForIndex(idx));
-            emit activeTagChanged();
-            emit modelSortUpdated();
-        }
-    }
-    QString searchText() const {
-        return m_currentSearchText;
-    }
-    void setSearchText(const QString &text) {
-        if (m_currentSearchText == text) {
-            return;
-        }
-        m_currentSearchText = text;
-        emit searchTextChanged();
-        m_compressor.start();
-    }
-
-    QAbstractItemModel *model() {
-        return m_tagFilterProxyModel;
-    }
-
-    QAbstractItemModel *sourceModel() const {
-        return m_tagFilterProxyModel->sourceModel();
-    }
-    void setSourceModel(QAbstractItemModel *newSourceModel) {
-        if (newSourceModel != m_tagFilterProxyModel->sourceModel()) {
-            m_tagFilterProxyModel->setSourceModel(newSourceModel);
-            emit sourceModelChanged();
-            emit modelChanged();
-            emit modelSortUpdated();
-        }
-    }
-
-    int currentTag() const {
-        return m_tagModel->indexForTag(m_tagFilterProxyModel->currentTagFilter()).row();
-    }
-
-    void setSearchInTag(const bool &newSearchInTag) {
-        if (m_tagFilterProxyModel->filterInCurrentTag() != newSearchInTag) {
-            m_tagFilterProxyModel->setFilterInCurrentTag(newSearchInTag);
-            emit searchInTagChanged();
-            emit modelSortUpdated();
-        }
-    }
-
-    bool searchInTag() {
-        return m_tagFilterProxyModel->filterInCurrentTag();
-    }
-
-    Q_INVOKABLE void addNewTag(const QString &newTagName, const int &resourceIndex = -1) {
-        KisTagSP tagsp = m_tagModel->tagForUrl(newTagName);
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        if (tagsp.isNull()) {
-            QVector<KoResourceSP> vec;
-            tagsp = m_tagModel->addTag(newTagName, false, vec);
-
-        }
-        // TODO: figure out how to get a tag reactivated again, without doing too much code duplication :|
-        if (resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
-            m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
-        }
-
-    }
-
-    Q_INVOKABLE void tagResource(const int &tagIndex, const int &resourceIndex) {
-        QModelIndex idx = m_tagModel->index(tagIndex, 0);
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        KisTagSP tagsp;
-        if (idx.isValid()) {
-            tagsp = m_tagModel->tagForIndex(idx);
-        }
-        if (tagsp && resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
-            m_tagFilterProxyModel->tagResources(tagsp, {resourceId});
-        }
-    }
-
-    Q_INVOKABLE void untagResource(const int &tagIndex, const int &resourceIndex) {
-        QModelIndex idx = m_tagModel->index(tagIndex, 0);
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        KisTagSP tagsp;
-        if (idx.isValid()) {
-            tagsp = m_tagModel->tagForIndex(idx);
-        }
-        if (tagsp && resourceIdx.isValid()) {
-            int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
-            m_tagFilterProxyModel->untagResources(tagsp, {resourceId});
-        }
-    }
-
-    Q_INVOKABLE QString localizedNameForIndex(const int &resourceIndex, const QStringList &locales, const QString &fallBack = "") {
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        QString name = fallBack;
-        if (resourceIdx.isValid()) {
-            name = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Name).toString();
-            QMap<QString, QVariant> metadata = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
-            QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
-            Q_FOREACH(const QString locale, locales) {
-                if (localizedNames.keys().contains(locale)) {
-                    name = localizedNames.value(locale).toString();
-                    break;
-                }
-            }
-        }
-        return name;
-    }
-
-    Q_INVOKABLE QVariantList taggedResourceModel (const int &resourceIndex) const {
-        QVariantList taggedResourceModel;
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        KisTagSP tagsp;
-        for (int i = 0; i< m_tagModel->rowCount(); i++) {
-            QModelIndex idx = m_tagModel->index(i, 0);
-            tagsp = m_tagModel->tagForIndex(idx);
-            bool visible = tagsp->id() >= 0;
-            bool enabled = false;
-            if (resourceIdx.isValid()) {
-                int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
-                enabled = m_tagFilterProxyModel->isResourceTagged(tagsp, resourceId) > 0 && visible;
-            }
-            QVariantMap tag {{"name", tagsp->name()}, {"value", i}, {"visible", visible}, {"enabled", enabled} };
-            taggedResourceModel.append(tag);
-        }
-        return taggedResourceModel;
-    }
-
-    Q_INVOKABLE bool showResourceTagged(const int &tagIndex, const int &resourceIndex) const {
-        QModelIndex idx = m_tagModel->index(tagIndex, 0);
-        QModelIndex resourceIdx = m_tagFilterProxyModel->index(resourceIndex, 0);
-        KisTagSP tagsp;
-        if (idx.isValid()) {
-            tagsp = m_tagModel->tagForIndex(idx);
-        }
-        if (tagsp) {
-            if (tagsp->id() < 0) return false;
-            return true;
-            if (resourceIdx.isValid()) {
-                int resourceId = m_tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Id).toInt();
-                return m_tagFilterProxyModel->isResourceTagged(tagsp, resourceId);
-            }
-        }
-        return false;
-    }
-
-Q_SIGNALS:
-    void sourceModelChanged();
-    void modelChanged();
-    void searchTextChanged();
-    void activeTagChanged();
-    void searchInTagChanged();
-    void modelSortUpdated();
-
-private Q_SLOTS:
-    void setSearchTextOnModel() {
-        m_tagFilterProxyModel->setSearchText(m_currentSearchText);
-        emit modelSortUpdated();
-    }
-private:
-    KisTagFilterResourceProxyModel *m_tagFilterProxyModel {nullptr};
-    KisTagModel *m_tagModel{nullptr};
-    KisSignalCompressor m_compressor;
-    QString m_currentSearchText;
-};
+#include "TagFilterProxyModelQmlWrapper.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -291,7 +96,6 @@ struct TextPropertiesDock::Private
     FontStyleModel stylesModel;
     FontAxesModel axesModel;
     KisAllResourcesModel *fontModel{nullptr};
-    KisTagModel *tagModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -321,7 +125,6 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setMinimumHeight(100);
 
     d->fontModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
-    d->tagModel = new KisTagModel(ResourceType::FontFamilies);
 
     QList<QLocale> locales;
     QStringList wellFormedBCPNames;
@@ -337,7 +140,6 @@ TextPropertiesDock::TextPropertiesDock()
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontModel));
-    m_quickWidget->rootContext()->setContextProperty("fontTagModel", QVariant::fromValue(d->tagModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));

@@ -52,21 +52,17 @@ CollapsibleGroupProperty {
         }
         FontResourceDropdown {
             id: mainFamilyCmb;
-            sourceModel: fontFamilyModel;
+            modelWrapper.sourceModel: fontFamilyModel;
             Layout.fillWidth: true;
             onActivated: {
                 if (fontFamilies.length >0) {
-                    fontFamilies[0] = currentText;
+                    fontFamilies[0] = text;
                 } else {
-                    fontFamilies = [ currentText ];
+                    fontFamilies = [ text ];
                 }
             }
-            Connections {
-                target: mainFamilyCmb.modelWrapper;
-                function onModelSortUpdated() { mainFamilyCmb.updateCurrentIndex() }
-            }
             function updateCurrentIndex() {
-                currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[0]))
+                modelWrapper.setResourceToFileName(mainWindow.wwsFontFamilyName(fontFamilies[0]))
             }
         }
 
@@ -101,10 +97,10 @@ CollapsibleGroupProperty {
                     property int dIndex: index;
                     FontResourceDropdown {
                         id: fontCmb;
-                        sourceModel: fontFamilyModel;
+                        modelWrapper.sourceModel: fontFamilyModel;
                         Layout.fillWidth: true;
                         onActivated: {
-                            fontFamilies[fontListDelegate.dIndex] = currentText;
+                            fontFamilies[fontListDelegate.dIndex] = text;
                         }
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
@@ -112,12 +108,8 @@ CollapsibleGroupProperty {
                             }
                             updateCurrentIndex();
                         }
-                        Connections {
-                            target: fontCmb.modelWrapper;
-                            function onModelSortUpdated() { fontCmb.updateCurrentIndex() }
-                        }
                         function updateCurrentIndex() {
-                            currentIndex = find(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]))
+                            modelWrapper.setResourceToFileName(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]))
                         }
                     }
                     ToolButton {

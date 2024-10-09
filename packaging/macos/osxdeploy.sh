@@ -471,6 +471,57 @@ fix_python_framework() {
     find "${PythonFrameworkBase}/Versions/Current/lib/python${PY_VERSION}/site-packages/PyQt5" -type f -name "*.so" | delete_install_rpath
 }
 
+plistbuddy_add() {
+    local plistbuddy="/usr/libexec/PlistBuddy"
+    local filename="${1}"
+    local key="${2}"
+    local type="${3}"
+    local value="${4}"
+
+    ${plistbuddy} "${filename}" -c "Add:${key} ${type} ${value}"
+}
+
+krita_create_PyKrita() {
+    local plistbuddy="/usr/libexec/PlistBuddy"
+    local fmwk_name="PyKrita"
+    local fmwk_version=${KRITA_VERSION%%-*}
+
+    # asume we are not in frameworks
+    local old_pwd=$(pwd)
+    cd ${KRITA_DMG}/krita.app/Contents/Frameworks/
+
+    mkdir ${fmwk_name}.framework
+    mkdir ${fmwk_name}.framework/Versions
+
+    cd ${fmwk_name}.framework/Versions
+    mkdir ${fmwk_version}
+    ln -s ${fmwk_version} Current
+
+    cd ${fmwk_version}
+    mkdir Resources lib
+
+    rsync -priul ${KIS_INSTALL_DIR}/lib/krita-python-libs/ lib
+
+    mv lib/PyKrita/krita.so ${fmwk_name}
+    ln -s ../../${fmwk_name} lib/PyKrita/krita.so
+
+    cd Resources
+    plistbuddy_add Info.plist CFBundleExecutable string ${fmwk_name}
+    plistbuddy_add Info.plist CFBundleIdentifier string org.krita.${fmwk_name}
+    plistbuddy_add Info.plist CFBundlePackageType string FMWK
+    plistbuddy_add Info.plist CFBundleShortVersionString string ${fmwk_version}
+    plistbuddy_add Info.plist CFBundleVersion string ${fmwk_version}
+
+    cd ../../..
+    ln -s Versions/Current/${fmwk_name} ${fmwk_name}
+    ln -s Versions/Current/Resources Resources
+
+    cd ../
+    ln -s ./${fmwk_name}.framework/Versions/Current/lib/ krita-python-libs
+
+    cd ${old_pwd}
+}
+
 # Checks for macdeployqt
 # If not present attempts to install
 # If it fails shows an informative message
@@ -643,7 +694,8 @@ krita_deploy () {
     # It is best that macdeployqt does not modify Python.framework
     # folders with period in name are treated as Frameworks for codesign
     rsync -prul ${KIS_INSTALL_DIR}/lib/Python.framework ${KRITA_DMG}/krita.app/Contents/Frameworks/
-    rsync -prul ${KIS_INSTALL_DIR}/lib/krita-python-libs ${KRITA_DMG}/krita.app/Contents/Frameworks/
+    krita_create_PyKrita
+
     # change perms on Python to allow header change
     chmod +w ${KRITA_DMG}/krita.app/Contents/Frameworks/Python.framework/Python
 

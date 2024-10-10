@@ -63,7 +63,7 @@ void KisBaseRectsWalker::addCloneSourceRegenerationJobs()
         for (auto it = prepareRegion.begin(); it != prepareRegion.end(); ++it) {
             pushJob(source->projectionLeaf(), N_EXTRA, *it, KisRenderPassFlag::NoTransformMaskUpdates);
             visitSubtreeTopToBottom(source->projectionLeaf(),
-                                    SkipNonRenderableNodes,
+                                    SkipNonRenderableNodes | DontNotifyClones,
                                     KisRenderPassFlag::NoTransformMaskUpdates,
                                     QRect());
         }
@@ -89,11 +89,13 @@ void KisBaseRectsWalker::visitSubtreeTopToBottom(KisProjectionLeafSP startWith, 
             calculateNodePosition(currentLeaf);
         registerNeedRect(currentLeaf, pos, renderFlags, cropRect);
 
-        /**
-         * we didn't have a change-rect pass, so we should
-         * add clone notifications manually
-         */
-        registerCloneNotification(currentLeaf->node(), pos);
+        if (!flags.testFlag(DontNotifyClones)) {
+            /**
+             * we didn't have a change-rect pass, so we should
+             * add clone notifications manually
+             */
+            registerCloneNotification(currentLeaf->node(), pos);
+        }
 
         currentLeaf = currentLeaf->prevSibling();
     }

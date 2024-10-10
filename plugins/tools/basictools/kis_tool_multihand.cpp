@@ -67,7 +67,7 @@ void KisToolMultihand::beginPrimaryAction(KoPointerEvent *event)
         requestUpdateOutline(event->point, 0);
         updateCanvas();
     }
-    else if (m_addSubbrushesMode){
+    else if (m_addSubbrushesMode &&  m_transformMode == COPYTRANSLATE){
         QPointF newPoint = convertToPixelCoord(event->point);
         m_subbrOriginalLocations << newPoint;
         requestUpdateOutline(event->point, 0);
@@ -111,8 +111,9 @@ void KisToolMultihand::endPrimaryAction(KoPointerEvent *event)
 
 void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE ||
-         m_transformMode != COPYTRANSLATEINTERVALS || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) ||
+            m_transformMode != COPYTRANSLATE ||
+            !m_addSubbrushesMode) {
         KisToolBrush::beginAlternateAction(event, action);
         return;
     }
@@ -124,8 +125,9 @@ void KisToolMultihand::beginAlternateAction(KoPointerEvent* event, AlternateActi
 
 void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE ||
-         m_transformMode != COPYTRANSLATEINTERVALS || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) ||
+            m_transformMode != COPYTRANSLATE ||
+            !m_addSubbrushesMode) {
         KisToolBrush::continueAlternateAction(event, action);
         return;
     }
@@ -138,8 +140,9 @@ void KisToolMultihand::continueAlternateAction(KoPointerEvent* event, AlternateA
 
 void KisToolMultihand::endAlternateAction(KoPointerEvent* event, AlternateAction action)
 {
-    if ((action != ChangeSize && action != ChangeSizeSnap) || m_transformMode != COPYTRANSLATE ||
-         m_transformMode != COPYTRANSLATEINTERVALS || !m_addSubbrushesMode) {
+    if ((action != ChangeSize && action != ChangeSizeSnap) ||
+            m_transformMode != COPYTRANSLATE ||
+            !m_addSubbrushesMode) {
         KisToolBrush::endAlternateAction(event, action);
         return;
     }
@@ -616,7 +619,7 @@ void KisToolMultihand::slotSetTransformMode(int index)
     vis = index == COPYTRANSLATE;
     customUI->subbrushLabel->setVisible(vis);
     customUI->addSubbrushButton->setVisible(vis);
-    customUI->addSubbrushButton->setChecked(false);
+    customUI->addSubbrushButton->setChecked(m_addSubbrushesMode);
     customUI->removeSubbrushButton->setVisible(vis);
 
     vis = index == COPYTRANSLATEINTERVALS;

@@ -31,7 +31,8 @@ class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
     Q_OBJECT
 
 public:
-    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText);
+    KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText,
+                    bool useSavedSmoothing = true);
     ~KisToolFreehand() override;
     int flags() const override;
     void mouseMoveEvent(KoPointerEvent *event) override;

@@ -34,6 +34,9 @@ private Q_SLOTS:
 
     void testWithSourceUnderTransformMask();
     void testWithSourceUnderTwoTransformMasks();
+
+    void testCloneOfGroupWithClones_data();
+    void testCloneOfGroupWithClones();
 };
 
 #endif

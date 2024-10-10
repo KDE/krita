@@ -4,8 +4,6 @@ add_definitions(-DQT_NO_KEYWORDS)
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 set(SOURCES
-    plugin.cpp
-    pyqtpluginsettings.cpp
     utilities.cpp
     PykritaModule.cpp
     PythonPluginManager.cpp
@@ -17,18 +15,9 @@ ki18n_wrap_ui(SOURCES
     manager.ui
 )
 
-kis_add_library(kritapykrita MODULE ${SOURCES})
 kis_add_library(pykrita STATIC ${SOURCES})
 
-target_include_directories(kritapykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
 target_include_directories(pykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
-
-target_link_libraries(
-    kritapykrita
-    ${PYTHON_LIBRARY}
-    kritaui
-    kritalibkis
-  )
 
 target_link_libraries(
     pykrita
@@ -37,14 +26,22 @@ target_link_libraries(
     kritalibkis
   )
 
+kis_add_library(kritapykrita MODULE
+    plugin.cpp
+    pyqtpluginsettings.cpp
+  )
+
+target_link_libraries(
+    kritapykrita
+    pykrita
+  )
+
 if (MINGW)
-    target_compile_definitions(kritapykrita PRIVATE _hypot=hypot)
     target_compile_definitions(pykrita PRIVATE _hypot=hypot)
 endif()
 if (WIN32)
     # Banish Python 3.8 from mucking up Boost.Assert use of snprintf.
     # https://github.com/boostorg/system/issues/32
-    target_compile_definitions(kritapykrita PRIVATE HAVE_SNPRINTF=1)
     target_compile_definitions(pykrita PRIVATE HAVE_SNPRINTF=1)
 endif (WIN32)
 

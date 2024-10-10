@@ -244,7 +244,7 @@ struct RgbPixelWrapper
     }
 
     inline bool checkMultipliedColorsConsistent() const {
-        return !(std::abs(pixel.a) < alphaEpsilon<T>() &&
+        return !(std::abs(pixel.a) <= alphaEpsilon<T>() &&
                  (!qFuzzyIsNull(pixel.r) ||
                   !qFuzzyIsNull(pixel.g) ||
                   !qFuzzyIsNull(pixel.b)));
@@ -284,7 +284,7 @@ struct GrayPixelWrapper
     }
 
     inline bool checkMultipliedColorsConsistent() const {
-        return !(std::abs(pixel.alpha) < alphaEpsilon<T>() &&
+        return !(std::abs(pixel.alpha) <= alphaEpsilon<T>() &&
                  !qFuzzyIsNull(pixel.gray));
     }
 
@@ -349,7 +349,7 @@ void multiplyAlpha(Pixel *pixel)
     if (alphaPos >= 0) {
         T alpha = pixel->data[alphaPos];
 
-        if (alpha > 0.0) {
+        if (alpha > alphaEpsilon<T>()) {
             for (int i = 0; i < size; ++i) {
                 if (i != alphaPos) {
                     pixel->data[i] *= alpha;
@@ -357,6 +357,10 @@ void multiplyAlpha(Pixel *pixel)
             }
 
             pixel->data[alphaPos] = alpha;
+        } else {
+            for (int i = 0; i < size; ++i) {
+                pixel->data[i] = 0;
+            }
         }
     }
 }

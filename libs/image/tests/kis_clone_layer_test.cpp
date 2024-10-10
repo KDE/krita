@@ -778,4 +778,88 @@ void KisCloneLayerTest::testWithSourceUnderTwoTransformMasks()
         "20_final"));
 }
 
+#include <kis_filter_registry.h>
+#include <kis_filter_configuration.h>
+#include <kis_filter_mask.h>
+#include <KisGlobalResourcesInterface.h>
+
+void KisCloneLayerTest::testCloneOfGroupWithClones_data()
+{
+    QTest::addColumn<bool>("useBlurFilter");
+    QTest::addRow("no_blur") << false;
+    QTest::addRow("with_blur") << true;
+}
+
+void KisCloneLayerTest::testCloneOfGroupWithClones()
+{
+    QFETCH(bool, useBlurFilter);
+
+    /*
+      +-------------------+
+      |root               |
+      |  clone_of_g1 ---+ |
+      |    blur_1       | |
+      |                 | |
+      |  group_1    <---+ |
+      |                   |
+      |    clone_of_p1 -+ |
+      |    paint_1  <---+ |
+      +-------------------+
+     */
+
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisLayerSP groupLayer1 = new KisGroupLayer(image, "group_1", OPACITY_OPAQUE_U8);
+    image->addNode(groupLayer1, image->root());
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(QRect(10,10,100,100), KoColor( Qt::white, colorSpace));
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint_1", OPACITY_OPAQUE_U8, device1);
+    image->addNode(paintLayer1, groupLayer1);
+
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_p1", OPACITY_OPAQUE_U8);
+    cloneLayer1->setX(10);
+    cloneLayer1->setY(10);
+    image->addNode(cloneLayer1, groupLayer1);
+
+    KisLayerSP cloneLayer2 = new KisCloneLayer(groupLayer1, image, "clone_of_g1", 200);
+    cloneLayer2->setX(-5);
+    cloneLayer2->setY(-5);
+    cloneLayer2->setCompositeOpId(COMPOSITE_EXCLUSION);
+    image->addNode(cloneLayer2, image->root());
+
+
+    if (useBlurFilter) {
+        // add a filter mask to cause out-of-the-bounds updates
+
+        KisFilterSP filter = KisFilterRegistry::instance()->value("blur");
+        KIS_ASSERT(filter);
+
+        KisFilterConfigurationSP configuration1 = filter->defaultConfiguration(KisGlobalResourcesInterface::instance());
+        configuration1->setProperty("halfWidth", 7);
+        configuration1->setProperty("halfHeight", 7);
+
+        KisFilterMaskSP filterMask1 = new KisFilterMask(image, "blur_1");
+        filterMask1->setFilter(configuration1->cloneWithResourcesSnapshot());
+
+        image->addNode(filterMask1, cloneLayer2);
+    }
+
+    image->initialRefreshGraph();
+    QTest::qWait(50);
+    image->waitForDone();
+
+    /**
+     * If the image is successfully renderred and **not** stuck in the infinite
+     * loop in the clone layers triggering each other, then the test is passed.
+     */
+
+    QVERIFY(TestUtil::checkQImage(
+        image->projection()->convertToQImage(nullptr, image->bounds()),
+        "clone_layer_test",
+        QString("clone_of_group_with_clones_%1").arg(QTest::currentDataTag()),
+        "00_initial"));
+}
+
 KISTEST_MAIN(KisCloneLayerTest)

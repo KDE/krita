@@ -110,6 +110,7 @@ public:
         None = 0x0,
         SkipNonRenderableNodes = 0x1,
         NoFilthyMode = 0x2,
+        DontNotifyClones = 0x4
     };
 
     Q_DECLARE_FLAGS(SubtreeVisitFlags, SubtreeVisitFlag);

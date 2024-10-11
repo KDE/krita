@@ -108,7 +108,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
     return false;
 }
 
-QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc)
+QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc, bool saveLayerOffset)
 {
     QDomElement element = doc.createElement(LAYER);
     saveLayer(element, PAINT_LAYER, layer);
@@ -118,21 +118,33 @@ QDomElement KisSaveXmlVisitor::savePaintLayerAttributes(KisPaintLayer *layer, QD
     element.setAttribute(ONION_SKIN_ENABLED, layer->onionSkinEnabled());
     element.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
 
+    if (!saveLayerOffset) {
+        element.removeAttribute(X);
+        element.removeAttribute(Y);
+    }
+
     return element;
 }
 
-void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer)
+void KisSaveXmlVisitor::loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer, bool loadLayerOffset)
 {
-    loadLayerAttributes(el, layer);
+    QDomElement copy = el;
 
-    if (el.hasAttribute(CHANNEL_LOCK_FLAGS)) {
-        layer->setChannelLockFlags(stringToFlags(el.attribute(CHANNEL_LOCK_FLAGS)));
+    if (!loadLayerOffset) {
+        copy.removeAttribute(X);
+        copy.removeAttribute(Y);
+    }
+
+    loadLayerAttributes(copy, layer);
+
+    if (copy.hasAttribute(CHANNEL_LOCK_FLAGS)) {
+        layer->setChannelLockFlags(stringToFlags(copy.attribute(CHANNEL_LOCK_FLAGS)));
     }
 }
 
 bool KisSaveXmlVisitor::visit(KisPaintLayer *layer)
 {
-    QDomElement layerElement = savePaintLayerAttributes(layer, m_doc);
+    QDomElement layerElement = savePaintLayerAttributes(layer, m_doc, true);
     m_elem.appendChild(layerElement);
     m_count++;
     return saveMasks(layer, layerElement);

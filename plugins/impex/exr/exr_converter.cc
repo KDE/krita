@@ -1358,7 +1358,12 @@ QString EXRConverter::Private::fetchExtraLayersInfo(QList<ExrPaintLayerSaveInfo>
         ExrPaintLayerSaveInfo &info = informationObjects[i];
         quint32 unused;
         KisSaveXmlVisitor visitor(doc, rootElement, unused, QString(), false);
-        QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc);
+
+        // EXR data is saved without the offset, saving code uses normal iterators
+        // that don't know about the layer offset, hence passing `false` for saving
+        // the offsets
+        QDomElement el = visitor.savePaintLayerAttributes(info.layer.data(), doc, false);
+
         // cut the ending '.'
         QString strippedName = info.name.left(info.name.size() - 1);
 

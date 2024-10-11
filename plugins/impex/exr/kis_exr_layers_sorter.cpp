@@ -94,7 +94,17 @@ void KisExrLayersSorter::Private::processLayers(KisNodeSP root)
         nodeToOrderingMap.insert(root, fetchMapValueLazy(pathToOrderingMap, path));
 
         if (KisPaintLayer *paintLayer = dynamic_cast<KisPaintLayer*>(root.data())) {
-            KisSaveXmlVisitor::loadPaintLayerAttributes(pathToElementMap[path], paintLayer);
+            QDomElement el = pathToElementMap[path];
+
+            /**
+             * In older files (before Krita 5.2.7) we used to save the layer offset
+             * into the XML metadata, while loading the pixel data at the origin.
+             * Since 5.2.7 we stopped saving offsets (we save null instead of them),
+             * we let's just make sure we don't load garbage from older files).
+             *
+             * Hence, we pass `false` for loading the offset
+             */
+            KisSaveXmlVisitor::loadPaintLayerAttributes(el, paintLayer, false);
         }
     }
 

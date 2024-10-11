@@ -52,10 +52,10 @@ public:
     }
 
 public:
-    QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc);
+    QDomElement savePaintLayerAttributes(KisPaintLayer *layer, QDomDocument &doc, bool saveLayerOffset);
 
     // used by EXR to save properties of Krita layers inside .exr
-    static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer);
+    static void loadPaintLayerAttributes(const QDomElement &el, KisPaintLayer *layer, bool loadLayerOffset);
 
 private:
     static void loadLayerAttributes(const QDomElement &el, KisLayer *layer);

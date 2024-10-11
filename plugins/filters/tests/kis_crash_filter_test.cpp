@@ -17,6 +17,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <simpletest.h>
 #include <testing_timed_default_bounds.h>
+#include <KisPortingUtils.h>
 
 bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
 {
@@ -35,12 +36,12 @@ bool KisCrashFilterTest::applyFilter(const KoColorSpace * cs,  KisFilterSP f)
         dbgKrita << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        KisGlobal::setUtf8OnStream(in);
+        KisPortingUtils::setUtf8OnStream(in);
         s = in.readAll();
         kfc->fromXML(s);
     }

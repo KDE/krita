@@ -7,7 +7,7 @@
 #include "WGColorPreviewToolTip.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFile>
 #include <QScreen>
 #include <QPainter>
@@ -41,7 +41,7 @@ void WGColorPreviewToolTip::updatePosition(const QWidget *focus)
     }
 
     QPoint parentPos = parent->mapToGlobal(QPoint(0,0));
-    const QRect availRect = QApplication::desktop()->availableGeometry(this);
+    const QRect availRect = this->screen()->availableGeometry();
     QPoint targetPos;
     if (parentPos.x() - width() > availRect.x()) {
         targetPos =  QPoint(parentPos.x() - width(), parentPos.y());

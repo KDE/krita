@@ -12,7 +12,7 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFrame>
 #include <QLabel>
 #include <QButtonGroup>
@@ -216,7 +216,7 @@ void KisWidgetChooser::showPopupWidget()
     QRect popupRect(QFrame::mapToGlobal(QPoint(-1, QFrame::height())), popSize);
 
     // Get the available geometry of the screen which contains this KisPopupButton
-    QRect screenRect = QApplication::desktop()->availableGeometry(this);
+    QRect screenRect = this->screen()->availableGeometry();
 
     // Make sure the popup is not drawn outside the screen area
     if(popupRect.right() > screenRect.right())

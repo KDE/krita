@@ -12,17 +12,20 @@
 #include <KritaVersionWrapper.h>
 #include <QSysInfo>
 #include <kis_image_config.h>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QClipboard>
 #include <QThread>
 #include <QFile>
 #include <QFileInfo>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QScreen>
+
 #include <KoFileDialog.h>
 #include <QMessageBox>
 
-#include <QScreen>
+
+#include <KisPortingUtils.h>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -87,7 +90,7 @@ void DlgBugInfo::saveToFile()
         }
 
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         QString originalLogFileName = originalFileName();
         if (originalLogFileName.isEmpty() && QFileInfo(originalLogFileName).exists()) {
             QFile src(originalLogFileName);

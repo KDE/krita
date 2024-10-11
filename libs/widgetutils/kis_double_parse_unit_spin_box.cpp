@@ -13,6 +13,9 @@
 #include <QMenu>
 #include <QAction>
 #include <QtMath>
+#include <QRegExp>
+#include <QString>
+#include <QActionGroup>
 
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
 {
@@ -114,9 +117,9 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
     double newStep;
 
     if (oldUnitManager == 0 ||
-        oldUnitManager &&
+        (oldUnitManager &&
         (d->unitManager->getApparentUnitSymbol() != oldUnitManager->getApparentUnitSymbol() ||
-         d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType())) {
+         d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()))) {
 
         if (oldUnitManager && d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
             //dimension is the same, calculate the new value

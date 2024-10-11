@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QCloseEvent>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDockWidget>
 #include <QLayout>
 #include <QMenuBar>

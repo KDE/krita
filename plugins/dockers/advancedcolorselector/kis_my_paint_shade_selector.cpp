@@ -18,7 +18,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QtGlobal>
 #include <QTimer>
 

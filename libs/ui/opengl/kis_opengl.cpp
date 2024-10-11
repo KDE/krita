@@ -14,7 +14,7 @@
 #include <QOpenGLFunctions>
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QPixmapCache>
 
 #include <QDir>

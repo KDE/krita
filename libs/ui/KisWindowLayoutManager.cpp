@@ -7,7 +7,7 @@
 #include "KisWindowLayoutManager.h"
 
 #include <QWidget>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QScreen>
 
 #include <kconfiggroup.h>
@@ -120,8 +120,8 @@ KisWindowLayoutManager::KisWindowLayoutManager()
             SIGNAL(focusChanged(QWidget*,QWidget*)),
             this, SLOT(slotFocusChanged(QWidget*,QWidget*)));
 
-    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(slotScreensChanged()));
-    connect(QApplication::desktop(), SIGNAL(screenCountChanged(int)), this, SLOT(slotScreensChanged()));
+    connect(qGuiApp, SIGNAL(screenAdded(QScreen*)), this, SLOT(slotScreensChanged()));
+    connect(qGuiApp, SIGNAL(screenRemoved(QScreen*)), this, SLOT(slotScreensChanged()));
 }
 
 KisWindowLayoutManager::~KisWindowLayoutManager() {
@@ -228,4 +228,9 @@ void KisWindowLayoutManager::slotScreensChanged()
             }
         }
     }
+
+    Q_FOREACH(QScreen *screen, screens) {
+        connect(screen, SIGNAL(geometryChanged(QRect)), this, SLOT(slotScreensChanged()), Qt::UniqueConnection);
+    }
+
 }

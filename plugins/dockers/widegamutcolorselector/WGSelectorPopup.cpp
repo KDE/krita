@@ -8,7 +8,7 @@
 #include <QApplication>
 #include <QBoxLayout>
 #include <QCursor>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QPainter>
 #include <QScreen>
 
@@ -53,11 +53,7 @@ WGSelectorWidgetBase *WGSelectorPopup::selectorWidget() const
 void WGSelectorPopup::slotShowPopup()
 {
     QPoint cursorPos = QCursor::pos();
-    QScreen *activeScreen = 0;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    activeScreen = QGuiApplication::screenAt(cursorPos);
-#endif
-    const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
+    const QRect availRect = this->screen()->availableGeometry();
 
     QRect popupRect(geometry());
     QPoint offset = m_selectorWidget ? m_selectorWidget->pos() + m_selectorWidget->popupOffset()

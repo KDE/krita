@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QDate>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMenu>
 #include <QMenuBar>
 #include <QStatusBar>

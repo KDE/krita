@@ -12,7 +12,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QComboBox>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFile>
 #include <QMimeData>
 #include <QPushButton>

@@ -30,6 +30,8 @@
 #include <kis_undo_stores.h>
 #include <testui.h>
 
+#include <KisPortingUtils.h>
+
 void TestDocument::testSetColorSpace()
 {
     QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
@@ -366,7 +368,7 @@ void TestDocument::testAnnotations()
     QBuffer buf;
     buf.open(QBuffer::WriteOnly);
     QTextStream in(&buf);
-    KisGlobal::setUtf8OnStream(in);
+    KisPortingUtils::setUtf8OnStream(in);
     in << "AnnotationTest";
     buf.close();
 

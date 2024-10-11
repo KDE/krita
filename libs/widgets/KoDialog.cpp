@@ -23,7 +23,7 @@
 #include <QWhatsThis>
 #include <QDebug>
 #include <QPushButton>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QTimer>
 
 #include <kconfig.h>

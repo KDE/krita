@@ -20,7 +20,7 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>
-#include <QDesktopWidget>
+#include <QScreen>
 
 
 #include <klocalizedstring.h>

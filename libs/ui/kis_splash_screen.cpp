@@ -7,7 +7,7 @@
 #include "kis_splash_screen.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QGraphicsDropShadowEffect>
 #include <QPixmap>
 #include <QPainter>

@@ -141,7 +141,7 @@ private Q_SLOTS:
                 if (shouldSpitWarning) {
                     QString message;
                     QTextStream log(&message);
-                    KisGlobal::setUtf8OnStream(log);
+                    KisPortingUtils::setUtf8OnStream(log);
 
                     log << "WARNING: couldn't reconnect to a removed file layer's file (" << path << "). File is not available for " << absenceTimeMSec / 1000 << " seconds";
 

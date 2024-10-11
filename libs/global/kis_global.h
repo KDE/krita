@@ -15,8 +15,6 @@
 
 #include <QPoint>
 #include <QPointF>
-#include <QIODevice>
-#include <QTextStream>
 
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 #include <QStringConverter>
@@ -318,18 +316,6 @@ inline T nextPowerOfTwo(T v)
     return static_cast<T>(qNextPowerOfTwo(static_cast<common_type>(v)));
 }
 
-namespace KisGlobal
-{
-
-inline void setUtf8OnStream(QTextStream &stream)
-{
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    stream.setCodec("UTF-8");
-#else
-     stream.setEncoding(QStringConverter::Utf8);
-#endif
-}
-}
 
 
 #endif // KISGLOBAL_H_

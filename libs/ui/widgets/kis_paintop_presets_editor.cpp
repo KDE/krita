@@ -19,7 +19,7 @@
 #include <QShowEvent>
 #include <QFontDatabase>
 #include <QWidgetAction>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QSplitter>
 
 #include <kconfig.h>
@@ -697,7 +697,7 @@ void KisPaintOpPresetsEditor::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
     if (parentWidget()) {
         // Make sure resizing doesn't push this widget out of the screen
-        QRect screenRect = QApplication::desktop()->availableGeometry(this);
+        QRect screenRect = this->screen()->availableGeometry();
         QRect newPositionRect = kisEnsureInRect(parentWidget()->geometry(), screenRect);
         parentWidget()->setGeometry(newPositionRect);
     }

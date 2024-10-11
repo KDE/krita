@@ -8,7 +8,7 @@
 
 #include <QtGlobal>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMutex>
 #include <QFont>
 #include <QThread>

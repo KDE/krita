@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QGuiApplication>
 #include <QApplication>
 #include <QScreen>
@@ -27,6 +27,7 @@
 #include "KisScreenColorSampler.h"
 #include "KisDlgInternalColorSelector.h"
 #include <KisStaticInitializer.h>
+#include <KisPortingUtils.h>
 
 #include <KisGrabKeyboardFocusRecoveryWorkaround.h>
 
@@ -190,8 +191,7 @@ KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
          }
      }
 
-    const QDesktopWidget *desktop = QApplication::desktop();
-    const QPixmap pixmap = QGuiApplication::screens().at(desktop->screenNumber(QApplication::activeWindow()))->grabWindow(desktop->winId(),
+    const QPixmap pixmap = QGuiApplication::screens().at(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()))->grabWindow(QApplication::activeWindow()->winId(),
                                                                                               p.x(), p.y(), 1, 1);
     QImage i = pixmap.toImage();
     KoColor col = KoColor();

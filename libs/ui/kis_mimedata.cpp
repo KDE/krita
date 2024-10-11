@@ -44,7 +44,7 @@
 #include <QBuffer>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDir>
 
 namespace {
@@ -183,7 +183,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 
         QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow())),
+        return doc->image()->projection()->convertToQImage(cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),
                                                            KoColorConversionTransformation::internalConversionFlags());
     }

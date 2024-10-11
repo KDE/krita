@@ -17,7 +17,7 @@
 #include <QPointer>
 #include <QAction>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFrame>
 #include <QLayout>
 #include <QMenu>

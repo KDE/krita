@@ -7,7 +7,7 @@
 #include "kis_scratch_pad.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QMutex>
 
 #include <KoColorSpace.h>
@@ -15,6 +15,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoPointerEvent.h>
 #include <resources/KoAbstractGradient.h>
+
+#include <KisPortingUtils.h>
 
 #include <kis_cursor.h>
 #include <kis_tool_utils.h>
@@ -24,6 +26,7 @@
 #include <kis_fill_painter.h>
 #include <kis_default_bounds.h>
 #include <kis_canvas_resource_provider.h>
+#include <KisPortingUtils.h>
 
 #include "kis_config.h"
 #include "kis_image.h"
@@ -39,6 +42,7 @@
 #include "kis_node_graph_listener.h"
 #include "kis_transaction.h"
 #include "kis_algebra_2d.h"
+
 
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
@@ -701,7 +705,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 {
     m_resourceProvider = resourceProvider;
     KisConfig cfg(true);
-    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow())));
+    setDisplayProfile(cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow())));
 
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));

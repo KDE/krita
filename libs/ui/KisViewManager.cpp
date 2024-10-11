@@ -23,7 +23,7 @@
 #include <QBuffer>
 #include <QByteArray>
 #include <QStandardPaths>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDesktopServices>
 #include <QGridLayout>
 #include <QMainWindow>

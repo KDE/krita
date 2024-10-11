@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 01:47+0000\n"
+"POT-Creation-Date: 2024-10-11 01:55+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -17006,9 +17006,9 @@ msgstr "Cỡ"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:479
-#: plugins/tools/basictools/kis_tool_multihand.cpp:490
-#: plugins/tools/basictools/kis_tool_multihand.cpp:492
+#: plugins/tools/basictools/kis_tool_multihand.cpp:482
+#: plugins/tools/basictools/kis_tool_multihand.cpp:493
+#: plugins/tools/basictools/kis_tool_multihand.cpp:495
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -32807,7 +32807,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:543
+#: plugins/tools/basictools/kis_tool_multihand.cpp:546
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -47440,7 +47440,7 @@ msgstr "tuỳ chọn"
 msgid "Selection mode:"
 msgstr "Chế độ chọn:"
 
-#: plugins/impex/exr/exr_converter.cc:907
+#: plugins/impex/exr/exr_converter.cc:911
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47450,19 +47450,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:914
+#: plugins/impex/exr/exr_converter.cc:918
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Mở một tài liệu mới với mẫu"
 
-#: plugins/impex/exr/exr_converter.cc:1329
+#: plugins/impex/exr/exr_converter.cc:1333
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "xanh nước biển"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -57872,38 +57872,38 @@ msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Chổi"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:447
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, fuzzy, kde-format
 msgid "Symmetry"
 msgstr "Tuỳ chọn Hình học"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:448
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, fuzzy, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Cắt ảnh"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:449
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, fuzzy, kde-format
 msgid "Translate"
 msgstr "Hình tam giác"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, fuzzy, kde-format
 msgid "Copy Translate"
 msgstr "Hình tam giác"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, fuzzy, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Hình tam giác"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:563
+#: plugins/tools/basictools/kis_tool_multihand.cpp:566
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 01:47+0000\n"
+"POT-Creation-Date: 2024-10-11 01:55+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16916,9 +16916,9 @@ msgstr "サイズ"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:479
-#: plugins/tools/basictools/kis_tool_multihand.cpp:490
-#: plugins/tools/basictools/kis_tool_multihand.cpp:492
+#: plugins/tools/basictools/kis_tool_multihand.cpp:482
+#: plugins/tools/basictools/kis_tool_multihand.cpp:493
+#: plugins/tools/basictools/kis_tool_multihand.cpp:495
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -32934,7 +32934,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:543
+#: plugins/tools/basictools/kis_tool_multihand.cpp:546
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -47747,7 +47747,7 @@ msgstr "アニメーションスタイルの設定"
 msgid "Selection mode:"
 msgstr "選択モード:"
 
-#: plugins/impex/exr/exr_converter.cc:907
+#: plugins/impex/exr/exr_converter.cc:911
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47762,19 +47762,19 @@ msgstr ""
 "<br/><br/>このことによる視覚的な違いはほとんどないですが、心に留めておいてく"
 "ださい。"
 
-#: plugins/impex/exr/exr_converter.cc:914
+#: plugins/impex/exr/exr_converter.cc:918
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 画像が変更されました"
 
-#: plugins/impex/exr/exr_converter.cc:1329
+#: plugins/impex/exr/exr_converter.cc:1333
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (種類: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58329,38 +58329,38 @@ msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "対称ブラシの描線"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:447
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, kde-format
 msgid "Symmetry"
 msgstr "多重対称"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:448
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "鏡像反転"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:449
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgid "Translate"
 msgstr "平行移動"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Snowflake"
 msgstr "反転多重対称"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Copy Translate"
 msgstr "コピー移動"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "間隔を空けてコピー移動"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:563
+#: plugins/tools/basictools/kis_tool_multihand.cpp:566
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."

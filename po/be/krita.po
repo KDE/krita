@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 01:47+0000\n"
+"POT-Creation-Date: 2024-10-11 01:55+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -16920,9 +16920,9 @@ msgstr "Памер"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:479
-#: plugins/tools/basictools/kis_tool_multihand.cpp:490
-#: plugins/tools/basictools/kis_tool_multihand.cpp:492
+#: plugins/tools/basictools/kis_tool_multihand.cpp:482
+#: plugins/tools/basictools/kis_tool_multihand.cpp:493
+#: plugins/tools/basictools/kis_tool_multihand.cpp:495
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -32493,7 +32493,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:543
+#: plugins/tools/basictools/kis_tool_multihand.cpp:546
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -46872,7 +46872,7 @@ msgstr "Яркасць"
 msgid "Selection mode:"
 msgstr "Рэжым вылучэння:"
 
-#: plugins/impex/exr/exr_converter.cc:907
+#: plugins/impex/exr/exr_converter.cc:911
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46882,19 +46882,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:914
+#: plugins/impex/exr/exr_converter.cc:918
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Стварыць новы дакумент па шаблоне"
 
-#: plugins/impex/exr/exr_converter.cc:1329
+#: plugins/impex/exr/exr_converter.cc:1333
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Кампанія:"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -57145,38 +57145,38 @@ msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Пэндзаль"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:447
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, fuzzy, kde-format
 msgid "Symmetry"
 msgstr "Параметры геаметрыі"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:448
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, fuzzy, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Адбіць адрэзак люстрана"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:449
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, fuzzy, kde-format
 msgid "Translate"
 msgstr "Кут"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, fuzzy, kde-format
 msgid "Copy Translate"
 msgstr "Кут"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, fuzzy, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Кут"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:563
+#: plugins/tools/basictools/kis_tool_multihand.cpp:566
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."

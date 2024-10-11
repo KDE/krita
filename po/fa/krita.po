@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 03:15+0000\n"
+"POT-Creation-Date: 2024-10-11 03:32+0000\n"
 "PO-Revision-Date: 2011-09-26 14:11+0330\n"
 "Last-Translator: Mohamad Reza Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <>\n"
@@ -46811,7 +46811,7 @@ msgstr "روشنایی"
 msgid "Selection mode:"
 msgstr "حالت گزینش:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:905
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46821,19 +46821,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:912
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "باز کردن یک سند جدید با یک قالب"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1327
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "شرکت"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1332
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 03:15+0000\n"
+"POT-Creation-Date: 2024-10-11 03:32+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -48393,7 +48393,7 @@ msgstr "Grube opcije"
 msgid "Selection mode:"
 msgstr "Režim izbora:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:905
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""
@@ -48417,7 +48417,7 @@ msgstr ""
 "Promjena alfa će imati raspon od <numid>%1</numid> prema <numid>%2</numid></"
 "note>"
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:912
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "EXR image will be modified"
@@ -48425,13 +48425,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR slika će biti promijenjena"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1327
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tip: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1332
 #, fuzzy, kde-format
 #| msgctxt "@info"
 #| msgid ""

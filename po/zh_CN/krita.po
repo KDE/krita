@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 03:15+0000\n"
+"POT-Creation-Date: 2024-10-11 03:32+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -46383,7 +46383,7 @@ msgstr "动态样式选项"
 msgid "Selection mode:"
 msgstr "笔尖图像顺序："
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:905
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46396,19 +46396,19 @@ msgstr ""
 "定透明度。像素的原始数值在保存时将<b>不会</b>被还原。<br/>虽然这并不会造成视"
 "觉上的明显区别，但请记住软件做过上述处理以防万一。"
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 图像已被调整。"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1327
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (类型：“%2”)"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1332
 #, kde-format
 msgctxt "@info"
 msgid ""

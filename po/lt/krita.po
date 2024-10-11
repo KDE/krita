@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 03:15+0000\n"
+"POT-Creation-Date: 2024-10-11 03:32+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -47412,7 +47412,7 @@ msgstr "Ryškumas"
 msgid "Selection mode:"
 msgstr "Pasirinkimo veiksena:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:905
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47422,19 +47422,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1327
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Kopijuoti"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1332
 #, kde-format
 msgctxt "@info"
 msgid ""

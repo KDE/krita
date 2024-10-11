@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 03:15+0000\n"
+"POT-Creation-Date: 2024-10-11 03:32+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -45992,7 +45992,7 @@ msgstr "כחול"
 msgid "Selection mode:"
 msgstr "בחירה"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:905
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -46002,19 +46002,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:912
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "פתח מסמך חדש מתוך תבנית"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1327
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "ירוק"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1332
 #, kde-format
 msgctxt "@info"
 msgid ""

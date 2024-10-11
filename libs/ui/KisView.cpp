@@ -27,7 +27,7 @@
 #include <QUrl>
 #include <QTemporaryFile>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDockWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>

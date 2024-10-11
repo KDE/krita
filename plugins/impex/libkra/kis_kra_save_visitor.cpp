@@ -282,7 +282,7 @@ bool KisKraSaveVisitor::visit(KisColorizeMask *mask)
     KisDomUtils::saveValue(&root, COLORIZE_KEYSTROKES_SECTION, QVector<KisLazyFillTools::KeyStroke>::fromList(mask->fetchKeyStrokesDirect()));
 
     QTextStream stream(&storeDev);
-    KisGlobal::setUtf8OnStream(stream);
+    KisPortingUtils::setUtf8OnStream(stream);
     stream << doc;
 
     if (!m_store->close())

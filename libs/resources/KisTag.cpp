@@ -18,7 +18,7 @@
 #include <KLocalizedString>
 
 #include <kis_debug.h>
-#include <kis_global.h>
+#include <KisPortingUtils.h>
 
 const QString KisTag::s_group {"Desktop Entry"};
 const QString KisTag::s_type {"Type"};
@@ -208,7 +208,7 @@ bool KisTag::load(QIODevice &io)
     setValid(false);
 
     QTextStream stream(&io);
-    KisGlobal::setUtf8OnStream(stream);
+    KisPortingUtils::setUtf8OnStream(stream);
     QStringList lines;
     QString line;
 
@@ -285,7 +285,7 @@ bool KisTag::save(QIODevice &io)
     }
 
     QTextStream stream(&io);
-    KisGlobal::setUtf8OnStream(stream);
+    KisPortingUtils::setUtf8OnStream(stream);
     stream << s_desktop << '\n';
     stream << s_type << '=' << s_tag << '\n';
     stream << s_url << '=' << d->url << '\n';

@@ -18,7 +18,7 @@
 #include <QTime>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QScreen>
 #include <QWindow>
 
@@ -1240,7 +1240,7 @@ void KisCanvas2::slotConfigChanged()
 void KisCanvas2::slotScreenChanged(QScreen *screen)
 {
     /**
-     * We cannot use QApplication::desktop()->screenNumber(mainWindow) here,
+     * We cannot use KisPortingUtils::getScreenNumberForWidget(mainWindow) here,
      * because this data is not yet ready when screenChanged signal is delivered.
      */
 

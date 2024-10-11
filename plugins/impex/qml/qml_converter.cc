@@ -11,6 +11,7 @@
 
 #include <kis_image.h>
 #include <kis_group_layer.h>
+#include <KisPortingUtils.h>
 
 #define SPACE "    "
 
@@ -25,7 +26,7 @@ QMLConverter::~QMLConverter()
 KisImportExportErrorCode QMLConverter::buildFile(const QString &filename, const QString &realFilename, QIODevice *io, KisImageSP image)
 {
     QTextStream out(io);
-    KisGlobal::setUtf8OnStream(out);
+    KisPortingUtils::setUtf8OnStream(out);
     out << "import QtQuick 1.1" << "\n\n";
     out << "Rectangle {\n";
     writeInt(out, 1, "width", image->width());

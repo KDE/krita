@@ -17,7 +17,7 @@
 
 #include <QMessageBox>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>

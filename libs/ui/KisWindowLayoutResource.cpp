@@ -314,7 +314,7 @@ bool KisWindowLayoutResource::saveToDevice(QIODevice *dev) const
     doc.appendChild(root);
 
     QTextStream textStream(dev);
-    KisGlobal::setUtf8OnStream(textStream);
+    KisPortingUtils::setUtf8OnStream(textStream);
     doc.save(textStream, 4);
     return true;
 }

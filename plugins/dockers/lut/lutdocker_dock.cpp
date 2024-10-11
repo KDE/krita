@@ -18,7 +18,7 @@
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QToolButton>
 #include <QDir>
 

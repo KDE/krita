@@ -17,7 +17,7 @@
 #include <QCloseEvent>
 #include <QStandardPaths>
 #include <QDesktopServices>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDialog>
 #include <QDockWidget>
 #include <QIcon>
@@ -2580,18 +2580,13 @@ void KisMainWindow::updateWindowMenu()
     docMenu->clear();
 
     QFontMetrics fontMetrics = docMenu->fontMetrics();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QRect geom = this->geometry();
     QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
     QScreen *screen = qApp->screenAt(p);
-
     int fileStringWidth = 300;
     if (screen) {
         fileStringWidth = int(screen->availableGeometry().width() * .40f);
     }
-#else
-    int fileStringWidth = int(QApplication::desktop()->screenGeometry(this).width() * .40f);
-#endif
     Q_FOREACH (QPointer<KisDocument> doc, KisPart::instance()->documents()) {
         if (doc) {
             QString title = fontMetrics.elidedText(doc->path(), Qt::ElideMiddle, fileStringWidth);
@@ -3077,8 +3072,7 @@ void KisMainWindow::initializeGeometry()
     KConfigGroup cfg = d->windowStateConfig;
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
-        const int scnum = QApplication::desktop()->screenNumber(parentWidget());
-        QRect desk = QGuiApplication::screens().at(scnum)->availableVirtualGeometry();
+        QRect desk = parentWidget()->screen()->availableGeometry();
 
         quint32 x = desk.x();
         quint32 y = desk.y();

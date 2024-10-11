@@ -14,7 +14,7 @@
 #include <QComboBox>
 #include <QRect>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDialogButtonBox>
 #include <QFile>
 #include <QSpacerItem>

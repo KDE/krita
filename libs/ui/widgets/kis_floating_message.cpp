@@ -18,7 +18,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QRegExp>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QLabel>
 #include <QGraphicsDropShadowEffect>
 

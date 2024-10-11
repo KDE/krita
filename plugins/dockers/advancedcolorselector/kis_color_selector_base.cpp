@@ -8,7 +8,7 @@
 
 #include <QMouseEvent>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QScreen>
 #include <QTimer>
 #include <QCursor>
@@ -54,7 +54,7 @@ public:
     void updatePosition()
     {
         QPoint parentPos = m_parent->mapToGlobal(QPoint(0,0));
-        const QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = this->screen()->availableGeometry();
         QPoint targetPos;
         if ( parentPos.x() - 100 > availRect.x() ) {
             targetPos =  QPoint(parentPos.x() - 100, parentPos.y());
@@ -219,7 +219,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         x-=popupsize/2;
         y-=popupsize/2;
 
-        const QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = this->screen()->availableGeometry();
 
         if(x<availRect.x())
             x = availRect.x();
@@ -282,7 +282,7 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
 
         lazyCreatePopup();
 
-        const QRect availRect = QApplication::desktop()->availableGeometry(this);
+        const QRect availRect = this->screen()->availableGeometry();
 
         QPoint proposedTopLeft = rect().center() - m_popup->rect().center();
         proposedTopLeft = mapToGlobal(proposedTopLeft);
@@ -399,11 +399,7 @@ void KisColorSelectorBase::showPopup(Move move)
     lazyCreatePopup();
 
     QPoint cursorPos = QCursor::pos();
-    QScreen *activeScreen = 0;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    activeScreen = QGuiApplication::screenAt(cursorPos);
-#endif
-    const QRect availRect = (activeScreen)? activeScreen->availableGeometry() : QApplication::desktop()->availableGeometry(this);
+    const QRect availRect = this->screen()->availableGeometry();
 
     if (move == MoveToMousePosition) {
         m_popup->move(QPoint(cursorPos.x()-m_popup->width()/2, cursorPos.y()-m_popup->height()/2));

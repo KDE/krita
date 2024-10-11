@@ -25,10 +25,12 @@
 #include <brushengine/kis_paintop_preset.h>
 
 #include "KisGlobalResourcesInterface.h"
+#include <KisPortingUtils.h>
 
 #include "tiles3/kis_tile_data_store.h"
 #include "kis_surrogate_undo_adapter.h"
 #include "kis_image_config.h"
+
 #define LOAD_PRESET_OR_RETURN(preset, fileName)                         \
     if(!preset->load(KisGlobalResourcesInterface::instance())) { dbgKrita << "Preset" << fileName << "was NOT loaded properly. Done."; return; } \
     else dbgKrita << "Loaded preset:" << fileName
@@ -105,7 +107,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
     QFile logFile(fileName);
     logFile.open(QFile::WriteOnly | QFile::Truncate);
     QTextStream logStream(&logFile);
-    KisGlobal::setUtf8OnStream(logStream);
+    KisPortingUtils::setUtf8OnStream(logStream);
     logStream.setFieldWidth(10);
     logStream.setFieldAlignment(QTextStream::AlignRight);
 

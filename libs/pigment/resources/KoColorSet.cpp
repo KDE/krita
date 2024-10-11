@@ -59,7 +59,7 @@ QStringList readAllLinesSafe(QByteArray *data)
     QBuffer buffer(data);
     buffer.open(QBuffer::ReadOnly);
     QTextStream stream(&buffer);
-    KisGlobal::setUtf8OnStream(stream);
+    KisPortingUtils::setUtf8OnStream(stream);
 
     QString line;
     while (stream.readLineInto(&line)) {
@@ -1304,7 +1304,7 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     Q_ASSERT(dev->isWritable());
 
     QTextStream stream(dev);
-    KisGlobal::setUtf8OnStream(stream);
+    KisPortingUtils::setUtf8OnStream(stream);
     stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << colorSet->columnCount() << "\n#\n";
 
     KisSwatchGroupSP global = colorSet->getGlobalGroup();

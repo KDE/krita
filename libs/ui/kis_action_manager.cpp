@@ -22,6 +22,7 @@
 #include "kis_clipboard.h"
 #include <kis_image_animation_interface.h>
 #include "kis_config.h"
+#include <KisPortingUtils.h>
 
 #include <QMenu>
 #include "QFile"
@@ -423,7 +424,7 @@ void KisActionManager::dumpActionFlags()
     QFile data("actions.txt");
     if (data.open(QFile::WriteOnly | QFile::Truncate)) {
         QTextStream out(&data);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
 
         Q_FOREACH (KisAction* action, d->actions) {
             KisAction::ActivationFlags flags = action->activationFlags();

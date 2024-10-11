@@ -2013,7 +2013,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
                 {
                     QString string;
                     QTextStream stream(&string);
-                    KisGlobal::setUtf8OnStream(stream);
+                    KisPortingUtils::setUtf8OnStream(stream);
                     stream << b;
                     debugFlake << "    " << string;
                 }

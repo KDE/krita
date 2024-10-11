@@ -26,6 +26,7 @@
 #include <kis_iterator_ng.h>
 #include "krita_utils.h"
 #include <KisGlobalResourcesInterface.h>
+#include <KisPortingUtils.h>
 
 void KisLevelFilterBenchmark::initTestCase()
 {
@@ -70,12 +71,12 @@ void KisLevelFilterBenchmark::benchmarkFilter()
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        KisGlobal::setUtf8OnStream(in);
+        KisPortingUtils::setUtf8OnStream(in);
         s = in.readAll();
         kfc->fromXML(s);
     }

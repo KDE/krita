@@ -11,7 +11,7 @@
 #include "kis_global.h"
 
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 
 #include <QFormLayout>
 #include "kis_slider_spin_box.h"
@@ -54,7 +54,7 @@ void BlackWhitePointChooser::showPopup(const QPoint &basePoint)
 
     QSize popupSize = size();
     QRect popupRect(basePoint - QPoint(0, popupSize.height()), popupSize);
-    QRect screenRect = QApplication::desktop()->availableGeometry(this);
+    QRect screenRect = this->screen()->availableGeometry();
 
     popupRect = kisEnsureInRect(popupRect, screenRect);
     setGeometry(popupRect);

@@ -20,7 +20,7 @@
 #endif
 
 #include <QStandardPaths>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDir>
 #include <QFile>
 #include <QLocale>

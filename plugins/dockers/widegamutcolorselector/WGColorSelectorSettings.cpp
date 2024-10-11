@@ -15,7 +15,7 @@
 #include <QApplication>
 #include <QButtonGroup>
 #include <QVBoxLayout>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QDialogButtonBox>
 #include <QStringList>
 #include <QToolButton>
@@ -286,7 +286,7 @@ void WGColorSelectorSettings::slotShowLineEditor(int lineNum)
     m_shadeLineEditor->show();
 
     QWidget *btn = m_shadeLineButtons.at(lineNum);
-    QRect fitRect = kisGrowRect(QApplication::desktop()->availableGeometry(btn), -10);
+    QRect fitRect = kisGrowRect(btn->screen()->availableGeometry(), -10);
     QRect popupRect = m_shadeLineEditor->rect();
     popupRect.moveTo(btn->mapToGlobal(QPoint()));
     popupRect = kisEnsureInRect(popupRect, fitRect);

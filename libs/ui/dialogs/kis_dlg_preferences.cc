@@ -17,7 +17,7 @@
 #include <QComboBox>
 #include <QClipboard>
 #include <QCursor>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QGridLayout>

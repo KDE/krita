@@ -8,7 +8,7 @@
 
 #include <QApplication>
 #include <QScreen>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QResizeEvent>
 #include <QGridLayout>
 #include <QPainter>

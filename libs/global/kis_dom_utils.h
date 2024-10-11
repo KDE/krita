@@ -23,6 +23,7 @@
 #include "kritaglobal_export.h"
 #include "kis_debug.h"
 #include "krita_container_utils.h"
+#include "KisPortingUtils.h"
 
 namespace KisDomUtils {
 
@@ -38,7 +39,7 @@ namespace KisDomUtils {
     inline QString toString(float value) {
         QString str;
         QTextStream stream;
-        KisGlobal::setUtf8OnStream(stream);
+        KisPortingUtils::setUtf8OnStream(stream);
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(FLT_DIG);
         stream << value;
@@ -48,7 +49,7 @@ namespace KisDomUtils {
     inline QString toString(double value) {
         QString str;
         QTextStream stream;
-        KisGlobal::setUtf8OnStream(stream);
+        KisPortingUtils::setUtf8OnStream(stream);
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(15);
         stream << value;

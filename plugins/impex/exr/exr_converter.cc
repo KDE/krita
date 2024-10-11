@@ -51,6 +51,7 @@
 #include "kis_kra_savexml_visitor.h"
 
 #include <KisImportExportAdditionalChecks.h>
+#include <KisPortingUtils.h>
 
 // Do not translate!
 #define HDR_LAYER "HDR Layer"
@@ -1327,7 +1328,7 @@ void EXRConverter::Private::reportLayersNotSaved(const QSet<KisNodeSP> &layersNo
 {
     QString layersList;
     QTextStream textStream(&layersList);
-    KisGlobal::setUtf8OnStream(textStream);
+    KisPortingUtils::setUtf8OnStream(textStream);
 
     Q_FOREACH (KisNodeSP node, layersNotSaved) {
         textStream << "<li>" << i18nc("@item:unsupported-node-message", "%1 (type: \"%2\")", node->name(), node->metaObject()->className()) << "</li>";

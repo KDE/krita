@@ -32,7 +32,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QWidgetAction>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QScreen>
 
 #include <kcharselect.h>
@@ -53,6 +53,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorPopupAction.h>
 #include <svg/SvgUtil.h>
+#include <KisPortingUtils.h>
 
 #include <KisSpinBoxI18nHelper.h>
 #include <KisScreenColorSampler.h>
@@ -275,7 +276,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
         restoreGeometry(QByteArray::fromBase64(ba));
     }
     else {
-        const int scnum = QApplication::desktop()->screenNumber(QApplication::activeWindow());
+        const int scnum = KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow());
         QRect desk = QGuiApplication::screens().at(scnum)->availableGeometry();
 
         quint32 x = desk.x();

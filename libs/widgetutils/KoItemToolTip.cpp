@@ -7,7 +7,6 @@
 
 #include <QApplication>
 #include <QBasicTimer>
-#include <QDesktopWidget>
 #include <QModelIndex>
 #include <QPainter>
 #include <QPaintEvent>
@@ -16,6 +15,7 @@
 #include <QTextDocument>
 #include <QTimerEvent>
 #include <QToolTip>
+#include <QScreen>
 
 class Q_DECL_HIDDEN KoItemToolTip::Private
 {
@@ -67,7 +67,8 @@ void KoItemToolTip::showTip(QWidget *widget, const QPoint &pos, const QStyleOpti
 
 void KoItemToolTip::updatePosition(QWidget *widget, const QPoint &pos, const QStyleOptionViewItem &option)
 {
-    const QRect drect = QApplication::desktop()->availableGeometry(widget);
+    QScreen *screen = widget->screen();
+    const QRect drect = screen->availableGeometry();
     const QSize size = sizeHint();
     const int width = size.width(), height = size.height();
     const QPoint gpos = widget->mapToGlobal(pos);

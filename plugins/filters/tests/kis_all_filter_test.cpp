@@ -19,7 +19,7 @@
 #include <qimage_test_util.h>
 #include <simpletest.h>
 #include <testing_timed_default_bounds.h>
-
+#include <KisPortingUtils.h>
 
 bool testFilterSrcNotIsDev(KisFilterSP f)
 {
@@ -43,12 +43,12 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        KisGlobal::setUtf8OnStream(in);
+        KisPortingUtils::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);
@@ -95,12 +95,12 @@ bool testFilter(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        KisGlobal::setUtf8OnStream(in);
+        KisPortingUtils::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         const bool validConfig = kfc->fromXML(s);
@@ -151,12 +151,12 @@ bool testFilterWithSelections(KisFilterSP f)
         //qDebug() << "creating new file for " << f->id();
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        KisGlobal::setUtf8OnStream(out);
+        KisPortingUtils::setUtf8OnStream(out);
         out << kfc->toXML();
     } else {
         QString s;
         QTextStream in(&file);
-        KisGlobal::setUtf8OnStream(in);
+        KisPortingUtils::setUtf8OnStream(in);
         s = in.readAll();
         //qDebug() << "Read for " << f->id() << "\n" << s;
         kfc->fromXML(s);

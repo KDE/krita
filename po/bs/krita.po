@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-11 01:55+0000\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -33970,14 +33970,14 @@ msgstr "Grupa se ne može mijenjati"
 msgid "Local selection is locked."
 msgstr "Lokalni izbor je zaključan."
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169

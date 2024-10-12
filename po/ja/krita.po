@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-11 01:55+0000\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -32884,7 +32884,7 @@ msgstr "グループは編集可能ではありません"
 msgid "Local selection is locked."
 msgstr "ローカル選択はロックされています。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32893,7 +32893,7 @@ msgstr ""
 "ブラシツールはこのレイヤーには描画できません。ペイントレイヤーかマスクを選択"
 "してください。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169

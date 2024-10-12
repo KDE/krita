@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-11 01:55+0000\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -33375,14 +33375,14 @@ msgstr "Laag-Grött"
 msgid "Local selection is locked."
 msgstr "Keen Akschoon utsöcht."
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169

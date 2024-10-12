@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-11 01:55+0000\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -33202,7 +33202,7 @@ msgstr "O grupo não está editável."
 msgid "Local selection is locked."
 msgstr "A seleção local está bloqueada."
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -33211,7 +33211,7 @@ msgstr ""
 "A ferramenta de pincel não consegue pintar nesta camada. Selecione uma "
 "camada ou máscara de pintura."
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169

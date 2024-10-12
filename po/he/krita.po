@@ -41,15 +41,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-11 01:55+0000\n"
-"PO-Revision-Date: 2024-09-13 23:01+0300\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
+"PO-Revision-Date: 2024-10-10 14:55+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -22140,9 +22140,9 @@ msgstr "הדבקת בחירה"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "גירסה"
+msgstr "גרסת FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -32424,14 +32424,14 @@ msgstr "&תמונה"
 msgid "Local selection is locked."
 msgstr "הדבקת בחירה"
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -32966,12 +32966,12 @@ msgstr "הוספת מרווח"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:112
 #: libs/ui/widgets/kis_color_space_selector.cc:66
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "This is appended to the color profile which is the default for the given "
 "colorspace and bit-depth"
 msgid "(Default)"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "(ברירת מחדל)"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:155
 #, kde-format
@@ -32987,10 +32987,10 @@ msgid "This profile has no colorants."
 msgstr "הקובץ %1 לא קיים."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:157
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Shows up instead of the name when there's no profile"
 msgid "No Profile Found"
-msgstr "מאפייני שכבה..."
+msgstr "לא נמצא פרופיל"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:158
 #, kde-format
@@ -33006,23 +33006,23 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, RedLabel)
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:54
-#, fuzzy, kde-format
+#, kde-format
 msgid "Red:"
-msgstr "אדום"
+msgstr "אדום:"
 
 #. i18n: ectx: property (text), widget (QLabel, GreenLabel)
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:173
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:101
-#, fuzzy, kde-format
+#, kde-format
 msgid "Green:"
-msgstr "ירוק"
+msgstr "ירוק:"
 
 #. i18n: ectx: property (text), widget (QLabel, BlueLabel)
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:174
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:142
-#, fuzzy, kde-format
+#, kde-format
 msgid "Blue:"
-msgstr "כחול"
+msgstr "כחול:"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:189
 #, kde-format
@@ -33065,16 +33065,16 @@ msgid "Estimated Gamma cannot be retrieved for YCbCr."
 msgstr ""
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:384
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "About <Profilename>"
 msgid "About %1/%2"
-msgstr "Krita"
+msgstr "על %1/%2"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:386
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "ICC profile version"
 msgid "ICC Version: %1"
-msgstr "גירסה"
+msgstr "גרסת ICC‏: %1"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:389
 #, fuzzy, kde-format
@@ -35740,9 +35740,9 @@ msgid "%1"
 msgstr "%1%"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
-#, fuzzy, kde-format
+#, kde-format
 msgid "About KDE"
-msgstr "Krita"
+msgstr "על KDE"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
 #, kde-format
@@ -35805,15 +35805,15 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "About KDE"
 msgid "&About"
-msgstr "Krita"
+msgstr "&על אודות"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "ייצ&וא..."
+msgstr "&דיווח על תקלות או משאלות"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -35821,9 +35821,9 @@ msgid "&Join KDE"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Support KDE"
-msgstr "Krita"
+msgstr "&תמיכה ב־KDE"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:84
 #: libs/widgetutils/xmlgui/kbugreport.cpp:101
@@ -35841,7 +35841,7 @@ msgstr ""
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, fuzzy, kde-format
 msgid "Application: "
-msgstr "רישיות"
+msgstr "יישום: "
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:132
 #, kde-format
@@ -35852,9 +35852,9 @@ msgstr ""
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Version:"
-msgstr "גירסה"
+msgstr "גרסה:"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:138
 #, kde-format
@@ -35901,15 +35901,15 @@ msgstr ""
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
-#, fuzzy, kde-format
+#, kde-format
 msgid "Old Text"
-msgstr "הוספת טקסט"
+msgstr "טקסט ישן"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "New Text"
-msgstr "הוספת טקסט"
+msgstr "טקסט חדש"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
 #, kde-format
@@ -35927,9 +35927,9 @@ msgid "--- separator ---"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Text"
-msgstr "שינוי רישיות"
+msgstr "שינוי טקסט"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
 #, fuzzy, kde-format
@@ -35942,9 +35942,9 @@ msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure Toolbars"
-msgstr "אישור שמירה"
+msgstr "הגדרת סרגלי כלים"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
 #, kde-format
@@ -35954,14 +35954,14 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
-#, fuzzy, kde-format
+#, kde-format
 msgid "Reset Toolbars"
-msgstr "הסתר סרגל כלים %1"
+msgstr "איפוס סרגלי כלים"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Toolbar:"
-msgstr "הצג סרגל כלים %1"
+msgstr "&סרגל כלים:"
 
 #. i18n("&New"), this);
 #. new_toolbar->setPixmap(BarIcon("document-new", KisIconUtils::SizeSmall));
@@ -35971,32 +35971,32 @@ msgstr "הצג סרגל כלים %1"
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
-#, fuzzy, kde-format
+#, kde-format
 msgid "A&vailable actions:"
-msgstr "מיקום הקובץ:"
+msgstr "פ&עולות זמינות:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
-msgstr "אחרי (%1):"
+msgstr "מסנן"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curr&ent actions:"
-msgstr "כיוו&ן פיצול"
+msgstr "פעול&ות נוכחיות:"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filter"
-msgstr "אחרי (%1):"
+msgstr "מסנן"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
 #, kde-format
@@ -36005,14 +36005,14 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
-#, fuzzy, kde-format
+#, kde-format
 msgid "<Merge>"
-msgstr "כחול"
+msgstr "<מיזוג>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
-#, fuzzy, kde-format
+#, kde-format
 msgid "<Merge %1>"
-msgstr "כחול"
+msgstr "<מיזוג %1>"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
 #, kde-format
@@ -36028,10 +36028,10 @@ msgstr "בחירה"
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
-msgstr "%1%"
+msgstr "%1"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:492
 #, kde-format
@@ -36066,14 +36066,14 @@ msgid "Hold %1, then push %2"
 msgstr ""
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Default:"
-msgstr "העבר שכבה נוכחית קדימה"
+msgstr "ברירת מחדל:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
 msgstr "ללא"
@@ -36097,21 +36097,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:38
-#, fuzzy, kde-format
+#, kde-format
 msgid "Action"
-msgstr "בחירה"
+msgstr "פעולה"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:43
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shortcut"
-msgstr "אישור שמירה"
+msgstr "קיצור דרך"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alternate"
-msgstr "כלי ציור"
+msgstr "חלופה"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
 #, kde-format
@@ -36121,17 +36121,17 @@ msgid ""
 msgstr ""
 
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:244
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "header for an applications shortcut list"
 msgid "Shortcuts for %1"
-msgstr "אישור שמירה"
+msgstr "קיצורי דרך ל־%1"
 
 #. i18n: ectx: property (text), widget (QLabel, priLabel)
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:262
 #: libs/widgetutils/xmlgui/kshortcutwidget.ui:27
-#, fuzzy, kde-format
+#, kde-format
 msgid "Main:"
-msgstr "סובב &90"
+msgstr "ראשי:"
 
 #. i18n: ectx: property (text), widget (QLabel, altLabel)
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:263
@@ -39501,9 +39501,9 @@ msgstr "שנה גודל"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleVideoDuration)
 #: plugins/dockers/recorder/recorder_export.ui:693
-#, fuzzy, kde-format
+#, kde-format
 msgid "Video duration:"
-msgstr "סובב &90"
+msgstr "משך סרטון:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDone)
 #: plugins/dockers/recorder/recorder_export.ui:943
@@ -39527,64 +39527,64 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonShowInFolder)
 #: plugins/dockers/recorder/recorder_export.ui:989
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Show in folder"
-msgstr "רוחב:"
+msgstr "הצגה בתיקייה"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRemoveSnapshots)
 #: plugins/dockers/recorder/recorder_export.ui:1026
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Open the folder when the new created video is placed"
 msgid "Remove recordings"
-msgstr "הסר קישור"
+msgstr "הסרת ההקלטות"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRenderTimeTitle)
 #: plugins/dockers/recorder/recorder_export.ui:1056
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "How long it took to render the video"
 msgid "Render time:"
-msgstr "מחיקת טקסט"
+msgstr "זמן תיצוג:"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRestart)
 #: plugins/dockers/recorder/recorder_export.ui:1083
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Button to restart the timelapse video configuring"
 msgid "Restart"
-msgstr "כלי &עט"
+msgstr "הפעלה מחדש"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonDoneClose)
 #: plugins/dockers/recorder/recorder_export.ui:1090
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Close dialog button"
 msgid "Close"
-msgstr "&צבע"
+msgstr "סגירה"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, RecorderProfileSettings)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit profile"
-msgstr "מאפייני שכבה..."
+msgstr "עריכת פרופיל"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleProfileSettings)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Profile settings"
-msgstr "הגדרות"
+msgstr "הגדרות פרופיל"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonPresetRevert)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:33
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Cancel any changes and restore initial value"
 msgid "Revert"
-msgstr "שנה גודל"
+msgstr "החזרה"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleSupportedVariables)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Title: variables for FFMpeg arguments"
 msgid "Insert variable:"
-msgstr "הוספת טקסט"
+msgstr "הוספת משתנה:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:169
@@ -39594,57 +39594,57 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:196
-#, fuzzy, kde-format
+#, kde-format
 msgid "Profile name:"
-msgstr "מאפייני שכבה..."
+msgstr "שם הפרופיל:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
 #: plugins/dockers/recorder/recorder_profile_settings.ui:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "File extension:"
-msgstr "הדבקת בחירה"
+msgstr "סיומת קובץ:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
-msgstr "שינוי גודל תמונה"
+msgstr "תצוגה מקדימה"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
-msgstr "שם:"
+msgstr "שם"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
-msgstr "מקושר"
+msgstr "גודל"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
-msgstr "אמצע:"
+msgstr "שינוי אחרון"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
-msgstr "שינוי שם התמונה..."
+msgstr "מתבצעת סריקה…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select All"
-msgstr "בחירה"
+msgstr "בחירה בהכול"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select None"
-msgstr "בחר גופן"
+msgstr "לבטל בחירה"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
 #, kde-format
@@ -39657,9 +39657,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Clean up Recordings"
-msgstr "ה&סר שכבה"
+msgstr "פינוי הקלטות"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProgress)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
@@ -39675,28 +39675,28 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpaceTitle)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:259
-#, fuzzy, kde-format
+#, kde-format
 msgid "Space to be freed:"
-msgstr "לוחות צבעים"
+msgstr "מקום לפינוי:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelSpace)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:272
-#, fuzzy, kde-format
+#, kde-format
 msgid "0 B"
-msgstr "שנייה"
+msgstr "0 ב׳"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDirectory)
 #: plugins/dockers/recorder/recorderdocker.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "A folder where recordings are stored"
 msgid "Recordings directory:"
-msgstr "&בוחר צבעים"
+msgstr "תיקיית הקלטות:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonManageRecordings)
 #: plugins/dockers/recorder/recorderdocker.ui:105
-#, fuzzy, kde-format
+#, kde-format
 msgid "Manage recordings..."
-msgstr "ערוצים"
+msgstr "ניהול הקלטות…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
@@ -41174,80 +41174,78 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Version"
-msgstr "גירסה"
+msgstr "גרסה"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "File name"
-msgstr "מאפייני שכבה..."
+msgstr "שם קובץ"
 
 #. i18n: ectx: property (text), widget (QLabel, colorComment_2)
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:108
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:145
 #, fuzzy, kde-format
 msgid "Comment"
-msgstr "הערה"
+msgstr "הערה : "
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Display Name"
-msgstr "חזרה:"
+msgstr "שם תצוגה"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database version"
-msgstr "יצירת תבנית"
+msgstr "גרסת מסד נתונים"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
+#, kde-format
 msgid "Krita version"
-msgstr "אלפא"
+msgstr "גרסת Krita"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Upgrade date"
-msgstr "חזרה:"
+msgstr "תאריך שדרוג"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "Storages"
-msgstr "ייצוא תמונה"
+msgstr "אחסונים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Versions"
-msgstr "גירסה"
+msgstr "גרסאות"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:160
-#, fuzzy, kde-format
-#| msgid "Document Information"
+#, kde-format
 msgid "Schema Information"
-msgstr "מידע מסמך"
+msgstr "פרטי סכמה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgid "Capitalization:"
+#, kde-format
 msgid "Initialization"
-msgstr "רישיות:"
+msgstr "אתחול"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
+#, kde-format
 msgid "Database version:"
-msgstr "יצירת תבנית"
+msgstr "גרסת מסד נתונים:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
+#, kde-format
 msgid "Krita version:"
-msgstr "אלפא"
+msgstr "גרסת Krita:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
@@ -41257,15 +41255,15 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resource View"
-msgstr "ערוצים"
+msgstr "תצוגת משאבים"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "Resource Type:"
-msgstr "ערוצים"
+msgstr "סוג משאב:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
@@ -41274,105 +41272,108 @@ msgid "Tag:"
 msgstr ""
 
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image Split"
-msgstr "&תמונה"
+msgstr "פיצול תמונה"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Could not save\n"
 "%1"
-msgstr "לא ניתן להוסיף שכבה לתמונה"
+msgstr ""
+"לא ניתן לשמור את\n"
+"%1"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:76
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Could not save %1\n"
 "Reason: %2"
-msgstr "הזז בחירה"
+msgstr ""
+"לא ניתן לשמור את %1\n"
+"סיבה: %2"
 
 #: plugins/extensions/imagesplit/imagesplit.cpp:172
 #: plugins/extensions/imagesplit/imagesplit.cpp:247
-#, fuzzy, kde-format
+#, kde-format
 msgid "Save Image on Split"
-msgstr "תמונה חדשה"
+msgstr "שמירת התמונה בעת הפיצול"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHorizontalSplitLines)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:26
-#, fuzzy, kde-format
+#, kde-format
 msgid "Horizontal Lines"
-msgstr "גל משולש"
+msgstr "קווים אופקיים"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesHorizontal)
 #. i18n: ectx: property (text), widget (QCheckBox, chkGuidesVertical)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:41
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use guides"
-msgstr "כחול"
+msgstr "להשתמש בקווים מנחים"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalSplitLines)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:50
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vertical Lines"
-msgstr "גל משולש"
+msgstr "קווים אנכיים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sort Direction:"
-msgstr "&בוחר צבעים"
+msgstr "כיוון המיון:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSuffix)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Prefix"
-msgstr "טקסט לפ&ני:"
+msgstr "קידומת"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFileType)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:127
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:64
-#, fuzzy, kde-format
+#, kde-format
 msgid "File Type"
-msgstr "גל משולש"
+msgstr "סוג קובץ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoSave)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:152
-#, fuzzy, kde-format
+#, kde-format
 msgid "Autosave on Split"
-msgstr "תמונה חדשה"
+msgstr "שמירה אוטומטית עם הפיצול"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move into previous group"
-msgstr "הסר שכבה"
+msgstr "העברה לקבוצה הקודמת"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:35
-#, fuzzy, kde-format
+#, kde-format
 msgid "Move into next group"
-msgstr "הסר שכבה"
+msgstr "העברה לקבוצה הבאה"
 
 #: plugins/extensions/layersplit/dlg_layersplit.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split Layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "פיצול שכבה"
 
 #: plugins/extensions/layersplit/layersplit.cpp:109
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split into Layers"
-msgstr "&שכבה"
+msgstr "פיצול לשכבות"
 
 #: plugins/extensions/layersplit/layersplit.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split into Masks"
-msgstr "&שכבה"
+msgstr "פיצול למסכות"
 
 #: plugins/extensions/layersplit/layersplit.cpp:194
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "פיצול שכבה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCreateGroupLayer)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:29
@@ -41394,9 +41395,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideOriginal)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide the original layer"
-msgstr "שינוי קנה מידה של שכבה..."
+msgstr "הסתרת השכבה המקורית"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSortLayers)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:66
@@ -41406,15 +41407,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisregardOpacity)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:76
-#, fuzzy, kde-format
+#, kde-format
 msgid "Disregard opacity"
-msgstr "סובב &90"
+msgstr "התעלמות מאטימות"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:83
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fuzziness:"
-msgstr "מקושר"
+msgstr "ערפול:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:96
@@ -41424,15 +41425,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (KisPopupButton, paletteChooser)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:103
-#, fuzzy, kde-format
+#, kde-format
 msgid "Choose Palette"
-msgstr "לוחות צבעים"
+msgstr "בחירת לוח צבעים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:111
-#, fuzzy, kde-format
+#, kde-format
 msgid "Split Into Layers"
-msgstr "&שכבה"
+msgstr "פיצול לשכבות"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbMode)
 #: plugins/extensions/layersplit/wdg_layersplit.ui:116

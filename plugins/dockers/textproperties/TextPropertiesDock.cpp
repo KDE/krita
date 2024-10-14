@@ -95,7 +95,7 @@ struct TextPropertiesDock::Private
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
     FontStyleModel stylesModel;
     FontAxesModel axesModel;
-    KisAllResourcesModel *fontModel{nullptr};
+    KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -124,7 +124,7 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setPalette(this->palette());
     m_quickWidget->setMinimumHeight(100);
 
-    d->fontModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
+    d->fontModel = new KisResourceModel(ResourceType::FontFamilies);
 
     QList<QLocale> locales;
     QStringList wellFormedBCPNames;
@@ -139,7 +139,6 @@ TextPropertiesDock::TextPropertiesDock()
 
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
-    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));

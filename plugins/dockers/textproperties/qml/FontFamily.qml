@@ -17,7 +17,6 @@ CollapsibleGroupProperty {
                        "font-family, typeface, font, fallback");
 
     property var fontFamilies: [];
-    property var fontFamilyModel : [];
 
     onPropertiesUpdated: {
         blockSignals = true;
@@ -52,7 +51,6 @@ CollapsibleGroupProperty {
         }
         FontResourceDropdown {
             id: mainFamilyCmb;
-            modelWrapper.sourceModel: fontFamilyModel;
             Layout.fillWidth: true;
             onActivated: {
                 if (fontFamilies.length >0) {
@@ -62,10 +60,14 @@ CollapsibleGroupProperty {
                 }
             }
             function updateCurrentIndex() {
-                modelWrapper.setResourceToFileName(mainWindow.wwsFontFamilyName(fontFamilies[0]))
+                var name = mainWindow.wwsFontFamilyName(fontFamilies[0]);
+                if (name !== modelWrapper.resourceFilename) {
+                    modelWrapper.currentTag = 0;
+                    modelWrapper.currentIndex = -1;
+                }
+                modelWrapper.setResourceToFileName(name)
             }
         }
-
     }
 
     onEnableProperty: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertySet;
@@ -97,7 +99,6 @@ CollapsibleGroupProperty {
                     property int dIndex: index;
                     FontResourceDropdown {
                         id: fontCmb;
-                        modelWrapper.sourceModel: fontFamilyModel;
                         Layout.fillWidth: true;
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = text;
@@ -105,8 +106,9 @@ CollapsibleGroupProperty {
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
                                 modelWrapper = mainFamilyCmb.modelWrapper;
+                            } else {
+                                updateCurrentIndex();
                             }
-                            updateCurrentIndex();
                         }
                         function updateCurrentIndex() {
                             modelWrapper.setResourceToFileName(mainWindow.wwsFontFamilyName(fontFamilies[fontListDelegate.dIndex]))

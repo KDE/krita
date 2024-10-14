@@ -19,7 +19,6 @@ class TagFilterProxyModelQmlWrapper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QAbstractItemModel *model READ model NOTIFY modelChanged)
-    Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE setSourceModel NOTIFY sourceModelChanged)
     Q_PROPERTY(QAbstractItemModel *tagModel READ tagModel NOTIFY tagModelChanged)
 
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY searchTextChanged)
@@ -34,11 +33,6 @@ public:
 
     /// The tagfilterproxymodel
     QAbstractItemModel *model() const;
-
-    /// The source model.
-    QAbstractItemModel *sourceModel() const;
-    /// Set the source model on the tag filter proxy model.
-    void setSourceModel(QAbstractItemModel *newSourceModel);
 
     /// Associated tagmodel
     QAbstractItemModel *tagModel() const;
@@ -89,7 +83,6 @@ public:
     QString resourceFilename();
 
 Q_SIGNALS:
-    void sourceModelChanged();
     void modelChanged();
     void searchTextChanged();
     void activeTagChanged();

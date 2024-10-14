@@ -51,18 +51,18 @@ Button {
             contentItem: KoShapeQtQuickLabel {
                 id: fontFamilyDelegate;
                 property alias meta: fontDelegateItem.meta;
-                property bool colorBitmap : meta.color_bitmap;
-                property bool colorCLRV0 : meta.color_clrv0;
-                property bool colorCLRV1 : meta.color_clrv1;
-                property bool colorSVG : meta.color_svg;
-                property bool isVariable : meta.is_variable;
-                property int type : meta.font_type;
+                property bool colorBitmap : typeof meta.color_bitmap === 'boolean'? meta.color_bitmap: false;
+                property bool colorCLRV0 : typeof meta.color_clrv0 === 'boolean'?  meta.color_clrv0: false;
+                property bool colorCLRV1 : typeof meta.color_clrv1 === 'boolean'?  meta.color_clrv1: false;
+                property bool colorSVG : typeof meta.color_svg === 'boolean'?  meta.color_svg: false;
+                property bool isVariable : typeof meta.is_variable === 'boolean'?  meta.is_variable: false;
+                property int type : typeof meta.font_type === 'number'? meta.font_type: 0;
                 property string fontName: fontDelegateItem.fontName;
                 width: parent.width;
                 height: nameLabel.height * 5;
                 imageScale: 3;
                 imagePadding: nameLabel.height;
-                svgData: meta.sample_svg;
+                svgData: typeof meta.sample_svg === 'string'? meta.sample_svg: "";
                 foregroundColor: sysPalette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
 

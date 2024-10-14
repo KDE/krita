@@ -20,10 +20,12 @@ struct TagFilterProxyModelQmlWrapper::Private {
         , tagModel(new KisTagModel(ResourceType::FontFamilies))
         , compressor(KisSignalCompressor(100, KisSignalCompressor::POSTPONE))
     {
+        allResourceModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
         tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
         tagFilterProxyModel->setTagFilter(tagModel->tagForIndex(tagModel->index(0, 0)));
     }
     KisTagFilterResourceProxyModel *tagFilterProxyModel {nullptr};
+    KisAllResourcesModel *allResourceModel {nullptr};
     KisTagModel *tagModel {nullptr};
     KisSignalCompressor compressor;
     QString currentSearchText;
@@ -45,21 +47,6 @@ TagFilterProxyModelQmlWrapper::~TagFilterProxyModelQmlWrapper()
 QAbstractItemModel *TagFilterProxyModelQmlWrapper::model() const
 {
     return d->tagFilterProxyModel;
-}
-
-QAbstractItemModel *TagFilterProxyModelQmlWrapper::sourceModel() const
-{
-    return d->tagFilterProxyModel->sourceModel();
-}
-
-void TagFilterProxyModelQmlWrapper::setSourceModel(QAbstractItemModel *newSourceModel)
-{
-    if (newSourceModel != d->tagFilterProxyModel->sourceModel()) {
-        d->tagFilterProxyModel->setSourceModel(newSourceModel);
-        emit sourceModelChanged();
-        emit modelChanged();
-        emit modelSortUpdated();
-    }
 }
 
 QAbstractItemModel *TagFilterProxyModelQmlWrapper::tagModel() const
@@ -180,6 +167,8 @@ QString TagFilterProxyModelQmlWrapper::localizedNameForIndex(
 QVariantMap TagFilterProxyModelQmlWrapper::metadataForIndex(const int &resourceIndex) const
 {
     QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
+    // NOTE: KisTagFilterProxyModel has this weird thing where it switches between source models depending
+    // on whether filtering by tag happens. This somehow causes index() to not always work.
     return d->tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
 }
 
@@ -240,11 +229,8 @@ void TagFilterProxyModelQmlWrapper::setCurrentIndex(const int &index)
 
 void TagFilterProxyModelQmlWrapper::setResourceToFileName(const QString &filename)
 {
-    QModelIndex index;
     KoResourceSP resource = d->currentResource;
-    KisAllResourcesModel *fontModel = dynamic_cast<KisAllResourcesModel*>(d->tagFilterProxyModel->sourceModel());
-    if (!fontModel) return;
-    QVector<KoResourceSP> resources = fontModel->resourcesForFilename(filename);
+    QVector<KoResourceSP> resources = d->allResourceModel->resourcesForFilename(filename);
     if (!resources.isEmpty()) {
         resource = resources.first();
     }

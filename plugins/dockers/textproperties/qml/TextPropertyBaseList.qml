@@ -107,7 +107,6 @@ ColumnLayout {
                 FontSize {
                 }
                 FontFamily {
-                    fontFamilyModel: fontFamiliesModel;
                 }
                 FontStyle {
                 }

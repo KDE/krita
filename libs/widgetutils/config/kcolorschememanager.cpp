@@ -15,6 +15,8 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QPainter>
+#include <QActionGroup>
+
 #include <KoResourcePaths.h>
 
 KColorSchemeManagerPrivate::KColorSchemeManagerPrivate()

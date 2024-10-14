@@ -8,10 +8,10 @@
 #include "kstandardaction_p.h"
 #include "moc_kstandardaction_p.cpp"
 
-#include <QMutableStringListIterator>
 #include <QToolButton>
-
+#include <QActionGroup>
 #include <QApplication>
+
 #include <klocalizedstring.h>
 #include <kstandardshortcut.h>
 #include <kacceleratormanager.h>

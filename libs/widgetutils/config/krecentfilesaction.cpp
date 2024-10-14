@@ -26,6 +26,7 @@
 #include <QProxyStyle>
 #include <QStandardItemModel>
 #include <QStyleFactory>
+#include <QActionGroup>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -298,7 +299,9 @@ void KRecentFilesAction::rebuildEntries()
         const QString title = titleWithSensibleWidth(nameValue, value);
         if (!value.isNull()) {
             thereAreEntries = true;
-            addAction(new QAction(title, selectableActionGroup()), item.m_url, nameValue);
+            QAction *action = new QAction(title);
+            action->setActionGroup(selectableActionGroup());
+            addAction(action, item.m_url, nameValue);
         }
     }
     if (thereAreEntries) {

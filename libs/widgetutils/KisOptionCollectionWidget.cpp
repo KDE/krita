@@ -10,6 +10,7 @@
 #include <QScrollArea>
 #include <QVariant>
 #include <QBoxLayout>
+#include <QStringRef>
 
 #include <kis_assert.h>
 

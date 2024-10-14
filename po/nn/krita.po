@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-08 01:47+0000\n"
+"POT-Creation-Date: 2024-10-12 01:47+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16916,9 +16916,9 @@ msgstr "Storleik"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:479
-#: plugins/tools/basictools/kis_tool_multihand.cpp:490
-#: plugins/tools/basictools/kis_tool_multihand.cpp:492
+#: plugins/tools/basictools/kis_tool_multihand.cpp:482
+#: plugins/tools/basictools/kis_tool_multihand.cpp:493
+#: plugins/tools/basictools/kis_tool_multihand.cpp:495
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -32895,7 +32895,7 @@ msgstr "Gruppa er ikkje redigerbar."
 msgid "Local selection is locked."
 msgstr "Lokalt utval er låst."
 
-#: libs/ui/tool/kis_tool_freehand.cc:211
+#: libs/ui/tool/kis_tool_freehand.cc:213
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32904,7 +32904,7 @@ msgstr ""
 "Penselverktøyet kan ikkje brukast på dette laget. Vel eit teiknelag eller ei "
 "maske."
 
-#: libs/ui/tool/kis_tool_freehand.cc:216
+#: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -32945,7 +32945,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:543
+#: plugins/tools/basictools/kis_tool_multihand.cpp:546
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -47763,7 +47763,7 @@ msgstr "Animasjonsstil"
 msgid "Selection mode:"
 msgstr "Utvalsmodus:"
 
-#: plugins/impex/exr/exr_converter.cc:907
+#: plugins/impex/exr/exr_converter.cc:911
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47777,20 +47777,20 @@ msgstr ""
 "tilbakestilte ved lagring av biletet.<br/><br/>Dette vil knapt ha nokon "
 "visuell verknad, men du bør likevel vera klar over det."
 
-#: plugins/impex/exr/exr_converter.cc:914
+#: plugins/impex/exr/exr_converter.cc:918
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR-biletet er endra"
 
-#: plugins/impex/exr/exr_converter.cc:1329
+#: plugins/impex/exr/exr_converter.cc:1333
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (type: «%2»)"
 
 # skip-rule: passiv
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58301,38 +58301,38 @@ msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Fleirpensel-strøk"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:447
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, kde-format
 msgid "Symmetry"
 msgstr "Symmetri"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:448
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Spegelvend"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:449
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgid "Translate"
 msgstr "Forskyv"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Snowflake"
 msgstr "Snøkrystall"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Copy Translate"
 msgstr "Kopiforskyving"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgid "Copy Translate at Intervals"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:563
+#: plugins/tools/basictools/kis_tool_multihand.cpp:566
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."

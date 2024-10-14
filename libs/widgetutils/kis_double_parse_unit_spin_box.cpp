@@ -13,7 +13,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QtMath>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QActionGroup>
 
@@ -384,7 +384,7 @@ QString KisDoubleParseUnitSpinBox::detectUnit()
 {
     QString str = veryCleanText().trimmed(); //text with the new unit but not the old one.
 
-    QRegExp regexp ("([ ]*[a-zA-Z]+[ ]*)$"); // Letters or spaces at end
+    QRegularExpression regexp ("([ ]*[a-zA-Z]+[ ]*)$"); // Letters or spaces at end
     int res = str.indexOf( regexp );
 
     if (res > -1) {

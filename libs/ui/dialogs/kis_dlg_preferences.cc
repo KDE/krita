@@ -1073,6 +1073,27 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
+    {
+        QStringList profiles;
+        QMap<QString, const KoColorProfile *>  profileList;
+        Q_FOREACH(const KoColorProfile *profile, KoColorSpaceRegistry::instance()->profilesFor(RGBAColorModelID.id())) {
+            profileList[profile->name()] = profile;
+            profiles.append(profile->name());
+        }
+
+        std::sort(profiles.begin(), profiles.end());
+        Q_FOREACH (const QString profile, profiles) {
+            m_page->cmbColorProfileForEXR->addSqueezedItem(profile);
+        }
+
+        const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+        const QString defaultProfile = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
+        const QString userProfile = cfg.readEntry("ExrDefaultColorProfile", defaultProfile);
+
+        m_page->cmbColorProfileForEXR->setCurrent(profiles.contains(userProfile) ? userProfile : defaultProfile);
+    }
+
+
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
     monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
     for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
@@ -1214,6 +1235,10 @@ void ColorSettingsTab::setDefault()
 {
     m_page->cmbWorkingColorSpace->setCurrent("RGBA");
 
+    const QString colorSpaceId = KoColorSpaceRegistry::instance()->colorSpaceId(RGBAColorModelID.id(), Float16BitsColorDepthID.id());
+    const QString defaultProfile = KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId);
+    m_page->cmbColorProfileForEXR->setCurrent(defaultProfile);
+
     refillMonitorProfiles(KoID("RGBA"));
 
     KisConfig cfg(true);
@@ -1270,7 +1295,6 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
         m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
 }
-
 
 //---------------------------------------------------------------------------------------------------
 
@@ -2443,6 +2467,8 @@ bool KisDlgPreferences::editPreferences()
             cfg.defColorModel(KoColorSpaceRegistry::instance()->colorSpaceColorModelId(currentWorkingColorSpace.id()).id());
             cfg.setDefaultColorDepth(KoColorSpaceRegistry::instance()->colorSpaceColorDepthId(currentWorkingColorSpace.id()).id());
         }
+
+        cfg.writeEntry("ExrDefaultColorProfile", m_colorSettings->m_page->cmbColorProfileForEXR->currentText());
 
         cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
                                           m_colorSettings->m_page->cmbProofingIntent->currentIndex(),

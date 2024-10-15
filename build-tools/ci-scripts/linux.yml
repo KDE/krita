@@ -20,7 +20,7 @@ linux-build:
     KRITACI_LINUX_PUBLISH_PLATFORM: linux
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b transition/win-clang18 krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_LINUX --depth=1
     - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1

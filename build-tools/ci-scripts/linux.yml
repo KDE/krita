@@ -16,7 +16,8 @@ linux-build:
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: False
     KDECI_EXTRA_CMAKE_ARGS: -DHIDE_SAFE_ASSERTS=OFF
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
-    KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+    KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
+    KRITACI_LINUX_PUBLISH_PLATFORM: linux
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_LINUX --depth=1
@@ -34,7 +35,7 @@ linux-build:
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
     - python3 -u build-tools/ci-scripts/build-appimage.py
-    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform linux --folder $CI_PROJECT_DIR/_packaging
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $KRITACI_LINUX_PUBLISH_PLATFORM --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 
 linux-nightly:
@@ -49,6 +50,41 @@ linux-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
+
+linux-debug-weekly:
+  extends:
+  - linux-build
+  - .weekly-job-mixin
+  - .ci-artifacts-with-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DENABLE_UPDATERS=OFF
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-debug }'
+
+linux-asan-weekly:
+  extends:
+  - linux-build
+  - .weekly-job-mixin
+  - .ci-artifacts-with-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DECM_ENABLE_SANITIZERS=address
+      -DENABLE_UPDATERS=OFF
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
+    ASAN_OPTIONS: 'new_delete_type_mismatch=0:detect_leaks=0:halt_on_error=0'
+    KRITACI_ALLOW_NO_PYQT: True
+    LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
+
 
 linux-release:
   extends:

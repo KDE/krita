@@ -59,9 +59,7 @@ windows-nightly:
 windows-asan-weekly:
   extends:
   - windows-build
-  # TODO: switch back to weekly when finished
-  #- .weekly-job-mixin
-  - .ci-manual-job-mixin
+  - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:

@@ -32,7 +32,7 @@ macos-build:
     KDECI_ONLY_BUILD: True
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b transition/win-clang18 krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_MACOS --depth=1
     - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
 

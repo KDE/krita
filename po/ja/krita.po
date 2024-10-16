@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 03:20+0000\n"
+"POT-Creation-Date: 2024-10-16 03:20+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -15837,14 +15837,14 @@ msgstr ""
 "Krita は Wayland プラットフォームをサポートしていません。Wayland で Krita を"
 "起動する場合は XWayland を使用してください。Krita を終了します。"
 
-#: krita/main.cc:693 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:695 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:694
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15856,12 +15856,12 @@ msgstr ""
 "サポートされているバージョンの Windows に更新してください: Windows 7、8、"
 "8.1、10"
 
-#: krita/main.cc:716 krita/main.cc:721
+#: krita/main.cc:718 krita/main.cc:723
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita タブレットサポート"
 
-#: krita/main.cc:717
+#: krita/main.cc:719
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15872,7 +15872,7 @@ msgstr ""
 "タブレットを使用している場合は、タブレットドライバが正しくインストールされて"
 "いることを確認してください。"
 
-#: krita/main.cc:722
+#: krita/main.cc:724
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

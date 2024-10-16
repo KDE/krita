@@ -307,7 +307,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="freeTransformWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -683,7 +683,6 @@
              </property>
              <property name="font">
               <font>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -894,7 +893,7 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="KisDoubleSliderSpinBox" name="cameraHeightBox" native="true">
+           <widget class="KisDoubleSliderSpinBox" name="cameraHeightBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -1183,7 +1182,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearYBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="shearYBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1224,7 +1223,7 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="shearXBox" native="true">
+             <widget class="KisDoubleSliderSpinBox" name="shearXBox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -1411,7 +1410,7 @@
           <number>0</number>
          </property>
          <item row="1" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="alphaBox" native="true">
+          <widget class="KisDoubleSliderSpinBox" name="alphaBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -1703,7 +1702,6 @@
         <widget class="QLabel" name="adjustGranularity">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -1768,7 +1766,7 @@
      <widget class="QWidget" name="liquifyTransformPage">
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,0">
+        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -1792,7 +1790,7 @@
            <property name="lineWidth">
             <number>0</number>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_9">
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
             <property name="leftMargin">
              <number>2</number>
             </property>
@@ -1828,7 +1826,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="liquifyScale">
+             <widget class="QToolButton" name="liquifyRotate">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1836,7 +1834,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Scale</string>
+               <string>Rotate</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1850,7 +1848,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QToolButton" name="liquifyRotate">
+             <widget class="QToolButton" name="liquifyScale">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1858,7 +1856,7 @@
                </sizepolicy>
               </property>
               <property name="text">
-               <string>Rotate</string>
+               <string>Scale</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -1926,8 +1924,8 @@
            <property name="verticalSpacing">
             <number>5</number>
            </property>
-           <item row="5" column="0">
-            <widget class="QLabel" name="label">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -1936,58 +1934,14 @@
              </property>
              <property name="minimumSize">
               <size>
-               <width>51</width>
+               <width>38</width>
                <height>0</height>
               </size>
              </property>
              <property name="text">
-              <string>Reverse:</string>
+              <string>Mode:</string>
              </property>
             </widget>
-           </item>
-           <item row="4" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider" native="true"/>
-           </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="lblSpacing">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>49</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Spacing:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="lblFlow">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Flow:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider" native="true"/>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lblSize">
@@ -2008,8 +1962,87 @@
              </property>
             </widget>
            </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="liquifyAmountPressureBox">
+             <property name="text">
+              <string>Pressure</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>true</bool>
+             </property>
+             <property name="autoRaise">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="KisDoubleSliderSpinBox" name="liquifyFlowSlider"/>
+           </item>
+           <item row="2" column="1">
+            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider"/>
+           </item>
            <item row="1" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider" native="true"/>
+            <widget class="KisDoubleSliderSpinBox" name="liquifySizeSlider"/>
+           </item>
+           <item row="4" column="1">
+            <widget class="KisDoubleSliderSpinBox" name="liquifySpacingSlider"/>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblFlow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>32</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Flow:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QCheckBox" name="liquifyReverseDirectionChk">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>51</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Reverse:</string>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblAmount">
@@ -2027,28 +2060,6 @@
              </property>
              <property name="text">
               <string comment="Amount of transformation">Amount:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="KisDoubleSliderSpinBox" name="liquifyAmountSlider" native="true"/>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>38</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Mode:</string>
              </property>
             </widget>
            </item>
@@ -2075,22 +2086,6 @@
              </item>
             </widget>
            </item>
-           <item row="5" column="1">
-            <widget class="QCheckBox" name="liquifyReverseDirectionChk">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="2">
             <widget class="QToolButton" name="liquifySizePressureBox">
              <property name="enabled">
@@ -2110,19 +2105,22 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="liquifyAmountPressureBox">
+           <item row="4" column="0">
+            <widget class="QLabel" name="lblSpacing">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>49</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="text">
-              <string>Pressure</string>
-             </property>
-             <property name="checkable">
-              <bool>true</bool>
-             </property>
-             <property name="autoExclusive">
-              <bool>true</bool>
-             </property>
-             <property name="autoRaise">
-              <bool>true</bool>
+              <string>Spacing:</string>
              </property>
             </widget>
            </item>

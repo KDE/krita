@@ -15,7 +15,6 @@
 #include <QThreadPool>
 #include <QApplication>
 #include <QScreen>
-#include <QScreen>
 
 #include <Eigen/Core>
 

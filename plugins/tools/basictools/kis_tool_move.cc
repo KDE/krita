@@ -242,7 +242,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
 
     {
         KConfigGroup group = KSharedConfig::openConfig()->group(toolId());
-        const bool forceLodMode = group.readEntry("forceLodMode", true);
+        const bool forceLodMode = group.readEntry("forceLodMode", false);
         strategy->setForceLodModeIfPossible(forceLodMode);
     }
 

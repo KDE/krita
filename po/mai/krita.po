@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 01:49+0000\n"
+"POT-Creation-Date: 2024-10-17 01:48+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -16249,7 +16249,7 @@ msgstr "लाल"
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1905
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1903
 #, fuzzy, kde-format
 msgid "Undo"
 msgstr "लाल"
@@ -22218,7 +22218,7 @@ msgstr "दस्तावेज"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:40
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:949
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:948
 #, kde-format
 msgid "Width:"
 msgstr "चओड़ाइ:"
@@ -22257,7 +22257,7 @@ msgstr "चओड़ाइ:"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:41
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1009
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1008
 #, kde-format
 msgid "Height:"
 msgstr "उँचाइ:"
@@ -25004,7 +25004,7 @@ msgstr "रँग:"
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1961
 #, kde-format
 msgid "Size:"
 msgstr "आकार:"
@@ -28054,7 +28054,7 @@ msgstr "विकल्प"
 #. i18n: ectx: property (title), widget (QGroupBox, grpAngle)
 #: libs/ui/imagesize/wdg_canvassize.ui:148
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:24
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1883
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1881
 #, kde-format
 msgid "Offset"
 msgstr "ऑफसेट"
@@ -29871,7 +29871,7 @@ msgstr "अपारदर्शिताः"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:275
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2008
 #, fuzzy, kde-format
 msgid "Flow:"
 msgstr "धीमा"
@@ -34859,7 +34859,7 @@ msgstr "दबाव"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2169
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2167
 #, kde-format
 msgid "Rows:"
 msgstr ""
@@ -34874,7 +34874,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2159
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2157
 #, fuzzy, kde-format
 #| msgid "Volume"
 msgid "Columns:"
@@ -45368,7 +45368,7 @@ msgstr "स्वतंत्रता"
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:53
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2051
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1942
 #, kde-format
 msgid "Mode:"
 msgstr "प्रकारः"
@@ -46740,7 +46740,7 @@ msgstr "उर्ध्वाधर"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1944
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2043
 #, fuzzy, kde-format
 msgid "Reverse:"
 msgstr "विपरीत"
@@ -46749,7 +46749,7 @@ msgstr "विपरीत"
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
 #: plugins/tools/basictools/wdgmovetool.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1045
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1044
 #, fuzzy, kde-format
 msgid "Position"
 msgstr "आनुपातिक"
@@ -47000,7 +47000,7 @@ msgstr "तारा"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/pattern/wdgpatternoptions.ui:269
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:60
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:738
 #, kde-format
 msgid "Rotation"
 msgstr "घुमाव"
@@ -47450,13 +47450,13 @@ msgid "Incremental"
 msgstr "संवर्द्धन"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
+#. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2100
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2116
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1968
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2095
 #, kde-format
 msgid "Pressure"
 msgstr "दबाव"
@@ -47491,7 +47491,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1966
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2123
 #, kde-format
 msgid "Spacing:"
 msgstr "अंतरण:"
@@ -51705,7 +51705,7 @@ msgstr ""
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:143
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1814
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1812
 #, kde-format
 msgid "Move"
 msgstr "घसकाबू"
@@ -52651,7 +52651,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2084
 #, kde-format
 msgid "Wash"
 msgstr ""
@@ -56335,7 +56335,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1861
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1837
 #, fuzzy, kde-format
 msgid "Rotate"
 msgstr "परत घुमाबू"
@@ -56353,8 +56353,8 @@ msgstr "मेटाबू"
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:915
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:914
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1859
 #, fuzzy, kde-format
 msgid "Scale"
 msgstr "मापक"
@@ -58292,8 +58292,8 @@ msgstr "एकाइः"
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateXBox)
 #: plugins/tools/basictools/wdgmovetool.ui:235
 #: plugins/tools/basictools/wdgmovetool.ui:257
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1071
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1093
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1070
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1092
 #, fuzzy, kde-format
 msgid "Horizontal Translation"
 msgstr "क्षैतिजः"
@@ -58301,7 +58301,7 @@ msgstr "क्षैतिजः"
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
 #: plugins/tools/basictools/wdgmovetool.ui:241
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:772
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:771
 #, fuzzy, kde-format
 msgid "&x:"
 msgstr "शैली:"
@@ -58310,8 +58310,8 @@ msgstr "शैली:"
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
 #: plugins/tools/basictools/wdgmovetool.ui:273
 #: plugins/tools/basictools/wdgmovetool.ui:286
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1109
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1122
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1108
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1121
 #, fuzzy, kde-format
 msgid "Vertical Translation"
 msgstr "उर्ध्वाधर"
@@ -58319,7 +58319,7 @@ msgstr "उर्ध्वाधर"
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
 #: plugins/tools/basictools/wdgmovetool.ui:289
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:807
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:806
 #, fuzzy, kde-format
 msgid "&y:"
 msgstr "शैली:"
@@ -61019,7 +61019,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1618
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1617
 #, fuzzy, kde-format
 msgid "Lock Points"
 msgstr "विकल्प"
@@ -61031,7 +61031,7 @@ msgstr "विकल्प"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1656
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1655
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
 msgstr ""
@@ -61162,83 +61162,83 @@ msgid "Shear"
 msgstr "तारा"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:699
 #, fuzzy, kde-format
 msgid "off canvas"
 msgstr "ज़ूम इन"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:766
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:765
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:781
 #, fuzzy, kde-format
 msgid "Rotate around X-Axis"
 msgstr "परत घुमाबू"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:801
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:800
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:816
 #, fuzzy, kde-format
 msgid "Rotate around Y-Axis"
 msgstr "परत घुमाबू"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:836
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:835
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:860
 #, fuzzy, kde-format
 msgid "Rotate around Z-Axis"
 msgstr "परत घुमाबू"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:842
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:841
 #, fuzzy, kde-format
 msgid "&z:"
 msgstr "आकार:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCameraHeight)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, cameraHeightBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:880
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:905
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:879
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:904
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:885
 #, fuzzy, kde-format
 msgid "Camera height:"
 msgstr "उँचाइ"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:946
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:968
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:945
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:967
 #, fuzzy, kde-format
 msgid "Horizontal Scale"
 msgstr "क्षैतिजः"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:970
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:986
 #, fuzzy, no-c-format, kde-format
 msgid " %"
 msgstr "%"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:984
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1006
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:983
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1005
 #, fuzzy, kde-format
 msgid "Vertical Scale"
 msgstr "उर्ध्वाधर"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1077
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1175
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1076
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1174
 #, fuzzy, kde-format
 #| msgid "Fax:"
 msgid "x:"
@@ -61246,116 +61246,116 @@ msgstr "फैक्सः"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1125
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1216
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1124
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1215
 #, fuzzy, kde-format
 msgid "y:"
 msgstr "शैली:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1142
 #, fuzzy, kde-format
 msgid "Shear"
 msgstr "तारा"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1172
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1235
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1171
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1234
 #, fuzzy, kde-format
 msgid "Horizontal Shear"
 msgstr "क्षैतिजः"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1194
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1213
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1193
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1212
 #, fuzzy, kde-format
 msgid "Vertical Shear"
 msgstr "उर्ध्वाधर"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1267
 #, fuzzy, kde-format
 msgid "Flip selection horizontally"
 msgstr "चयन बढाउ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1293
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1292
 #, fuzzy, kde-format
 msgid "Flip selection vertically"
 msgstr "चुनाव"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1334
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1333
 #, fuzzy, kde-format
 #| msgid "Rotate Layer"
 msgid "Rotate selection counter-clockwise 90 degrees"
 msgstr "परत घुमाबू"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1359
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1358
 #, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1438
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1437
 #, kde-format
 msgid "Fle&xibility:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, warpTypeLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1467
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1466
 #, fuzzy, kde-format
 msgid "Anc&hor Strength:"
 msgstr "नमाइः "
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1484
 #, fuzzy, kde-format
 msgid "Anchor Points"
 msgstr "विकल्प"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1519
 #, fuzzy, kde-format
 #| msgid "Divide"
 msgid "Subdi&vide"
 msgstr "भाग"
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1577
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1576
 #, fuzzy, kde-format
 msgid "Draw"
 msgstr "रेखा"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetPointsButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1611
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1610
 #, fuzzy, kde-format
 msgid "Clear Points"
 msgstr "विकल्प"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1663
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1662
 #, fuzzy, kde-format
 msgid "Add/Ed&it Anchor Points"
 msgstr "विकल्प"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1678
 #, fuzzy, kde-format
 msgid "Defor&m Selection"
 msgstr "चयन घोकचाबू"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1709
 #, fuzzy, kde-format
 msgid "Adjust Granularity :"
 msgstr "विसंतृप्त"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1720
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1718
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "The Granularity value for Cage Transformation Preview"
@@ -61363,20 +61363,20 @@ msgid "Preview"
 msgstr "पूर्वावलोकन"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1735
 #, fuzzy, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "उर्ध्वाधर"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1784
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1782
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2062
 #, fuzzy, kde-format
 #| msgid "Amount:"
 msgctxt "Amount of transformation"
@@ -61384,32 +61384,32 @@ msgid "Amount:"
 msgstr "मात्रा:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2079
 #, kde-format
 msgid "Build Up"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2151
 #, fuzzy, kde-format
 #| msgid "Brush"
 msgid "Mesh size"
 msgstr "ब्रश"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2180
 #, fuzzy, kde-format
 msgid "Show handles"
 msgstr "लेखा"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2187
 #, kde-format
 msgid "Lock handles symmetrically"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr ""

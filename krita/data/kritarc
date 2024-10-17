@@ -378,3 +378,5 @@ actionGestureSwipeRight=KritaSelected/KisToolColorSampler
 actionGestureSwipeLeft=KritaShape/KisToolBrush
 actionGestureSwipeUp=make_brush_color_lighter
 
+[KritaTransform/KisToolMove]
+forceLodMode=false

@@ -27,8 +27,10 @@ inline void setUtf8OnStream(QTextStream &stream)
 inline int getScreenNumberForWidget(const QWidget *w)
 {
     QList<QScreen *> screens = QGuiApplication::screens();
-    if (screens.contains(w->screen())) {
-        return screens.indexOf(w->screen());
+    if (w) {
+        if (screens.contains(w->screen())) {
+            return screens.indexOf(w->screen());
+        }
     }
 
     return screens.indexOf(QGuiApplication::primaryScreen());

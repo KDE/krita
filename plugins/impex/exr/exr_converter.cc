@@ -1083,10 +1083,21 @@ KisPaintDeviceSP wrapLayerDevice(KisPaintDeviceSP device)
     const KoColorSpace *cs = device->colorSpace();
 
     if (cs->colorDepthId() != Float16BitsColorDepthID && cs->colorDepthId() != Float32BitsColorDepthID) {
+        /**
+         * We should try to keep the same profile of the space when possible
+         * (i.e. when the color model is kept the same)
+         */
+        const KoColorProfile *targetBestEffortProfile = nullptr;
+        if (cs->colorModelId() == GrayAColorModelID ||
+            cs->colorModelId() == RGBAColorModelID) {
+            targetBestEffortProfile = cs->profile();
+        }
+
         cs = KoColorSpaceRegistry::instance()->colorSpace(
             cs->colorModelId() == GrayAColorModelID ?
                 GrayAColorModelID.id() : RGBAColorModelID.id(),
-            Float16BitsColorDepthID.id());
+            Float16BitsColorDepthID.id(),
+            targetBestEffortProfile);
     } else if (cs->colorModelId() != GrayAColorModelID &&
                cs->colorModelId() != RGBAColorModelID) {
         cs = KoColorSpaceRegistry::instance()->colorSpace(

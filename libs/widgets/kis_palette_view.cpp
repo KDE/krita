@@ -216,8 +216,9 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
     setModel(model);
     slotAdditionalGuiUpdate();
 
-    connect(model, SIGNAL(sigPaletteModified()), SLOT(slotAdditionalGuiUpdate()));
-    connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), SLOT(slotAdditionalGuiUpdate()));
+    connect(model, SIGNAL(modelReset()), SLOT(slotAdditionalGuiUpdate()));
 }
 
 KisPaletteModel* KisPaletteView::paletteModel() const
@@ -257,6 +258,12 @@ void KisPaletteView::removeSelectedEntry()
 
 void KisPaletteView::slotAdditionalGuiUpdate()
 {
+    /*
+     * Note: QTableView (Qt 5.15) does not clear spans on model resets.
+     * But it does move spans on row inserts/removals, so incremental updates
+     * would be possible.
+     * Moving rows on the other hand does NOT update row spans accordingly...
+     */
     if (!d->model->colorSet()) return;
 
     clearSpans();

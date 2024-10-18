@@ -68,6 +68,9 @@ windows-asan-weekly:
     KRITACI_SKIP_SPLIT_DEBUG: True
     KRITACI_SKIP_DEBUG_PACKAGE: True
     KRITACI_BUILD_INSTALLERS: False
+    # do not try to sign asan package since its uploading back and forth
+    # is extremely slow (~45 minutes)
+    KRITACI_WINDOWS_SIGN_CONFIG: do-not-sign-asan-package.non-existent-file.ini
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF

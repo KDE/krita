@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:48+0000\n"
+"POT-Creation-Date: 2024-10-18 01:46+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16897,7 +16897,7 @@ msgstr "डिफ़ॉल्ट"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
 msgstr "आकार"
@@ -19739,7 +19739,7 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -19755,7 +19755,7 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2829 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19796,7 +19796,7 @@ msgstr "स्थानीय संसाधन"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -20263,7 +20263,7 @@ msgid "Delete resource"
 msgstr "संसाधन मिटाएँ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2631
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -22423,34 +22423,34 @@ msgstr "चित्र सीमा"
 msgid "Image Center"
 msgstr "चित्र का मध्य :"
 
-#: libs/ui/dialogs/kis_about_application.cpp:34
+#: libs/ui/dialogs/kis_about_application.cpp:35
 #, kde-format
 msgid "About Krita"
 msgstr "क्रिता के बारे में"
 
-#: libs/ui/dialogs/kis_about_application.cpp:45
+#: libs/ui/dialogs/kis_about_application.cpp:46
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">निर्माता</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "रविशंकर श्रीवास्तव, जी. करूणाकर, राघवेंद्र कामत"
 
-#: libs/ui/dialogs/kis_about_application.cpp:69
+#: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "raviratlami@aol.in,"
 
-#: libs/ui/dialogs/kis_about_application.cpp:74
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>अनुवादक</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:86
+#: libs/ui/dialogs/kis_about_application.cpp:87
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22462,7 +22462,7 @@ msgstr ""
 "हार्दिक धन्यवाद।</p><p>केडीई के अंतर्राष्ट्रीयकरण के बारे में और अधिक जानकारी के लिए यहाँ "
 "जाएँ - <a href=\"http://l10n.kde.org\">http://l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:96
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22477,12 +22477,12 @@ msgid ""
 "asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:107
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">इन्हें धन्यवाद</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:134
+#: libs/ui/dialogs/kis_about_application.cpp:135
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22491,7 +22491,7 @@ msgstr ""
 ".</p><p><i>सलाह, आइकन, ब्रश सेट और अन्य विषयों में क्रिता के विकास का समर्थन करने के "
 "लिए।</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:138
+#: libs/ui/dialogs/kis_about_application.cpp:139
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22525,7 +22525,7 @@ msgstr ""
 "शैक्षिक संस्करण, जो वाणिज्यिक स्थितियों में आपके काम के लिए इनका उपयोग करने से आपको वर्जित "
 "करते हैं ।</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:173
+#: libs/ui/dialogs/kis_about_application.cpp:174
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22761,7 +22761,7 @@ msgstr "परत गुण"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -22796,7 +22796,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "शैली के लिए नया नाम दर्ज करें"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25974,7 +25974,7 @@ msgstr "अग्रभूमि का रंग"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1557
 #, kde-format
 msgid "Background Color"
 msgstr "पृष्ठभूमि रंग"
@@ -28711,12 +28711,12 @@ msgstr ""
 msgid "No Gesture"
 msgstr "इशारा नहीं"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:106
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr ""
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_tablet_debugger.cpp:108
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr ""
@@ -30974,13 +30974,13 @@ msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र (&k)"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "औज़ार पट्टी %1 दिखाएँ"
 
 #: libs/ui/KisMainWindow.cpp:590
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "औज़ार-पट्टी %1 छुपाएँ"
@@ -31078,58 +31078,58 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "नया दस्तावेज़ बनाने में विफल. एनिमेशन आयात रद्द किया गया।"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "कार्यक्षेत्र आयात करें... (&I)"
 
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "नया कार्यक्षेत्र... (&N)"
 
-#: libs/ui/KisMainWindow.cpp:2641
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "नया कार्यक्षेत्र..."
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2688
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2857
+#: libs/ui/KisMainWindow.cpp:2852
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2868
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "संस्थापन त्रुटि"
 
-#: libs/ui/KisMainWindow.cpp:2983
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "थीम (&T)"
 
-#: libs/ui/KisMainWindow.cpp:3042
+#: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "विस्तार होने वाला स्पेसर "
@@ -32683,7 +32683,7 @@ msgstr "समूह परत संपादन योग्य नहीं �
 msgid "Local selection is locked."
 msgstr "स्थानीय चयन तालाबंद है।"
 
-#: libs/ui/tool/kis_tool_freehand.cc:213
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32691,7 +32691,7 @@ msgid ""
 msgstr ""
 "ब्रश उपकरण इस परत पर पेंट नहीं कर सकता है। कृपया एक चित्रकारी परत या मास्क का चयन करें।"
 
-#: libs/ui/tool/kis_tool_freehand.cc:218
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -32792,13 +32792,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "फ़िल्टर \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "पूर्वन्यस्त"
 
-#: libs/ui/toolbox/KoToolBox.cpp:354
+#: libs/ui/toolbox/KoToolBox.cpp:355
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -35460,12 +35460,12 @@ msgstr "चैनलें"
 msgid "without name"
 msgstr "बिना नाम का"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:90
+#: libs/widgetutils/config/krecentfilesaction.cpp:91
 #, kde-format
 msgid "No Entries"
 msgstr "कोई प्रविष्टि नहीं"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:96
+#: libs/widgetutils/config/krecentfilesaction.cpp:97
 #, kde-format
 msgid "Clear List"
 msgstr "सूची साफ करें"
@@ -35967,69 +35967,69 @@ msgstr "%1 के बारे में (&A)"
 msgid "About &KDE"
 msgstr "केडीई के बारे में (&K)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "इकाईः"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "प्रतिशत (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr "दृश्य चौड़ाई का प्रतिशत (vw)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr "दृश्य ऊंचाई का प्रतिशत (vh)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "अंश (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr "कोण (रेडियन)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr "गोन्स (गोन)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr "वृत्त का प्रतिशत (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr "फ़्रेम (f)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "सेकंड (s)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -41483,23 +41483,23 @@ msgstr "कॉन्फ़िगर..."
 msgid "Wide Gamut Color Selector Settings"
 msgstr "रंग चयनक विन्यास"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:35
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
 msgstr "कृपया इस जानकारी को अपनी बग रिपोर्ट में चिपकाएँ "
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, fuzzy, kde-format
 msgid "Copy to clipboard"
 msgstr "चयन को नई परत में नक़ल करें"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:42
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:76
 #, kde-format
 msgid "Save to file"
 msgstr "फ़ाइल में सहेजें"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:87
 #, kde-format
 msgid "Unable to open file"
 msgstr "फाइल खोलने में असमर्थ"
@@ -47568,7 +47568,7 @@ msgstr "ब्रिसल्स"
 msgid "Selection mode:"
 msgstr "चयन मोड :"
 
-#: plugins/impex/exr/exr_converter.cc:911
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47578,19 +47578,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:918
+#: plugins/impex/exr/exr_converter.cc:919
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "नया दस्तावेज़ टैम्प्लेट के साथ खोलें"
 
-#: plugins/impex/exr/exr_converter.cc:1333
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (क़िस्म : \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1338
+#: plugins/impex/exr/exr_converter.cc:1339
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49377,17 +49377,17 @@ msgstr "नया मास्क या परत बनाएँ"
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr "नया मास्क या परत बनाएँ"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, fuzzy, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr "नया मास्क या परत बनाएँ"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, fuzzy, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr "नया मास्क या परत बनाएँ"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, fuzzy, kde-format
 msgid "Could not write for %1 metadata to the file."
 msgstr "चित्र में परत जोड़ा नहीं जा सका."
@@ -59384,83 +59384,83 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "एसवीजी पाठ साधन बदलें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
 #, kde-format
 msgid "Text Tool"
 msgstr "पाठ औज़ार"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:400
 #, kde-format
 msgid "Conversion failed"
 msgstr "परिवर्तन असफल"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
 #, kde-format
 msgid "Find Text"
 msgstr "पाठ ढूंढें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:654
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
 #, kde-format
 msgid "Find:"
 msgstr "ढूंढें :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:693
 #, kde-format
 msgid "Find and Replace all"
 msgstr "सभी को ढूंढें और बदलें"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:699
 #, kde-format
 msgid "Replace:"
 msgstr "प्रतिस्थापित :"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "संपन्न पाठ्य"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1385
 #, kde-format
 msgid "SVG Source"
 msgstr "एसविजि स्रोत"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1532
 #, kde-format
 msgid "Font"
 msgstr "फॉन्ट"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1549
 #, kde-format
 msgid "Text Color"
 msgstr "पाठ रंग"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1564
 #, kde-format
 msgid "Sample a Color"
 msgstr "एक रंग चुने"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgid "Line height"
 msgstr "लकीर की ऊँचाई"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "सामान्य"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
@@ -59468,7 +59468,7 @@ msgid "100%"
 msgstr "१००%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"

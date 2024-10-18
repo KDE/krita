@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:48+0000\n"
+"POT-Creation-Date: 2024-10-18 01:46+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -16988,7 +16988,7 @@ msgstr "по умолчанию"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
 msgstr "Размер"
@@ -19988,7 +19988,7 @@ msgstr "Локальные источники"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -20004,7 +20004,7 @@ msgstr "Локальные источники"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2829 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20045,7 +20045,7 @@ msgstr "Локальные источники"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -20508,7 +20508,7 @@ msgid "Delete resource"
 msgstr "Удалить ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2631
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -22714,17 +22714,17 @@ msgstr "Края изображения"
 msgid "Image Center"
 msgstr "Центр изображения"
 
-#: libs/ui/dialogs/kis_about_application.cpp:34
+#: libs/ui/dialogs/kis_about_application.cpp:35
 #, kde-format
 msgid "About Krita"
 msgstr "О Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:45
+#: libs/ui/dialogs/kis_about_application.cpp:46
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Разработчики</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -22732,7 +22732,7 @@ msgstr ""
 "Николай Шафоростов,Андрей Черепанов,Александр Прокудин,Дмитрий Рязанцев,Юрий "
 "Ефремов,Георгий Сыпченко"
 
-#: libs/ui/dialogs/kis_about_application.cpp:69
+#: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22740,12 +22740,12 @@ msgstr ""
 "shafff@ukr.net,sibskull@mail.ru,alexandre.prokoudine@gmail.com,"
 "djm00n@rambler.ru, yur.arh@gmail.com, superzhook@gmail.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:74
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Переводчики</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:86
+#: libs/ui/dialogs/kis_about_application.cpp:87
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22760,7 +22760,7 @@ msgstr ""
 "a>. Там вы сможете узнать о работе команды, переводившей KDE на русский "
 "язык, и, возможно, сами захотите участвовать в этой работе.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:96
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22785,12 +22785,12 @@ msgstr ""
 "href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
 "body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:107
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Спасибо</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:134
+#: libs/ui/dialogs/kis_about_application.cpp:135
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22799,7 +22799,7 @@ msgstr ""
 ".</p><p><i>За поддержку Krita советами, значками, наборами кистей и многое "
 "другое</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:138
+#: libs/ui/dialogs/kis_about_application.cpp:139
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22834,7 +22834,7 @@ msgstr ""
 "коммерческих программ, которые прямо запрещают их использование в "
 "коммерческих целях.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:173
+#: libs/ui/dialogs/kis_about_application.cpp:174
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -23086,7 +23086,7 @@ msgstr "Свойства слоя"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -23123,7 +23123,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ввод названия нового стиля"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26424,7 +26424,7 @@ msgstr "Цвет переднего плана"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1557
 #, kde-format
 msgid "Background Color"
 msgstr "Цвет фона"
@@ -29283,12 +29283,12 @@ msgstr "Прокрутка пятью пальцами"
 msgid "No Gesture"
 msgstr "Без жеста"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:106
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "Журналирование событий планшета включено"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_tablet_debugger.cpp:108
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "Журналирование событий планшета отключено"
@@ -31672,13 +31672,13 @@ msgid "Wor&kspace"
 msgstr "Рабо&чее пространство"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показать панель инструментов %1"
 
 #: libs/ui/KisMainWindow.cpp:590
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скрыть панель инструментов %1"
@@ -31785,35 +31785,35 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Не удалось создать новый документ. Импорт анимации прерван."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Импорт рабочих пространств..."
 
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Новое рабочее пространство..."
 
-#: libs/ui/KisMainWindow.cpp:2641
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Новое рабочее пространство..."
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2688
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2857
+#: libs/ui/KisMainWindow.cpp:2852
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31822,19 +31822,19 @@ msgstr ""
 "Модуль Krita LittleCMS для управления цветом не установлен. Работа Krita "
 "будет завершена."
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2868
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Ошибка установки"
 
-#: libs/ui/KisMainWindow.cpp:2983
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Темы"
 
-#: libs/ui/KisMainWindow.cpp:3042
+#: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Расширяющийся заполнитель"
@@ -33444,7 +33444,7 @@ msgstr "Группу нельзя редактировать."
 msgid "Local selection is locked."
 msgstr "Локальное выделение заблокировано."
 
-#: libs/ui/tool/kis_tool_freehand.cc:213
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -33453,7 +33453,7 @@ msgstr ""
 "Инструмент «Кисть» не может рисовать на этом слое. Выберите обычный слой или "
 "маску."
 
-#: libs/ui/tool/kis_tool_freehand.cc:218
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -33554,13 +33554,13 @@ msgstr ""
 "Фильтр «%1»\n"
 "Фильтр «%1»"
 
-#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "По умолчанию"
 
-#: libs/ui/toolbox/KoToolBox.cpp:354
+#: libs/ui/toolbox/KoToolBox.cpp:355
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -36382,12 +36382,12 @@ msgstr "Каналы"
 msgid "without name"
 msgstr "без названия"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:90
+#: libs/widgetutils/config/krecentfilesaction.cpp:91
 #, kde-format
 msgid "No Entries"
 msgstr "Пусто"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:96
+#: libs/widgetutils/config/krecentfilesaction.cpp:97
 #, kde-format
 msgid "Clear List"
 msgstr "Очистить список"
@@ -36893,69 +36893,69 @@ msgstr "&О %1"
 msgid "About &KDE"
 msgstr "О &KDE"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "Единица:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "Проценты (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr "процент от ширины просмотра (шп)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr "процент от высоты просмотра (вп)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "градусы (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr "радианы (рад)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr "грады (град)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr "процент от окружности (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr "кадры (к)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "секунды (с)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -42461,23 +42461,23 @@ msgstr "Настроить..."
 msgid "Wide Gamut Color Selector Settings"
 msgstr "Параметры выбора цветов в широком диапазоне"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:35
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
 msgstr "Вставьте эту информацию в свой отчёт об ошибке"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, kde-format
 msgid "Copy to clipboard"
 msgstr "Скопировать в буфер обмена"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:42
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:76
 #, kde-format
 msgid "Save to file"
 msgstr "Сохранить в файл"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:87
 #, kde-format
 msgid "Unable to open file"
 msgstr "Не удалось открыть файл"
@@ -48538,7 +48538,7 @@ msgstr "Опции анимированного стиля"
 msgid "Selection mode:"
 msgstr "Режим выделения:"
 
-#: plugins/impex/exr/exr_converter.cc:911
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48553,19 +48553,19 @@ msgstr ""
 "сохранении изображения.<br/><br/>Визуальные отличия будет очень трудно "
 "обнаружить, имейте это в виду."
 
-#: plugins/impex/exr/exr_converter.cc:918
+#: plugins/impex/exr/exr_converter.cc:919
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Изображение EXR было изменено"
 
-#: plugins/impex/exr/exr_converter.cc:1333
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (тип: «%2»)"
 
-#: plugins/impex/exr/exr_converter.cc:1338
+#: plugins/impex/exr/exr_converter.cc:1339
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -50447,17 +50447,17 @@ msgstr "Ошибка сохранения локального выделени�
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr "Не удалось сохранить данные растрового выделения для слоя %1."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr "Не удалось сохранить данные векторного выделения для слоя %1."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr "Не удалось сохранить метаданные для %1 в буфер."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
 msgid "Could not write for %1 metadata to the file."
 msgstr "Не удалось записать метаданные для %1 в файл."
@@ -60739,89 +60739,89 @@ msgstr ""
 "Изменение SvgTextTool\n"
 "изменение SvgTextTool"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
 #, kde-format
 msgid "Text Tool"
 msgstr "Текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:400
 #, kde-format
 msgid "Conversion failed"
 msgstr "Ошибка преобразования"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
 #, kde-format
 msgid "Find Text"
 msgstr "Найти текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:654
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
 #, kde-format
 msgid "Find:"
 msgstr "Искать:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:693
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Найти и заменить все"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:699
 #, kde-format
 msgid "Replace:"
 msgstr "Заменить на:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Текст был изменён. Отклонить изменения?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Текст с форматированием"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1385
 #, kde-format
 msgid "SVG Source"
 msgstr "Источник SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1532
 #, kde-format
 msgid "Font"
 msgstr "Шрифт"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1549
 #, kde-format
 msgid "Text Color"
 msgstr "Цвет текста"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1564
 #, kde-format
 msgid "Sample a Color"
 msgstr "Взять образец цвета"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgid "Line height"
 msgstr "Высота строки"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
 #, fuzzy, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Нормальный"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
 #, fuzzy, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"

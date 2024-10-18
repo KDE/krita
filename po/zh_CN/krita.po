@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:48+0000\n"
+"POT-Creation-Date: 2024-10-18 01:46+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16736,7 +16736,7 @@ msgstr "默认"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
 msgstr "大小"
@@ -19552,7 +19552,7 @@ msgstr "本地资源"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -19568,7 +19568,7 @@ msgstr "本地资源"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2829 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19609,7 +19609,7 @@ msgstr "本地资源"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -20072,7 +20072,7 @@ msgid "Delete resource"
 msgstr "删除资源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2631
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -22225,17 +22225,17 @@ msgstr "图像边框"
 msgid "Image Center"
 msgstr "图像中心"
 
-#: libs/ui/dialogs/kis_about_application.cpp:34
+#: libs/ui/dialogs/kis_about_application.cpp:35
 #, kde-format
 msgid "About Krita"
 msgstr "关于 Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:45
+#: libs/ui/dialogs/kis_about_application.cpp:46
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">开发人员名单</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
@@ -22244,7 +22244,7 @@ msgstr ""
 "楠, 贾民 (Jia Min), Henry Hu, Aster Wang, 潘晓宇, Jeff_Li, Zixing Liu "
 "(liushuyu), hotkeyliu, StevenByte"
 
-#: libs/ui/dialogs/kis_about_application.cpp:69
+#: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
@@ -22253,12 +22253,12 @@ msgstr ""
 "sinan@kde.org, jia.min@kde.org, henry.hu@kde.org, pan.xiaoyu@kde.org, jeff."
 "li@kde.org, liushuyu@aosc.io, hotkey.liu@kde.org, stevenByte@kde.org"
 
-#: libs/ui/dialogs/kis_about_application.cpp:74
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>翻译人员</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:86
+#: libs/ui/dialogs/kis_about_application.cpp:87
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22270,7 +22270,7 @@ msgstr ""
 "际化工作的详情，请访问 <a href=\"https://l10n.kde.org\">http://l10n.kde.org</"
 "a>。</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:96
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22295,12 +22295,12 @@ msgstr ""
 "href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
 "body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:107
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">特别鸣谢</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:134
+#: libs/ui/dialogs/kis_about_application.cpp:135
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22309,7 +22309,7 @@ msgstr ""
 "</p><p>感谢上面各位人士为 Krita 的开发提供的建议、图标、笔刷以及其他的点点滴"
 "滴。</p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:138
+#: libs/ui/dialogs/kis_about_application.cpp:139
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22339,7 +22339,7 @@ msgstr ""
 "p><p>Krita 通过 GPL 许可证赋予用户上述自由，任何人无权剥夺。</p><br/><hr/"
 "><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:173
+#: libs/ui/dialogs/kis_about_application.cpp:174
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22586,7 +22586,7 @@ msgstr "图层属性"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -22621,7 +22621,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "输入新样式名称"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25830,7 +25830,7 @@ msgstr "前景色"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1557
 #, kde-format
 msgid "Background Color"
 msgstr "背景色"
@@ -28617,12 +28617,12 @@ msgstr "五指拖动"
 msgid "No Gesture"
 msgstr "无手势"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:106
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "数位板事件记录已开始"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_tablet_debugger.cpp:108
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "数位板事件记录已停止"
@@ -30886,13 +30886,13 @@ msgid "Wor&kspace"
 msgstr "工作区(&K)"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "显示%1工具栏"
 
 #: libs/ui/KisMainWindow.cpp:590
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "隐藏%1工具栏"
@@ -30997,54 +30997,54 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "创建新图像失败。动画导入已中止。"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "导入工作区(&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新建工作区(&N)..."
 
-#: libs/ui/KisMainWindow.cpp:2641
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新建工作区..."
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2688
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2857
+#: libs/ui/KisMainWindow.cpp:2852
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安装 Krita 的 LittleCMS 色彩管理插件。Krita 将立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2868
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安装错误"
 
-#: libs/ui/KisMainWindow.cpp:2983
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "界面颜色(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3042
+#: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "<<--- 空白占位符 (自动伸展) --->>"
@@ -32609,14 +32609,14 @@ msgstr "图层组不可编辑。"
 msgid "Local selection is locked."
 msgstr "局部选区蒙版已锁定。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:213
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr "笔刷工具无法在此图层绘画，请选中一个颜料图层或者蒙版图层。"
 
-#: libs/ui/tool/kis_tool_freehand.cc:218
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -32711,13 +32711,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "滤镜“%1”"
 
-#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "默认"
 
-#: libs/ui/toolbox/KoToolBox.cpp:354
+#: libs/ui/toolbox/KoToolBox.cpp:355
 #, kde-format
 msgid "%1x%2"
 msgstr "%1x%2"
@@ -35436,12 +35436,12 @@ msgstr "通道"
 msgid "without name"
 msgstr "不包括名字"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:90
+#: libs/widgetutils/config/krecentfilesaction.cpp:91
 #, kde-format
 msgid "No Entries"
 msgstr "没有条目"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:96
+#: libs/widgetutils/config/krecentfilesaction.cpp:97
 #, kde-format
 msgid "Clear List"
 msgstr "清除列表"
@@ -35943,68 +35943,68 @@ msgstr "关于 %1(&A)"
 msgid "About &KDE"
 msgstr "关于 KDE(&K)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, kde-format
 msgid "Unit"
 msgstr "单位"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "百分比(%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr "视图宽度比例 (vw)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr "视图高度比例 (vh)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "度数 (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr "弧度 (度)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr "百分度"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr "圆的百分比 (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr "帧 (f)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "秒 (s)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -41306,23 +41306,23 @@ msgstr "配置..."
 msgid "Wide Gamut Color Selector Settings"
 msgstr "宽色域拾色器设置"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:35
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
 msgstr "请将此信息粘贴到缺陷报告中"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, kde-format
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:42
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:76
 #, kde-format
 msgid "Save to file"
 msgstr "保存到文件"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:87
 #, kde-format
 msgid "Unable to open file"
 msgstr "无法打开文件"
@@ -47247,7 +47247,7 @@ msgstr "动态样式选项"
 msgid "Selection mode:"
 msgstr "笔尖图像顺序："
 
-#: plugins/impex/exr/exr_converter.cc:911
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47260,19 +47260,19 @@ msgstr ""
 "定透明度。像素的原始数值在保存时将<b>不会</b>被还原。<br/>虽然这并不会造成视"
 "觉上的明显区别，但请记住软件做过上述处理以防万一。"
 
-#: plugins/impex/exr/exr_converter.cc:918
+#: plugins/impex/exr/exr_converter.cc:919
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 图像已被调整。"
 
-#: plugins/impex/exr/exr_converter.cc:1333
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (类型：“%2”)"
 
-#: plugins/impex/exr/exr_converter.cc:1338
+#: plugins/impex/exr/exr_converter.cc:1339
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49092,17 +49092,17 @@ msgstr "保存局部选区蒙版 %1 的选区失败。"
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr "保存图层 %1 的像素选区数据失败。"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr "保存图层 %1 的矢量选区数据失败。"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr "元数据后台程序保存 %1 的元数据失败"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
 msgid "Could not write for %1 metadata to the file."
 msgstr "无法为 %1 元数据写入文件。"
@@ -58977,89 +58977,89 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "SVG 文字工具更改"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
 #, kde-format
 msgid "Text Tool"
 msgstr "文字工具"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:400
 #, kde-format
 msgid "Conversion failed"
 msgstr "转换失败"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
 #, kde-format
 msgid "Find Text"
 msgstr "查找文字"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:654
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
 #, kde-format
 msgid "Find:"
 msgstr "查找："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:693
 #, kde-format
 msgid "Find and Replace all"
 msgstr "查找并替换全部"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:699
 #, kde-format
 msgid "Replace:"
 msgstr "替换："
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "文字已被修改。您想要放弃更改吗？"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "可视编辑器"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1385
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG 源代码"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1532
 #, kde-format
 msgid "Font"
 msgstr "字体"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1549
 #, kde-format
 msgid "Text Color"
 msgstr "文字颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1564
 #, kde-format
 msgid "Sample a Color"
 msgstr "拾取颜色"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgid "Line height"
 msgstr "行高"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "正常"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"

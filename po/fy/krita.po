@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-17 01:48+0000\n"
+"POT-Creation-Date: 2024-10-18 01:46+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -17074,7 +17074,7 @@ msgstr "Standert"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
 msgstr "Grutte"
@@ -20019,7 +20019,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -20035,7 +20035,7 @@ msgstr "Boarnetriemmen:"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2829 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20076,7 +20076,7 @@ msgstr "Boarnetriemmen:"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -20554,7 +20554,7 @@ msgid "Delete resource"
 msgstr "Wiskje"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2631
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -22732,34 +22732,34 @@ msgstr "Ofbylding"
 msgid "Image Center"
 msgstr "Yn it midden:"
 
-#: libs/ui/dialogs/kis_about_application.cpp:34
+#: libs/ui/dialogs/kis_about_application.cpp:35
 #, fuzzy, kde-format
 msgid "About Krita"
 msgstr "Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:45
+#: libs/ui/dialogs/kis_about_application.cpp:46
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Berend Ytsma,Rinse de Vries"
 
-#: libs/ui/dialogs/kis_about_application.cpp:69
+#: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "berendy@bigfoot.com,rinsedevries@kde.nl"
 
-#: libs/ui/dialogs/kis_about_application.cpp:74
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:86
+#: libs/ui/dialogs/kis_about_application.cpp:87
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22768,7 +22768,7 @@ msgid ""
 "org</a></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:96
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
@@ -22783,19 +22783,19 @@ msgid ""
 "asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:107
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:134
+#: libs/ui/dialogs/kis_about_application.cpp:135
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:138
+#: libs/ui/dialogs/kis_about_application.cpp:139
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22814,7 +22814,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:173
+#: libs/ui/dialogs/kis_about_application.cpp:174
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -23046,7 +23046,7 @@ msgstr "Laacheigenskippen"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -23083,7 +23083,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Groepnamme ynfiere:"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2637
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26336,7 +26336,7 @@ msgstr "Kleur fan foargrûn"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1557
 #, kde-format
 msgid "Background Color"
 msgstr "Eftergrûnkleur"
@@ -29107,12 +29107,12 @@ msgstr ""
 msgid "No Gesture"
 msgstr "Fochtich tekstuer"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:106
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr ""
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_tablet_debugger.cpp:108
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr ""
@@ -31347,13 +31347,13 @@ msgid "Wor&kspace"
 msgstr "Kleurromte"
 
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Orizjinele laach sjen litte"
 
 #: libs/ui/KisMainWindow.cpp:590
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "&Ark"
@@ -31451,56 +31451,56 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Nije laach oanmeitsje"
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2617
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "Figuer &ymportearje..."
 
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2632
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Figuer &ymportearje..."
 
-#: libs/ui/KisMainWindow.cpp:2641
+#: libs/ui/KisMainWindow.cpp:2636
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Figuer &ymportearje..."
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2680
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "&%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2688
+#: libs/ui/KisMainWindow.cpp:2683
 #, fuzzy, kde-format
 #| msgid "%1 %"
 msgid "%1 %2"
 msgstr "%1 %"
 
-#: libs/ui/KisMainWindow.cpp:2857
+#: libs/ui/KisMainWindow.cpp:2852
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2868
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Flater by bit oanmeitsjen fan laach"
 
-#: libs/ui/KisMainWindow.cpp:2983
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3042
+#: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -33078,14 +33078,14 @@ msgstr "Laachgrutte"
 msgid "Local selection is locked."
 msgstr "Seleksje skealje"
 
-#: libs/ui/tool/kis_tool_freehand.cc:213
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
 
-#: libs/ui/tool/kis_tool_freehand.cc:218
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -33181,13 +33181,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filterje:"
 
-#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Standert"
 
-#: libs/ui/toolbox/KoToolBox.cpp:354
+#: libs/ui/toolbox/KoToolBox.cpp:355
 #, kde-format
 msgid "%1x%2"
 msgstr ""
@@ -35831,13 +35831,13 @@ msgstr "Kanaal"
 msgid "without name"
 msgstr "Berend Ytsma,Rinse de Vries"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:90
+#: libs/widgetutils/config/krecentfilesaction.cpp:91
 #, fuzzy, kde-format
 #| msgid "Number of tiles"
 msgid "No Entries"
 msgstr "Oantal tegels"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:96
+#: libs/widgetutils/config/krecentfilesaction.cpp:97
 #, fuzzy, kde-format
 msgid "Clear List"
 msgstr "Omskjinje"
@@ -36342,26 +36342,26 @@ msgstr "Krita"
 msgid "About &KDE"
 msgstr "Krita"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "Ienheid:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, fuzzy, kde-format
 msgid "Percent (%)"
 msgstr "&Persintaazje:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
 msgid "percent of view width (vw)"
 msgstr "Selbreedte"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
@@ -36369,44 +36369,44 @@ msgstr "Selbreedte"
 msgid "percent of view height (vh)"
 msgstr "Selhichte"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 #| msgid "90 &degrees"
 msgid "degrees (°)"
 msgstr "90 &graden"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 msgid "percent of circle (%)"
 msgstr "&Persintaazje:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, fuzzy, kde-format
 msgid "frames (f)"
 msgstr "Laach wiskje"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, fuzzy, kde-format
 msgid "percent of animation (%)"
@@ -41750,24 +41750,24 @@ msgstr "Ynstelle..."
 msgid "Wide Gamut Color Selector Settings"
 msgstr "Lytse kleurkiezer"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:35
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
 msgstr ""
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, fuzzy, kde-format
 msgid "Copy to clipboard"
 msgstr "Seleksje nei nije laach kopiearje"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:42
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:76
 #, fuzzy, kde-format
 #| msgid "&Save to Presets"
 msgid "Save to file"
 msgstr "Nei foarynstelde op&set bewarje"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:87
 #, fuzzy, kde-format
 msgid "Unable to open file"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
@@ -47928,7 +47928,7 @@ msgstr "Helderheid"
 msgid "Selection mode:"
 msgstr "Seleksjemodus:"
 
-#: plugins/impex/exr/exr_converter.cc:911
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47938,19 +47938,19 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:918
+#: plugins/impex/exr/exr_converter.cc:919
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Meitsje nij dokumint fanút in sjabloan."
 
-#: plugins/impex/exr/exr_converter.cc:1333
+#: plugins/impex/exr/exr_converter.cc:1334
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Bedriuw:"
 
-#: plugins/impex/exr/exr_converter.cc:1338
+#: plugins/impex/exr/exr_converter.cc:1339
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49703,17 +49703,17 @@ msgstr "Nije laach oanmeitsje"
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr "Nije laach oanmeitsje"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, fuzzy, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr "Nije laach oanmeitsje"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, fuzzy, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr "Nije laach oanmeitsje"
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, fuzzy, kde-format
 msgid "Could not write for %1 metadata to the file."
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
@@ -59915,84 +59915,84 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Feroarje"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
 #, fuzzy, kde-format
 msgid "Text Tool"
 msgstr "Line ark"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:400
 #, fuzzy, kde-format
 msgid "Conversion failed"
 msgstr "Seleksje oaniensletten gebiet"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
 #, fuzzy, kde-format
 msgid "Find Text"
 msgstr "Tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:654
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
 #, fuzzy, kde-format
 msgid "Find:"
 msgstr "Midden:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:693
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:699
 #, fuzzy, kde-format
 msgid "Replace:"
 msgstr "Ferfange"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, fuzzy, kde-format
 msgid "Rich text"
 msgstr "Skeanprinte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1385
 #, fuzzy, kde-format
 #| msgid "Source"
 msgid "SVG Source"
 msgstr "Boarne"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1532
 #, fuzzy, kde-format
 msgid "Font"
 msgstr "Punttype ynstelle"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1549
 #, fuzzy, kde-format
 msgid "Text Color"
 msgstr "Line ark"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1564
 #, fuzzy, kde-format
 msgid "Sample a Color"
 msgstr "Seleksjemodus:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, fuzzy, kde-format
 msgid "Line height"
 msgstr "Selhichte"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Gewoan"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
 #, fuzzy, kde-format
 #| msgid "100%"
 msgctxt "line height for text"
@@ -60000,7 +60000,7 @@ msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, fuzzy, kde-format
 #| msgid "Line Spacing"

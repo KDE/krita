@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
 "PO-Revision-Date: 2024-09-29 08:51+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -47937,13 +47937,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Obraz EXR uległ zmianie"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (rodzaj: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

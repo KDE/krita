@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -47339,13 +47339,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 影像已被調整"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (類型：「%2」)"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

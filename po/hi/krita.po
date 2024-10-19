@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -47584,13 +47584,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "नया दस्तावेज़ टैम्प्लेट के साथ खोलें"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (क़िस्म : \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

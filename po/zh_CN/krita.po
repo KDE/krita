@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -24211,7 +24211,7 @@ msgstr "强制拾取色板颜色：始终拾取与当前色板最接近的颜色
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr ""
+msgstr "导入的 EXR 文件的色彩特性文件："
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178
@@ -47266,13 +47266,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 图像已被调整。"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (类型：“%2”)"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -48144,13 +48144,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "D'éirigh le gabháil an scáileáin."
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Cóipeáil Ó"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

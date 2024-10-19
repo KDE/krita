@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-18 01:46+0000\n"
-"PO-Revision-Date: 2024-09-27 12:08+0200\n"
+"POT-Creation-Date: 2024-10-19 01:50+0000\n"
+"PO-Revision-Date: 2024-10-16 13:11+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -24422,7 +24422,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr ""
+msgstr "Profile del colore per i file EXR importati:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178
@@ -30410,7 +30410,7 @@ msgstr "Caricamento della finestra principale..."
 #: libs/ui/KisApplication.cpp:514
 #, kde-format
 msgid "Launching..."
-msgstr "Avvio corso..."
+msgstr "Avvio in corso..."
 
 #: libs/ui/KisApplication.cpp:583
 #, kde-format
@@ -47980,13 +47980,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "L'immagine EXR è stata modificata"
 
-#: plugins/impex/exr/exr_converter.cc:1334
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (tipo:  «%2»)"
 
-#: plugins/impex/exr/exr_converter.cc:1339
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""

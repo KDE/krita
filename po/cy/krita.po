@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 03:20+0000\n"
+"POT-Creation-Date: 2024-10-19 03:23+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -46318,13 +46318,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Mae'r sgrin wedi'i gipio'n lwyddiannus."
 
-#: plugins/impex/exr/exr_converter.cc:1327
+#: plugins/impex/exr/exr_converter.cc:1338
 #, fuzzy, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "Copio gwyrdd"
 
-#: plugins/impex/exr/exr_converter.cc:1332
+#: plugins/impex/exr/exr_converter.cc:1343
 #, kde-format
 msgctxt "@info"
 msgid ""

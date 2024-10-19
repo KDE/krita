@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-16 03:20+0000\n"
+"POT-Creation-Date: 2024-10-19 03:23+0000\n"
 "PO-Revision-Date: 2024-09-26 21:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -46845,13 +46845,13 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR görseli değiştirildi"
 
-#: plugins/impex/exr/exr_converter.cc:1327
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (Tür: “%2”)"
 
-#: plugins/impex/exr/exr_converter.cc:1332
+#: plugins/impex/exr/exr_converter.cc:1343
 #, kde-format
 msgctxt "@info"
 msgid ""

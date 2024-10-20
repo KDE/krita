@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-19 01:50+0000\n"
-"PO-Revision-Date: 2024-09-25 17:33+0200\n"
+"PO-Revision-Date: 2024-10-19 16:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -24377,7 +24377,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr ""
+msgstr "Färgprofil för importerade EXR-filer: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178

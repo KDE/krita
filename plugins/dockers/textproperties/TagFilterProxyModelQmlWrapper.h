@@ -66,6 +66,9 @@ public:
     Q_INVOKABLE QString localizedNameForIndex(const int &resourceIndex, const QStringList &locales, const QString &fallBack = "");
     Q_INVOKABLE QVariantMap metadataForIndex(const int &resourceIndex) const;
 
+    /// Get localized sample string based on scripts of locale.
+    Q_INVOKABLE QString localizedSampleForIndex(const int &resourceIndex, const QStringList &locales, const QString &fallBack = "");
+
     /// Get a variantlist with the tags for the given resource index.
     Q_INVOKABLE QVariantList taggedResourceModel (const int &resourceIndex) const;
 

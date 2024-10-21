@@ -25,7 +25,9 @@ const QString COLOR_CLRV1 = "color_clrv1";
 const QString COLOR_SVG = "color_svg";
 const QString SAMPLE_STRING = "sample_string";
 const QString SAMPLE_SVG = "sample_svg";
+const QString SAMPLE_BBOX = "sample_bbox";
 const QString LAST_MODIFIED = "last_modified";
+const QString SUPPORTED_LANGUAGES = "supported_languages";
 
 struct KoFontFamily::Private {
 };
@@ -62,14 +64,21 @@ QImage generateImage(QString sample, QString fontFamily, bool isColor) {
     return img;
 }
 
-QString generateSVG(QString sample, QString fontFamily) {
+QString generateSVG(QString sample, QString fontFamily, QRectF &layoutBox, const QString &lang) {
     QSharedPointer<KoSvgTextShape> shape(new KoSvgTextShape);
     shape->setResolution(300, 300);
     shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::black)));
     KoSvgTextProperties props = shape->textProperties();
     props.setProperty(KoSvgTextProperties::FontFamiliesId, {fontFamily});
+    KoSvgText::CssLengthPercentage fontSize(12.0);
+    props.setProperty(KoSvgTextProperties::FontSizeId, QVariant::fromValue(fontSize));
+    if (!lang.isEmpty()) {
+        props.setProperty(KoSvgTextProperties::TextLanguage, lang);
+    }
     shape->setPropertiesAtPos(-1, props);
     shape->insertText(0, sample);
+
+    layoutBox = shape->selectionBoxes(0, shape->posDown(0)).boundingRect();
 
     SvgWriter writer({shape->textOutline()});
     QBuffer buffer;
@@ -107,6 +116,14 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
         samples.insert(key, QVariant::fromValue(representation.sampleStrings.value(key)));
     }
     addMetaData(SAMPLE_STRING, samples);
+    QList<QVariant> supportedLanguages;
+    Q_FOREACH(const QLocale l, representation.supportedLanguages) {
+        QString val = l.bcp47Name();
+        val.replace("_", "-");
+        supportedLanguages.append(QVariant::fromValue(val));
+    }
+    addMetaData(SUPPORTED_LANGUAGES, supportedLanguages);
+
     addMetaData(FONT_TYPE, representation.type);
     addMetaData(IS_VARIABLE, representation.isVariable);
     addMetaData(COLOR_BITMAP, representation.colorBitMap);
@@ -175,10 +192,22 @@ QPair<QString, QString> KoFontFamily::resourceType() const
 void KoFontFamily::updateThumbnail()
 {
     QHash<QString, QVariant> samples = metadata().value(SAMPLE_STRING).toHash();
-    QString sample = samples.isEmpty()? QString("AaBbGg"):
-                                        samples.value("s_Latn", samples.values().first()).toString();
+    QHash<QString, QVariant> sampleSVG;
+    QHash<QString, QVariant> sampleSVGBbox;
+
+    Q_FOREACH (const QString key, samples.keys()) {
+        QString sample = samples.value(key).toString();
+        QRectF sampleBBox;
+        QString lang = key.startsWith("l_")? key.right(key.size() - 2): "";
+        sampleSVG.insert(key, QVariant::fromValue(generateSVG(sample, filename(), sampleBBox, lang)));
+        sampleSVGBbox.insert(key, QVariant::fromValue(sampleBBox));
+    }
+
+    addMetaData(SAMPLE_SVG, sampleSVG);
+    addMetaData(SAMPLE_BBOX, sampleSVGBbox);
+    const QString sample = samples.isEmpty()? "AaBbGg"
+                                            : samples.value("s_Latn", samples.values().first()).toString();
     bool isColor = (metadata().value(COLOR_BITMAP).toBool() || metadata().value(COLOR_CLRV0).toBool());
-    addMetaData(SAMPLE_SVG, generateSVG(sample, filename()));
     setImage(generateImage(sample, filename(), isColor));
 }
 

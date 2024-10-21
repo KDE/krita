@@ -38,6 +38,8 @@ Button {
             id: fontDelegateItem;
             required property var model;
             property string fontName: model.name;
+            // TODO: change this to use the text locale, if possible.
+            property string sample: familyCmb.modelWrapper.localizedSampleForIndex(model.index, locales, "");
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
             /// the metadata from the modelwrapper.
             property var meta: familyCmb.modelWrapper.metadataForIndex(model.index);
@@ -62,7 +64,7 @@ Button {
                 height: nameLabel.height * 5;
                 imageScale: 3;
                 imagePadding: nameLabel.height;
-                svgData: typeof meta.sample_svg === 'string'? meta.sample_svg: "";
+                svgData: fontDelegateItem.sample;
                 foregroundColor: sysPalette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
 

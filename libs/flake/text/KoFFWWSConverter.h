@@ -63,7 +63,7 @@ public:
     /// and other font features.
     bool addFontFromFile(const QString &filename, const int index, FT_LibrarySP freeTypeLibrary);
 
-    void addSupportedLanguagesByFile(const QString &filename, const int index, const QList<QLocale> &supportedLanguages);
+    void addSupportedLanguagesByFile(const QString &filename, const int index, const QList<QLocale> &supportedLanguages, FcCharSet *set);
 
     /// Sort any straggling fonts into WWSFamilies.
     void sortIntoWWSFamilies();

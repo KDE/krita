@@ -101,7 +101,7 @@ QString hueMaxLabel()
 QString saturationMinLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
@@ -113,7 +113,7 @@ QString saturationMinLabel()
 QString saturationMaxLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
@@ -124,7 +124,7 @@ QString saturationMaxLabel()
 QString valueMinLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
@@ -136,7 +136,7 @@ QString valueMinLabel()
 QString valueMaxLabel()
 {
     // xgettext: no-c-format
-    QString activeColorMsg = i18n("(50% is active color)");
+    QString activeColorMsg = i18n("(0% is active color)");
     QString br("<br />");
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
@@ -159,7 +159,8 @@ KisCurveOptionWidget *createSaturationOptionWidget()
 {
     return createCurveOptionWidget(KisSaturationOptionData(), KisPaintOpOption::COLOR,
                                    detail::saturationMinLabel(),
-                                   detail::saturationMaxLabel());
+                                   detail::saturationMaxLabel(),
+                                   -100, 100, i18n("%"));
 }
 
 KisCurveOptionWidget *createValueOptionWidget()
@@ -167,7 +168,8 @@ KisCurveOptionWidget *createValueOptionWidget()
     return createCurveOptionWidget(KisValueOptionData(),
                                    KisPaintOpOption::COLOR,
                                    detail::valueMinLabel(),
-                                   detail::valueMaxLabel());
+                                   detail::valueMaxLabel(),
+                                   -100, 100, i18n("%"));
 }
 
 KisCurveOptionWidget *createRateOptionWidget()

@@ -525,6 +525,11 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
             // remove everything related to this resource from the database (remember about tags and versions!!!)
             r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
 
+            {
+                const QString absoluteStorageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+                KisResourceThumbnailCache::instance()->remove(absoluteStorageLocation, resourceType, existingResource->filename());
+            }
+
             Q_EMIT endExternalResourceRemove(resourceType);
 
             if (!r) {

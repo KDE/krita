@@ -16,6 +16,11 @@ class QMutex;
 
 class KisAsyncActionFeedback
 {
+private:
+    struct DefaultWaitingMessageCallback {
+        QString operator()() const;
+    };
+
 public:
     KisAsyncActionFeedback(const QString &message, QWidget *parent);
     ~KisAsyncActionFeedback();
@@ -27,6 +32,25 @@ public:
     void waitForMutex(Mutex &mutex) {
         waitForMutexLikeImpl(std::make_unique<MutexLike<Mutex>>(mutex));
     }
+
+    template<typename Mutex, typename CallbackFunc = DefaultWaitingMessageCallback>
+    class MutexWrapper : public Mutex
+    {
+    public:
+        template<typename ...Args>
+        MutexWrapper(Args ...args)
+            : Mutex(args...)
+        {
+        }
+
+        void lock() {
+            if (!Mutex::try_lock()) {
+                KisAsyncActionFeedback f(CallbackFunc{}(), 0);
+                f.waitForMutex(static_cast<Mutex&>(*this));
+                Mutex::lock();
+            }
+        }
+    };
 
 private:
 

@@ -73,3 +73,8 @@ void KisAsyncActionFeedback::waitForMutexLikeImpl(std::unique_ptr<MutexLikeBase>
 
     mutex->unlock();
 }
+
+QString KisAsyncActionFeedback::DefaultWaitingMessageCallback::operator()() const
+{
+    return i18nc("progress dialog message when the user has to wait for the image to become unlocked", "Waiting for the action to complete...");
+}

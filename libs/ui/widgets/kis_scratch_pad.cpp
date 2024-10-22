@@ -38,6 +38,43 @@
 #include "kis_node_graph_listener.h"
 #include "kis_transaction.h"
 
+#include <KisAdaptedLock.h>
+#include <kis_async_action_feedback.h>
+
+namespace {
+class KisUpdateSchedulerLockAdapter
+{
+public:
+    KisUpdateSchedulerLockAdapter(KisUpdateScheduler *scheduler)
+        : m_scheduler(scheduler)
+    {
+    }
+
+    void lock() {
+        m_scheduler->barrierLock();
+    }
+
+    bool try_lock() {
+        return m_scheduler->tryBarrierLock();
+    }
+
+    void unlock() {
+        m_scheduler->unlock();
+    }
+
+private:
+    KisUpdateScheduler *m_scheduler;
+};
+
+/**
+ * Define an adapted lock that has application-wide busy-wait feedback
+ */
+KIS_DECLARE_ADAPTED_LOCK(KisUpdateSchedulerLockWithFeedback,
+                         KisAsyncActionFeedback::MutexWrapper<KisUpdateSchedulerLockAdapter>)
+
+}
+
+
 class KisScratchPadNodeListener : public KisNodeGraphListener
 {
 public:
@@ -533,10 +570,15 @@ void KisScratchPad::paintCustomImage(const QImage& loadedImage)
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
     device->convertFromQImage(scaledImage, 0);
 
-    KisPainter painter(paintDevice);
-    painter.beginTransaction();
-    painter.bitBlt(overlayRect.topLeft(), device, imageRect);
-    painter.deleteTransaction();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisPainter painter(paintDevice);
+        painter.beginTransaction();
+        painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+        painter.deleteTransaction();
+    }
+
+
     update();
 }
 
@@ -555,10 +597,14 @@ void KisScratchPad::loadScratchpadImage(QImage image)
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
     device->convertFromQImage(image, 0);
 
-    KisPainter painter(paintDevice);
-    painter.beginTransaction();
-    painter.bitBlt(imageSize.topLeft(), device, imageSize);
-    painter.deleteTransaction();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisPainter painter(paintDevice);
+        painter.beginTransaction();
+        painter.bitBlt(imageSize.topLeft(), device, imageSize);
+        painter.deleteTransaction();
+    }
+
     update();
 }
 
@@ -586,10 +632,14 @@ void KisScratchPad::paintPresetImage()
     KisPaintDeviceSP device = new KisPaintDevice(paintDevice->colorSpace());
     device->convertFromQImage(scaledImage, 0);
 
-    KisPainter painter(paintDevice);
-    painter.beginTransaction();
-    painter.bitBlt(overlayRect.topLeft(), device, imageRect);
-    painter.deleteTransaction();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisPainter painter(paintDevice);
+        painter.beginTransaction();
+        painter.bitBlt(overlayRect.topLeft(), device, imageRect);
+        painter.deleteTransaction();
+    }
+
     update();
 }
 
@@ -606,10 +656,15 @@ void KisScratchPad::fillDefault()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    KisTransaction t(paintDevice);
-    paintDevice->setDefaultPixel(m_defaultColor);
-    paintDevice->clear();
-    t.end();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+
+        KisTransaction t(paintDevice);
+        paintDevice->setDefaultPixel(m_defaultColor);
+        paintDevice->clear();
+        t.end();
+    }
+
     update();
 }
 
@@ -621,10 +676,15 @@ void KisScratchPad::fillTransparent() {
     KoColor transparentColor(transQColor, KoColorSpaceRegistry::instance()->rgb8());
     transparentColor.setOpacity(0.0);
 
-    KisTransaction t(paintDevice);
-    paintDevice->setDefaultPixel(transparentColor);
-    paintDevice->clear();
-    t.end();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+
+        KisTransaction t(paintDevice);
+        paintDevice->setDefaultPixel(transparentColor);
+        paintDevice->clear();
+        t.end();
+    }
+
     update();
 }
 
@@ -641,21 +701,25 @@ void KisScratchPad::fillGradient()
     KoAbstractGradientSP gradient = m_resourceProvider->currentGradient();
     QRect gradientRect = widgetToDocument().mapRect(rect());
 
-    KisTransaction t(paintDevice);
 
-    paintDevice->clear();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisTransaction t(paintDevice);
 
-    KisGradientPainter painter(paintDevice);
-    painter.setGradient(gradient);
-    painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
-    painter.paintGradient(gradientRect.topLeft(),
-                          gradientRect.bottomRight(),
-                          KisGradientPainter::GradientRepeatNone,
-                          0.2, false,
-                          gradientRect.left(), gradientRect.top(),
-                          gradientRect.width(), gradientRect.height());
+        paintDevice->clear();
 
-    t.end();
+        KisGradientPainter painter(paintDevice);
+        painter.setGradient(gradient);
+        painter.setGradientShape(KisGradientPainter::GradientShapeLinear);
+        painter.paintGradient(gradientRect.topLeft(),
+                            gradientRect.bottomRight(),
+                            KisGradientPainter::GradientRepeatNone,
+                            0.2, false,
+                            gradientRect.left(), gradientRect.top(),
+                            gradientRect.width(), gradientRect.height());
+        t.end();
+    }
+
     update();
 }
 
@@ -664,10 +728,14 @@ void KisScratchPad::fillBackground()
     if(!m_paintLayer) return;
     KisPaintDeviceSP paintDevice = m_paintLayer->paintDevice();
 
-    KisTransaction t(paintDevice);
-    paintDevice->setDefaultPixel(m_resourceProvider->bgColor());
-    paintDevice->clear();
-    t.end();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisTransaction t(paintDevice);
+        paintDevice->setDefaultPixel(m_resourceProvider->bgColor());
+        paintDevice->clear();
+        t.end();
+    }
+
     update();
 }
 
@@ -678,10 +746,14 @@ void KisScratchPad::fillLayer()
 
     QRect sourceRect(0, 0, paintDevice->exactBounds().width(), paintDevice->exactBounds().height());
 
-    KisPainter painter(paintDevice);
-    painter.beginTransaction();
-    painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);
-    painter.deleteTransaction();
+    {
+        KisUpdateSchedulerLockWithFeedback l(m_updateScheduler);
+        KisPainter painter(paintDevice);
+        painter.beginTransaction();
+        painter.bitBlt(QPoint(0, 0), m_resourceProvider->currentImage()->projection(), sourceRect);
+        painter.deleteTransaction();
+    }
+
     update();
 }
 

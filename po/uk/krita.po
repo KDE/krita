@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 03:23+0000\n"
-"PO-Revision-Date: 2024-08-29 19:11+0300\n"
+"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"PO-Revision-Date: 2024-10-22 21:07+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19774,52 +19774,52 @@ msgstr "1. Не вдалося створити теку ресурсів у %1.
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Тека зберігання ресурсів %1 є непридатною до запису."
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:804
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Не вдалося додати %1 до бази даних"
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:848
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Не вдалося вилучити сховище %1 з бази"
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:960
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita запущено вперше. Для ініціалізації програми знадобиться певний час."
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:967
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Не вдалося створити теку ресурсів у %1."
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:996
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Не вдалося скопіювати ресурс %1 до %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:992
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Встановлення ресурсів з комплекту %1."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Ініціалізація ресурсів."
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1048
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Тимчасові ресурси"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1171
+#: libs/resources/KisResourceLocator.cpp:1177
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Не вдалося синхронізувати %1 із базою даних"
@@ -22869,6 +22869,8 @@ msgstr "Властивості шару"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -30086,14 +30088,9 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Нещодавні файли</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Користування Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
@@ -30101,6 +30098,8 @@ msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Підтримайте розробку Krita!</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:229
 #, kde-format
@@ -30109,6 +30108,9 @@ msgid ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
 "span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">Початкові "
+"зауваження</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:230
 #, kde-format
@@ -30116,6 +30118,8 @@ msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Підручник</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
@@ -30123,16 +30127,13 @@ msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Сайт Krita</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Нещодавні файли</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Програмування Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -30140,6 +30141,8 @@ msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">Спільнота користувачів</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
@@ -30147,6 +30150,8 @@ msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Початковий код</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
@@ -30154,22 +30159,19 @@ msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">Інтерфейс для роботи зі скриптами</"
+"span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
-"<html><head/><body><p>Якщо хочете дізнатися більше про написання скриптів "
-"Krita, відвідайте <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Школу роботи "
-"зі скриптами у Krita</span></a>!</p></body></html>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Навчання роботи зі скриптами</"
+"span></a></p>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -35393,46 +35395,40 @@ msgid "Color name:"
 msgstr "Назва кольору:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "Відтінок:"
+msgstr "В:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "ОС:"
+msgstr "Н:"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "О:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "Ід.:"
+msgstr "І:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Зн.:"
+msgstr "З:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -53839,8 +53835,9 @@ msgstr "ЗГС відтінку"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, no-c-format, kde-format
-msgid "(50% is active color)"
+#, fuzzy, no-c-format, kde-format
+#| msgid "(50% is active color)"
+msgid "(0% is active color)"
 msgstr "(50% є активним кольором)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106

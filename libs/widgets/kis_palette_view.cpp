@@ -286,7 +286,6 @@ void KisPaletteView::slotAdditionalGuiUpdate()
         setRowHeight(rowNumber, fontMetrics().lineSpacing() + 6);
         verticalHeader()->resizeSection(rowNumber, fontMetrics().lineSpacing() + 6);
     }
-    Q_EMIT sigPaletteUpdatedFromModel();
 }
 
 void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)

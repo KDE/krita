@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:50+0000\n"
+"POT-Creation-Date: 2024-10-23 01:48+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -20638,33 +20638,33 @@ msgstr "Сақлаш учун файлни яратиб бўлмади"
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:804
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not add %1 to the database"
 msgstr "Расмни юклаб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:848
+#: libs/resources/KisResourceLocator.cpp:1195
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "Could not remove storage %1 from the database"
 msgstr "Файлнинг бошини ўқиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:960
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:967
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Сақлаш учун файлни яратиб бўлмади"
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:996
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -20674,25 +20674,25 @@ msgstr ""
 "%1 файлини очиб бўлмади.\n"
 "Сабаб: %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:992
 #, fuzzy, kde-format
 #| msgid "Could not export file."
 msgid "Installing the resources from bundle %1."
 msgstr "Файлни экспорт қилиб бўлмади."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1014
 #, fuzzy, kde-format
 msgid "Initializing the resources."
 msgstr "Матнни ўчириш"
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1048
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Temporary Resources"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1171
+#: libs/resources/KisResourceLocator.cpp:1177
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize %1 with the database"
@@ -25928,6 +25928,8 @@ msgstr "Умумий таҳрирлаш вақти:"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -30169,6 +30171,14 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Ҳужжатни импорт қилиш"
+
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, kde-format
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr ""
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, fuzzy, kde-format
@@ -55587,7 +55597,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
-msgid "(50% is active color)"
+msgid "(0% is active color)"
 msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106

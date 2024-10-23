@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:50+0000\n"
+"POT-Creation-Date: 2024-10-23 01:48+0000\n"
 "PO-Revision-Date: 2024-10-16 10:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19748,18 +19748,18 @@ msgstr "1.- No s'ha pogut crear la ubicació del recurs a %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2.- La ubicació del recurs a %1 no és d'escriptura."
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:804
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "No s'ha pogut afegir %1 a la base de dades"
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:848
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "No s'ha pogut eliminar l'emmagatzematge %1 de la base de dades"
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:960
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -19767,34 +19767,34 @@ msgstr ""
 "S'està executant Krita per primera vegada. La inicialització prendrà algun "
 "temps."
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:967
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3.- No s'ha pogut crear la ubicació del recurs a %1."
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:996
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "No s'ha pogut copiar el recurs %1 a %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:992
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "S'estan instal·lant els recursos des del paquet %1."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Initializing the resources."
 msgstr "S'estan inicialitzant els recursos."
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1048
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Recursos temporals"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1171
+#: libs/resources/KisResourceLocator.cpp:1177
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "No s'ha pogut sincronitzar %1 amb la base de dades"
@@ -25018,6 +25018,8 @@ msgstr "Comença la visualització des de:"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -29245,6 +29247,15 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Importa una animació"
+
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "S'està esperant que l'operació damunt de la imatge es complete…"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -54326,8 +54337,9 @@ msgstr "To en sentit horari"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, no-c-format, kde-format
-msgid "(50% is active color)"
+#, fuzzy, no-c-format, kde-format
+#| msgid "(50% is active color)"
+msgid "(0% is active color)"
 msgstr "(50% és un color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106

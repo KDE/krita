@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:50+0000\n"
+"POT-Creation-Date: 2024-10-23 01:48+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -20418,32 +20418,32 @@ msgstr "Kunne ikke oprette filen til skrivning"
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:804
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Kunne ikke tilføje lag til billede."
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:848
+#: libs/resources/KisResourceLocator.cpp:1195
 #, fuzzy, kde-format
 #| msgid "Could not load profile %1."
 msgid "Could not remove storage %1 from the database"
 msgstr "Kunne ikke indlæse profil %1."
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:960
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:967
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "Kunne ikke oprette filen til skrivning"
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:996
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open %1\n"
@@ -20453,25 +20453,25 @@ msgstr ""
 "Kunne ikke åbne %1\n"
 "Årsag: %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:992
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Ny konfiguration %1"
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1014
 #, fuzzy, kde-format
 msgid "Initializing the resources."
 msgstr "&Ressourcer"
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1048
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
 msgid "Temporary Resources"
 msgstr "Importér ressource"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1171
+#: libs/resources/KisResourceLocator.cpp:1177
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -25784,6 +25784,8 @@ msgstr "Start optagelse af makro"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -29972,6 +29974,15 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Eksportér komposition"
+
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Fetching the title: 0% complete"
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "Henter titlen: 0% gennemført"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -55202,8 +55213,9 @@ msgstr "CW-tone"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, no-c-format, kde-format
-msgid "(50% is active color)"
+#, fuzzy, no-c-format, kde-format
+#| msgid "(50% is active color)"
+msgid "(0% is active color)"
 msgstr "(50% er aktiv farve)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
@@ -69650,9 +69662,6 @@ msgstr "Referencebilleder"
 
 #~ msgid "Bookmark does not exist"
 #~ msgstr "Bogmærket findes ikke"
-
-#~ msgid "Fetching the title: 0% complete"
-#~ msgstr "Henter titlen: 0% gennemført"
 
 #~ msgid "Fetch timed out"
 #~ msgstr "Hentning havde tidsudløb"

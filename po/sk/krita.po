@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-19 01:50+0000\n"
+"POT-Creation-Date: 2024-10-23 01:48+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -19818,51 +19818,51 @@ msgstr "1. Nebolo možné vytvoriť umiestnenie zdrojov na %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Do umiestnenia zdrojov na %1 sa nedá zapisovať."
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:804
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Nebolo možné pridať %1 do databázy"
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:848
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Úložisko %1 nebolo možné odstrániť z databázy"
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:960
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita je spustená prvýkrát. Inicializácia bude nejaký čas trvať."
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:967
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Nebolo možné vytvoriť umiestnenie zdrojov na %1."
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:980
+#: libs/resources/KisResourceLocator.cpp:996
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Nebolo možné kopírovať zdroj %1 do %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:992
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Inštalovanie zdrojov z balíka %1."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Inicializácia zdrojov."
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1048
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Dočasné zdroje"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1171
+#: libs/resources/KisResourceLocator.cpp:1177
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Nebolo možné synchronizovať %1 s databázou"
@@ -25118,6 +25118,8 @@ msgstr "Začať zobrazovanie na:"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -29370,6 +29372,15 @@ msgstr "Nepýtať sa (stlačte Shift, ak to chcete vidieť znova)"
 msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Importovať animáciu"
+
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "Čakanie na dokončenie operácie obrázka..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -54540,8 +54551,9 @@ msgstr "Odtieň CW"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, no-c-format, kde-format
-msgid "(50% is active color)"
+#, fuzzy, no-c-format, kde-format
+#| msgid "(50% is active color)"
+msgid "(0% is active color)"
 msgstr "(50% je aktívna farba)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106

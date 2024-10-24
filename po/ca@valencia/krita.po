@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-23 01:48+0000\n"
-"PO-Revision-Date: 2024-10-16 10:53+0200\n"
+"PO-Revision-Date: 2024-10-23 09:56+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -29249,13 +29249,12 @@ msgid "Import animation"
 msgstr "Importa una animació"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "S'està esperant que l'operació damunt de la imatge es complete…"
+msgstr "S'està esperant que es complete l'acció…"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -54315,7 +54314,7 @@ msgstr "Primer pla"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
 #, no-c-format, kde-format
 msgid "(0° is active color)"
-msgstr "(0° és un color actiu)"
+msgstr "(0° és el color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:84
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:95
@@ -54337,10 +54336,9 @@ msgstr "To en sentit horari"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50% és un color actiu)"
+msgstr "(0% és el color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

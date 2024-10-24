@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-23 01:48+0000\n"
-"PO-Revision-Date: 2024-10-17 09:21+0200\n"
+"PO-Revision-Date: 2024-10-23 09:48+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29168,13 +29168,12 @@ msgid "Import animation"
 msgstr "Uvoz animacijo"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Čakanje na dokončanje operacije s sliko ..."
+msgstr "Čakanje na dokončanje operacije ..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -54156,10 +54155,9 @@ msgstr "Obarvanost v SUK"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50 % je aktivna barva)"
+msgstr "(0 % je aktivna barva)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

@@ -73,6 +73,7 @@ public:
     QScopedPointer<KisPaintOpPresetUpdateProxy> updateProxy;
     KisPaintOpSettings::UpdateListenerSP settingsUpdateListener;
     QString version;
+    QList<KoResourceLoadResult> sideLoadedResources;
 };
 
 
@@ -169,7 +170,6 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     d->version = reader.text("version");
     QString preset = reader.text("preset");
-    int resourceCount = reader.text("embedded_resources").toInt();
 
     if (!(d->version == "2.2" || d->version == "5.0")) {
         return false;
@@ -193,38 +193,33 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     QDomElement root = doc.documentElement();
 
-    if (d->version == "5.0" && resourceCount > 0) {
+    if (d->version == "5.0") {
         // Load any embedded resources
         QDomElement e = root.firstChildElement("resources");
-        for (e = e.firstChildElement("resource"); !e.isNull(); e = e.nextSiblingElement("resource")) {
-            QString name = e.attribute("name");
-            QString filename = e.attribute("filename");
-            QString resourceType = e.attribute("type");
-            QString md5sum = e.attribute("md5sum");
+        if (!e.isNull()) {
+            for (e = e.firstChildElement("resource"); !e.isNull(); e = e.nextSiblingElement("resource")) {
+                QString name = e.attribute("name");
+                QString filename = e.attribute("filename");
+                QString resourceType = e.attribute("type");
+                QString md5sum = e.attribute("md5sum");
 
-            KoResourceSP existingResource = resourcesInterface
-                ->source(resourceType)
-                .bestMatch(md5sum, filename, name);
+                KoResourceSP existingResource = resourcesInterface
+                        ->source(resourceType)
+                        .bestMatch(md5sum, filename, name);
 
-            if (existingResource) {
-                continue;
+                if (existingResource) {
+                    continue;
+                }
+
+                QByteArray ba = QByteArray::fromBase64(e.text().toLatin1());
+                QBuffer buf(&ba);
+                buf.open(QBuffer::ReadOnly);
+
+                d->sideLoadedResources.append(
+                            KoEmbeddedResource(
+                                KoResourceSignature(resourceType, md5sum, filename, name),
+                                ba));
             }
-
-            QByteArray ba = QByteArray::fromBase64(e.text().toLatin1());
-            QBuffer buf(&ba);
-            buf.open(QBuffer::ReadOnly);
-
-            /// HACK ALERT: Calling importResource()
-            /// here is technically undefined
-            /// behavior, because this code is
-            /// called from inside the storage's
-            /// loadVersionedResource(). Basically
-            /// we change underlying storage's
-            /// storage while it is reading from
-            /// it.
-
-            KisResourceModel model(resourceType);
-            model.importResource(filename, &buf, false, "memory");
         }
     }
 
@@ -572,6 +567,31 @@ QList<KoResourceLoadResult> KisPaintOpPreset::embeddedResources(KisResourcesInte
     }
 
     return resources;
+}
+
+QList<KoResourceLoadResult> KisPaintOpPreset::sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    QList<KoResourceLoadResult> resources;
+
+    Q_FOREACH(const KoResourceLoadResult &resource, d->sideLoadedResources) {
+        KoResourceSignature sig = resource.signature();
+
+        /**
+         * Do not load the existing resources. There is no use for it.
+         */
+        if (!globalResourcesInterface->source(sig.type)
+                .bestMatch(sig.md5sum, sig.filename, sig.name)) {
+
+            resources << resource;
+        }
+    }
+
+    return resources;
+}
+
+void KisPaintOpPreset::clearSideLoadedResources()
+{
+    d->sideLoadedResources.clear();
 }
 
 QList<int> KisPaintOpPreset::requiredCanvasResources() const

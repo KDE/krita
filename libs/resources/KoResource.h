@@ -239,8 +239,36 @@ public:
      * @return all the resources that were embedded into (*this) resource.
      * If the resources were already added to the global database, then they
      * are fetched from \p globalResourcesInterface to save time/memory.
+     *
+     * These resources are embedded into the resource itself and are available
+     * throughout the entire lifetime of the resource.
      */
     virtual QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
+    /**
+     * Returns all the side-loaded resources and clears the memory under them,
+     * the caller is expected to add them into the global store.
+     *
+     * It is basically a combination of sideLoadedResources() + clearSideLoadedResources().
+     */
+    QList<KoResourceLoadResult> takeSideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface);
+
+    /**
+     * Side-loaded resources are the resources embedded into the file format and
+     * loaded alongside the main resource. After being loaded in loadFromDevice()
+     * they are stored separately and may be fetched by the resource locator.
+     *
+     * After the locator has loaded them into the global storage, it can free the
+     * memory by calling clearSideLoadedResources().
+     */
+    virtual QList<KoResourceLoadResult> sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
+
+    /**
+     * Clears memory under side-loaded resources. The method is called by
+     * KisResourceLocator after the resources have been fetched and added
+     * to the global store.
+     */
+    virtual void clearSideLoadedResources();
 
     /**
      * A list of per-canvas active resources that are needed for this resource

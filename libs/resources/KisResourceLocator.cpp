@@ -153,28 +153,42 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
 
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
-    QList<KoResourceLoadResult> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
+    auto loadResourcesGroup =
+            [this] (QList<KoResourceLoadResult> resources,
+            const QString &resourceGroup) {
 
-    Q_FOREACH (KoResourceLoadResult res, requiredResources) {
-        switch (res.type())
-        {
-        case KoResourceLoadResult::ExistingResource:
-            KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
-            break;
-        case KoResourceLoadResult::EmbeddedResource: {
-            KoResourceSignature sig = res.embeddedResource().signature();
-            QByteArray data = res.embeddedResource().data();
-            QBuffer buffer(&data);
-            buffer.open(QBuffer::ReadOnly);
+        Q_FOREACH (KoResourceLoadResult res, resources) {
+            switch (res.type())
+            {
+            case KoResourceLoadResult::ExistingResource:
+                KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
+                break;
+            case KoResourceLoadResult::EmbeddedResource: {
+                KoResourceSignature sig = res.embeddedResource().signature();
+                QByteArray data = res.embeddedResource().data();
+                QBuffer buffer(&data);
+                buffer.open(QBuffer::ReadOnly);
 
-            importResource(sig.type, sig.filename, &buffer, false, "memory");
-            break;
+                importResource(sig.type, sig.filename, &buffer, false, "memory");
+                break;
+            }
+            case KoResourceLoadResult::FailedLink:
+                qWarning() << "Failed to load" << resourceGroup << "resource:" << res.signature();
+                break;
+            }
         }
-        case KoResourceLoadResult::FailedLink:
-            qWarning() << "Failed to load linked resource:" << res.signature();
-            break;
-        }
-    }
+    };
+
+    /**
+     * First load the side-loaded resources, since they may be linked
+     * by the linked resources.
+     */
+    loadResourcesGroup(resource->takeSideLoadedResources(KisGlobalResourcesInterface::instance()), "side-loaded");
+
+    /**
+     * Now load the linked resources
+     */
+    loadResourcesGroup(resource->requiredResources(KisGlobalResourcesInterface::instance()), "linked");
 }
 
 KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString resourceType)
@@ -558,6 +572,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         resource->setMD5Sum(storage->resourceMd5(resourceUrl));
         resource->setVersion(0);
         resource->setDirty(false);
+        loadRequiredResources(resource);
         resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
         Q_EMIT beginExternalResourceImport(resourceType, 1);
@@ -632,6 +647,7 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setStorageLocation(storageLocation);
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    loadRequiredResources(resource);
     resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
@@ -676,6 +692,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
 
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    loadRequiredResources(resource);
     resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // The version needs already to have been incremented
@@ -714,6 +731,7 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
 
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
+    loadRequiredResources(resource);
     resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // We haven't changed the version of the resource, so the cache must be still valid

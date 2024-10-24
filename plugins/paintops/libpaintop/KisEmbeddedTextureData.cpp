@@ -59,6 +59,11 @@ KoResourceLoadResult KisEmbeddedTextureData::tryLoadEmbeddedPattern() const
         effectiveName = info.completeBaseName();
     }
 
+    KIS_SAFE_ASSERT_RECOVER(!patternBase64.isEmpty()) {
+        // return a fail-link pattern
+        return KoResourceSignature(ResourceType::Patterns, effectiveMd5Sum, fileName, effectiveName);
+    }
+
     const QByteArray ba = QByteArray::fromBase64(patternBase64.toLatin1());
     return KoEmbeddedResource(KoResourceSignature(ResourceType::Patterns, effectiveMd5Sum, fileName, effectiveName), ba);
 }
@@ -68,7 +73,7 @@ KoResourceLoadResult KisEmbeddedTextureData::loadLinkedPattern(KisResourcesInter
 {
     KoResourceLoadResult result = tryFetchPattern(resourcesInterface);
 
-    if (result.type() == KoResourceLoadResult::FailedLink) {
+    if (result.type() == KoResourceLoadResult::FailedLink && !patternBase64.isEmpty()) {
         result = tryLoadEmbeddedPattern();
     }
 

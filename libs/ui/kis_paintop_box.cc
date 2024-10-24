@@ -608,7 +608,6 @@ void KisPaintopBox::restoreResource(KoResourceSP resource)
     if (preset) {
         setCurrentPaintop(preset);
 
-        m_presetsEditor->setPresetImage(preset->image());
         m_presetsEditor->resourceSelected(resource);
     }
 }
@@ -648,7 +647,6 @@ void KisPaintopBox::resourceSelected(KoResourceSP resource)
         dbgResources << "resourceSelected: preset" << preset << (preset ? QString("%1").arg(preset->valid()) : "");
         setCurrentPaintop(preset);
 
-        m_presetsEditor->setPresetImage(preset->image());
         m_presetsEditor->resourceSelected(resource);
     }
 }
@@ -1395,7 +1393,6 @@ void KisPaintopBox::slotSwitchToPreviousPreset()
                     i18n("%1\nselected",
                          m_resourceProvider->currentPreset()->name()),
                     QIcon(QPixmap::fromImage(m_resourceProvider->currentPreset()->image())));
-        m_presetsEditor->setPresetImage(m_resourceProvider->currentPreset()->image());
     }
 }
 

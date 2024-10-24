@@ -548,6 +548,9 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
     QImage thumbImage = resource->image();
+
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(thumbImage);
+
     QPixmap thumbnail;
     if (!thumbImage.isNull()) {
         thumbnail = QPixmap::fromImage(thumbImage.scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -621,12 +624,6 @@ void KisPaintOpPresetsEditor::setCurrentPaintOpId(const QString& paintOpId)
 
 QString KisPaintOpPresetsEditor::currentPaintOpId() {
     return current_paintOpId;
-}
-
-void KisPaintOpPresetsEditor::setPresetImage(const QImage& image)
-{
-    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
-    saveDialog->brushPresetThumbnailWidget->setPresetImage(image);
 }
 
 void KisPaintOpPresetsEditor::hideEvent(QHideEvent *event)
@@ -837,6 +834,8 @@ void KisPaintOpPresetsEditor::slotSaveBrushPreset() {
     // there is a dialog with save options, but we don't need to show it in this situation
 
     saveDialog->useNewBrushDialog(false); // this mostly just makes sure we keep the existing brush preset name when saving
+    const QImage thumbImage = m_d->resourceProvider->currentPreset() ? m_d->resourceProvider->currentPreset()->image() : QImage();
+    saveDialog->brushPresetThumbnailWidget->setPresetImage(thumbImage);
     saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
     saveDialog->loadExistingThumbnail(); // This makes sure we use the existing preset icon when updating the existing brush preset
     saveDialog->showDialog();
@@ -848,6 +847,8 @@ void KisPaintOpPresetsEditor::slotSaveBrushPreset() {
 
 void KisPaintOpPresetsEditor::slotSaveNewBrushPreset() {
     saveDialog->useNewBrushDialog(true);
+    const QImage thumbImage = m_d->resourceProvider->currentPreset() ? m_d->resourceProvider->currentPreset()->image() : QImage();
+    saveDialog->brushPresetThumbnailWidget->setPresetImage(thumbImage);
     saveDialog->saveScratchPadThumbnailArea(m_d->uiWdgPaintOpPresetSettings.scratchPad->cutoutOverlay());
     saveDialog->showDialog();
 }

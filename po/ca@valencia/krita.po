@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-23 03:15+0000\n"
-"PO-Revision-Date: 2024-09-25 09:05+0200\n"
+"PO-Revision-Date: 2024-10-23 09:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.1\n"
+"X-Generator: Lokalize 24.08.2\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -53316,7 +53316,7 @@ msgstr "Primer pla"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
 #, no-c-format, kde-format
 msgid "(0° is active color)"
-msgstr "(0° és un color actiu)"
+msgstr "(0° és el color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:84
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:95
@@ -53338,10 +53338,9 @@ msgstr "To en sentit horari"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50% és un color actiu)"
+msgstr "(0% és el color actiu)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

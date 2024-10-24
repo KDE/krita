@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-23 03:15+0000\n"
-"PO-Revision-Date: 2024-09-26 21:33+0300\n"
+"PO-Revision-Date: 2024-10-23 12:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -30697,6 +30697,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Bir <b>süzgeç katman</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
+"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30705,6 +30707,9 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Bir <b>süzgeç maskesi</b> içeren bir görselde gelişmiş dışa aktarma "
+"yapılmaya çalışılıyor. Yeniden boyutlandırma öncesi görsel "
+"<b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30713,6 +30718,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"Bir <b>katman biçemi</b> içeren bir görselde gelişmiş dışa aktarma yapılmaya "
+"çalışılıyor. Yeniden boyutlandırma öncesi görsel <b>düzleştirilecektir</b>."
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -53087,10 +53094,9 @@ msgstr "CW renk tonu"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(%​50, etkin renktir)"
+msgstr "(%​0, etkin renktir)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -60576,52 +60582,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Krita’yı Kullanmak</b></"
-#~ "span></p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Krita’nın Geliştirmesini Destekle!</"
-#~ "span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
-#~ "getting_started.html\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Başlarken</span></a></p><p><a href=\"https://docs.krita.org/"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Kılavuz</span></"
-#~ "a></p><p><a href=\"https://krita.org/\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Krita Web Sitesi</span></a></p></td><td><p><span "
-#~ "style=\" color:%1;\"><b>Krita’yı Kodlamak</b></span></p><p><a href="
-#~ "\"https://krita-artists.org\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Kullanıcı Topluluğu</span></a></p><p><a href=\"https://invent."
-#~ "kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Kaynak Kodu</span></a></p><p><a href=\"https://api.kde.org/krita/"
-#~ "html/classKrita.html\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Betik Yazım API’si</span></a></p><p><a href=\"https://scripting."
-#~ "krita.org/lessons/introduction\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Betik Yazım Okulu</span></a></p></td></table></"
-#~ "body></html>"
-
-#~ msgctxt "action"
-#~ msgid "Brush Smoothing: Pixel"
-#~ msgstr "Fırça yumuşatma: Piksel"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "İşlemci Kısma"

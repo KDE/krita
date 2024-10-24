@@ -3594,7 +3594,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_sparse."
 "png"
 msgid "chalk sparse"
-msgstr "チョーク(まばら)"
+msgstr "チョーク (まばら)"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4551,7 +4551,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Grow.kpp"
 msgid "v) Distort Grow"
-msgstr "v) 歪み 伸張"
+msgstr "v) ゆがみ 伸張"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4560,7 +4560,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Move.kpp"
 msgid "v) Distort Move"
-msgstr "v) 歪み 移動"
+msgstr "v) ゆがみ 移動"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4569,7 +4569,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Shrink.kpp"
 msgid "v) Distort Shrink"
-msgstr "v) 歪み 縮小"
+msgstr "v) ゆがみ 縮小"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -8422,7 +8422,7 @@ msgstr "スクリーンの色を抽出"
 #, kde-format
 msgctxt "action"
 msgid "&Sample Screen Color (Sample Real Canvas)"
-msgstr "スクリーンの色を抽出(キャンバスの実際の色を抽出)(&S)"
+msgstr "スクリーンの色を抽出 (キャンバスの実際の色を抽出)(&S)"
 
 #. i18n: context: toolTip @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:303
@@ -22998,7 +22998,7 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
-"ブラシの速度計算にタブレットドライバのタイムスタンプを使用する(WinTab タブ"
+"ブラシの速度計算にタブレットドライバのタイムスタンプを使用する (WinTab タブ"
 "レット API を使用している場合、かなり不自然な結果になる恐れがあります)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1308
@@ -23351,8 +23351,8 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
-"2つのストロークの間に短い時間間隔(遅延)がある場合、それらは同じグループに属し"
-"ていると見なされ、統合されます"
+"2つのストロークの間に短い時間間隔 (遅延) がある場合、それらは同じグループに属"
+"していると見なされ、統合されます"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
@@ -25550,7 +25550,7 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">とても</span> 大きい"
-"ファイルサイズの場合のみ使用するオプション : 4GB以上のディスク領域</p></"
+"ファイルサイズの場合のみ使用するオプション : 4GB 以上のディスク領域</p></"
 "body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
@@ -25662,7 +25662,7 @@ msgstr "画像をレイヤーとしてインポートする前に、その画像
 #: libs/ui/forms/wdggeneralsettings.ui:1212
 #, kde-format
 msgid "Only applies to new or newly opened images."
-msgstr "新規または新規に開いた画像にのみ適用されます。"
+msgstr "新しい画像、または新しく開いた画像にのみ適用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeneralsettings.ui:1202
@@ -28440,7 +28440,7 @@ msgstr "最も上のレイヤーを選択 (選択範囲を置換)"
 #: libs/ui/input/kis_select_layer_action.cpp:122
 #, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "全てのレイヤーを選択 (選択範囲を置換)"
+msgstr "すべてのレイヤーを選択 (選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
@@ -28455,7 +28455,7 @@ msgstr "最も上のレイヤーを選択 (選択範囲に追加)"
 #: libs/ui/input/kis_select_layer_action.cpp:128
 #, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "全てのレイヤーを選択 (選択範囲に追加)"
+msgstr "すべてのレイヤーを選択 (選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
@@ -28466,7 +28466,7 @@ msgstr "メニューから選択 (選択範囲に追加)"
 #, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
-msgstr "全レイヤーを選択"
+msgstr "すべてのレイヤーを選択"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:293
 #, kde-format
@@ -29231,8 +29231,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
-"アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。全ての"
-"クリップに統合するには少なくとも 1 つフレームを作成してください"
+"アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。すべて"
+"のクリップに統合するには少なくとも 1 つフレームを作成してください"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29694,14 +29694,9 @@ msgstr ""
 "したファイル</span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p align=\"center\"><b><span style=\" color:%1;\">最近使用"
-"したファイル</span></b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Krita を使う</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
@@ -29709,6 +29704,8 @@ msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
+"underline; color:%1;\">Krita の開発を支援する！</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:229
 #, kde-format
@@ -29717,6 +29714,9 @@ msgid ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</"
 "span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/ja/user_manual/getting_started.html"
+"\"><span style=\" text-decoration: underline; color:%1;\">はじめに</span></"
+"a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:230
 #, kde-format
@@ -29724,6 +29724,8 @@ msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
+"<p><a href=\"https://docs.krita.org/ja\"><span style=\" text-decoration: "
+"underline; color:%1;\">マニュアル</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
@@ -29731,6 +29733,8 @@ msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Krita ウェブサイト</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:233
 #, fuzzy, kde-format
@@ -29748,6 +29752,8 @@ msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
+"<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
+"underline; color:%1;\">ユーザーコミュニティ</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
@@ -29755,6 +29761,8 @@ msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
+"<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">ソースコード</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
@@ -29762,6 +29770,8 @@ msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
+"<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
+"text-decoration: underline; color:%1;\">スクリプト API</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
 #, fuzzy, kde-format
@@ -30218,7 +30228,7 @@ msgstr "エクスポート用のファイル名"
 #: libs/ui/KisApplicationArguments.cpp:98
 #, kde-format
 msgid "File layer to be added to existing or new file"
-msgstr "既存または新規のファイルに追加されるファイル参照レイヤー"
+msgstr "既存または新規ファイルに追加されるファイル参照レイヤー"
 
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
@@ -33292,13 +33302,13 @@ msgid ""
 "convert to other spaces. RGB is also the recommended colorspace for HDR "
 "editing."
 msgstr ""
-"<p><b><a href=\"https://ja.wikipedia.org/wiki/RGB\">RGB (Rが赤(Red)、Gが緑"
-"(Green)、Bが青(Blue))</a></b>はスクリーンおよびその他の発光体を使用するメディ"
-"アで用いられる色モデルです。</p><p>RGB は加法混合に基づいた色モデルです。加法"
-"混合とは色を混ぜ合わせると混ぜ合わせた色より明るい色になることを意味します。"
-"この色モデルはすべての色モデルの中で最も広域なもので、作業ファイル用の色モデ"
-"ルこれを利用し、後で他の色空間に変換することが推奨されます。また RGB は HDR "
-"編集用の色空間としても推奨されます。</p>"
+"<p><b><a href=\"https://ja.wikipedia.org/wiki/RGB\">RGB (Rが赤 (Red)、Gが緑 "
+"(Green)、Bが青 (Blue) )</a></b>はスクリーンおよびその他の発光体を使用するメ"
+"ディアで用いられる色モデルです。</p><p>RGB は加法混合に基づいた色モデルです。"
+"加法混合とは色を混ぜ合わせると混ぜ合わせた色より明るい色になることを意味しま"
+"す。この色モデルはすべての色モデルの中で最も広域なもので、作業ファイル用の色"
+"モデルこれを利用し、後で他の色空間に変換することが推奨されます。また RGB は "
+"HDR 編集用の色空間としても推奨されます。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
@@ -33313,15 +33323,15 @@ msgid ""
 "<b>not</b> recommended for painting.Unfortunately, Krita cannot retrieve "
 "colorants or the TRC for this space."
 msgstr ""
-"<b><a href=\"https://ja.wikipedia.org/wiki/CMYK\">CMYK (Cがシアン(Cyan)、Mが"
-"マゼンタ(Magenta)、Yが黄色(Yellow)、Kがキー(Key))</a></b>はプリンタやその他イ"
-"ンクを用いるメディアで使用される色モデルです。<br/>CMYK は減法混合に基づく色"
-"モデルです。減法混合とは色を混ぜ合わせると元の色より暗い色になることを意味し"
-"ます。CMYK プロファイルはプリンタごとに大きく異なるため、作業は RGB 色空間で"
-"行い、その後に使用するプリンタに最も適した CMYK プロファイルに変換することを"
-"推奨します。<br/>CMYK はお絵描きに用には推奨<b>できません</b>。残念ながら、"
-"Krita には CMYK 色空間用にインク組成や TRC (トーン応答曲線)の情報を引き出す機"
-"能はありません。"
+"<b><a href=\"https://ja.wikipedia.org/wiki/CMYK\">CMYK (Cがシアン (Cyan)、Mが"
+"マゼンタ (Magenta)、Yが黄色 (Yellow)、Kがキー (Key) )</a></b>はプリンタやその"
+"他インクを用いるメディアで使用される色モデルです。<br/>CMYK は減法混合に基づ"
+"く色モデルです。減法混合とは色を混ぜ合わせると元の色より暗い色になることを意"
+"味します。CMYK プロファイルはプリンタごとに大きく異なるため、作業は RGB 色空"
+"間で行い、その後に使用するプリンタに最も適した CMYK プロファイルに変換するこ"
+"とを推奨します。<br/>CMYK はお絵描きに用には推奨<b>できません</b>。残念なが"
+"ら、Krita には CMYK 色空間用にインク組成や TRC (トーン応答曲線)の情報を引き出"
+"す機能はありません。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
@@ -33353,7 +33363,7 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://ja.wikipedia.org/wiki/グレースケール\">グレースケール</"
 "a></b>では、グレー値と透明値のみを使用できます。グレースケール画像は同じ bit-"
-"depth (ビット深度)の RGB 画像と比較して、メモリとディスク領域が半分で済みま"
+"depth (ビット深度) の RGB 画像と比較して、メモリとディスク領域が半分で済みま"
 "す。<br/>グレースケールは、線入れとグレースケール画像に便利です。Krita では同"
 "じ画像にグレースケールレイヤーと RGB レイヤーを混在させることができます。"
 
@@ -33373,11 +33383,11 @@ msgid ""
 "painting, nor for export, but best as a space to do post-processing in. The "
 "TRC is assumed to be the L* TRC."
 msgstr ""
-"<b><a href=\"https://ja.wikipedia.org/wiki/Lab色空間\">L*a*b</a></b>。 <b>L</"
-"b>は明度を、<b>a</b> と <b>b</b> はカラーチャンネルを表します。<br/>L*a*b は"
+"<b><a href=\"https://ja.wikipedia.org/wiki/Lab色空間\">L*a*b</a></b>。<b>L</"
+"b> は明度を、<b>a</b> と <b>b</b> はカラーチャンネルを表します。<br/>L*a*b は"
 "色補正のための特別なモデルです。これは人間の視覚に基づいており、明度、赤と緑"
 "のバランス、黄色と青のバランスの差をエンコードしようとします。これは色補正に"
-"便利ですが、混色モードのほとんどの色計算はここで期待通りには動作しません。"
+"便利ですが、混色モードのほとんどの色計算はここで期待どおりには動作しません。"
 "<br/>同様に、Krita は LAB で HDR をサポートしていません。これは HDR 画像を "
 "LAB に変換すると色情報が失われることを意味します。この色空間はお絵描きやエク"
 "スポートには<b>推奨されません</b>が、後処理には最適です。TRC は L* TRC と見な"
@@ -33600,13 +33610,13 @@ msgstr ""
 "<p>このプロファイルは ACES 色空間の色域とおおよそ同サイズ・同形状で、ACES 色"
 "空間と同様に AllColorsRGB はすべての存在しうる現実の色を含んでいます。ですが"
 "実のところ AllColorsRGB はやや色域が大きく (標準的な観察者に見られた際に現実"
-"としてはほとんど適さない いくつかの外縁の色を包括するためのもの) D50 白点を使"
-"用しています。</p><p>ACES 色空間と丁度同じように AllColorsRGB は高い割合で 現"
-"実には存在しない色を含んでいます。現実には存在しない色について もっと多くの情"
-"報を知りたい場合は<a href=\"http://ninedegreesbelow.com/photography/xyz-rgb."
-"html\"> XYZ、RGB、ICC、xyY、TRC のプログラマー向け簡単ガイド</a>をご覧くださ"
-"い。</p><p>色空間が本当にすべての存在しうる色をカバーしていると保証する必要が"
-"ある場合を除き、このプロファイルを編集に使用する理由はないでしょう。</p> "
+"としてはほとんど適さない、いくつかの外縁の色を包括するためのもの) D50 白点を"
+"使用しています。</p><p>ACES 色空間と丁度同じように AllColorsRGB は高い割合で "
+"現実には存在しない色を含んでいます。現実には存在しない色について もっと多くの"
+"情報を知りたい場合は<a href=\"http://ninedegreesbelow.com/photography/xyz-"
+"rgb.html\"> XYZ、RGB、ICC、xyY、TRC のプログラマー向け簡単ガイド</a>をご覧く"
+"ださい。</p><p>色空間が本当にすべての存在しうる色をカバーしていると保証する必"
+"要がある場合を除き、このプロファイルを編集に使用する理由はないでしょう。</p> "
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:565
 #, kde-format
@@ -33624,8 +33634,8 @@ msgstr ""
 "<p>この色プロファイルがここに含まれている理由はほぼその歴史的重要性によるもの"
 "です。この色プロファイルは XYZ 参照色空間の創始につながる最初の色合わせ実験で"
 "用いられた色空間なのです。</p><p>ASTM E 白点はおそらく CIERGB 色空間プロファ"
-"イルを作る際に使用されたまさにそのE白点です。正確な CIERGB プライマリが本当は"
-"何だったのかはよくわかりません。Lindbloom が一つセットを提供しており、LCMS "
+"イルを作る際に使用されたまさにその E 白点です。正確な CIERGB プライマリが本当"
+"は何だったのかはよくわかりません。Lindbloom が一つセットを提供しており、LCMS "
 "バージョン1チュートリアルはそれとは異なるセットを提供しています。この分野の専"
 "門家は実際のプライマリはスペクトル波長から計算されなければならないと主張して"
 "いるので、ここでもそうしています。</p>"
@@ -33768,14 +33778,14 @@ msgid ""
 "images does save some kilobytes.  For grayscale images uploaded to the "
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
-"<p>これらのプロファイルはモノトーンのグレーに変換された RGB 画像(白黒)に用い"
-"られることを意図したものです。RGB をグレースケールに変換する主な理由は画像を"
-"エンコードするのに必要なファイルの容量を削減するためです。Google はウェブペー"
-"ジの素早い読み込みに大きな関心を置いており、画像こそウェブページの読み込みを"
-"遅くする最も大きな要素です。ですので白黒の画像をグレースケール画像に変換する"
-"ことで数キロバイトの容量軽減が可能となります。インターネット上にアップロード"
-"するグレースケール画像については、画像を sRGB トーン応答曲線(TRC)を持つ V2 "
-"Gray 色プロファイルに変換するとよいでしょう。</p>"
+"<p>これらのプロファイルはモノトーンのグレーに変換された RGB 画像 (白黒) に用"
+"いられることを意図したものです。RGB をグレースケールに変換する主な理由は画像"
+"をエンコードするのに必要なファイルの容量を削減するためです。Google はウェブ"
+"ページの素早い読み込みに大きな関心を置いており、画像こそウェブページの読み込"
+"みを遅くする最も大きな要素です。ですので白黒の画像をグレースケール画像に変換"
+"することで数キロバイトの容量軽減が可能となります。インターネット上にアップ"
+"ロードするグレースケール画像については、画像を sRGB トーン応答曲線 (TRC) を持"
+"つ V2 Gray 色プロファイルに変換するとよいでしょう。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
@@ -33800,9 +33810,9 @@ msgid ""
 "few editing operations really should be done on perceptually uniform RGB. "
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
-"<p>「-labl.icc」で終わる色プロファイルは知覚的に一様なトーン応答曲線(TRC)を使"
-"用します。いくつかの編集操作については知覚的一様な RGB で行われるべきです。V4"
-"バージョンは高深度画像の編集に用いるためのものです。</p>"
+"<p>「-labl.icc」で終わる色プロファイルは知覚的に一様なトーン応答曲線 (TRC) を"
+"使用します。いくつかの編集操作については知覚的一様な RGB で行われるべきです。"
+"V4バージョンは高深度画像の編集に用いるためのものです。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
@@ -33830,9 +33840,9 @@ msgid ""
 "8-bit editing.</p>"
 msgstr ""
 "<p>8ビット画像を編集する際は小さい色域で近似あるいは正確に知覚的一様なトーン"
-"応答曲線(TRC)を持つ色プロファイルを使用するべきです。この色プロファイルパック"
-"の中で8ビットでの編集に十分なほど色域が小さいのは sRGB および AdobeRGB1998 "
-"(ClayRGB)色空間のみです。AdobeRGB1998 色空間でもポスタリゼーションを起こさな"
+"応答曲線 (TRC) を持つ色プロファイルを使用するべきです。この色プロファイルパッ"
+"クの中で8ビットでの編集に十分なほど色域が小さいのは sRGB および AdobeRGB1998 "
+"(ClayRGB) 色空間のみです。AdobeRGB1998 色空間でもポスタリゼーションを起こさな"
 "いように注意する必要があります。もちろん8ビットでの編集でそれらのプロファイル"
 "の線形ガンマ値を持つバージョンを使用することはできません。</p>"
 
@@ -36152,9 +36162,9 @@ msgstr ""
 "善できる個所に気付いた時はぜひ我々にそれをお伝えください。<br /><br />KDE に"
 "はバグ追跡システムがあります。ウェブサイト<a href=\"%1\">%1</a>または「ヘル"
 "プ」メニューの「バグを報告...」を使って不具合を報告してください。<br /><br />"
-"改善のためのいいアイディアをお持ちの場合もバグ追跡システムを使って皆さんの要"
-"望をぜひお寄せください。この場合、重要度(severity)には「要望(Wishlist)」を指"
-"定するようお願いします。</html>"
+"改善のための良いアイディアをお持ちの場合もバグ追跡システムを使って皆さんの要"
+"望をぜひお寄せください。この場合、重要度 (severity) には「要望 (Wishlist)」を"
+"指定するようお願いします。</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
 #, kde-format
@@ -40079,8 +40089,7 @@ msgstr "アイソレートモードで記録"
 #: plugins/dockers/recorder/recorderdocker.ui:315
 #, kde-format
 msgid "Start recording after creating a new image or opening an existing one."
-msgstr ""
-"新規にイメージを作成するか、既存のイメージを開いてから録画を開始します。"
+msgstr "新しい画像を作成するか、既存の画像を開いてから録画を開始します。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxAutoRecord)
 #: plugins/dockers/recorder/recorderdocker.ui:318
@@ -40220,8 +40229,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
-"低パフォーマンス警告。レコーダーが全てのフレームを時間内に書き込むことができ"
-"ません。キャプチャ間隔を増やしてみてください。"
+"低パフォーマンス警告。レコーダーがすべてのフレームを時間内に書き込むことがで"
+"きません。キャプチャ間隔を増やしてみてください。"
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -46956,8 +46965,8 @@ msgid ""
 "a perceptual quantizer curve (also known as SMPTE 2048 curve). Recommended "
 "for HDR images where the absolute brightness is important."
 msgstr ""
-"画像はまず Rec 2020 線形に変換され、その後、PQカーブ (SMPTE 2048 曲線とも呼ば"
-"れる) でエンコードされます。絶対的な明るさが重要な HDR 画像におすすめです。"
+"画像はまず Rec 2020 線形に変換され、その後、PQ カーブ (SMPTE 2048 曲線とも呼"
+"ばれる) でエンコードされます。絶対的な明るさが重要な HDR 画像におすすめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:547
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
@@ -46988,7 +46997,7 @@ msgid ""
 "quantizer curve (also known as the SMPTE 2048 curve). Recommended for images "
 "where the absolute brightness is important."
 msgstr ""
-"画像はまず線形化され、その後、PQカーブ (SMPTE 2048 曲線とも呼ばれる) でエン"
+"画像はまず線形化され、その後、PQ カーブ (SMPTE 2048 曲線とも呼ばれる) でエン"
 "コードされます。絶対的な明度が重要な画像におすすめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:558
@@ -48560,9 +48569,9 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"レイヤー\"%1\"には、Krita 5.2でCMYKカラーの動作が変更された\"%2\"というブレン"
-"ディングモードがあります。結果を確認し、設定->Kritaの設定を変更...->全般->"
-"ツール->CMYK混色モードでレガシーの\"加算\"アルゴリズムを有効にすることを検討"
+"レイヤー\"%1\"には、Krita 5.2で CMYK カラーの動作が変更された\"%2\"というブレ"
+"ンディングモードがあります。結果を確認し、設定->Krita の設定を変更...->全般->"
+"ツール->CMYK 混色モードでレガシーの\"加算\"アルゴリズムを有効にすることを検討"
 "してください"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1105
@@ -49384,7 +49393,7 @@ msgstr ""
 "す。この方法は、均質性メトリックを最大化するように補間の方向を選択し、通常は"
 "色に関するアーティファクトを最小限に抑えます。</li><li><emphasis "
 "strong='true'>DCB</emphasis>: linuxphoto.org プロジェクトの DCB 補間。</"
-"li><li><emphasis strong='true'>AHD v2</emphasis>: 分散色差法を使用した修正"
+"li><li><emphasis strong='true'>AHD v2</emphasis>: 分散色差法を使用した修正 "
 "AHD 補間。</li><li><emphasis strong='true'>AFD</emphasis>: PerfectRaw プロ"
 "ジェクトの5パス平均フィルタを使用した適応フィルタデモザイク補間。</"
 "li><li><emphasis strong='true'>VCD</emphasis>: 色差の分散補間。</"
@@ -50455,7 +50464,7 @@ msgstr " B (バイト)"
 msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
 "precedence over Target Size."
-msgstr "非ゼロの場合、最小の歪みを指定します。目標サイズより優先されます。"
+msgstr "非ゼロの場合、最小のゆがみを指定します。目標サイズより優先されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:234
@@ -50998,7 +51007,7 @@ msgid ""
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
 "現在のレイヤーに描画します\n"
-"が、混色の入力には現在表示されている全てのレイヤーを使用します\n"
+"が、混色の入力には現在表示されているすべてのレイヤーを使用します\n"
 "注意: このモードは完全に不透明な背景でのみ正しく動作します"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
@@ -52055,7 +52064,7 @@ msgstr "ペンの設定を有効化"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:469
 #, kde-format
 msgid "Y Range:"
-msgstr "Yの範囲:"
+msgstr "Y の範囲:"
 
 #. i18n: ectx: property (text), widget (QLabel, toLabel2)
 #. i18n: ectx: property (text), widget (QLabel, toLabel1)
@@ -52167,7 +52176,7 @@ msgstr "すべての設定でグラフを共有"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:591
 #, kde-format
 msgid "X Range:"
-msgstr "Xの範囲:"
+msgstr "X の範囲:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:115
@@ -52804,13 +52813,13 @@ msgstr "筆圧 (加圧のみ)"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "X-Tilt"
-msgstr "X方向の傾き"
+msgstr "X 方向の傾き"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:22
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Y-Tilt"
-msgstr "Y方向の傾き"
+msgstr "Y 方向の傾き"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
 #, kde-format
@@ -54139,8 +54148,8 @@ msgid ""
 "<html><head/><body><p>Use the drawing direction to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの描画方向を用いてX軸とY軸を決定します。Z軸"
-"にはペンタブペンの傾きの絶対値が用いられます</p></body></html>"
+"<html><head/><body><p>ペンタブペンの描画方向を用いて X 軸と Y 軸を決定しま"
+"す。Z 軸にはペンタブペンの傾きの絶対値が用いられます</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:250
@@ -54150,8 +54159,8 @@ msgid ""
 "determine the X and Y-axes, while tilt-elevation is used for the Z-axis.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの回転センサーを用いてX軸とY軸を決定しま"
-"す。Z軸にはペンタブペンの傾きの絶対が用いられます。</p></body></html>"
+"<html><head/><body><p>ペンタブペンの回転センサーを用いて X 軸と Y 軸を決定し"
+"ます。Z 軸にはペンタブペンの傾きの絶対が用いられます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
@@ -54167,8 +54176,8 @@ msgid ""
 "<html><head/><body><p>Mix Tilt and Drawing angle to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>傾きと描画方向の組み合わせでX軸とY軸を決定します。Z軸に"
-"はペンタブペンの傾きの絶対が用いられます。</p></body></html>"
+"<html><head/><body><p>傾きと描画方向の組み合わせで X 軸と Y 軸を決定します。"
+"Z 軸にはペンタブペンの傾きの絶対が用いられます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
@@ -54319,7 +54328,7 @@ msgstr "サイズ変更前にファイルを切り抜く"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
 msgid "Percentage"
-msgstr "パーセンテージ(%)"
+msgstr "パーセンテージ (%)"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
 msgid "DPI"
@@ -54343,7 +54352,7 @@ msgstr "方式:"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:67
 msgid "Percentage:"
-msgstr "パーセンテージ(%):"
+msgstr "パーセンテージ (%):"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
@@ -56854,7 +56863,7 @@ msgstr "クリックした領域と類似色の領域を塗りつぶす"
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "指定した境界色までの全ての領域を塗りつぶす"
+msgstr "指定した境界色までのすべての領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
@@ -56920,7 +56929,7 @@ msgstr "アクティブなレイヤーにある領域を塗りつぶす"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr "全てのレイヤーを統合してできた領域を塗りつぶす"
+msgstr "すべてのレイヤーを統合してできた領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:642
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
@@ -57760,7 +57769,7 @@ msgstr "資料画像ツール"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:51
 #, kde-format
 msgid "Saturation [*varies*]: "
-msgstr "彩度[*可変*]: {n}%"
+msgstr "彩度[*可変*]: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:61
 #, kde-format

@@ -253,6 +253,23 @@ QList<KoResourceLoadResult> KoResource::embeddedResources(KisResourcesInterfaceS
     return {};
 }
 
+QList<KoResourceLoadResult> KoResource::takeSideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface)
+{
+    QList<KoResourceLoadResult> result = sideLoadedResources(globalResourcesInterface);
+    clearSideLoadedResources();
+    return result;
+}
+
+QList<KoResourceLoadResult> KoResource::sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const
+{
+    Q_UNUSED(globalResourcesInterface);
+    return {};
+}
+
+void KoResource::clearSideLoadedResources()
+{
+}
+
 QList<int> KoResource::requiredCanvasResources() const
 {
     return {};

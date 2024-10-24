@@ -218,11 +218,15 @@ QSharedPointer<KisResourceStorage::TagIterator> KisResourceStorage::tags(const Q
 
 bool KisResourceStorage::saveAsNewVersion(KoResourceSP resource)
 {
+    if (!resource) return false;
+
     return d->storagePlugin->saveAsNewVersion(resource->resourceType().first, resource);
 }
 
 bool KisResourceStorage::addResource(KoResourceSP resource)
 {
+    if (!resource) return false;
+
     return d->storagePlugin->addResource(resource->resourceType().first, resource);
 }
 

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 01:48+0000\n"
+"POT-Creation-Date: 2024-10-25 01:48+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -13218,12 +13218,12 @@ msgstr "&Ferbergje"
 msgid "File"
 msgstr "&Filter"
 
-#: krita/krita5.xmlgui:429
+#: krita/krita5.xmlgui:432
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Be&wurkje"
 
-#: krita/krita5.xmlgui:434
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Skildersark"
@@ -20101,52 +20101,52 @@ msgstr "De triem koe net opslein wurde"
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, fuzzy, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "3. Could not create the resource location at %1."
 msgstr "De triem koe net opslein wurde"
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Laach koe net tafoege wurde oan de ôfbylding."
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Nije ynstellings %1"
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, fuzzy, kde-format
 msgid "Initializing the resources."
 msgstr "&Helpboarnen"
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, fuzzy, kde-format
 msgid "Temporary Resources"
 msgstr "Dokumint ymportearje"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -20457,7 +20457,7 @@ msgstr "Ofbylding ymportearje"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
@@ -30142,8 +30142,8 @@ msgstr "Kleurromte"
 msgid "Brush composite"
 msgstr "Pinsielgrutte"
 
-#: libs/ui/kis_paintop_box.cc:1359 libs/ui/kis_paintop_box.cc:1381
-#: libs/ui/kis_paintop_box.cc:1395
+#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
+#: libs/ui/kis_paintop_box.cc:1393
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

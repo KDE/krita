@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 01:48+0000\n"
+"POT-Creation-Date: 2024-10-25 01:48+0000\n"
 "PO-Revision-Date: 2024-10-23 11:40+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -13067,12 +13067,12 @@ msgstr "&Help"
 msgid "File"
 msgstr "Bestand"
 
-#: krita/krita5.xmlgui:429
+#: krita/krita5.xmlgui:432
 #, kde-format
 msgid "Edit"
 msgstr "Bewerken"
 
-#: krita/krita5.xmlgui:434
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penselen en dergelijke"
@@ -19807,52 +19807,52 @@ msgstr "1. Kon de hulpbronlocatie niet aanmaken op %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. De hulpbronlocatie op %1 is niet te beschrijven."
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Kon %1 niet toevoegen aan de database"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Kon opslag %1 niet verwijderen uit de database"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita is voor de eerste keer actief. Initialiseren zal enige tijd nemen."
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Kon de hulpbronlocatie niet aanmaken op %1."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Kon hulpbron %1 niet kopiëren naar %2"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "De hulpbronnen uit bundel %1 worden geïnstalleerd."
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "De hulpbronnen worden geïnitialiseerd"
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Tijdelijke hulpbronnen"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Kon %1 niet synchroniseren met de database"
@@ -20150,7 +20150,7 @@ msgstr "Miniatuur"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
@@ -30001,8 +30001,8 @@ msgstr "Werkruimte kiezen"
 msgid "Brush composite"
 msgstr "Samengesteld penseel"
 
-#: libs/ui/kis_paintop_box.cc:1359 libs/ui/kis_paintop_box.cc:1381
-#: libs/ui/kis_paintop_box.cc:1395
+#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
+#: libs/ui/kis_paintop_box.cc:1393
 #, kde-format
 msgid ""
 "%1\n"

@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -20836,51 +20836,51 @@ msgstr "1. Ressursi loomine asukohas %1 nurjus."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Ressursi asukohta %1 ei ole lubatud kirjutada."
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1 lisamine andmebaasi nurjus"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Salvesti %1 eemaldamine andmebaasist nurjus"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "Krita pandi esimest korda tööle. Initsialiseerimine võtab pisut aega."
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Ressursi loomine asukohas %1 nurjus."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Ressursi %1 kopeerimine asukohta %2 nurjus"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Ressursside paigaldamine kimbust %1."
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Ressursside initsialiseerimine."
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Ajutised ressursid"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1 sünkroonimine andmebaasiga nurjus"
@@ -21194,7 +21194,7 @@ msgstr "Pisipilt"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -30478,6 +30478,15 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Impordi animatsioon"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "Pilditoimingu lõpetamise ootamine..."
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -31110,8 +31119,8 @@ msgstr "Tööruumi valimine"
 msgid "Brush composite"
 msgstr "Pintsli komposiit"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"

@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2024-10-18 18:58+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -19580,52 +19580,52 @@ msgstr "1. Could not create the resource location at %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. The resource location at %1 is not writeable."
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Could not add %1 to the database"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Could not remove storage %1 from the database"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita is running for the first time. Initialisation will take some time."
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Could not create the resource location at %1."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Could not copy resource %1 to %2"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Installing the resources from bundle %1."
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Initialising the resources."
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Temporary Resources"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Could not synchronize %1 with the database"
@@ -19923,7 +19923,7 @@ msgstr "Thumbnail"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -28961,6 +28961,15 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Import animation"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "Waiting for image operation to complete..."
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -29573,8 +29582,8 @@ msgstr "Choose workspace"
 msgid "Brush composite"
 msgstr "Brush composite"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"

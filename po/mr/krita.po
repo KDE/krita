@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20130,51 +20130,51 @@ msgstr "स्तरासाठी ब्लेंडिंग पद्धत 
 msgid "2. The resource location at %1 is not writable."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, fuzzy, kde-format
 msgid "Could not add %1 to the database"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, fuzzy, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, fuzzy, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "स्तरासाठी ब्लेंडिंग पद्धत निवडा."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "नवीन संयोजना %1"
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, fuzzy, kde-format
 msgid "Initializing the resources."
 msgstr "संसाधने (&R)"
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, fuzzy, kde-format
 msgid "Temporary Resources"
 msgstr "संसाधन आयात करा"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
@@ -20493,7 +20493,7 @@ msgstr "लघुप्रतिमा"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -29545,6 +29545,14 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "रचना निर्यात करा"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, kde-format
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr ""
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -30202,8 +30210,8 @@ msgstr "कार्यक्षेत्र निवडा"
 msgid "Brush composite"
 msgstr "एकत्रित कुंचला"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

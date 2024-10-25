@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -19596,18 +19596,18 @@ msgstr "1. Não foi possível criar o local do recurso em %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. O local do recurso em %1 não é gravável."
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Não foi possível adicionar %1 ao banco de dados"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Não foi possível remover o armazenamento %1 do banco de dados"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -19615,34 +19615,34 @@ msgstr ""
 "O Krita está sendo executado pela primeira vez. A inicialização levará algum "
 "tempo."
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Não foi possível criar o local do recurso em %1."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Não foi possível copiar o recurso %1 para %2"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Instalando os recursos do grupo de recursos %1."
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Inicializando os recursos..."
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Recursos temporários"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Não foi possível sincronizar %1 com o banco de dados"
@@ -19941,7 +19941,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -29129,6 +29129,15 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Importar animação"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "Aguardando terminar a operação com imagem..."
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -29743,8 +29752,8 @@ msgstr "Escolher espaço de trabalho"
 msgid "Brush composite"
 msgstr "Pincel composto"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"

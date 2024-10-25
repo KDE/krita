@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20444,52 +20444,52 @@ msgstr "1. %1에 리소스 위치를 만들 수 없습니다."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. 리소스 위치 %1에 쓸 수 없습니다."
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "%1을(를) 데이터베이스에 추가할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "저장소 %1을(를) 데이터베이스에서 삭제할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 "Krita를 처음으로 실행했습니다. 초기화 과정에 시간이 조금 걸릴 수도 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. %1에 리소스 위치를 만들 수 없습니다."
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "리소스 %1을(를) %2(으)로 복사할 수 없음"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "번들 %1에서 리소스를 설치하고 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "리소스를 초기화하고 있습니다."
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "임시 리소스"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "%1을(를) 데이터베이스와 동기화할 수 없음"
@@ -20788,7 +20788,7 @@ msgstr "섬네일"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -29975,6 +29975,15 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "애니메이션 가져오기"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "이미지 연산 완료를 기다리는 중..."
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -30596,8 +30605,8 @@ msgstr "작업 공간 선택"
 msgid "Brush composite"
 msgstr "브러시 합성"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"

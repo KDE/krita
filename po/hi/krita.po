@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-23 03:15+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -19637,51 +19637,51 @@ msgstr "१. %1 पर संसाधन स्थान नहीं बना
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. %1 पर संसाधन स्थान लिखने योग्य नहीं है।"
 
-#: libs/resources/KisResourceLocator.cpp:804
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "डेटाबेस में %1 नहीं जोडा जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:848
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "डेटाबेस से %1 संचय नहीं निकाला जा सका"
 
-#: libs/resources/KisResourceLocator.cpp:960
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr "क्रिता पहली चलाया जा रहा है। प्रारंभ होने में कुछ समय लगेगा।"
 
-#: libs/resources/KisResourceLocator.cpp:967
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "३. %1 पर संसाधन स्थान नहीं बना सका।"
 
-#: libs/resources/KisResourceLocator.cpp:980
-#: libs/resources/KisResourceLocator.cpp:996
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "संसाधन की नकल %1 से %2 में नहीं बन सकी"
 
-#: libs/resources/KisResourceLocator.cpp:992
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "बंडल %1 से संसाधनों को स्थापित किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "संसाधनों को प्रारंभ किया जा रहा है।"
 
-#: libs/resources/KisResourceLocator.cpp:1048
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "अस्थाई संसाधन"
 
-#: libs/resources/KisResourceLocator.cpp:1171
-#: libs/resources/KisResourceLocator.cpp:1177
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "डेटाबेस से %1 को सिंक्रनाइज़ नहीं किया जा सका"
@@ -19980,7 +19980,7 @@ msgstr "लघुछवि"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -28827,6 +28827,15 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "एनिमेशन आयात करें"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, fuzzy, kde-format
+#| msgid "Waiting for image operation to complete..."
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr "छवि संचालन पूर्ण होने की प्रतीक्षा की जा रही है... "
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -29441,8 +29450,8 @@ msgstr "कार्यक्षेत्र चुनें"
 msgid "Brush composite"
 msgstr "ब्रश समग्र"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"

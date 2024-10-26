@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-25 01:48+0000\n"
-"PO-Revision-Date: 2024-10-23 09:56+0200\n"
+"PO-Revision-Date: 2024-10-23 18:57+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -29802,7 +29802,7 @@ msgstr "Agrupa ràpid de retall"
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
-msgstr "Grup de retall"
+msgstr "Grup de retalls"
 
 #: libs/ui/kis_node_manager.cpp:1636
 #, kde-format

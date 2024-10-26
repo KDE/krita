@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-25 01:48+0000\n"
-"PO-Revision-Date: 2024-10-16 13:11+0200\n"
+"PO-Revision-Date: 2024-10-24 08:50+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -24422,7 +24422,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr "Profile del colore per i file EXR importati:"
+msgstr "Profilo del colore per i file EXR importati:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178
@@ -29272,13 +29272,12 @@ msgid "Import animation"
 msgstr "Importa animazione"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "In attesa del completamento dell'operazione sull'immagine..."
+msgstr "In attesa del completamento dell'operazione..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -54379,10 +54378,9 @@ msgstr "Tonalità oraria"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50% è colore attivo)"
+msgstr "(0% è colore attivo)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 01:47+0000\n"
+"POT-Creation-Date: 2024-10-25 01:48+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -13002,12 +13002,12 @@ msgstr "&Hjelp"
 msgid "File"
 msgstr "Fil"
 
-#: krita/krita5.xmlgui:429
+#: krita/krita5.xmlgui:432
 #, kde-format
 msgid "Edit"
 msgstr ""
 
-#: krita/krita5.xmlgui:434
+#: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penslar og anna"
@@ -15953,14 +15953,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:691 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:693 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:692
+#: krita/main.cc:694
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15971,12 +15971,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:714 krita/main.cc:719
+#: krita/main.cc:716 krita/main.cc:721
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:715
+#: krita/main.cc:717
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15987,7 +15987,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:720
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16124,7 +16124,7 @@ msgstr "Gjer om"
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1905
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1903
 #, kde-format
 msgid "Undo"
 msgstr "Angra"
@@ -16812,7 +16812,7 @@ msgstr "standard"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
 msgstr "Storleik"
@@ -16855,7 +16855,7 @@ msgstr "Storleik"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1507
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1531
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -19670,7 +19670,7 @@ msgstr "Lokale ressursar"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
@@ -19686,7 +19686,7 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2198 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2834 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:2829 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19727,7 +19727,7 @@ msgstr "Lokale ressursar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
@@ -19753,18 +19753,18 @@ msgstr "1. Klarte ikkje oppretta ressursplassering i %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Ressursplasseringa i %1 er skriveverna."
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Klarte ikkje leggja til %1 i databasen"
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Klarte ikkje fjerna lageret %1 frå databasen"
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -19772,34 +19772,34 @@ msgstr ""
 "Dette er første gong du køyrer Krita. Det kan ta litt tid å klargjera "
 "programmet."
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Klarte ikkje oppretta ressursplassering i %1."
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Klarte ikkje kopiera ressursen %1 til %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Installerer ressursar frå ressurssamlinga %1."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Gjer klar ressursar."
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Mellombelse ressursar"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Klarte ikkje synkronisera %1 med databasen"
@@ -19933,8 +19933,8 @@ msgstr "Metadata"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1857
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1861
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1881
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1885
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:326
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -20097,7 +20097,7 @@ msgstr "Miniatyrbilete"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
@@ -20192,7 +20192,7 @@ msgid "Delete resource"
 msgstr "Slett ressurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2631
+#: libs/ui/KisMainWindow.cpp:2626
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20729,7 +20729,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:516
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1885
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1909
 #, kde-format
 msgid "Warning(s):"
 msgstr "Åtvaring(ar):"
@@ -21691,9 +21691,9 @@ msgstr "Hovudvising:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2147
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2149
-#: libs/ui/forms/wdgcolorsettings.ui:155 libs/ui/forms/wdgdisplaysettings.ui:24
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
 msgid "Display"
@@ -21792,8 +21792,8 @@ msgstr "Importering av videoanimasjon"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2119
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -21976,7 +21976,7 @@ msgstr "Dokument"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:40
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:949
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:948
 #, kde-format
 msgid "Width:"
 msgstr "Breidd:"
@@ -22015,7 +22015,7 @@ msgstr "Breidd:"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:41
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1009
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1008
 #, kde-format
 msgid "Height:"
 msgstr "Høgd:"
@@ -22368,34 +22368,34 @@ msgstr "Biletgrenser"
 msgid "Image Center"
 msgstr "Biletmidte"
 
-#: libs/ui/dialogs/kis_about_application.cpp:34
+#: libs/ui/dialogs/kis_about_application.cpp:35
 #, kde-format
 msgid "About Krita"
 msgstr "Om Krita"
 
-#: libs/ui/dialogs/kis_about_application.cpp:45
+#: libs/ui/dialogs/kis_about_application.cpp:46
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Created By</h1></p><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Laga av</h1></p><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:68
+#: libs/ui/dialogs/kis_about_application.cpp:69
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr "Karl Ove Hufthammer"
 
-#: libs/ui/dialogs/kis_about_application.cpp:69
+#: libs/ui/dialogs/kis_about_application.cpp:70
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "karl@huftis.org"
 
-#: libs/ui/dialogs/kis_about_application.cpp:74
+#: libs/ui/dialogs/kis_about_application.cpp:75
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Omsetjarar</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:86
+#: libs/ui/dialogs/kis_about_application.cpp:87
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22416,7 +22416,7 @@ msgstr ""
 "p><p>Du finn meir informasjon om internasjonalisering av KDE-programma på <a "
 "href=\"https://l10n.kde.org/\">https://l10n.kde.org/</a>.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:95
+#: libs/ui/dialogs/kis_about_application.cpp:96
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\">Development Fund</h1><p "
@@ -22431,12 +22431,12 @@ msgid ""
 "src=\":/asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:107
+#: libs/ui/dialogs/kis_about_application.cpp:108
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Takk til</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:134
+#: libs/ui/dialogs/kis_about_application.cpp:135
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22445,7 +22445,7 @@ msgstr ""
 ".</p><p><i>For å støtta Krita-utviklinga med råd, ikon, penselsamlingar og "
 "anna.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:138
+#: libs/ui/dialogs/kis_about_application.cpp:139
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22480,7 +22480,7 @@ msgstr ""
 "vare, som gjerne forbyr deg å bruka det du lagar med program­vara kommersielt."
 "</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:173
+#: libs/ui/dialogs/kis_about_application.cpp:174
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -22700,10 +22700,10 @@ msgstr "Lageigenskapar"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1422
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1513 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1446
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1537 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
@@ -22728,7 +22728,7 @@ msgstr "Lageigenskapar"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -22763,7 +22763,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn nytt namn på stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2642
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2637
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -23030,9 +23030,9 @@ msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1079
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1188
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1100
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1294
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -23040,14 +23040,14 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Skjerm %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1148
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1169
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Installer fargeprofilar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1358
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1382
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -23056,7 +23056,7 @@ msgstr ""
 "Bruk tidskodar frå teiknebrett-drivaren til penselfart (kan føra til store "
 "feil viss du brukar WinTab-API-et)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1360
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1384
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Bruk tidskodar frå teiknebrett-drivaren til penselfart"
@@ -23064,7 +23064,7 @@ msgstr "Bruk tidskodar frå teiknebrett-drivaren til penselfart"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1370
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1394
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -23074,7 +23074,7 @@ msgstr[1] ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1403
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
@@ -23082,13 +23082,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1476
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1500
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1497
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1521
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -23097,182 +23097,182 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " sekund"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1501
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1525
 #, kde-format
 msgid " fps"
 msgstr " bilete/s"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1730
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1754
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1731
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1755
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programvarebasert oppteiknar (veldig treg)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1733
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1757
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 via ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1735
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1759
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1742
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Ukjend"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1762
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1786
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1843
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1867
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Skjerm-ID: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1844
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1868
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Skjermnamn: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1845
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1869
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Minste lysstyrke: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1846
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1870
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Maks lysstyrke: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1847
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1871
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Maks fullbilet-lysstyrke: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1848
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1872
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Primærfarge raud: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1849
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1873
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Primærfarge grøn: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1850
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1874
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Primærfarge blå: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1851
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1875
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Kvitpunkt: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2025
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2049
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, kde-format
 msgid "Configure Krita"
 msgstr "Set opp Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2127
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Snøggtastar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2129
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Snøggtastar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2139
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Lerretbruk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2140
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
 #, kde-format
 msgid "Canvas Input"
 msgstr "Lerretbruk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Fargestyring"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2159
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Farge"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2167
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
 #, kde-format
 msgid "Performance"
 msgstr "Yting"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
 #, kde-format
 msgid "Tablet settings"
 msgstr "Teikneplate"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
 #, kde-format
 msgid "Tablet"
 msgstr "Teikneplate"
 
 # Vert vist i innstillingsvindauget. Unødvendig og forstyrrande med «-innstillingar»-suffiks.
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2187
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Berre lerretet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
 #, kde-format
 msgid "Canvas-only"
 msgstr "Berre lerretet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2199
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Sprettopp-palett"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Opphavsperson"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Opphavsperson"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24188,8 +24188,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:191
-#: libs/ui/forms/wdgcolorsettings.ui:282
+#: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:208
+#: libs/ui/forms/wdgcolorsettings.ui:299
 #: libs/ui/forms/wdgconvertcolorspace.ui:55
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
@@ -24230,8 +24230,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:201
-#: libs/ui/forms/wdgcolorsettings.ui:292
+#: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:218
+#: libs/ui/forms/wdgcolorsettings.ui:309
 #: libs/ui/forms/wdgconvertcolorspace.ui:99
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
@@ -24369,20 +24369,26 @@ msgid ""
 msgstr ""
 "Tving bruk av palettfargar (vel alltid næraste farge frå gjeldande palett)"
 
+#. i18n: ectx: property (text), widget (QLabel, lblEXRImportColorSpace)
+#: libs/ui/forms/wdgcolorsettings.ui:159
+#, kde-format
+msgid "Color profile for imported EXR files:"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
-#: libs/ui/forms/wdgcolorsettings.ui:161
+#: libs/ui/forms/wdgcolorsettings.ui:178
 #, kde-format
 msgid "Use system monitor profile"
 msgstr "Bruk global skjermprofil"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblRenderingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:171
+#: libs/ui/forms/wdgcolorsettings.ui:188
 #, kde-format
 msgid "The icm profile for your calibrated monitor"
 msgstr "ICM-profilen for den kalibrerte skjermen din"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:174
+#: libs/ui/forms/wdgcolorsettings.ui:191
 #, kde-format
 msgid "&Rendering intent:"
 msgstr "&Fargeframstilling:"
@@ -24390,7 +24396,7 @@ msgstr "&Fargeframstilling:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:196 libs/ui/forms/wdgcolorsettings.ui:287
+#: libs/ui/forms/wdgcolorsettings.ui:213 libs/ui/forms/wdgcolorsettings.ui:304
 #: libs/ui/forms/wdgimageproperties.ui:303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
@@ -24400,7 +24406,7 @@ msgstr "Relativ fargeanalyse"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:206 libs/ui/forms/wdgcolorsettings.ui:297
+#: libs/ui/forms/wdgcolorsettings.ui:223 libs/ui/forms/wdgcolorsettings.ui:314
 #: libs/ui/forms/wdgimageproperties.ui:313
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
@@ -24408,7 +24414,7 @@ msgid "Absolute Colorimetric"
 msgstr "Absolutt fargeanalyse"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAddColorProfile)
-#: libs/ui/forms/wdgcolorsettings.ui:230
+#: libs/ui/forms/wdgcolorsettings.ui:247
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:67
 #: libs/ui/widgets/kis_color_space_selector.cc:55
 #, kde-format
@@ -24416,25 +24422,25 @@ msgid "Import profile"
 msgstr "Importer fargeprofil"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgcolorsettings.ui:251
+#: libs/ui/forms/wdgcolorsettings.ui:268
 #, kde-format
 msgid "Soft Proofing"
 msgstr "Simuler utskrift"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgcolorsettings.ui:257
+#: libs/ui/forms/wdgcolorsettings.ui:274
 #, kde-format
 msgid "Note: these are the default proofing settings for new images."
 msgstr "Merk: Dette vert standard simuleringsinnstillingar for nye bilete."
 
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgcolorsettings.ui:291
 #, kde-format
 msgid "Proofing Rendering Intent:"
 msgstr "Fargeframstilling ved utskriftssimulering:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
-#: libs/ui/forms/wdgcolorsettings.ui:305
+#: libs/ui/forms/wdgcolorsettings.ui:322
 #: libs/ui/forms/wdgimageproperties.ui:326
 #, kde-format
 msgid "Adaptation State:"
@@ -24442,7 +24448,7 @@ msgstr "Adapsjonstilstand:"
 
 # Er snakk om kva farge fargar som ligg utanfor det aktuelle fargeområdet skal visast som.
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
-#: libs/ui/forms/wdgcolorsettings.ui:319
+#: libs/ui/forms/wdgcolorsettings.ui:336
 #: libs/ui/forms/wdgimageproperties.ui:350
 #, kde-format
 msgid "Gamut Warning:"
@@ -24450,7 +24456,7 @@ msgstr "Åtvaringsfarge for utilgjengelege fargar:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, ckbProofBlackPoint)
-#: libs/ui/forms/wdgcolorsettings.ui:333
+#: libs/ui/forms/wdgcolorsettings.ui:350
 #: libs/ui/forms/wdgimageproperties.ui:367
 #, kde-format
 msgid "Black Point Compensation"
@@ -24879,7 +24885,7 @@ msgstr ""
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1961
 #, kde-format
 msgid "Size:"
 msgstr "Storleik:"
@@ -24971,6 +24977,8 @@ msgstr "Vis først ved:"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -26021,7 +26029,7 @@ msgstr "Framgrunnsfarge"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1557
 #, kde-format
 msgid "Background Color"
 msgstr "Bakgrunnsfarge"
@@ -28048,7 +28056,7 @@ msgstr "Fast breidd/høgd-forhold"
 #. i18n: ectx: property (title), widget (QGroupBox, grpAngle)
 #: libs/ui/imagesize/wdg_canvassize.ui:148
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:24
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1883
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1881
 #, kde-format
 msgid "Offset"
 msgstr "Forskyving"
@@ -28863,12 +28871,12 @@ msgstr "Femfingerdraging"
 msgid "No Gesture"
 msgstr "Inga rørsle"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:106
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "Logging av teikneplate-hendingar er slått på"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:107
+#: libs/ui/input/kis_tablet_debugger.cpp:108
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "Logging av teikneplate-hendingar er slått av"
@@ -29182,6 +29190,14 @@ msgstr "Ikkje spør igjen (hald inne «Shift» for å få spørsmålet igjen)"
 msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Importer animasjon"
+
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, kde-format
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr ""
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -29852,7 +29868,7 @@ msgstr "Tettleik:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:275
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1985
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2008
 #, kde-format
 msgid "Flow:"
 msgstr "Flyt:"
@@ -29867,8 +29883,8 @@ msgstr "Vel arbeidsflate"
 msgid "Brush composite"
 msgstr "Penselsamansetjing"
 
-#: libs/ui/kis_paintop_box.cc:1359 libs/ui/kis_paintop_box.cc:1381
-#: libs/ui/kis_paintop_box.cc:1395
+#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
+#: libs/ui/kis_paintop_box.cc:1393
 #, kde-format
 msgid ""
 "%1\n"
@@ -31137,14 +31153,14 @@ msgstr "&Arbeidsflate"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
 #: libs/ui/KisMainWindow.cpp:588
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Vis «%1»-verktøylinje"
 
 # Namnet på verktøylinja har stor forbokstav, så bør vera hermeteikn her.
 #: libs/ui/KisMainWindow.cpp:590
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Gøym «%1»-verktøylinje"
@@ -31254,35 +31270,35 @@ msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Klarte ikkje oppretta nytt dokument. Animasjonsimporteringa vart avbroten."
 
-#: libs/ui/KisMainWindow.cpp:2622
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2637
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2641
+#: libs/ui/KisMainWindow.cpp:2636
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2685
+#: libs/ui/KisMainWindow.cpp:2680
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2688
+#: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2857
+#: libs/ui/KisMainWindow.cpp:2852
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31291,19 +31307,19 @@ msgstr ""
 "LittleCMS-programtillegget for fargestyring i Krita er ikkje installert. "
 "Programmet vert derfor avslutta."
 
-#: libs/ui/KisMainWindow.cpp:2873
+#: libs/ui/KisMainWindow.cpp:2868
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installasjonsfeil"
 
-#: libs/ui/KisMainWindow.cpp:2983
+#: libs/ui/KisMainWindow.cpp:2978
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema"
 
-#: libs/ui/KisMainWindow.cpp:3042
+#: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Utvidande mellomrom"
@@ -32895,7 +32911,7 @@ msgstr "Gruppa er ikkje redigerbar."
 msgid "Local selection is locked."
 msgstr "Lokalt utval er låst."
 
-#: libs/ui/tool/kis_tool_freehand.cc:213
+#: libs/ui/tool/kis_tool_freehand.cc:212
 #, kde-format
 msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
@@ -32904,7 +32920,7 @@ msgstr ""
 "Penselverktøyet kan ikkje brukast på dette laget. Vel eit teiknelag eller ei "
 "maske."
 
-#: libs/ui/tool/kis_tool_freehand.cc:218
+#: libs/ui/tool/kis_tool_freehand.cc:217
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
@@ -33001,13 +33017,13 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filteret «%1»"
 
-#: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
 msgstr "Standard"
 
-#: libs/ui/toolbox/KoToolBox.cpp:354
+#: libs/ui/toolbox/KoToolBox.cpp:355
 #, kde-format
 msgid "%1x%2"
 msgstr "%1 × %2"
@@ -35154,7 +35170,7 @@ msgstr "Trykk-knapp"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2169
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2167
 #, kde-format
 msgid "Rows:"
 msgstr "Rader:"
@@ -35169,7 +35185,7 @@ msgstr "Rader:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2159
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2157
 #, kde-format
 msgid "Columns:"
 msgstr "Kolonnar:"
@@ -35822,12 +35838,12 @@ msgstr "Kanalar"
 msgid "without name"
 msgstr "namnlaus"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:90
+#: libs/widgetutils/config/krecentfilesaction.cpp:91
 #, kde-format
 msgid "No Entries"
 msgstr "Ingen oppføringar"
 
-#: libs/widgetutils/config/krecentfilesaction.cpp:96
+#: libs/widgetutils/config/krecentfilesaction.cpp:97
 #, kde-format
 msgid "Clear List"
 msgstr "Tøm liste"
@@ -36331,69 +36347,69 @@ msgstr "&Om %1"
 msgid "About &KDE"
 msgstr "Om &KDE"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, kde-format
 msgid "Unit"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "Prosent (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:505
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr "prosent av visingsbreidd (vw)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr "prosent av visingshøgd (vh)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:513
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "gradar (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:515
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr "radianar (rad)"
 
 # https://nn.wikipedia.org/wiki/Gon
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:517
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr "gon (gon)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:519
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr "prosent av sirkel (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:525
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr "bilete (f)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:527
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "sekund (s)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:529
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -41747,23 +41763,23 @@ msgid "Wide Gamut Color Selector Settings"
 msgstr ""
 
 # Bør vera kolon på slutten av her.
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:35
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
 msgid "Please paste this information in your bug report"
 msgstr "Legg ved denne informasjonen når du melder frå om feil:"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:38
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:41
 #, kde-format
 msgid "Copy to clipboard"
 msgstr "Kopier til utklippstavla"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:39
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:73
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:42
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:76
 #, kde-format
 msgid "Save to file"
 msgstr "Lagra til fil"
 
-#: plugins/extensions/buginfo/dlg_buginfo.cpp:84
+#: plugins/extensions/buginfo/dlg_buginfo.cpp:87
 #, kde-format
 msgid "Unable to open file"
 msgstr "Klarte ikkje opna fila"
@@ -45650,7 +45666,7 @@ msgstr "Uavhengige kanalar"
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:53
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2051
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1942
 #, kde-format
 msgid "Mode:"
 msgstr "Modus:"
@@ -46983,7 +46999,7 @@ msgstr "Grense for kantutjamning:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1944
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2043
 #, kde-format
 msgid "Reverse:"
 msgstr "Baklengs:"
@@ -46992,7 +47008,7 @@ msgstr "Baklengs:"
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
 #: plugins/tools/basictools/wdgmovetool.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1045
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1044
 #, kde-format
 msgid "Position"
 msgstr "Posisjon"
@@ -47237,7 +47253,7 @@ msgstr "Skråstill:"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/pattern/wdgpatternoptions.ui:269
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:60
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:738
 #, kde-format
 msgid "Rotation"
 msgstr "Dreiing"
@@ -47665,13 +47681,13 @@ msgid "Incremental"
 msgstr "Gradvis"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBox2)
-#. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyAmountPressureBox)
+#. i18n: ectx: property (text), widget (QToolButton, liquifySizePressureBox)
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2100
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2116
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1968
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2095
 #, kde-format
 msgid "Pressure"
 msgstr "Trykk"
@@ -47706,7 +47722,7 @@ msgstr "Rang"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1966
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2123
 #, kde-format
 msgid "Spacing:"
 msgstr "Avstand:"
@@ -47763,7 +47779,7 @@ msgstr "Animasjonsstil"
 msgid "Selection mode:"
 msgstr "Utvalsmodus:"
 
-#: plugins/impex/exr/exr_converter.cc:911
+#: plugins/impex/exr/exr_converter.cc:912
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -47777,20 +47793,20 @@ msgstr ""
 "tilbakestilte ved lagring av biletet.<br/><br/>Dette vil knapt ha nokon "
 "visuell verknad, men du bør likevel vera klar over det."
 
-#: plugins/impex/exr/exr_converter.cc:918
+#: plugins/impex/exr/exr_converter.cc:919
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR-biletet er endra"
 
-#: plugins/impex/exr/exr_converter.cc:1333
+#: plugins/impex/exr/exr_converter.cc:1345
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (type: «%2»)"
 
 # skip-rule: passiv
-#: plugins/impex/exr/exr_converter.cc:1338
+#: plugins/impex/exr/exr_converter.cc:1350
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49637,17 +49653,17 @@ msgstr "Klarte ikkje lagra utval for lokalt utval %1."
 msgid "Failed to save the pixel selection data for layer %1."
 msgstr "Klarte ikkje lagra pikselutval for lag %1."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:466
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:467
 #, kde-format
 msgid "Failed to save the vector selection data for layer %1."
 msgstr "Klarte ikkje lagra vektorutvalsdata for lag %1."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:520
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:521
 #, kde-format
 msgid "The metadata backend failed to save the metadata for %1"
 msgstr "Metadata-motoren klarte ikkje lagra metadata for %1."
 
-#: plugins/impex/libkra/kis_kra_save_visitor.cpp:531
+#: plugins/impex/libkra/kis_kra_save_visitor.cpp:532
 #, kde-format
 msgid "Could not write for %1 metadata to the file."
 msgstr "Klarte ikkje skriva for %1-metadata til fila."
@@ -52249,7 +52265,7 @@ msgstr "Spiral mot klokka"
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:143
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1814
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1812
 #, kde-format
 msgid "Move"
 msgstr "Flytt"
@@ -53208,7 +53224,7 @@ msgstr "Oppbygging"
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2073
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2084
 #, kde-format
 msgid "Wash"
 msgstr "Lasur"
@@ -54062,8 +54078,8 @@ msgstr "Kulør med klokka"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
-msgid "(50% is active color)"
-msgstr "(50 % er gjeldande farge)"
+msgid "(0% is active color)"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -56779,7 +56795,7 @@ msgstr "Programtillegg for endra eigenskapar på utvalde dokument"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1861
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1837
 #, kde-format
 msgid "Rotate"
 msgstr "Dreiing"
@@ -56795,8 +56811,8 @@ msgstr "Gradar:"
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:915
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:914
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1859
 #, kde-format
 msgid "Scale"
 msgstr "Skalering"
@@ -58623,8 +58639,8 @@ msgstr "Eining:"
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateXBox)
 #: plugins/tools/basictools/wdgmovetool.ui:235
 #: plugins/tools/basictools/wdgmovetool.ui:257
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1071
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1093
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1070
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1092
 #, kde-format
 msgid "Horizontal Translation"
 msgstr "Flytt til høgre/venstre"
@@ -58632,7 +58648,7 @@ msgstr "Flytt til høgre/venstre"
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
 #: plugins/tools/basictools/wdgmovetool.ui:241
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:772
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:771
 #, kde-format
 msgid "&x:"
 msgstr "&x:"
@@ -58642,8 +58658,8 @@ msgstr "&x:"
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
 #: plugins/tools/basictools/wdgmovetool.ui:273
 #: plugins/tools/basictools/wdgmovetool.ui:286
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1109
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1122
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1108
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1121
 #, kde-format
 msgid "Vertical Translation"
 msgstr "Flytt nedover/oppover"
@@ -58651,7 +58667,7 @@ msgstr "Flytt nedover/oppover"
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
 #: plugins/tools/basictools/wdgmovetool.ui:289
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:807
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:806
 #, kde-format
 msgid "&y:"
 msgstr "&y:"
@@ -59734,89 +59750,89 @@ msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr "Endra SVG-tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:266
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:267
 #, kde-format
 msgid "Text Tool"
 msgstr "Tekstverktøy"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:400
 #, kde-format
 msgid "Conversion failed"
 msgstr "Feil ved konvertering"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
 #, kde-format
 msgid "Find Text"
 msgstr "Finn tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:654
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:697
 #, kde-format
 msgid "Find:"
 msgstr "Finn:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:693
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Søk og byt ut alle"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:699
 #, kde-format
 msgid "Replace:"
 msgstr "Byt ut"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Du har endra teksten. Vil du forkasta endringane?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Rik tekst"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1385
 #, kde-format
 msgid "SVG Source"
 msgstr "SVG-kjelde"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1532
 #, kde-format
 msgid "Font"
 msgstr "Skrift"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1549
 #, kde-format
 msgid "Text Color"
 msgstr "Tekstfarge"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1564
 #, kde-format
 msgid "Sample a Color"
 msgstr "Plukk opp ein farge"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
 #, kde-format
 msgid "Line height"
 msgstr "Linjehøgd"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1582
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1591
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"
@@ -61310,7 +61326,7 @@ msgstr "Byt mellom å redigera og å fordreia buret"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1618
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1617
 #, kde-format
 msgid "Lock Points"
 msgstr "Lås punkt"
@@ -61322,7 +61338,7 @@ msgstr "Lås opp punkt"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1656
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1655
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
 msgstr "Legg til tre punkt på lerretet for å starta"
@@ -61450,248 +61466,248 @@ msgid "Shear"
 msgstr "Skråstilling"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:699
 #, kde-format
 msgid "off canvas"
 msgstr "utanfor lerretet"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:766
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:765
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:781
 #, kde-format
 msgid "Rotate around X-Axis"
 msgstr "Drei rundt x-aksen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:801
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:800
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:816
 #, kde-format
 msgid "Rotate around Y-Axis"
 msgstr "Drei rundt y-aksen"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:836
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:835
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:860
 #, kde-format
 msgid "Rotate around Z-Axis"
 msgstr "Drei rundt z-aksen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:842
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:841
 #, kde-format
 msgid "&z:"
 msgstr "&z:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCameraHeight)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, cameraHeightBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:880
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:905
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:879
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:904
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
 msgstr "Z-koordinat til kamera­plasseringa over scena"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:885
 #, kde-format
 msgid "Camera height:"
 msgstr "Kamerahøgd:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:946
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:968
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:945
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:967
 #, kde-format
 msgid "Horizontal Scale"
 msgstr "Vassrett skalering"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:971
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:987
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:970
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:986
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:984
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1006
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:983
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1005
 #, kde-format
 msgid "Vertical Scale"
 msgstr "Loddrett skalering"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1077
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1175
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1076
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1174
 #, kde-format
 msgid "x:"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1125
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1216
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1124
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1215
 #, kde-format
 msgid "y:"
 msgstr "Y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1142
 #, kde-format
 msgid "Shear"
 msgstr "Skråstilling"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1172
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1235
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1171
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1234
 #, kde-format
 msgid "Horizontal Shear"
 msgstr "Skråstill vassrett"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1194
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1213
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1193
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1212
 #, kde-format
 msgid "Vertical Shear"
 msgstr "Skråstill loddrett"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1267
 #, kde-format
 msgid "Flip selection horizontally"
 msgstr "Spegla utvalet vassrett"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1293
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1292
 #, kde-format
 msgid "Flip selection vertically"
 msgstr "Spegla utvalet loddrett"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1334
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1333
 #, kde-format
 msgid "Rotate selection counter-clockwise 90 degrees"
 msgstr "Drei utvalet 90° til venstre"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1359
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1358
 #, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
 msgstr "Drei utvalet 90° til høgre"
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1438
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1437
 #, kde-format
 msgid "Fle&xibility:"
 msgstr "&Fleksibilitet:"
 
 #. i18n: ectx: property (text), widget (QLabel, warpTypeLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1467
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1466
 #, kde-format
 msgid "Anc&hor Strength:"
 msgstr "An&kerstyrke:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1484
 #, kde-format
 msgid "Anchor Points"
 msgstr "Ankerpunkt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1519
 #, kde-format
 msgid "Subdi&vide"
 msgstr "&Underinndeling"
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1577
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1576
 #, kde-format
 msgid "Draw"
 msgstr "Teikn"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetPointsButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1611
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1610
 #, kde-format
 msgid "Clear Points"
 msgstr "Fjern punkt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1663
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1662
 #, kde-format
 msgid "Add/Ed&it Anchor Points"
 msgstr "Legg til / &rediger ankerpunkt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1678
 #, kde-format
 msgid "Defor&m Selection"
 msgstr "&Fordei utval"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1709
 #, kde-format
 msgid "Adjust Granularity :"
 msgstr "Juster detaljgrad:"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1720
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1718
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
 msgstr "Førehandsvising"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1737
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1735
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "Endeleg"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1784
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1782
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2062
 #, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "Mengd:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2068
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2079
 #, kde-format
 msgid "Build Up"
 msgstr "Oppbygging"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2151
 #, kde-format
 msgid "Mesh size"
 msgstr "Maskestorleik"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2180
 #, kde-format
 msgid "Show handles"
 msgstr "Vis handtak"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2187
 #, kde-format
 msgid "Lock handles symmetrically"
 msgstr "Lås handtaka symmetrisk"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr "Skaler handtak proporsjonalt"

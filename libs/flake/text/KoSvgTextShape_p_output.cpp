@@ -14,6 +14,10 @@
 #include <KoColorBackground.h>
 #include <KoPathShape.h>
 #include <KoShapeStroke.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactoryBase.h>
+#include <KoProperties.h>
+#include <KoClipMask.h>
 
 #include <QPainter>
 #include <QtMath>
@@ -265,6 +269,13 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
 {
 
     QList<KoShape *> shapes;
+
+    KoShapeFactoryBase *imageFactory = KoShapeRegistry::instance()->value("ImageShape");
+    const QString imageProp = "image";
+    const QString imageViewTransformProp = "viewboxTransform";
+    KoShapeFactoryBase *rectangleFactory = KoShapeRegistry::instance()->value("RectangleShape");
+
+
     KoShapeStrokeModelSP stroke = rootShape->stroke();
     QSharedPointer<KoShapeBackground> background = rootShape->background();
     QVector<KoShape::PaintOrder> paintOrder = rootShape->paintOrder();
@@ -333,6 +344,31 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                             }
                         } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
                             chunk.addPath(tf.map(outlineGlyph->path));
+                        } else if (const auto *bitmapGlyph = std::get_if<Glyph::Bitmap>(&result.at(i).glyph)) {
+
+                            KoProperties params;
+                            QRectF drawRect = bitmapGlyph->drawRect;
+                            QTransform imageTf = QTransform::fromTranslate(drawRect.x(), drawRect.y());
+                            QTransform viewBox = QTransform::fromScale(drawRect.width()/bitmapGlyph->image.width(),
+                                                                   drawRect.height()/bitmapGlyph->image.height());
+                            params.setProperty(imageProp, bitmapGlyph->image);
+                            params.setProperty(imageViewTransformProp, viewBox);
+                            KoShape *shape = imageFactory->createShape(&params);
+                            if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
+                                KoShape *rect = rectangleFactory->createDefaultShape();
+                                rect->setSize(drawRect.size());
+                                rect->setBackground(background);
+                                rect->setStroke(nullptr);
+                                KoClipMask *mask = new KoClipMask();
+                                mask->setShapes({shape});
+                                rect->setClipMask(mask);
+                                rect->setTransformation(imageTf*tf);
+                                shapes.append(rect);
+                            } else {
+                                shape->setSize(drawRect.size());
+                                shape->setTransformation(imageTf*tf);
+                                shapes.append(shape);
+                            }
                         }
                     }
                 }

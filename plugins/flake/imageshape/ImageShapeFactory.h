@@ -22,6 +22,16 @@ public:
     ~ImageShapeFactory() override {}
 
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    /**
+     * @brief createShape
+     * @param params
+     * The parameters. Will look at keys...
+     * - "image" and retrieve as a QImage to set on the shape.
+     * - "viewboxTransform" and retrieve as a QTransform to set on the shape.
+     * @param documentResources -- unused.
+     * @return ImageShape
+     */
+    KoShape *createShape(const KoProperties *params, KoDocumentResourceManager *documentResources = 0) const;
     bool supports(const QDomElement &e, KoShapeLoadingContext &context) const override;
     QList<KoShapeConfigWidgetBase *> createShapeOptionPanels() override;
 };

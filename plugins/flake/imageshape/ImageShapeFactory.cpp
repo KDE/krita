@@ -16,6 +16,7 @@
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoIcon.h>
+#include <KoProperties.h>
 
 // KDE
 #include <klocalizedstring.h>
@@ -38,6 +39,23 @@ KoShape *ImageShapeFactory::createDefaultShape(KoDocumentResourceManager */*docu
     ImageShape *shape = new ImageShape();
     shape->setShapeId(ImageShapeId);
 
+    return shape;
+}
+
+
+KoShape *ImageShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager */*documentResources*/) const
+{
+    ImageShape *shape = new ImageShape();
+    shape->setShapeId(ImageShapeId);
+
+    QVariant var = params->value("image");
+    if (var.type() == QVariant::Image) {
+        shape->setImage(var.value<QImage>());
+    }
+    var = params->value("viewboxTransform");
+    if (var.type() == QVariant::Transform) {
+        shape->setViewBoxTransform(var.value<QTransform>());
+    }
     return shape;
 }
 

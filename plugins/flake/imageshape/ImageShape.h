@@ -30,6 +30,12 @@ public:
     bool saveSvg(SvgSavingContext &context) override;
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
 
+    void setImage(const QImage &img);
+    QImage image() const;
+
+    void setViewBoxTransform(const QTransform &tf);
+    QTransform viewBoxTransform() const;
+
 private:
     ImageShape(const ImageShape &rhs);
 

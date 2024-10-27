@@ -157,3 +157,29 @@ bool ImageShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
 
     return true;
 }
+
+void ImageShape::setImage(const QImage &img)
+{
+    if (m_d->image != img) {
+        m_d->image = img;
+        shapeChanged(KoShape::ContentChanged);
+    }
+}
+
+QImage ImageShape::image() const
+{
+    return m_d->image;
+}
+
+void ImageShape::setViewBoxTransform(const QTransform &tf)
+{
+    if (m_d->viewBoxTransform != tf) {
+        m_d->viewBoxTransform = tf;
+        shapeChanged(KoShape::GenericMatrixChange);
+    }
+}
+
+QTransform ImageShape::viewBoxTransform() const
+{
+    return m_d->viewBoxTransform;
+}

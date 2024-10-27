@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-25 03:17+0000\n"
-"PO-Revision-Date: 2024-09-25 17:28+0200\n"
+"PO-Revision-Date: 2024-10-26 19:38+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -28956,13 +28956,12 @@ msgid "Import animation"
 msgstr "Importera animering"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Väntar på att bildåtgärd ska bli färdig..."
+msgstr "Väntar på att åtgärden ska bli färdig..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -53146,10 +53145,9 @@ msgstr "Färgton medurs"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50 % är aktiv färg)"
+msgstr "(0 % är aktiv färg)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

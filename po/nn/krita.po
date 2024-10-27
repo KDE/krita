@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-12 03:20+0000\n"
+"POT-Creation-Date: 2024-10-25 03:17+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15841,14 +15841,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:693 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:695 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:694
+#: krita/main.cc:696
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15859,12 +15859,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:716 krita/main.cc:721
+#: krita/main.cc:718 krita/main.cc:723
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:717
+#: krita/main.cc:719
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15875,7 +15875,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:722
+#: krita/main.cc:724
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19588,18 +19588,18 @@ msgstr "1. Klarte ikkje oppretta ressursplassering i %1."
 msgid "2. The resource location at %1 is not writable."
 msgstr "2. Ressursplasseringa i %1 er skriveverna."
 
-#: libs/resources/KisResourceLocator.cpp:799
+#: libs/resources/KisResourceLocator.cpp:822
 #, kde-format
 msgid "Could not add %1 to the database"
 msgstr "Klarte ikkje leggja til %1 i databasen"
 
-#: libs/resources/KisResourceLocator.cpp:843
-#: libs/resources/KisResourceLocator.cpp:1190
+#: libs/resources/KisResourceLocator.cpp:866
+#: libs/resources/KisResourceLocator.cpp:1213
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "Klarte ikkje fjerna lageret %1 frå databasen"
 
-#: libs/resources/KisResourceLocator.cpp:955
+#: libs/resources/KisResourceLocator.cpp:978
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
@@ -19607,34 +19607,34 @@ msgstr ""
 "Dette er første gong du køyrer Krita. Det kan ta litt tid å klargjera "
 "programmet."
 
-#: libs/resources/KisResourceLocator.cpp:962
+#: libs/resources/KisResourceLocator.cpp:985
 #, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "3. Klarte ikkje oppretta ressursplassering i %1."
 
-#: libs/resources/KisResourceLocator.cpp:975
-#: libs/resources/KisResourceLocator.cpp:991
+#: libs/resources/KisResourceLocator.cpp:998
+#: libs/resources/KisResourceLocator.cpp:1014
 #, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "Klarte ikkje kopiera ressursen %1 til %2"
 
-#: libs/resources/KisResourceLocator.cpp:987
+#: libs/resources/KisResourceLocator.cpp:1010
 #, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "Installerer ressursar frå ressurssamlinga %1."
 
-#: libs/resources/KisResourceLocator.cpp:1009
+#: libs/resources/KisResourceLocator.cpp:1032
 #, kde-format
 msgid "Initializing the resources."
 msgstr "Gjer klar ressursar."
 
-#: libs/resources/KisResourceLocator.cpp:1043
+#: libs/resources/KisResourceLocator.cpp:1066
 #, kde-format
 msgid "Temporary Resources"
 msgstr "Mellombelse ressursar"
 
-#: libs/resources/KisResourceLocator.cpp:1166
-#: libs/resources/KisResourceLocator.cpp:1172
+#: libs/resources/KisResourceLocator.cpp:1189
+#: libs/resources/KisResourceLocator.cpp:1195
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "Klarte ikkje synkronisera %1 med databasen"
@@ -19932,7 +19932,7 @@ msgstr "Miniatyrbilete"
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:616
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:325
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:664
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:716
@@ -22633,6 +22633,8 @@ msgstr "Lageigenskapar"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:26
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:27
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:163
+#: plugins/paintops/libpaintop/KisStandardOptionData.cpp:172
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:48
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
@@ -28975,6 +28977,14 @@ msgctxt "(qtundo-format)"
 msgid "Import animation"
 msgstr "Importer animasjon"
 
+#: libs/ui/kis_async_action_feedback.cpp:79
+#, kde-format
+msgctxt ""
+"progress dialog message when the user has to wait for the image to become "
+"unlocked"
+msgid "Waiting for the action to complete..."
+msgstr ""
+
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
 msgid "New configuration %1"
@@ -29588,8 +29598,8 @@ msgstr "Vel arbeidsflate"
 msgid "Brush composite"
 msgstr "Penselsamansetjing"
 
-#: libs/ui/kis_paintop_box.cc:1307 libs/ui/kis_paintop_box.cc:1329
-#: libs/ui/kis_paintop_box.cc:1343
+#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
+#: libs/ui/kis_paintop_box.cc:1341
 #, kde-format
 msgid ""
 "%1\n"
@@ -46935,14 +46945,14 @@ msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR-biletet er endra"
 
-#: plugins/impex/exr/exr_converter.cc:1327
+#: plugins/impex/exr/exr_converter.cc:1338
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (type: «%2»)"
 
 # skip-rule: passiv
-#: plugins/impex/exr/exr_converter.cc:1332
+#: plugins/impex/exr/exr_converter.cc:1343
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -53150,8 +53160,8 @@ msgstr "Kulør med klokka"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
-msgid "(50% is active color)"
-msgstr "(50 % er gjeldande farge)"
+msgid "(0% is active color)"
+msgstr ""
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118

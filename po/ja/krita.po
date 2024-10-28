@@ -28946,13 +28946,12 @@ msgid "Import animation"
 msgstr "アニメーションをインポート"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "画像の処理が完了するのを待っています..."
+msgstr "処理が完了するのを待っています..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -29746,14 +29745,9 @@ msgstr ""
 "color:%1;\">Krita ウェブサイト</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p align=\"center\"><b><span style=\" color:%1;\">最近使用"
-"したファイル</span></b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Krita の開発</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -29783,20 +29777,14 @@ msgstr ""
 "text-decoration: underline; color:%1;\">スクリプト API</span></a></p>"
 
 #: libs/ui/kis_splash_screen.cpp:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
-"<html><head/><body><p>Krita スクリプトの書き方を学びたい場合は、<a href="
-"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
-"decoration: underline; color:#2980b9;\">Krita Scripting School</span></a> を"
-"チェックしてください!</p></body></html>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">スクリプティング・スクール</"
+"span></a></p>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -30237,7 +30225,7 @@ msgstr "エクスポート用のファイル名"
 #: libs/ui/KisApplicationArguments.cpp:98
 #, kde-format
 msgid "File layer to be added to existing or new file"
-msgstr "既存または新規ファイルに追加されるファイル参照レイヤー"
+msgstr "既存または新しいファイルに追加されるファイル参照レイヤー"
 
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
@@ -30738,6 +30726,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"<b>フィルタレイヤー</b>を含む画像で高度なエクスポートを実行しようとしていま"
+"す。画像はサイズ変更前に<b>統合</b>されます。"
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30746,6 +30736,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"<b>フィルタマスク</b>を含む画像で高度なエクスポートを実行しようとしています。"
+"画像はサイズ変更前に<b>統合</b>されます。"
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30754,6 +30746,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
+"<b>レイヤースタイル</b>を含む画像で高度なエクスポートを実行しようとしていま"
+"す。画像はサイズ変更前に<b>統合</b>されます。"
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -33339,8 +33333,8 @@ msgstr ""
 "味します。CMYK プロファイルはプリンタごとに大きく異なるため、作業は RGB 色空"
 "間で行い、その後に使用するプリンタに最も適した CMYK プロファイルに変換するこ"
 "とを推奨します。<br/>CMYK はお絵描きに用には推奨<b>できません</b>。残念なが"
-"ら、Krita には CMYK 色空間用にインク組成や TRC (トーン応答曲線)の情報を引き出"
-"す機能はありません。"
+"ら、Krita には CMYK 色空間用にインク組成や TRC (トーン応答曲線) の情報を引き"
+"出す機能はありません。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
 #, kde-format
@@ -34921,46 +34915,40 @@ msgid "Color name:"
 msgstr "色名:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "色相:"
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "OS:"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "L:"
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "I:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "明度:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format

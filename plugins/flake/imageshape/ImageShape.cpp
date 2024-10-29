@@ -86,7 +86,7 @@ bool ImageShape::saveSvg(SvgSavingContext &context)
     context.shapeWriter().addAttribute("width", QString("%1px").arg(KisDomUtils::toString(size().width())));
     context.shapeWriter().addAttribute("height", QString("%1px").arg(KisDomUtils::toString(size().height())));
 
-    QString aspectString = m_d->ratioParser->toString();
+    QString aspectString = m_d->ratioParser? m_d->ratioParser->toString(): QString();
     if (!aspectString.isEmpty()) {
         context.shapeWriter().addAttribute("preserveAspectRatio", aspectString);
     }

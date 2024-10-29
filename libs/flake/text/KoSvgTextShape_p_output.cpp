@@ -12,6 +12,7 @@
 
 #include <KoClipMaskPainter.h>
 #include <KoColorBackground.h>
+#include <KoGradientBackground.h>
 #include <KoPathShape.h>
 #include <KoShapeStroke.h>
 #include <KoShapeRegistry.h>
@@ -263,6 +264,61 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     }
 }
 
+#include <kis_algebra_2d.h>
+QGradient *cloneAndTransformGradient(const QGradient *grad, const QTransform &tf) {
+    QGradient *newGrad = KoFlake::cloneGradient(grad);
+
+    if (newGrad->type() == QGradient::LinearGradient) {
+        QLinearGradient *lgradient = static_cast<QLinearGradient*>(newGrad);
+        lgradient->setStart(tf.map(lgradient->start()));
+        lgradient->setFinalStop(tf.map(lgradient->finalStop()));
+    } else if (newGrad->type() == QGradient::RadialGradient) {
+        QRadialGradient *rgradient = static_cast<QRadialGradient*>(newGrad);
+        rgradient->setFocalPoint(tf.map(rgradient->focalPoint()));
+        rgradient->setCenter(tf.map(rgradient->center()));
+    }
+    return newGrad;
+}
+
+QSharedPointer<KoShapeBackground> transformBackgroundToBounds(QSharedPointer<KoShapeBackground> bg, const QRectF &oldBounds, const QRectF &newBounds) {
+    KoGradientBackground *g = dynamic_cast<KoGradientBackground *>(bg.data());
+
+    if (g) {
+        QRectF relative = KisAlgebra2D::absoluteToRelative(oldBounds, newBounds);
+        QTransform newTf = QTransform::fromTranslate(relative.x(), relative.y());
+        newTf.scale(relative.width(), relative.height());
+
+        return QSharedPointer<KoGradientBackground>(new KoGradientBackground(cloneAndTransformGradient(g->gradient(), newTf), g->transform()));
+    }
+
+    // assume bg is KoColorBackground.
+    return bg;
+}
+#include <KoInsets.h>
+KoShapeStrokeModelSP transformStrokeBgToNewBounds(KoShapeStrokeModelSP stroke, const QRectF &oldBounds, const QRectF &newBounds, bool calcInsets = true) {
+    KoShapeStrokeSP s = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
+    if (s) {
+        QBrush b = s->lineBrush();
+        if (b.gradient()) {
+            QRectF nb = newBounds;
+            if (calcInsets) {
+                KoInsets insets;
+                s->strokeInsets(nullptr, insets);
+                nb.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
+            }
+
+            QRectF relative = KisAlgebra2D::absoluteToRelative(oldBounds, nb);
+            KoShapeStrokeSP newStroke(new KoShapeStroke(*s.data()));
+            QTransform newTf = QTransform::fromTranslate(relative.x(), relative.y());
+            newTf.scale(relative.width(), relative.height());
+            QBrush newBrush = *cloneAndTransformGradient(b.gradient(), newTf);
+            newStroke->setLineBrush(newBrush);
+            return newStroke;
+        }
+    }
+    return stroke;
+}
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 QList<KoShape *>
 KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
@@ -298,7 +354,9 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
 
             if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
-                shape->setBackground(decorationColor);
+                shape->setBackground(transformBackgroundToBounds(decorationColor,
+                                                                 rootShape->outlineRect(),
+                                                                 shape->outlineRect()));
                 shape->setStroke(stroke);
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
@@ -308,8 +366,12 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             }
             if (textDecorations.contains(KoSvgText::DecorationOverline)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
-                shape->setBackground(decorationColor);
-                shape->setStroke(stroke);
+                shape->setBackground(transformBackgroundToBounds(decorationColor,
+                                                                 rootShape->outlineRect(),
+                                                                 shape->outlineRect()));
+                shape->setStroke(transformStrokeBgToNewBounds(stroke,
+                                                              rootShape->outlineRect(),
+                                                              shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
                 if (hasPaintOrder)
@@ -357,24 +419,34 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                             if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
                                 KoShape *rect = rectangleFactory->createDefaultShape();
                                 rect->setSize(drawRect.size());
-                                rect->setBackground(background);
                                 rect->setStroke(nullptr);
                                 KoClipMask *mask = new KoClipMask();
                                 mask->setShapes({shape});
                                 rect->setClipMask(mask);
+                                rect->setZIndex(shapes.size());
+                                rect->setBackground(transformBackgroundToBounds(background,
+                                                                                 rootShape->outlineRect(),
+                                                                                 tf.mapRect(drawRect)));
                                 rect->setTransformation(imageTf*tf);
+
                                 shapes.append(rect);
                             } else {
                                 shape->setSize(drawRect.size());
                                 shape->setTransformation(imageTf*tf);
+                                shape->setZIndex(shapes.size());
                                 shapes.append(shape);
                             }
                         }
                     }
                 }
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(chunk);
-                shape->setBackground(background);
-                shape->setStroke(stroke);
+                shape->setBackground(transformBackgroundToBounds(background,
+                                                                 rootShape->outlineRect(),
+                                                                 shape->outlineRect()));
+
+                shape->setStroke(transformStrokeBgToNewBounds(stroke,
+                                                              rootShape->outlineRect(),
+                                                              shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
                 if (hasPaintOrder)
@@ -388,11 +460,16 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             inheritPaintProperties(it, stroke, background, paintOrder);
             if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
-                shape->setBackground(decorationColor);
-                shape->setStroke(stroke);
+                shape->setBackground(transformBackgroundToBounds(decorationColor,
+                                                                 rootShape->outlineRect(),
+                                                                 shape->outlineRect()));
+                shape->setStroke(transformStrokeBgToNewBounds(stroke,
+                                                              rootShape->outlineRect(),
+                                                              shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);
-                shape->setPaintOrder(first, second);
+                if (hasPaintOrder)
+                    shape->setPaintOrder(first, second);
                 shapes.append(shape);
             }
         }

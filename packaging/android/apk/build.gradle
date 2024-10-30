@@ -202,7 +202,7 @@ android {
         ndkVersion "27.2.12479018"
 
         targetSdkVersion 34
-        minSdkVersion 23
+        minSdkVersion 24
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "5.3.0-prealpha"
         def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')

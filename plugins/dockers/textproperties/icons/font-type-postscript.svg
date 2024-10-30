@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="12"
+   height="12"
+   viewBox="0 0 3.1749999 3.175"
+   version="1.1"
+   id="svg5"
+   xml:space="preserve"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   sodipodi:docname="font-type-postscript.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"><sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="true"
+     inkscape:zoom="52.712632"
+     inkscape:cx="5.0557142"
+     inkscape:cy="6.0137388"
+     inkscape:window-width="1920"
+     inkscape:window-height="1010"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"><inkscape:grid
+       type="xygrid"
+       id="grid1725"
+       spacingx="0.13229166"
+       spacingy="0.13229166"
+       empspacing="2" /></sodipodi:namedview><defs
+     id="defs2" /><path
+     style="color:#000000;display:inline;fill:#4d4d4d;fill-opacity:1;-inkscape-stroke:none;paint-order:stroke fill markers"
+     d="m 1.3227863,0.26430382 -0.78906241,0.005859 v 0.26367187 l 0.78906241,-0.003906 c 0,0 0.071007,0.001324 0.1386719,0.0351563 0.067665,0.0338326 0.1250001,0.0741756 0.125,0.22851563 0,0.15434017 -0.057335,0.1966361 -0.125,0.23046878 -0.067665,0.033833 -0.1386718,0.035156 -0.1386719,0.035156 H 0.92630201 V 1.3228975 H 1.3227863 c 0,0 0.1270406,0.00289 0.2578125,-0.0625 C 1.7113708,1.1950115 1.8520832,1.036135 1.8520832,0.79360069 1.8520833,0.55106635 1.7113708,0.39414286 1.5805988,0.32875694 1.4498269,0.26337102 1.3227864,0.26430382 1.3227863,0.26430382 Z"
+     id="path1966" /><path
+     style="color:#000000;display:inline;fill:#4d4d4d;fill-opacity:1;-inkscape-stroke:none;paint-order:stroke fill markers"
+     d="M 0.79348951,0.39711632 V 1.8521944 H 1.0571614 V 0.39711632 Z"
+     id="path2681" /><path
+     style="color:#000000;display:inline;fill:#4d4d4d;fill-opacity:1;-inkscape-stroke:none;paint-order:stroke fill markers"
+     d="m 2.1171875,1.3222656 c -0.1587185,-1.106e-4 -0.2944366,0.039125 -0.390625,0.125 -0.096188,0.085875 -0.1386719,0.2115682 -0.1386719,0.3378906 0,0.1433158 0.086529,0.2617451 0.1835938,0.3261719 0.097064,0.064427 0.2035816,0.096029 0.3027344,0.1289063 0.099153,0.032878 0.1904751,0.066997 0.2421875,0.1015625 0.051712,0.034565 0.064453,0.049347 0.064453,0.1054687 0,0.069821 -0.017132,0.1094729 -0.052734,0.140625 -0.035602,0.031152 -0.1006946,0.058594 -0.2109375,0.058594 -0.1096351,-2e-7 -0.1661446,-0.026856 -0.2011719,-0.0625 -0.035027,-0.035644 -0.062111,-0.095519 -0.064453,-0.2050781 l -0.2636719,0.00586 c 0.00324,0.1513761 0.042802,0.2872068 0.1386719,0.3847657 0.09587,0.097559 0.235677,0.1406247 0.390625,0.140625 0.1543402,2e-7 0.2880765,-0.038444 0.3847656,-0.1230469 0.096689,-0.084603 0.1445313,-0.211227 0.1445313,-0.3398438 0,-0.1437033 -0.086478,-0.2612583 -0.1835938,-0.3261718 C 2.365775,2.0561802 2.2574877,2.0231557 2.1582031,1.9902344 2.0589185,1.9573131 1.9677792,1.9249832 1.9160156,1.890625 1.8642521,1.8562668 1.8515625,1.8402777 1.8515625,1.7851562 c 0,-0.072115 0.017259,-0.1106971 0.050781,-0.140625 0.033522,-0.029928 0.098655,-0.056722 0.2148438,-0.056641 0.1162775,8.11e-5 0.1739645,0.024881 0.2070313,0.058594 0.033067,0.033713 0.05664,0.093114 0.056641,0.2050781 h 0.265625 C 2.6464843,1.6989431 2.6083625,1.5594686 2.5117188,1.4609375 2.415075,1.3624064 2.2758173,1.3223762 2.1171875,1.3222656 Z"
+     id="path2683" /><metadata
+     id="metadata3005"><rdf:RDF><cc:Work
+         rdf:about=""><dc:creator><cc:Agent><dc:title>Wolthera van Hövell tot Westerflier</dc:title></cc:Agent></dc:creator><dc:rights><cc:Agent><dc:title>CC-BY-SA 4.0 Wolthera van Hövell tot Westerflier</dc:title></cc:Agent></dc:rights><dc:date>october 2024</dc:date></cc:Work></rdf:RDF></metadata></svg>

@@ -81,44 +81,70 @@ Button {
                     anchors.bottom: parent.bottom;
                     anchors.left: parent.left;
                     property int imgHeight: 12;
-                    Image {
+                    ToolButton {
+                        enabled: false;
+                        padding:0;
+                        width: parent.imgHeight;
+                        height: parent.imgHeight;
                         property int type: fontFamilyDelegate.type;
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        source: type === KoSvgText.BDFFontType? "qrc:///light_select-pixel.svg"
-                                                              : type === KoSvgText.Type1FontType? "qrc:///light_transparency-enabled.svg"
-                                                                                                : type === KoSvgText.OpenTypeFontType? "qrc:///light_select-shape.svg":"qrc:///light_system-help.svg";
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
+                        icon.color: sysPalette.text;
+                        icon.source: type === KoSvgText.BDFFontType? "qrc:///font-type-bitmap.svg"
+                                                              : type === KoSvgText.Type1FontType? "qrc:///font-type-postscript.svg"
+                                                                                                : type === KoSvgText.OpenTypeFontType? "qrc:///font-type-opentype.svg":"qrc:///light_system-help.svg";
                     }
-                    Image {
+                    ToolButton {
+                        enabled: false;
+                        padding: 0;
                         width: parent.imgHeight;
                         height: parent.imgHeight;
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
+                        icon.color: sysPalette.text;
                         visible: fontFamilyDelegate.isVariable;
-                        source: "qrc:///light_zoom-horizontal.svg"
+                        icon.source: "qrc:///font-type-opentype-variable.svg"
                     }
 
-                    Image {
+                    ToolButton {
+                        enabled: false;
+                        padding: 0;
                         width: parent.imgHeight;
                         height: parent.imgHeight;
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
                         visible: fontFamilyDelegate.colorBitmap;
-                        source: "qrc:///light_palette-library.svg"
+                        icon.source: "qrc:///font-color-type-clr-bitmap.svg"
                     }
-                    Image {
+                    ToolButton {
+                        enabled: false
+                        padding: 0;
                         width: parent.imgHeight;
                         height: parent.imgHeight;
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
                         visible: fontFamilyDelegate.colorCLRV0;
-                        source: "qrc:///light_color-adjustment-mode-channels.svg"
+                        icon.source: "qrc:///font-color-type-clr-v0.svg"
                     }
-                    Image {
+                    ToolButton {
+                        padding: 0;
+                        enabled: false;
                         width: parent.imgHeight;
                         height: parent.imgHeight;
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
                         visible: fontFamilyDelegate.colorCLRV1;
-                        source: "qrc:///light_config-color-manage.svg"
+                        icon.source: "qrc:///font-color-type-clr-v1.svg"
                     }
-                    Image {
+                    ToolButton {
+                        enabled: false;
+                        padding: 0;
                         width: parent.imgHeight;
                         height: parent.imgHeight;
+                        icon.width: parent.imgHeight;
+                        icon.height: parent.imgHeight;
                         visible: fontFamilyDelegate.colorSVG;
-                        source: "qrc:///light_sort-by-hue.svg"
+                        icon.source: "qrc:///font-color-type-svg.svg"
                     }
                 }
             }

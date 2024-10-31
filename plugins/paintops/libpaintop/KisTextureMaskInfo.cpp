@@ -107,7 +107,7 @@ QRect KisTextureMaskInfo::maskBounds() const {
     return m_maskBounds;
 }
 
-bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface)
+bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, bool invertAdditionally)
 {
     KisTextureOptionData data;
     data.read(setting);
@@ -127,7 +127,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *settin
     m_brightness = data.brightness;
     m_contrast = data.contrast;
     m_neutralPoint = data.neutralPoint;
-    m_invert = data.invert;
+    m_invert = data.invert != invertAdditionally;
     m_cutoffLeft = data.cutOffLeft;
     m_cutoffRight = data.cutOffRight;
     m_cutoffPolicy = data.cutOffPolicy;

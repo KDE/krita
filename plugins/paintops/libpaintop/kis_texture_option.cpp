@@ -81,8 +81,19 @@ void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting,
 
     const bool preserveAlpha = m_texturingMode == KisTextureOptionData::LIGHTNESS || m_texturingMode == KisTextureOptionData::GRADIENT;
 
+    QString effectiveCompositeOp = COMPOSITE_OVER;
+    bool additionalInvert = false;
+
+    if (canvasResourcesInterface && data.autoInvertOnErase) {
+        effectiveCompositeOp = canvasResourcesInterface->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString();
+        KIS_SAFE_ASSERT_RECOVER (!effectiveCompositeOp.isEmpty()) {
+            effectiveCompositeOp = COMPOSITE_OVER;
+        }
+        additionalInvert = effectiveCompositeOp == COMPOSITE_ERASE;
+    }
+
     m_maskInfo = toQShared(new KisTextureMaskInfo(m_levelOfDetail, preserveAlpha));
-    if (!m_maskInfo->fillProperties(setting, resourcesInterface)) {
+    if (!m_maskInfo->fillProperties(setting, resourcesInterface, additionalInvert)) {
         warnKrita << "WARNING: Couldn't load the pattern for a stroke (KisTextureProperties)";
         m_enabled = false;
         return;
@@ -153,6 +164,15 @@ bool KisTextureOption::applyingGradient(const KisPropertiesConfiguration *settin
 
     return data.texturingMode == KisTextureOptionData::GRADIENT;
 }
+
+bool KisTextureOption::requiresEffectiveCompositeOp(const KisPropertiesConfiguration *settings)
+{
+    KisTextureOptionData data;
+    data.read(settings);
+
+    return data.isEnabled && data.autoInvertOnErase;
+}
+
 
 void KisTextureOption::applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info) {
     if (!m_enabled) return;

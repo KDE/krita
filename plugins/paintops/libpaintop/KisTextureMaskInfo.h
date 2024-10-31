@@ -42,7 +42,7 @@ public:
 
     QRect maskBounds() const;
 
-    bool fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface);
+    bool fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, bool invertAdditionally);
 
     void recalculateMask();
 

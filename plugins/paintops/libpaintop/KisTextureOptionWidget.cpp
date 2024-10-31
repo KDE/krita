@@ -64,6 +64,7 @@ KisTextureOptionWidget::KisTextureOptionWidget(lager::cursor<KisTextureOptionDat
     connectControl(chooserWidget->checkBoxSoftTexturing, &m_d->model, "useSoftTexturing");
     connectControl(chooserWidget->cmbCutoffPolicy, &m_d->model, "cutOffPolicy");
     connectControl(chooserWidget->chkInvert, &m_d->model, "invert");
+    connectControl(chooserWidget->chkAutoInvertOnErase, &m_d->model, "autoInvertOnErase");
 
     m_d->model.LAGER_QT(maximumOffsetX).bind(std::bind(&KisSliderSpinBox::setMaximum, chooserWidget->offsetSliderX, std::placeholders::_1, true));
     m_d->model.LAGER_QT(maximumOffsetY).bind(std::bind(&KisSliderSpinBox::setMaximum, chooserWidget->offsetSliderY, std::placeholders::_1, true));

@@ -87,6 +87,7 @@ KisTextureChooser::KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent
                                   " by the slider, the cut-off policy will be applied."));
 
     chkInvert->setChecked(false);
+    chkAutoInvertOnErase->setChecked(false);
 
 }
 

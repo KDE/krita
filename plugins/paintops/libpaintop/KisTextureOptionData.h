@@ -63,7 +63,9 @@ struct  PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisText
                 lhs.cutOffPolicy == rhs.cutOffPolicy &&
                 lhs.cutOffLeft == rhs.cutOffLeft &&
                 lhs.cutOffRight == rhs.cutOffRight &&
-                lhs.invert == rhs.invert;
+                lhs.invert == rhs.invert &&
+                lhs.autoInvertOnErase == rhs.autoInvertOnErase;
+
     }
 
     KisEmbeddedTextureData textureData;
@@ -85,6 +87,7 @@ struct  PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisText
     int cutOffLeft {0};
     int cutOffRight {255};
     bool invert {false};
+    bool autoInvertOnErase {false};
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;

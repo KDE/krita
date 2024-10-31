@@ -62,6 +62,7 @@ KisTextureOptionModel::KisTextureOptionModel(lager::cursor<KisTextureOptionData>
     , LAGER_QT(cutOffRightNormalized) {optionData[&KisTextureOptionData::cutOffRight]
             .zoom(kislager::lenses::scale_int_to_real(1.0/255.0))}
     , LAGER_QT(invert) {optionData[&KisTextureOptionData::invert]}
+    , LAGER_QT(autoInvertOnErase) {optionData[&KisTextureOptionData::autoInvertOnErase]}
 {
     LAGER_QT(textureResource).bind(std::bind(&KisTextureOptionModel::updateOffsetLimits, this, std::placeholders::_1));
 }

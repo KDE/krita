@@ -39,6 +39,7 @@ public:
     LAGER_QT_CURSOR(qreal, cutOffLeftNormalized);
     LAGER_QT_CURSOR(qreal, cutOffRightNormalized);
     LAGER_QT_CURSOR(bool, invert);
+    LAGER_QT_CURSOR(bool, autoInvertOnErase);
 
     KisTextureOptionData bakedOptionData() const;
 

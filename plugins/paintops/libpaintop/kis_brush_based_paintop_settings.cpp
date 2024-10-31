@@ -336,6 +336,10 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
         result << KoCanvasResource::BackgroundColor;
     }
 
+    if (KisTextureOption::requiresEffectiveCompositeOp(this)) {
+        result << KoCanvasResource::CurrentEffectiveCompositeOp;
+    }
+
     return result;
 }
 

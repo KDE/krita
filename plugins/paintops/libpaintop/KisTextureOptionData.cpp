@@ -29,6 +29,7 @@ bool KisTextureOptionData::read(const KisPropertiesConfiguration *setting)
     cutOffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     cutOffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
     invert = setting->getBool("Texture/Pattern/Invert");
+    autoInvertOnErase = setting->getBool("Texture/Pattern/AutoInvertOnErase");
 
     return true;
 }
@@ -51,6 +52,7 @@ void KisTextureOptionData::write(KisPropertiesConfiguration *setting) const
     setting->setProperty("Texture/Pattern/CutoffRight", cutOffRight);
     setting->setProperty("Texture/Pattern/CutoffPolicy", cutOffPolicy);
     setting->setProperty("Texture/Pattern/Invert", invert);
+    setting->setProperty("Texture/Pattern/AutoInvertOnErase", autoInvertOnErase);
     setting->setProperty("Texture/Pattern/MaximumOffsetX", maximumOffsetX);
     setting->setProperty("Texture/Pattern/MaximumOffsetY", maximumOffsetY);
     setting->setProperty("Texture/Pattern/isRandomOffsetX", isRandomOffsetX);

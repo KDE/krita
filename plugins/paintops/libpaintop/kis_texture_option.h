@@ -51,6 +51,7 @@ public:
     bool applyingGradient() const;
 
     static bool applyingGradient(const KisPropertiesConfiguration *settings);
+    static bool requiresEffectiveCompositeOp(const KisPropertiesConfiguration *settings);
 
 private:
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);

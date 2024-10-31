@@ -119,6 +119,8 @@ void KisSplashScreen::updateSplashImage()
 
     QPixmap img(splashName);
 
+    if (img.isNull() || img.height() == 0) return;
+
     // Preserve aspect ratio of splash.
     const int height = splashHeight;
     const int width = height * img.width() / img.height();

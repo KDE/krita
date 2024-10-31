@@ -50,7 +50,7 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     {
         modular->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
         modular->addItem(i18nc("JPEG-XL encoder options", "VarDCT mode (e.g. for photographic images)"), 0);
-        modular->addItem(i18nc("JPEG-XL encoder options", "Modular mode (e.g. for lossless images)"), -1);
+        modular->addItem(i18nc("JPEG-XL encoder options", "Modular mode (e.g. for lossless images)"), 1);
     }
 
     {
@@ -62,7 +62,7 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     {
         groupOrder->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
         groupOrder->addItem(i18nc("JPEG-XL encoder options", "Scanline order"), 0);
-        groupOrder->addItem(i18nc("JPEG-XL encoder options", "Center-first order"), -1);
+        groupOrder->addItem(i18nc("JPEG-XL encoder options", "Center-first order"), 1);
     }
 
     {

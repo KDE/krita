@@ -883,6 +883,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 dbgFile << "Importing frame @" << d.m_nextFrameTime
                         << d.m_header.duration;
 
+                // XXX: If frame header duration is set to 0xFFFFFFFF it indicates that the
+                // current animation page has ended. Since we didn't currently support
+                // multipage image/animation, this will dump the whole animation instead.
+                // Otherwise, it may cause a lockup when loading a multipage image.
+                const uint32_t frameDurationNorm = d.m_header.duration == UINT32_MAX ? 1 : d.m_header.duration;
                 if (d.m_nextFrameTime == 0) {
                     dbgFile << "Animation detected, ticks per second:"
                             << d.m_info.animation.tps_numerator
@@ -907,7 +912,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                         const int approximatedFramerate = std::lround(
                             1000.0 / static_cast<double>(d.m_header.duration));
                         d.m_durationFrameInTicks =
-                            static_cast<int>(d.m_header.duration);
+                            static_cast<int>(frameDurationNorm);
                         framerate = std::max(approximatedFramerate, 1);
                     } else {
                         d.m_durationFrameInTicks = 1;
@@ -926,11 +931,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 auto *frame = dynamic_cast<KisRasterKeyframeChannel *>(channel);
                 image->animationInterface()->setDocumentRangeEndFrame(
                     std::lround(static_cast<double>(d.m_nextFrameTime
-                                                    + d.m_header.duration)
+                                                    + frameDurationNorm)
                                 / static_cast<double>(d.m_durationFrameInTicks))
                     - 1);
                 frame->importFrame(currentFrameTime, d.m_currentFrame, nullptr);
-                d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
+                d.m_nextFrameTime += static_cast<int>(frameDurationNorm);
             } else {
                 if (d.isCMYK && d.m_info.uses_original_profile) {
                     QVector<quint8 *> planes = d.m_currentFrame->readPlanarBytes(layerBounds.x(),

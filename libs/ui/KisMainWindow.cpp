@@ -3072,7 +3072,7 @@ void KisMainWindow::initializeGeometry()
     KConfigGroup cfg = d->windowStateConfig;
     QByteArray geom = QByteArray::fromBase64(cfg.readEntry("ko_geometry", QByteArray()));
     if (!restoreGeometry(geom)) {
-        QRect desk = parentWidget()->screen()->availableGeometry();
+        QRect desk = this->screen()->availableGeometry();
 
         quint32 x = desk.x();
         quint32 y = desk.y();

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-25 01:48+0000\n"
+"POT-Creation-Date: 2024-11-01 01:47+0000\n"
 "PO-Revision-Date: 2024-10-24 08:50+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -30093,13 +30093,13 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Seleziona opacità"
 
-#: libs/ui/kis_splash_screen.cpp:155
+#: libs/ui/kis_splash_screen.cpp:157
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
 msgstr "Opera d'arte di: %1"
 
-#: libs/ui/kis_splash_screen.cpp:179
+#: libs/ui/kis_splash_screen.cpp:181
 #, kde-format
 msgid ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></b></"
@@ -30108,12 +30108,12 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">File recenti</span></b></"
 "p>"
 
-#: libs/ui/kis_splash_screen.cpp:222
+#: libs/ui/kis_splash_screen.cpp:224
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Uso di Krita</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:226
+#: libs/ui/kis_splash_screen.cpp:228
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
@@ -30122,7 +30122,7 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Sostieni lo sviluppo di Krita!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:229
+#: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30133,7 +30133,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Primi passi</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:230
+#: libs/ui/kis_splash_screen.cpp:232
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -30142,7 +30142,7 @@ msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manuale</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:233
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
@@ -30151,12 +30151,12 @@ msgstr ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Sito web di Krita</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Programmare per Krita</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
@@ -30165,7 +30165,7 @@ msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">Comunità utenti</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
@@ -30174,7 +30174,7 @@ msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Codice sorgente</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
@@ -30183,7 +30183,7 @@ msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">API degli script</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
@@ -48694,7 +48694,7 @@ msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Lunghezza del nome del livello JPEG-XL non valido"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:905
+#: plugins/impex/jxl/JPEGXLImport.cpp:910
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

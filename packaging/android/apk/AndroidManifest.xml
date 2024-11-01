@@ -2,7 +2,6 @@
 <manifest package="org.krita" xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
 
     <application android:hardwareAccelerated="true"
                  android:name="org.qtproject.qt5.android.bindings.QtApplication"
@@ -142,7 +141,7 @@
         <activity android:name="org.qtproject.qt5.android.bindings.QtActivity" />
 
         <service android:name=".android.DocumentSaverService"
-            android:foregroundServiceType="dataSync"
+            android:foregroundServiceType="shortService"
             android:exported="false">
         </service>
 

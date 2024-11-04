@@ -122,7 +122,11 @@ public class DocumentSaverService extends Service {
                                     JNIWrappers.saveState();
                                     Log.i(TAG, "... exited JNIWrappers.saveState(), started in foreground: " + mStartedInForeground);
                                     if (mStartedInForeground) {
-                                        stopForeground(true);
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                            stopForeground(STOP_FOREGROUND_REMOVE);
+                                        } else {
+                                            stopForeground(true);
+                                        }
                                         // reset the value
                                         mStartedInForeground = false;
                                     }

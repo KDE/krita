@@ -96,7 +96,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     , m_actionManager(viewManager->actionManager())
     , m_resourceManager(manager)
     , m_displayRenderer(displayRenderer)
-    , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::POSTPONE))
+    , m_colorChangeCompressor(new KisSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE))
     , m_actionCollection(viewManager->actionCollection())
     , m_acyclicConnector(new KisAcyclicSignalConnector(this))
     , m_clicksEater(new KisMouseClickEater(Qt::RightButton, 1, this))

@@ -399,6 +399,7 @@ set(kritaui_LIB_SRCS
     imagesize/imagesize.cc
     imagesize/dlg_canvassize.cc
     imagesize/dlg_imagesize.cc
+    imagesize/wdg_imagesize.cc
     imagesize/dlg_layersize.cc
 
     kcanvaspreview.cc

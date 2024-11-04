@@ -54,7 +54,7 @@
 #include "KisImportExportFilter.h"
 #include "KisMainWindow.h"
 #include "KisReferenceImagesLayer.h"
-#include "imagesize/dlg_imagesize.h"
+#include "imagesize/wdg_imagesize.h"
 #include "kis_async_action_feedback.h"
 #include "kis_config.h"
 #include "kis_grid_config.h"
@@ -692,13 +692,12 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             box->addTab(wdg,i18n("Options"));
         }
 
-        DlgImageSize *dlgImageSize = nullptr;
+        WdgImageSize *wdgImageSize = nullptr;
 
         if (isAdvancedExporting) {
-            dlgImageSize = new DlgImageSize(box, m_document->image()->width(), m_document->image()->height(), m_document->image()->yRes());
-            dlgImageSize->setButtons(KoDialog::None);
+            wdgImageSize = new WdgImageSize(box, m_document->image()->width(), m_document->image()->height(), m_document->image()->yRes());
 
-            box->addTab(dlgImageSize,i18n("Resize"));
+            box->addTab(wdgImageSize,i18n("Resize"));
         }
         layout->addWidget(box);
 
@@ -727,17 +726,17 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             *alsoAsKra = chkAlsoAsKra->isChecked();
         }
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(bool(isAdvancedExporting) == bool(dlgImageSize));
+        KIS_SAFE_ASSERT_RECOVER_NOOP(bool(isAdvancedExporting) == bool(wdgImageSize));
 
-        if (isAdvancedExporting && dlgImageSize) {
+        if (isAdvancedExporting && wdgImageSize) {
             if (shouldFlattenTheImageBeforeScaling) {
                 m_document->savingImage()->flatten(KisNodeSP());
                 m_document->savingImage()->waitForDone();
             }
 
-            const QSize desiredSize(dlgImageSize->desiredWidth(), dlgImageSize->desiredHeight());
-            double res = dlgImageSize->desiredResolution();
-            m_document->savingImage()->scaleImage(desiredSize,res,res,dlgImageSize->filterType());
+            const QSize desiredSize(wdgImageSize->desiredWidth(), wdgImageSize->desiredHeight());
+            double res = wdgImageSize->desiredResolution();
+            m_document->savingImage()->scaleImage(desiredSize,res,res,wdgImageSize->filterType());
             m_document->savingImage()->waitForDone();
             KisLayerUtils::forceAllDelayedNodesUpdate(m_document->savingImage()->root());
             m_document->savingImage()->waitForDone();

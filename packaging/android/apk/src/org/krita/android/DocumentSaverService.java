@@ -86,6 +86,7 @@ public class DocumentSaverService extends Service {
     @RequiresApi(api = Build.VERSION_CODES.S)
     private void tryStartServiceInForegroundS() {
         try {
+            Log.w(TAG, "Starting the service in foreground");
             startForeground(NOTIFICATION_ID, getNotification());
             mStartedInForeground = true;
         } catch (ForegroundServiceStartNotAllowedException e) {
@@ -117,7 +118,9 @@ public class DocumentSaverService extends Service {
                             new Runnable() {
                                 @Override
                                 public void run() {
+                                    Log.i(TAG, "... calling JNIWrappers.saveState()");
                                     JNIWrappers.saveState();
+                                    Log.i(TAG, "... exited JNIWrappers.saveState(), started in foreground: " + mStartedInForeground);
                                     if (mStartedInForeground) {
                                         stopForeground(true);
                                         // reset the value
@@ -127,6 +130,7 @@ public class DocumentSaverService extends Service {
                             });
             mDocSaverThread.start();
         } else if (intent.getBooleanExtra(KILL_PROCESS, false)) {
+            Log.i(TAG, "kill process command received");
             mKillProcess = true;
             if (mStartedInForeground) {
                 // This can be async, because foreground service are promised to run beyond process death.
@@ -147,6 +151,7 @@ public class DocumentSaverService extends Service {
                 stopSelf();
             }
         } else if (intent.getBooleanExtra(CANCEL_SAVING, false)) {
+            Log.i(TAG, "cancel saving command received");
             // without this Android will think we crashed
             stopSelf();
 

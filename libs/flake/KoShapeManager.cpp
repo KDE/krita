@@ -210,9 +210,13 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
 
         KoClipMask *clipMask = shape->clipMask();
         if (clipMask) {
-            const QRectF bounds = painter.transform().mapRect(shape->outlineRect());
+            /**
+             * We should clip on both, the shape and the global clipping rect.
+             * Otherwise filling huge shapes will go into almost infinite loop.
+             */
+            const QRectF bounds = painter.transform().mapRect(shape->outlineRect() & painter.clipBoundingRect());
 
-            clipMaskPainter.reset(new KoClipMaskPainter(&painter, bounds/*shape->boundingRect())*/));
+            clipMaskPainter.reset(new KoClipMaskPainter(&painter, bounds));
             shapePainter = clipMaskPainter->shapePainter();
         }
 

@@ -777,7 +777,7 @@
       <iconText></iconText>
       <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
-      <shortcut>Ctrl++</shortcut>
+      <shortcut>Ctrl+=</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

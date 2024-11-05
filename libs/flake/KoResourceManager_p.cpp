@@ -229,6 +229,7 @@ QString KoResourceManager::stringResource(int key) const
 
 QSizeF KoResourceManager::sizeResource(int key) const
 {
+    // TODO: remove this check
     if (! m_resources.contains(key)) {
         QSizeF empty;
         return empty;

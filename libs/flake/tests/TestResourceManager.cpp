@@ -413,5 +413,104 @@ void TestResourceManager::testNeverChangingConverters()
     QCOMPARE(m.resource(derivedKey).toInt(), 10);
 }
 
+struct CanvasResource : KoAbstractCanvasResourceInterface
+{
+    CanvasResource(int key, const QVariant &defaultValue)
+        : KoAbstractCanvasResourceInterface(key, "debug")
+        , m_value(defaultValue)
+    {
+    }
+
+    QVariant value() const override {
+        return m_value;
+    }
+
+    void setValue(const QVariant value) override {
+        m_value = value;
+    }
+
+    void notifyChangedExplicitly() {
+        Q_EMIT sigResourceChangedExternal(key(), m_value);
+    }
+
+private:
+    QVariant m_value;
+};
+
+void TestResourceManager::testAbstractResource()
+{
+    const int key1 = 1;
+
+    KoResourceManager m;
+    QSignalSpy spy(&m, SIGNAL(resourceChanged(int,QVariant)));
+
+    QSharedPointer<CanvasResource> resourceValue1(new CanvasResource(key1, 10));
+    QSharedPointer<CanvasResource> resourceValue2(new CanvasResource(key1, 20));
+
+    QVERIFY(!m.hasResource(key1));
+    QVERIFY(spy.isEmpty());
+
+    {
+        m.setAbstractResource(resourceValue1);
+
+        QVERIFY(m.hasResource(key1));
+        QCOMPARE(m.resource(key1).toInt(), 10);
+
+        QCOMPARE(spy.size(), 1);
+        QCOMPARE(spy[0][0].toInt(), key1);
+        QCOMPARE(spy[0][1].toInt(), 10);
+
+        m.setResource(key1, 11);
+        QCOMPARE(m.resource(key1).toInt(), 11);
+
+        QCOMPARE(spy.size(), 2);
+        QCOMPARE(spy[1][0].toInt(), key1);
+        QCOMPARE(spy[1][1].toInt(), 11);
+
+        spy.clear();
+    }
+
+    {
+        m.setAbstractResource(resourceValue2);
+
+        QVERIFY(m.hasResource(key1));
+        QCOMPARE(m.resource(key1).toInt(), 20);
+
+        QCOMPARE(spy.size(), 1);
+        QCOMPARE(spy[0][0].toInt(), key1);
+        QCOMPARE(spy[0][1].toInt(), 20);
+
+        m.setResource(key1, 21);
+        QCOMPARE(m.resource(key1).toInt(), 21);
+
+        QCOMPARE(spy.size(), 2);
+        QCOMPARE(spy[1][0].toInt(), key1);
+        QCOMPARE(spy[1][1].toInt(), 21);
+
+        spy.clear();
+    }
+
+    {
+        // the new resource sets the same value
+        resourceValue1->setValue(21);
+
+        m.setAbstractResource(resourceValue1);
+        QCOMPARE(spy.size(), 0);
+    }
+
+    {
+        // explicit change in the linked resource (delivers a signal)
+        resourceValue1->notifyChangedExplicitly();
+        QCOMPARE(spy.size(), 1);
+
+        // explicit change in unlinked resource (does nothing)
+        resourceValue2->notifyChangedExplicitly();
+        QCOMPARE(spy.size(), 1);
+
+        spy.clear();
+    }
+}
+
+
 
 SIMPLE_TEST_MAIN(TestResourceManager)

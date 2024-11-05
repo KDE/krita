@@ -17,9 +17,14 @@
 
 void KoResourceManager::slotResourceInternalsChanged(int key)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_resources.contains(key));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_resources.contains(key) || m_abstractResources.contains(key));
     notifyDerivedResourcesChanged(key, m_resources[key]);
     notifyDependenciesAboutTargetChange(key, m_resources[key]);
+}
+
+void KoResourceManager::slotAbstractResourceChangedExternal(int key, const QVariant &value)
+{
+    notifyResourceChanged(key, value);
 }
 
 void KoResourceManager::setResource(int key, const QVariant &value)
@@ -28,6 +33,9 @@ void KoResourceManager::setResource(int key, const QVariant &value)
 
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
+
+    KoAbstractCanvasResourceInterfaceSP abstractResource =
+            m_abstractResources.value(key, KoAbstractCanvasResourceInterfaceSP());
 
     if (converter) {
         const int sourceKey = converter->sourceKey();
@@ -43,6 +51,17 @@ void KoResourceManager::setResource(int key, const QVariant &value)
         if (oldSourceValue != newSourceValue) {
             m_resources[sourceKey] = newSourceValue;
             notifyResourceChanged(sourceKey, newSourceValue);
+        }
+    } else if (abstractResource) {
+        const QVariant oldValue = abstractResource->value();
+        abstractResource->setValue(value);
+
+        if (m_updateMediators.contains(key)) {
+            m_updateMediators[key]->connectResource(value);
+        }
+
+        if (oldValue != value) {
+            notifyResourceChanged(key, value);
         }
     } else if (m_resources.contains(key)) {
         const QVariant oldValue = m_resources.value(key, QVariant());
@@ -126,6 +145,12 @@ void KoResourceManager::notifyDependenciesAboutTargetChange(int targetKey, const
 
 QVariant KoResourceManager::resource(int key) const
 {
+    KoAbstractCanvasResourceInterfaceSP abstractResource =
+            m_abstractResources.value(key, KoAbstractCanvasResourceInterfaceSP());
+    if (abstractResource) {
+        return abstractResource->value();
+    }
+
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
 
@@ -213,6 +238,8 @@ QSizeF KoResourceManager::sizeResource(int key) const
 
 bool KoResourceManager::hasResource(int key) const
 {
+    if (m_abstractResources.contains(key)) return true;
+
     KoDerivedResourceConverterSP converter =
         m_derivedResources.value(key, KoDerivedResourceConverterSP());
 
@@ -224,6 +251,9 @@ void KoResourceManager::clearResource(int key)
 {
     // we cannot remove a derived resource
     if (m_derivedResources.contains(key)) return;
+
+    // we cannot remove an abstract resource either
+    if (m_abstractResources.contains(key)) return;
 
     if (m_resources.contains(key)) {
         m_resources.remove(key);
@@ -334,4 +364,32 @@ bool KoResourceManager::updateConverter(KoDerivedResourceConverterSP converter)
         }
     }
     return false;
+}
+
+bool KoResourceManager::hasAbstractResource(int key)
+{
+    return m_abstractResources.contains(key);
+}
+
+void KoResourceManager::setAbstractResource(KoAbstractCanvasResourceInterfaceSP resourceInterface)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(resourceInterface);
+
+    const QVariant oldValue = this->resource(resourceInterface->key());
+
+    KoAbstractCanvasResourceInterfaceSP oldResoruceInterface =
+        m_abstractResources.value(resourceInterface->key());
+    if (oldResoruceInterface) {
+        disconnect(oldResoruceInterface.data(), SIGNAL(sigResourceChangedExternal(int, QVariant)),
+                   this, SLOT(slotAbstractResourceChangedExternal(int, QVariant)));
+    }
+
+    m_abstractResources[resourceInterface->key()] = resourceInterface;
+
+    connect(resourceInterface.data(), SIGNAL(sigResourceChangedExternal(int, QVariant)),
+            this, SLOT(slotAbstractResourceChangedExternal(int, const QVariant&)));
+
+    if (oldValue != resourceInterface->value()) {
+        notifyResourceChanged(resourceInterface->key(), resourceInterface->value());
+    }
 }

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -29026,20 +29026,8 @@ msgstr "태블릿 시험 도구 열기..."
 msgid "Resize Canvas"
 msgstr "캔버스 크기 변경"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, kde-format
-msgid "Pixels/Inch"
-msgstr "픽셀/인치"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, kde-format
-msgid "Pixels/Centimeter"
-msgstr "픽셀/센티미터"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "새 크기로 조정"
@@ -29143,6 +29131,18 @@ msgstr "Y:"
 #, kde-format
 msgid "Anchor:"
 msgstr "고정:"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, kde-format
+msgid "Pixels/Inch"
+msgstr "픽셀/인치"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, kde-format
+msgid "Pixels/Centimeter"
+msgstr "픽셀/센티미터"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -32225,12 +32225,12 @@ msgstr "이유:"
 msgid "Options"
 msgstr "옵션"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, kde-format
 msgid "Resize"
 msgstr "크기 조정"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Krita 파일로도 이미지를 저장합니다."

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2024-10-24 08:50+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -28065,20 +28065,8 @@ msgstr "Apri tester della tavoletta grafica..."
 msgid "Resize Canvas"
 msgstr "Ridimensiona tela"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, kde-format
-msgid "Pixels/Inch"
-msgstr "Pixel/pollice"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, kde-format
-msgid "Pixels/Centimeter"
-msgstr "Pixel/centimetro"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "Scala a nuove dimensioni"
@@ -28182,6 +28170,18 @@ msgstr "Y:"
 #, kde-format
 msgid "Anchor:"
 msgstr "Àncora:"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, kde-format
+msgid "Pixels/Inch"
+msgstr "Pixel/pollice"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, kde-format
+msgid "Pixels/Centimeter"
+msgstr "Pixel/centimetro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31203,12 +31203,12 @@ msgstr "Motivo:"
 msgid "Options"
 msgstr "Opzioni"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, kde-format
 msgid "Resize"
 msgstr "Ridimensiona"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Salva anche la tua immagine come file Krita."

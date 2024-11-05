@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -28254,21 +28254,8 @@ msgstr "Oscail pailéad"
 msgid "Resize Canvas"
 msgstr "Rothlaigh go Tuathalach"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
-msgid "Pixels/Inch"
-msgstr "picteilíní/orlach"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
-#| msgid "Centimeters (cm)"
-msgid "Pixels/Centimeter"
-msgstr "Ceintiméadair (cm)"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, fuzzy, kde-format
 msgid "Scale To New Size"
 msgstr "Scálaigh an Íomhá"
@@ -28375,6 +28362,19 @@ msgstr "Y:"
 #, fuzzy, kde-format
 msgid "Anchor:"
 msgstr "Ancaire"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, fuzzy, kde-format
+msgid "Pixels/Inch"
+msgstr "picteilíní/orlach"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, fuzzy, kde-format
+#| msgid "Centimeters (cm)"
+msgid "Pixels/Centimeter"
+msgstr "Ceintiméadair (cm)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31346,12 +31346,12 @@ msgstr "Cúntóir:"
 msgid "Options"
 msgstr "Roghanna"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "Athraigh an mhéid"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

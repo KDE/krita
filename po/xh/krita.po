@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -27660,20 +27660,8 @@ msgstr "Pale Green"
 msgid "Resize Canvas"
 msgstr "Ilaphu"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
-msgid "Pixels/Inch"
-msgstr "Umfanekiso"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
-msgid "Pixels/Centimeter"
-msgstr "iiMillimeta (mm)"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, fuzzy, kde-format
 msgid "Scale To New Size"
 msgstr "Gcina Ulwaleko njengo Mfanekiso..."
@@ -27777,6 +27765,18 @@ msgstr "Y:"
 #, fuzzy, kde-format
 msgid "Anchor:"
 msgstr "Unobumba wokuqala Wesigrike"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, fuzzy, kde-format
+msgid "Pixels/Inch"
+msgstr "Umfanekiso"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, fuzzy, kde-format
+msgid "Pixels/Centimeter"
+msgstr "iiMillimeta (mm)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -30693,12 +30693,12 @@ msgstr "Nyibilikisa"
 msgid "Options"
 msgstr "Unobumba wokuqala Wesigrike"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "Susa Umfanekiso"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -28743,20 +28743,8 @@ msgstr "Åbn paletten"
 msgid "Resize Canvas"
 msgstr "Tilpas lærredstørrelse..."
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, kde-format
-msgid "Pixels/Inch"
-msgstr "Pixel pr. tomme"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, kde-format
-msgid "Pixels/Centimeter"
-msgstr "Pixel pr. cm"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "Skalér til ny størrelse"
@@ -28860,6 +28848,18 @@ msgstr "Y:"
 #, kde-format
 msgid "Anchor:"
 msgstr "Anker:"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, kde-format
+msgid "Pixels/Inch"
+msgstr "Pixel pr. tomme"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, kde-format
+msgid "Pixels/Centimeter"
+msgstr "Pixel pr. cm"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31941,14 +31941,14 @@ msgstr "Linealassistent"
 msgid "Options"
 msgstr "Indstillinger"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Resize"
 msgid "Resize"
 msgstr "Ændr størrelse"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

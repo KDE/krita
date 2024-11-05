@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -28127,20 +28127,8 @@ msgstr "ជ្រើស​តំបន់​ធ្វើ​ការ​"
 msgid "Resize Canvas"
 msgstr "ខ្សែកោង​ទំហំ..."
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
-msgid "Pixels/Inch"
-msgstr "ភីកសែល​/អ៊ិន្ឈ៍"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
-msgid "Pixels/Centimeter"
-msgstr "ភាគរយ"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "ធ្វើ​មាត្រដ្ឋាន​ទៅ​ទំហំ​ថ្មី"
@@ -28243,6 +28231,18 @@ msgstr "Y ៖"
 #, fuzzy, kde-format
 msgid "Anchor:"
 msgstr "យុថ្កា"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, fuzzy, kde-format
+msgid "Pixels/Inch"
+msgstr "ភីកសែល​/អ៊ិន្ឈ៍"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, fuzzy, kde-format
+msgid "Pixels/Centimeter"
+msgstr "ភាគរយ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31172,12 +31172,12 @@ msgstr "អ្នក​ជំនួយការ​បន្ទាត់"
 msgid "Options"
 msgstr "ជម្រើស​​"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "ប្ដូរ​ទំហំ"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

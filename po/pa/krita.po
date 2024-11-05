@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -29883,22 +29883,8 @@ msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 msgid "Resize Canvas"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
-#| msgid "Replace"
-msgid "Pixels/Inch"
-msgstr "ਤਬਦੀਲ"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
-#| msgid "Change parameter"
-msgid "Pixels/Centimeter"
-msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Scale To New Size"
@@ -30014,6 +30000,20 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #| msgid "Move points"
 msgid "Anchor:"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Pixels/Inch"
+msgstr "ਤਬਦੀਲ"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, fuzzy, kde-format
+#| msgid "Change parameter"
+msgid "Pixels/Centimeter"
+msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -33301,13 +33301,13 @@ msgstr "%1 ਸਲਾਈਡ"
 msgid "Options"
 msgstr "%1 ਚੋਣਾਂ"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 #| msgid "Delete shapes"
 msgid "Resize"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

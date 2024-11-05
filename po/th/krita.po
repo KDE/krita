@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -27725,21 +27725,8 @@ msgstr "เปิดจานสี"
 msgid "Resize Canvas"
 msgstr "พื้นที่วาดภาพ"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
-msgid "Pixels/Inch"
-msgstr "รูปภาพ"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
-#| msgid "Centimeters (cm)"
-msgid "Pixels/Centimeter"
-msgstr "เซนติเมตร (ซ.ม.)"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, fuzzy, kde-format
 msgid "Scale To New Size"
 msgstr "ปรับขนาดภาพ"
@@ -27842,6 +27829,19 @@ msgstr "X:"
 #, fuzzy, kde-format
 msgid "Anchor:"
 msgstr "ตัวเลือกสี"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, fuzzy, kde-format
+msgid "Pixels/Inch"
+msgstr "รูปภาพ"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, fuzzy, kde-format
+#| msgid "Centimeters (cm)"
+msgid "Pixels/Centimeter"
+msgstr "เซนติเมตร (ซ.ม.)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -30786,12 +30786,12 @@ msgstr "ตัวช่วยไม้บรรทัด"
 msgid "Options"
 msgstr "ตัวเลือกการไล่ระดับสี"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, fuzzy, kde-format
 msgid "Resize"
 msgstr "ลบรูปภาพ"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr ""

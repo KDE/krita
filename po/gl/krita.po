@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
 "PO-Revision-Date: 2024-09-25 21:15+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -28043,20 +28043,8 @@ msgstr "Abrir o probador de tableta…"
 msgid "Resize Canvas"
 msgstr "Cambiar o tamaño do lenzo"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, kde-format
-msgid "Pixels/Inch"
-msgstr "Píxeles/polgada"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, kde-format
-msgid "Pixels/Centimeter"
-msgstr "Píxeles/centímetro"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "Cambiar as dimensións a"
@@ -28160,6 +28148,18 @@ msgstr "Y:"
 #, kde-format
 msgid "Anchor:"
 msgstr "Áncora:"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, kde-format
+msgid "Pixels/Inch"
+msgstr "Píxeles/polgada"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, kde-format
+msgid "Pixels/Centimeter"
+msgstr "Píxeles/centímetro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31181,12 +31181,12 @@ msgstr "Motivo:"
 msgid "Options"
 msgstr "Opcións"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, kde-format
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "Tamén gardar a imaxe como ficheiro de Krita."

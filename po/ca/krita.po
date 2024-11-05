@@ -9,13 +9,12 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 01:47+0000\n"
-"PO-Revision-Date: 2024-10-23 18:57+0200\n"
+"POT-Creation-Date: 2024-11-05 01:48+0000\n"
+"PO-Revision-Date: 2024-11-04 11:03+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -24,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -28041,20 +28040,8 @@ msgstr "Obre el provador de la tauleta..."
 msgid "Resize Canvas"
 msgstr "Redimensió del llenç"
 
-#: libs/ui/imagesize/dlg_imagesize.cc:41
-#: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, kde-format
-msgid "Pixels/Inch"
-msgstr "Píxels/Polzada"
-
-#: libs/ui/imagesize/dlg_imagesize.cc:47
-#: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, kde-format
-msgid "Pixels/Centimeter"
-msgstr "Píxels/Centímetre"
-
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageSize)
-#: libs/ui/imagesize/dlg_imagesize.cc:54 libs/ui/imagesize/wdg_imagesize.ui:18
+#: libs/ui/imagesize/dlg_imagesize.cc:19 libs/ui/imagesize/wdg_imagesize.ui:18
 #, kde-format
 msgid "Scale To New Size"
 msgstr "Escala a una mida nova"
@@ -28158,6 +28145,18 @@ msgstr "Y:"
 #, kde-format
 msgid "Anchor:"
 msgstr "Àncora:"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:54
+#: libs/ui/widgets/kis_custom_image_widget.cc:57
+#, kde-format
+msgid "Pixels/Inch"
+msgstr "Píxels/Polzada"
+
+#: libs/ui/imagesize/wdg_imagesize.cc:60
+#: libs/ui/widgets/kis_custom_image_widget.cc:63
+#, kde-format
+msgid "Pixels/Centimeter"
+msgstr "Píxels/Centímetre"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -31183,12 +31182,12 @@ msgstr "Motiu:"
 msgid "Options"
 msgstr "Opcions"
 
-#: libs/ui/KisImportExportManager.cpp:701
+#: libs/ui/KisImportExportManager.cpp:700
 #, kde-format
 msgid "Resize"
 msgstr "Redimensiona"
 
-#: libs/ui/KisImportExportManager.cpp:707
+#: libs/ui/KisImportExportManager.cpp:706
 #, kde-format
 msgid "Also save your image as a Krita file."
 msgstr "També desa la imatge com un fitxer del Krita."
@@ -43336,7 +43335,7 @@ msgstr "Sensor lineal seqüencial de color"
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:97
 #, kde-format
 msgid "Dublin Core"
-msgstr "Nucli Dublin"
+msgstr "Dublin Core"
 
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162

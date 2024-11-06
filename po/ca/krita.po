@@ -1,6 +1,7 @@
 # Translation of krita.po to Catalan
 # Copyright (C) 2000-2024 This_file_is_part_of_KDE
 #
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -8,13 +9,12 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-01 03:13+0000\n"
-"PO-Revision-Date: 2024-10-25 09:21+0200\n"
+"PO-Revision-Date: 2024-11-04 11:02+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Accelerator-Marker: &\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -42691,7 +42691,7 @@ msgstr "Sensor lineal seqüencial de color"
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:97
 #, kde-format
 msgid "Dublin Core"
-msgstr "Nucli Dublin"
+msgstr "Dublin Core"
 
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
@@ -60846,45 +60846,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\"color:%1;\"><b>Usar el Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\"text-"
-#~ "decoration: underline; color:%1;\">Dona suport al desenvolupament del "
-#~ "Krita!</span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
-#~ "getting_started.html\"><span style=\"text-decoration: underline; color:%1;"
-#~ "\">Com començar</span></a></p><p> <a href=\"https://docs.krita.org/"
-#~ "\"><span style=\"text-decoration: underline; color:%1;\">Manual</span></"
-#~ "a></p><p><a href=\"https://krita.org/\"><span style=\"text-decoration: "
-#~ "underline; color:%1;\">Lloc web del Krita</span></a></p></td><td><p><span "
-#~ "style=\"color:%1;\"><b>Codificació del Krita</b></span></p><p><a href="
-#~ "\"https://krita-artists.org\"><span style=\"text-decoration: underline; "
-#~ "color:%1;\">Comunitat d'usuaris</span></a></p><p><a href=\"https://invent."
-#~ "kde.org/graphics/krita\"><span style=\"text-decoration: underline; color:"
-#~ "%1;\">Codi font</span></a></p><p><a href=\"https://api.kde.org/krita/html/"
-#~ "classKrita.html\"><span style=\"text-decoration: underline; color:%1;"
-#~ "\">API de creació de scripts</span></a></p><p><a href=\"https://scripting."
-#~ "krita.org/lessons/introduction\"><span style=\"text-decoration: "
-#~ "underline; color:%1;\">Escola de creació de scripts</span></a></p></td></"
-#~ "table></body></html>"

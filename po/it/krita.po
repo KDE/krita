@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-05 01:48+0000\n"
-"PO-Revision-Date: 2024-10-24 08:50+0200\n"
+"PO-Revision-Date: 2024-11-01 14:55+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12054,7 +12054,7 @@ msgstr "Converti il livello in fotogrammi di animazione"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Converti in Livello &File..."
+msgstr "Converti in Livello &file..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3050
@@ -12069,7 +12069,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
-msgstr "Converti in Livello ile"
+msgstr "Converti in Livello file"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3060
@@ -29534,7 +29534,7 @@ msgid ""
 "will then reference this location."
 msgstr ""
 "Scegli la posizione in cui dovrà essere salvato il livello. Il nuovo livello "
-"farà riferimento a questa posizione."
+"file farà riferimento a questa posizione."
 
 #: libs/ui/kis_layer_manager.cc:595
 msgctxt "(qtundo-format)"
@@ -34340,7 +34340,7 @@ msgstr "Inserisci come nuovo livello"
 #: libs/ui/widgets/kis_canvas_drop.cpp:34
 #, kde-format
 msgid "Insert as New File Layer"
-msgstr "Inserisci come nuovo livello di file"
+msgstr "Inserisci come nuovo livello file"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:35
 #, kde-format
@@ -34360,7 +34360,7 @@ msgstr "Inserisci molti livelli"
 #: libs/ui/widgets/kis_canvas_drop.cpp:39
 #, kde-format
 msgid "Insert Many File Layers"
-msgstr "Inserisci molti livelli di file"
+msgstr "Inserisci molti livelli file"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:40
 #, kde-format

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-05 01:48+0000\n"
-"PO-Revision-Date: 2024-10-23 12:46+0300\n"
+"PO-Revision-Date: 2024-11-06 20:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 24.08.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -25489,7 +25489,7 @@ msgstr "Kontrol/Seçenek Seçim Niteleyicilerini Değiştir"
 #: libs/ui/forms/wdggeneralsettings.ui:710
 #, kde-format
 msgid "Enable Touch Painting"
-msgstr "Dokunma Boyamayı Etkinleştir"
+msgstr "Dokunma ile boyamayı etkinleştir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTransformToolAfterPaste)
 #: libs/ui/forms/wdggeneralsettings.ui:717

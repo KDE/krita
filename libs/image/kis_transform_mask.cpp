@@ -410,22 +410,7 @@ void KisTransformMask::recalculateStaticImage()
     QRect requestedRect =
         parentLayer->changeRect(parentLayer->exactBounds());
 
-
-    QRect bounds;
-
-    {
-        KisNodeSP parentNode = parent();
-
-        if (parentNode) {
-            bounds = parentNode->original()->defaultBounds()->bounds();
-        } else {
-            bounds = QRect(0,0,777,777);
-            warnKrita << "WARNING: transform mask has no parent (change rect)."
-                      << "Cannot run safe transformations."
-                      << "Will limit bounds to" << ppVar(bounds);
-        }
-    }
-
+    const QRect bounds = parentLayer->original()->defaultBounds()->bounds();
     const QRect limitingRect = KisAlgebra2D::blowRect(bounds, m_d->offBoundsReadArea);
 
     requestedRect &= limitingRect;

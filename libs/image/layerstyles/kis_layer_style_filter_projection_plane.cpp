@@ -163,3 +163,12 @@ QRect KisLayerStyleFilterProjectionPlane::tightUserVisibleBounds() const
                                     m_d->environment.data());
 }
 
+QRect KisLayerStyleFilterProjectionPlane::looseUserVisibleBounds() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->filter, QRect());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->sourceLayer, QRect());
+
+    return m_d->filter->changedRect(m_d->sourceLayer->extent(),
+                                    m_d->style,
+                                    m_d->environment.data());
+}

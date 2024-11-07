@@ -432,6 +432,18 @@ QRect KisLayerStyleProjectionPlane::tightUserVisibleBounds() const
     return rect;
 }
 
+QRect KisLayerStyleProjectionPlane::looseUserVisibleBounds() const
+{
+    KisAbstractProjectionPlaneSP sourcePlane = m_d->sourceProjectionPlane.toStrongRef();
+    QRect rect = sourcePlane->looseUserVisibleBounds();
+
+    Q_FOREACH (const KisAbstractProjectionPlaneSP plane, m_d->allStyles()) {
+        rect |= plane->looseUserVisibleBounds();
+    }
+
+    return rect;
+}
+
 QRect KisLayerStyleProjectionPlane::stylesNeedRect(const QRect &rect) const
 {
     QRect needRect = rect;

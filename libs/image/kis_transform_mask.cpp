@@ -11,6 +11,7 @@
 
 #include "kis_layer.h"
 #include "kis_transform_mask.h"
+#include <kis_group_layer.h>
 #include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
@@ -559,6 +560,20 @@ void KisTransformMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *und
     return visitor.visit(this, undoAdapter);
 }
 
+namespace {
+QRect calculateInterestRect(KisNodeSP node) {
+    QRect resultInterestRect;
+
+    if (KisGroupLayer *group = qobject_cast<KisGroupLayer*>(node.data())) {
+        resultInterestRect = group->calculateChildrenLooseUserVisibleBounds();
+    } else {
+        resultInterestRect = node->original()->extent();
+    }
+
+    return resultInterestRect;
+}
+}
+
 QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) const
 {
     Q_UNUSED(pos);
@@ -580,7 +595,7 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
 
         if (parentNode) {
             bounds = parentNode->original()->defaultBounds()->bounds();
-            interestRect = parentNode->original()->extent();
+            interestRect = calculateInterestRect(parentNode);
         } else {
             bounds = QRect(0,0,777,777);
             interestRect = QRect(0,0,888,888);
@@ -594,9 +609,6 @@ QRect KisTransformMask::changeRect(const QRect &rect, PositionToFilthy pos) cons
         KisSafeTransform transform(params->finalAffineTransform(), limitingRect, interestRect);
         changeRect = transform.mapRectForward(rect);
     } else {
-        QRect interestRect;
-        interestRect = parent() ? parent()->original()->extent() : QRect();
-
         changeRect = params->nonAffineChangeRect(rect);
     }
 
@@ -621,7 +633,7 @@ QRect KisTransformMask::needRect(const QRect& rect, PositionToFilthy pos) const
 
     if (parentNode) {
         bounds = parentNode->original()->defaultBounds()->bounds();
-        interestRect = parentNode->original()->extent();
+        interestRect = calculateInterestRect(parentNode);
     } else {
         bounds = QRect(0,0,777,777);
         interestRect = QRect(0,0,888,888);

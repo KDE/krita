@@ -804,9 +804,9 @@ KisPaintDeviceSP KisLayer::projection() const
         m_d->safeProjection->getDeviceLazy(originalDevice) : originalDevice;
 }
 
-QRect KisLayer::tightUserVisibleBounds() const
+QRect KisLayer::userVisibleBoundsImpl(bool exactBounds) const
 {
-    QRect changeRect = exactBounds();
+    QRect changeRect = exactBounds ? this->exactBounds() : this->extent();
 
     /// we do not use incomingChangeRect() here, because
     /// exactBounds() already takes it into account (it
@@ -817,6 +817,17 @@ QRect KisLayer::tightUserVisibleBounds() const
     changeRect = masksChangeRect(effectMasks(), changeRect, changeRectVaries);
 
     return changeRect;
+}
+
+
+QRect KisLayer::tightUserVisibleBounds() const
+{
+    return userVisibleBoundsImpl(true);
+}
+
+QRect KisLayer::looseUserVisibleBounds() const
+{
+    return userVisibleBoundsImpl(false);
 }
 
 QRect KisLayer::amortizedProjectionRectForCleanupInChangePass() const

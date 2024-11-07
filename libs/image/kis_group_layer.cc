@@ -25,6 +25,8 @@
 #include "kis_selection_mask.h"
 #include "kis_psd_layer_style.h"
 #include "kis_layer_properties_icons.h"
+#include <kis_projection_leaf.h>
+#include <kis_abstract_projection_plane.h>
 
 
 struct Q_DECL_HIDDEN KisGroupLayer::Private
@@ -392,14 +394,14 @@ void KisGroupLayer::setY(qint32 y)
 struct ExtentPolicy
 {
     inline QRect operator() (const KisNode *node) {
-        return node->extent();
+        return node->projectionPlane()->looseUserVisibleBounds();
     }
 };
 
 struct ExactBoundsPolicy
 {
     inline QRect operator() (const KisNode *node) {
-        return node->exactBounds();
+        return node->projectionPlane()->tightUserVisibleBounds();
     }
 };
 
@@ -410,7 +412,9 @@ QRect collectRects(const KisNode *node, MetricPolicy policy)
 
     const KisNode *child = node->firstChild();
     while (child) {
-        if (!qobject_cast<const KisMask*>(child)) {
+        if (child->projectionLeaf()->isLayer() &&
+                child->projectionLeaf()->visible()) {
+
             accumulator |= policy(child);
         }
         child = child->nextSibling();
@@ -422,13 +426,23 @@ QRect collectRects(const KisNode *node, MetricPolicy policy)
 QRect KisGroupLayer::extent() const
 {
     return m_d->passThroughMode ?
-        collectRects(this, ExtentPolicy()) :
+        calculateChildrenLooseUserVisibleBounds() :
         KisLayer::extent();
 }
 
 QRect KisGroupLayer::exactBounds() const
 {
     return m_d->passThroughMode ?
-        collectRects(this, ExactBoundsPolicy()) :
+        calculateChildrenTightUserVisibleBounds() :
         KisLayer::exactBounds();
+}
+
+QRect KisGroupLayer::calculateChildrenTightUserVisibleBounds() const
+{
+    return collectRects(this, ExactBoundsPolicy());
+}
+
+QRect KisGroupLayer::calculateChildrenLooseUserVisibleBounds() const
+{
+    return collectRects(this, ExtentPolicy());
 }

@@ -114,3 +114,8 @@ QRect KisLayerProjectionPlane::tightUserVisibleBounds() const
     return m_d->layer->tightUserVisibleBounds();
 }
 
+QRect KisLayerProjectionPlane::looseUserVisibleBounds() const
+{
+    return m_d->layer->looseUserVisibleBounds();
+}
+

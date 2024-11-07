@@ -80,3 +80,10 @@ QRect KisMaskProjectionPlane::tightUserVisibleBounds() const
     return m_d->mask->extent();
 }
 
+QRect KisMaskProjectionPlane::looseUserVisibleBounds() const
+{
+    // masks don't have anything complex inside, so just
+    // fall back to tightUserVisibleBounds()
+    return tightUserVisibleBounds();
+}
+

@@ -102,6 +102,9 @@ public:
 
     bool projectionIsValid() const;
 
+    QRect calculateChildrenTightUserVisibleBounds() const;
+    QRect calculateChildrenLooseUserVisibleBounds() const;
+
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;

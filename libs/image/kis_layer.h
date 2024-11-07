@@ -250,6 +250,16 @@ public:
      */
     QRect tightUserVisibleBounds() const;
 
+    /**
+     * Return an approximated (loose) rectangle, where the contents of
+     * the layer is placed from user's point of view. This rectangle
+     * includes all the masks and effects the layer has (excluding layer
+     * styles, they report their bounds via projection plane).
+     *
+     * This rect is always equal or bigger than tightUserVisibleBounds()
+     */
+    QRect looseUserVisibleBounds() const;
+
 public:
     /**
      * Returns true if there are any effect masks present
@@ -416,6 +426,7 @@ private:
 
 private:
     QRect layerExtentImpl(bool exactBounds) const;
+    QRect userVisibleBoundsImpl(bool exactBounds) const;
 
 private:
     struct Private;

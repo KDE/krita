@@ -36,8 +36,6 @@ void KoZoomController::Private::init(KoCanvasController *co,
     connect(action, SIGNAL(zoomedToAll()),
             parent, SIGNAL(zoomedToAll()));
 
-    actionCollection->addAction("view_zoom", action);
-
     connect(canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), parent, SLOT(setAvailableSize()) );
 
     connect(canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), parent, SLOT(requestZoomRelative(qreal,QPointF)) );

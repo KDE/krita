@@ -8,6 +8,7 @@
 #include <QUrl>
 #include <QDomDocument>
 
+#include <KisSynchronizedConnection.h>
 #include <KoColorSpaceConstants.h>
 #include <KisDocument.h>
 #include <kis_image.h>
@@ -116,6 +117,9 @@ void Document::setBatchmode(bool value)
 
 Node *Document::activeNode() const
 {
+    // see a related comment in Document::setActiveNode
+    KisSynchronizedConnectionBase::forceDeliverAllSynchronizedEvents();
+
     QList<KisNodeSP> activeNodes;
     Q_FOREACH(QPointer<KisView> view, KisPart::instance()->views()) {
         if (view && view->document() == d->document) {
@@ -144,8 +148,16 @@ void Document::setActiveNode(Node* value)
     if (!nodeManager) return;
     KisNodeSelectionAdapter *selectionAdapter = nodeManager->nodeSelectionAdapter();
     if (!selectionAdapter) return;
-    selectionAdapter->setActiveNode(value->node());
 
+    /**
+     * If we created any nodes via the same script, then dummies state
+     * may be not synchronized with the actual state of the nodes in the
+     * image. Hence, we should explicitly deliver the synchronized events
+     * before we try to manipulate with the GUI representation of nodes.
+     */
+    KisSynchronizedConnectionBase::forceDeliverAllSynchronizedEvents();
+
+    selectionAdapter->setActiveNode(value->node());
 }
 
 QList<Node *> Document::topLevelNodes() const

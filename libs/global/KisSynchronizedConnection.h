@@ -61,6 +61,7 @@ public:
     static void setAutoModeForUnittestsEnabled(bool value);
     static bool isAutoModeForUnittestsEnabled();
 
+    static void forceDeliverAllSynchronizedEvents();
 
 protected:
     bool event(QEvent *event) override;

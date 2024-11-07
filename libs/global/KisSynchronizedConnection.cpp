@@ -78,6 +78,12 @@ bool KisSynchronizedConnectionBase::isAutoModeForUnittestsEnabled()
     return s_instance->enableAutoModeForUnittests;
 }
 
+void KisSynchronizedConnectionBase::forceDeliverAllSynchronizedEvents()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(s_barrier->callback);
+    s_barrier->callback();
+}
+
 bool KisSynchronizedConnectionBase::event(QEvent *event)
 {
     if (event->type() == s_instance->eventType) {

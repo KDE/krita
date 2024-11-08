@@ -41,6 +41,7 @@ namespace
         "KisToolCrop",
         "KisToolSelectPath",
         "KisToolSelectMagnetic",
+        "SvgTextTool",
     }; // disable recorder when toggled to one of these tools.
     const QStringList activateBlacklistedTools = {
         "KritaTransform/KisToolMove",

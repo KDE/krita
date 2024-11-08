@@ -50,6 +50,7 @@ private:
     Ui::RecorderSnapshotsManager *ui;
     RecorderSnapshotsScanner *scanner;
     RecorderDirectoryCleaner* cleaner;
+    QPushButton* cleanUpButton;
 };
 
 #endif // WIDGET_H

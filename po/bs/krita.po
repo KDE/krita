@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 01:48+0000\n"
+"POT-Creation-Date: 2024-11-08 01:48+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -16578,7 +16578,7 @@ msgstr "Ponovi"
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1903
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1930
 #, kde-format
 msgid "Undo"
 msgstr "Poništi"
@@ -17751,7 +17751,7 @@ msgstr ""
 msgid "Mitchell"
 msgstr "Mičel"
 
-#: libs/image/kis_group_layer.cc:348
+#: libs/image/kis_group_layer.cc:350
 #: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
 msgid "Pass Through"
@@ -18925,7 +18925,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Razdvoji sliku"
 
-#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -22788,7 +22788,7 @@ msgstr "Dokument"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:40
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:948
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
 #, kde-format
 msgid "Width:"
 msgstr "Širina:"
@@ -22827,7 +22827,7 @@ msgstr "Širina:"
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:41
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1008
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
 msgid "Height:"
 msgstr "Visina:"
@@ -25776,7 +25776,7 @@ msgstr "Boja:"
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1961
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1988
 #, kde-format
 msgid "Size:"
 msgstr "Veličina:"
@@ -26061,7 +26061,7 @@ msgstr "Profil:"
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:62
 #, kde-format
 msgid "Preview"
 msgstr "Pregled"
@@ -28932,7 +28932,7 @@ msgstr "Čuvaj proporcije"
 #. i18n: ectx: property (title), widget (QGroupBox, grpAngle)
 #: libs/ui/imagesize/wdg_canvassize.ui:148
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:24
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1881
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1908
 #, kde-format
 msgid "Offset"
 msgstr "Pomjeraj"
@@ -30874,7 +30874,7 @@ msgstr "Providnost:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:275
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2008
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2035
 #, kde-format
 msgid "Flow:"
 msgstr "Protok:"
@@ -36147,7 +36147,7 @@ msgstr "Pritisno-dugme"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2167
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
 msgid "Rows:"
 msgstr "Redovi:"
@@ -36162,7 +36162,7 @@ msgstr "Redovi:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2157
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2184
 #, kde-format
 msgid "Columns:"
 msgstr "Kolone:"
@@ -38645,8 +38645,8 @@ msgstr "Pomocnik perspektive"
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
 #: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:164
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:167
 #, kde-format
 msgid "Perspective"
 msgstr "Perspektiva"
@@ -47123,7 +47123,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:53
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1942
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
 msgstr "Režim:"
@@ -48505,7 +48505,7 @@ msgstr "Prag omekšavanja:"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2043
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2070
 #, kde-format
 msgid "Reverse:"
 msgstr "Obrnuto"
@@ -48513,8 +48513,8 @@ msgstr "Obrnuto"
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
-#: plugins/tools/basictools/wdgmovetool.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1044
+#: plugins/tools/basictools/wdgmovetool.ui:200
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1056
 #, kde-format
 msgid "Position"
 msgstr "Pozicija"
@@ -48783,7 +48783,7 @@ msgstr "Striženje:"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/pattern/wdgpatternoptions.ui:269
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:60
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:738
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:750
 #, kde-format
 msgid "Rotation"
 msgstr "Rotacija"
@@ -49263,8 +49263,8 @@ msgstr "Inkrementalno"
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1968
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2095
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1995
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2122
 #, kde-format
 msgid "Pressure"
 msgstr "Pritisak"
@@ -49301,7 +49301,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2123
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2150
 #, kde-format
 msgid "Spacing:"
 msgstr "Razmak:"
@@ -53067,7 +53067,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:414
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:74
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
 #, kde-format
 msgid "Fast"
 msgstr "Brzo"
@@ -53740,7 +53740,7 @@ msgstr "Swirl CCW"
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:143
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1812
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
 #, kde-format
 msgid "Move"
 msgstr "Premjesti"
@@ -54716,7 +54716,7 @@ msgstr "Prema gore"
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2084
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2111
 #, kde-format
 msgid "Wash"
 msgstr "Pranje"
@@ -58669,7 +58669,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1837
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1864
 #, kde-format
 msgid "Rotate"
 msgstr "Rotiraj"
@@ -58687,8 +58687,8 @@ msgstr "90 &stepeni"
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:914
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1859
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:926
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1886
 #, kde-format
 msgid "Scale"
 msgstr "Veličina"
@@ -60641,13 +60641,13 @@ msgid "Update color"
 msgstr "Ažuriraj tekuću boju"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
-#: plugins/tools/basictools/wdgmovetool.ui:27
+#: plugins/tools/basictools/wdgmovetool.ui:42
 #, kde-format
 msgid "Selection Mode"
 msgstr "Režim izbora"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSelectedLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:33
+#: plugins/tools/basictools/wdgmovetool.ui:48
 #, kde-format
 msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
@@ -60657,14 +60657,14 @@ msgstr ""
 "maskama. Kratica: ctrl-klik."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:36
+#: plugins/tools/basictools/wdgmovetool.ui:51
 #, fuzzy, kde-format
 #| msgid "Move current layer"
 msgid "&Move current layer"
 msgstr "Pomjeri trenutni sloj"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioFirstLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:46
+#: plugins/tools/basictools/wdgmovetool.ui:61
 #, fuzzy, kde-format
 #| msgid ""
 #| "Move the first layer with visible content at the place where you click. "
@@ -60675,14 +60675,14 @@ msgstr ""
 "Ovo će, takođe, izabrati taj sloj u kutiji slojeva."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:49
+#: plugins/tools/basictools/wdgmovetool.ui:64
 #, fuzzy, kde-format
 #| msgid "Move layer with content"
 msgid "Mo&ve layer with content"
 msgstr "Pomjeri sloj sa sadržajem"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
-#: plugins/tools/basictools/wdgmovetool.ui:59
+#: plugins/tools/basictools/wdgmovetool.ui:74
 #, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
@@ -60692,39 +60692,39 @@ msgstr ""
 "Kratica: ctrl-shift-click."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
-#: plugins/tools/basictools/wdgmovetool.ui:62
+#: plugins/tools/basictools/wdgmovetool.ui:77
 #, fuzzy, kde-format
 #| msgid "Move the whole group"
 msgid "Move &the whole group"
 msgstr "Pomjeri cijelu grupu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
-#: plugins/tools/basictools/wdgmovetool.ui:78
+#: plugins/tools/basictools/wdgmovetool.ui:93
 #, fuzzy, kde-format
 msgid "Move Shortcut"
 msgstr "Konfiguriši..."
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
-#: plugins/tools/basictools/wdgmovetool.ui:90
+#: plugins/tools/basictools/wdgmovetool.ui:105
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
-#: plugins/tools/basictools/wdgmovetool.ui:112
+#: plugins/tools/basictools/wdgmovetool.ui:127
 #, fuzzy, kde-format
 #| msgid "Multiline"
 msgid "Multiplier:"
 msgstr "Višelinijski"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveStep)
-#: plugins/tools/basictools/wdgmovetool.ui:128
+#: plugins/tools/basictools/wdgmovetool.ui:143
 #, kde-format
 msgid "Number of units to move after move shortcut keypress."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/basictools/wdgmovetool.ui:150
+#: plugins/tools/basictools/wdgmovetool.ui:165
 #, fuzzy, kde-format
 #| msgid "Amount:"
 msgctxt "Amount of shortcut key movement for Move Tool"
@@ -60732,7 +60732,7 @@ msgid "Amount:"
 msgstr "Količina:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/basictools/wdgmovetool.ui:163
+#: plugins/tools/basictools/wdgmovetool.ui:178
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit:"
@@ -60740,18 +60740,18 @@ msgstr "Jedinica:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateXBox)
-#: plugins/tools/basictools/wdgmovetool.ui:235
-#: plugins/tools/basictools/wdgmovetool.ui:257
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1070
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1092
+#: plugins/tools/basictools/wdgmovetool.ui:250
+#: plugins/tools/basictools/wdgmovetool.ui:272
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1082
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1104
 #, kde-format
 msgid "Horizontal Translation"
 msgstr "Horizontalna translacija"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
-#: plugins/tools/basictools/wdgmovetool.ui:241
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:771
+#: plugins/tools/basictools/wdgmovetool.ui:256
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:783
 #, fuzzy, kde-format
 #| msgid "x:"
 msgid "&x:"
@@ -60759,18 +60759,18 @@ msgstr "x:"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
-#: plugins/tools/basictools/wdgmovetool.ui:273
-#: plugins/tools/basictools/wdgmovetool.ui:286
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1108
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1121
+#: plugins/tools/basictools/wdgmovetool.ui:288
+#: plugins/tools/basictools/wdgmovetool.ui:301
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1120
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1133
 #, kde-format
 msgid "Vertical Translation"
 msgstr "Vertikalna translacija"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
-#: plugins/tools/basictools/wdgmovetool.ui:289
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:806
+#: plugins/tools/basictools/wdgmovetool.ui:304
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:818
 #, fuzzy, kde-format
 #| msgid "y:"
 msgid "&y:"
@@ -60778,8 +60778,8 @@ msgstr "y:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowCoordinates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowCoordinates)
-#: plugins/tools/basictools/wdgmovetool.ui:304
-#: plugins/tools/basictools/wdgmovetool.ui:307
+#: plugins/tools/basictools/wdgmovetool.ui:319
+#: plugins/tools/basictools/wdgmovetool.ui:322
 #, fuzzy, kde-format
 #| msgid "Show Decorations"
 msgid "Show coordinates on canvas"
@@ -63605,7 +63605,7 @@ msgstr "Prelaz između kaveza za uređivanje i deformisanje"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1617
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "Tačke zaključavanja"
@@ -63617,7 +63617,7 @@ msgstr "Otključaj tačke"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1655
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
 msgstr "Kreiraj 3 tačke na platnu za početak"
@@ -63647,78 +63647,78 @@ msgid "Transform"
 msgstr "Trasformiši"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:64
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:76
 #, kde-format
 msgid "Accurate"
 msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:81
 #, fuzzy, kde-format
 msgid "Accurate with Instant Preview"
 msgstr "Udaljeni pogled"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:136
 #, kde-format
 msgid "Free"
 msgstr "Slobodno"
 
 #. i18n: ectx: property (text), widget (QToolButton, freeTransformButton)
 #. i18n: ectx: property (text), widget (QLabel, lblTransformType)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:127
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:292
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:139
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:304
 #, kde-format
 msgid "Free Transform"
 msgstr "Slobodna transformacija"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:177
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:180
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:189
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:192
 #, kde-format
 msgid "Warp"
 msgstr "Uvijanje"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, cageButton)
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:205
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:208
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:217
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:220
 #, kde-format
 msgid "Cage"
 msgstr "Kavez"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, liquifyButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:230
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:233
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:242
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:245
 #, kde-format
 msgid "Liquify"
 msgstr "Tečno"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, meshButton)
 #. i18n: ectx: property (text), widget (QToolButton, meshButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:249
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:252
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:261
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:264
 #, kde-format
 msgid "Mesh"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:358
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:370
 #, fuzzy, kde-format
 #| msgid "Filter:"
 msgid "&Filter:"
 msgstr "Filter:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnTransformAroundPivotPoint)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:389
 #, kde-format
 msgid "Transform around pivot point (Alt)"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:630
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:642
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "@option:radio Type of transformation"
@@ -63726,7 +63726,7 @@ msgid "Position"
 msgstr "Pozicija"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeRotationRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:643
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:655
 #, fuzzy, kde-format
 #| msgid "Rotate"
 msgctxt "@option:radio Type of transformation"
@@ -63734,7 +63734,7 @@ msgid "Rotate"
 msgstr "Rotiraj"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeScaleRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:653
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:665
 #, fuzzy, kde-format
 #| msgid "Scale"
 msgctxt "@option:radio Type of transformation"
@@ -63742,7 +63742,7 @@ msgid "Scale"
 msgstr "Veličina"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeShearRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:663
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:675
 #, fuzzy, kde-format
 #| msgid "Shear"
 msgctxt "@option:radio Type of transformation"
@@ -63750,37 +63750,37 @@ msgid "Shear"
 msgstr "Ostriži"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:699
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:711
 #, kde-format
 msgid "off canvas"
 msgstr "izvan platna"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:765
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:781
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:777
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:793
 #, kde-format
 msgid "Rotate around X-Axis"
 msgstr "Rotiraj oko X ose"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:800
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:816
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:812
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:828
 #, kde-format
 msgid "Rotate around Y-Axis"
 msgstr "Rotiraj oko Y ose"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:835
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:860
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:847
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:872
 #, kde-format
 msgid "Rotate around Z-Axis"
 msgstr "Rotiraj oko Z ose"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:841
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:853
 #, fuzzy, kde-format
 #| msgid "z:"
 msgid "&z:"
@@ -63788,14 +63788,14 @@ msgstr "z:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCameraHeight)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, cameraHeightBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:879
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:904
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:891
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:916
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:885
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:897
 #, fuzzy, kde-format
 #| msgid "Grid height:"
 msgid "Camera height:"
@@ -63803,82 +63803,82 @@ msgstr "Visina koordinatne mreže:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:945
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:967
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:957
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:979
 #, kde-format
 msgid "Horizontal Scale"
 msgstr "Vodoravna skala"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:970
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:986
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:982
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:998
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:983
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1005
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:995
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1017
 #, kde-format
 msgid "Vertical Scale"
 msgstr "Uspravna skala"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1076
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1174
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
 #, kde-format
 msgid "x:"
 msgstr "x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1124
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1215
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
 #, kde-format
 msgid "y:"
 msgstr "y:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1142
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, kde-format
 msgid "Shear"
 msgstr "Ostriži"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1171
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1234
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1183
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1246
 #, kde-format
 msgid "Horizontal Shear"
 msgstr "Horizontalno striganje"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1193
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1212
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1205
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1224
 #, kde-format
 msgid "Vertical Shear"
 msgstr "Vertikalno striganje"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1267
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1279
 #, fuzzy, kde-format
 #| msgid "Sobel horizontally"
 msgid "Flip selection horizontally"
 msgstr "Sobel vodoravni"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1292
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1304
 #, fuzzy, kde-format
 #| msgid "Selection Overlay"
 msgid "Flip selection vertically"
 msgstr "Preklop s izborom"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1333
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1345
 #, fuzzy, kde-format
 #| msgctxt "rotate image 90 degrees Counter-Clockwise"
 #| msgid "Rotate Image 90° Counter-Clockwise"
@@ -63886,73 +63886,73 @@ msgid "Rotate selection counter-clockwise 90 degrees"
 msgstr "Rotiraj sliku za 90° obrnuto od kazaljke na satu"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1358
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1370
 #, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1437
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1449
 #, fuzzy, kde-format
 #| msgid "Flexibility:"
 msgid "Fle&xibility:"
 msgstr "Savitljivost"
 
 #. i18n: ectx: property (text), widget (QLabel, warpTypeLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1466
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1478
 #, fuzzy, kde-format
 #| msgid "Anchor Strength:"
 msgid "Anc&hor Strength:"
 msgstr "Jačina sidra:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1484
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1496
 #, kde-format
 msgid "Anchor Points"
 msgstr "Tačke sidra"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1519
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1531
 #, fuzzy, kde-format
 #| msgid "Subdivide"
 msgid "Subdi&vide"
 msgstr "Potpodjela:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1576
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1588
 #, kde-format
 msgid "Draw"
 msgstr "Crtaj"
 
 #. i18n: ectx: property (text), widget (QPushButton, resetPointsButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1610
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1622
 #, kde-format
 msgid "Clear Points"
 msgstr "Čiste tačke"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1662
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1689
 #, fuzzy, kde-format
 #| msgid "Add/Edit Anchor Points"
 msgid "Add/Ed&it Anchor Points"
 msgstr "Dodaj/uredi tačke sidra"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1678
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1705
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Defor&m Selection"
 msgstr "Odabir vektora"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1709
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1736
 #, fuzzy, kde-format
 #| msgid "Arcus Tangent"
 msgid "Adjust Granularity :"
 msgstr "Arcus Tangens"
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1718
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1745
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "The Granularity value for Cage Transformation Preview"
@@ -63960,7 +63960,7 @@ msgid "Preview"
 msgstr "Pregled"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1735
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1762
 #, fuzzy, kde-format
 #| msgid "RealZero"
 msgctxt "The Granularity value for Cage Transformation Result"
@@ -63968,13 +63968,13 @@ msgid "Real"
 msgstr "RealZero"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1782
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1809
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2062
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2089
 #, fuzzy, kde-format
 #| msgid "Amount:"
 msgctxt "Amount of transformation"
@@ -63982,27 +63982,27 @@ msgid "Amount:"
 msgstr "Količina:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2079
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2106
 #, kde-format
 msgid "Build Up"
 msgstr "Prema gore"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2151
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Mesh size"
 msgstr "Veličina četkice"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2180
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207
 #, fuzzy, kde-format
 #| msgid "Show Changes"
 msgid "Show handles"
 msgstr "Pokaži promjene"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2187
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2214
 #, fuzzy, kde-format
 #| msgctxt "the gradient will be drawn as a symmetric cone"
 #| msgid "Conical Symmetric"
@@ -64010,7 +64010,7 @@ msgid "Lock handles symmetrically"
 msgstr "Simetrično konični"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2221
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr ""

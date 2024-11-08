@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-05 01:48+0000\n"
+"POT-Creation-Date: 2024-11-08 01:48+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -13134,7 +13134,7 @@ msgstr "导出 - 更多选项..."
 #, kde-format
 msgctxt "action"
 msgid "Advanced Export"
-msgstr "高级导出"
+msgstr "导出 - 更多选项"
 
 #. i18n: context: text @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:117
@@ -16054,7 +16054,7 @@ msgstr "重做"
 #. i18n: ectx: property (text), widget (QToolButton, liquifyUndo)
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1903
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1930
 #, kde-format
 msgid "Undo"
 msgstr "撤销"
@@ -17179,7 +17179,7 @@ msgstr ""
 msgid "Mitchell"
 msgstr "Mitchell"
 
-#: libs/image/kis_group_layer.cc:348
+#: libs/image/kis_group_layer.cc:350
 #: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
 msgid "Pass Through"
@@ -17832,7 +17832,7 @@ msgctxt "image conversion warning"
 msgid ""
 "This image has <b>animated layers</b>. Animation cannot be saved to this "
 "format."
-msgstr "此图像含有<b>动画图层</b>。动画无法用此格式保存。"
+msgstr "此图像包含 <b>动画图层</b>。动画无法用此格式保存。"
 
 #: libs/impex/CheckImageSize.h:27 libs/impex/ImageSizeCheck.h:26
 #, kde-format
@@ -17858,7 +17858,7 @@ msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a color model that is different from the "
 "image. The layers will be converted."
-msgstr "此图像含有色彩模型与其不统一的图层。这些图层的色彩空间将被转换。"
+msgstr "此图像包含色彩模型与其不统一的图层。这些图层的色彩空间将被转换。"
 
 #: libs/impex/ColorModelPerLayerCheck.h:116
 #, kde-format
@@ -17867,7 +17867,7 @@ msgid ""
 "Your image contains layers with the color model <b>%1</b> and channel depth "
 "<b>%2</b> which cannot be saved to this format. The layers will be converted."
 msgstr ""
-"此图像含有 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法用此格式保"
+"此图像包含 <b>%1</b> 色彩模型和 <b>%2</b> 色彩深度的图层，它们无法用此格式保"
 "存。这些图层的色彩空间将被转换。"
 
 #: libs/impex/CompositionsCheck.h:23
@@ -17875,7 +17875,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>compositions</b>. The compositions will not be saved."
-msgstr "此图像包含<b>图层显示方案</b>。这些方案将不会被保存。"
+msgstr "此图像包含 <b>图层显示方案</b>。这些方案将不会被保存。"
 
 #: libs/impex/ExifCheck.h:28
 #, kde-format
@@ -17901,7 +17901,7 @@ msgid ""
 "The image contains a Fill Layer of type <b>%1</b>, which is not supported, "
 "the layer will be converted to a paintlayer"
 msgstr ""
-"图像包含<b>%1</b>类型的填充图层，Krita 不支持这种图层，它将被转换为颜料图层"
+"图像包含 <b>%1</b> 类型的填充图层，Krita 不支持这种图层，它将被转换为颜料图层"
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -17911,8 +17911,8 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
-"此图像包含的动画使用了<b>非整数毫秒fractions of a millisecond</b>的帧持续时"
-"间。此格式不支持非整数毫秒的帧持续时间，它将被四舍五入为最接近的整数毫秒。"
+"此图像包含的动画使用了 <b>非整数毫秒</b> 的帧持续时间。此格式不支持非整数毫秒"
+"的帧持续时间，它将被四舍五入为最接近的整数毫秒。"
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:690
 #, kde-format
@@ -17988,7 +17988,7 @@ msgid ""
 "The image has <b>more than one layer or a mask or an active selection</b>. "
 "Only the flattened image will be saved."
 msgstr ""
-"此图像含有<b>多个图层、蒙版或者活动选区</b>。只有合并后的图像才会被保存。"
+"此图像包含 <b>多个图层、蒙版或者活动选区</b>。只有合并后的图像才会被保存。"
 
 #: libs/impex/MultiTransparencyMaskCheck.h:25
 #, kde-format
@@ -17998,8 +17998,8 @@ msgid ""
 "layers that have multiple transparency masks, only the rendered result will "
 "be saved."
 msgstr ""
-"此图像的<b>某些单个图层带有多个透明度蒙版</b>。这些图层将仅按照它们合成后的状"
-"态进行保存。"
+"此图像的 <b>某些单个图层带有多个透明度蒙版</b>。这些图层将仅按照它们合成后的"
+"状态进行保存。"
 
 #: libs/impex/NodeTypeCheck.h:25
 #, kde-format
@@ -18016,7 +18016,7 @@ msgstr ""
 msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>layer styles</b>. The layer styles will not be saved."
-msgstr "此图像含有 <b>图层样式</b>。这些图层样式将不会被保存。"
+msgstr "此图像包含 <b>图层样式</b>。这些图层样式将不会被保存。"
 
 #: libs/impex/sRGBProfileCheck.h:28
 #, kde-format
@@ -18025,8 +18025,8 @@ msgid ""
 "The image is not tagged as <b>non-linear gamma sRGB</b>. The image will be "
 "converted to sRGB."
 msgstr ""
-"此图像未被标记为<b>非线性伽玛曲线 sRGB 色彩空间</b>。它将被转换为 sRGB 色彩空"
-"间。"
+"此图像未被标记为 <b>非线性伽玛曲线 sRGB 色彩空间</b>。它将被转换为 sRGB 色彩"
+"空间。"
 
 #: libs/koplugin/KisMimeDatabase.cpp:169
 #, kde-format
@@ -18250,7 +18250,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE 图像"
 
-#: libs/libkis/Document.cpp:979 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2210
 #, kde-format
 msgid "Import frames"
@@ -21836,7 +21836,7 @@ msgstr "新建文档选项"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:40
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:948
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
 #, kde-format
 msgid "Width:"
 msgstr "宽度："
@@ -21875,7 +21875,7 @@ msgstr "宽度："
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:41
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1008
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
 msgid "Height:"
 msgstr "高度："
@@ -24430,7 +24430,7 @@ msgid ""
 msgstr ""
 "无论在色域内外的处理方式都与绝对比色模式\n"
 "保持一致。白点将为输出中性灰色进行转换。\n"
-"如果特性文件带有适合的查找表则使用此模式。\n"
+"如果特性文件包含适合的查找表则使用此模式。\n"
 "否则将用回可感知模式。"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSaturation)
@@ -24455,7 +24455,7 @@ msgstr ""
 "维持色相及饱和度，为维持饱和度而牺牲亮度。\n"
 "白点将为输出中性灰色进行转换。适合办公用途，\n"
 "如彩色表格、柱状图、报表等图形。\n"
-"如果特性文件带有适合的查找表则使用此模式。\n"
+"如果特性文件包含适合的查找表则使用此模式。\n"
 "否则将用回可感知模式。"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioAbsoluteColorimetric)
@@ -24714,7 +24714,7 @@ msgstr "颜色 2："
 #: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1961
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1988
 #, kde-format
 msgid "Size:"
 msgstr "大小："
@@ -24988,7 +24988,7 @@ msgstr "特性文件："
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
 #: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:62
 #, kde-format
 msgid "Preview"
 msgstr "预览"
@@ -27802,7 +27802,7 @@ msgstr "保持宽高比"
 #. i18n: ectx: property (title), widget (QGroupBox, grpAngle)
 #: libs/ui/imagesize/wdg_canvassize.ui:148
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:24
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1881
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1908
 #, kde-format
 msgid "Offset"
 msgstr "偏移"
@@ -29601,7 +29601,7 @@ msgstr "不透明度："
 
 #. i18n: ectx: property (text), widget (QLabel, lblFlow)
 #: libs/ui/kis_paintop_box.cc:275
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2008
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2035
 #, kde-format
 msgid "Flow:"
 msgstr "流量："
@@ -30737,7 +30737,7 @@ msgstr "正在保存图像..."
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>assistants</b>. The assistants will not be saved."
-msgstr "此图像包含<b>辅助尺</b>。这些辅助尺将不会被保存。"
+msgstr "此图像包含 <b>辅助尺</b>。这些辅助尺将不会被保存。"
 
 #: libs/ui/KisImportExportManager.cpp:587
 #, kde-format
@@ -30745,13 +30745,13 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>reference images</b>. The reference images will not be "
 "saved."
-msgstr "此图像包含<b>参考图像</b>。这些参考图像将不会被保存。"
+msgstr "此图像包含 <b>参考图像</b>。这些参考图像将不会被保存。"
 
 #: libs/ui/KisImportExportManager.cpp:590
 #, kde-format
 msgctxt "image conversion warning"
 msgid "The image contains <b>guides</b>. The guides will not be saved."
-msgstr "此图像包含<b> 参考线 </b>。这些参考线将不会被保存。"
+msgstr "此图像包含 <b>参考线</b>。这些参考线将不会被保存。"
 
 #: libs/ui/KisImportExportManager.cpp:593
 #, kde-format
@@ -30759,7 +30759,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains a <b>custom grid configuration</b>. The configuration "
 "will not be saved."
-msgstr "此图像包含<b>自定义网格设置</b>。这些自定义网格设置将不会被保存。"
+msgstr "此图像包含 <b>自定义网格设置</b>。这些自定义网格设置将不会被保存。"
 
 #: libs/ui/KisImportExportManager.cpp:611
 #, kde-format
@@ -30768,8 +30768,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"正在尝试对包含 <b>滤镜图层</b> 的图像进行高级导出。图像的所有图层将在调整大小"
-"之前被 <b>合并</b>。"
+"正在尝试对包含 <b>滤镜图层</b> 的图像进行“导出-更多选项”操作。图像的所有图层"
+"将在调整大小之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:615
 #, kde-format
@@ -30778,8 +30778,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"正在尝试对包含 <b>滤镜蒙版</b> 的图像进行高级导出。图像的所有图层将在调整大小"
-"之前被 <b>合并</b>。"
+"正在尝试对包含 <b>滤镜蒙版</b> 的图像进行“导出-更多选项”操作。图像的所有图层"
+"将在调整大小之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:626
 #, kde-format
@@ -30788,8 +30788,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"正在尝试对包含 <b>图层样式</b> 的图像进行高级导出。图像的所有图层将在调整大小"
-"之前被 <b>合并</b>。"
+"正在尝试对包含 <b>图层样式</b> 的图像进行“导出-更多选项”操作。图像的所有图层"
+"将在调整大小之前被 <b>合并</b>。"
 
 #: libs/ui/KisImportExportManager.cpp:633
 #, kde-format
@@ -33203,7 +33203,7 @@ msgstr "D50-适应型 xyY 色料。"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "This profile has the following xyY colorants:"
-msgstr "此特性文件含有下列 xyY 色料："
+msgstr "此特性文件包含下列 xyY 色料："
 
 #. i18n: ectx: property (text), widget (QLabel, RedLabel)
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:172
@@ -33587,8 +33587,8 @@ msgstr ""
 "<p>AllColorsRGB 特性文件的色域在轮廓和大小上与 ACES 色域相仿，它们都被设计为"
 "可以容纳现实世界的一切真实颜色。两者的不同之处在于 AllColorsRGB 使用 D50 白点"
 "且具备稍宽的色域来容纳那些在色域边缘上被普通人认作非真实的色彩。</p><p>和 "
-"ACES 色域一样， AllColorsRGB 包含有大量概念色 (imaginary colors) 。如需了解概"
-"念色，可阅读 <a href=\"https://ninedegreesbelow.com/photography/xyz-rgb.html"
+"ACES 色域一样， AllColorsRGB 包含大量概念色 (imaginary colors) 。如需了解概念"
+"色，可阅读 <a href=\"https://ninedegreesbelow.com/photography/xyz-rgb.html"
 "\">Painless Programmer's Guide to XYZ, RGB, ICC, xyY, and TRCs</a> 。</p><p>"
 "除非必须确保色彩空间包含一切真实颜色，否则不应使用此特性文件来进行图像编辑。"
 "</p>"
@@ -33753,9 +33753,9 @@ msgid ""
 "integer). Many editing operations produce better results in linear gamma "
 "color spaces.</p>"
 msgstr ""
-"<p>以“-g10.icc”结尾的色彩特性文件带有线性伽玛曲线 (gamma=1.0 ，也称线性光) ，"
-"它们只应用作 16 位 整数及浮点、32 位整数及浮点图像的编辑流程。许多图像编辑工"
-"作在线性伽玛曲线的色彩空间下能产生更好的结果。</p>"
+"<p>以“-g10.icc”结尾的色彩特性文件使用的是线性伽玛曲线 (gamma=1.0 ，也称线性"
+"光) ，它们只应用作 16 位 整数及浮点、32 位整数及浮点图像的编辑流程。许多图像"
+"编辑工作在线性伽玛曲线的色彩空间下能产生更好的结果。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:652
 #, kde-format
@@ -34787,7 +34787,7 @@ msgstr "按下按钮"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2167
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
 msgid "Rows:"
 msgstr "行数："
@@ -34802,7 +34802,7 @@ msgstr "行数："
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2157
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2184
 #, kde-format
 msgid "Columns:"
 msgstr "列数："
@@ -37238,8 +37238,8 @@ msgstr "透视辅助尺"
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
 #: plugins/assistants/Assistants/PerspectiveAssistant.cc:364
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:164
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:167
 #, kde-format
 msgid "Perspective"
 msgstr "透视"
@@ -45161,7 +45161,7 @@ msgstr "独立色彩通道"
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
 #: plugins/python/highpass/highpass.py:53
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1942
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
 msgstr "模式："
@@ -46485,7 +46485,7 @@ msgstr "抗锯齿阈值："
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, labelReverse)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:115
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2043
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2070
 #, kde-format
 msgid "Reverse:"
 msgstr "反向："
@@ -46493,8 +46493,8 @@ msgstr "反向："
 #. i18n: ectx: property (title), widget (QGroupBox, moveGroup)
 #. i18n: ectx: attribute (title), widget (QWidget, tabPosition)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:159
-#: plugins/tools/basictools/wdgmovetool.ui:185
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1044
+#: plugins/tools/basictools/wdgmovetool.ui:200
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1056
 #, kde-format
 msgid "Position"
 msgstr "位置"
@@ -46735,7 +46735,7 @@ msgstr "斜切："
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/pattern/wdgpatternoptions.ui:269
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:60
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:738
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:750
 #, kde-format
 msgid "Rotation"
 msgstr "旋转"
@@ -47164,8 +47164,8 @@ msgstr "递增"
 #: plugins/impex/brush/KisWdgOptionsBrush.h:36
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:224
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:17
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1968
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2095
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1995
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2122
 #, kde-format
 msgid "Pressure"
 msgstr "压力"
@@ -47200,7 +47200,7 @@ msgstr "顺位"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:219
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:152
 #: plugins/paintops/roundmarker/kis_roundmarker_option.ui:36
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2123
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2150
 #, kde-format
 msgid "Spacing:"
 msgstr "间距："
@@ -47926,7 +47926,7 @@ msgstr "写入作者档案信息"
 msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
-msgstr "检测到带有专色通道的 JPEG-XL 图像，将导入合并后的图像。"
+msgstr "检测到使用了专色通道的 JPEG-XL 图像，将导入合并后的图像。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:647
 #: plugins/impex/jxl/JPEGXLImport.cpp:659
@@ -47943,7 +47943,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
-msgstr "检测到带有不支持的混合模式的多图层 JPEG-XL 图像，将导入合并后的图像。"
+msgstr ""
+"检测到使用了不支持的混合模式的多图层 JPEG-XL 图像，将导入合并后的图像。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
@@ -49543,7 +49544,7 @@ msgctxt "image conversion warning"
 msgid ""
 "Your image contains one or more layers with a color model that is different "
 "from the image."
-msgstr "此图像含有与其色彩模型不统一的图层。"
+msgstr "此图像包含色彩模型与其不统一的图层。"
 
 #: plugins/impex/psd/psd_loader.cpp:156
 #, kde-format
@@ -50052,8 +50053,8 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
-"<p>勾选此项后，程序对包含有溢出通道图像的处理将更为精确，不会产生粉色云状色块"
-"或钨丝灯下的蓝色高光。</p>"
+"<p>勾选此项后，程序对包含溢出通道图像的处理将更为精确，不会产生粉色云状色块或"
+"钨丝灯下的蓝色高光。</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
@@ -50973,7 +50974,7 @@ msgstr "透明度平面预测过滤"
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:414
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:25
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:74
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:86
 #, kde-format
 msgid "Fast"
 msgstr "最快"
@@ -51618,7 +51619,7 @@ msgstr "漩涡 (逆时针)"
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:143
 #: plugins/paintops/deform/wdgdeformoptions.ui:79
 #: plugins/tools/basictools/wdgmultihandtool.ui:173
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1812
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1839
 #, kde-format
 msgid "Move"
 msgstr "移动"
@@ -52573,7 +52574,7 @@ msgstr "堆积"
 #. i18n: ectx: property (text), widget (QRadioButton, radioWash)
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
 #: plugins/paintops/libpaintop/forms/wdgincremental.ui:43
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2084
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2111
 #, kde-format
 msgid "Wash"
 msgstr "冲染"
@@ -54761,7 +54762,7 @@ msgid ""
 "needs to contain the keyword to be recognized. Keywords should be comma "
 "separated."
 msgstr ""
-"这些是可被用于标记文字图层的关键词。每个图层只需含有这些关键词即可被识别。用"
+"这些是可被用于标记文字图层的关键词。每个图层只需包含这些关键词即可被识别。用"
 "半角逗号分隔不同关键词。"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:257
@@ -54770,7 +54771,7 @@ msgid ""
 "needs to contain the keyword to be recognized. Keywords should be comma "
 "separated."
 msgstr ""
-"这些是可被用于标记对话框图层的关键词。每个图层只需含有这些关键词即可被识别。"
+"这些是可被用于标记对话框图层的关键词。每个图层只需包含这些关键词即可被识别。"
 "用半角逗号分隔不同关键词。"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
@@ -55606,7 +55607,7 @@ msgid ""
 "the extra auto-completion keys, each on a new line. This path is stored in "
 "the Krita configuration, and not the project configuration."
 msgstr ""
-"元数据编辑器中使用的附加自动填充关键词的位置。将此位置指向一个含有 "
+"元数据编辑器中使用的附加自动填充关键词的位置。将此位置指向一个包含 "
 "key_characters、key_format、key_genre、key_rating、key_author_roles、"
 "key_other 等项的文本文件 (csv 用于评分)，每行一个附加自动完成关键词。此路径存"
 "储在 Krita 配置中，而不是项目配置中。"
@@ -55799,7 +55800,7 @@ msgid ""
 "live area minus the margins, and the full image is the live area plus the "
 "bleeds."
 msgstr ""
-"此插件可以制作带有参考线的模板。\n"
+"此插件可以制作包含参考线的模板。\n"
 "宽度和高度用于定义内容区域，安全区域是内容区域减去页边距，完整图像是内容区域"
 "加上出血区域。"
 
@@ -56066,7 +56067,7 @@ msgstr "用于编辑选定文档属性的插件。"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1837
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1864
 #, kde-format
 msgid "Rotate"
 msgstr "旋转"
@@ -56082,8 +56083,8 @@ msgstr "度数："
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:12
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:914
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1859
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:926
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1886
 #, kde-format
 msgid "Scale"
 msgstr "缩放"
@@ -56347,7 +56348,7 @@ msgstr "导出为 GIMP 色板文件"
 
 #: plugins/python/palette_docker/palette_docker.py:101
 msgid "Export as Inkscape SVG with Swatches"
-msgstr "导出为带有色板的 Inkscape SVG"
+msgstr "导出为包含色板的 Inkscape SVG"
 
 #: plugins/python/palette_docker/palette_docker.py:105
 msgid "Sort Colors"
@@ -57795,13 +57796,13 @@ msgid "Update color"
 msgstr "更新前景色"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionMethod)
-#: plugins/tools/basictools/wdgmovetool.ui:27
+#: plugins/tools/basictools/wdgmovetool.ui:42
 #, kde-format
 msgid "Selection Mode"
 msgstr "移动对象模式"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioSelectedLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:33
+#: plugins/tools/basictools/wdgmovetool.ui:48
 #, kde-format
 msgid ""
 "Move the layer that you have currently selected in the layerbox with its "
@@ -57811,25 +57812,25 @@ msgstr ""
 "此模式。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:36
+#: plugins/tools/basictools/wdgmovetool.ui:51
 #, kde-format
 msgid "&Move current layer"
 msgstr "移动当前图层(&M)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioFirstLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:46
+#: plugins/tools/basictools/wdgmovetool.ui:61
 #, kde-format
 msgid "Move the first layer with visible content at the place where you click."
-msgstr "移动点击处的第一个带有可见内容的图层。"
+msgstr "移动点击处的第一个包含可见内容的图层。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
-#: plugins/tools/basictools/wdgmovetool.ui:49
+#: plugins/tools/basictools/wdgmovetool.ui:64
 #, kde-format
 msgid "Mo&ve layer with content"
 msgstr "移动点击内容所在图层(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
-#: plugins/tools/basictools/wdgmovetool.ui:59
+#: plugins/tools/basictools/wdgmovetool.ui:74
 #, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
@@ -57839,88 +57840,88 @@ msgstr ""
 "内容时将移动所有图层！选中其他模式时，可按 Ctrl 键临时切换成此模式。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
-#: plugins/tools/basictools/wdgmovetool.ui:62
+#: plugins/tools/basictools/wdgmovetool.ui:77
 #, kde-format
 msgid "Move &the whole group"
 msgstr "移动点击内容所在图层组(&T)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMoveStep)
-#: plugins/tools/basictools/wdgmovetool.ui:78
+#: plugins/tools/basictools/wdgmovetool.ui:93
 #, kde-format
 msgid "Move Shortcut"
 msgstr "快捷键单次移动距离"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveScale)
-#: plugins/tools/basictools/wdgmovetool.ui:90
+#: plugins/tools/basictools/wdgmovetool.ui:105
 #, kde-format
 msgid "When holding shift, move keyboard shortcuts scale up by this amount."
 msgstr "按住 Shift 时，快捷键的单次移动距离将按此倍数放大。"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLabel)
-#: plugins/tools/basictools/wdgmovetool.ui:112
+#: plugins/tools/basictools/wdgmovetool.ui:127
 #, kde-format
 msgid "Multiplier:"
 msgstr "Shift 键加速倍率："
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, spinMoveStep)
-#: plugins/tools/basictools/wdgmovetool.ui:128
+#: plugins/tools/basictools/wdgmovetool.ui:143
 #, kde-format
 msgid "Number of units to move after move shortcut keypress."
 msgstr "按一下快捷键的移动距离。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/tools/basictools/wdgmovetool.ui:150
+#: plugins/tools/basictools/wdgmovetool.ui:165
 #, kde-format
 msgctxt "Amount of shortcut key movement for Move Tool"
 msgid "Amount:"
 msgstr "长度："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/tools/basictools/wdgmovetool.ui:163
+#: plugins/tools/basictools/wdgmovetool.ui:178
 #, kde-format
 msgid "Unit:"
 msgstr "单位："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateXBox)
-#: plugins/tools/basictools/wdgmovetool.ui:235
-#: plugins/tools/basictools/wdgmovetool.ui:257
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1070
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1092
+#: plugins/tools/basictools/wdgmovetool.ui:250
+#: plugins/tools/basictools/wdgmovetool.ui:272
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1082
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1104
 #, kde-format
 msgid "Horizontal Translation"
 msgstr "水平位置"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateX)
-#: plugins/tools/basictools/wdgmovetool.ui:241
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:771
+#: plugins/tools/basictools/wdgmovetool.ui:256
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:783
 #, kde-format
 msgid "&x:"
 msgstr "&x："
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetY)
-#: plugins/tools/basictools/wdgmovetool.ui:273
-#: plugins/tools/basictools/wdgmovetool.ui:286
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1108
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1121
+#: plugins/tools/basictools/wdgmovetool.ui:288
+#: plugins/tools/basictools/wdgmovetool.ui:301
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1120
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1133
 #, kde-format
 msgid "Vertical Translation"
 msgstr "垂直位置"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_rotateY)
-#: plugins/tools/basictools/wdgmovetool.ui:289
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:806
+#: plugins/tools/basictools/wdgmovetool.ui:304
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:818
 #, kde-format
 msgid "&y:"
 msgstr "&y："
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkShowCoordinates)
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowCoordinates)
-#: plugins/tools/basictools/wdgmovetool.ui:304
-#: plugins/tools/basictools/wdgmovetool.ui:307
+#: plugins/tools/basictools/wdgmovetool.ui:319
+#: plugins/tools/basictools/wdgmovetool.ui:322
 #, kde-format
 msgid "Show coordinates on canvas"
 msgstr "显示坐标到画布视图"
@@ -60158,7 +60159,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Activate for images with vast solid areas. Set the value to the width of the "
 "thinnest lines on the image"
-msgstr "请在线稿含有大面积实心色块时勾选此项，并将数值设为图像中最窄线条的宽度"
+msgstr "请在线稿包含大面积实心色块时勾选此项，并将数值设为图像中最窄线条的宽度"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:117
 #, kde-format
@@ -60550,7 +60551,7 @@ msgstr "控制点模式："
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1617
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "变形模式"
@@ -60562,7 +60563,7 @@ msgstr "编辑点模式"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1655
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
 msgstr "请先在画布上建立至少 3 个控制点"
@@ -60592,346 +60593,346 @@ msgid "Transform"
 msgstr "变形"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:64
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:76
 #, kde-format
 msgid "Accurate"
 msgstr "精确"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:69
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:81
 #, kde-format
 msgid "Accurate with Instant Preview"
 msgstr "精确 (快速预渲染)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, freeTransformButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:124
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:136
 #, kde-format
 msgid "Free"
 msgstr "自由变形"
 
 #. i18n: ectx: property (text), widget (QToolButton, freeTransformButton)
 #. i18n: ectx: property (text), widget (QLabel, lblTransformType)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:127
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:292
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:139
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:304
 #, kde-format
 msgid "Free Transform"
 msgstr "自由变形"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, warpButton)
 #. i18n: ectx: property (text), widget (QToolButton, warpButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:177
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:180
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:189
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:192
 #, kde-format
 msgid "Warp"
 msgstr "操控变形 - 网格"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, cageButton)
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:205
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:208
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:217
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:220
 #, kde-format
 msgid "Cage"
 msgstr "操控变形 - 外框"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, liquifyButton)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:230
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:233
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:242
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:245
 #, kde-format
 msgid "Liquify"
 msgstr "液化变形"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, meshButton)
 #. i18n: ectx: property (text), widget (QToolButton, meshButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:249
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:252
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:261
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:264
 #, kde-format
 msgid "Mesh"
 msgstr "曲线网格变形"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:358
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:370
 #, kde-format
 msgid "&Filter:"
 msgstr "平滑算法(&F)："
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnTransformAroundPivotPoint)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:377
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:389
 #, kde-format
 msgid "Transform around pivot point (Alt)"
 msgstr "围绕参照点变形 (Alt)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeMoveRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:630
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:642
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Position"
 msgstr "位置"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeRotationRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:643
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:655
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Rotate"
 msgstr "旋转"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeScaleRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:653
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:665
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Scale"
 msgstr "缩放"
 
 #. i18n: ectx: property (text), widget (QRadioButton, freeShearRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:663
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:675
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
 msgstr "斜切"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:699
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:711
 #, kde-format
 msgid "off canvas"
 msgstr "画布之外"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:765
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:781
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:777
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:793
 #, kde-format
 msgid "Rotate around X-Axis"
 msgstr "旋转 (围绕 X 轴)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:800
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:816
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:812
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:828
 #, kde-format
 msgid "Rotate around Y-Axis"
 msgstr "旋转 (围绕 Y 轴)"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:835
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:860
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:847
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:872
 #, kde-format
 msgid "Rotate around Z-Axis"
 msgstr "旋转 (围绕 Z 轴)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:841
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:853
 #, kde-format
 msgid "&z:"
 msgstr "&z："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCameraHeight)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, cameraHeightBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:879
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:904
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:891
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:916
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
 msgstr "场景镜头位置的 Z 坐标"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:885
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:897
 #, kde-format
 msgid "Camera height:"
 msgstr "镜头高度："
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_width)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:945
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:967
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:957
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:979
 #, kde-format
 msgid "Horizontal Scale"
 msgstr "水平缩放"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleXBox)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, scaleYBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:970
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:986
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:982
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:998
 #, no-c-format, kde-format
 msgid " %"
 msgstr " %"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, scaleYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_height)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:983
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1005
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:995
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1017
 #, kde-format
 msgid "Vertical Scale"
 msgstr "垂直缩放"
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (text), widget (QLabel, label_shearX)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1076
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1174
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1088
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1186
 #, kde-format
 msgid "x:"
 msgstr "x："
 
 #. i18n: ectx: property (text), widget (QLabel, label_offsetY)
 #. i18n: ectx: property (text), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1124
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1215
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1136
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1227
 #, kde-format
 msgid "y:"
 msgstr "y："
 
 #. i18n: ectx: property (title), widget (QGroupBox, shearGroup)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1142
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, kde-format
 msgid "Shear"
 msgstr "斜切"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1171
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1234
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1183
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1246
 #, kde-format
 msgid "Horizontal Shear"
 msgstr "水平斜切"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1193
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1212
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1205
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1224
 #, kde-format
 msgid "Vertical Shear"
 msgstr "垂直斜切"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1267
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1279
 #, kde-format
 msgid "Flip selection horizontally"
 msgstr "翻转对象 (水平)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipYButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1292
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1304
 #, kde-format
 msgid "Flip selection vertically"
 msgstr "翻转对象 (垂直)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1333
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1345
 #, kde-format
 msgid "Rotate selection counter-clockwise 90 degrees"
 msgstr "旋转所选对象 (逆时针 90 度)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, rotateCWButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1358
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1370
 #, kde-format
 msgid "Rotate the selection clockwise 90 degrees"
 msgstr "旋转所选对象 (顺时针 90 度)"
 
 #. i18n: ectx: property (text), widget (QLabel, flexibilityLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1437
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1449
 #, kde-format
 msgid "Fle&xibility:"
 msgstr "画面弹性(&X)："
 
 #. i18n: ectx: property (text), widget (QLabel, warpTypeLabel)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1466
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1478
 #, kde-format
 msgid "Anc&hor Strength:"
 msgstr "扭曲力度(&H)："
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1484
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1496
 #, kde-format
 msgid "Anchor Points"
 msgstr "控制点："
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1519
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1531
 #, kde-format
 msgid "Subdi&vide"
 msgstr "网格细分(&V)："
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1576
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1588
 #, kde-format
 msgid "Draw"
 msgstr "自行绘制："
 
 #. i18n: ectx: property (text), widget (QPushButton, resetPointsButton)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1610
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1622
 #, kde-format
 msgid "Clear Points"
 msgstr "清除全部点"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageAddEditRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1662
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1689
 #, kde-format
 msgid "Add/Ed&it Anchor Points"
 msgstr "编辑模式(&I)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1678
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1705
 #, kde-format
 msgid "Defor&m Selection"
 msgstr "变形模式(&M)"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1709
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1736
 #, kde-format
 msgid "Adjust Granularity :"
 msgstr "颗粒度 (越小越精确但越慢)："
 
 #. i18n: ectx: property (text), widget (QLabel, previewGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1718
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1745
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Preview"
 msgid "Preview"
 msgstr "预览颗粒度"
 
 #. i18n: ectx: property (text), widget (QLabel, realGranularity)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1735
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1762
 #, kde-format
 msgctxt "The Granularity value for Cage Transformation Result"
 msgid "Real"
 msgstr "真实颗粒度"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1782
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:1809
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
 msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2062
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2089
 #, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "幅度："
 
 #. i18n: ectx: property (text), item, widget (QComboBox, buildupModeComboBox)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2079
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2106
 #, kde-format
 msgid "Build Up"
 msgstr "堆积"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2151
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2178
 #, kde-format
 msgid "Mesh size"
 msgstr "网格密度"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2180
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2207
 #, kde-format
 msgid "Show handles"
 msgstr "显示控制点"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2187
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2214
 #, kde-format
 msgid "Lock handles symmetrically"
 msgstr "对称锁定控制点"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:2221
 #, kde-format
 msgid "Scale handles proportionally"
 msgstr "按比例缩放控制点"

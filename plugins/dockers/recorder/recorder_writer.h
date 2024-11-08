@@ -53,6 +53,7 @@ protected:
 private Q_SLOTS:
     void onImageModified();
     void onToolChanged(const QString &toolId);
+    void onToolPrimaryActionActivated(bool activated);
 
 private:
     Q_DISABLE_COPY(RecorderWriter)

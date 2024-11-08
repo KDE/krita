@@ -98,13 +98,15 @@ RecorderSnapshotsManager::RecorderSnapshotsManager(QWidget *parent)
     , cleaner(nullptr)
 {
     ui->setupUi(this);
+    cleanUpButton = new QPushButton(i18n("Clean Up"), ui->buttonBox);
+    ui->buttonBox->addButton(cleanUpButton, QDialogButtonBox::ActionRole);
 
     ui->stackedWidget->setCurrentIndex(PageProgress);
 
     connect(scanner, SIGNAL(scanningFinished(SnapshotDirInfoList)),
             this, SLOT(onScanningFinished(SnapshotDirInfoList)));
     connect(ui->buttonSelectAll, SIGNAL(clicked()), this, SLOT(onButtonSelectAllClicked()));
-    connect(ui->buttonBox->button(QDialogButtonBox::Discard), SIGNAL(clicked()), this, SLOT(onButtonCleanUpClicked()));
+    connect(cleanUpButton, SIGNAL(clicked()), this, SLOT(onButtonCleanUpClicked()));
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -172,7 +174,7 @@ void RecorderSnapshotsManager::onScanningFinished(SnapshotDirInfoList snapshots)
     if (oldSelectionModel != nullptr)
         oldSelectionModel->deleteLater();
 
-    ui->buttonBox->button(QDialogButtonBox::Discard)->setEnabled(false);
+    cleanUpButton->setEnabled(false);
     ui->stackedWidget->setCurrentIndex(PageSelection);
 
      for(int col = 0; col < (ColumnCount - 1); ++col) {
@@ -193,7 +195,7 @@ void RecorderSnapshotsManager::onSelectionChanged(const QItemSelection &selected
     for (const QModelIndex &index : deselected.indexes())
         model->setData(index.sibling(index.row(), ColumnCheck), Qt::Unchecked, Qt::CheckStateRole);
 
-    ui->buttonBox->button(QDialogButtonBox::Discard)->setEnabled(!ui->treeDirectories->selectionModel()->selectedIndexes().isEmpty());
+    cleanUpButton->setEnabled(!ui->treeDirectories->selectionModel()->selectedIndexes().isEmpty());
 
     updateSpaceToBeFreed();
 }

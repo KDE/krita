@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-01 03:13+0000\n"
+"POT-Creation-Date: 2024-11-09 03:20+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -42419,7 +42419,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:668
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -42665,35 +42665,41 @@ msgstr "ਸੰਭਾਲੋ"
 msgid "File extension:"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgid "Line Style"
+msgid "Clean Up"
+msgstr "ਰੇਖਾ ਸਟਾਈਲ"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "ਵੇਖਣ ਮੋਡ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "ਨਾਂ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 #| msgid "Size"
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "ਸਾਈਜ਼"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 #| msgid "Import Document..."
 msgctxt "Label title, Scanning for directory, files, etc.."
@@ -42701,20 +42707,20 @@ msgid "Scanning..."
 msgstr "...ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Select All"
 msgstr "ਤਬਦੀਲ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Select None"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -66096,11 +66102,6 @@ msgstr "ਤਬਦੀਲ"
 #~ msgstr ""
 #~ "%1\n"
 #~ "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
-
-#, fuzzy
-#~| msgid "Line Style"
-#~ msgid "Clean Up"
-#~ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
 #, fuzzy
 #~| msgid "Import Document"

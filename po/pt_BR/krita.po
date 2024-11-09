@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -40660,7 +40660,7 @@ msgstr ""
 "Você deseja continuar?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -40904,49 +40904,54 @@ msgstr "Nome do perfil:"
 msgid "File extension:"
 msgstr "Extensão de arquivo:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, kde-format
+msgid "Clean Up"
+msgstr "Limpar"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Visualização"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Nome"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Tamanho"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Última modificação"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Verificando..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Selecionar tudo"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
 msgstr "Nenhuma seleção"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -64497,9 +64502,6 @@ msgstr "Ferramenta Imagens de Referência"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Renomear sessão"
-
-#~ msgid "Clean Up"
-#~ msgstr "Limpar"
 
 #~ msgctxt "floating message when cannot copy from a node"
 #~ msgid "Cannot copy pixels from this type of layer "

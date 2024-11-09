@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -40193,7 +40193,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 #| msgid "Cerulean Blue"
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -40434,54 +40434,60 @@ msgstr "Profyl"
 msgid "File extension:"
 msgstr "Ofbyld&ing seleksje"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgid "Cerulean Blue"
+msgid "Clean Up"
+msgstr "Koarnblomblau"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Foarbyld"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Namme:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 #| msgid "Size"
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Grutte"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Wizige:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Ofbylding skeanlûke..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "Alle&s selektearje"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Select None"
 msgstr "Lettertype selektearje"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -63442,11 +63448,6 @@ msgstr "Referinsje-ôfbylding:"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Foarmen oanmeitsje"
-
-#, fuzzy
-#~| msgid "Cerulean Blue"
-#~ msgid "Clean Up"
-#~ msgstr "Koarnblomblau"
 
 #, fuzzy
 #~ msgctxt "action"

@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -39529,7 +39529,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -39765,50 +39765,55 @@ msgstr "அடுக்கு குணங்கள்..."
 msgid "File extension:"
 msgstr "தேர்வை அளவுமாற்று"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+msgid "Clean Up"
+msgstr "அதிக நீலம்"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "முன்தோற்றம்"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "&பெயர்:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "அளவு:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "நடு:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "&பிம்பத்தை சுற்று..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "தேர்வு"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 msgid "Select None"
 msgstr "எழுத்துருவை தேர்"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -62160,10 +62165,6 @@ msgstr "உருவத்திற்கு மறுபெயரிடு"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "வார்ப்புருவை உருவாக்கு"
-
-#, fuzzy
-#~ msgid "Clean Up"
-#~ msgstr "அதிக நீலம்"
 
 #, fuzzy
 #~ msgctxt "action"

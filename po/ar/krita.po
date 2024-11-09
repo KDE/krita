@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -41388,7 +41388,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -41632,49 +41632,54 @@ msgstr "اسم التّشكيلة:"
 msgid "File extension:"
 msgstr "امتداد الملفّ:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, kde-format
+msgid "Clean Up"
+msgstr "نظّف"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "عاين"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "الاسم"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "المقاس"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "آخر تعديل"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "يكتشف..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "حدّد الكلّ"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
 msgstr "أزل التّحديد"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -65244,9 +65249,6 @@ msgstr "الصّور المرجع"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "غير اسم الجلسة"
-
-#~ msgid "Clean Up"
-#~ msgstr "نظّف"
 
 #~ msgctxt "floating message when cannot copy from a node"
 #~ msgid "Cannot copy pixels from this type of layer "

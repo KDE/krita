@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -39640,7 +39640,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -39876,49 +39876,56 @@ msgstr "Име на профил:"
 msgid "File extension:"
 msgstr "Файлово разширение:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgctxt "Label title, Snapshot directory deleting is in progress"
+#| msgid "Cleaning up..."
+msgid "Clean Up"
+msgstr "Изчистване..."
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Предварителен изглед"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Име"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Размер"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Последна промяна"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Претърсване..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Маркиране на всичко"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
 msgstr "Избиране нищо"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "

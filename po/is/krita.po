@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -40160,7 +40160,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 #| msgid "Facing pages"
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -40402,31 +40402,37 @@ msgstr "Lýsingar heiti"
 msgid "File extension:"
 msgstr "Prósenta"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgid "Facing pages"
+msgid "Clean Up"
+msgstr "Passa á síðu"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Forskoða"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Nafn"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Stærð"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Breytt"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 #| msgid "Updating..."
 msgctxt "Label title, Scanning for directory, files, etc.."
@@ -40434,7 +40440,7 @@ msgid "Scanning..."
 msgstr "Uppfæri..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -40442,12 +40448,12 @@ msgstr "Uppfæri..."
 msgid "Select All"
 msgstr "Velja allt"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 msgid "Select None"
 msgstr "Velja letur"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -63291,11 +63297,6 @@ msgstr "Stillingar"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Heimasíða"
-
-#, fuzzy
-#~| msgid "Facing pages"
-#~ msgid "Clean Up"
-#~ msgstr "Passa á síðu"
 
 #~ msgctxt "action"
 #~ msgid "Filters"

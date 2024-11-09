@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2024-10-19 16:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -40220,7 +40220,7 @@ msgstr ""
 "Vill du fortsätta?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -40461,49 +40461,54 @@ msgstr "Profilnamn:"
 msgid "File extension:"
 msgstr "Filändelse:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, kde-format
+msgid "Clean Up"
+msgstr "Rensa"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Förhandsgranskning"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Namn"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Storlek"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Senast ändrad"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Söker..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Markera alla"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
 msgstr "Avmarkera alla"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -63343,9 +63348,6 @@ msgstr "Referensbildverktyg"
 
 #~ msgid "Could not update preset %1."
 #~ msgstr "Kunde inte uppdatera förinställning %1."
-
-#~ msgid "Clean Up"
-#~ msgstr "Rensa"
 
 #~ msgid "Export Directory: "
 #~ msgstr "Exportkatalog: "

@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -42223,7 +42223,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -42473,49 +42473,55 @@ msgstr "Profiilin nimi:"
 msgid "File extension:"
 msgstr "Tiedostopääte:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgid "Facing pages"
+msgid "Clean Up"
+msgstr "Vastakkaiset sivut"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Esikatsele"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Nimi"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Koko"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Viimeksi muutettu"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Etsitään…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, kde-format
 msgid "Select All"
 msgstr "Valitse kaikki"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, kde-format
 msgid "Select None"
 msgstr "Poista valinta"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -65862,11 +65868,6 @@ msgstr "Viitekuvatyökalu"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Muuta istunnon nimeä"
-
-#, fuzzy
-#~| msgid "Facing pages"
-#~ msgid "Clean Up"
-#~ msgstr "Vastakkaiset sivut"
 
 #~ msgctxt "floating message when cannot copy from a node"
 #~ msgid "Cannot copy pixels from this type of layer "

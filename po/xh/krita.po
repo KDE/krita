@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -39425,7 +39425,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -39659,49 +39659,54 @@ msgstr "Izinto zobumnini Zolwaleko..."
 msgid "File extension:"
 msgstr "Ukhetho"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+msgid "Clean Up"
+msgstr "Luhlaza okwesibhaka-bhaka"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Yenza ngokutsha Amalaphu"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "Igama:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Idityanisiwe"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Phakathi:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Nika igama kwakhona Umfanekiso..."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "Ukhetho"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 msgid "Select None"
 msgstr "Khetha ubukhulu begama"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -61929,10 +61934,6 @@ msgstr "Umfanekiso Onikwe igama kwakhona"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Yenza i Template"
-
-#, fuzzy
-#~ msgid "Clean Up"
-#~ msgstr "Luhlaza okwesibhaka-bhaka"
 
 #, fuzzy
 #~ msgctxt "action"

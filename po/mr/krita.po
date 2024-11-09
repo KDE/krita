@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -40713,7 +40713,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 #| msgid "Facing pages"
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -40961,54 +40961,60 @@ msgstr "रूपरेषा नाव"
 msgid "File extension:"
 msgstr "प्रतिमा निवड (&I)"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+#| msgid "Facing pages"
+msgid "Clean Up"
+msgstr "समोरील पाने"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "पूर्वावलोकन"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 #| msgid "Name"
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "नाव"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 #| msgid "Size"
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "आकार"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "बदल दिनांक :"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "संयोजना"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "सर्व निवडा"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Select None"
 msgstr "फॉन्ट निवडा"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -64501,11 +64507,6 @@ msgstr "25%"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "पानाचे नाव बदला"
-
-#, fuzzy
-#~| msgid "Facing pages"
-#~ msgid "Clean Up"
-#~ msgstr "समोरील पाने"
 
 #, fuzzy
 #~ msgctxt "action"

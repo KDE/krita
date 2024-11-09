@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-08 01:48+0000\n"
+"POT-Creation-Date: 2024-11-09 01:48+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -39646,7 +39646,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:264
 #, fuzzy, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
@@ -39881,52 +39881,57 @@ msgstr "ProffiliauÂ :"
 msgid "File extension:"
 msgstr "Gludo Detholiad"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:159
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
+#, fuzzy, kde-format
+msgid "Clean Up"
+msgstr "Mwy Glas"
+
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, fuzzy, kde-format
 #| msgid "Preview"
 msgctxt "Header title for preview thumbnail"
 msgid "Preview"
 msgstr "Rhagolygu"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
 #, fuzzy, kde-format
 msgctxt "Header title for directory name column"
 msgid "Name"
 msgstr "&Enw:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:163
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
 #, fuzzy, kde-format
 #| msgid "Size"
 msgctxt "Header title for size of directory column"
 msgid "Size"
 msgstr "Maint"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:165
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:167
 #, fuzzy, kde-format
 #| msgid "Modified:"
 msgctxt "Header title for last modified date/time column"
 msgid "Last Modified"
 msgstr "Newidwyd:"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:203
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:205
 #, fuzzy, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
 msgstr "Ailenwi Delwedd.."
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:205
 #, fuzzy, kde-format
 msgid "Select All"
 msgstr "&Dewis Popeth"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
 #, fuzzy, kde-format
 msgid "Select None"
 msgstr "Dewis Wynebfath"
 
-#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
+#: plugins/dockers/recorder/recorder_snapshots_manager.cpp:251
 #, kde-format
 msgid ""
 "The selected recordings will be deleted and you will not be able to export a "
@@ -62352,10 +62357,6 @@ msgstr "Ailenwi Delwedd"
 #~ msgctxt "Warning about not being able to rename a session"
 #~ msgid "Renaming the session failed."
 #~ msgstr "Creu Patrymlun"
-
-#, fuzzy
-#~ msgid "Clean Up"
-#~ msgstr "Mwy Glas"
 
 #, fuzzy
 #~ msgctxt "action"

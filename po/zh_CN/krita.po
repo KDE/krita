@@ -40011,10 +40011,9 @@ msgid "File extension:"
 msgstr "文件扩展名："
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
-#| msgid "Pan Up"
+#, kde-format
 msgid "Clean Up"
-msgstr "上移"
+msgstr ""
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-09 03:20+0000\n"
-"PO-Revision-Date: 2024-11-04 11:02+0100\n"
+"PO-Revision-Date: 2024-11-09 09:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -40064,10 +40064,9 @@ msgid "File extension:"
 msgstr "Extensió del fitxer:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgid "Clean Up"
-msgstr "Neteja: "
+msgstr "Neteja"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format

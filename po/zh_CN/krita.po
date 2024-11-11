@@ -40013,7 +40013,7 @@ msgstr "文件扩展名："
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
 #, kde-format
 msgid "Clean Up"
-msgstr ""
+msgstr "清理"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format

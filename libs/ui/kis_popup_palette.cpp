@@ -670,7 +670,10 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     if (m_showColorHistory) {
         // paint recent colors area.
         painter.setPen(Qt::NoPen);
-        qreal rotationAngle = -360.0 / m_resourceManager->recentColorsTotal();
+        const qreal rotationAngle = 360.0 / m_resourceManager->recentColorsTotal();
+        const qreal rotationOffset = 180.0;
+
+        painter.rotate(rotationOffset);
 
         // there might be no recent colors at the start, so paint a placeholder
         if (m_resourceManager->recentColorsTotal() == 0) {
@@ -680,7 +683,6 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.setPen(QPen(palette().color(QPalette::Window).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(emptyRecentColorsPath);
         } else {
-
             for (int pos = 0; pos < m_resourceManager->recentColorsTotal(); pos++) {
                 QPainterPath recentColorsPath(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
 
@@ -699,7 +701,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
                 QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
                 painter.drawPath(path_ColorDonut);
             } else {
-                painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) *rotationAngle);
+                painter.rotate((m_resourceManager->recentColorsTotal() + hoveredColor()) * rotationAngle);
                 QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
                 painter.drawPath(path);
                 painter.rotate(hoveredColor() * -1 * rotationAngle);
@@ -714,7 +716,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
                 QPainterPath path_ColorDonut(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
                 painter.drawPath(path_ColorDonut);
             } else {
-                painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) *rotationAngle);
+                painter.rotate((m_resourceManager->recentColorsTotal() + selectedColor()) * rotationAngle);
                 QPainterPath path(drawDonutPathAngle(m_colorHistoryInnerRadius, m_colorHistoryOuterRadius, m_resourceManager->recentColorsTotal()));
                 painter.drawPath(path);
                 painter.rotate(selectedColor() * -1 * rotationAngle);
@@ -1151,13 +1153,10 @@ int KisPopupPalette::calculateColorIndex(QPointF position, int numColors) const
     // relative to palette center
     QPointF relPosition = position - QPointF(0.5 * m_popupPaletteSize, 0.5 * m_popupPaletteSize);
 
-    qreal angle = qAtan2(relPosition.x(), relPosition.y()) + M_PI/numColors;
-    if (angle < 0) {
-        angle += 2 * M_PI;
-    }
+    qreal angle = M_PI - qAtan2(relPosition.x(), relPosition.y()) + M_PI / numColors;
+    angle = normalizeAngle(angle);
 
     int index = floor(angle * numColors / (2 * M_PI));
-
     return qBound(0, index, numColors - 1);
 }
 

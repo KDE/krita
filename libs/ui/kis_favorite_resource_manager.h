@@ -21,6 +21,8 @@
 class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
+template <typename T>
+class KisHistoryList;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
@@ -43,7 +45,7 @@ public:
     void updateFavoritePresets();
 
     int recentColorsTotal();
-    const KoColor& recentColorAt(int pos);
+    KoColor recentColorAt(int pos);
 
     // Reimplemented from KoResourceServerObserver
     void removingResource(QSharedPointer<KisPaintOpPreset> resource) override;
@@ -90,13 +92,11 @@ private Q_SLOTS:
     void presetsChanged();
 
 private:
+    static const int MAX_RECENT_COLOR;
 
     void init();
 
     KisPaintopBox *m_paintopBox {nullptr};
-
-    class ColorDataList;
-    ColorDataList *m_colorList {nullptr};
 
     void saveFavoritePresets();
 
@@ -110,6 +110,7 @@ private:
     KisTagModel* m_tagModel {nullptr};
     KisTagFilterResourceProxyModel* m_resourcesProxyModel {nullptr};
     KisResourceModel* m_resourceModel {nullptr};
+    QScopedPointer<KisHistoryList<KoColor>> m_colorHistoryList;
 
 };
 

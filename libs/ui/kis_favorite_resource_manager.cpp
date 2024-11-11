@@ -19,152 +19,21 @@
 #include "kis_paintop_box.h"
 #include "KisViewManager.h"
 #include "KisResourceServerProvider.h"
-#include "kis_min_heap.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <kis_paintop_preset.h>
+#include <KisHistoryList.h>
 
-
-class KisFavoriteResourceManager::ColorDataList
-{
-public:
-    static const int MAX_RECENT_COLOR = 12;
-
-    ColorDataList() {
-        m_key = 0;
-    }
-
-    ~ColorDataList() {
-        qDeleteAll(m_guiList);
-    }
-
-    int size() {
-        return m_guiList.size();
-    }
-
-    int leastUsedGuiPos() {
-        return findPos(m_priorityList.valueAt(0));
-    }
-
-    const KoColor& guiColor(int pos) {
-        Q_ASSERT_X(pos < size(), "ColorDataList::guiColor", "index out of bounds");
-        Q_ASSERT_X(pos >= 0, "ColorDataList::guiColor", "negative index");
-
-        return m_guiList.at(pos)->data;
-    }
-
-    void append(const KoColor& data) {
-        int pos = findPos(data);
-        if (pos > -1) updateKey(pos);
-        else appendNew(data);
-    }
-
-    void appendNew(const KoColor& data) {
-        if (size() >= ColorDataList::MAX_RECENT_COLOR) removeLeastUsed();
-
-        PriorityNode<KoColor> * node;
-        node = new PriorityNode <KoColor>();
-        node->data = data;
-        node->key = m_key++;
-        m_priorityList.append(node);
-
-        int pos = guiInsertPos(data);
-        pos >= m_guiList.size() ? m_guiList.append(node)
-        : m_guiList.insert(pos, node);
-        node = 0;
-    }
-
-    void removeLeastUsed() {
-        Q_ASSERT_X(size() >= 0, "ColorDataList::removeLeastUsed", "index out of bounds");
-        if (size() <= 0) return;
-
-        int pos = findPos(m_priorityList.valueAt(0));
-        m_guiList.removeAt(pos);
-        m_priorityList.remove(0);
-    }
-
-    void clearHistory() {
-        Q_ASSERT_X(size() >= 0, "ColorDataList::clearHistory", "index out of bounds");
-        if (size() <= 0 ) return;
-        while (size() > 0){
-            removeLeastUsed();
-        }
-    }
-
-    void updateKey(int guiPos) {
-        if (m_guiList.at(guiPos)->key == m_key - 1) return;
-        m_priorityList.changeKey(m_guiList.at(guiPos)->pos, m_key++);
-    }
-
-    /*find position of the color on the gui list*/
-    int findPos(const KoColor& color) {
-
-        int low = 0, high = size(), mid = 0;
-        while (low < high) {
-            mid = (low + high) / 2;
-            if (hsvComparison(color, m_guiList.at(mid)->data) == 0) return mid;
-            else if (hsvComparison(color, m_guiList.at(mid)->data) < 0) high = mid;
-            else low = mid + 1;
-        }
-
-        return -1;
-    }
-
-
-private:
-
-    int m_key;
-
-    int guiInsertPos(const KoColor& color) {
-        int low = 0, high = size() - 1, mid = (low + high) / 2;
-        while (low < high) {
-
-            hsvComparison(color, m_guiList[mid]->data) == -1 ? high = mid
-                    : low = mid + 1;
-            mid = (low + high) / 2;
-        }
-
-        if (m_guiList.size() > 0) {
-            if (hsvComparison(color, m_guiList[mid]->data) == 1) ++mid;
-        }
-        return mid;
-    }
-
-    /*compares c1 and c2 based on HSV.
-      c1 < c2, returns -1
-      c1 = c2, returns 0
-      c1 > c2, returns 1 */
-    int hsvComparison(const KoColor& c1, const KoColor& c2) {
-        QColor qc1 = c1.toQColor();
-        QColor qc2 = c2.toQColor();
-
-        if (qc1.hue() < qc2.hue()) return -1;
-        if (qc1.hue() > qc2.hue()) return 1;
-
-        // hue is the same, ok let's compare saturation
-        if (qc1.saturation() < qc2.saturation()) return -1;
-        if (qc1.saturation() > qc2.saturation()) return 1;
-
-        // oh, also saturation is same?
-        if (qc1.value() < qc2.value()) return -1;
-        if (qc1.value() > qc2.value()) return 1;
-
-        // user selected two similar colors
-        return 0;
-    }
-
-    KisMinHeap <KoColor, MAX_RECENT_COLOR> m_priorityList;
-    QList <PriorityNode <KoColor>*> m_guiList;
-};
-
+const int KisFavoriteResourceManager::MAX_RECENT_COLOR = 12;
 
 
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_paintopBox(paintopBox)
+    , m_colorHistoryList(new KisHistoryList<KoColor>(MAX_RECENT_COLOR))
+
 {
     KisConfig cfg(true);
     m_maxPresets = cfg.favoritePresets();
-    m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
@@ -174,7 +43,6 @@ KisFavoriteResourceManager::~KisFavoriteResourceManager()
 {
     KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->removeObserver(this);
-    delete m_colorList;
 }
 
 void KisFavoriteResourceManager::unsetResourceServer()
@@ -246,19 +114,14 @@ int KisFavoriteResourceManager::numFavoritePresets()
 //Recent Colors
 void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
-    // Do not update the key, the color might be selected but it is not used yet. So we are not supposed
-    // to update the color priority when we select it.
-    m_colorList->updateKey(pos);
-
     Q_EMIT setSelectedColor(pos);
-    Q_EMIT sigSetFGColor(m_colorList->guiColor(pos));
+    Q_EMIT sigSetFGColor(m_colorHistoryList->at(pos));
     Q_EMIT hidePalettes();
 }
 
 void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 {
-    m_colorList->append(color);
-    int pos = m_colorList->findPos(color);
+    int pos = m_colorHistoryList->append(color);
     Q_EMIT setSelectedColor(pos);
 }
 
@@ -284,17 +147,17 @@ void KisFavoriteResourceManager::resourceChanged(QSharedPointer<KisPaintOpPreset
 
 int KisFavoriteResourceManager::recentColorsTotal()
 {
-    return m_colorList->size();
+    return m_colorHistoryList->size();
 }
 
 void KisFavoriteResourceManager::slotClearHistory()
 {
-    m_colorList->clearHistory();
+    m_colorHistoryList->clear();
 }
 
-const KoColor& KisFavoriteResourceManager::recentColorAt(int pos)
+KoColor KisFavoriteResourceManager::recentColorAt(int pos)
 {
-    return m_colorList->guiColor(pos);
+    return m_colorHistoryList->at(pos);
 }
 
 void KisFavoriteResourceManager::slotSetBGColor(const KoColor c)

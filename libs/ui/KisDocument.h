@@ -520,13 +520,13 @@ private:
     friend class KisPart;
     friend class SafeSavingLocker;
 
-    KritaUtils::JobResult initiateSavingInBackground(const QString actionName,
+    KritaUtils::BackgroudSavingStartResult initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration,
                                     std::unique_ptr<KisDocument> &&optionalClonedDocument, bool isAdvancedExporting = false);
 
-    KritaUtils::JobResult initiateSavingInBackground(const QString actionName,
+    KritaUtils::BackgroudSavingStartResult initiateSavingInBackground(const QString actionName,
                                     const QObject *receiverObject, const char *receiverMethod,
                                     const KritaUtils::ExportFileJob &job,
                                     KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting =false );

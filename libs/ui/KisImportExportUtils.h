@@ -28,10 +28,11 @@ enum SaveFlag {
     SaveInAutosaveMode = 0x4
 };
 
-enum JobResult {
+enum BackgroudSavingStartResult {
     Success = 0,
     Failure = 1,
-    Busy = 2
+    AnotherSavingInProgress = 2,
+    ImageLockFailure = 3
 };
 
 Q_DECLARE_FLAGS(SaveFlags, SaveFlag)

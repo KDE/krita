@@ -40089,7 +40089,8 @@ msgid "File extension:"
 msgstr "Rozszerzenie pliku:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Clean Up"
 msgid "Clean Up"
 msgstr "Uprzątnij"
 

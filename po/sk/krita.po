@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 01:48+0000\n"
+"POT-Creation-Date: 2024-11-12 01:52+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -17337,7 +17337,7 @@ msgstr "Prechod cez"
 msgid "Imported Image"
 msgstr "Importovaný obrázok"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19742,11 +19742,11 @@ msgstr "Lokálne zdroje"
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
-#: libs/ui/KisDocument.cpp:987 libs/ui/KisDocument.cpp:1007
-#: libs/ui/KisDocument.cpp:1933 libs/ui/KisDocument.cpp:1977
-#: libs/ui/KisDocument.cpp:1983 libs/ui/KisDocument.cpp:1996
-#: libs/ui/KisDocument.cpp:2000 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
+#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
+#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -30844,7 +30844,7 @@ msgstr "Exportovanie dokumentu..."
 msgid "Saving Document..."
 msgstr "Ukladanie dokumentu..."
 
-#: libs/ui/KisDocument.cpp:844
+#: libs/ui/KisDocument.cpp:849
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30853,13 +30853,29 @@ msgstr ""
 "Nebolo možné spustiť ukladanie %1. Počkajte, kým sa neukončí aktuálna "
 "operácia ukladania."
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:854
+#, fuzzy, kde-format
+#| msgid "Could not save to svg: %1"
+msgid "Could not start saving %1. Image is busy"
+msgstr "Nebolo možné uložiť do svg: %1"
+
+#: libs/ui/KisDocument.cpp:859
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not start saving %1. Wait until the current save operation has "
+#| "finished."
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+"Nebolo možné spustiť ukladanie %1. Počkajte, kým sa neukončí aktuálna "
+"operácia ukladania."
+
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Chyba počas ukladania %1: %2"
 
-#: libs/ui/KisDocument.cpp:981 libs/ui/KisDocument.cpp:988
+#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30867,7 +30883,7 @@ msgstr "Chyba počas ukladania %1: %2"
 msgid "Could not save %1."
 msgstr "Nepodarilo sa uložiť '%1'"
 
-#: libs/ui/KisDocument.cpp:1010
+#: libs/ui/KisDocument.cpp:1036
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30875,7 +30891,7 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1016
+#: libs/ui/KisDocument.cpp:1042
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "dialog box shown to the user if there were warnings while saving the "
@@ -30890,38 +30906,38 @@ msgstr ""
 "%1 bol uložený, ale nie je kompletný.\n"
 "Pri ukladaní sa vyskytli nasledovné problémy:"
 
-#: libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1059
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Dokončené ukladanie %1"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1484
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Automatické ukladanie... %1"
 
-#: libs/ui/KisDocument.cpp:1447
+#: libs/ui/KisDocument.cpp:1492
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatické ukladanie..."
 
-#: libs/ui/KisDocument.cpp:1453
+#: libs/ui/KisDocument.cpp:1498
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatické ukladanie odložené: dokument je zaneprázdnený..."
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1641
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Chyba počas automatického ukladania %1: %2"
 
-#: libs/ui/KisDocument.cpp:1610
+#: libs/ui/KisDocument.cpp:1655
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Dokončené automatické ukladanie %1"
 
-#: libs/ui/KisDocument.cpp:1867
+#: libs/ui/KisDocument.cpp:1912
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30930,40 +30946,40 @@ msgstr ""
 "Nesprávne vytvorená cesta\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1978
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Súbor %1 neexistuje."
 
-#: libs/ui/KisDocument.cpp:1962
+#: libs/ui/KisDocument.cpp:2007
 #, kde-format
 msgid "Opening document"
 msgstr "Otvorenie dokumentu"
 
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1984
+#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Nepodarilo sa otvoriť '%1'."
 
-#: libs/ui/KisDocument.cpp:1997 libs/ui/KisDocument.cpp:2001
+#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "Nastali problémy pri otváraní %1"
 
-#: libs/ui/KisDocument.cpp:2140
+#: libs/ui/KisDocument.cpp:2185
 #, kde-format
 msgid "Not Saved"
 msgstr "Neuložené"
 
-#: libs/ui/KisDocument.cpp:2626
+#: libs/ui/KisDocument.cpp:2671
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Výplň pozadia"
 
-#: libs/ui/KisDocument.cpp:2688
+#: libs/ui/KisDocument.cpp:2733
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

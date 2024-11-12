@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 01:48+0000\n"
+"POT-Creation-Date: 2024-11-12 01:52+0000\n"
 "PO-Revision-Date: 2024-10-23 11:40+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -17333,7 +17333,7 @@ msgstr "Doorgeven"
 msgid "Imported Image"
 msgstr "Geïmporteerde afbeelding"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19731,11 +19731,11 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
-#: libs/ui/KisDocument.cpp:987 libs/ui/KisDocument.cpp:1007
-#: libs/ui/KisDocument.cpp:1933 libs/ui/KisDocument.cpp:1977
-#: libs/ui/KisDocument.cpp:1983 libs/ui/KisDocument.cpp:1996
-#: libs/ui/KisDocument.cpp:2000 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
+#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
+#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -30746,7 +30746,7 @@ msgstr "Document wordt geëxporteerd..."
 msgid "Saving Document..."
 msgstr "Document wordt opgeslagen..."
 
-#: libs/ui/KisDocument.cpp:844
+#: libs/ui/KisDocument.cpp:849
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30755,18 +30755,34 @@ msgstr ""
 "Beginnen met opslaan van %1 lukt niet. Wacht totdat de huidige "
 "opslagoperatie is geëindigd."
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:854
+#, fuzzy, kde-format
+#| msgid "Could not save to svg: %1"
+msgid "Could not start saving %1. Image is busy"
+msgstr "Kon niet opslaan naar svg: %1"
+
+#: libs/ui/KisDocument.cpp:859
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not start saving %1. Wait until the current save operation has "
+#| "finished."
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+"Beginnen met opslaan van %1 lukt niet. Wacht totdat de huidige "
+"opslagoperatie is geëindigd."
+
+#: libs/ui/KisDocument.cpp:999
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fout tijdens het opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:981 libs/ui/KisDocument.cpp:988
+#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
 #, kde-format
 msgid "Could not save %1."
 msgstr "Kon %1 niet opslaan."
 
-#: libs/ui/KisDocument.cpp:1010
+#: libs/ui/KisDocument.cpp:1036
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30774,45 +30790,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 is opgeslagen maar is niet compleet."
 
-#: libs/ui/KisDocument.cpp:1016
+#: libs/ui/KisDocument.cpp:1042
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Er zijn enige problemen opgetreden bij opslaan."
 
-#: libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1059
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1484
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Bezig met automatisch opslaan... %1"
 
-#: libs/ui/KisDocument.cpp:1447
+#: libs/ui/KisDocument.cpp:1492
 #, kde-format
 msgid "Autosaving..."
 msgstr "Bezig met automatisch opslaan..."
 
-#: libs/ui/KisDocument.cpp:1453
+#: libs/ui/KisDocument.cpp:1498
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatisch opslaan uitgesteld: document is bezig..."
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1641
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fout tijdens het automatisch opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:1610
+#: libs/ui/KisDocument.cpp:1655
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Automatisch opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1867
+#: libs/ui/KisDocument.cpp:1912
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30821,38 +30837,38 @@ msgstr ""
 "Misvormd pad\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1978
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Bestand %1 bestaat niet."
 
-#: libs/ui/KisDocument.cpp:1962
+#: libs/ui/KisDocument.cpp:2007
 #, kde-format
 msgid "Opening document"
 msgstr "Bezig met document te openen"
 
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1984
+#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kon '%1' niet openen."
 
-#: libs/ui/KisDocument.cpp:1997 libs/ui/KisDocument.cpp:2001
+#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Er waren problemen om %1 te openen."
 
-#: libs/ui/KisDocument.cpp:2140
+#: libs/ui/KisDocument.cpp:2185
 #, kde-format
 msgid "Not Saved"
 msgstr "Niet opgeslagen"
 
-#: libs/ui/KisDocument.cpp:2626
+#: libs/ui/KisDocument.cpp:2671
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Gekleurde achtergrond"
 
-#: libs/ui/KisDocument.cpp:2688
+#: libs/ui/KisDocument.cpp:2733
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

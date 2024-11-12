@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 01:48+0000\n"
+"POT-Creation-Date: 2024-11-12 01:52+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -17393,7 +17393,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Mewnforio Delwedd"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2619
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19826,11 +19826,11 @@ msgstr "&Gwaredu Plygell"
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:980
-#: libs/ui/KisDocument.cpp:987 libs/ui/KisDocument.cpp:1007
-#: libs/ui/KisDocument.cpp:1933 libs/ui/KisDocument.cpp:1977
-#: libs/ui/KisDocument.cpp:1983 libs/ui/KisDocument.cpp:1996
-#: libs/ui/KisDocument.cpp:2000 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
+#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
+#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -30384,26 +30384,36 @@ msgstr "Dogfen gaeth"
 msgid "Saving Document..."
 msgstr "Cadw'r Ddogfen Fel"
 
-#: libs/ui/KisDocument.cpp:844
+#: libs/ui/KisDocument.cpp:849
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:973
+#: libs/ui/KisDocument.cpp:854
+#, fuzzy, kde-format
+msgid "Could not start saving %1. Image is busy"
+msgstr "Methwyd ychwanegu haen i ddelwedd."
+
+#: libs/ui/KisDocument.cpp:859
+#, kde-format
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:999
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Digwyddodd gwall yn ystod y hunangadw!  Rhaniad llawn?"
 
-#: libs/ui/KisDocument.cpp:981 libs/ui/KisDocument.cpp:988
+#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Methwyd ychwanegu haen i ddelwedd."
 
-#: libs/ui/KisDocument.cpp:1010
+#: libs/ui/KisDocument.cpp:1036
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30411,47 +30421,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1016
+#: libs/ui/KisDocument.cpp:1042
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1059
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Polylinell"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1484
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Hunangadw..."
 
-#: libs/ui/KisDocument.cpp:1447
+#: libs/ui/KisDocument.cpp:1492
 #, kde-format
 msgid "Autosaving..."
 msgstr "Hunangadw..."
 
-#: libs/ui/KisDocument.cpp:1453
+#: libs/ui/KisDocument.cpp:1498
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1641
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Digwyddodd gwall yn ystod y hunangadw!  Rhaniad llawn?"
 
-#: libs/ui/KisDocument.cpp:1610
+#: libs/ui/KisDocument.cpp:1655
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Polylinell"
 
-#: libs/ui/KisDocument.cpp:1867
+#: libs/ui/KisDocument.cpp:1912
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30463,39 +30473,39 @@ msgstr ""
 "URL wedi'i gamffurfio\n"
 " %1"
 
-#: libs/ui/KisDocument.cpp:1933
+#: libs/ui/KisDocument.cpp:1978
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "Nid yw'r ffeil %1 yn bodoli!."
 
-#: libs/ui/KisDocument.cpp:1962
+#: libs/ui/KisDocument.cpp:2007
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "Dogfen gaeth"
 
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1984
+#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Methwyd ychwanegu haen i ddelwedd."
 
-#: libs/ui/KisDocument.cpp:1997 libs/ui/KisDocument.cpp:2001
+#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2140
+#: libs/ui/KisDocument.cpp:2185
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "&Llenwi Offer"
 
-#: libs/ui/KisDocument.cpp:2626
+#: libs/ui/KisDocument.cpp:2671
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "cefndir"
 
-#: libs/ui/KisDocument.cpp:2688
+#: libs/ui/KisDocument.cpp:2733
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

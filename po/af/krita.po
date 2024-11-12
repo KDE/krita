@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 03:20+0000\n"
+"POT-Creation-Date: 2024-11-12 03:26+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -17127,7 +17127,7 @@ msgstr "In voer Beeld..."
 msgid "Selection Mask"
 msgstr "Keuse"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2632
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19514,11 +19514,11 @@ msgstr "Verwyder Laag"
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
-#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:997
+#: libs/ui/KisDocument.cpp:1004 libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2004 libs/ui/KisDocument.cpp:2017
+#: libs/ui/KisDocument.cpp:2021 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -29891,25 +29891,35 @@ msgstr "Open Dokument"
 msgid "Saving Document..."
 msgstr "Stoor Dokument As"
 
-#: libs/ui/KisDocument.cpp:835
+#: libs/ui/KisDocument.cpp:840
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:845
+#, fuzzy, kde-format
+msgid "Could not start saving %1. Image is busy"
+msgstr "Kon nie voeg by laag na beeld."
+
+#: libs/ui/KisDocument.cpp:850
+#, kde-format
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
+#: libs/ui/KisDocument.cpp:998 libs/ui/KisDocument.cpp:1005
 #, fuzzy, kde-format
 msgid "Could not save %1."
 msgstr "Kon nie voeg by laag na beeld."
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1027
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29917,45 +29927,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1033
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1050
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "Poligoon Program"
 
-#: libs/ui/KisDocument.cpp:1430
+#: libs/ui/KisDocument.cpp:1475
 #, fuzzy, kde-format
 msgid "Autosaving... %1"
 msgstr "Herbenaam Beeld..."
 
-#: libs/ui/KisDocument.cpp:1438
+#: libs/ui/KisDocument.cpp:1483
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "Herbenaam Beeld..."
 
-#: libs/ui/KisDocument.cpp:1444
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1587
+#: libs/ui/KisDocument.cpp:1632
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1601
+#: libs/ui/KisDocument.cpp:1646
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "Poligoon Program"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1888
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -29967,39 +29977,39 @@ msgstr ""
 "Misformde Url\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1954
 #, fuzzy, kde-format
 msgid "File %1 does not exist."
 msgstr "Voeg by Naam"
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1983
 #, fuzzy, kde-format
 #| msgid "Open Document"
 msgid "Opening document"
 msgstr "Open Dokument"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1999 libs/ui/KisDocument.cpp:2005
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "Kon nie voeg by laag na beeld."
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:2018 libs/ui/KisDocument.cpp:2022
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2157
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "geïndekseerd"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2639
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "agtergrond"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2691
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

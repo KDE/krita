@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 03:20+0000\n"
+"POT-Creation-Date: 2024-11-12 03:26+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17987,7 +17987,7 @@ msgstr "가져온 이미지"
 msgid "Selection Mask"
 msgstr "선택 마스크"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2632
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -20367,11 +20367,11 @@ msgstr "로컬 리소스"
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
-#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:997
+#: libs/ui/KisDocument.cpp:1004 libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2004 libs/ui/KisDocument.cpp:2017
+#: libs/ui/KisDocument.cpp:2021 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -31338,20 +31338,31 @@ msgstr "문서 내보내는 중..."
 msgid "Saving Document..."
 msgstr "문서 저장하는 중..."
 
-#: libs/ui/KisDocument.cpp:835
+#: libs/ui/KisDocument.cpp:840
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:845
+#, fuzzy, kde-format
+#| msgid "Could not save to svg: %1"
+msgid "Could not start saving %1. Image is busy"
+msgstr "SVG로 저장할 수 없습니다: %1"
+
+#: libs/ui/KisDocument.cpp:850
+#, kde-format
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "%1을(를) 저장하는 중 오류 발생: %2"
 
-#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
+#: libs/ui/KisDocument.cpp:998 libs/ui/KisDocument.cpp:1005
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31361,7 +31372,7 @@ msgstr ""
 "%1을(를)\n"
 "저장할 수 없음"
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1027
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -31369,45 +31380,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1033
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1050
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 저장 완료"
 
-#: libs/ui/KisDocument.cpp:1430
+#: libs/ui/KisDocument.cpp:1475
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "자동 저장 중... %1"
 
-#: libs/ui/KisDocument.cpp:1438
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving..."
 msgstr "자동 저장 중..."
 
-#: libs/ui/KisDocument.cpp:1444
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "자동 저장 지연됨: 문서 작업 진행 중..."
 
-#: libs/ui/KisDocument.cpp:1587
+#: libs/ui/KisDocument.cpp:1632
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "%1 자동 저장 중 오류 발생: %2"
 
-#: libs/ui/KisDocument.cpp:1601
+#: libs/ui/KisDocument.cpp:1646
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 자동 저장 완료됨"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1888
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -31416,40 +31427,40 @@ msgstr ""
 "잘못된 경로\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1954
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 파일이 없습니다."
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1983
 #, kde-format
 msgid "Opening document"
 msgstr "문서 여는 중"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1999 libs/ui/KisDocument.cpp:2005
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "'%1'을(를) 열 수 없습니다."
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:2018 libs/ui/KisDocument.cpp:2022
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1."
 msgid "There were problems opening %1."
 msgstr "%1을(를) 여는 중 문제가 발생했습니다."
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2157
 #, kde-format
 msgid "Not Saved"
 msgstr "저장되지 않음"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2639
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "배경 채우기"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2691
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

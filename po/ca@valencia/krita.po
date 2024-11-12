@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 03:20+0000\n"
+"POT-Creation-Date: 2024-11-12 03:26+0000\n"
 "PO-Revision-Date: 2024-11-09 09:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -17125,7 +17125,7 @@ msgstr "Imatge importada"
 msgid "Selection Mask"
 msgstr "Màscara de selecció"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2632
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19488,11 +19488,11 @@ msgstr "Recursos locals"
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
-#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:997
+#: libs/ui/KisDocument.cpp:1004 libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2004 libs/ui/KisDocument.cpp:2017
+#: libs/ui/KisDocument.cpp:2021 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -30361,7 +30361,7 @@ msgstr "S'està exportant el document…"
 msgid "Saving Document..."
 msgstr "S'està guardant el document…"
 
-#: libs/ui/KisDocument.cpp:835
+#: libs/ui/KisDocument.cpp:840
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30370,18 +30370,34 @@ msgstr ""
 "No s'ha pogut iniciar la guardada de %1. Espereu fins que finalitze "
 "l'operació actual de guardada."
 
-#: libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:845
+#, fuzzy, kde-format
+#| msgid "Could not save to svg: %1"
+msgid "Could not start saving %1. Image is busy"
+msgstr "No s'ha pogut guardar a SVG: %1"
+
+#: libs/ui/KisDocument.cpp:850
+#, fuzzy, kde-format
+#| msgid ""
+#| "Could not start saving %1. Wait until the current save operation has "
+#| "finished."
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+"No s'ha pogut iniciar la guardada de %1. Espereu fins que finalitze "
+"l'operació actual de guardada."
+
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "S'ha produït un error en guardar %1: %2"
 
-#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
+#: libs/ui/KisDocument.cpp:998 libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgid "Could not save %1."
 msgstr "No s'ha pogut guardar «%1»."
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1027
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30389,45 +30405,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 s'ha guardat, però està incomplet."
 
-#: libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1033
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "S'han trobat diversos problemes en guardar."
 
-#: libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1050
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 ha finalitzat la guardada"
 
-#: libs/ui/KisDocument.cpp:1430
+#: libs/ui/KisDocument.cpp:1475
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "S'està guardant automàticament… %1"
 
-#: libs/ui/KisDocument.cpp:1438
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving..."
 msgstr "S'està guardant automàticament…"
 
-#: libs/ui/KisDocument.cpp:1444
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "La guardada automàtica es posposa: el document està ocupat…"
 
-#: libs/ui/KisDocument.cpp:1587
+#: libs/ui/KisDocument.cpp:1632
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Error durant en guardar automàticament %1: %2"
 
-#: libs/ui/KisDocument.cpp:1601
+#: libs/ui/KisDocument.cpp:1646
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 ha finalitzat la guardada automàtica"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1888
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30436,38 +30452,38 @@ msgstr ""
 "Camí amb format incorrecte\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1954
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "El fitxer %1 no existix."
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1983
 #, kde-format
 msgid "Opening document"
 msgstr "Obertura de document"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1999 libs/ui/KisDocument.cpp:2005
 #, kde-format
 msgid "Could not open %1."
 msgstr "No s'ha pogut obrir %1."
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:2018 libs/ui/KisDocument.cpp:2022
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Hi ha hagut problemes en obrir %1."
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2157
 #, kde-format
 msgid "Not Saved"
 msgstr "Sense guardar"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2639
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Emplenat del fons"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2691
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

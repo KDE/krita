@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-09 03:20+0000\n"
+"POT-Creation-Date: 2024-11-12 03:26+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -17774,7 +17774,7 @@ msgstr "صورة مستوردة"
 msgid "Selection Mask"
 msgstr "قناع تحديد"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2632
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -20239,11 +20239,11 @@ msgstr "يحمّل حزم الموارد..."
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:971
-#: libs/ui/KisDocument.cpp:978 libs/ui/KisDocument.cpp:998
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:997
+#: libs/ui/KisDocument.cpp:1004 libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1998
+#: libs/ui/KisDocument.cpp:2004 libs/ui/KisDocument.cpp:2017
+#: libs/ui/KisDocument.cpp:2021 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -31222,20 +31222,30 @@ msgstr "يصدّر المستند..."
 msgid "Saving Document..."
 msgstr "يحفظ المستند..."
 
-#: libs/ui/KisDocument.cpp:835
+#: libs/ui/KisDocument.cpp:840
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:964
+#: libs/ui/KisDocument.cpp:845
+#, fuzzy, kde-format
+msgid "Could not start saving %1. Image is busy"
+msgstr "تعّذر الحفظ بِ SVG: %1"
+
+#: libs/ui/KisDocument.cpp:850
+#, kde-format
+msgid "Could not start saving %1. Unknown failure has happened"
+msgstr ""
+
+#: libs/ui/KisDocument.cpp:990
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "خطأ أثناء حفظ %1: ‏%2"
 
-#: libs/ui/KisDocument.cpp:972 libs/ui/KisDocument.cpp:979
+#: libs/ui/KisDocument.cpp:998 libs/ui/KisDocument.cpp:1005
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31245,7 +31255,7 @@ msgstr ""
 "تعذر حفظ\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1001
+#: libs/ui/KisDocument.cpp:1027
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -31253,45 +31263,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1007
+#: libs/ui/KisDocument.cpp:1033
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1024
+#: libs/ui/KisDocument.cpp:1050
 #, kde-format
 msgid "Finished saving %1"
 msgstr "انتهى حفظ %1"
 
-#: libs/ui/KisDocument.cpp:1430
+#: libs/ui/KisDocument.cpp:1475
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "يحفظ آليًّا... %1"
 
-#: libs/ui/KisDocument.cpp:1438
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving..."
 msgstr "يحفظ آليا..."
 
-#: libs/ui/KisDocument.cpp:1444
+#: libs/ui/KisDocument.cpp:1489
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1587
+#: libs/ui/KisDocument.cpp:1632
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "خطأ أثناء حفظ %1 آليًّا: %2"
 
-#: libs/ui/KisDocument.cpp:1601
+#: libs/ui/KisDocument.cpp:1646
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "انتهى حفظ %1 آليًّا"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1888
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -31303,40 +31313,40 @@ msgstr ""
 "المسار مشوّه\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1954
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "الملف %1 ليس موجودا."
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1983
 #, kde-format
 msgid "Opening document"
 msgstr "يفتح المستند"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1999 libs/ui/KisDocument.cpp:2005
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not open %1."
 msgstr "تعذر العثور على %1"
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:2018 libs/ui/KisDocument.cpp:2022
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "حدثت مشاكل في فتح %1"
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2157
 #, kde-format
 msgid "Not Saved"
 msgstr "ليس محفوظًا"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2639
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "تعبئة الخلفية"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2691
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"

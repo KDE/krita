@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-12 03:26+0000\n"
-"PO-Revision-Date: 2024-10-24 09:40+0300\n"
+"PO-Revision-Date: 2024-11-12 15:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -29269,13 +29269,12 @@ msgstr ""
 "імпортування анімації"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Очікуємо на завершення дії над зображенням…"
+msgstr "Очікуємо на завершення дії…"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -30709,20 +30708,14 @@ msgstr ""
 "дію зі збереження."
 
 #: libs/ui/KisDocument.cpp:845
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Не вдалося зберегти до SVG: %1"
+msgstr "Не вдалося розпочати зберігання %1. Зображення зайняте іншою програмою"
 
 #: libs/ui/KisDocument.cpp:850
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Не вдалося розпочати збереження %1. Зачекайте, доки буде завершено поточну "
-"дію зі збереження."
+msgstr "Не вдалося розпочати збереження %1. Сталася невідома критична помилка"
 
 #: libs/ui/KisDocument.cpp:990
 #, kde-format

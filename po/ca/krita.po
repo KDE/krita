@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-12 03:26+0000\n"
-"PO-Revision-Date: 2024-11-09 09:34+0100\n"
+"PO-Revision-Date: 2024-11-12 09:36+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -30366,20 +30366,15 @@ msgstr ""
 "l'operació actual de desament."
 
 #: libs/ui/KisDocument.cpp:845
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "No s'ha pogut desar a SVG: %1"
+msgstr "No s'ha pogut iniciar el desament de %1. La imatge està activa"
 
 #: libs/ui/KisDocument.cpp:850
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
-"No s'ha pogut iniciar el desament de %1. Espereu fins que finalitzi "
-"l'operació actual de desament."
+"No s'ha pogut iniciar el desament de %1. Hi ha hagut una fallada desconeguda"
 
 #: libs/ui/KisDocument.cpp:990
 #, kde-format

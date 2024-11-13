@@ -111,11 +111,11 @@ public:
      * @param opacity transparency with which to blend
      * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
-    void compositeF(quint8 *dstRowStart, qint32 dstRowStride,
-                    const quint8 *srcRowStart, qint32 srcRowStride,
-                    const quint8 *maskRowStart, qint32 maskRowStride,
-                    qint32 rows, qint32 numColumns,
-                    float opacity, const QBitArray& channelFlags = QBitArray()) const;
+    void composite(quint8 *dstRowStart, qint32 dstRowStride,
+                   const quint8 *srcRowStart, qint32 srcRowStride,
+                   const quint8 *maskRowStart, qint32 maskRowStride,
+                   qint32 rows, qint32 numColumns,
+                   float opacity, const QBitArray& channelFlags = QBitArray()) const;
 
 
     /**

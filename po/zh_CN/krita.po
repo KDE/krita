@@ -30363,18 +30363,14 @@ msgid ""
 msgstr "无法发起保存 %1 的操作。请在当前的保存操作结束后重试。"
 
 #: libs/ui/KisDocument.cpp:854
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "无法保存为 SVG：%1"
+msgstr ""
 
 #: libs/ui/KisDocument.cpp:859
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr "无法发起保存 %1 的操作。请在当前的保存操作结束后重试。"
+msgstr ""
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format

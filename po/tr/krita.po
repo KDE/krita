@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-12 01:52+0000\n"
-"PO-Revision-Date: 2024-11-09 08:41+0300\n"
+"PO-Revision-Date: 2024-11-12 19:15+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -30592,20 +30592,14 @@ msgstr ""
 "bekleyin."
 
 #: libs/ui/KisDocument.cpp:854
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "SVG’ye kaydedilemedi: %1"
+msgstr "%1 kaydedilmeye başlanamadı. Görsel meşgul."
 
 #: libs/ui/KisDocument.cpp:859
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"%1 kaydedilmeye başlanamadı. Geçerli kaydetme işlemi bitinceye değin "
-"bekleyin."
+msgstr "%1 kaydedilmeye başlanamadı. Bilinmeyen bir hata oluştu."
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format

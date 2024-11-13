@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-12 01:52+0000\n"
-"PO-Revision-Date: 2024-10-23 09:51+0300\n"
+"PO-Revision-Date: 2024-11-12 14:58+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -31061,20 +31061,14 @@ msgstr ""
 "дію зі збереження."
 
 #: libs/ui/KisDocument.cpp:854
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Не вдалося зберегти до SVG: %1"
+msgstr "Не вдалося розпочати зберігання %1. Зображення зайняте іншою програмою"
 
 #: libs/ui/KisDocument.cpp:859
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Не вдалося розпочати збереження %1. Зачекайте, доки буде завершено поточну "
-"дію зі збереження."
+msgstr "Не вдалося розпочати збереження %1. Сталася невідома критична помилка"
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format

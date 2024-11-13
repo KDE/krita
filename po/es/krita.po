@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-12 01:52+0000\n"
-"PO-Revision-Date: 2024-10-23 22:44+0100\n"
+"PO-Revision-Date: 2024-11-12 12:46+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -30727,20 +30727,15 @@ msgstr ""
 "operación actual de guardar."
 
 #: libs/ui/KisDocument.cpp:854
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "No ha sido posible guardar en SVG: %1"
+msgstr "No se ha podido empezar a guardar %1. La imagen está ocupada."
 
 #: libs/ui/KisDocument.cpp:859
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
-"No se ha podido empezar a guardar %1. Espere hasta que se haya terminado la "
-"operación actual de guardar."
+"No se ha podido empezar a guardar %1. Ha ocurrido un fallo desconocido."
 
 #: libs/ui/KisDocument.cpp:999
 #, kde-format

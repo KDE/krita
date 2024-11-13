@@ -51,28 +51,31 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8*       dstRowStart , qint32 dstRowStride ,
-                           const quint8* srcRowStart , qint32 srcRowStride ,
-                           const quint8* maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const override {
+    void composite(const KoCompositeOp::ParameterInfo& params) const override {
 
-        const QBitArray& flags       = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
+        const QBitArray& flags       = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
         bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
 
         using namespace Arithmetic;
 
 //         quint32       ctr       = quint32(reinterpret_cast<quint64>(dstRowStart) % 256);
-        qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
-        bool          useMask   = maskRowStart != 0;
+        qint32        srcInc    = (params.srcRowStride == 0) ? 0 : channels_nb;
+        bool          useMask   = params.maskRowStart != 0;
         channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-        channels_type opacity   = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
+        channels_type opacity   = KoColorSpaceMaths<float,channels_type>::scaleToA(params.opacity);
+
+        const quint8 *srcRowStart = params.srcRowStart;
+        quint8 *dstRowStart = params.dstRowStart;
+        const quint8 *maskRowStart = params.maskRowStart;
+
+        qint32 rows = params.rows;
 
         for(; rows>0; --rows) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
             channels_type*       dst  = reinterpret_cast<channels_type*>(dstRowStart);
             const quint8*        mask = maskRowStart;
 
-            for(qint32 c=cols; c>0; --c) {
+            for(qint32 c=params.cols; c>0; --c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask), srcAlpha) : mul(opacity, srcAlpha);
@@ -96,10 +99,10 @@ public:
                 }
             }
 
-            srcRowStart  += srcRowStride;
-            dstRowStart  += dstRowStride;
+            srcRowStart  += params.srcRowStride;
+            dstRowStart  += params.dstRowStride;
             if (maskRowStart) {
-                maskRowStart += maskRowStride;
+                maskRowStart += params.maskRowStride;
             }
         }
     }

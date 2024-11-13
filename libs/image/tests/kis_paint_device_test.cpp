@@ -2377,19 +2377,19 @@ void KisPaintDeviceTest::testCompositionAssociativity()
             KoColor r2(QColor(Qt::transparent), cs);
             KoColor r3(QColor(Qt::transparent), cs);
 
-            op->composite(r1.data(), 0, c1.data(), 0, 0,0, 1,1, 255);
-            op->composite(r1.data(), 0, c2.data(), 0, 0,0, 1,1, 255);
-            op->composite(r1.data(), 0, c3.data(), 0, 0,0, 1,1, 255);
-            //op->composite(r1.data(), 0, c4.data(), 0, 0,0, 1,1, 255);
-            //op->composite(r1.data(), 0, c5.data(), 0, 0,0, 1,1, 255);
+            op->compositeF(r1.data(), 0, c1.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            op->compositeF(r1.data(), 0, c2.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            op->compositeF(r1.data(), 0, c3.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            //op->compositeF(r1.data(), 0, c4.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            //op->compositeF(r1.data(), 0, c5.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
 
-            op->composite(r3.data(), 0, c2.data(), 0, 0,0, 1,1, 255);
-            op->composite(r3.data(), 0, c3.data(), 0, 0,0, 1,1, 255);
-            //op->composite(r3.data(), 0, c4.data(), 0, 0,0, 1,1, 255);
-            //op->composite(r3.data(), 0, c5.data(), 0, 0,0, 1,1, 255);
+            op->compositeF(r3.data(), 0, c2.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            op->compositeF(r3.data(), 0, c3.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            //op->compositeF(r3.data(), 0, c4.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            //op->compositeF(r3.data(), 0, c5.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
 
-            op->composite(r2.data(), 0, c1.data(), 0, 0,0, 1,1, 255);
-            op->composite(r2.data(), 0, r3.data(), 0, 0,0, 1,1, 255);
+            op->compositeF(r2.data(), 0, c1.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
+            op->compositeF(r2.data(), 0, r3.data(), 0, 0,0, 1,1, OPACITY_OPAQUE_F);
 
             const quint8 *p1 = r1.data();
             const quint8 *p2 = r2.data();

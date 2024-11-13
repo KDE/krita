@@ -96,10 +96,6 @@ public:
      */
     QString category() const;
 
-    // WARNING: A derived class needs to overwrite at least one
-    //          of the following virtual methods or a call to
-    //          composite(...) will lead to an endless recursion/stack overflow
-
     /**
      * @param dstRowStart pointer to the start of the byte array we will composite the source on
      * @param dstRowStride length of the rows of the block of destination pixels in bytes
@@ -115,23 +111,11 @@ public:
      * @param opacity transparency with which to blend
      * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                            const quint8 *srcRowStart, qint32 srcRowStride,
-                            const quint8 *maskRowStart, qint32 maskRowStride,
-                            qint32 rows, qint32 numColumns,
-                            quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
-
-    /**
-     * A version of composite() function that accepts floating point opacity
-     * value.
-     *
-     * TODO: remove the non-floating point opacity version
-     */
-    virtual void compositeF(quint8 *dstRowStart, qint32 dstRowStride,
-                            const quint8 *srcRowStart, qint32 srcRowStride,
-                            const quint8 *maskRowStart, qint32 maskRowStride,
-                            qint32 rows, qint32 numColumns,
-                            float opacity, const QBitArray& channelFlags=QBitArray()) const;
+    void compositeF(quint8 *dstRowStart, qint32 dstRowStride,
+                    const quint8 *srcRowStart, qint32 srcRowStride,
+                    const quint8 *maskRowStart, qint32 maskRowStride,
+                    qint32 rows, qint32 numColumns,
+                    float opacity, const QBitArray& channelFlags = QBitArray()) const;
 
 
     /**

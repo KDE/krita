@@ -136,27 +136,6 @@ KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id, const Q
     }
 }
 
-void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
-                              const quint8 *srcRowStart, qint32 srcRowStride,
-                              const quint8 *maskRowStart, qint32 maskRowStride,
-                              qint32 rows, qint32 numColumns,
-                              quint8 opacity, const QBitArray& channelFlags) const
-{
-    KoCompositeOp::ParameterInfo params;
-    params.dstRowStart   = dstRowStart;
-    params.dstRowStride  = dstRowStride;
-    params.srcRowStart   = srcRowStart;
-    params.srcRowStride  = srcRowStride;
-    params.maskRowStart  = maskRowStart;
-    params.maskRowStride = maskRowStride;
-    params.rows          = rows;
-    params.cols          = numColumns;
-    params.opacity       = float(opacity) / 255.0f;
-    params.flow          = 1.0f;
-    params.channelFlags  = channelFlags;
-    composite(params);
-}
-
 void KoCompositeOp::compositeF(quint8 *dstRowStart, qint32 dstRowStride,
                                const quint8 *srcRowStart, qint32 srcRowStride,
                                const quint8 *maskRowStart, qint32 maskRowStride,
@@ -183,13 +162,12 @@ void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
     using namespace Arithmetic;
 
-    composite(params.dstRowStart           , params.dstRowStride ,
+    compositeF(params.dstRowStart           , params.dstRowStride ,
               params.srcRowStart           , params.srcRowStride ,
               params.maskRowStart          , params.maskRowStride,
               params.rows                  , params.cols         ,
-              scale<quint8>(params.opacity), params.channelFlags );
+              params.opacity, params.channelFlags );
 }
-
 
 QString KoCompositeOp::category() const
 {

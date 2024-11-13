@@ -45,38 +45,37 @@ QString KisColorSmudgeStrategyMaskLegacy::finalCompositeOp(bool smearAlpha) cons
     return smearAlpha ? COMPOSITE_COPY : COMPOSITE_OVER;
 }
 
-quint8 KisColorSmudgeStrategyMaskLegacy::finalPainterOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyMaskLegacy::finalPainterOpacity(qreal opacity, qreal smudgeRateValue)
 {
-    return qBound(OPACITY_TRANSPARENT_U8,
-                  quint8(qRound(255.0 *  smudgeRateValue * opacity)),
-                  OPACITY_OPAQUE_U8);
+    return qBound(OPACITY_TRANSPARENT_F,
+                  smudgeRateValue * opacity,
+                  OPACITY_OPAQUE_F);
 }
 
-quint8 KisColorSmudgeStrategyMaskLegacy::colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue,
-                                                          qreal maxPossibleSmudgeRateValue)
+qreal KisColorSmudgeStrategyMaskLegacy::colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue,
+                                                         qreal maxPossibleSmudgeRateValue)
 {
     Q_UNUSED(smudgeRateValue);
 
     const qreal maxColorRate = qMax<qreal>(1.0 - maxPossibleSmudgeRateValue, 0.2);
 
-    // qFloor instead of qRound due to "historical reasons"
-    return qBound(OPACITY_TRANSPARENT_U8,
-                  quint8(qFloor(255.0 * KisAlgebra2D::lerp(0.0, maxColorRate, colorRateValue * opacity))),
-                  OPACITY_OPAQUE_U8);
+    return qBound(OPACITY_TRANSPARENT_F,
+                  KisAlgebra2D::lerp(0.0, maxColorRate, colorRateValue * opacity),
+                  OPACITY_OPAQUE_F);
 }
 
-quint8 KisColorSmudgeStrategyMaskLegacy::dullingRateOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyMaskLegacy::dullingRateOpacity(qreal opacity, qreal smudgeRateValue)
 {
     Q_UNUSED(opacity);
     Q_UNUSED(smudgeRateValue);
 
-    return OPACITY_OPAQUE_U8;
+    return OPACITY_OPAQUE_F;
 }
 
-quint8 KisColorSmudgeStrategyMaskLegacy::smearRateOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyMaskLegacy::smearRateOpacity(qreal opacity, qreal smudgeRateValue)
 {
     Q_UNUSED(opacity);
     Q_UNUSED(smudgeRateValue);
 
-    return OPACITY_OPAQUE_U8;
+    return OPACITY_OPAQUE_F;
 }

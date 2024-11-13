@@ -68,7 +68,7 @@ struct KisOnionSkinCompositor::Private
 
         gcFrame.bitBlt(rect.topLeft(), tintSource, rect);
 
-        gcDest.setOpacity(opacity);
+        gcDest.setOpacityU8(opacity);
         gcDest.bitBlt(rect.topLeft(), gcFrame.device(), rect);
     }
 
@@ -141,7 +141,7 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisPainter gcFrame(frameDevice);
     QBitArray channelFlags = sourceDevice->colorSpace()->channelFlags(true, false);
     gcFrame.setChannelFlags(channelFlags);
-    gcFrame.setOpacity(m_d->tintFactor);
+    gcFrame.setOpacityU8(m_d->tintFactor);
 
     KisPaintDeviceSP backwardTintDevice = m_d->setUpTintDevice(m_d->backwardTintColor, sourceDevice->colorSpace());
     KisPaintDeviceSP forwardTintDevice = m_d->setUpTintDevice(m_d->forwardTintColor, sourceDevice->colorSpace());

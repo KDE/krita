@@ -40,7 +40,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_unmerged(false)
     , m_useBgColor(false)
     , m_useCustomBlendingOptions(false)
-    , m_customOpacity(OPACITY_OPAQUE_U8)
+    , m_customOpacity(OPACITY_OPAQUE_F)
     , m_customCompositeOp(COMPOSITE_OVER)
     , m_progressHelper(nullptr)
 {}
@@ -136,7 +136,7 @@ void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &
     m_resources->setupPainter(&painter);
 
     if (m_useCustomBlendingOptions) {
-        painter.setOpacity(m_customOpacity);
+        painter.setOpacityF(m_customOpacity);
         painter.setCompositeOpId(m_customCompositeOp);
     }
 
@@ -174,7 +174,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setHeight(fillRect.height());
     fillPainter.setUseCompositing(!m_useFastMode);
     if (m_useCustomBlendingOptions) {
-        fillPainter.setOpacity(m_customOpacity);
+        fillPainter.setOpacityF(m_customOpacity);
         fillPainter.setCompositeOpId(m_customCompositeOp);
     }
 
@@ -394,7 +394,7 @@ void FillProcessingVisitor::setUseCustomBlendingOptions(bool useCustomBlendingOp
     m_useCustomBlendingOptions = useCustomBlendingOptions;
 }
 
-void FillProcessingVisitor::setCustomOpacity(int customOpacity)
+void FillProcessingVisitor::setCustomOpacity(qreal customOpacity)
 {
     m_customOpacity = customOpacity;
 }

@@ -638,12 +638,12 @@ void KisLayerStyleProjectionPlaneTest::testBlending()
 
     KisPainter painter(bg);
 
-    painter.setOpacity(layerOpacity);
+    painter.setOpacityU8(layerOpacity);
     painter.setCompositeOpId(COMPOSITE_OVER);
 
     painter.bitBlt(rc.topLeft(), layer, rc);
 
-    painter.setOpacity(overlayOpacity);
+    painter.setOpacityU8(overlayOpacity);
     painter.setCompositeOpId(COMPOSITE_ADD);
 
     painter.bitBlt(rc.topLeft(), overlay, rc);

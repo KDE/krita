@@ -80,7 +80,7 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
     indirect->setTemporaryTarget(movedDevice);
     indirect->setTemporaryCompositeOp(COMPOSITE_OVER);
-    indirect->setTemporaryOpacity(OPACITY_OPAQUE_U8);
+    indirect->setTemporaryOpacity(OPACITY_OPAQUE_F);
     indirect->setTemporarySelection(0);
     indirect->setTemporaryChannelFlags(QBitArray());
 

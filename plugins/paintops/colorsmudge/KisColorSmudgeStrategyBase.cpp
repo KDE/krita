@@ -23,39 +23,39 @@ bool KisColorSmudgeStrategyBase::DabColoringStrategyMask::supportsFusedDullingBl
 
 void KisColorSmudgeStrategyBase::DabColoringStrategyMask::blendInFusedBackgroundAndColorRateWithDulling(
         KisFixedPaintDeviceSP dst, KisColorSmudgeSourceSP src, const QRect &dstRect,
-        const KoColor &preparedDullingColor, const KoCompositeOp *smearOp, const quint8 smudgeRateOpacity,
-        const KoColor &paintColor, const KoCompositeOp *colorRateOp, const quint8 colorRateOpacity) const
+        const KoColor &preparedDullingColor, const KoCompositeOp *smearOp, const qreal smudgeRateOpacity,
+        const KoColor &paintColor, const KoCompositeOp *colorRateOp, const qreal colorRateOpacity) const
 {
     KoColor dullingFillColor(preparedDullingColor);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(*paintColor.colorSpace() == *colorRateOp->colorSpace());
-    colorRateOp->composite(dullingFillColor.data(), 1, paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
+    colorRateOp->compositeF(dullingFillColor.data(), 1, paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
 
-    if (smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
+    if (smearOp->id() == COMPOSITE_COPY && qFuzzyCompare(smudgeRateOpacity, OPACITY_OPAQUE_F)) {
         dst->fill(dst->bounds(), dullingFillColor);
     } else {
         src->readBytes(dst->data(), dstRect);
-        smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
-                           dullingFillColor.data(), 0,
-                           0, 0,
-                           1, dstRect.width() * dstRect.height(),
-                           smudgeRateOpacity);
+        smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
+                            dullingFillColor.data(), 0,
+                            0, 0,
+                            1, dstRect.width() * dstRect.height(),
+                            smudgeRateOpacity);
     }
 }
 
 void KisColorSmudgeStrategyBase::DabColoringStrategyMask::blendInColorRate(const KoColor &paintColor,
                                                                            const KoCompositeOp *colorRateOp,
-                                                                           quint8 colorRateOpacity,
+                                                                           qreal colorRateOpacity,
                                                                            KisFixedPaintDeviceSP dstDevice,
                                                                            const QRect &dstRect) const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(*paintColor.colorSpace() == *colorRateOp->colorSpace());
 
-    colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
-                           paintColor.data(), 0,
-                           0, 0,
-                           dstRect.height(), dstRect.width(),
-                           colorRateOpacity);
+    colorRateOp->compositeF(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                            paintColor.data(), 0,
+                            0, 0,
+                            dstRect.height(), dstRect.width(),
+                            colorRateOpacity);
 }
 
 /**********************************************************************************/
@@ -69,7 +69,7 @@ void KisColorSmudgeStrategyBase::DabColoringStrategyStamp::setStampDab(KisFixedP
 
 void KisColorSmudgeStrategyBase::DabColoringStrategyStamp::blendInColorRate(const KoColor &paintColor,
                                                                             const KoCompositeOp *colorRateOp,
-                                                                            quint8 colorRateOpacity,
+                                                                            qreal colorRateOpacity,
                                                                             KisFixedPaintDeviceSP dstDevice,
                                                                             const QRect &dstRect) const
 {
@@ -78,11 +78,11 @@ void KisColorSmudgeStrategyBase::DabColoringStrategyStamp::blendInColorRate(cons
     // TODO: check correctness for composition source device (transparency masks)
     KIS_ASSERT_RECOVER_RETURN(*dstDevice->colorSpace() == *m_origDab->colorSpace());
 
-    colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
-                           m_origDab->data(), dstRect.width() * m_origDab->pixelSize(),
-                           0, 0,
-                           dstRect.height(), dstRect.width(),
-                           colorRateOpacity);
+    colorRateOp->compositeF(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                            m_origDab->data(), dstRect.width() * m_origDab->pixelSize(),
+                            0, 0,
+                            dstRect.height(), dstRect.width(),
+                            colorRateOpacity);
 }
 
 bool KisColorSmudgeStrategyBase::DabColoringStrategyStamp::supportsFusedDullingBlending() const
@@ -92,8 +92,8 @@ bool KisColorSmudgeStrategyBase::DabColoringStrategyStamp::supportsFusedDullingB
 
 void KisColorSmudgeStrategyBase::DabColoringStrategyStamp::blendInFusedBackgroundAndColorRateWithDulling(
         KisFixedPaintDeviceSP dst, KisColorSmudgeSourceSP src, const QRect &dstRect,
-        const KoColor &preparedDullingColor, const KoCompositeOp *smearOp, const quint8 smudgeRateOpacity,
-        const KoColor &paintColor, const KoCompositeOp *colorRateOp, const quint8 colorRateOpacity) const
+        const KoColor &preparedDullingColor, const KoCompositeOp *smearOp, const qreal smudgeRateOpacity,
+        const KoColor &paintColor, const KoCompositeOp *colorRateOp, const qreal colorRateOpacity) const
 {
     Q_UNUSED(dst);
     Q_UNUSED(src);
@@ -143,30 +143,30 @@ QString KisColorSmudgeStrategyBase::finalCompositeOp(bool smearAlpha) const
     return COMPOSITE_COPY;
 }
 
-quint8 KisColorSmudgeStrategyBase::finalPainterOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyBase::finalPainterOpacity(qreal opacity, qreal smudgeRateValue)
 {
     Q_UNUSED(opacity);
     Q_UNUSED(smudgeRateValue);
 
-    return OPACITY_OPAQUE_U8;
+    return OPACITY_OPAQUE_F;
 }
 
-quint8 KisColorSmudgeStrategyBase::colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue,
-                                                    qreal maxPossibleSmudgeRateValue)
+qreal KisColorSmudgeStrategyBase::colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue,
+                                                   qreal maxPossibleSmudgeRateValue)
 {
     Q_UNUSED(smudgeRateValue);
     Q_UNUSED(maxPossibleSmudgeRateValue);
-    return qRound(colorRateValue * colorRateValue * opacity * 255.0);
+    return colorRateValue * colorRateValue * opacity;
 }
 
-quint8 KisColorSmudgeStrategyBase::dullingRateOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyBase::dullingRateOpacity(qreal opacity, qreal smudgeRateValue)
 {
-    return qRound(0.8 * smudgeRateValue * opacity * 255.0);
+    return 0.8 * smudgeRateValue * opacity;
 }
 
-quint8 KisColorSmudgeStrategyBase::smearRateOpacity(qreal opacity, qreal smudgeRateValue)
+qreal KisColorSmudgeStrategyBase::smearRateOpacity(qreal opacity, qreal smudgeRateValue)
 {
-    return qRound(smudgeRateValue * opacity * 255.0);
+    return smudgeRateValue * opacity;
 }
 
 void KisColorSmudgeStrategyBase::sampleDullingColor(const QRect &srcRect, qreal sampleRadiusValue,
@@ -187,7 +187,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
                                        qreal smudgeRateValue, qreal maxPossibleSmudgeRateValue, qreal colorRateValue,
                                        qreal smudgeRadiusValue)
 {
-    const quint8 colorRateOpacity = this->colorRateOpacity(opacity, smudgeRateValue, colorRateValue, maxPossibleSmudgeRateValue);
+    const qreal colorRateOpacity = this->colorRateOpacity(opacity, smudgeRateValue, colorRateValue, maxPossibleSmudgeRateValue);
 
     if (m_useDullingMode) {
         this->sampleDullingColor(srcRect,
@@ -205,7 +205,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
 
     DabColoringStrategy &coloringStrategy = this->coloringStrategy();
 
-    const quint8 dullingRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
+    const qreal dullingRateOpacity = this->dullingRateOpacity(opacity, smudgeRateValue);
 
     if (colorRateOpacity > 0 &&
         m_useDullingMode &&
@@ -213,7 +213,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
         ((m_smearOp->id() == COMPOSITE_OVER &&
           m_colorRateOp->id() == COMPOSITE_OVER) ||
          (m_smearOp->id() == COMPOSITE_COPY &&
-          dullingRateOpacity == OPACITY_OPAQUE_U8))) {
+          qFuzzyCompare(dullingRateOpacity, OPACITY_OPAQUE_F)))) {
 
         coloringStrategy.blendInFusedBackgroundAndColorRateWithDulling(m_blendDevice,
                                                                        srcSampleDevice,
@@ -228,7 +228,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
 
     } else {
         if (!m_useDullingMode) {
-            const quint8 smudgeRateOpacity = this->smearRateOpacity(opacity, smudgeRateValue);
+            const qreal smudgeRateOpacity = this->smearRateOpacity(opacity, smudgeRateValue);
             blendInBackgroundWithSmearing(m_blendDevice, srcSampleDevice,
                                           srcRect, dstRect, smudgeRateOpacity);
         } else {
@@ -249,7 +249,7 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
     const bool preserveDab = preserveMaskDab && dstPainters.size() > 1;
 
     Q_FOREACH (KisPainter *dstPainter, dstPainters) {
-        dstPainter->setOpacity(finalPainterOpacity(opacity, smudgeRateValue));
+        dstPainter->setOpacityF(finalPainterOpacity(opacity, smudgeRateValue));
 
         dstPainter->bltFixedWithFixedSelection(dstRect.x(), dstRect.y(),
                                                m_blendDevice, maskDab,
@@ -263,9 +263,9 @@ KisColorSmudgeStrategyBase::blendBrush(const QVector<KisPainter *> dstPainters, 
 
 void KisColorSmudgeStrategyBase::blendInBackgroundWithSmearing(KisFixedPaintDeviceSP dst, KisColorSmudgeSourceSP src,
                                                                const QRect &srcRect, const QRect &dstRect,
-                                                               const quint8 smudgeRateOpacity)
+                                                               const qreal smudgeRateOpacity)
 {
-    if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
+    if (m_smearOp->id() == COMPOSITE_COPY && qFuzzyCompare(smudgeRateOpacity, OPACITY_OPAQUE_F)) {
         src->readBytes(dst->data(), srcRect);
     } else {
         src->readBytes(dst->data(), dstRect);
@@ -275,28 +275,28 @@ void KisColorSmudgeStrategyBase::blendInBackgroundWithSmearing(KisFixedPaintDevi
         tempDevice.lazyGrowBufferWithoutInitialization();
 
         src->readBytes(tempDevice.data(), srcRect);
-        m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
-                             tempDevice.data(), dstRect.width() * tempDevice.pixelSize(), // stride should be random non-zero
-                             0, 0,
-                             1, dstRect.width() * dstRect.height(),
-                             smudgeRateOpacity);
+        m_smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
+                              tempDevice.data(), dstRect.width() * tempDevice.pixelSize(), // stride should be random non-zero
+                              0, 0,
+                              1, dstRect.width() * dstRect.height(),
+                              smudgeRateOpacity);
     }
 }
 
 void KisColorSmudgeStrategyBase::blendInBackgroundWithDulling(KisFixedPaintDeviceSP dst, KisColorSmudgeSourceSP src,
                                                               const QRect &dstRect, const KoColor &preparedDullingColor,
-                                                              const quint8 smudgeRateOpacity)
+                                                              const qreal smudgeRateOpacity)
 {
     Q_UNUSED(preparedDullingColor);
 
-    if (m_smearOp->id() == COMPOSITE_COPY && smudgeRateOpacity == OPACITY_OPAQUE_U8) {
+    if (m_smearOp->id() == COMPOSITE_COPY && qFuzzyCompare(smudgeRateOpacity, OPACITY_OPAQUE_F)) {
         dst->fill(dst->bounds(), m_preparedDullingColor);
     } else {
         src->readBytes(dst->data(), dstRect);
-        m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
-                             m_preparedDullingColor.data(), 0,
-                             0, 0,
-                             1, dstRect.width() * dstRect.height(),
-                             smudgeRateOpacity);
+        m_smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
+                              m_preparedDullingColor.data(), 0,
+                              0, 0,
+                              1, dstRect.width() * dstRect.height(),
+                              smudgeRateOpacity);
     }
 }

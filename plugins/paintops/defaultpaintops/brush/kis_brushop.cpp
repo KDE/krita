@@ -126,8 +126,8 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                               brush->maskWidth(shape, 0, 0, info),
                               brush->maskHeight(shape, 0, 0, info));
 
-    quint8 dabOpacity = OPACITY_OPAQUE_U8;
-    quint8 dabFlow = OPACITY_OPAQUE_U8;
+    qreal dabOpacity = OPACITY_OPAQUE_F;
+    qreal dabFlow = OPACITY_OPAQUE_F;
 
     m_opacityOption.apply(info, &dabOpacity, &dabFlow);
 
@@ -138,7 +138,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                                              m_softnessOption.apply(info),
                                              m_lightnessStrengthOption.apply(info));
 
-    m_dabExecutor->addDab(request, qreal(dabOpacity) / 255.0, qreal(dabFlow) / 255.0);
+    m_dabExecutor->addDab(request, dabOpacity, dabFlow);
 
 
     KisSpacingInformation spacingInfo =

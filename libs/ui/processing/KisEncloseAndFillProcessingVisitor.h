@@ -41,7 +41,7 @@ public:
         bool unmerged,
         bool useBgColor,
         bool useCustomBlendingOptions,
-        int customOpacity,
+        qreal customOpacity,
         const QString &customCompositeOp
     );
 
@@ -73,7 +73,7 @@ private:
     bool m_unmerged {false};
     bool m_useBgColor {false};
     bool m_useCustomBlendingOptions;
-    int m_customOpacity;
+    qreal m_customOpacity;
     QString m_customCompositeOp;
 };
 

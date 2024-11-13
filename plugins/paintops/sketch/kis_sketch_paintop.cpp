@@ -271,8 +271,10 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
             }
 
             // distance based opacity
-            quint8 opacity = OPACITY_OPAQUE_U8;
+            qreal opacity = OPACITY_OPAQUE_F;
             if (m_sketchProperties.distanceOpacity) {
+                // TODO: check if the formula is correct, do we actually
+                //       need rounding here?
                 opacity *= qRound((1.0 - (distance / thresholdDistance)));
             }
 
@@ -280,7 +282,7 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
                 opacity *= randomSource->generateNormalized();
             }
 
-            m_painter->setOpacity(opacity);
+            m_painter->setOpacityF(opacity);
 
             if (m_sketchProperties.magnetify) {
                 drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt, currentLineWidth);
@@ -297,11 +299,11 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
     m_count++;
 
     QRect rc = m_dab->extent();
-    quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
+    qreal origOpacity = m_opacityOption.apply(painter(), pi2);
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacity(origOpacity);
+    painter()->setOpacityF(origOpacity);
 }
 
 

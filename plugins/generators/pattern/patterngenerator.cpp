@@ -179,7 +179,7 @@ void PatternGenerator::generate(KisProcessingInformation dstInfo,
     gc.setPattern(pattern);
     gc.setProgress(progressUpdater);
     gc.setChannelFlags(config->channelFlags());
-    gc.setOpacity(OPACITY_OPAQUE_U8);
+    gc.setOpacityToUnit();
     gc.setSelection(dstInfo.selection());
     gc.setWidth(size.width());
     gc.setHeight(size.height());

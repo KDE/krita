@@ -14,8 +14,7 @@
 
 #include "KisEncloseAndFillProcessingVisitor.h"
 
-KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
-        KisPaintDeviceSP referencePaintDevice,
+KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(KisPaintDeviceSP referencePaintDevice,
         KisPixelSelectionSP enclosingMask,
         KisSelectionSP selection,
         KisResourcesSnapshotSP resources,
@@ -35,7 +34,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         bool unmerged,
         bool useBgColor,
         bool useCustomBlendingOptions,
-        int customOpacity,
+        qreal customOpacity,
         const QString &customCompositeOp
 )
     : m_referencePaintDevice(referencePaintDevice)
@@ -105,7 +104,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     painter.setFeather(m_feather);
     if (m_useCustomBlendingOptions) {
-        painter.setOpacity(m_customOpacity);
+        painter.setOpacityF(m_customOpacity);
         painter.setCompositeOpId(m_customCompositeOp);
     }
 

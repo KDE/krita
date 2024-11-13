@@ -166,8 +166,8 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
     const qreal overlayAdjustment =
         (m_thicknessMode == KisPaintThicknessOptionData::ThicknessMode::OVERWRITE) ?
         1.0 : KisAlgebra2D::lerp(overlaySmearRate, 1.0, paintThicknessValue);
-    const quint8 brushHeightmapOpacity = qRound(opacity * overlayAdjustment * 255.0);
-    m_heightmapPainter.setOpacity(brushHeightmapOpacity);
+    const qreal brushHeightmapOpacity = opacity * overlayAdjustment;
+    m_heightmapPainter.setOpacityF(brushHeightmapOpacity);
     m_heightmapPainter.bltFixed(dstRect.topLeft(), m_origDab, m_origDab->bounds());
     m_heightmapPainter.renderMirrorMaskSafe(dstRect, m_origDab, m_shouldPreserveOriginalDab);
 

@@ -144,7 +144,7 @@ void KisMultigridPatternGenerator::generate(KisProcessingInformation dstInfo,
 
         KisPainter gc(dst);
         gc.setChannelFlags(config->channelFlags());
-        gc.setOpacity(255);
+        gc.setOpacityToUnit();
         gc.setFillStyle(KisPainter::FillStyleBackgroundColor);
         gc.setStrokeStyle(KisPainter::StrokeStyleBrush);
         gc.setSelection(dstInfo.selection());

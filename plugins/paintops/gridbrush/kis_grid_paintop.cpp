@@ -178,7 +178,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 if (m_colorProperties.useRandomOpacity) {
                     const qreal alpha = randomSource->generateNormalized();
                     color.setOpacity(alpha);
-                    m_painter->setOpacity(qRound(alpha * OPACITY_OPAQUE_U8));
+                    m_painter->setOpacityF(alpha);
                 }
 
                 if (!m_colorProperties.colorPerParticle) {

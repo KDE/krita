@@ -237,7 +237,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
     if (!m_useCompositing) {
         if (m_sizemod || m_feather ||
             compositeOpId() != COMPOSITE_OVER ||
-            opacity() != MAX_SELECTED ||
+            !isOpacityUnit() ||
             sourceDevice != device()) {
 
             warnKrita << "WARNING: Fast Flood Fill (no compositing mode)"

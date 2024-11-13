@@ -307,10 +307,18 @@ namespace KritaUtils
         return resultList;
     }
 
-    quint8 mergeOpacity(quint8 opacity, quint8 parentOpacity)
+    quint8 mergeOpacityU8(quint8 opacity, quint8 parentOpacity)
     {
         if (parentOpacity != OPACITY_OPAQUE_U8) {
             opacity = (int(opacity) * parentOpacity) / OPACITY_OPAQUE_U8;
+        }
+        return opacity;
+    }
+
+    qreal mergeOpacityF(qreal opacity, qreal parentOpacity)
+    {
+        if (!qFuzzyCompare(parentOpacity, OPACITY_OPAQUE_F)) {
+            opacity *= parentOpacity;
         }
         return opacity;
     }

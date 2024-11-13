@@ -290,9 +290,9 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             }
 
             if (m_colorProperties->useRandomOpacity) {
-                quint8 alpha = qRound(randomSource->generateNormalized() * OPACITY_OPAQUE_U8);
+                const qreal alpha = randomSource->generateNormalized();
                 m_inkColor.setOpacity(alpha);
-                m_painter->setOpacity(alpha);
+                m_painter->setOpacityF(alpha);
             }
 
             if (!m_colorProperties->colorPerParticle) {

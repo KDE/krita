@@ -304,7 +304,7 @@ quint8 KisProjectionLeaf::opacity() const
     if (m_d->checkParentPassThrough()) {
         quint8 parentOpacity = m_d->node->parent()->projectionLeaf()->opacity();
 
-        resultOpacity = KritaUtils::mergeOpacity(resultOpacity, parentOpacity);
+        resultOpacity = KritaUtils::mergeOpacityU8(resultOpacity, parentOpacity);
     }
 
     return resultOpacity;

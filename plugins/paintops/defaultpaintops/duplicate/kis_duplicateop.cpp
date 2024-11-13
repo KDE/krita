@@ -269,7 +269,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
 
-    painter()->setOpacity(opacity);
+    painter()->setOpacityF(opacity);
 
     return effectiveSpacing(scale);
 }

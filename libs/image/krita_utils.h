@@ -56,7 +56,8 @@ namespace KritaUtils
     QList<QPainterPath> KRITAIMAGE_EXPORT splitDisjointPaths(const QPainterPath &path);
 
 
-    quint8 KRITAIMAGE_EXPORT mergeOpacity(quint8 opacity, quint8 parentOpacity);
+    quint8 KRITAIMAGE_EXPORT mergeOpacityU8(quint8 opacity, quint8 parentOpacity);
+    qreal KRITAIMAGE_EXPORT mergeOpacityF(qreal opacity, qreal parentOpacity);
     QBitArray KRITAIMAGE_EXPORT mergeChannelFlags(const QBitArray &flags, const QBitArray &parentFlags);
 
     bool KRITAIMAGE_EXPORT compareChannelFlags(QBitArray f1, QBitArray f2);

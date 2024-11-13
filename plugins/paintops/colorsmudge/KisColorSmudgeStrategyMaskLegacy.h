@@ -24,10 +24,10 @@ public:
                             KoColor *resultColor) override;
     QString smearCompositeOp(bool smearAlpha) const override;
     QString finalCompositeOp(bool smearAlpha) const override;
-    quint8 finalPainterOpacity(qreal opacity, qreal smudgeRateValue) override;
-    quint8 colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue, qreal maxPossibleSmudgeRateValue) override;
-    quint8 dullingRateOpacity(qreal opacity, qreal smudgeRateValue) override;
-    quint8 smearRateOpacity(qreal opacity, qreal smudgeRateValue) override;
+    qreal finalPainterOpacity(qreal opacity, qreal smudgeRateValue) override;
+    qreal colorRateOpacity(qreal opacity, qreal smudgeRateValue, qreal colorRateValue, qreal maxPossibleSmudgeRateValue) override;
+    qreal dullingRateOpacity(qreal opacity, qreal smudgeRateValue) override;
+    qreal smearRateOpacity(qreal opacity, qreal smudgeRateValue) override;
 };
 
 

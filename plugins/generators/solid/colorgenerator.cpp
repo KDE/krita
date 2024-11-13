@@ -81,7 +81,7 @@ void KisColorGenerator::generate(KisProcessingInformation dstInfo,
         KisFillPainter gc(dst);
         gc.setProgress(progressUpdater);
         gc.setChannelFlags(config->channelFlags());
-        gc.setOpacity(100);
+        gc.setOpacityF(0.4);
         gc.setSelection(dstInfo.selection());
         gc.fillRect(QRect(dstInfo.topLeft(), size), c);
         gc.end();

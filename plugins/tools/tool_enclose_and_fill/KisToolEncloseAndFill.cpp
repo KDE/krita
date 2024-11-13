@@ -333,7 +333,7 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                                                false,
                                                m_fillType == FillWithBackgroundColor,
                                                m_useCustomBlendingOptions,
-                                               m_customOpacity * OPACITY_OPAQUE_U8 / 100,
+                                               m_customOpacity / 100.0,
                                                m_customCompositeOp);
 
     applicator.applyVisitor(visitor,

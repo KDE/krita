@@ -89,7 +89,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         fillPainter.beginTransaction(kundo2_noi18n("Flood Fill"));
 
         //fillPainter.setProgress(updater->startSubtask());
-        fillPainter.setOpacity(OPACITY_OPAQUE_U8);
+        fillPainter.setOpacityToUnit();
         // default
         fillPainter.setFillThreshold(15);
         fillPainter.setCompositeOpId(COMPOSITE_OVER);
@@ -123,7 +123,7 @@ void KisFloodFillBenchmark::benchmarkFloodWithoutSelectionAsBoundary()
 
         fillPainter.beginTransaction(kundo2_noi18n("Flood Fill"));
 
-        fillPainter.setOpacity(OPACITY_OPAQUE_U8);
+        fillPainter.setOpacityToUnit();
         // default
         fillPainter.setFillThreshold(15);
         fillPainter.setCompositeOpId(COMPOSITE_OVER);
@@ -154,7 +154,7 @@ void KisFloodFillBenchmark::benchmarkFloodWithSelectionAsBoundary()
 
         fillPainter.beginTransaction(kundo2_noi18n("Flood Fill"));
 
-        fillPainter.setOpacity(OPACITY_OPAQUE_U8);
+        fillPainter.setOpacityToUnit();
         // default
         fillPainter.setFillThreshold(15);
         fillPainter.setCompositeOpId(COMPOSITE_OVER);

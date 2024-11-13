@@ -28,21 +28,21 @@ KisFlowOpacityOption2::KisFlowOpacityOption2(const KisPropertiesConfiguration *s
 
 void KisFlowOpacityOption2::apply(KisPainter* painter, const KisPaintInformation& info)
 {
-    quint8 opacity = OPACITY_OPAQUE_U8;
-    quint8 flow = OPACITY_OPAQUE_U8;
+    qreal opacity = OPACITY_OPAQUE_F;
+    qreal flow = OPACITY_OPAQUE_F;
 
     apply(info, &opacity, &flow);
 
     painter->setOpacityUpdateAverage(opacity);
-    painter->setFlow(flow);
+    painter->setFlow(qRound(OPACITY_OPAQUE_U8 * flow));
 }
 
-void KisFlowOpacityOption2::apply(const KisPaintInformation &info, quint8 *opacity, quint8 *flow)
+void KisFlowOpacityOption2::apply(const KisPaintInformation &info, qreal *opacity, qreal *flow)
 {
     if (m_opacityOption.isChecked()) {
-        *opacity = quint8(m_opacityOption.computeSizeLikeValue(info, !m_indirectPaintingActive) * 255.0);
+        *opacity = m_opacityOption.computeSizeLikeValue(info, !m_indirectPaintingActive);
     }
-    *flow = quint8(m_flowOption.apply(info) * 255.0);
+    *flow = m_flowOption.apply(info);
 }
 
 

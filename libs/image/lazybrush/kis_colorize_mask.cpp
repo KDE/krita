@@ -536,16 +536,16 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         if (m_d->shouldShowFilteredSource()) {
             const QRect drawRect = m_d->limitToDeviceBounds ? rect & m_d->filteredDeviceBounds : rect;
 
-            gc.setOpacity(128);
+            gc.setOpacityF(0.5);
             gc.bitBlt(drawRect.topLeft(), m_d->filteredSource, drawRect);
         } else {
-            gc.setOpacity(255);
+            gc.setOpacityToUnit();
             gc.bitBlt(rect.topLeft(), src, rect);
         }
 
         if (m_d->shouldShowColoring()) {
 
-            gc.setOpacity(opacity());
+            gc.setOpacityU8(opacity());
             gc.setCompositeOpId(compositeOpId());
             gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
         }

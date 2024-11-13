@@ -46,7 +46,7 @@ bool operator==(const KisStrokeCompatibilityInfo &lhs, const KisStrokeCompatibil
         lhs.currentPreset == rhs.currentPreset &&
         lhs.currentGeneratorXml == rhs.currentGeneratorXml &&
         lhs.currentNode == rhs.currentNode &&
-        lhs.opacity == rhs.opacity &&
+        qFuzzyCompare(lhs.opacity, rhs.opacity) &&
         lhs.compositeOpId == rhs.compositeOpId &&
         lhs.channelLockFlags == rhs.channelLockFlags;
 }

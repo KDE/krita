@@ -271,10 +271,8 @@ namespace KisLsUtils
             *dstIt->rawData() = value;
         }
 
-        noise = noise * 255 / 100;
-
         KisPainter gc(selection);
-        gc.setOpacity(noise);
+        gc.setOpacityF(qreal(noise) / 100.0);
         gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(applyRect.topLeft(), randomOverlay, applyRect);
     }

@@ -45,7 +45,7 @@ struct KisResourcesSnapshot::Private {
     bool mirrorMaskHorizontal {false};
     bool mirrorMaskVertical {false};
 
-    quint8 opacity {OPACITY_OPAQUE_U8};
+    qreal opacity {OPACITY_OPAQUE_F};
     QString compositeOpId {COMPOSITE_OVER};
     const KoCompositeOp *compositeOp {0};
 
@@ -130,9 +130,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->mirrorMaskHorizontal = resourceManager->resource(KoCanvasResource::MirrorHorizontal).toBool();
     m_d->mirrorMaskVertical = resourceManager->resource(KoCanvasResource::MirrorVertical).toBool();
 
-
-    qreal normOpacity = resourceManager->resource(KoCanvasResource::Opacity).toDouble();
-    m_d->opacity = quint8(normOpacity * OPACITY_OPAQUE_U8);
+    m_d->opacity = resourceManager->resource(KoCanvasResource::Opacity).toDouble();
 
     m_d->compositeOpId = resourceManager->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString();
     setCurrentNode(currentNode);
@@ -174,7 +172,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
         relativeAxesCenter = m_d->image->mirrorAxesCenter();
     }
     m_d->axesCenter = KisAlgebra2D::relativeToAbsolute(relativeAxesCenter, m_d->bounds->imageBorderRect());
-    m_d->opacity = OPACITY_OPAQUE_U8;
+    m_d->opacity = OPACITY_OPAQUE_F;
 
     setCurrentNode(currentNode);
 
@@ -207,7 +205,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
         painter->setChannelFlags(lockflags);
     }
 
-    painter->setOpacity(m_d->opacity);
+    painter->setOpacityF(m_d->opacity);
     painter->setCompositeOpId(m_d->compositeOpId);
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
@@ -231,7 +229,7 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
     painter->setPaintColor(KoColor(Qt::white, painter->device()->colorSpace()));
     painter->setBackgroundColor(KoColor(Qt::black, painter->device()->colorSpace()));
 
-    painter->setOpacity(OPACITY_OPAQUE_U8);
+    painter->setOpacityToUnit();
     painter->setChannelFlags(QBitArray());
 
     // masked brush always paints in indirect mode
@@ -354,10 +352,10 @@ bool KisResourcesSnapshot::needsSpacingUpdates() const
 
 void KisResourcesSnapshot::setOpacity(qreal opacity)
 {
-    m_d->opacity = opacity * OPACITY_OPAQUE_U8;
+    m_d->opacity = opacity;
 }
 
-quint8 KisResourcesSnapshot::opacity() const
+qreal KisResourcesSnapshot::opacity() const
 {
     return m_d->opacity;
 }

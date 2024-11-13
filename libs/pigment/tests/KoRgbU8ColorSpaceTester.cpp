@@ -202,7 +202,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
                           0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(red);
@@ -214,7 +214,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
                           0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(transparentRed);
@@ -226,7 +226,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
                           0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(blue);
@@ -350,7 +350,7 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
         }
 
         const qreal opacityF = opacity / 255.0;
-        op->compositeF(dstPtr, numTestablePixels * cs->pixelSize(),
+        op->composite(dstPtr, numTestablePixels * cs->pixelSize(),
                       srcPtr, numTestablePixels * cs->pixelSize(),
                       0, 0,
                       1, numTestablePixels, opacityF);

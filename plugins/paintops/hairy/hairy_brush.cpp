@@ -387,7 +387,7 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color)
 inline void HairyBrush::plotPixel(int wx, int wy, const KoColor &color)
 {
     m_dabAccessor->moveTo(wx, wy);
-    m_compositeOp->compositeF(m_dabAccessor->rawData(), m_pixelSize, color.data() , m_pixelSize, 0, 0, 1, 1, OPACITY_OPAQUE_F);
+    m_compositeOp->composite(m_dabAccessor->rawData(), m_pixelSize, color.data() , m_pixelSize, 0, 0, 1, 1, OPACITY_OPAQUE_F);
 }
 
 inline void HairyBrush::darkenPixel(int wx, int wy, const KoColor &color)

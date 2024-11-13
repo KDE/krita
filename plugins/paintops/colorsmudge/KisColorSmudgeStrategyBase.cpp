@@ -29,17 +29,17 @@ void KisColorSmudgeStrategyBase::DabColoringStrategyMask::blendInFusedBackground
     KoColor dullingFillColor(preparedDullingColor);
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(*paintColor.colorSpace() == *colorRateOp->colorSpace());
-    colorRateOp->compositeF(dullingFillColor.data(), 1, paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
+    colorRateOp->composite(dullingFillColor.data(), 1, paintColor.data(), 1, 0, 0, 1, 1, colorRateOpacity);
 
     if (smearOp->id() == COMPOSITE_COPY && qFuzzyCompare(smudgeRateOpacity, OPACITY_OPAQUE_F)) {
         dst->fill(dst->bounds(), dullingFillColor);
     } else {
         src->readBytes(dst->data(), dstRect);
-        smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
-                            dullingFillColor.data(), 0,
-                            0, 0,
-                            1, dstRect.width() * dstRect.height(),
-                            smudgeRateOpacity);
+        smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
+                           dullingFillColor.data(), 0,
+                           0, 0,
+                           1, dstRect.width() * dstRect.height(),
+                           smudgeRateOpacity);
     }
 }
 
@@ -51,11 +51,11 @@ void KisColorSmudgeStrategyBase::DabColoringStrategyMask::blendInColorRate(const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(*paintColor.colorSpace() == *colorRateOp->colorSpace());
 
-    colorRateOp->compositeF(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
-                            paintColor.data(), 0,
-                            0, 0,
-                            dstRect.height(), dstRect.width(),
-                            colorRateOpacity);
+    colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                           paintColor.data(), 0,
+                           0, 0,
+                           dstRect.height(), dstRect.width(),
+                           colorRateOpacity);
 }
 
 /**********************************************************************************/
@@ -78,11 +78,11 @@ void KisColorSmudgeStrategyBase::DabColoringStrategyStamp::blendInColorRate(cons
     // TODO: check correctness for composition source device (transparency masks)
     KIS_ASSERT_RECOVER_RETURN(*dstDevice->colorSpace() == *m_origDab->colorSpace());
 
-    colorRateOp->compositeF(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
-                            m_origDab->data(), dstRect.width() * m_origDab->pixelSize(),
-                            0, 0,
-                            dstRect.height(), dstRect.width(),
-                            colorRateOpacity);
+    colorRateOp->composite(dstDevice->data(), dstRect.width() * dstDevice->pixelSize(),
+                           m_origDab->data(), dstRect.width() * m_origDab->pixelSize(),
+                           0, 0,
+                           dstRect.height(), dstRect.width(),
+                           colorRateOpacity);
 }
 
 bool KisColorSmudgeStrategyBase::DabColoringStrategyStamp::supportsFusedDullingBlending() const
@@ -275,11 +275,11 @@ void KisColorSmudgeStrategyBase::blendInBackgroundWithSmearing(KisFixedPaintDevi
         tempDevice.lazyGrowBufferWithoutInitialization();
 
         src->readBytes(tempDevice.data(), srcRect);
-        m_smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
-                              tempDevice.data(), dstRect.width() * tempDevice.pixelSize(), // stride should be random non-zero
-                              0, 0,
-                              1, dstRect.width() * dstRect.height(),
-                              smudgeRateOpacity);
+        m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
+                             tempDevice.data(), dstRect.width() * tempDevice.pixelSize(), // stride should be random non-zero
+                             0, 0,
+                             1, dstRect.width() * dstRect.height(),
+                             smudgeRateOpacity);
     }
 }
 
@@ -293,10 +293,10 @@ void KisColorSmudgeStrategyBase::blendInBackgroundWithDulling(KisFixedPaintDevic
         dst->fill(dst->bounds(), m_preparedDullingColor);
     } else {
         src->readBytes(dst->data(), dstRect);
-        m_smearOp->compositeF(dst->data(), dstRect.width() * dst->pixelSize(),
-                              m_preparedDullingColor.data(), 0,
-                              0, 0,
-                              1, dstRect.width() * dstRect.height(),
-                              smudgeRateOpacity);
+        m_smearOp->composite(dst->data(), dstRect.width() * dst->pixelSize(),
+                             m_preparedDullingColor.data(), 0,
+                             0, 0,
+                             1, dstRect.width() * dstRect.height(),
+                             smudgeRateOpacity);
     }
 }

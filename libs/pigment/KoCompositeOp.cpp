@@ -136,7 +136,7 @@ KoCompositeOp::KoCompositeOp(const KoColorSpace * cs, const QString& id, const Q
     }
 }
 
-void KoCompositeOp::compositeF(quint8 *dstRowStart, qint32 dstRowStride,
+void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                                const quint8 *srcRowStart, qint32 srcRowStride,
                                const quint8 *maskRowStart, qint32 maskRowStride,
                                qint32 rows, qint32 numColumns,
@@ -162,7 +162,7 @@ void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
     using namespace Arithmetic;
 
-    compositeF(params.dstRowStart           , params.dstRowStride ,
+    composite(params.dstRowStart           , params.dstRowStride ,
               params.srcRowStart           , params.srcRowStride ,
               params.maskRowStart          , params.maskRowStride,
               params.rows                  , params.cols         ,

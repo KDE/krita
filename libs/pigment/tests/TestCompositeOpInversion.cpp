@@ -81,7 +81,8 @@ void TestCompositeOpInversion::test()
 
                         std::memcpy(origDstColor.data(), dstColor.data(), cs->pixelSize());
 
-                        op->composite(dstColor.data(), 0, srcColor.data(), 0, 0, 0, 1, 1, opacity);
+                        const qreal opacityF = opacity / 255.0;
+                        op->compositeF(dstColor.data(), 0, srcColor.data(), 0, 0, 0, 1, 1, opacityF);
 
                         dstPixel->green = 255 - dstPixel->green;
 

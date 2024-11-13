@@ -27,22 +27,18 @@ public:
 
     using KoCompositeOp::composite;
 
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
-                   quint8 opacity,
-                   const QBitArray &channelFlags) const override
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
-        Q_UNUSED(maskRowStart);
-        Q_UNUSED(maskRowStride);
+        channels_type opacity = KoColorSpaceMaths<float, channels_type>::scaleToA(params.opacity);
 
-        if (opacity == OPACITY_TRANSPARENT_U8) {
+        if (opacity == NATIVE_OPACITY_TRANSPARENT) {
             return;
         }
 
-        channels_type *d;
-        const channels_type *s;
+        const quint8 *srcRowStart = params.srcRowStart;
+        quint8 *dstRowStart = params.dstRowStart;
+
+        qint32 rows = params.rows;
 
         qint32 i;
 
@@ -50,9 +46,10 @@ public:
         qreal alpha;
 
         while (rows-- > 0) {
-            d = reinterpret_cast<channels_type *>(dstRowStart);
-            s = reinterpret_cast<const channels_type *>(srcRowStart);
-            for (i = numColumns; i > 0; i--, d += _CSTraits::channels_nb, s += _CSTraits::channels_nb) {
+            channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
+            const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
+
+            for (i = params.cols; i > 0; i--, d += _CSTraits::channels_nb, s += _CSTraits::channels_nb) {
 
                 if (s[_CSTraits::alpha_pos] == NATIVE_OPACITY_TRANSPARENT) {
                     d[_CSTraits::alpha_pos] = NATIVE_OPACITY_TRANSPARENT;
@@ -66,13 +63,13 @@ public:
 
                 alpha = (qreal)(s[_CSTraits::alpha_pos]) * d[_CSTraits::alpha_pos] / NATIVE_OPACITY_OPAQUE;
 
-                if (channelFlags.isEmpty() || channelFlags.testBit(_CSTraits::alpha_pos)) {
+                if (params.channelFlags.isEmpty() || params.channelFlags.testBit(_CSTraits::alpha_pos)) {
                     d[_CSTraits::alpha_pos] = (channels_type)((d[_CSTraits::alpha_pos] * alpha / NATIVE_OPACITY_OPAQUE) + 0.5);
                 }
 
             }
-            dstRowStart += dstRowStride;
-            srcRowStart += srcRowStride;
+            dstRowStart += params.dstRowStride;
+            srcRowStart += params.srcRowStride;
         }
     }
 };

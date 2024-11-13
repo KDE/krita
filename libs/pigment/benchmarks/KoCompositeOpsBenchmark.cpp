@@ -21,7 +21,7 @@ const int TILE_HEIGHT = 64;
 const int IMG_WIDTH = 2048;
 const int IMG_HEIGHT = 2048;
 
-const quint8 OPACITY_HALF = 128;
+const qreal OPACITY_HALF = 0.5;
 
 const int TILES_IN_WIDTH = IMG_WIDTH / TILE_WIDTH;
 const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
@@ -32,7 +32,7 @@ const int TILES_IN_HEIGHT = IMG_HEIGHT / TILE_HEIGHT;
             for (int x = 0; x < TILES_IN_WIDTH; x++) {                                           \
                 const int rowStride = IMG_WIDTH * KoBgrU8Traits::pixelSize;  \
                 const int bufOffset = y * rowStride + x * TILE_WIDTH * KoBgrU8Traits::pixelSize;  \
-                compositeOp->composite(m_dstBuffer + bufOffset, rowStride,      \
+                compositeOp->compositeF(m_dstBuffer + bufOffset, rowStride,      \
                                       m_srcBuffer + bufOffset, rowStride,      \
                                       m_mskBuffer + bufOffset, rowStride,                                                            \
                                       TILE_WIDTH, TILE_HEIGHT,                                         \

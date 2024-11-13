@@ -41,27 +41,23 @@ public:
     using KoCompositeOp::composite;
 
     template<bool alphaLocked, bool allChannelFlags>
-    void composite(quint8 *dstRowStart,
-                   qint32 dststride,
-                   const quint8 *srcRowStart,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
+    void composite(const KoCompositeOp::ParameterInfo& params) const {
+        qint32 srcInc = (params.srcRowStride == 0) ? 0 : _CSTraits::channels_nb;
 
-        qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
+        channels_type opacity = KoColorSpaceMaths<float, channels_type>::scaleToA(params.opacity);
 
-        channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
+        const quint8 *srcRowStart = params.srcRowStart;
+        quint8 *dstRowStart = params.dstRowStart;
+        const quint8 *maskRowStart = params.maskRowStart;
+
+        qint32 rows = params.rows;
 
         while (rows > 0) {
             const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
             channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
             const quint8 *mask = maskRowStart;
 
-            qint32 columns = cols;
+            qint32 columns = params.cols;
 
             while (columns > 0) {
 
@@ -109,7 +105,7 @@ public:
                         // newAlpha cannot be zero, because srcAlpha!=zero and dstAlpha!=unit here
                         srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, newAlpha);
                     }
-                    _compositeOp::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, channelFlags);
+                    _compositeOp::composeColorChannels(srcBlend, srcN, dstN, allChannelFlags, params.channelFlags);
 
                 }
                 columns--;
@@ -118,56 +114,38 @@ public:
             }
 
             rows--;
-            srcRowStart += srcstride;
-            dstRowStart += dststride;
+            srcRowStart += params.srcRowStride;
+            dstRowStart += params.dstRowStride;
             if (maskRowStart) {
-                maskRowStart += maskstride;
+                maskRowStart += params.maskRowStride;
             }
         }
     }
     template<bool alphaLocked>
-    void composite(quint8 *dstRowStart,
-                   qint32 dststride,
-                   const quint8 *srcRowStart,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const
     {
-        bool allChannelFlags = channelFlags.isEmpty();
+        bool allChannelFlags = params.channelFlags.isEmpty();
         if(allChannelFlags)
         {
-            composite<alphaLocked, true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+            composite<alphaLocked, true>(params);
         } else {
-            composite<alphaLocked, false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+            composite<alphaLocked, false>(params);
         }
     }
 
-    void composite(quint8 *dstRowStart,
-                           qint32 dststride,
-                           const quint8 *srcRowStart,
-                           qint32 srcstride,
-                           const quint8 *maskRowStart,
-                           qint32 maskstride,
-                           qint32 rows,
-                           qint32 cols,
-                           quint8 U8_opacity,
-                           const QBitArray& channelFlags = QBitArray()) const override
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         bool alphaLocked = false;
-        if (!channelFlags.isEmpty()) {
-            if (_CSTraits::alpha_pos == -1 || !channelFlags.testBit(_CSTraits::alpha_pos)) {
+        if (!params.channelFlags.isEmpty()) {
+            if (_CSTraits::alpha_pos == -1 || !params.channelFlags.testBit(_CSTraits::alpha_pos)) {
                 alphaLocked = true;
             }
         }
         if(alphaLocked)
         {
-            composite<true>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+            composite<true>(params);
         } else {
-            composite<false>(dstRowStart, dststride, srcRowStart, srcstride, maskRowStart, maskstride, rows, cols, U8_opacity, channelFlags);
+            composite<false>(params);
         }
     }
 };

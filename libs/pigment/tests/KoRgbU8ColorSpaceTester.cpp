@@ -202,8 +202,8 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(red);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -214,8 +214,8 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(transparentRed);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -226,8 +226,8 @@ void KoRgbU8ColorSpaceTester::testCompositeOps()
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 
-        copyOp->composite(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
-                          0, 0, 1, 1, OPACITY_OPAQUE_U8);
+        copyOp->compositeF(dst.data(), cs->pixelSize(), src.data(), cs->pixelSize(),
+                          0, 0, 1, 1, OPACITY_OPAQUE_F);
 
         src.fromQColor(blue);
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) == 0);
@@ -349,10 +349,11 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
             }
         }
 
-        op->composite(dstPtr, numTestablePixels * cs->pixelSize(),
+        const qreal opacityF = opacity / 255.0;
+        op->compositeF(dstPtr, numTestablePixels * cs->pixelSize(),
                       srcPtr, numTestablePixels * cs->pixelSize(),
                       0, 0,
-                      1, numTestablePixels, opacity);
+                      1, numTestablePixels, opacityF);
 
         if (memcmp(badPixelDstPtr, expectedDst, cs->pixelSize()) != 0) {
             qDebug() << "badPixelPos" << badPixelPos;

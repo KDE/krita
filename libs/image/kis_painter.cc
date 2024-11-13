@@ -2685,10 +2685,10 @@ quint8 KisPainter::flow() const
     return quint8(d->paramInfo.flow * 255.0f);
 }
 
-void KisPainter::setOpacityUpdateAverage(quint8 opacity)
+void KisPainter::setOpacityUpdateAverage(qreal opacity)
 {
-    d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
-    d->paramInfo.updateOpacityAndAverage(float(opacity) / 255.0f);
+    d->isOpacityUnit = qFuzzyCompare(opacity, OPACITY_OPAQUE_F);
+    d->paramInfo.updateOpacityAndAverage(opacity);
 }
 
 void KisPainter::setAverageOpacity(qreal averageOpacity)
@@ -2705,15 +2705,32 @@ qreal KisPainter::blendAverageOpacity(qreal opacity, qreal averageOpacity)
         exponent * opacity + (1.0 - exponent) * (averageOpacity);
 }
 
-void KisPainter::setOpacity(quint8 opacity)
+void KisPainter::setOpacityU8(quint8 opacity)
 {
     d->isOpacityUnit = opacity == OPACITY_OPAQUE_U8;
     d->paramInfo.opacity = float(opacity) / 255.0f;
 }
 
-quint8 KisPainter::opacity() const
+void KisPainter::setOpacityF(qreal opacity)
 {
-    return quint8(d->paramInfo.opacity * 255.0f);
+    d->isOpacityUnit = qFuzzyCompare(opacity, OPACITY_OPAQUE_F);
+    d->paramInfo.opacity = opacity;
+}
+
+qreal KisPainter::opacityF() const
+{
+    return d->paramInfo.opacity;
+}
+
+bool KisPainter::isOpacityUnit() const
+{
+    return d->isOpacityUnit;
+}
+
+void KisPainter::setOpacityToUnit()
+{
+    d->isOpacityUnit = true;
+    d->paramInfo.opacity = OPACITY_OPAQUE_F;
 }
 
 void KisPainter::setCompositeOpId(const KoCompositeOp * op)

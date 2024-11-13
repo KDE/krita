@@ -762,7 +762,7 @@ public:
      * mean opacity of the stroke. This mean value is used to
      * make ALPHA_DARKEN painting look correct
      */
-    void setOpacityUpdateAverage(quint8 opacity);
+    void setOpacityUpdateAverage(qreal opacity);
 
     /**
      * Sets average opacity, that is used to make ALPHA_DARKEN painting look correct
@@ -775,10 +775,14 @@ public:
     static qreal blendAverageOpacity(qreal opacity, qreal averageOpacity);
 
     /// Set the opacity which is used in painting (like filling polygons)
-    void setOpacity(quint8 opacity);
+    void setOpacityU8(quint8 opacity);
+    void setOpacityF(qreal opacity);
 
     /// Returns the opacity that is used in painting
-    quint8 opacity() const;
+    qreal opacityF() const;
+
+    bool isOpacityUnit() const;
+    void setOpacityToUnit();
 
     /**
      * Set the composite op ID for this painter

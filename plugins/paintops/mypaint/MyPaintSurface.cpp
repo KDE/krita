@@ -40,7 +40,7 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
     m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.overlayColorSpace()));
 
     m_backgroundPainter->setCompositeOpId(COMPOSITE_COPY);
-    m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
+    m_backgroundPainter->setOpacityToUnit();
     m_tempPainter->setCompositeOpId(COMPOSITE_COPY);
     m_tempPainter->setSelection(painter->selection());
     m_tempPainter->setChannelFlags(painter->channelFlags());

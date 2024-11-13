@@ -398,7 +398,7 @@ void benchmarkMassiveBltFixedImpl(int numDabs, int size, qreal spacing, int idea
 
         KisPainter painter(dst);
         Q_FOREACH (const KisRenderedDab &dab, devices) {
-            painter.setOpacity(255 * dab.opacity);
+            painter.setOpacityF(dab.opacity);
             painter.setFlow(255 * dab.flow);
             painter.bltFixed(dab.offset, dab.device, dab.device->bounds());
         }

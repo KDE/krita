@@ -129,7 +129,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     Q_ASSERT(m_dstDabRect.size() == dabRect.size());
     Q_UNUSED(dabRect);
 
-    quint8  oldOpacity = painter()->opacity();
+    qreal  oldOpacityF = painter()->opacityF();
     QString oldCompositeOpId = painter()->compositeOpId();
 
 
@@ -141,7 +141,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     painter()->renderMirrorMaskSafe(m_dstDabRect, m_maskDab, !m_dabCache->needSeparateOriginal());
 
     // restore original opacity and composite mode values
-    painter()->setOpacity(oldOpacity);
+    painter()->setOpacityF(oldOpacityF);
     painter()->setCompositeOpId(oldCompositeOpId);
 
     return computeSpacing(info, scale, rotation);

@@ -97,7 +97,7 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     }
 
     qreal rotation = m_rotationOption.apply(info);
-    quint8 origOpacity = m_opacityOption.apply(painter(), info);
+    qreal origOpacity = m_opacityOption.apply(painter(), info);
     // Spray Brush is capable of working with zero scale,
     // so no additional checks for 'zero'ness are needed
     const qreal scale = m_sizeOption.apply(info);
@@ -115,7 +115,7 @@ KisSpacingInformation KisSprayPaintOp::paintAt(const KisPaintInformation& info)
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacity(origOpacity);
+    painter()->setOpacityF(origOpacity);
 
     return computeSpacing(info, lodScale);
 }

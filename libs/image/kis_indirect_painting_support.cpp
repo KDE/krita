@@ -28,7 +28,7 @@ struct Q_DECL_HIDDEN KisIndirectPaintingSupport::Private {
     // To simulate the indirect painting
     KisPaintDeviceSP temporaryTarget;
     QString compositeOp;
-    quint8 compositeOpacity;
+    qreal compositeOpacity;
     QBitArray channelFlags;
     KisSelectionSP selection;
 
@@ -62,7 +62,7 @@ void KisIndirectPaintingSupport::setTemporaryCompositeOp(const QString &id)
     d->compositeOp = id;
 }
 
-void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
+void KisIndirectPaintingSupport::setTemporaryOpacity(qreal o)
 {
     d->compositeOpacity = o;
 }
@@ -126,7 +126,7 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
 
 void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) const
 {
-     painter->setOpacity(d->compositeOpacity);
+     painter->setOpacityF(d->compositeOpacity);
      painter->setCompositeOpId(d->compositeOp);
      painter->setChannelFlags(d->channelFlags);
      painter->setSelection(d->selection);
@@ -239,7 +239,7 @@ void KisIndirectPaintingSupport::releaseResources()
     d->temporaryTarget = 0;
     d->selection = 0;
     d->compositeOp = COMPOSITE_OVER;
-    d->compositeOpacity = OPACITY_OPAQUE_U8;
+    d->compositeOpacity = OPACITY_OPAQUE_F;
     d->channelFlags.clear();
 }
 

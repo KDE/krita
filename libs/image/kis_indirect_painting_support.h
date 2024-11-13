@@ -42,7 +42,7 @@ public:
     virtual void setCurrentColor(const KoColor &color);
     void setTemporaryTarget(KisPaintDeviceSP t);
     void setTemporaryCompositeOp(const QString &id);
-    void setTemporaryOpacity(quint8 o);
+    void setTemporaryOpacity(qreal o);
     void setTemporaryChannelFlags(const QBitArray& channelFlags);
     void setTemporarySelection(KisSelectionSP selection);
 

@@ -56,7 +56,7 @@ void KisGradientBenchmark::benchmarkGradient()
         fillPainter.beginTransaction(kundo2_noi18n("Gradient Fill"));
 
         //fillPainter.setProgress(updater->startSubtask());
-        fillPainter.setOpacity(OPACITY_OPAQUE_U8);
+        fillPainter.setOpacityToUnit();
         // default
         fillPainter.setCompositeOpId(COMPOSITE_OVER);
         fillPainter.setGradientShape(KisGradientPainter::GradientShapeBiLinear);

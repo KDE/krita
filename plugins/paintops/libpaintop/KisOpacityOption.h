@@ -18,7 +18,7 @@ public:
     using BaseClass::BaseClass;
     using BaseClass::apply;
 
-    quint8 apply(KisPainter* painter, const KisPaintInformation& info) const;
+    qreal apply(KisPainter* painter, const KisPaintInformation& info) const;
 };
 
 #endif // KISOPACITYOPTION_H

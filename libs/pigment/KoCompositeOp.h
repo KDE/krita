@@ -122,6 +122,19 @@ public:
                             quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
 
     /**
+     * A version of composite() function that accepts floating point opacity
+     * value.
+     *
+     * TODO: remove the non-floating point opacity version
+     */
+    virtual void compositeF(quint8 *dstRowStart, qint32 dstRowStride,
+                            const quint8 *srcRowStart, qint32 srcRowStride,
+                            const quint8 *maskRowStart, qint32 maskRowStride,
+                            qint32 rows, qint32 numColumns,
+                            float opacity, const QBitArray& channelFlags=QBitArray()) const;
+
+
+    /**
     * Same as previous, but uses a parameter structure
     */
     virtual void composite(const ParameterInfo& params) const;

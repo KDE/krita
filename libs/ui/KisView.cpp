@@ -821,8 +821,8 @@ void KisView::dropEvent(QDropEvent *event)
             }
         }
         const bool useCustomBlendingOptions = configGroup.readEntry<bool>("useCustomBlendingOptions", false);
-        const int customOpacity =
-            qBound(0, configGroup.readEntry<int>("customOpacity", 100), 100) * OPACITY_OPAQUE_U8 / 100;
+        const qreal customOpacity =
+            qBound(0, configGroup.readEntry<int>("customOpacity", 100), 100) / 100.0;
         QString customCompositeOp = configGroup.readEntry<QString>("customCompositeOp", COMPOSITE_OVER);
         if (KoCompositeOpRegistry::instance().getKoID(customCompositeOp).id().isNull()) {
             customCompositeOp = COMPOSITE_OVER;
@@ -966,9 +966,9 @@ void KisView::dropEvent(QDropEvent *event)
                 }
                 const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
                 const bool blendingOptionsAreNoOp = useCustomBlendingOptions
-                                                    ? (customOpacity == OPACITY_OPAQUE_U8 &&
+                                                    ? (qFuzzyCompare(customOpacity, OPACITY_OPAQUE_F) &&
                                                        customCompositeOp == COMPOSITE_OVER)
-                                                    : (resources->opacity() == OPACITY_OPAQUE_U8 &&
+                                                    : (qFuzzyCompare(resources->opacity(), OPACITY_OPAQUE_F) &&
                                                        resources->compositeOpId() == COMPOSITE_OVER);
                 const bool useFastMode = !resources->activeSelection() &&
                                          blendingOptionsAreNoOp &&

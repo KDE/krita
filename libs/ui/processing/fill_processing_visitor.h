@@ -50,7 +50,7 @@ public:
     void setUnmerged(bool unmerged);
     void setUseBgColor(bool useBgColor);
     void setUseCustomBlendingOptions(bool useCustomBlendingOptions);
-    void setCustomOpacity(int customOpacity);
+    void setCustomOpacity(qreal customOpacity);
     void setCustomCompositeOp(const QString &customCompositeOp);
     void setOutDirtyRect(QSharedPointer<QRect> outDirtyRect);
     void setProgressHelper(QSharedPointer<ProgressHelper> progressHelper);
@@ -94,7 +94,7 @@ private:
     bool m_useBgColor;
 
     bool m_useCustomBlendingOptions;
-    int m_customOpacity;
+    qreal m_customOpacity;
     QString m_customCompositeOp;
 
     QSharedPointer<QRect> m_outDirtyRect;

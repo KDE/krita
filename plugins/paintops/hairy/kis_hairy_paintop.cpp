@@ -139,7 +139,7 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     qreal scale = m_sizeOption.apply(pi);
     scale *= KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(pi);
-    quint8 origOpacity = m_opacityOption.apply(painter(), pi);
+    qreal origOpacity = m_opacityOption.apply(painter(), pi);
 
     const bool mirrorFlip = pi1.canvasMirroredH() != pi1.canvasMirroredV();
 
@@ -153,7 +153,7 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacity(origOpacity);
+    painter()->setOpacityF(origOpacity);
 
     // we don't use spacing in hairy brush, but history is
     // still important for us

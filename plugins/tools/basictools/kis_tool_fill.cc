@@ -349,7 +349,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
 
-    const int customOpacity = m_customOpacity * OPACITY_OPAQUE_U8 / 100;
+    const qreal customOpacity = m_customOpacity / 100.0;
 
     if (m_effectiveFillMode != FillMode_FillSimilarRegions) {
         FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
@@ -357,9 +357,9 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
                                                                     m_resourcesSnapshot);
 
         const bool blendingOptionsAreNoOp = m_useCustomBlendingOptions
-                                            ? (customOpacity == OPACITY_OPAQUE_U8 &&
+                                            ? (qFuzzyCompare(customOpacity, OPACITY_OPAQUE_F) &&
                                                m_customCompositeOp == COMPOSITE_OVER)
-                                            : (m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
+                                            : (qFuzzyCompare(m_resourcesSnapshot->opacity(), OPACITY_OPAQUE_F) &&
                                                m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER);
 
         const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&

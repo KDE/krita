@@ -59,7 +59,7 @@ void KisLayerStyleKnockoutBlower::apply(KisPainter *painter, KisPaintDeviceSP me
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_knockoutSelection);
 
-    painter->setOpacity(OPACITY_OPAQUE_U8);
+    painter->setOpacityToUnit();
     painter->setChannelFlags(QBitArray());
     painter->setCompositeOpId(COMPOSITE_COPY);
     painter->setSelection(m_knockoutSelection);

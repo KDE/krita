@@ -7,15 +7,15 @@
 
 #include <kis_painter.h>
 
-quint8 KisOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
+qreal KisOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
 {
     if (!isChecked()) {
-        return painter->opacity();
+        return painter->opacityF();
     }
-    quint8 origOpacity = painter->opacity();
+    qreal origOpacity = painter->opacityF();
 
-    qreal opacity = (qreal)(origOpacity * computeSizeLikeValue(info));
-    quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT_U8, opacity, OPACITY_OPAQUE_U8));
+    qreal opacity = origOpacity * computeSizeLikeValue(info);
+    qreal opacity2 = qBound<qreal>(OPACITY_TRANSPARENT_F, opacity, OPACITY_OPAQUE_F);
 
     painter->setOpacityUpdateAverage(opacity2);
     return origOpacity;

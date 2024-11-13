@@ -65,7 +65,7 @@ public:
     bool needsSpacingUpdates() const;
 
     void setOpacity(qreal opacity);
-    quint8 opacity() const;
+    qreal opacity() const;
     QString compositeOpId() const;
 
     KoPatternSP currentPattern() const;

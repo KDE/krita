@@ -198,7 +198,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
 
         if(hasIndirectPainting) {
             painter->setCompositeOpId(indirectPaintingCompositeOp);
-            painter->setOpacity(OPACITY_OPAQUE_U8);
+            painter->setOpacityToUnit();
             painter->setChannelFlags(QBitArray());
         }
     }

@@ -34,7 +34,7 @@ struct KRITAUI_EXPORT KisStrokeCompatibilityInfo : public boost::equality_compar
     QString currentGeneratorXml;
     QUuid currentNode;
 
-    quint8 opacity {OPACITY_OPAQUE_U8};
+    qreal opacity {OPACITY_OPAQUE_F};
     QString compositeOpId {COMPOSITE_OVER};
 
     QBitArray channelLockFlags;

@@ -15,7 +15,7 @@ public:
     KisFlowOpacityOption2(const KisPropertiesConfiguration *setting, KisNodeSP currentNode);
 
     void apply(KisPainter* painter, const KisPaintInformation& info);
-    void apply(const KisPaintInformation &info, quint8 *opacity, quint8 *flow);
+    void apply(const KisPaintInformation &info, qreal *opacity, qreal *flow);
 
 private:
     KisOpacityOption m_opacityOption;

@@ -2833,7 +2833,7 @@
       <whatsThis/>
       <toolTip>Cut Selection to New Layer</toolTip>
       <iconText>Cut Selection to New Layer</iconText>
-      <activationFlags>100000000</activationFlags>
+      <activationFlags>11000000000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>Ctrl+Shift+J</shortcut>
       <isCheckable>false</isCheckable>
@@ -2845,7 +2845,7 @@
       <whatsThis/>
       <toolTip>Copy Selection to New Layer</toolTip>
       <iconText>Copy Selection to New Layer</iconText>
-      <activationFlags>100000000</activationFlags>
+      <activationFlags>11000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Alt+J</shortcut>
       <isCheckable>false</isCheckable>

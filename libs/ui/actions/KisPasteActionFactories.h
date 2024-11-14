@@ -12,14 +12,26 @@
 #include "operations/kis_operation_configuration.h"
 
 struct KRITAUI_EXPORT KisPasteActionFactory : public KisOperation {
+    enum Flag {
+        None = 0x0,
+        PasteAtCursor = 0x1,
+        ForceNewLayer = 0x2
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
     KisPasteActionFactory() : KisOperation("paste-ui-action") {}
 
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        run(config.getBool("paste-at-cursor-position", false), view);
+        Flags flags;
+        flags.setFlag(PasteAtCursor, config.getBool("paste-at-cursor-position", false));
+        flags.setFlag(ForceNewLayer, config.getBool("force-new-layer", false));
+        run(flags, view);
     }
 
-    void run(bool pasteAtCursorPosition, KisViewManager *view);
+    void run(Flags flags, KisViewManager *view);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisPasteActionFactory::Flags)
 
 struct KRITAUI_EXPORT KisPasteIntoActionFactory : public KisNoParameterActionFactory {
     KisPasteIntoActionFactory() : KisNoParameterActionFactory("paste-into-ui-action") {}

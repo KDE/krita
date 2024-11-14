@@ -347,25 +347,25 @@ void KisSelectionManager::selectionChanged()
 void KisSelectionManager::cut()
 {
     KisCutCopyActionFactory factory;
-    factory.run(true, false, m_view);
+    factory.run(KisCutCopyActionFactory::CutClip, m_view);
 }
 
 void KisSelectionManager::copy()
 {
     KisCutCopyActionFactory factory;
-    factory.run(false, false, m_view);
+    factory.run(KisCutCopyActionFactory::None, m_view);
 }
 
 void KisSelectionManager::cutSharp()
 {
     KisCutCopyActionFactory factory;
-    factory.run(true, true, m_view);
+    factory.run(KisCutCopyActionFactory::CutClip | KisCutCopyActionFactory::SharpClip, m_view);
 }
 
 void KisSelectionManager::copySharp()
 {
     KisCutCopyActionFactory factory;
-    factory.run(false, true, m_view);
+    factory.run(KisCutCopyActionFactory::SharpClip, m_view);
 }
 
 void KisSelectionManager::copyMerged()
@@ -377,13 +377,13 @@ void KisSelectionManager::copyMerged()
 void KisSelectionManager::paste()
 {
     KisPasteActionFactory factory;
-    factory.run(false, m_view);
+    factory.run(KisPasteActionFactory::None, m_view);
 }
 
 void KisSelectionManager::pasteAt()
 {
     KisPasteActionFactory factory;
-    factory.run(true, m_view);
+    factory.run(KisPasteActionFactory::PasteAtCursor, m_view);
 }
 
 void KisSelectionManager::pasteInto()
@@ -547,13 +547,15 @@ void KisSelectionManager::fillPatternOpacity()
 void KisSelectionManager::copySelectionToNewLayer()
 {
     copy();
-    paste();
+    KisPasteActionFactory factory;
+    factory.run(KisPasteActionFactory::ForceNewLayer, m_view);
 }
 
 void KisSelectionManager::cutToNewLayer()
 {
     cut();
-    paste();
+    KisPasteActionFactory factory;
+    factory.run(KisPasteActionFactory::ForceNewLayer, m_view);
 }
 
 void KisSelectionManager::toggleDisplaySelection()

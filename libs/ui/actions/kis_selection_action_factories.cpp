@@ -297,7 +297,7 @@ void KisImageResizeToSelectionActionFactory::run(KisViewManager *view)
     view->image()->cropImage(selection->selectedExactRect());
 }
 
-void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManager *view)
+void KisCutCopyActionFactory::run(Flags flags, KisViewManager *view)
 {
     KisImageSP image = view->image();
     if (!image) return;
@@ -310,12 +310,15 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         view->canvasBase()->toolProxy()->hasSelection();
 
     const bool haveShapesSelected =
-        view->selectionManager()->haveShapesSelected();
+            view->selectionManager()->haveShapesSelected();
 
-    KisNodeSP node = view->activeNode();
     KisSelectionSP selection = view->selection();
 
-    if (!makeSharpClip && (haveShapesSelected || currentToolHasSelection)) {
+    const bool skipShapes = selection && !currentToolHasSelection;
+
+    if (!skipShapes && !flags.testFlag(SharpClip) && (haveShapesSelected || currentToolHasSelection)) {
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
+
         /**
          * Make sure that we use tryBarrierLock() here becasue it does **not**
          * cause requestStrokeEnd() to be called in the tools, hence does not
@@ -324,8 +327,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisImageBarrierLock lock(image, std::try_to_lock);
         if (!lock.owns_lock()) return;
 
-        // XXX: "Add saving of XML data for Cut/Copy of shapes"
-        if (willCut) {
+        if (flags & CutClip) {
             view->canvasBase()->toolProxy()->cut();
         } else {
             view->canvasBase()->toolProxy()->copy();
@@ -356,7 +358,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         }
 
         Q_FOREACH (KisNodeSP node, nodes) {
-            KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+            KisLayerUtils::recursiveApplyNodes(node, [image, view, flags] (KisNodeSP node) {
                 if (node && node->paintDevice()) {
                     node->paintDevice()->burnKeyframe();
                 }
@@ -370,7 +372,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                 }
 
                 if (node && node->paintDevice() && !node->inherits("KisMask")) {
-                    ActionHelper::trimDevice(view, node->paintDevice(), makeSharpClip, range);
+                    ActionHelper::trimDevice(view, node->paintDevice(), flags.testFlag(SharpClip), range);
                 }
             });
         }
@@ -379,12 +381,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisClipboard::instance()->setLayers(nodes, tempImage);
 
 
-        KUndo2MagicString actionName = willCut ?
+        KUndo2MagicString actionName = flags & CutClip ?
                     kundo2_i18n("Cut") :
                     kundo2_i18n("Copy");
         KisProcessingApplicator *ap = beginAction(view, actionName);
 
-        if (willCut) {
+        if (flags & CutClip) {
             selectedNodes.append(masks);
             Q_FOREACH (KisNodeSP node, selectedNodes) {
                 KisLayerUtils::recursiveApplyNodes(node, [selection, masks, ap] (KisNodeSP node){
@@ -438,10 +440,11 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         }
 
         KisOperationConfiguration config(id());
-        config.setProperty("will-cut", willCut);
+        config.setProperty("will-cut", flags.testFlag(CutClip));
+        config.setProperty("use-sharp-clip", flags.testFlag(SharpClip));
         endAction(ap, config.toXML());
-    } else if (!makeSharpClip) {
-        if (willCut) {
+    } else if (!flags.testFlag(SharpClip)) {
+        if (flags & CutClip) {
             view->nodeManager()->cutLayersToClipboard();
         } else {
             view->nodeManager()->copyLayersToClipboard();

@@ -55,9 +55,10 @@ KoShapeControllerBase::~KoShapeControllerBase()
     delete d;
 }
 
-KoShapeContainer* KoShapeControllerBase::createParentForShapes(const QList<KoShape*> shapes, KUndo2Command *parentCommand)
+KoShapeContainer* KoShapeControllerBase::createParentForShapes(const QList<KoShape*> shapes, bool forceNewLayer, KUndo2Command *parentCommand)
 {
     Q_UNUSED(parentCommand);
+    Q_UNUSED(forceNewLayer);
     Q_UNUSED(shapes);
 
     return 0;

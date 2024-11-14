@@ -55,13 +55,25 @@ struct KRITAUI_EXPORT KisImageResizeToSelectionActionFactory : public KisNoParam
 };
 
 struct KRITAUI_EXPORT KisCutCopyActionFactory : public KisOperation {
+    enum Flag {
+        None = 0x0,
+        CutClip = 0x1,
+        SharpClip = 0x2
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
     KisCutCopyActionFactory() : KisOperation("cut-copy-ui-action") {}
     void runFromXML(KisViewManager *view, const KisOperationConfiguration &config) override {
-        run(config.getBool("will-cut", false), config.getBool("use-sharp-clip", false), view);
+        Flags flags;
+        flags.setFlag(CutClip, config.getBool("will-cut", false));
+        flags.setFlag(SharpClip, config.getBool("use-sharp-clip", false));
+        run(flags, view);
     }
 
-    void run(bool willCut, bool makeSharpClip, KisViewManager *view);
+    void run(Flags flags, KisViewManager *view);
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisCutCopyActionFactory::Flags)
 
 struct KRITAUI_EXPORT KisCopyMergedActionFactory : public KisNoParameterActionFactory {
     KisCopyMergedActionFactory() : KisNoParameterActionFactory("copy-merged-ui-action") {}

@@ -28,6 +28,7 @@
 #include <KoDocumentInfo.h>
 #include <KoSvgPaste.h>
 #include <KoShapeController.h>
+#include <KoShapeControllerBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoSelectedShapesProxy.h>
@@ -48,7 +49,6 @@
 #include <KisMainWindow.h>
 #include <QApplication>
 #include <QClipboard>
-
 
 namespace {
 QPointF getFittingOffset(QList<KoShape*> shapes,
@@ -75,7 +75,7 @@ QPointF getFittingOffset(QList<KoShape*> shapes,
     return accumulatedFitOffset;
 }
 
-bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
+bool tryPasteShapes(KisPasteActionFactory::Flags flags, KisViewManager *view)
 {
     bool result = false;
 
@@ -118,17 +118,25 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
             }
 
             KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18n("Paste shapes"));
-            canvas->shapeController()->addShapesDirect(shapes, 0, parentCommand);
+
+            const bool forceCreateNewLayer = flags.testFlag(KisPasteActionFactory::ForceNewLayer);
+            KoShapeContainer *parentLayer = nullptr;
+
+            if (forceCreateNewLayer) {
+                parentLayer = canvas->shapeController()->documentBase()->createParentForShapes(shapes, true, parentCommand);
+            }
+
+            canvas->shapeController()->addShapesDirect(shapes, parentLayer, parentCommand);
 
             QPointF finalShapesOffset;
 
 
-            if (pasteAtCursorPosition) {
+            if (flags.testFlag(KisPasteActionFactory::PasteAtCursor)) {
                 QRectF boundingRect = KoShape::boundingRect(shapes);
                 const QPointF cursorPos = canvas->canvasController()->currentCursorPosition();
                 finalShapesOffset = cursorPos - boundingRect.center();
 
-            } else {
+            } else if (!forceCreateNewLayer) {
                 bool foundOverlapping = false;
 
                 QRectF boundingRect = KoShape::boundingRect(shapes);
@@ -174,7 +182,10 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
             }
 
             const QRectF documentRect = canvas->shapeController()->documentRect();
-            finalShapesOffset += getFittingOffset(shapes, finalShapesOffset, documentRect, 0.1);
+
+            if (!forceCreateNewLayer) {
+                finalShapesOffset += getFittingOffset(shapes, finalShapesOffset, documentRect, 0.1);
+            }
 
             if (!finalShapesOffset.isNull()) {
                 new KoShapeMoveCommand(shapes, finalShapesOffset, parentCommand);
@@ -195,8 +206,10 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
 
 }
 
-void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view)
+void KisPasteActionFactory::run(Flags flags, KisViewManager *view)
 {
+    bool pasteAtCursorPosition = flags.testFlag(PasteAtCursor);
+
     KisImageSP image = view->image();
     if (!image) return;
 
@@ -209,7 +222,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     }
 
     // Paste shapes
-    if (tryPasteShapes(pasteAtCursorPosition, view)) {
+    if (tryPasteShapes(flags, view)) {
         return;
     }
 

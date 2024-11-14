@@ -150,7 +150,7 @@ static inline bool belongsToShapeSelection(KoShape* shape) {
     return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
 }
 
-KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape *> shapes, KUndo2Command *parentCommand)
+KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape *> shapes, bool forceNewLayer, KUndo2Command *parentCommand)
 {
     KoShapeContainer *resultParent = 0;
     KisCommandUtils::CompositeCommand *resultCommand =
@@ -191,7 +191,7 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
                 dynamic_cast<KisShapeLayer*>(
                     canvas->selectedShapesProxy()->selection()->activeLayer());
 
-        if (!shapeLayer) {
+        if (!shapeLayer || forceNewLayer) {
             shapeLayer = new KisShapeLayer(this, image(),
                                            i18n("Vector Layer %1", m_d->nameServer->number()),
                                            OPACITY_OPAQUE_U8);

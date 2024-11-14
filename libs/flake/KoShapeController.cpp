@@ -93,7 +93,7 @@ public:
 
         if (!parentShape) {
             resultCommand = new KUndo2Command(parent);
-            parentShape = shapeController->createParentForShapes(shapes, resultCommand);
+            parentShape = shapeController->createParentForShapes(shapes, false, resultCommand);
             KUndo2Command *addShapeCommand = new KoShapeCreateCommand(shapeController, shapes, parentShape, resultCommand);
             resultCommand->setText(addShapeCommand->text());
         } else {

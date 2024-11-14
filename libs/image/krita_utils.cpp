@@ -530,6 +530,23 @@ namespace KritaUtils
         return QTransform::fromScale(image->xRes(), image->yRes());
     }
 
+    QPainterPath tryCloseTornSubpathsAfterIntersection(QPainterPath path)
+    {
+        path.setFillRule(Qt::WindingFill);
+        QList<QPolygonF> polys = path.toSubpathPolygons();
+
+        path = QPainterPath();
+        path.setFillRule(Qt::WindingFill);
+        Q_FOREACH (QPolygonF poly, polys) {
+            ENTER_FUNCTION() << ppVar(poly.isClosed());
+            if (!poly.isClosed()) {
+                poly.append(poly.first());
+            }
+            path.addPolygon(poly);
+        }
+        return path;
+    }
+
     void thresholdOpacity(KisPaintDeviceSP device, const QRect &rect, ThresholdMode mode)
     {
         const KoColorSpace *cs = device->colorSpace();

@@ -113,6 +113,20 @@ namespace KritaUtils
      */
     QTransform KRITAIMAGE_EXPORT pathShapeBooleanSpaceWorkaround(KisImageSP image);
 
+    /**
+     * Sometimes, when intersecting two paths, QPainterPath
+     * does not close some of the subpaths. It causes glitches
+     * when rendering them on screen. So we should just close
+     * them explicitly.
+     *
+     * Note: after intersecting the paths all bezier curves are
+     *       already converted to polylines, so it should be safe
+     *       to go through the polygons.
+     *
+     * See: https://bugs.kde.org/show_bug.cgi?id=408369
+     */
+    QPainterPath KRITAIMAGE_EXPORT tryCloseTornSubpathsAfterIntersection(QPainterPath path);
+
     enum ThresholdMode {
         ThresholdNone = 0,
         ThresholdFloor,

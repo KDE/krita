@@ -151,7 +151,7 @@ void KarbonCalligraphyTool::addPoint(KoPointerEvent *event)
 {
     if (m_pointCount == 0) {
         if (m_usePath && m_selectedPath) {
-            m_selectedPathOutline = m_selectedPath->outline();
+            m_selectedPathOutline = m_selectedPath->absoluteTransformation().map(m_selectedPath->outline());
         }
         m_pointCount = 1;
         m_endOfPath = false;
@@ -239,8 +239,7 @@ QPointF KarbonCalligraphyTool::calculateNewPoint(const QPointF &mousePos, QPoint
         t = m_selectedPathOutline.percentAtLength(m_followPathPosition);
     }
 
-    QPointF res = m_selectedPathOutline.pointAtPercent(t)
-            + m_selectedPath->position();
+    QPointF res = m_selectedPathOutline.pointAtPercent(t);
     *speed = res - m_lastPoint;
     return res;
 }

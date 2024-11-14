@@ -2676,14 +2676,14 @@ KisPainter::StrokeStyle KisPainter::strokeStyle() const
     return d->strokeStyle;
 }
 
-void KisPainter::setFlow(quint8 flow)
+void KisPainter::setFlow(qreal flow)
 {
-    d->paramInfo.flow = float(flow) / 255.0f;
+    d->paramInfo.flow = flow;
 }
 
-quint8 KisPainter::flow() const
+qreal KisPainter::flow() const
 {
-    return quint8(d->paramInfo.flow * 255.0f);
+    return d->paramInfo.flow;
 }
 
 void KisPainter::setOpacityUpdateAverage(qreal opacity)

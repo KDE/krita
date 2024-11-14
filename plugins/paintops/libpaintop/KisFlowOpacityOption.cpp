@@ -34,7 +34,7 @@ void KisFlowOpacityOption2::apply(KisPainter* painter, const KisPaintInformation
     apply(info, &opacity, &flow);
 
     painter->setOpacityUpdateAverage(opacity);
-    painter->setFlow(qRound(OPACITY_OPAQUE_U8 * flow));
+    painter->setFlow(flow);
 }
 
 void KisFlowOpacityOption2::apply(const KisPaintInformation &info, qreal *opacity, qreal *flow)

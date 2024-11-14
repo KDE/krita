@@ -189,11 +189,11 @@ class UIExportLayers(object):
     def _exportLayers(self, parentNode, fileFormat, parentDir):
         """ This method get all sub-nodes from the current node and export then in
             the defined format."""
-
+        prefixNum = 0
         for node in parentNode.childNodes():
             newDir = ''
             if node.type() == 'grouplayer' and not self.groupAsLayer.isChecked():
-                newDir = os.path.join(parentDir, node.name())
+                newDir = os.path.join(parentDir, str(prefixNum) + "-" + node.name())
                 self.mkdir(newDir)
             elif (not self.exportFilterLayersCheckBox.isChecked()
                   and 'filter' in node.type()):
@@ -216,10 +216,10 @@ class UIExportLayers(object):
 
                 layerFileName = '{0}{1}/{2}.{3}'.format(
                     self.directoryTextField.text(),
-                    parentDir, node.name(), _fileFormat)
+                    parentDir, str(prefixNum) + "-" + node.name(), _fileFormat)
                 node.save(layerFileName, self.resSpinBox.value() / 72.,
                           self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
-
+            prefixNum += 1
             if node.childNodes() and not self.groupAsLayer.isChecked():
                 self._exportLayers(node, fileFormat, newDir)
 

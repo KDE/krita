@@ -43,7 +43,6 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     , m_selectedPath(0)
     , m_isDrawing(false)
     , m_speed(0, 0)
-    , m_lastShape(0)
 {
     connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), SLOT(updateSelectedPath()));
 
@@ -138,7 +137,6 @@ void KarbonCalligraphyTool::mouseReleaseEvent(KoPointerEvent *event)
 
     KUndo2Command *cmd = canvas()->shapeController()->addShape(m_shape, 0);
     if (cmd) {
-        m_lastShape = m_shape;
         canvas()->addCommand(cmd);
         canvas()->updateCanvas(m_shape->boundingRect());
     } else {
@@ -351,7 +349,6 @@ void KarbonCalligraphyTool::activate(const QSet<KoShape*> &shapes)
 
 
     useCursor(Qt::CrossCursor);
-    m_lastShape = 0;
 }
 
 void KarbonCalligraphyTool::deactivate()
@@ -367,12 +364,6 @@ void KarbonCalligraphyTool::deactivate()
 
     a = action("calligraphy_decrease_angle");
     disconnect(a, 0, this, 0);
-
-    if (m_lastShape && canvas()->shapeManager()->shapes().contains(m_lastShape)) {
-        KoSelection *selection = canvas()->shapeManager()->selection();
-        selection->deselectAll();
-        selection->select(m_lastShape);
-    }
 
     KoToolBase::deactivate();
 }

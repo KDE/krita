@@ -753,9 +753,9 @@ public:
     /// Returns the current brush stroke style
     StrokeStyle strokeStyle() const;
 
-    void setFlow(quint8 flow);
+    void setFlow(qreal flow);
 
-    quint8 flow() const;
+    qreal flow() const;
 
     /**
      * Sets the opacity of the painting and recalculates the

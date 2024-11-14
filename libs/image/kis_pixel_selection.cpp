@@ -28,6 +28,7 @@
 #include "kis_outline_generator.h"
 #include <kis_iterator_ng.h>
 #include "kis_lod_transform.h"
+#include "krita_utils.h"
 #include "kundo2command.h"
 
 
@@ -271,8 +272,7 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
     m_d->outlineCacheValid &= selection->outlineCacheValid();
 
     if (m_d->outlineCacheValid) {
-        m_d->outlineCache &= selection->outlineCache();
-        m_d->outlineCache.closeSubpath();
+        m_d->outlineCache = KritaUtils::tryCloseTornSubpathsAfterIntersection(m_d->outlineCache & selection->outlineCache());
     }
 
     m_d->invalidateThumbnailImage();

@@ -262,8 +262,8 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
 
                     case SELECTION_INTERSECT:
                         path = path1 & path2;
+                        path = KritaUtils::tryCloseTornSubpathsAfterIntersection(path);
                         break;
-
                     case SELECTION_ADD:
                         path = path1 | path2;
                         break;

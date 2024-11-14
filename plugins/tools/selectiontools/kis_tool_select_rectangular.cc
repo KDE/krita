@@ -61,10 +61,10 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect, qreal roundCorners
                                         selectionMode(),
                                         selectionAction());
 
+    if (!rc.isValid()) {
+        return;
+    }
     if (mode == PIXEL_SELECTION) {
-        if (!rc.isValid()) {
-            return;
-        }
         KisProcessingApplicator applicator(currentImage(),
                                            currentNode(),
                                            KisProcessingApplicator::NONE,

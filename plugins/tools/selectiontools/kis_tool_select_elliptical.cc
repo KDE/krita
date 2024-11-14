@@ -51,6 +51,10 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect, qreal roundCornersX
         return;
     }
 
+    if (rect.isEmpty()) {
+        return;
+    }
+
     const SelectionMode mode =
         helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
                                         selectionMode(),

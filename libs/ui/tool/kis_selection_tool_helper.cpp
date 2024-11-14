@@ -218,18 +218,26 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
         KUndo2Command* paint() override {
             KUndo2Command *resultCommand = 0;
 
-
             KisSelectionSP selection = m_view->selection();
             if (selection) {
                 KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
 
-                if (shapeSelection) {
-                    QList<KoShape*> existingShapes = shapeSelection->shapes();
+                if (shapeSelection ||
+                        m_action == SELECTION_SUBTRACT) {
 
                     QPainterPath path1;
-                    path1.setFillRule(Qt::WindingFill);
-                    Q_FOREACH(KoShape *shape, existingShapes) {
-                        path1 += shape->absoluteTransformation().map(shape->outline());
+                    QList<KoShape*> existingShapes;
+
+                    if (shapeSelection) {
+                        existingShapes = shapeSelection->shapes();
+
+                        path1.setFillRule(Qt::WindingFill);
+                        Q_FOREACH(KoShape *shape, existingShapes) {
+                            path1 += shape->absoluteTransformation().map(shape->outline());
+                        }
+                    } else if (m_action == SELECTION_SUBTRACT) {
+                        KisImageSP image = m_view->image();
+                        path1.addRect(m_view->viewConverter()->imageRectInDocumentPixels());
                     }
 
                     QPainterPath path2;
@@ -275,7 +283,9 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
 
                     KUndo2Command *parentCommand = new KUndo2Command();
 
-                    m_view->canvasBase()->shapeController()->removeShapes(existingShapes, parentCommand);
+                    if (!existingShapes.isEmpty()) {
+                        m_view->canvasBase()->shapeController()->removeShapes(existingShapes, parentCommand);
+                    }
                     m_view->canvasBase()->shapeController()->addShape(newShape, 0, parentCommand);
 
                     if (path.isEmpty()) {
@@ -286,9 +296,11 @@ void KisSelectionToolHelper::addSelectionShapes(QList< KoShape* > shapes, Select
                     }
 
                     resultCommand = parentCommand;
+                } else if (m_action == SELECTION_INTERSECT) {
+                    // just do nothing if there is nothing to intersect with
+                    return nullptr;
                 }
             }
-
 
             if (!resultCommand) {
                 /**

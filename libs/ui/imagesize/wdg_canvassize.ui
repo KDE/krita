@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>391</width>
+    <width>411</width>
     <height>400</height>
    </rect>
   </property>
@@ -185,6 +185,9 @@
       </item>
       <item row="1" column="4">
        <widget class="QPushButton" name="lockyOffset">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -202,6 +205,9 @@
       </item>
       <item row="0" column="4">
        <widget class="QPushButton" name="lockxOffset">
+        <property name="focusPolicy">
+         <enum>Qt::TabFocus</enum>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -227,6 +233,9 @@
               <width>25</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="text">
              <string/>
@@ -256,6 +265,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -283,6 +295,9 @@
               <width>25</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="text">
              <string/>
@@ -312,6 +327,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -339,6 +357,9 @@
               <width>25</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="text">
              <string/>
@@ -368,6 +389,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -396,6 +420,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -423,6 +450,9 @@
               <width>25</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="text">
              <string/>
@@ -454,6 +484,9 @@
               <width>25</width>
               <height>25</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::TabFocus</enum>
             </property>
             <property name="text">
              <string/>
@@ -663,8 +696,10 @@
   <tabstop>constrainProportionsCkb</tabstop>
   <tabstop>xOffsetDouble</tabstop>
   <tabstop>xOffUnit</tabstop>
+  <tabstop>lockxOffset</tabstop>
   <tabstop>yOffsetDouble</tabstop>
   <tabstop>yOffUnit</tabstop>
+  <tabstop>lockyOffset</tabstop>
   <tabstop>topLeft</tabstop>
   <tabstop>topCenter</tabstop>
   <tabstop>topRight</tabstop>

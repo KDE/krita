@@ -35,6 +35,8 @@ class UIExportLayers(object):
             i18n("Ignore invisible layers"))
         self.cropToImageBounds = QCheckBox(
                 i18n("Adjust export size to layer content"))
+        self.addIncrementPrefixCheckBox = QCheckBox(
+            i18n("Add incrementing prefix"))
 
         self.rectWidthSpinBox = QSpinBox()
         self.rectHeightSpinBox = QSpinBox()
@@ -83,6 +85,7 @@ class UIExportLayers(object):
         self.optionsLayout.addWidget(self.groupAsLayer)
         self.optionsLayout.addWidget(self.ignoreInvisibleLayersCheckBox)
         self.optionsLayout.addWidget(self.cropToImageBounds)
+        self.optionsLayout.addWidget(self.addIncrementPrefixCheckBox)
 
         self.resSpinBoxLayout.addRow(i18n("dpi:"), self.resSpinBox)
 
@@ -192,8 +195,12 @@ class UIExportLayers(object):
         prefixNum = 0
         for node in parentNode.childNodes():
             newDir = ''
+            nodeName = node.name()
+            if self.addIncrementPrefixCheckBox.isChecked():
+                nodeName = str(prefixNum) + "-" + nodeName
+
             if node.type() == 'grouplayer' and not self.groupAsLayer.isChecked():
-                newDir = os.path.join(parentDir, str(prefixNum) + "-" + node.name())
+                newDir = os.path.join(parentDir, nodeName)
                 self.mkdir(newDir)
             elif (not self.exportFilterLayersCheckBox.isChecked()
                   and 'filter' in node.type()):
@@ -202,7 +209,6 @@ class UIExportLayers(object):
                   and not node.visible()):
                 continue
             else:
-                nodeName = node.name()
                 _fileFormat = self.formatsComboBox.currentText()
                 if '[jpeg]' in nodeName:
                     _fileFormat = 'jpeg'
@@ -216,7 +222,7 @@ class UIExportLayers(object):
 
                 layerFileName = '{0}{1}/{2}.{3}'.format(
                     self.directoryTextField.text(),
-                    parentDir, str(prefixNum) + "-" + node.name(), _fileFormat)
+                    parentDir, nodeName, _fileFormat)
                 node.save(layerFileName, self.resSpinBox.value() / 72.,
                           self.resSpinBox.value() / 72., krita.InfoObject(), bounds)
             prefixNum += 1

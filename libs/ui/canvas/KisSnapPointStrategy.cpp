@@ -7,6 +7,7 @@
 #include "KisSnapPointStrategy.h"
 
 #include <QPainterPath>
+#include <KoViewConverter.h>
 #include "kis_global.h"
 
 struct KisSnapPointStrategy::Private
@@ -46,8 +47,11 @@ bool KisSnapPointStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy
 
 QPainterPath KisSnapPointStrategy::decoration(const KoViewConverter &converter) const
 {
-    Q_UNUSED(converter);
-    return QPainterPath();
+    QRectF unzoomedRect = converter.viewToDocument(QRectF(0, 0, 11, 11));
+    unzoomedRect.moveCenter(snappedPosition());
+    QPainterPath decoration;
+    decoration.addEllipse(unzoomedRect);
+    return decoration;
 }
 
 void KisSnapPointStrategy::addPoint(const QPointF &pt)

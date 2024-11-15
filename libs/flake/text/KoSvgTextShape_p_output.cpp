@@ -418,6 +418,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                             KoShape *shape = imageFactory->createShape(&params);
                             if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
                                 KoShape *rect = rectangleFactory->createDefaultShape();
+                                shape->setSize(drawRect.size());
                                 rect->setSize(drawRect.size());
                                 rect->setStroke(nullptr);
                                 KoClipMask *mask = new KoClipMask();

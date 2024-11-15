@@ -7,6 +7,7 @@
 #include "kis_snap_line_strategy.h"
 
 #include <QPainterPath>
+#include <KoViewConverter.h>
 #include "kis_global.h"
 
 struct KisSnapLineStrategy::Private
@@ -70,8 +71,13 @@ bool KisSnapLineStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy,
 
 QPainterPath KisSnapLineStrategy::decoration(const KoViewConverter &converter) const
 {
-    Q_UNUSED(converter);
-    return QPainterPath();
+    QSizeF unzoomedSize = converter.viewToDocument(QSizeF(5, 5));
+    QPainterPath decoration;
+    decoration.moveTo(snappedPosition() - QPointF(unzoomedSize.width(), 0));
+    decoration.lineTo(snappedPosition() + QPointF(unzoomedSize.width(), 0));
+    decoration.moveTo(snappedPosition() - QPointF(0, unzoomedSize.height()));
+    decoration.lineTo(snappedPosition() + QPointF(0, unzoomedSize.height()));
+    return decoration;
 }
 
 void KisSnapLineStrategy::addLine(Qt::Orientation orientation, qreal pos)

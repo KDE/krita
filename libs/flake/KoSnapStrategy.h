@@ -22,6 +22,12 @@ class QPainterPath;
 class KRITAFLAKE_EXPORT KoSnapStrategy
 {
 public:
+    enum SnapType {
+        ToPoint = 0,
+        ToLine
+    };
+
+public:
     KoSnapStrategy(KoSnapGuide::Strategy type);
     virtual ~KoSnapStrategy() {};
 
@@ -35,18 +41,25 @@ public:
 
     /// returns the snapped position form the last call to snapToPoints
     QPointF snappedPosition() const;
+    SnapType snappedType() const;
 
     /// returns the current snap strategy decoration
     virtual QPainterPath decoration(const KoViewConverter &converter) const = 0;
 
 protected:
     /// sets the current snapped position
-    void setSnappedPosition(const QPointF &position);
+    void setSnappedPosition(const QPointF &position, SnapType snapType);
 
 private:
-    KoSnapGuide::Strategy m_snapType;
+    KoSnapGuide::Strategy m_snapStrategyType;
     QPointF m_snappedPosition;
+    SnapType m_snappedType = ToPoint;
 };
+
+inline bool operator<(KoSnapStrategy::SnapType lhs, KoSnapStrategy::SnapType rhs)
+{
+    return int(lhs) < int(rhs);
+}
 
 /// snaps to x- or y-coordinates of path points
 class KRITAFLAKE_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy

@@ -23,7 +23,7 @@
 #endif
 
 KoSnapStrategy::KoSnapStrategy(KoSnapGuide::Strategy type)
-    : m_snapType(type)
+    : m_snapStrategyType(type)
 {
 }
 
@@ -32,14 +32,20 @@ QPointF KoSnapStrategy::snappedPosition() const
     return m_snappedPosition;
 }
 
-void KoSnapStrategy::setSnappedPosition(const QPointF &position)
+KoSnapStrategy::SnapType KoSnapStrategy::snappedType() const
+{
+    return m_snappedType;
+}
+
+void KoSnapStrategy::setSnappedPosition(const QPointF &position, SnapType snapType)
 {
     m_snappedPosition = position;
+    m_snappedType = snapType;
 }
 
 KoSnapGuide::Strategy KoSnapStrategy::type() const
 {
-    return m_snapType;
+    return m_snapStrategyType;
 }
 
 qreal KoSnapStrategy::squareDistance(const QPointF &p1, const QPointF &p2)
@@ -85,23 +91,28 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
     }
 
     QPointF snappedPoint = mousePosition;
+    SnapType snappedType = ToPoint;
 
     if (minHorzDist < HUGE_VAL)
         snappedPoint.setX(horzSnap.x());
     if (minVertDist < HUGE_VAL)
         snappedPoint.setY(vertSnap.y());
 
-    if (minHorzDist < HUGE_VAL)
+    if (minHorzDist < HUGE_VAL) {
         m_hLine = QLineF(horzSnap, snappedPoint);
-    else
+    } else {
         m_hLine = QLineF();
+        snappedType = ToLine;
+    }
 
-    if (minVertDist < HUGE_VAL)
+    if (minVertDist < HUGE_VAL) {
         m_vLine = QLineF(vertSnap, snappedPoint);
-    else
+    } else {
         m_vLine = QLineF();
+        snappedType = ToLine;
+    }
 
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, snappedType);
 
     return (minHorzDist < HUGE_VAL || minVertDist < HUGE_VAL);
 }
@@ -144,7 +155,7 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
         }
     }
 
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, ToPoint);
 
     return (minDistance < HUGE_VAL);
 }
@@ -249,22 +260,22 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
             // add both extension lines
             m_lines.append(QLineF(startPoints[0], isects[0]));
             m_lines.append(QLineF(startPoints[1], isects[0]));
-            setSnappedPosition(isects[0]);
+            setSnappedPosition(isects[0], ToLine);
         }
         else {
             // only add nearest extension line of both
             uint index = minDistances[0] < minDistances[1] ? 0 : 1;
             m_lines.append(QLineF(startPoints[index], snappedPoints[index]));
-            setSnappedPosition(snappedPoints[index]);
+            setSnappedPosition(snappedPoints[index], ToLine);
         }
     }
     else  if (minDistances[0] < HUGE_VAL) {
         m_lines.append(QLineF(startPoints[0], snappedPoints[0]));
-        setSnappedPosition(snappedPoints[0]);
+        setSnappedPosition(snappedPoints[0], ToLine);
     }
     else if (minDistances[1] < HUGE_VAL) {
         m_lines.append(QLineF(startPoints[1], snappedPoints[1]));
-        setSnappedPosition(snappedPoints[1]);
+        setSnappedPosition(snappedPoints[1], ToLine);
     }
     else {
         // none of the extension lines is near our mouse position
@@ -393,7 +404,7 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *p
         }
     }
 
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, ToPoint);
 
     return (minDistance < HUGE_VAL);
 }
@@ -449,6 +460,7 @@ bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qr
     }
 
     QPointF snappedPoint = mousePosition;
+    SnapType snapType = ToPoint;
 
     bool pointIsSnapped = false;
 
@@ -460,13 +472,15 @@ bool GridSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy, qr
         pointIsSnapped = true;
     } else if (distToRow < maxSnapDistance) {
         snappedPoint.ry() = offset.y() + row * spacing.height();
+        snapType = ToLine;
         pointIsSnapped = true;
     } else if (distToCol < maxSnapDistance) {
         snappedPoint.rx() = offset.x() + col * spacing.width();
+        snapType = ToLine;
         pointIsSnapped = true;
     }
 
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, snapType);
 
     return pointIsSnapped;
 }
@@ -497,6 +511,7 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
 
     rect.moveCenter(mousePosition);
     QPointF snappedPoint = mousePosition;
+    SnapType snapType = ToPoint;
 
     KoFlake::AnchorPosition pointId[5] = {
         KoFlake::TopLeft,
@@ -517,6 +532,7 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
                 shapeMinDistance = d;
                 minDistance = d;
                 snappedPoint = m_boxPoints[i];
+                snapType = ToPoint;
             }
         }
         // prioritize points over edges
@@ -530,10 +546,11 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
             if (d < minDistance && d < maxDistance) {
                 minDistance = d;
                 snappedPoint = pointOnLine;
+                snapType = ToLine;
             }
         }
     }
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, snapType);
 
     return (minDistance < maxDistance);
 }

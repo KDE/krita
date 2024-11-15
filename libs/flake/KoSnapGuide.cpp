@@ -163,10 +163,12 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
 
     KoSnapProxy proxy(this);
 
-    qreal minDistance = HUGE_VAL;
+    using PriorityTuple = std::tuple<KoSnapStrategy::SnapType, qreal>;
+    PriorityTuple minPriority(KoSnapStrategy::ToLine, HUGE_VAL);
 
-    qreal maxSnapDistance = d->canvas->viewConverter()->viewToDocument(QSizeF(d->snapDistance,
-                d->snapDistance)).width();
+    const qreal maxSnapDistance = d->canvas->viewConverter()->
+            viewToDocument(QSizeF(d->snapDistance,
+                                  d->snapDistance)).width();
 
     foreach (Private::KoSnapStrategySP strategy, d->strategies) {
         if (d->usedStrategies & strategy->type() ||
@@ -178,9 +180,11 @@ QPointF KoSnapGuide::snap(const QPointF &mousePosition, Qt::KeyboardModifiers mo
 
             QPointF snapCandidate = strategy->snappedPosition();
             qreal distance = KoSnapStrategy::squareDistance(snapCandidate, mousePosition);
-            if (distance < minDistance) {
+
+            const PriorityTuple priority(strategy->snappedType(), distance);
+            if (priority < minPriority) {
                 d->currentStrategy = strategy;
-                minDistance = distance;
+                minPriority = priority;
             }
         }
     }

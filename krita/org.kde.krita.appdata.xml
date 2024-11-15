@@ -646,7 +646,7 @@
     <release date="2023-01-05" version="5.1.5">
       <artifacts>
         <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5-x86_64.appimage</location>
+          <location>https://download.kde.org/stable/krita/5.1.5/krita-5.1.5-x86_64.AppImage</location>
           <bundle type="appimage">krita-5.1.5</bundle>
         </artifact>
         <artifact type="binary" platform="macOS">

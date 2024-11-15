@@ -28,7 +28,7 @@ bool KisSnapPixelStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy
 
     const QPointF imagePos = canvas2->coordinatesConverter()->documentToImage(mousePosition);
     const QPointF alignedDocPoint = canvas2->coordinatesConverter()->imageToDocument(imagePos.toPoint());
-    setSnappedPosition(alignedDocPoint);
+    setSnappedPosition(alignedDocPoint, ToPoint);
 
     return true;
 }

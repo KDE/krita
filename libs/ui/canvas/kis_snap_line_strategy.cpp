@@ -59,7 +59,10 @@ bool KisSnapLineStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy,
         }
     }
 
-    setSnappedPosition(snappedPoint);
+    const SnapType snapType = minXDistance < std::numeric_limits<qreal>::max() &&
+            minYDistance < std::numeric_limits<qreal>::max() ? ToPoint : ToLine;
+
+    setSnappedPosition(snappedPoint, snapType);
     return
         minXDistance < std::numeric_limits<qreal>::max() ||
         minYDistance < std::numeric_limits<qreal>::max();

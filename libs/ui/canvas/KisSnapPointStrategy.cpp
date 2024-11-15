@@ -40,7 +40,7 @@ bool KisSnapPointStrategy::snap(const QPointF &mousePosition, KoSnapProxy *proxy
         }
     }
 
-    setSnappedPosition(snappedPoint);
+    setSnappedPosition(snappedPoint, ToPoint);
     return minDistance < std::numeric_limits<qreal>::max();
 }
 

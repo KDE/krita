@@ -134,7 +134,7 @@ public:
         if (snapDistance > maxSquareSnapDistance)
             return false;
 
-        setSnappedPosition(line.p2());
+        setSnappedPosition(line.p2(), ToLine);
         return true;
     }
 

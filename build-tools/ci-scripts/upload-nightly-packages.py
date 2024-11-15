@@ -36,7 +36,7 @@ patterns = []
 if arguments.platform == 'windows':
     patterns = ['*.zip', '*.exe', '*.msix']
 elif arguments.platform == 'linux':
-    patterns = ['*.appimage', '*.zsync']
+    patterns = ['*.AppImage', '*.zsync']
     pass
 elif arguments.platform == 'macos-universal':
     print('## WARNING: check the pattern for artifacts on macOS!')

@@ -4,7 +4,7 @@ The entire process is documented on https://partner.steamgames.com/doc/sdk, but 
   # Set up a **[[ https://partner.steamgames.com/ | Steamworks ]]** account, and download the [[ https://partner.steamgames.com/doc/sdk | Steamworks SDK ]] somewhere on your system. (Works on both Windows and Linux, and maybe MacOSX too, but I'm not sure about that.)
 
   # Download stable **Krita** binaries for all Steam platforms (right now that's just Linux and Windows); place the respective content into `windows/` and `linux/` subdirectories inside `sdk/tools/ContentBuilder/content/`.
-     - **Linux note:** for Steam we currently run Krita through a small `launch.sh` script. This is used to circumvent Steam's built-in "linux runtime", since we don't need it and it interferes with appimages. `launch.sh` expects the appimage to be named `krita.appimage`, so we name it that.
+     - **Linux note:** for Steam we currently run Krita through a small `launch.sh` script. This is used to circumvent Steam's built-in "linux runtime", since we don't need it and it interferes with appimages. `launch.sh` expects the appimage to be named `krita.AppImage`, so we name it that.
      - **Windows note:** on Windows, Steam is configured to launch Krita at the relative path `krita\bin\krita.exe` so I usually rename the folder that holds our portable build to just `krita`. This could be changed, but it works for me.
 
   # With the SDK downloaded and the content in the right place, we can //almost// build and push, but first we need to set up "**SteamPipe Build Scripts**" (https://partner.steamgames.com/doc/sdk/uploading#3)

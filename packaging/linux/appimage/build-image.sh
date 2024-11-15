@@ -78,7 +78,7 @@ if [[ "${CI_COMMIT_BRANCH}" =~ release/.* ]]; then
     fi
 
     export VERSION=$KRITA_VERSION
-    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
+    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.AppImage"
 
     pushd $BUILD_DIR
 
@@ -113,7 +113,7 @@ else
         export VERSION=$KRITA_VERSION
     fi
 
-    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
+    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.AppImage"
 
     if [[ "${CI_COMMIT_BRANCH}" =~ krita/.* ]]; then
         ESCAPED_COMMIT_BRANCH="${CI_COMMIT_BRANCH//\//-}"

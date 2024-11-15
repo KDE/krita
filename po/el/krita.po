@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-12 03:26+0000\n"
+"POT-Creation-Date: 2024-11-15 03:20+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -17310,7 +17310,7 @@ msgstr "Αποεπιλογή"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:254
+#: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -20085,7 +20085,7 @@ msgstr "Προσαρμοσμένο"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:379
+#: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -21039,58 +21039,58 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Γέμισμα χρώματος"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:347
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Αποκοπή"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:348
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Αντιγραφή από"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:434
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Αποκοπή εικόνας"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:476
+#: libs/ui/actions/kis_selection_action_factories.cpp:496
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Επιλογή διανύσματος"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:491
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:537
 #, fuzzy, kde-format
 #| msgid "Transform a layer or a selection"
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "Μετασχηματισμός ενός στρώματος ή μιας επιλογής"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:543
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Επιλογή διανύσματος"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:596
+#: libs/ui/actions/kis_selection_action_factories.cpp:655
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -21105,18 +21105,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Επικόλληση σχημάτων"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:285
-#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:298
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(επικολλήθηκε)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:384
+#: libs/ui/actions/KisPasteActionFactories.cpp:397
 #, fuzzy, kde-format
 msgid "Pasted"
 msgstr "Παστέλ"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:439
+#: libs/ui/actions/KisPasteActionFactories.cpp:452
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
@@ -30425,42 +30425,42 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:592
 #, fuzzy, kde-format
 msgid "Stroked Shapes"
 msgstr "Σχήματα flake %1"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:594
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Σχήματα flake %1"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:712
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:715
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:721
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Επιλογή αδιαφανούς"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:724
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
@@ -33311,14 +33311,14 @@ msgid ""
 "selection instead"
 msgstr ""
 
-#: libs/ui/tool/kis_selection_tool_helper.cpp:346
+#: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgid "Selection Actions"
 msgstr "Διακόσμηση επιλογής"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
-#: libs/ui/tool/kis_selection_tool_helper.cpp:374
+#: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
@@ -35490,27 +35490,27 @@ msgstr "Λοξότμητη ένωση"
 msgid "Miter limit"
 msgstr "Όριο γωνιακής ένωσης:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Ορισμός πλάτους γραμμής πραγματιστικής επιλογής"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "New style"
 msgid "Line Style:"
 msgstr "Νέο στιλ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, fuzzy, kde-format
 #| msgid "New style"
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Νέο στιλ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set marker"
@@ -35518,7 +35518,7 @@ msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Ορισμός δείκτη"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set marker"
@@ -35526,7 +35526,7 @@ msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Ορισμός δείκτη"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set marker"
@@ -36641,6 +36641,79 @@ msgstr "Krita"
 msgid "About &KDE"
 msgstr "Krita"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "Μονάδα:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "Ποσοστό (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Line width"
+msgid "percent of view width (vw)"
+msgstr "Πλάτος γραμμής"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Pixel height"
+msgid "percent of view height (vh)"
+msgstr "Ύψος εικονοστοιχείου"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+#| msgid "90 &degrees"
+msgid "degrees (°)"
+msgstr "90 &μοίρες"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgid "percent of circle (%)"
+msgstr "Ποσοστό (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, fuzzy, kde-format
+msgid "frames (f)"
+msgstr "Αφαίρεση στρώματος"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+#| msgid "%1 s"
+msgid "seconds (s)"
+msgstr "%1 s"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "percent of animation (%)"
+msgstr "Σύνθεση"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -36684,63 +36757,6 @@ msgstr "Χρονικό βήμα:"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Εργαλεία &ζωγραφικής"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "Ποσοστό (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Pixel height"
-msgid "percent of view height (vh)"
-msgstr "Ύψος εικονοστοιχείου"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Line width"
-msgid "percent of view width (vw)"
-msgstr "Πλάτος γραμμής"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-#| msgid "90 &degrees"
-msgid "degrees (°)"
-msgstr "90 &μοίρες"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
-msgid "percent of circle (%)"
-msgstr "Ποσοστό (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, fuzzy, kde-format
-msgid "frames (f)"
-msgstr "Αφαίρεση στρώματος"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "percent of animation (%)"
-msgstr "Σύνθεση"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-#| msgid "%1 s"
-msgid "seconds (s)"
-msgstr "%1 s"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, fuzzy, kde-format
@@ -59334,14 +59350,14 @@ msgctxt "action"
 msgid "Calligraphy: decrease angle"
 msgstr "Καλλιγραφία: μείωση γωνίας"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:415
 #, fuzzy, kde-format
 #| msgid "Calligraphy"
 msgctxt "Object name of Calligraphy"
 msgid "Calligraphy"
 msgstr "Καλλιγραφία"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:426
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:416
 #, fuzzy, kde-format
 #| msgid "Calligraphy"
 msgctxt "Tool Option title of Calligraphy"
@@ -59440,7 +59456,7 @@ msgid "Elliptical Selection"
 msgstr "Ελλειπτική επιλογή"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:64
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"

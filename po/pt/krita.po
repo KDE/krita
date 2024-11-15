@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-12 03:26+0000\n"
+"POT-Creation-Date: 2024-11-15 03:20+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17756,7 +17756,7 @@ msgstr "Deseleccionar"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:254
+#: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -20356,7 +20356,7 @@ msgstr "Saída"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:379
+#: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -21308,52 +21308,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Preencher a Camada"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:347
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Cortar"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:348
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Copiar"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Cópia Reunida"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "A selecção já está num formato vectorial "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:476
+#: libs/ui/actions/kis_selection_action_factories.cpp:496
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Conversão Vectorial da Selecção"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:491
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "A selecção já está num formato rasterizado "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:537
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "A forma já pertence a uma selecção"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Conversão de formas para vectores da selecção"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:596
+#: libs/ui/actions/kis_selection_action_factories.cpp:655
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -21364,18 +21364,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Colar as formas"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:285
-#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:298
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(colado)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:384
+#: libs/ui/actions/KisPasteActionFactories.cpp:397
 #, kde-format
 msgid "Pasted"
 msgstr "Colado"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:439
+#: libs/ui/actions/KisPasteActionFactories.cpp:452
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "Colar o Estilo"
@@ -30854,37 +30854,37 @@ msgstr ""
 "Não existem marcas disponíveis para mostrar nesta janela. Para adicionar "
 "predefinições, terá de as marcar e depois seleccionar aqui a marca."
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:592
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "Formas Traçadas"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:594
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Formas em Traços"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:712
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Selecção Opaca (Adição)"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:715
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Selecção Opaca (Subtracção)"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:718
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Selecção Opaca (Intersecção)"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:721
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Selecção Opaca (Diferença Simétrica)"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:724
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Selecção Opaca"
@@ -33824,13 +33824,13 @@ msgstr ""
 "A selecção da forma não suporta por completo o modo de envolvência. Use por "
 "favor a selecção por pixels em alternativa"
 
-#: libs/ui/tool/kis_selection_tool_helper.cpp:346
+#: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, kde-format
 msgid "Selection Actions"
 msgstr "Acções de Selecção"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
-#: libs/ui/tool/kis_selection_tool_helper.cpp:374
+#: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
@@ -36248,37 +36248,37 @@ msgstr "Junção em bisel"
 msgid "Miter limit"
 msgstr "Limite da média"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Definir a espessura do traço da selecção actual"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "Estilo da Linha:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Estilo da linha"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Marcador do início"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Marcador do nó"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -37382,6 +37382,74 @@ msgstr "&Acerca do %1"
 msgid "About &KDE"
 msgstr "Acerca do &KDE"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "Unidade:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "Percentagem (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view width (vw)"
+msgstr "percentagem da largura da janela (vw)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view height (vh)"
+msgstr "percentagem da altura da janela (vh)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr "graus (°)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr "radianos (rad)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr "gons (gon)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "percent of circle (%)"
+msgstr "percentagem da circunferência (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, kde-format
+msgid "frames (f)"
+msgstr "imagens (f)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr "segundos (s)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "percent of animation (%)"
+msgstr "percentagem da animação (%)"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -37424,58 +37492,6 @@ msgstr "Passo &acima"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Passo a&baixo"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "Percentagem (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view height (vh)"
-msgstr "percentagem da altura da janela (vh)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view width (vw)"
-msgstr "percentagem da largura da janela (vw)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr "graus (°)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr "gons (gon)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "percent of circle (%)"
-msgstr "percentagem da circunferência (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr "radianos (rad)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, kde-format
-msgid "frames (f)"
-msgstr "imagens (f)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "percent of animation (%)"
-msgstr "percentagem da animação (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr "segundos (s)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format
@@ -59933,13 +59949,13 @@ msgctxt "action"
 msgid "Calligraphy: decrease angle"
 msgstr "Caligrafia: diminuir o ângulo"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:415
 #, kde-format
 msgctxt "Object name of Calligraphy"
 msgid "Calligraphy"
 msgstr "Caligrafia"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:426
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:416
 #, kde-format
 msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
@@ -60041,7 +60057,7 @@ msgid "Elliptical Selection"
 msgstr "Selecção Elíptica"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:64
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "Elipse da Selecção"

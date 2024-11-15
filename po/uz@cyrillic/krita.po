@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-12 03:26+0000\n"
+"POT-Creation-Date: 2024-11-15 03:20+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17592,7 +17592,7 @@ msgstr "&Тиклаш"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:254
+#: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -20332,7 +20332,7 @@ msgstr "Бошқа"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:379
+#: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
@@ -21297,61 +21297,61 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Сония"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:347
 #, fuzzy
 #| msgid "Custom"
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "Бошқа"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:348
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "Ташкилот"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:434
 #, fuzzy
 #| msgid "Green"
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "Яшил"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:476
+#: libs/ui/actions/kis_selection_action_factories.cpp:496
 #, fuzzy
 #| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "Тўлдириш"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:491
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:537
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:543
 #, fuzzy
 #| msgid "Completion"
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Тўлдириш"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:596
+#: libs/ui/actions/kis_selection_action_factories.cpp:655
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -21364,20 +21364,20 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "Намунани яратиш"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:285
-#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:298
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "(pasted)"
 msgstr "Сана"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:384
+#: libs/ui/actions/KisPasteActionFactories.cpp:397
 #, fuzzy, kde-format
 #| msgid "Date"
 msgid "Pasted"
 msgstr "Сана"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:439
+#: libs/ui/actions/KisPasteActionFactories.cpp:452
 #, fuzzy
 #| msgid "Paste Text"
 msgctxt "(qtundo-format)"
@@ -30746,42 +30746,42 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:592
 #, fuzzy, kde-format
 msgid "Stroked Shapes"
 msgstr "Намунани яратиш"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:594
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Намунани яратиш"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:712
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Андоза йўл"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:715
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Андоза йўл"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:718
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Андоза йўл"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:721
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Андоза йўл"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:724
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
@@ -33709,14 +33709,14 @@ msgid ""
 "selection instead"
 msgstr ""
 
-#: libs/ui/tool/kis_selection_tool_helper.cpp:346
+#: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, fuzzy, kde-format
 #| msgid "&Select..."
 msgid "Selection Actions"
 msgstr "&Танлаш"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
-#: libs/ui/tool/kis_selection_tool_helper.cpp:374
+#: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
@@ -35884,39 +35884,39 @@ msgstr "Боғни олиб ташлаш"
 msgid "Miter limit"
 msgstr "Бўш жой"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "Font style:"
 msgid "Line Style:"
 msgstr "Шрифтнинг услуби:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, fuzzy, kde-format
 #| msgid "Font style:"
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Шрифтнинг услуби:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Сония"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Сония"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -37086,6 +37086,76 @@ msgstr "Сақлашни тасдиқлаш"
 msgid "About &KDE"
 msgstr "Сақлашни тасдиқлаш"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "Бирлик:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, fuzzy, kde-format
+msgid "Percent (%)"
+msgstr "Ҳужжатни импорт қилиш"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Line width:"
+msgid "percent of view width (vw)"
+msgstr "Чизиқнинг эни:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Line width:"
+msgid "percent of view height (vh)"
+msgstr "Чизиқнинг эни:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+msgid "percent of circle (%)"
+msgstr "Ҳужжатни импорт қилиш"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, fuzzy, kde-format
+msgid "frames (f)"
+msgstr "Матнни қўйиш"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "percent of animation (%)"
+msgstr "Ҳужжатни импорт қилиш"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, fuzzy, kde-format
 #| msgid "Select Font"
@@ -37132,60 +37202,6 @@ msgstr "Сана"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Матнни ўчириш"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, fuzzy, kde-format
-msgid "Percent (%)"
-msgstr "Ҳужжатни импорт қилиш"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Line width:"
-msgid "percent of view height (vh)"
-msgstr "Чизиқнинг эни:"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Line width:"
-msgid "percent of view width (vw)"
-msgstr "Чизиқнинг эни:"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-msgid "percent of circle (%)"
-msgstr "Ҳужжатни импорт қилиш"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, fuzzy, kde-format
-msgid "frames (f)"
-msgstr "Матнни қўйиш"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "percent of animation (%)"
-msgstr "Ҳужжатни импорт қилиш"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr ""
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, fuzzy, kde-format
@@ -60072,13 +60088,13 @@ msgctxt "action"
 msgid "Calligraphy: decrease angle"
 msgstr "Тўлқин"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:415
 #, fuzzy, kde-format
 msgctxt "Object name of Calligraphy"
 msgid "Calligraphy"
 msgstr "Боғни қўйиш"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:426
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:416
 #, fuzzy, kde-format
 msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
@@ -60179,7 +60195,7 @@ msgid "Elliptical Selection"
 msgstr "Жорий бўлим"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:64
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"

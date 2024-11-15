@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-12 03:26+0000\n"
+"POT-Creation-Date: 2024-11-15 03:20+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16780,7 +16780,7 @@ msgstr "取消选择"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/actions/KisPasteActionFactories.cpp:254
+#: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -19338,7 +19338,7 @@ msgstr "输出"
 #: libs/pigment/resources/KoColorSet.cpp:1391
 #: libs/pigment/resources/KoColorSet.cpp:1474
 #: libs/pigment/resources/KoColorSet.cpp:1688
-#: libs/ui/actions/KisPasteActionFactories.cpp:379
+#: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
@@ -20253,52 +20253,52 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "浸漫填充图层"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:346
+#: libs/ui/actions/kis_selection_action_factories.cpp:347
 msgctxt "(qtundo-format)"
 msgid "Cut"
 msgstr "剪切"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:347
+#: libs/ui/actions/kis_selection_action_factories.cpp:348
 msgctxt "(qtundo-format)"
 msgid "Copy"
 msgstr "复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:432
+#: libs/ui/actions/kis_selection_action_factories.cpp:434
 msgctxt "(qtundo-format)"
 msgid "Copy Merged"
 msgstr "合并复制"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:449
+#: libs/ui/actions/kis_selection_action_factories.cpp:451
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
 msgstr "选区已是矢量格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:474
-#: libs/ui/actions/kis_selection_action_factories.cpp:494
+#: libs/ui/actions/kis_selection_action_factories.cpp:476
+#: libs/ui/actions/kis_selection_action_factories.cpp:496
 msgctxt "(qtundo-format)"
 msgid "Convert to Vector Selection"
 msgstr "转换为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:489
+#: libs/ui/actions/kis_selection_action_factories.cpp:491
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "选区已是栅格格式 "
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:535
+#: libs/ui/actions/kis_selection_action_factories.cpp:537
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "此形状已属于一个选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:541
+#: libs/ui/actions/kis_selection_action_factories.cpp:543
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "形状转换为矢量选区"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:594
-#: libs/ui/actions/kis_selection_action_factories.cpp:653
+#: libs/ui/actions/kis_selection_action_factories.cpp:596
+#: libs/ui/actions/kis_selection_action_factories.cpp:655
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -20309,18 +20309,18 @@ msgctxt "(qtundo-format)"
 msgid "Paste shapes"
 msgstr "粘贴形状"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:285
-#: libs/ui/actions/KisPasteActionFactories.cpp:386 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:298
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:606
 #, kde-format
 msgid "(pasted)"
 msgstr "(粘贴)"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:384
+#: libs/ui/actions/KisPasteActionFactories.cpp:397
 #, kde-format
 msgid "Pasted"
 msgstr "粘贴"
 
-#: libs/ui/actions/KisPasteActionFactories.cpp:439
+#: libs/ui/actions/KisPasteActionFactories.cpp:452
 msgctxt "(qtundo-format)"
 msgid "Paste Style"
 msgstr "粘贴样式"
@@ -29417,37 +29417,37 @@ msgstr ""
 "没有预设标签可供弹出面板加载。要添加预设至弹出面板，请先在笔刷预设面板给预设"
 "指定标签，然后在此处选中该预设所在的标签。"
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:592
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "已描边的形状"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:594
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "对形状描边"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:712
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "选择不透明区域 (添加)"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:715
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "选择不透明区域 (减去)"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:718
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "选择不透明区域 (交集)"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:721
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "选择不透明区域 (互斥)"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:724
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "选择不透明区域"
@@ -32300,13 +32300,13 @@ msgid ""
 "selection instead"
 msgstr "矢量选区在四方连续显示模式下无法正常工作，请改用像素选区"
 
-#: libs/ui/tool/kis_selection_tool_helper.cpp:346
+#: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, kde-format
 msgid "Selection Actions"
 msgstr "选区操作"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
-#: libs/ui/tool/kis_selection_tool_helper.cpp:374
+#: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1826
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
@@ -34525,37 +34525,37 @@ msgstr "斜面连接"
 msgid "Miter limit"
 msgstr "尖角限制"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "为选中对象设定描边宽度"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "线条样式："
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "线条样式"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "起点标记"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "锚点标记"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -35642,6 +35642,74 @@ msgstr "关于 %1(&A)"
 msgid "About &KDE"
 msgstr "关于 KDE(&K)"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "单位："
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "百分比(%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view width (vw)"
+msgstr "视图宽度比例 (vw)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view height (vh)"
+msgstr "视图高度比例 (vh)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr "度数 (°)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr "弧度 (度)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr "百分度"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "percent of circle (%)"
+msgstr "圆的百分比 (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, kde-format
+msgid "frames (f)"
+msgstr "帧 (f)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr "秒 (s)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "percent of animation (%)"
+msgstr "动画长度百分比 (%)"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -35687,58 +35755,6 @@ msgstr "增加(&S)"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "减少(&D)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "百分比(%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view height (vh)"
-msgstr "视图高度比例 (vh)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view width (vw)"
-msgstr "视图宽度比例 (vw)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr "度数 (°)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr "百分度"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "percent of circle (%)"
-msgstr "圆的百分比 (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr "弧度 (度)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, kde-format
-msgid "frames (f)"
-msgstr "帧 (f)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "percent of animation (%)"
-msgstr "动画长度百分比 (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr "秒 (s)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format
@@ -57362,13 +57378,13 @@ msgctxt "action"
 msgid "Calligraphy: decrease angle"
 msgstr "西文书法：减小角度"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:415
 #, kde-format
 msgctxt "Object name of Calligraphy"
 msgid "Calligraphy"
 msgstr "西文书法工具"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:426
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:416
 #, kde-format
 msgctxt "Tool Option title of Calligraphy"
 msgid "Calligraphy"
@@ -57464,7 +57480,7 @@ msgid "Elliptical Selection"
 msgstr "椭圆选区"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
-#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:64
+#: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:68
 msgctxt "(qtundo-format)"
 msgid "Select Ellipse"
 msgstr "按椭圆建立选区"

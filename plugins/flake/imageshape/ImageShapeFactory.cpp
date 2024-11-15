@@ -49,9 +49,10 @@ KoShape *ImageShapeFactory::createShape(const KoProperties *params, KoDocumentRe
     shape->setShapeId(ImageShapeId);
 
     QVariant var = params->value("image");
-    if (var.type() == QVariant::Image) {
-        shape->setImage(var.value<QImage>());
-    }
+
+    KIS_SAFE_ASSERT_RECOVER(var.type() == QVariant::Image);
+    shape->setImage(var.value<QImage>());
+
     var = params->value("viewboxTransform");
     if (var.type() == QVariant::Transform) {
         shape->setViewBoxTransform(var.value<QTransform>());

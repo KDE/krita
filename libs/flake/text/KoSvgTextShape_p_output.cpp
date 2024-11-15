@@ -19,6 +19,9 @@
 #include <KoShapeFactoryBase.h>
 #include <KoProperties.h>
 #include <KoClipMask.h>
+#include <KoInsets.h>
+
+#include <kis_algebra_2d.h>
 
 #include <QPainter>
 #include <QtMath>
@@ -264,7 +267,6 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     }
 }
 
-#include <kis_algebra_2d.h>
 QGradient *cloneAndTransformGradient(const QGradient *grad, const QTransform &tf) {
     QGradient *newGrad = KoFlake::cloneGradient(grad);
 
@@ -294,7 +296,7 @@ QSharedPointer<KoShapeBackground> transformBackgroundToBounds(QSharedPointer<KoS
     // assume bg is KoColorBackground.
     return bg;
 }
-#include <KoInsets.h>
+
 KoShapeStrokeModelSP transformStrokeBgToNewBounds(KoShapeStrokeModelSP stroke, const QRectF &oldBounds, const QRectF &newBounds, bool calcInsets = true) {
     KoShapeStrokeSP s = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
     if (s) {

@@ -846,27 +846,14 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if (!node->paintDevice()->compositionSourceColorSpace()->hasCompositeOp(compositeOpID)) {
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
         }
-
-        {
-            KisSignalsBlocker b1(m_cmbCompositeOp);
-            m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
-        }
-        if (compositeOpID != m_currCompositeOpID) {
-            m_currCompositeOpID = compositeOpID;
-        }
-        if (compositeOpID == COMPOSITE_ERASE || m_resourceProvider->eraserMode()) {
-            m_eraseModeButton->setChecked(true);
-        }
-        else {
-            m_eraseModeButton->setChecked(false);
-        }
     }
-    else if (!node) {
-        KisSignalsBlocker b1(m_cmbCompositeOp);
+
+    {
+        KisSignalsBlocker b1(m_cmbCompositeOp, m_eraseModeButton);
         m_cmbCompositeOp->selectCompositeOp(KoID(compositeOpID));
-        m_currCompositeOpID = compositeOpID;
-
+        m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE || m_resourceProvider->eraserMode());
     }
+    m_currCompositeOpID = compositeOpID;
 }
 
 void KisPaintopBox::setWidgetState(int flags)

@@ -17,6 +17,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoIcon.h>
 #include <KoProperties.h>
+#include <kis_assert.h>
 
 // KDE
 #include <klocalizedstring.h>

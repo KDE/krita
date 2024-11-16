@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-15 01:49+0000\n"
+"POT-Creation-Date: 2024-11-16 01:54+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -29964,7 +29964,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: ectx: property (text), widget (QLabel, xLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/imagesize/wdg_canvassize.ui:196
+#: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
@@ -29982,7 +29982,7 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #. i18n: ectx: property (text), widget (QLabel, yLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/imagesize/wdg_canvassize.ui:530
+#: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
@@ -29995,7 +29995,7 @@ msgid "Y:"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
-#: libs/ui/imagesize/wdg_canvassize.ui:540
+#: libs/ui/imagesize/wdg_canvassize.ui:573
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Anchor:"
@@ -32049,8 +32049,8 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 msgid "Brush composite"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
-#: libs/ui/kis_paintop_box.cc:1393
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid ""

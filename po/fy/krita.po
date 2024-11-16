@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-15 01:49+0000\n"
+"POT-Creation-Date: 2024-11-16 01:54+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -28293,7 +28293,7 @@ msgstr "Offset"
 #. i18n: ectx: property (text), widget (QLabel, xLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/imagesize/wdg_canvassize.ui:196
+#: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
@@ -28310,7 +28310,7 @@ msgstr "X:"
 #. i18n: ectx: property (text), widget (QLabel, yLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/imagesize/wdg_canvassize.ui:530
+#: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
@@ -28322,7 +28322,7 @@ msgid "Y:"
 msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
-#: libs/ui/imagesize/wdg_canvassize.ui:540
+#: libs/ui/imagesize/wdg_canvassize.ui:573
 #, fuzzy, kde-format
 msgid "Anchor:"
 msgstr "Auto"
@@ -30142,8 +30142,8 @@ msgstr "Kleurromte"
 msgid "Brush composite"
 msgstr "Pinsielgrutte"
 
-#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
-#: libs/ui/kis_paintop_box.cc:1393
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

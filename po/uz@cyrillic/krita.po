@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-15 01:49+0000\n"
+"POT-Creation-Date: 2024-11-16 01:54+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -28977,7 +28977,7 @@ msgstr "Соя:"
 #. i18n: ectx: property (text), widget (QLabel, xLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: libs/ui/imagesize/wdg_canvassize.ui:196
+#: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
@@ -28995,7 +28995,7 @@ msgstr "Факс:"
 #. i18n: ectx: property (text), widget (QLabel, yLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: libs/ui/imagesize/wdg_canvassize.ui:530
+#: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
@@ -29008,7 +29008,7 @@ msgid "Y:"
 msgstr "Факс:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
-#: libs/ui/imagesize/wdg_canvassize.ui:540
+#: libs/ui/imagesize/wdg_canvassize.ui:573
 #, fuzzy, kde-format
 #| msgid "Author"
 msgid "Anchor:"
@@ -30958,8 +30958,8 @@ msgstr "Филтерни танлаш"
 msgid "Brush composite"
 msgstr "&Услуб"
 
-#: libs/ui/kis_paintop_box.cc:1357 libs/ui/kis_paintop_box.cc:1379
-#: libs/ui/kis_paintop_box.cc:1393
+#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
+#: libs/ui/kis_paintop_box.cc:1380
 #, fuzzy, kde-format
 #| msgid "Completion"
 msgid ""

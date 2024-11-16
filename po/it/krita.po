@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-15 03:20+0000\n"
-"PO-Revision-Date: 2024-11-01 14:55+0100\n"
+"POT-Creation-Date: 2024-11-16 03:27+0000\n"
+"PO-Revision-Date: 2024-11-12 18:52+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27976,7 +27976,7 @@ msgstr "Scostamento"
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/imagesize/wdg_canvassize.ui:196
+#: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
@@ -27994,7 +27994,7 @@ msgstr "X:"
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/imagesize/wdg_canvassize.ui:530
+#: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
@@ -28007,7 +28007,7 @@ msgid "Y:"
 msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
-#: libs/ui/imagesize/wdg_canvassize.ui:540
+#: libs/ui/imagesize/wdg_canvassize.ui:573
 #, kde-format
 msgid "Anchor:"
 msgstr "Àncora:"
@@ -29661,8 +29661,8 @@ msgstr "Scegli spazio di lavoro"
 msgid "Brush composite"
 msgstr "Composizione del pennello"
 
-#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
-#: libs/ui/kis_paintop_box.cc:1341
+#: libs/ui/kis_paintop_box.cc:1292 libs/ui/kis_paintop_box.cc:1314
+#: libs/ui/kis_paintop_box.cc:1328
 #, kde-format
 msgid ""
 "%1\n"
@@ -30404,20 +30404,16 @@ msgstr ""
 "l'attuale operazione di salvataggio è terminata."
 
 #: libs/ui/KisDocument.cpp:845
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Impossibile salvare in svg: %1"
+msgstr "Impossibile inizializzare il salvataggio di %1. L'immagine è occupata"
 
 #: libs/ui/KisDocument.cpp:850
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
-"Impossibile inizializzare il salvataggio di %1. Attendi fino a quando "
-"l'attuale operazione di salvataggio è terminata."
+"Impossibile inizializzare il salvataggio di %1. Si è verificato un errore "
+"sconosciuto"
 
 #: libs/ui/KisDocument.cpp:990
 #, kde-format
@@ -36170,10 +36166,9 @@ msgid "About &KDE"
 msgstr "Informazioni su &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Unità:"
+msgstr "Unità"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

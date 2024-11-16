@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-15 03:20+0000\n"
+"POT-Creation-Date: 2024-11-16 03:27+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -29397,7 +29397,7 @@ msgstr "Siirtymä"
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, label_7)
-#: libs/ui/imagesize/wdg_canvassize.ui:196
+#: libs/ui/imagesize/wdg_canvassize.ui:199
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
@@ -29415,7 +29415,7 @@ msgstr "X;"
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: libs/ui/imagesize/wdg_canvassize.ui:530
+#: libs/ui/imagesize/wdg_canvassize.ui:563
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
@@ -29428,7 +29428,7 @@ msgid "Y:"
 msgstr "Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAnchor)
-#: libs/ui/imagesize/wdg_canvassize.ui:540
+#: libs/ui/imagesize/wdg_canvassize.ui:573
 #, kde-format
 msgid "Anchor:"
 msgstr "Ankkuri:"
@@ -31192,8 +31192,8 @@ msgstr "Valitse työtila"
 msgid "Brush composite"
 msgstr "Pensselit"
 
-#: libs/ui/kis_paintop_box.cc:1305 libs/ui/kis_paintop_box.cc:1327
-#: libs/ui/kis_paintop_box.cc:1341
+#: libs/ui/kis_paintop_box.cc:1292 libs/ui/kis_paintop_box.cc:1314
+#: libs/ui/kis_paintop_box.cc:1328
 #, fuzzy, kde-format
 msgid ""
 "%1\n"

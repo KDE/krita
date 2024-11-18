@@ -20,20 +20,20 @@ public:
 
     bool isAnimated() const override;
 
-    KisKeyframeChannel* requestKeyframeChannel(const QString &id);
-    KisKeyframeChannel* getKeyframeChannel(const QString &id) const;
+    KisKeyframeChannel* requestKeyframeChannel(const QString &id) override;
+    KisKeyframeChannel* getKeyframeChannel(const QString &id) const override;
 
-    KisTransformMaskParamsInterfaceSP bakeIntoParams() const;
+    KisTransformMaskParamsInterfaceSP bakeIntoParams() const override;
 
-    void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand);
+    void setParamsAtCurrentPosition(const KisTransformMaskParamsInterface *params, KUndo2Command *parentCommand) override;
 
-    KisAnimatedTransformParamsHolderInterfaceSP clone() const;
+    KisAnimatedTransformParamsHolderInterfaceSP clone() const override;
 
-    void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
+    void setDefaultBounds(KisDefaultBoundsBaseSP bounds) override;
 
-    KisDefaultBoundsBaseSP defaultBounds() const;
+    KisDefaultBoundsBaseSP defaultBounds() const override;
 
-    void syncLodCache();
+    void syncLodCache() override;
 
 private:
     KisDefaultBoundsBaseSP m_defaultBounds;

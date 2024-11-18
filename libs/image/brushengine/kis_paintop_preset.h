@@ -226,8 +226,8 @@ public:
 
     QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
 
-    QList<KoResourceLoadResult> sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const;
-    void clearSideLoadedResources();
+    QList<KoResourceLoadResult> sideLoadedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+    void clearSideLoadedResources() override;
 
     QList<int> requiredCanvasResources() const override;
 

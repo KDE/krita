@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-16 03:27+0000\n"
-"PO-Revision-Date: 2024-11-01 14:18+0000\n"
+"PO-Revision-Date: 2024-11-16 15:41+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
 "Language: en_GB\n"
@@ -30324,20 +30324,14 @@ msgstr ""
 "finished."
 
 #: libs/ui/KisDocument.cpp:845
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Could not save to SVG: %1"
+msgstr "Could not start saving %1. Image is busy"
 
 #: libs/ui/KisDocument.cpp:850
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Could not start saving %1. Wait until the current save operation has "
-"finished."
+msgstr "Could not start saving %1. Unknown failure has happened"
 
 #: libs/ui/KisDocument.cpp:990
 #, kde-format
@@ -36024,10 +36018,9 @@ msgid "About &KDE"
 msgstr "About &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Unit:"
+msgstr "Unit"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

@@ -108,6 +108,7 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.set(WGConfig::popupPatches.rows, m_ui->sbPopupPatchesRows->value());
     cfg.set(WGConfig::popupPatches.scrolling, static_cast<WGConfig::Scrolling>(m_ui->cbPopupScrolling->currentIndex()));
     // Shade Selector
+    cfg.set(WGConfig::minimalShadeSelectorEnabled, m_ui->grpMinimalShadeSelector->isChecked());
     cfg.set(WGConfig::shadeSelectorUpdateOnExternalChanges, m_ui->chkShadeSelUpdateExternal->isChecked());
     cfg.set(WGConfig::shadeSelectorUpdateOnInteractionEnd, m_ui->chkShadeSelUpdateInteraction->isChecked());
     cfg.set(WGConfig::shadeSelectorUpdateOnRightClick, m_ui->chkShadeSelUpdateOnRightClick->isChecked());
@@ -181,6 +182,7 @@ void WGColorSelectorSettings::loadPreferencesImpl(bool defaults)
     m_ui->sbPopupPatchesRows->setValue(cfg.get(WGConfig::popupPatches.rows, defaults));
     m_ui->cbPopupScrolling->setCurrentIndex(static_cast<int>(cfg.get(WGConfig::popupPatches.scrolling, defaults)));
     // Shade Selector
+    m_ui->grpMinimalShadeSelector->setChecked(cfg.get(WGConfig::minimalShadeSelectorEnabled, defaults));
     m_ui->chkShadeSelUpdateExternal->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnExternalChanges, defaults));
     m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnInteractionEnd, defaults));
     m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnRightClick, defaults));

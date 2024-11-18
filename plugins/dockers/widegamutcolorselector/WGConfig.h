@@ -214,6 +214,7 @@ extern const GenericSetting<bool> quickSettingsEnabled;
 extern const NumericSetting<int> popupSize;
 
 // Shade Selector
+extern const GenericSetting<bool> minimalShadeSelectorEnabled;
 extern const NumericSetting<int> shadeSelectorLineHeight;
 extern const GenericSetting<bool> shadeSelectorUpdateOnExternalChanges;
 extern const GenericSetting<bool> shadeSelectorUpdateOnInteractionEnd;

@@ -265,6 +265,14 @@ void WGColorSelectorDock::updateLayout()
         m_commonColors->hide();
     }
 
+    bool shadeSelectorEnabled = cfg.get(WGConfig::minimalShadeSelectorEnabled);
+    if (shadeSelectorEnabled) {
+        m_shadeSelector->show();
+    }
+    else {
+        m_shadeSelector->hide();
+    }
+
 }
 
 void WGColorSelectorDock::slotConfigurationChanged()

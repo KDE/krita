@@ -243,6 +243,7 @@ const GenericSetting<bool> commonColorsAutoUpdate { "commonColorsAutoUpdate", fa
 const GenericSetting<bool> quickSettingsEnabled { "quickSettingsMenuEnabled", true };
 const NumericSetting<int> popupSize { "popupSize", 300, 100, 500, true };
 
+const GenericSetting<bool> minimalShadeSelectorEnabled {"minimalShadeSelectorEnabled", true};
 const NumericSetting<int> shadeSelectorLineHeight { "shadeSelectorLineHeight", 10, 8, 99 };
 const GenericSetting<bool> shadeSelectorUpdateOnExternalChanges { "shadeSelectorUpdateOnExternalChanges", true };
 const GenericSetting<bool> shadeSelectorUpdateOnInteractionEnd { "shadeSelectorUpdateOnInteractionEnd", false };

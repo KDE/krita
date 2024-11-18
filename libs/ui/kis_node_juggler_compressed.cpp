@@ -323,7 +323,7 @@ private:
 
 
 /**
- * A generalized command to muve up/down a set of layer
+ * A generalized command to move up/down a set of layer
  */
 struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     LowerRaiseLayer(BatchMoveUpdateDataSP updateData,
@@ -433,7 +433,8 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
             }
         }
 
-        if (!newParent) return;
+        if (!newParent ||
+            !newParent->isEditable(false)) return;
 
         addCommand(new KisLayerUtils::KeepNodesSelectedCommand(sortedNodes, sortedNodes,
                                                                m_activeNode, m_activeNode,

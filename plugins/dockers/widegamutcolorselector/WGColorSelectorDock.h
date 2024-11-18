@@ -23,6 +23,7 @@ class KisColorSourceToggle;
 class KisDisplayColorConverter;
 class KisSignalCompressor;
 class KisVisualColorSelector;
+class KisGamutMaskToolbar;
 class WGActionManager;
 class WGColorPatches;
 class WGColorPreviewToolTip;
@@ -89,6 +90,7 @@ private:
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;
     KisUniqueColorSet *m_colorHistory;
+    KisGamutMaskToolbar *m_gamutToolbar;
     WGCommonColorSet *m_commonColorSet {0};
     WGActionManager *m_actionManager {0};
     WGColorPreviewToolTip *m_colorTooltip {0};

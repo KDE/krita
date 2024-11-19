@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 03:27+0000\n"
+"POT-Creation-Date: 2024-11-19 03:19+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -18072,13 +18072,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Disposition"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "non activate (off)"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"

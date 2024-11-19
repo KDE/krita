@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 03:27+0000\n"
+"POT-Creation-Date: 2024-11-19 03:19+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -17780,13 +17780,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "अभिन्यास"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "बंद"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"

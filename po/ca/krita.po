@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 03:27+0000\n"
+"POT-Creation-Date: 2024-11-19 03:19+0000\n"
 "PO-Revision-Date: 2024-11-15 09:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -17691,13 +17691,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Disposició"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "inactiu"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"

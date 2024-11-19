@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 03:27+0000\n"
+"POT-Creation-Date: 2024-11-19 03:19+0000\n"
 "PO-Revision-Date: 2018-01-04 15:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -18072,13 +18072,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Uppsetning á síðu"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, fuzzy, kde-format
 msgid "off"
 msgstr "óvirkt"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, fuzzy, kde-format
 msgid "on"

@@ -30,6 +30,7 @@
 #include "kis_iterator_ng.h"
 #include "kis_fixed_paint_device.h"
 #include "opengl/KisOpenGLModeProber.h"
+#include "KisDisplayConfig.h"
 
 Q_GLOBAL_STATIC(KisDisplayColorConverter, s_instance)
 
@@ -249,7 +250,7 @@ KisDisplayColorConverter::KisDisplayColorConverter(KoCanvasResourceProvider *res
 
     m_d->inputImageProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     m_d->setCurrentNode(0);
-    setMonitorProfile(0);
+    setDisplayConfig(KisDisplayConfig());
     setDisplayFilter(QSharedPointer<KisDisplayFilter>(0));
 }
 
@@ -262,7 +263,7 @@ KisDisplayColorConverter::KisDisplayColorConverter()
     m_d->paintingColorSpace = KoColorSpaceRegistry::instance()->rgb8();
 
     m_d->setCurrentNode(0);
-    setMonitorProfile(0);
+    setDisplayConfig(KisDisplayConfig());
 }
 
 KisDisplayColorConverter::~KisDisplayColorConverter()
@@ -412,17 +413,18 @@ const KoColorSpace *KisDisplayColorConverter::nodeColorSpace() const
     return m_d->nodeColorSpace;
 }
 
-void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorProfile)
+void KisDisplayColorConverter::setDisplayConfig(const KisDisplayConfig &config)
 {
+    const KoColorProfile *monitorProfile = config.profile;
+
     if (m_d->useHDRMode) {
         // we don't use ICC color management in HDR mode
         monitorProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     }
 
     m_d->monitorProfile = monitorProfile;
-
-    m_d->renderingIntent = renderingIntent();
-    m_d->conversionFlags = conversionFlags();
+    m_d->renderingIntent = config.intent;
+    m_d->conversionFlags = config.conversionFlags;
 
     m_d->notifyDisplayConfigurationChanged();
 }
@@ -454,26 +456,9 @@ void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter>
     m_d->selectPaintingColorSpace();
 }
 
-
-KoColorConversionTransformation::Intent
-KisDisplayColorConverter::renderingIntent()
+KisDisplayConfig KisDisplayColorConverter::displayConfig() const
 {
-    KisConfig cfg(true);
-    return (KoColorConversionTransformation::Intent)cfg.monitorRenderIntent();
-}
-
-KoColorConversionTransformation::ConversionFlags
-KisDisplayColorConverter::conversionFlags()
-{
-    KoColorConversionTransformation::ConversionFlags conversionFlags =
-        KoColorConversionTransformation::HighQuality;
-
-    KisConfig cfg(true);
-
-    if (cfg.useBlackPointCompensation()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-    if (!cfg.allowLCMSOptimization()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
-
-    return conversionFlags;
+    return KisDisplayConfig(m_d->monitorProfile, m_d->renderingIntent, m_d->conversionFlags);
 }
 
 QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
@@ -481,14 +466,9 @@ QSharedPointer<KisDisplayFilter> KisDisplayColorConverter::displayFilter() const
     return m_d->displayFilter;
 }
 
-const KoColorProfile* KisDisplayColorConverter::monitorProfile() const
+KisDisplayConfig KisDisplayColorConverter::openGLCanvasSurfaceDisplayConfig() const
 {
-    return m_d->monitorProfile;
-}
-
-const KoColorProfile* KisDisplayColorConverter::openGLCanvasSurfaceProfile() const
-{
-    return m_d->openGLSurfaceProfile();
+    return KisDisplayConfig(m_d->openGLSurfaceProfile(), m_d->renderingIntent, m_d->conversionFlags);
 }
 
 bool KisDisplayColorConverter::isHDRMode() const

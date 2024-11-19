@@ -31,7 +31,7 @@
 #include "KisWraparoundAxis.h"
 
 class KoToolProxy;
-class KoColorProfile;
+class KisDisplayConfig;
 
 
 class KisViewManager;
@@ -47,6 +47,7 @@ class KisCoordinatesConverter;
 class KoViewConverter;
 class KisAbstractCanvasWidget;
 class KisPopupPalette;
+
 
 /**
  * KisCanvas2 is not an actual widget class, but rather an adapter for
@@ -130,8 +131,6 @@ public: // KoCanvasBase implementation
     KoUnit unit() const override;
 
     KoToolProxy* toolProxy() const override;
-
-    const KoColorProfile* monitorProfile();
 
     // FIXME:
     // Temporary! Either get the current layer and image from the
@@ -326,7 +325,7 @@ private:
     void updateCanvasWidgetImpl(const QRect &rc = QRect());
     void setCanvasWidget(KisAbstractCanvasWidget *widget);
     void resetCanvas(bool useOpenGL);
-    void setDisplayProfile(const KoColorProfile *profile);
+    void setDisplayConfig(const KisDisplayConfig &config);
 
     void notifyLevelOfDetailChange();
 

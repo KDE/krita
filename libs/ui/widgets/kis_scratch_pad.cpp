@@ -44,6 +44,7 @@
 #include "kis_algebra_2d.h"
 #include <KisAdaptedLock.h>
 #include <kis_async_action_feedback.h>
+#include <KisScreenMigrationTracker.h>
 
 namespace {
 class KisUpdateSchedulerLockAdapter
@@ -160,7 +161,6 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_scratchpadScaleY(1.0)
     , m_accumulatedMouseDelta(0)
     , m_paintLayer(0)
-    , m_displayProfile(0)
     , m_resourceProvider(0)
 {
 
@@ -192,6 +192,12 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     m_infoBuilder = new KisScratchPadPaintingInformationBuilder(this);
 
     m_scaleBorderWidth = 1;
+
+    m_screenMigrationTracker.reset(new KisScreenMigrationTracker(this));
+
+    connect(m_screenMigrationTracker.data(), &KisScreenMigrationTracker::sigScreenChanged,
+            this, &KisScratchPad::slotScreenChanged);
+    slotScreenChanged(m_screenMigrationTracker->currentScreenSafe());
 }
 
 KisScratchPad::~KisScratchPad()
@@ -682,13 +688,13 @@ void KisScratchPad::paintEvent ( QPaintEvent * event ) {
     m_paintLayer->projectionPlane()->recalculate(alignedImageRect, m_paintLayer, KisRenderPassFlag::None);
     KisPaintDeviceSP projection = m_paintLayer->projection();
 
-    QImage image = projection->convertToQImage(m_displayProfile,
+    QImage image = projection->convertToQImage(m_displayConfig.profile,
                                                alignedImageRect.x(),
                                                alignedImageRect.y(),
                                                alignedImageRect.width(),
                                                alignedImageRect.height(),
-                                               KoColorConversionTransformation::internalRenderingIntent(),
-                                               KoColorConversionTransformation::internalConversionFlags());
+                                               m_displayConfig.intent,
+                                               m_displayConfig.conversionFlags);
 
 
     QPainter gc(this);
@@ -739,11 +745,6 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
                                     const QColor &defaultColor)
 {
     m_resourceProvider = resourceProvider;
-    KisConfig cfg(true);
-    setDisplayProfile(cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow())));
-
-    connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
-            SLOT(setDisplayProfile(const KoColorProfile*)));
 
     connect(m_resourceProvider, SIGNAL(sigOnScreenResolutionChanged(qreal,qreal)),
             SLOT(setOnScreenResolution(qreal,qreal)));
@@ -921,12 +922,12 @@ void KisScratchPad::paintPresetImage()
     Q_EMIT contentChanged();
 }
 
-void KisScratchPad::setDisplayProfile(const KoColorProfile *colorProfile)
+void KisScratchPad::slotScreenChanged(QScreen *screen)
 {
-    if (colorProfile) {
-        m_displayProfile = colorProfile;
-        QWidget::update();
-    }
+    KisConfig cfg(true);
+    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+    m_displayConfig = KisDisplayConfig(canvasScreenNumber, cfg);
+    update();
 }
 
 void KisScratchPad::fillDefault()

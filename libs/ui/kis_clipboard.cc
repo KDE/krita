@@ -42,6 +42,7 @@
 #include "dialogs/kis_dlg_paste_format.h"
 #include "kis_mimedata.h"
 #include "kis_store_paintdevice_writer.h"
+#include "KisDisplayConfig.h"
 
 Q_GLOBAL_STATIC(KisClipboard, s_instance)
 
@@ -159,11 +160,11 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft, const Ki
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
     KisConfig cfg(true);
-    const KoColorProfile *monitorProfile =
-            cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()));
-    qimage = dev->convertToQImage(monitorProfile,
-                                  KoColorConversionTransformation::internalRenderingIntent(),
-                                  KoColorConversionTransformation::internalConversionFlags());
+    const KisDisplayConfig displayConfig(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()), cfg);
+
+    qimage = dev->convertToQImage(displayConfig.profile,
+                                  displayConfig.intent,
+                                  displayConfig.conversionFlags);
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
     }

@@ -18,6 +18,7 @@
 class KoColor;
 class KoColorProfile;
 class KoCanvasResourceProvider;
+class KisDisplayConfig;
 class KoID;
 
 /**
@@ -50,7 +51,7 @@ public:
 
     const KoColorSpace* paintingColorSpace() const;
     const KoColorSpace* nodeColorSpace() const;
-    void setMonitorProfile(const KoColorProfile *monitorProfile);
+    void setDisplayConfig(const KisDisplayConfig &config);
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
 
     QColor toQColor(const KoColor &c, bool proofToPaintColors = false) const;
@@ -82,12 +83,10 @@ public:
     void getHsiF(const KoColor &srcColor, qreal *h, qreal *s, qreal *i);
     void getHsyF(const KoColor &srcColor, qreal *h, qreal *s, qreal *y, qreal R=0.2126, qreal G=0.7152, qreal B=0.0722, qreal gamma=2.2);
 
-    static KoColorConversionTransformation::Intent renderingIntent();
-    static KoColorConversionTransformation::ConversionFlags conversionFlags();
+    KisDisplayConfig displayConfig() const;
 
     QSharedPointer<KisDisplayFilter> displayFilter() const;
-    const KoColorProfile* monitorProfile() const;
-    const KoColorProfile* openGLCanvasSurfaceProfile() const;
+    KisDisplayConfig openGLCanvasSurfaceDisplayConfig() const;
     bool isHDRMode() const;
 
     void notifyOpenGLCanvasIsActive(bool value);

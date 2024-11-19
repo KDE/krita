@@ -183,9 +183,11 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 
         QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
 
-        return doc->image()->projection()->convertToQImage(cfg.displayProfile(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow())),
-                                                           KoColorConversionTransformation::internalRenderingIntent(),
-                                                           KoColorConversionTransformation::internalConversionFlags());
+        const KisDisplayConfig displayConfig(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()), cfg);
+
+        return doc->image()->projection()->convertToQImage(displayConfig.profile,
+                                                           displayConfig.intent,
+                                                           displayConfig.conversionFlags);
     }
     else if (mimetype == "application/zip") {
 

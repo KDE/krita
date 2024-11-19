@@ -108,6 +108,7 @@ set(kritaui_LIB_SRCS
     KisOcioConfiguration.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
+    KisDisplayConfig.cpp
     kis_paint_ops_model.cpp
     kis_custom_pattern.cc
     kis_file_layer.cpp

@@ -18,10 +18,10 @@
 #include <kis_types.h>
 #include <kis_gradient_painter.h>
 #include <kritaui_export.h>
+#include <KisDisplayConfig.h>
 
 class QColor;
 
-class KoColorProfile;
 class KoPointerEvent;
 
 class KisCanvasResourceProvider;
@@ -32,6 +32,7 @@ class KisScratchPadEventFilter;
 class KisPaintingInformationBuilder;
 class KisToolFreehandHelper;
 class KisNodeGraphListener;
+class KisScreenMigrationTracker;
 
 
 /**
@@ -201,8 +202,8 @@ Q_SIGNALS:
     void viewportChanged(const QRect rect);
 
 private Q_SLOTS:
+    void slotScreenChanged(QScreen *screen);
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
-    void setDisplayProfile(const KoColorProfile* colorProfile);
     void slotUpdateCanvas(const QRect &rect);
 
 Q_SIGNALS:
@@ -275,6 +276,7 @@ private:
 
     KisPaintLayerSP m_paintLayer;
     const KoColorProfile* m_displayProfile;
+    KisDisplayConfig m_displayConfig;
     QCursor m_cursor;
     QCursor m_colorSamplerCursor;
     QRect m_cutoutOverlay;
@@ -297,6 +299,7 @@ private:
     int m_scaleBorderWidth;
 
     QImage m_presetImage;
+    QScopedPointer<KisScreenMigrationTracker> m_screenMigrationTracker;
 };
 
 #endif // KIS_SCRATCH_PAD_H

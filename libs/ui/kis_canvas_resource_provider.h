@@ -174,7 +174,6 @@ Q_SIGNALS:
     void sigGradientChanged(KoAbstractGradientSP);
     void sigPatternChanged(KoPatternSP);
     void sigNodeChanged(const KisNodeSP);
-    void sigDisplayProfileChanged(const KoColorProfile *);
     void sigFGColorUsed(const KoColor&);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
     void sigEffectiveCompositeOpChanged();

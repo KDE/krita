@@ -29,6 +29,7 @@
 #include "kis_projection_backend.h"
 #include "kis_image_pyramid.h"
 #include "kis_display_filter.h"
+#include <KisDisplayConfig.h>
 
 #define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
 
@@ -250,9 +251,9 @@ void KisPrescaledProjection::preScale()
 
 }
 
-void KisPrescaledProjection::setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags)
+void KisPrescaledProjection::setDisplayConfig(const KisDisplayConfig &config)
 {
-    m_d->projectionBackend->setMonitorProfile(monitorProfile, renderingIntent, conversionFlags);
+    m_d->projectionBackend->setMonitorProfile(config.profile, config.intent, config.conversionFlags);
 }
 
 void KisPrescaledProjection::setChannelFlags(const QBitArray &channelFlags)

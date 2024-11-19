@@ -20,10 +20,10 @@ class QPainter;
 class KoColorProfile;
 class KisCoordinatesConverter;
 class KisDisplayFilter;
+class KisDisplayConfig;
 
 #include <kis_types.h>
 #include "kis_ui_types.h"
-
 
 
 /**
@@ -98,7 +98,7 @@ public Q_SLOTS:
     /**
      * Set the current monitor profile
      */
-    void setMonitorProfile(const KoColorProfile *monitorProfile, KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::ConversionFlags conversionFlags);
+    void setDisplayConfig(const KisDisplayConfig &config);
 
     void setChannelFlags(const QBitArray &channelFlags);
 

@@ -28,6 +28,7 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_fixed_paint_device.h"
 #include <opengl/KisOpenGLModeProber.h>
+#include <KisDisplayConfig.h>
 
 
 struct KisSmallColorWidget::Private {
@@ -58,7 +59,7 @@ struct KisSmallColorWidget::Private {
         return
             KoColorSpaceRegistry::instance()->
                 colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
-                           displayColorConverter->openGLCanvasSurfaceProfile());
+                           displayColorConverter->openGLCanvasSurfaceDisplayConfig().profile);
     }
 
     const KoColorSpace *generationColorSpace() {

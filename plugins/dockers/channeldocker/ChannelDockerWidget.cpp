@@ -15,6 +15,7 @@
 #include <kis_canvas2.h>
 #include "KisChannelsThumbnailsStrokeStrategy.h"
 #include <kis_display_color_converter.h>
+#include <KisDisplayConfig.h>
 
 ChannelDockerWidget::ChannelDockerWidget(QWidget *parent, const char *name)
     : KisWidgetWithIdleTask<QWidget>(parent)
@@ -72,19 +73,14 @@ KisIdleTasksManager::TaskGuard ChannelDockerWidget::registerIdleTask(KisCanvas2 
     return
         canvas->viewManager()->idleTasksManager()->
         addIdleTaskWithGuard([this](KisImageSP image) {
-            const KoColorProfile *profile =
-                m_canvas->displayColorConverter()->monitorProfile();
-            KoColorConversionTransformation::ConversionFlags conversionFlags =
-                m_canvas->displayColorConverter()->conversionFlags();
-            KoColorConversionTransformation::Intent renderingIntent =
-                m_canvas->displayColorConverter()->renderingIntent();
+            const KisDisplayConfig config = m_canvas->displayColorConverter()->displayConfig();
 
             const QSize previewSize = m_model->thumbnailSizeLimit();
 
             KisChannelsThumbnailsStrokeStrategy *strategy =
                 new KisChannelsThumbnailsStrokeStrategy(image->projection(), image->bounds(),
-                                                        previewSize, false, profile,
-                                                        renderingIntent, conversionFlags);
+                                                        previewSize, false, config.profile,
+                                                        config.intent, config.conversionFlags);
 
             connect(strategy, SIGNAL(thumbnailsUpdated(QVector<QImage>, const KoColorSpace*)), this, SLOT(updateImageThumbnails(QVector<QImage>, const KoColorSpace*)));
 

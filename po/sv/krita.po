@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 01:54+0000\n"
+"POT-Creation-Date: 2024-11-19 01:49+0000\n"
 "PO-Revision-Date: 2024-10-19 16:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16884,7 +16884,7 @@ msgstr "Storlek"
 #: plugins/dockers/griddocker/grid_config_widget.ui:717
 #: plugins/dockers/recorder/recorder_export.ui:478
 #: plugins/dockers/recorder/recorder_export.ui:516
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:479
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:36
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
@@ -17863,13 +17863,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr "Utläggning"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "av"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
@@ -21958,8 +21958,8 @@ msgstr "Dokument"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:668
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:875
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:89
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
@@ -21999,8 +21999,8 @@ msgstr "Bredd:"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:688
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:895
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
@@ -22186,8 +22186,8 @@ msgstr "FFmpeg-version:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:275
 #: plugins/dockers/griddocker/grid_config_widget.ui:259
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:631
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:37
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
@@ -31121,8 +31121,8 @@ msgstr "Orsak:"
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/KisImportExportManager.cpp:692
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:728
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:935
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
@@ -35192,8 +35192,8 @@ msgstr "Tryckknapp"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:966
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:610
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:817
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
@@ -38271,7 +38271,7 @@ msgstr "Fläckar per rad:"
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:603
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:545
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:553
 #, kde-format
 msgid "Color History"
 msgstr "Färghistorik"
@@ -38306,8 +38306,8 @@ msgstr "Maximalt antal fläckar:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:708
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:925
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:554
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:562
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:769
 #, kde-format
 msgid "Layout"
 msgstr "Utläggning"
@@ -41457,7 +41457,7 @@ msgstr "Storlek på meddelanderuta:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:547
 #, kde-format
 msgid "Color Patches"
 msgstr "Färgfläckar"
@@ -41466,8 +41466,8 @@ msgstr "Färgfläckar"
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:568
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:775
 #, kde-format
 msgid "Orientation:"
 msgstr "Orientering:"
@@ -41476,8 +41476,8 @@ msgstr "Orientering:"
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsHorizontal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:590
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:797
 #, kde-format
 msgid "hori&zontal"
 msgstr "Hori&sontell"
@@ -41486,8 +41486,8 @@ msgstr "Hori&sontell"
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsVertical)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:600
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:807
 #, kde-format
 msgid "&vertical"
 msgstr "&Vertikal"
@@ -41496,8 +41496,8 @@ msgstr "&Vertikal"
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:636
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:843
 #, kde-format
 msgid "Along Orientation"
 msgstr "Längs orientering"
@@ -41506,8 +41506,8 @@ msgstr "Längs orientering"
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
 #, kde-format
 msgid "Laterally"
 msgstr "Lateralt"
@@ -41516,8 +41516,8 @@ msgstr "Lateralt"
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:649
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:856
 #, kde-format
 msgid "Scrolling:"
 msgstr "Rullning:"
@@ -41526,8 +41526,8 @@ msgstr "Rullning:"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:659
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:866
 #, kde-format
 msgid "Patches"
 msgstr "Färgrutor"
@@ -41536,8 +41536,8 @@ msgstr "Färgrutor"
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:695
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:902
 #, kde-format
 msgid "Max Patches:"
 msgstr "Maximalt antal fläckar:"
@@ -41566,32 +41566,39 @@ msgstr "Högerklick på skuggväljare"
 msgid "Interaction ends"
 msgstr "Interaktion slutar"
 
+#. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
+#, fuzzy, kde-format
+#| msgid "Minimal Shade Selector"
+msgid "Show Minimal Shade Selector"
+msgstr "Minimal skuggväljare"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
 #, kde-format
 msgid "Line Count:"
 msgstr "Radantal:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #, kde-format
 msgid "Line Height:"
 msgstr "Radhöjd:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
 #, kde-format
 msgid "Clear Button"
 msgstr "Rensningsknapp"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:760
 #, kde-format
 msgid "Colors fro&m Image"
 msgstr "Färger från &bild"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:941
 #, kde-format
 msgid "Auto Update"
 msgstr "Automatisk uppdatering"
@@ -41800,7 +41807,7 @@ msgstr "Skifta den valda färgens färgton moturs"
 msgid "Wide Gamut Color Selector"
 msgstr "Väljare av stort färgomfång"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:308
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
@@ -52970,7 +52977,7 @@ msgstr "Kvadrat"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, btnAntialiasing)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:109
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:262
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:301
 #, kde-format
 msgid "The border of the brush will be smoothed to avoid aliasing"
 msgstr "Penselns kant kommer att jämnas ut för att undvika kanteffekter"
@@ -53425,30 +53432,36 @@ msgid "Soft texturing"
 msgstr "Mjuk struktur"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:242
 #, kde-format
 msgid "Vertical Offset:"
 msgstr "Vertikalt avstånd:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
+#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
+#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:265
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
 #, kde-format
-msgid "Invert Pattern"
-msgstr "Invertera mönster"
+msgid "Random Offset"
+msgstr "Slumpmässig position"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
 #, kde-format
 msgid "Horizontal Offset:"
 msgstr "Horisontellt avstånd:"
 
-#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
-#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:294
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:307
+#. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
 #, kde-format
-msgid "Random Offset"
-msgstr "Slumpmässig position"
+msgid "Invert Pattern"
+msgstr "Invertera mönster"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoInvertOnErase)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
+#, kde-format
+msgid "Auto Invert For Eraser"
+msgstr ""
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -54215,7 +54228,7 @@ msgstr "Styrka"
 msgid "Lightness Strength"
 msgstr "Ljushetsstyrka"
 
-#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:64
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:66
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"

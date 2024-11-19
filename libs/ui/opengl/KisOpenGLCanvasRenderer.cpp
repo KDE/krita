@@ -41,6 +41,7 @@
 #include "KisOpenGLBufferCircularStorage.h"
 #include "kis_painting_tweaks.h"
 #include <KisOptimizedBrushOutline.h>
+#include <KisDisplayConfig.h>
 
 #include <config-ocio.h>
 
@@ -147,11 +148,13 @@ KisOpenGLCanvasRenderer::KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge,
 {
     d->canvasBridge = canvasBridge;
 
+    const KisDisplayConfig config = colorConverter->openGLCanvasSurfaceDisplayConfig();
+
     d->openGLImageTextures =
             KisOpenGLImageTextures::getImageTextures(image,
-                                                     colorConverter->openGLCanvasSurfaceProfile(),
-                                                     colorConverter->renderingIntent(),
-                                                     colorConverter->conversionFlags());
+                                                     config.profile,
+                                                     config.intent,
+                                                     config.conversionFlags);
 
 
     setDisplayFilterImpl(colorConverter->displayFilter(), true);
@@ -998,9 +1001,11 @@ void KisOpenGLCanvasRenderer::renderCanvasGL(const QRect &updateRect)
 
 void KisOpenGLCanvasRenderer::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
-    d->openGLImageTextures->setMonitorProfile(colorConverter->openGLCanvasSurfaceProfile(),
-                                              colorConverter->renderingIntent(),
-                                              colorConverter->conversionFlags());
+    const KisDisplayConfig config = colorConverter->openGLCanvasSurfaceDisplayConfig();
+
+    d->openGLImageTextures->setMonitorProfile(config.profile,
+                                              config.intent,
+                                              config.conversionFlags);
 }
 
 void KisOpenGLCanvasRenderer::channelSelectionChanged(const QBitArray &channelFlags)

@@ -14,6 +14,7 @@
 
 class QScreen;
 class QWidget;
+class QWindow;
 class KisSignalCompressor;
 
 class KRITAWIDGETUTILS_EXPORT KisScreenMigrationTracker : public QObject
@@ -23,6 +24,7 @@ public:
     KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent = nullptr);
 
     QScreen* currentScreen() const;
+    QScreen* currentScreenSafe() const;
 
 private Q_SLOTS:
     void slotScreenChanged(QScreen *screen);
@@ -36,11 +38,16 @@ Q_SIGNALS:
 
 private:
     void connectScreenSignals(QScreen *screen);
+    void connectTopLevelWindow(QWindow *window);
+
+protected:
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     Q_DISABLE_COPY_MOVE(KisScreenMigrationTracker)
 
     QWidget *m_trackedWidget {nullptr};
+    QPointer<QWindow> m_trackedTopLevelWindow;
     KisSignalAutoConnectionsStore m_screenConnections;
     KisSignalCompressor *m_resolutionChangeCompressor;
 };

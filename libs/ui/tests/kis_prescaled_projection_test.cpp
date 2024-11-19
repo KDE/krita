@@ -23,6 +23,7 @@
 #include <kis_paint_layer.h>
 #include <kis_group_layer.h>
 #include <kis_update_info.h>
+#include <KisDisplayConfig.h>
 
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_prescaled_projection.h"
@@ -164,9 +165,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                 KoColorConversionTransformation::internalConversionFlags());
+    projection.setDisplayConfig(KisDisplayConfig());
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
@@ -199,9 +198,7 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                 KoColorConversionTransformation::internalConversionFlags());
+    projection.setDisplayConfig(KisDisplayConfig());
     projection.setImage(image);
 
     testProjectionScenario(projection, &converter, "120dpi");
@@ -231,9 +228,7 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
     KisCoordinatesConverter converter;
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-    projection.setMonitorProfile(0,
-                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                 KoColorConversionTransformation::internalConversionFlags());
+    projection.setDisplayConfig(KisDisplayConfig());
     projection.setImage(image);
 
     // Emulate pixel size aspect canvas mapping
@@ -289,9 +284,7 @@ public:
         converter.setDocumentOffset(QPoint(100,100));
 
         projection.setCoordinatesConverter(&converter);
-        projection.setMonitorProfile(0,
-                                     KoColorConversionTransformation::internalRenderingIntent(),
-                                     KoColorConversionTransformation::internalConversionFlags());
+        projection.setDisplayConfig(KisDisplayConfig());
         projection.setImage(image);
         projection.notifyCanvasSizeChanged(QSize(100,100));
         projection.notifyZoomChanged();

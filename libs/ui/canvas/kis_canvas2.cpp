@@ -92,6 +92,7 @@
 #include "kis_image_signal_router.h"
 
 #include "KisSnapPixelStrategy.h"
+#include "KisDisplayConfig.h"
 
 
 class Q_DECL_HIDDEN KisCanvas2::KisCanvas2Private
@@ -541,9 +542,7 @@ void KisCanvas2::createQPainterCanvas()
     KisQPainterCanvas * canvasWidget = new KisQPainterCanvas(this, m_d->coordinatesConverter, m_d->view);
     m_d->prescaledProjection = new KisPrescaledProjection();
     m_d->prescaledProjection->setCoordinatesConverter(m_d->coordinatesConverter);
-    m_d->prescaledProjection->setMonitorProfile(m_d->displayColorConverter.monitorProfile(),
-                                                m_d->displayColorConverter.renderingIntent(),
-                                                m_d->displayColorConverter.conversionFlags());
+    m_d->prescaledProjection->setDisplayConfig(m_d->displayColorConverter.displayConfig());
     m_d->prescaledProjection->setDisplayFilter(m_d->displayColorConverter.displayFilter());
     canvasWidget->setPrescaledProjection(m_d->prescaledProjection);
     setCanvasWidget(canvasWidget);
@@ -576,9 +575,8 @@ void KisCanvas2::createCanvas(bool useOpenGL)
         canvasScreenNumber = 0;
     }
 
-    const KoColorProfile *profile = cfg.displayProfile(canvasScreenNumber);
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
-    m_d->displayColorConverter.setMonitorProfile(profile);
+    m_d->displayColorConverter.setDisplayConfig(KisDisplayConfig(canvasScreenNumber, cfg));
 
     if (useOpenGL && !KisOpenGL::hasOpenGL()) {
         warnKrita << "Tried to create OpenGL widget when system doesn't have OpenGL\n";
@@ -1167,11 +1165,6 @@ void KisCanvas2::notifyLevelOfDetailChange()
     }
 }
 
-const KoColorProfile *  KisCanvas2::monitorProfile()
-{
-    return m_d->displayColorConverter.monitorProfile();
-}
-
 KisViewManager* KisCanvas2::viewManager() const
 {
     if (m_d->view) {
@@ -1254,7 +1247,7 @@ void KisCanvas2::slotScreenChanged(QScreen *screen)
     if (canvasScreenNumber != -1) {
         // If profile is the same, then setDisplayProfile does nothing
         KisConfig cfg(true);
-        setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
+        setDisplayConfig(KisDisplayConfig(canvasScreenNumber, cfg));
     } else {
         warnUI << "Failed to get screenNumber for updating display profile.";
     }
@@ -1267,11 +1260,11 @@ void KisCanvas2::refetchDataFromImage()
     startUpdateInPatches(image->bounds());
 }
 
-void KisCanvas2::setDisplayProfile(const KoColorProfile *monitorProfile)
+void KisCanvas2::setDisplayConfig(const KisDisplayConfig &config)
 {
-    if (m_d->displayColorConverter.monitorProfile() == monitorProfile) return;
+    if (m_d->displayColorConverter.displayConfig() == config) return;
 
-    m_d->displayColorConverter.setMonitorProfile(monitorProfile);
+    m_d->displayColorConverter.setDisplayConfig(config);
 
     {
         KisImageSP image = this->image();

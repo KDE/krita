@@ -47,6 +47,7 @@
 
 #include <KoCanvasController.h>
 #include <KisRepaintDebugger.h>
+#include <KisDisplayConfig.h>
 
 class KisQPainterCanvas::Private
 {
@@ -171,9 +172,7 @@ void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
 void KisQPainterCanvas::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
     Q_ASSERT(m_d->prescaledProjection);
-    m_d->prescaledProjection->setMonitorProfile(colorConverter->monitorProfile(),
-                                                colorConverter->renderingIntent(),
-                                                colorConverter->conversionFlags());
+    m_d->prescaledProjection->setDisplayConfig(colorConverter->displayConfig());
 }
 
 void KisQPainterCanvas::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)

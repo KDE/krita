@@ -25,6 +25,7 @@
 #include <kis_display_color_converter.h>
 #include <KisMainWindow.h>
 #include "KisIdleTasksManager.h"
+#include <KisDisplayConfig.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : KisWidgetWithIdleTask<QWidget>(parent)
@@ -78,12 +79,7 @@ KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canv
     return
         canvas->viewManager()->idleTasksManager()->
         addIdleTaskWithGuard([this](KisImageSP image) {
-            const KoColorProfile *profile =
-                m_canvas->displayColorConverter()->monitorProfile();
-            KoColorConversionTransformation::ConversionFlags conversionFlags =
-                m_canvas->displayColorConverter()->conversionFlags();
-            KoColorConversionTransformation::Intent renderingIntent =
-                m_canvas->displayColorConverter()->renderingIntent();
+            const KisDisplayConfig config = m_canvas->displayColorConverter()->displayConfig();
 
             // If the widget is presented on a device with a pixel ratio > 1.0, we must compensate for it
             // by increasing the thumbnail's resolution. Otherwise it will appear blurry.
@@ -94,7 +90,7 @@ KisIdleTasksManager::TaskGuard OverviewWidget::registerIdleTask(KisCanvas2 *canv
             }
 
             KisImageThumbnailStrokeStrategy *strategy =
-                new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), thumbnailSize, isPixelArt(), profile, renderingIntent, conversionFlags);
+                new KisImageThumbnailStrokeStrategy(image->projection(), image->bounds(), thumbnailSize, isPixelArt(), config.profile, config.intent, config.conversionFlags);
 
             connect(strategy, SIGNAL(thumbnailUpdated(QImage)), this, SLOT(updateThumbnail(QImage)));
 

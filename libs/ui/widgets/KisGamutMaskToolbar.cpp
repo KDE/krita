@@ -5,6 +5,7 @@
  */
 
 #include <QWidget>
+#include <QToolTip>
 #include "KisGamutMaskToolbar.h"
 #include <kis_icon_utils.h>
 #include <kis_canvas_resource_provider.h>
@@ -39,9 +40,10 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
     m_d->textNoMask = i18n("Select a mask in \"Gamut Masks\" docker");
     m_d->textMaskDisabled = i18n("Mask is disabled");
 
+    m_ui->labelMaskName->hide();
+
     m_ui->bnToggleMask->setChecked(false);
     m_ui->bnToggleMask->setIcon(m_d->iconMaskOn);
-    m_ui->bnToggleMask->setEnabled(false);
 
     m_ui->rotationAngleSelector->setDecimals(0);
     m_ui->rotationAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
@@ -99,10 +101,7 @@ void KisGamutMaskToolbar::slotGamutMaskUnset()
 {
     m_d->selectedMask = nullptr;
     m_ui->rotationAngleSelector->hide();
-    m_ui->labelMaskName->show();
-    m_ui->labelMaskName->setText(m_d->textNoMask);
     m_ui->bnToggleMask->setIcon(m_d->iconMaskOn);
-    m_ui->bnToggleMask->setEnabled(false);
 }
 
 void KisGamutMaskToolbar::slotGamutMaskDeactivate()
@@ -116,7 +115,11 @@ void KisGamutMaskToolbar::slotGamutMaskDeactivate()
 
 void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
 {
-    updateMaskState(state, true);
+    if (m_d->selectedMask) {
+        updateMaskState(state, true);
+    } else {
+        QToolTip::showText(QCursor::pos(), m_d->textNoMask, m_ui->bnToggleMask, m_ui->bnToggleMask->geometry());
+    }
 }
 
 void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)

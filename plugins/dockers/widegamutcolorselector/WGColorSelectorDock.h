@@ -78,6 +78,7 @@ private Q_SLOTS:
     void slotSetNewColors();
     void slotCanvasResourceChanged(int key, const QVariant &value);
     void slotOpenSettings();
+    void slotShowGamutMaskToolbar(bool show);
 private:
     QPointer<KisCanvas2> m_canvas;
     WGSelectorDisplayConfigSP m_displayConfig;

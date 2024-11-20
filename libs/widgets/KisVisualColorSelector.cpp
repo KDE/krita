@@ -368,6 +368,8 @@ void KisVisualColorSelector::rebuildSelector()
 
     m_d->colorChannelCount = m_d->selectorModel->colorChannelCount();
 
+    bool supportsGamutMask = false;
+
     //recreate all the widgets.
 
     if (m_d->colorChannelCount == 1) {
@@ -474,6 +476,8 @@ void KisVisualColorSelector::rebuildSelector()
                                                          channel2, channel3);
         }
 
+        supportsGamutMask = block->supportsGamutMask();
+
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         connect(block, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         m_d->widgetlist.append(block);
@@ -499,6 +503,7 @@ void KisVisualColorSelector::rebuildSelector()
 
     // finally update widgets with new channel values
     slotChannelValuesChanged(m_d->selectorModel->channelValues(), (1u << m_d->colorChannelCount) - 1);
+    emit sigGamutMaskSupportChanged(supportsGamutMask);
 }
 
 void KisVisualColorSelector::resizeEvent(QResizeEvent *)

@@ -71,7 +71,10 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_gamutToolbar->setContentsMargins(0, 0, 0, 5);
     m_gamutToolbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     headerLayout->addWidget(m_gamutToolbar);
+    headerLayout->addStretch();
     headerLayout->setContentsMargins(0, 0, 0, 0);
+
+    connect(m_selector, SIGNAL(sigGamutMaskSupportChanged(bool)), SLOT(slotShowGamutMaskToolbar(bool)));
 
     m_configButton = new QToolButton(this);
     m_configButton->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -477,6 +480,11 @@ void WGColorSelectorDock::slotOpenSettings()
     if (settings.exec() == QDialog::Accepted) {
         //WGConfig::notifier()->notifyConfigChanged();
     }
+}
+
+void WGColorSelectorDock::slotShowGamutMaskToolbar(bool show)
+{
+    m_gamutToolbar->setVisible(show);
 }
 
 namespace WGConfig {

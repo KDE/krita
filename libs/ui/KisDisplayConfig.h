@@ -12,7 +12,12 @@
 
 class KoColorProfile;
 class KisConfig;
-
+/**
+ * @brief KisDisplayConfig
+ * This class keeps track of the color management configuration for
+ * image to display. This includes the profile used, but also the
+ * various flags that need to be set on the final transform.
+ */
 class KRITAUI_EXPORT KisDisplayConfig : public boost::equality_comparable<KisDisplayConfig>
 {
 public:

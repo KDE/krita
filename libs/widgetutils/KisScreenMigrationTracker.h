@@ -17,13 +17,31 @@ class QWidget;
 class QWindow;
 class KisSignalCompressor;
 
+/**
+ * A simple class that tracks the current screen assigned to the widget. When
+ * the widget migrates to a different screen, a signal is emitted.
+ *
+ * If KisScreenMigrationTracker is created **before** the actual window for
+ * the widget is created, then it subscribes to widget's QEvent::Show event
+ * and waits until the widget is displayed.
+ */
 class KRITAWIDGETUTILS_EXPORT KisScreenMigrationTracker : public QObject
 {
     Q_OBJECT
 public:
     KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent = nullptr);
 
+    /**
+     * Return the screen currently assigned to the tracked widget. If the widget
+     * has no native window associated, then the function asserts.
+     */
     QScreen* currentScreen() const;
+
+    /**
+     * Return the screen currently assigned to the tracked widget or the default
+     * screen if the widget has no native window association (usually it means that
+     * the widget hasn't yet been added into the window hierarchy).
+     */
     QScreen* currentScreenSafe() const;
 
 private Q_SLOTS:
@@ -33,7 +51,15 @@ private Q_SLOTS:
     void slotResolutionCompressorTriggered();
 
 Q_SIGNALS:
+    /**
+     * Emitted when the widget migrates to a different screen
+     */
     void sigScreenChanged(QScreen *screen);
+
+    /**
+     * Emitted when the widget migrates to a different screen or screen resolution
+     * changes. This signal is useful for adjusting the display scale factor.
+     */
     void sigScreenOrResolutionChanged(QScreen *screen);
 
 private:

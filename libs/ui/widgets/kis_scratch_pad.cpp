@@ -45,6 +45,7 @@
 #include <KisAdaptedLock.h>
 #include <kis_async_action_feedback.h>
 #include <KisScreenMigrationTracker.h>
+#include <kis_config_notifier.h>
 
 namespace {
 class KisUpdateSchedulerLockAdapter
@@ -198,6 +199,9 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     connect(m_screenMigrationTracker.data(), &KisScreenMigrationTracker::sigScreenChanged,
             this, &KisScratchPad::slotScreenChanged);
     slotScreenChanged(m_screenMigrationTracker->currentScreenSafe());
+
+    connect(KisConfigNotifier::instance(), &KisConfigNotifier::configChanged,
+            this, &KisScratchPad::slotConfigChanged);
 }
 
 KisScratchPad::~KisScratchPad()
@@ -672,6 +676,19 @@ void KisScratchPad::imageUpdated(const QRect &rect)
 void KisScratchPad::slotUpdateCanvas(const QRect &rect)
 {
     update(rect);
+}
+
+void KisScratchPad::slotConfigChanged()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_screenMigrationTracker);
+
+    KisConfig cfg(true);
+    QScreen *screen = m_screenMigrationTracker->currentScreenSafe();
+    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+    KisDisplayConfig newConfig(canvasScreenNumber, cfg);
+    if (newConfig != m_displayConfig) {
+        slotScreenChanged(screen);
+    }
 }
 
 void KisScratchPad::paintEvent ( QPaintEvent * event ) {

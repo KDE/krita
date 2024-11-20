@@ -205,6 +205,7 @@ private Q_SLOTS:
     void slotScreenChanged(QScreen *screen);
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void slotUpdateCanvas(const QRect &rect);
+    void slotConfigChanged();
 
 Q_SIGNALS:
     void colorSelected(const KoColor& color);

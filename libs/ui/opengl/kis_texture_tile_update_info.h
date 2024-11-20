@@ -19,6 +19,7 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpace.h>
 #include <kis_lod_transform.h>
+#include <KisDisplayConfig.h>
 
 class KisTextureTileUpdateInfo;
 typedef QSharedPointer<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoSP;

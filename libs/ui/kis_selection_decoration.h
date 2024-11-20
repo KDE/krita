@@ -18,6 +18,7 @@
 class KisView;
 class QWindow;
 class QScreen;
+class KisScreenMigrationTracker;
 
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {

@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QMutex>
+#include <QScreen>
 
 #include <KoColorSpace.h>
 #include <KoColorProfile.h>

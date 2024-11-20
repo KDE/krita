@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-19 01:49+0000\n"
+"POT-Creation-Date: 2024-11-20 01:50+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -48816,13 +48816,13 @@ msgstr "Sinimuotoinen"
 msgid "Vertical Wave"
 msgstr "Pystysuuntainen aalto:"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:24
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, fuzzy, kde-format
 #| msgid "Images"
 msgid "Image shape"
 msgstr "Kuvat"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, fuzzy, kde-format
 #| msgid "A shape that shows a vector image (EMF/WMF/SVM)"
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
@@ -57654,7 +57654,7 @@ msgstr "Virkistä"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Documents:"
 msgstr "Tiedostot:"
 
@@ -59120,7 +59120,7 @@ msgid "The selected documents has been modified."
 msgstr "Tätä tasoa ei voi tallentaa EXR:ksi"
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:113
 msgid "Export Layers"
 msgstr "Vie tasot"
 
@@ -59148,47 +59148,51 @@ msgstr "Sivuuta näkymättömät tasot"
 msgid "Adjust export size to layer content"
 msgstr "Sovita vientikoko tason sisältöön"
 
-#: plugins/python/exportlayers/uiexportlayers.py:72
+#: plugins/python/exportlayers/uiexportlayers.py:39
+msgid "Add incrementing prefix"
+msgstr ""
+
+#: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:73
+#: plugins/python/exportlayers/uiexportlayers.py:75
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:87
+#: plugins/python/exportlayers/uiexportlayers.py:90
 msgid "dpi:"
 msgstr "dpi:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:98
 msgid "Initial directory:"
 msgstr "Aloituskansio:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "Export options:"
 msgstr "Vientiasetukset:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:100
 msgid "Export size:"
 msgstr "Vientikoko:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:102
 msgid "Images extensions:"
 msgstr "Kuvapäätteet:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:156
+#: plugins/python/exportlayers/uiexportlayers.py:159
 msgid "Select one document."
 msgstr "Valitse yksi tiedosto."
 
-#: plugins/python/exportlayers/uiexportlayers.py:158
+#: plugins/python/exportlayers/uiexportlayers.py:161
 msgid "Select the initial directory."
 msgstr "Valitse aloituskansio."
 
-#: plugins/python/exportlayers/uiexportlayers.py:162
+#: plugins/python/exportlayers/uiexportlayers.py:165
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:229
+#: plugins/python/exportlayers/uiexportlayers.py:235
 msgid "Select a Folder"
 msgstr "Valitse kansio"
 

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-19 01:49+0000\n"
+"POT-Creation-Date: 2024-11-20 01:50+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -46893,12 +46893,12 @@ msgstr ""
 msgid "Vertical Wave"
 msgstr "Scála Ingearach"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:24
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, fuzzy, kde-format
 msgid "Image shape"
 msgstr "Íomhá"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, fuzzy, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
 msgstr "Giuirléid a thaispeánann íomhá veicteoireach"
@@ -55427,7 +55427,7 @@ msgstr "Athnuachan Iomlán"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:96
 #, fuzzy
 msgid "Documents:"
 msgstr "Oscail i gCáipéisí Nua"
@@ -57113,7 +57113,7 @@ msgid "The selected documents has been modified."
 msgstr "D'éirigh le gabháil an scáileáin."
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:113
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export Layers"
@@ -57147,55 +57147,59 @@ msgstr "&Maolaigh Sraith"
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:72
+#: plugins/python/exportlayers/uiexportlayers.py:39
+msgid "Add incrementing prefix"
+msgstr ""
+
+#: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:73
+#: plugins/python/exportlayers/uiexportlayers.py:75
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:87
+#: plugins/python/exportlayers/uiexportlayers.py:90
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:98
 #, fuzzy
 #| msgid "Initial mode"
 msgid "Initial directory:"
 msgstr "Mód tosaigh"
 
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/exportlayers/uiexportlayers.py:99
 #, fuzzy
 #| msgid "PNG Export Options"
 msgid "Export options:"
 msgstr "Roghanna Easpórtála PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:100
 #, fuzzy
 msgid "Export size:"
 msgstr "Easpórtáil"
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:102
 #, fuzzy
 msgid "Images extensions:"
 msgstr "&Inbhéartaigh an Rogha"
 
-#: plugins/python/exportlayers/uiexportlayers.py:156
+#: plugins/python/exportlayers/uiexportlayers.py:159
 #, fuzzy
 msgid "Select one document."
 msgstr "Cruthaigh cáipéis fholamh"
 
-#: plugins/python/exportlayers/uiexportlayers.py:158
+#: plugins/python/exportlayers/uiexportlayers.py:161
 #, fuzzy
 msgid "Select the initial directory."
 msgstr "Roghnaigh limistéar dronuilleogach"
 
-#: plugins/python/exportlayers/uiexportlayers.py:162
+#: plugins/python/exportlayers/uiexportlayers.py:165
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:229
+#: plugins/python/exportlayers/uiexportlayers.py:235
 #, fuzzy
 msgid "Select a Folder"
 msgstr "Mód Roghnaithe"

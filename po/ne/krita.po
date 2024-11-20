@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-19 01:49+0000\n"
+"POT-Creation-Date: 2024-11-20 01:50+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -46564,12 +46564,12 @@ msgstr "सिनुसोइडल"
 msgid "Vertical Wave"
 msgstr "ठाडो तरङ"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:24
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, fuzzy, kde-format
 msgid "Image shape"
 msgstr "छवि"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, fuzzy, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
 msgstr "आयत"
@@ -55006,7 +55006,7 @@ msgstr ""
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:96
 #, fuzzy
 #| msgid "Document"
 msgid "Documents:"
@@ -56679,7 +56679,7 @@ msgid "The selected documents has been modified."
 msgstr "टेम्प्लेट सहितको नयाँ कागजात खोल्नुहोस्"
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:113
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export Layers"
@@ -56713,54 +56713,58 @@ msgstr "फिल्टर ग्यालेरी"
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:72
+#: plugins/python/exportlayers/uiexportlayers.py:39
+msgid "Add incrementing prefix"
+msgstr ""
+
+#: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:73
+#: plugins/python/exportlayers/uiexportlayers.py:75
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:87
+#: plugins/python/exportlayers/uiexportlayers.py:90
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:98
 #, fuzzy
 msgid "Initial directory:"
 msgstr "पिक्सेल चौडाइ"
 
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/exportlayers/uiexportlayers.py:99
 #, fuzzy
 msgid "Export options:"
 msgstr "ज्यामिति विकल्प"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:100
 #, fuzzy
 msgid "Export size:"
 msgstr "निर्यात:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:102
 #, fuzzy
 #| msgid "&Image Selection"
 msgid "Images extensions:"
 msgstr "छवि चयन"
 
-#: plugins/python/exportlayers/uiexportlayers.py:156
+#: plugins/python/exportlayers/uiexportlayers.py:159
 #, fuzzy
 msgid "Select one document."
 msgstr "एउटा खाली कागजात सिर्जना गर्दछ"
 
-#: plugins/python/exportlayers/uiexportlayers.py:158
+#: plugins/python/exportlayers/uiexportlayers.py:161
 #, fuzzy
 msgid "Select the initial directory."
 msgstr "आयातकार क्षेत्र चयन गर्नुहोस्"
 
-#: plugins/python/exportlayers/uiexportlayers.py:162
+#: plugins/python/exportlayers/uiexportlayers.py:165
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:229
+#: plugins/python/exportlayers/uiexportlayers.py:235
 #, fuzzy
 msgid "Select a Folder"
 msgstr "चयन मोड:"

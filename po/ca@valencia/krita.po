@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-19 01:49+0000\n"
-"PO-Revision-Date: 2024-11-12 09:36+0100\n"
+"POT-Creation-Date: 2024-11-20 01:50+0000\n"
+"PO-Revision-Date: 2024-11-19 09:42+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -25998,7 +25998,7 @@ msgstr ""
 "dependre del DPI de la pantalla (el qual era un error).\n"
 "En Krita 4.4.3, este error s'ha esmenat, el qual pot fer que els fitxers "
 "creats en versions anteriors es vegen diferent.\n"
-"Per a restaurar el comportament anterior, podeu obligar a Krita a utilitzar "
+"Per a restaurar el comportament anterior, podeu obligar Krita a utilitzar "
 "DPI de la pantalla per als tipus de lletra introduint-lo en este camp."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
@@ -41697,10 +41697,9 @@ msgstr "La interacció acaba"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Selector mínim d'ombres"
+msgstr "Mostra el selector mínim d'ombres"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -46760,12 +46759,12 @@ msgstr "Sinusoidal"
 msgid "Vertical Wave"
 msgstr "Ona vertical"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:24
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, kde-format
 msgid "Image shape"
 msgstr "Forma d'imatge"
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
 msgstr "Una forma que mostra una imatge (PNG/JPG/TIFF)"
@@ -53679,7 +53678,7 @@ msgstr "Inversió del patró"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "Inversió automàtica per a l'esborrador"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -55617,7 +55616,7 @@ msgstr "Actualitza"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Documents:"
 msgstr "Documents:"
 
@@ -57108,7 +57107,7 @@ msgid "The selected documents has been modified."
 msgstr "S'han modificat els documents seleccionats."
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:113
 msgid "Export Layers"
 msgstr "Exportació de capes"
 
@@ -57136,47 +57135,51 @@ msgstr "Ignora les capes invisibles"
 msgid "Adjust export size to layer content"
 msgstr "Ajusta la mida de l'exportació al contingut de la capa"
 
-#: plugins/python/exportlayers/uiexportlayers.py:72
+#: plugins/python/exportlayers/uiexportlayers.py:39
+msgid "Add incrementing prefix"
+msgstr ""
+
+#: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:73
+#: plugins/python/exportlayers/uiexportlayers.py:75
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:87
+#: plugins/python/exportlayers/uiexportlayers.py:90
 msgid "dpi:"
 msgstr "ppp:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:98
 msgid "Initial directory:"
 msgstr "Directori inicial:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "Export options:"
 msgstr "Opcions d'exportació:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:100
 msgid "Export size:"
 msgstr "Mida de l'exportació:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:102
 msgid "Images extensions:"
 msgstr "Extensions de les imatges:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:156
+#: plugins/python/exportlayers/uiexportlayers.py:159
 msgid "Select one document."
 msgstr "Seleccioneu un document."
 
-#: plugins/python/exportlayers/uiexportlayers.py:158
+#: plugins/python/exportlayers/uiexportlayers.py:161
 msgid "Select the initial directory."
 msgstr "Seleccioneu el directori inicial."
 
-#: plugins/python/exportlayers/uiexportlayers.py:162
+#: plugins/python/exportlayers/uiexportlayers.py:165
 msgid "All layers have been exported."
 msgstr "S'han exportat totes les capes."
 
-#: plugins/python/exportlayers/uiexportlayers.py:229
+#: plugins/python/exportlayers/uiexportlayers.py:235
 msgid "Select a Folder"
 msgstr "Seleccioneu una carpeta"
 

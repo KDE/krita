@@ -22,6 +22,7 @@ class KRITAUI_EXPORT KisGamutMaskToolbar : public QWidget
     Q_OBJECT
 public:
     KisGamutMaskToolbar(QWidget* parent = nullptr);
+    ~KisGamutMaskToolbar();
     void connectMaskSignals(KisCanvasResourceProvider* resourceProvider);
 
 Q_SIGNALS:
@@ -41,16 +42,9 @@ private Q_SLOTS:
 private:
     void updateMaskState(bool maskEnabled, bool internalChange);
 
+    struct Private;
+    const QScopedPointer<Private> m_d;
     QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;
-    KoGamutMaskSP m_selectedMask;
-
-    QIcon m_iconMaskOff;
-    QIcon m_iconMaskOn;
-
-    QString m_textNoMask;
-    QString m_textMaskDisabled;
-
-    bool m_selfUpdate;
 };
 
 #endif // KISGAMUTMASKTOOLBAR_H

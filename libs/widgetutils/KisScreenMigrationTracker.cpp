@@ -13,6 +13,22 @@
 #include <kis_assert.h>
 #include <kis_signal_compressor.h>
 
+namespace {
+QWindow *findNearestParentWithNativeWindow(QWidget *widget)
+{
+    do {
+        QWindow *nativeWindow = widget->windowHandle();
+
+        if (nativeWindow) {
+            return nativeWindow;
+        }
+
+    } while ((widget = widget->parentWidget()));
+
+    return nullptr;
+}
+}
+
 KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QObject *parent)
     : QObject(parent)
     , m_trackedWidget(trackedWidget)
@@ -25,7 +41,7 @@ KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QOb
      * of the widget. Hence we should postpone initialization of the window handle
      * till the widget gets shown on screen.
      */
-    m_trackedTopLevelWindow = trackedWidget->topLevelWidget()->windowHandle();
+    m_trackedTopLevelWindow = findNearestParentWithNativeWindow(trackedWidget);
     if (m_trackedTopLevelWindow) {
         connectTopLevelWindow(m_trackedTopLevelWindow);
     } else {
@@ -38,10 +54,8 @@ KisScreenMigrationTracker::KisScreenMigrationTracker(QWidget *trackedWidget, QOb
 
 QScreen* KisScreenMigrationTracker::currentScreen() const
 {
-    QWindow *window = m_trackedWidget->topLevelWidget()->windowHandle();
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(window, qApp->screens().first());
-
-    return window->screen();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_trackedTopLevelWindow, qApp->screens().first());
+    return m_trackedTopLevelWindow->screen();
 }
 
 QScreen *KisScreenMigrationTracker::currentScreenSafe() const
@@ -71,7 +85,7 @@ void KisScreenMigrationTracker::connectTopLevelWindow(QWindow *window)
 bool KisScreenMigrationTracker::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_trackedWidget && event->type() == QEvent::Show) {
-        m_trackedTopLevelWindow = m_trackedWidget->topLevelWidget()->windowHandle();
+        m_trackedTopLevelWindow = findNearestParentWithNativeWindow(m_trackedWidget);
         if (m_trackedTopLevelWindow) {
             connectTopLevelWindow(m_trackedTopLevelWindow);
             m_trackedWidget->removeEventFilter(this);

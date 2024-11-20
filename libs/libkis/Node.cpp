@@ -71,6 +71,7 @@
 #include "KisMainWindow.h"
 #include "kis_canvas2.h"
 #include "KoCanvasResourceProvider.h"
+#include <brushengine/kis_paintop_preset.h>
 
 
 struct Node::Private {

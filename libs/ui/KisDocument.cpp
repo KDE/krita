@@ -43,7 +43,6 @@
 #include <KoEmbeddedResource.h>
 #include <KisUsageLogger.h>
 #include <klocalizedstring.h>
-#include "kis_scratch_pad.h"
 #include <kis_debug.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>

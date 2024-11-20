@@ -37,6 +37,7 @@
 #include <KoStore.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KisDisplayConfig.h>
 
 #include <QApplication>
 #include <QImage>

@@ -13,6 +13,7 @@
 #include "Canvas.h"
 #include <KoCanvasBase.h>
 #include <kis_canvas2.h>
+#include "kis_scratch_pad.h"
 
 #include <QColor>
 #include <QVBoxLayout>

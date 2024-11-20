@@ -11,7 +11,6 @@
 #include <kis_types.h>
 #include "kritalibkis_export.h"
 #include "libkis.h"
-#include "kis_scratch_pad.h"
 #include "View.h"
 
 class KoCanvasBase;

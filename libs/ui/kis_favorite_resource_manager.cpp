@@ -22,19 +22,19 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include <kis_paintop_preset.h>
-#include <KisHistoryList.h>
+#include <KisSortedHistoryList.h>
 
 const int KisFavoriteResourceManager::MAX_RECENT_COLOR = 12;
 
 
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_paintopBox(paintopBox)
-    , m_colorHistoryList(new KisHistoryList<KoColor>(MAX_RECENT_COLOR))
+    , m_colorHistoryList(new KisSortedHistoryList<KoColor>(MAX_RECENT_COLOR))
 
 {
-    KisConfig cfg(true);
-    m_maxPresets = cfg.favoritePresets();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
+    configChanged();
+
     KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     rServer->addObserver(this);
 }
@@ -185,6 +185,23 @@ void KisFavoriteResourceManager::configChanged()
     KisConfig cfg(true);
     m_maxPresets = cfg.favoritePresets();
     updateFavoritePresets();
+
+    using compare_less = KisSortedHistoryList<KoColor>::compare_less;
+
+    compare_less sortingFunc;
+    const QString sortingType = cfg.readEntry("popuppalette/colorHistorySorting", QString("hsv"));
+    if (sortingType == "hsv") {
+        sortingFunc = [] (const KoColor &lhs, const KoColor &rhs) {
+            auto makeHsvTuple = [] (const KoColor &color) {
+                int h, s, v;
+                color.toQColor().getHsv(&h, &s, &v);
+                return std::make_tuple(h, s, v);
+            };
+            return makeHsvTuple(lhs) < makeHsvTuple(rhs);
+        };
+    }
+
+    m_colorHistoryList->setCompareLess(sortingFunc);
 }
 
 void KisFavoriteResourceManager::presetsChanged()

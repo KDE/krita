@@ -16,6 +16,7 @@ class KisHistoryListTest : public QObject
 private Q_SLOTS:
     void testRotation();
     void testBubbleUp();
+    void testSortedList();
 };
 
 #endif // KISHISTORYLISTTEST_H

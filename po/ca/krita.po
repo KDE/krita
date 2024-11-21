@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-20 01:50+0000\n"
-"PO-Revision-Date: 2024-11-19 09:42+0100\n"
+"POT-Creation-Date: 2024-11-21 01:47+0000\n"
+"PO-Revision-Date: 2024-11-20 10:22+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -17278,7 +17278,7 @@ msgstr "Curtcircuitat"
 msgid "Imported Image"
 msgstr "Imatge importada"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2663
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19665,18 +19665,18 @@ msgstr "Recursos locals"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
-#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
-#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
-#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1012 libs/ui/KisDocument.cpp:1032
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisDocument.cpp:2021
+#: libs/ui/KisDocument.cpp:2027 libs/ui/KisDocument.cpp:2040
+#: libs/ui/KisDocument.cpp:2044 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19688,7 +19688,7 @@ msgstr "Recursos locals"
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
@@ -29292,7 +29292,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Canvia la capa de fitxer"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:700
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29522,7 +29522,7 @@ msgstr "Converteix a una capa de fitxer"
 msgid "New Filter Layer"
 msgstr "Capa de filtratge nova"
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:324
+#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "Capa d'emplenat"
@@ -30656,34 +30656,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Clona el document"
 
-#: libs/ui/KisDocument.cpp:744
+#: libs/ui/KisDocument.cpp:743
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "No es pot escriure a %1. Deseu-ho amb un nom diferent."
 
-#: libs/ui/KisDocument.cpp:794
+#: libs/ui/KisDocument.cpp:793
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Ha fallat en crear un fitxer de còpia de seguretat"
 
-#: libs/ui/KisDocument.cpp:811
+#: libs/ui/KisDocument.cpp:810
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Ha fallat en crear un fitxer de còpia de seguretat numerat"
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Exporting Document..."
 msgstr "S'està exportant el document..."
 
-#: libs/ui/KisDocument.cpp:834
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid "Saving Document..."
 msgstr "S'està desant el document..."
 
-#: libs/ui/KisDocument.cpp:849
+#: libs/ui/KisDocument.cpp:848
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30692,29 +30692,29 @@ msgstr ""
 "No s'ha pogut iniciar el desament de %1. Espereu fins que finalitzi "
 "l'operació actual de desament."
 
-#: libs/ui/KisDocument.cpp:854
+#: libs/ui/KisDocument.cpp:853
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "No s'ha pogut iniciar el desament de %1. La imatge està activa"
 
-#: libs/ui/KisDocument.cpp:859
+#: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
 "No s'ha pogut iniciar el desament de %1. Hi ha hagut una fallada desconeguda"
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:998
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Error en desar %1: %2"
 
-#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
+#: libs/ui/KisDocument.cpp:1006 libs/ui/KisDocument.cpp:1013
 #, kde-format
 msgid "Could not save %1."
 msgstr "No s'ha pogut desar «%1»."
 
-#: libs/ui/KisDocument.cpp:1036
+#: libs/ui/KisDocument.cpp:1035
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30722,45 +30722,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 s'ha desat, però està incomplet."
 
-#: libs/ui/KisDocument.cpp:1042
+#: libs/ui/KisDocument.cpp:1041
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "S'han trobat diversos problemes en desar."
 
-#: libs/ui/KisDocument.cpp:1059
+#: libs/ui/KisDocument.cpp:1058
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 ha finalitzat el desament"
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "S'està desant automàticament... %1"
 
-#: libs/ui/KisDocument.cpp:1492
+#: libs/ui/KisDocument.cpp:1491
 #, kde-format
 msgid "Autosaving..."
 msgstr "S'està desant automàticament..."
 
-#: libs/ui/KisDocument.cpp:1498
+#: libs/ui/KisDocument.cpp:1497
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "El desament automàtic es posposa: el document està ocupat..."
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1640
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Error durant en desar automàticament %1: %2"
 
-#: libs/ui/KisDocument.cpp:1655
+#: libs/ui/KisDocument.cpp:1654
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 ha finalitzat el desament automàtic"
 
-#: libs/ui/KisDocument.cpp:1912
+#: libs/ui/KisDocument.cpp:1911
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30769,38 +30769,38 @@ msgstr ""
 "Camí amb format incorrecte\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "El fitxer %1 no existeix."
 
-#: libs/ui/KisDocument.cpp:2007
+#: libs/ui/KisDocument.cpp:2006
 #, kde-format
 msgid "Opening document"
 msgstr "Obertura de document"
 
-#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
+#: libs/ui/KisDocument.cpp:2022 libs/ui/KisDocument.cpp:2028
 #, kde-format
 msgid "Could not open %1."
 msgstr "No s'ha pogut obrir %1."
 
-#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
+#: libs/ui/KisDocument.cpp:2041 libs/ui/KisDocument.cpp:2045
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Hi ha hagut problemes en obrir %1."
 
-#: libs/ui/KisDocument.cpp:2185
+#: libs/ui/KisDocument.cpp:2184
 #, kde-format
 msgid "Not Saved"
 msgstr "Sense desar"
 
-#: libs/ui/KisDocument.cpp:2671
+#: libs/ui/KisDocument.cpp:2670
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Emplenat del fons"
 
-#: libs/ui/KisDocument.cpp:2733
+#: libs/ui/KisDocument.cpp:2732
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -32956,7 +32956,7 @@ msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
 "L'OpenColorIO està desactivat: no es permet l'espai de color de les imatges"
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:332
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -57132,7 +57132,7 @@ msgstr "Ajusta la mida de l'exportació al contingut de la capa"
 
 #: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Afegeix un prefix que s'incrementi"
 
 #: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"

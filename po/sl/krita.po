@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-20 01:50+0000\n"
+"POT-Creation-Date: 2024-11-21 01:47+0000\n"
 "PO-Revision-Date: 2024-11-18 21:31+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -17247,7 +17247,7 @@ msgstr "Prepusti skozi"
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2663
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19632,18 +19632,18 @@ msgstr "Krajevni viri"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
-#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
-#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
-#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1012 libs/ui/KisDocument.cpp:1032
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisDocument.cpp:2021
+#: libs/ui/KisDocument.cpp:2027 libs/ui/KisDocument.cpp:2040
+#: libs/ui/KisDocument.cpp:2044 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19655,7 +19655,7 @@ msgstr "Krajevni viri"
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
@@ -29213,7 +29213,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Spremeni plast datoteke"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:700
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29442,7 +29442,7 @@ msgstr "Pretvori v plast datoteke"
 msgid "New Filter Layer"
 msgstr "Nova plast filtrov"
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:324
+#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr "Zapolni plast"
@@ -30578,34 +30578,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Kloniraj dokument"
 
-#: libs/ui/KisDocument.cpp:744
+#: libs/ui/KisDocument.cpp:743
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "V %1 ni možno pisati. Shranite pod drugim imenom."
 
-#: libs/ui/KisDocument.cpp:794
+#: libs/ui/KisDocument.cpp:793
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Datoteke varnostne kopije ni mogoče ustvariti."
 
-#: libs/ui/KisDocument.cpp:811
+#: libs/ui/KisDocument.cpp:810
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Oštevilčene datoteke varnostne kopije ni mogoče ustvariti."
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Izvažanje dokumenta ..."
 
-#: libs/ui/KisDocument.cpp:834
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid "Saving Document..."
 msgstr "Shranjevanje dokumenta ..."
 
-#: libs/ui/KisDocument.cpp:849
+#: libs/ui/KisDocument.cpp:848
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30614,28 +30614,28 @@ msgstr ""
 "Ni bilo mogoče začeti shranjevanje %1. Počakajte, da se trenutna operacija "
 "shranjevanje konča."
 
-#: libs/ui/KisDocument.cpp:854
+#: libs/ui/KisDocument.cpp:853
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "Ni bilo mogoče začeti shranjevanja %1. Slika je zasedena."
 
-#: libs/ui/KisDocument.cpp:859
+#: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "Ni bilo mogoče začeti shranjevanja %1. Prišlo je do neznane težave."
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:998
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Napaka med shranjevanjem %1: %2"
 
-#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
+#: libs/ui/KisDocument.cpp:1006 libs/ui/KisDocument.cpp:1013
 #, kde-format
 msgid "Could not save %1."
 msgstr "Ni bilo mogoče shraniti %1."
 
-#: libs/ui/KisDocument.cpp:1036
+#: libs/ui/KisDocument.cpp:1035
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30643,45 +30643,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 je bil shranjen, vendar je nepopoln."
 
-#: libs/ui/KisDocument.cpp:1042
+#: libs/ui/KisDocument.cpp:1041
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Pri shranjevanju je prišlo do določenih težav."
 
-#: libs/ui/KisDocument.cpp:1059
+#: libs/ui/KisDocument.cpp:1058
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Dokončano shranjevanje %1"
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Samodejno shranjevanje ... %1"
 
-#: libs/ui/KisDocument.cpp:1492
+#: libs/ui/KisDocument.cpp:1491
 #, kde-format
 msgid "Autosaving..."
 msgstr "Samodejno shranjevanje ..."
 
-#: libs/ui/KisDocument.cpp:1498
+#: libs/ui/KisDocument.cpp:1497
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Samodejno shranjevanje preloženo: dokument je zaseden ..."
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1640
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Napaka pri samodejnem shranjevanju %1: %2"
 
-#: libs/ui/KisDocument.cpp:1655
+#: libs/ui/KisDocument.cpp:1654
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Samodejno shranjevanje %1 je končano"
 
-#: libs/ui/KisDocument.cpp:1912
+#: libs/ui/KisDocument.cpp:1911
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30690,38 +30690,38 @@ msgstr ""
 "Nepravilno oblikovana pot\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Datoteka %1 ne obstaja."
 
-#: libs/ui/KisDocument.cpp:2007
+#: libs/ui/KisDocument.cpp:2006
 #, kde-format
 msgid "Opening document"
 msgstr "Odpiranje dokumenta"
 
-#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
+#: libs/ui/KisDocument.cpp:2022 libs/ui/KisDocument.cpp:2028
 #, kde-format
 msgid "Could not open %1."
 msgstr "Ni mogoče odpreti %1."
 
-#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
+#: libs/ui/KisDocument.cpp:2041 libs/ui/KisDocument.cpp:2045
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Prišlo je do težav pri odpiranju %1."
 
-#: libs/ui/KisDocument.cpp:2185
+#: libs/ui/KisDocument.cpp:2184
 #, kde-format
 msgid "Not Saved"
 msgstr "Ni shranjeno"
 
-#: libs/ui/KisDocument.cpp:2671
+#: libs/ui/KisDocument.cpp:2670
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Polnilo ozadja"
 
-#: libs/ui/KisDocument.cpp:2733
+#: libs/ui/KisDocument.cpp:2732
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -32871,7 +32871,7 @@ msgstr "Razpoložljivi upodobljevalniki ne podpirajo želene oblike izhoda"
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO je onemogočen: barvni prostor slike ni podprt"
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:332
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"

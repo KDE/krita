@@ -2083,14 +2083,26 @@ void FullscreenSettingsTab::setDefault()
 
 //---------------------------------------------------------------------------------------------------
 
+namespace PopupPaletteTabPrivate {
+static const QStringList allowedColorHistorySortingValues({"none", "hsv"});
+}
+
 PopupPaletteTab::PopupPaletteTab(QWidget *parent, const char *name)
     : WdgPopupPaletteSettingsBase(parent, name)
 {
+    using namespace PopupPaletteTabPrivate;
+
     load();
+
+    connect(chkShowColorHistory, SIGNAL(toggled(bool)), cmbColorHistorySorting, SLOT(setEnabled(bool)));
+    connect(chkShowColorHistory, SIGNAL(toggled(bool)), lblColorHistorySorting, SLOT(setEnabled(bool)));
+    KIS_SAFE_ASSERT_RECOVER_NOOP(cmbColorHistorySorting->count() == allowedColorHistorySortingValues.size());
 }
 
 void PopupPaletteTab::load()
 {
+    using namespace PopupPaletteTabPrivate;
+
     KisConfig config(true);
     sbNumPresets->setValue(config.favoritePresets());
     sbPaletteSize->setValue(config.readEntry("popuppalette/size", 385));
@@ -2099,10 +2111,20 @@ void PopupPaletteTab::load()
     chkShowColorHistory->setChecked(config.readEntry("popuppalette/showColorHistory", true));
     chkShowRotationTrack->setChecked(config.readEntry("popuppalette/showRotationTrack", true));
     chkUseDynamicSlotCount->setChecked(config.readEntry("popuppalette/useDynamicSlotCount", true));
+
+    QString currentSorting = config.readEntry("popuppalette/colorHistorySorting", QString("hsv"));
+    if (!allowedColorHistorySortingValues.contains(currentSorting)) {
+        currentSorting = "hsv";
+    }
+    cmbColorHistorySorting->setCurrentIndex(allowedColorHistorySortingValues.indexOf(currentSorting));
+    cmbColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
+    lblColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
 }
 
 void PopupPaletteTab::save()
 {
+    using namespace PopupPaletteTabPrivate;
+
     KisConfig config(true);
     config.setFavoritePresets(sbNumPresets->value());
     config.writeEntry("popuppalette/size", sbPaletteSize->value());
@@ -2111,6 +2133,8 @@ void PopupPaletteTab::save()
     config.writeEntry<bool>("popuppalette/showColorHistory", chkShowColorHistory->isChecked());
     config.writeEntry<bool>("popuppalette/showRotationTrack", chkShowRotationTrack->isChecked());
     config.writeEntry<bool>("popuppalette/useDynamicSlotCount", chkUseDynamicSlotCount->isChecked());
+    config.writeEntry("popuppalette/colorHistorySorting",
+                      allowedColorHistorySortingValues[cmbColorHistorySorting->currentIndex()]);
 }
 
 void PopupPaletteTab::setDefault()
@@ -2123,6 +2147,8 @@ void PopupPaletteTab::setDefault()
     chkShowColorHistory->setChecked(true);
     chkShowRotationTrack->setChecked(true);
     chkUseDynamicSlotCount->setChecked(true);
+    cmbColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
+    lblColorHistorySorting->setEnabled(chkShowColorHistory->isChecked());
 }
 
 //---------------------------------------------------------------------------------------------------

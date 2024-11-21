@@ -15,6 +15,9 @@ template <typename T>
 class KisHistoryList
 {
 public:
+    using const_iterator = typename std::deque<T>::const_iterator;
+
+public:
     KisHistoryList(int size)
         : m_maxSize(size)
     {
@@ -76,6 +79,15 @@ public:
     int maxSize() const {
         return m_maxSize;
     }
+
+    const_iterator cbegin() const {
+        return m_values.cbegin();
+    }
+
+    const_iterator cend() const {
+        return m_values.cend();
+    }
+
 
 private:
     int m_maxSize = 0;

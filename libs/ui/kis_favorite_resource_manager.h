@@ -22,7 +22,7 @@ class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 template <typename T>
-class KisHistoryList;
+class KisSortedHistoryList;
 
 class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
 {
@@ -110,7 +110,7 @@ private:
     KisTagModel* m_tagModel {nullptr};
     KisTagFilterResourceProxyModel* m_resourcesProxyModel {nullptr};
     KisResourceModel* m_resourceModel {nullptr};
-    QScopedPointer<KisHistoryList<KoColor>> m_colorHistoryList;
+    QScopedPointer<KisSortedHistoryList<KoColor>> m_colorHistoryList;
 
 };
 

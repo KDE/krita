@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-19 03:19+0000\n"
+"POT-Creation-Date: 2024-11-21 03:15+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17891,7 +17891,7 @@ msgstr "Услубларни импорт қилиш"
 msgid "Selection Mask"
 msgstr "&Танлаш"
 
-#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2632
+#: libs/image/kis_image.cc:753 libs/ui/KisDocument.cpp:2631
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -20385,18 +20385,18 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:352
 #: libs/ui/dialogs/kis_dlg_preferences.cc:905
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1240
 #: libs/ui/kis_node_manager.cpp:1303 libs/ui/KisApplication.cpp:1012
 #: libs/ui/KisApplication.cpp:1015 libs/ui/KisApplication.cpp:1031
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
-#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:997
-#: libs/ui/KisDocument.cpp:1004 libs/ui/KisDocument.cpp:1024
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1998
-#: libs/ui/KisDocument.cpp:2004 libs/ui/KisDocument.cpp:2017
-#: libs/ui/KisDocument.cpp:2021 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:996
+#: libs/ui/KisDocument.cpp:1003 libs/ui/KisDocument.cpp:1023
+#: libs/ui/KisDocument.cpp:1953 libs/ui/KisDocument.cpp:1997
+#: libs/ui/KisDocument.cpp:2003 libs/ui/KisDocument.cpp:2016
+#: libs/ui/KisDocument.cpp:2020 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
 #: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
 #: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
@@ -20408,7 +20408,7 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
 #: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:738
 #: libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1350
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1353
@@ -29998,7 +29998,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Рўйхатнинг турини ўзгартириш"
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:698
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -30228,7 +30228,7 @@ msgstr "Юнончага айлантириш"
 msgid "New Filter Layer"
 msgstr "Матнни ўчириш"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:324
+#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:327
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Қизил"
@@ -31314,42 +31314,42 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Бошқа ҳужжат"
 
-#: libs/ui/KisDocument.cpp:735
+#: libs/ui/KisDocument.cpp:734
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:785
+#: libs/ui/KisDocument.cpp:784
 #, fuzzy, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Намунани яратиш"
 
-#: libs/ui/KisDocument.cpp:802
+#: libs/ui/KisDocument.cpp:801
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:824
+#: libs/ui/KisDocument.cpp:823
 #, fuzzy, kde-format
 #| msgid "Open This Document"
 msgid "Exporting Document..."
 msgstr "Шу ҳужжатни очиш"
 
-#: libs/ui/KisDocument.cpp:825
+#: libs/ui/KisDocument.cpp:824
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Бошқа ҳужжат сифатида сақлаш"
 
-#: libs/ui/KisDocument.cpp:840
+#: libs/ui/KisDocument.cpp:839
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:845
+#: libs/ui/KisDocument.cpp:844
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31359,19 +31359,19 @@ msgstr ""
 "%1\n"
 "файлини сақлаб бўлмади."
 
-#: libs/ui/KisDocument.cpp:850
+#: libs/ui/KisDocument.cpp:849
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:990
+#: libs/ui/KisDocument.cpp:989
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Автоматик сақлашда хато рўй берди! Эҳтимол дискда бўш жой қолмаган."
 
-#: libs/ui/KisDocument.cpp:998 libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:997 libs/ui/KisDocument.cpp:1004
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31381,7 +31381,7 @@ msgstr ""
 "%1\n"
 "файлини сақлаб бўлмади."
 
-#: libs/ui/KisDocument.cpp:1027
+#: libs/ui/KisDocument.cpp:1026
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -31389,49 +31389,49 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1033
+#: libs/ui/KisDocument.cpp:1032
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1050
+#: libs/ui/KisDocument.cpp:1049
 #, fuzzy, kde-format
 #| msgid "First line indent"
 msgid "Finished saving %1"
 msgstr "Биринчи сатрда бўш жой"
 
-#: libs/ui/KisDocument.cpp:1475
+#: libs/ui/KisDocument.cpp:1474
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Авто-сақланмоқда..."
 
-#: libs/ui/KisDocument.cpp:1483
+#: libs/ui/KisDocument.cpp:1482
 #, kde-format
 msgid "Autosaving..."
 msgstr "Авто-сақланмоқда..."
 
-#: libs/ui/KisDocument.cpp:1489
+#: libs/ui/KisDocument.cpp:1488
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1632
+#: libs/ui/KisDocument.cpp:1631
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Автоматик сақлашда хато рўй берди! Эҳтимол дискда бўш жой қолмаган."
 
-#: libs/ui/KisDocument.cpp:1646
+#: libs/ui/KisDocument.cpp:1645
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Finished autosaving %1"
 msgstr "Авто-сақланмоқда..."
 
-#: libs/ui/KisDocument.cpp:1888
+#: libs/ui/KisDocument.cpp:1887
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -31443,19 +31443,19 @@ msgstr ""
 "Нотўгри URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1954
+#: libs/ui/KisDocument.cpp:1953
 #, fuzzy, kde-format
 #| msgid "The file %1 does not exist."
 msgid "File %1 does not exist."
 msgstr "%1 файли мавжуд эмас."
 
-#: libs/ui/KisDocument.cpp:1983
+#: libs/ui/KisDocument.cpp:1982
 #, fuzzy, kde-format
 #| msgid "Open This Document"
 msgid "Opening document"
 msgstr "Шу ҳужжатни очиш"
 
-#: libs/ui/KisDocument.cpp:1999 libs/ui/KisDocument.cpp:2005
+#: libs/ui/KisDocument.cpp:1998 libs/ui/KisDocument.cpp:2004
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -31465,24 +31465,24 @@ msgstr ""
 "%1\n"
 "файлини очиб бўлмади."
 
-#: libs/ui/KisDocument.cpp:2018 libs/ui/KisDocument.cpp:2022
+#: libs/ui/KisDocument.cpp:2017 libs/ui/KisDocument.cpp:2021
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2157
+#: libs/ui/KisDocument.cpp:2156
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "Услубларни импорт қилиш"
 
-#: libs/ui/KisDocument.cpp:2639
+#: libs/ui/KisDocument.cpp:2638
 #, fuzzy, kde-format
 #| msgid "Background color:"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Орқа фоннинг ранги:"
 
-#: libs/ui/KisDocument.cpp:2691
+#: libs/ui/KisDocument.cpp:2690
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -33692,7 +33692,7 @@ msgstr ""
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:332
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -36515,7 +36515,7 @@ msgstr "&Танлаш"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:31
 #, fuzzy, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"

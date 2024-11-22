@@ -48,7 +48,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
 "PO-Revision-Date: 2024-10-18 16:01+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -29199,7 +29199,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr ""
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29208,7 +29208,7 @@ msgstr ""
 "Klikněte pro prohození barev popředí a pozadí.\n"
 "Pravým kliknutím je změníte na černou a bílou."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "

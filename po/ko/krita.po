@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -30677,7 +30677,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "캔버스 크기"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -30686,7 +30686,7 @@ msgstr ""
 "전경색과 배경색을 전환하려면 클릭하십시오.\n"
 "검은색과 흰색으로 설정하려면 오른쪽 단추로 클릭하십시오."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "

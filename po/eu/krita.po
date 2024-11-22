@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
 "PO-Revision-Date: 2024-08-17 23:11+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -29749,7 +29749,7 @@ msgstr "% 100"
 msgid "Fit Canvas to View"
 msgstr "Oihalaren tamaina"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29758,7 +29758,7 @@ msgstr ""
 "Egin klik aurreko eta atzeko planoetako koloreak trukatzeko.\n"
 " Eskuineko klik zuri-beltza ezartzeko."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "

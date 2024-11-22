@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -30837,7 +30837,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Tamanho da Área de Desenho"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, fuzzy, kde-format
 #| msgid "Set foreground and background colors to black and white"
 msgid ""
@@ -30845,7 +30845,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "Configurar as cores principais e de fundo como preto e branco"
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "

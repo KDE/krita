@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -29992,7 +29992,7 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "&Telas (canvas)"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, fuzzy, kde-format
 #| msgid "Set foreground and background colors to black and white"
 msgid ""
@@ -30000,7 +30000,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "Fixa Colores de Prime Plano e de fundo a Nigro e Blanco "
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "

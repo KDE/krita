@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 03:15+0000\n"
-"PO-Revision-Date: 2024-10-25 18:16+0200\n"
+"POT-Creation-Date: 2024-11-22 03:17+0000\n"
+"PO-Revision-Date: 2024-11-21 10:16+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29624,7 +29624,7 @@ msgstr "100 %"
 msgid "Fit Canvas to View"
 msgstr "Prilagodi platno pogledu"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:877
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29633,7 +29633,7 @@ msgstr ""
 "Kliknite, če želite medsebojno zamenjati barve v ospredju in ozadju.\n"
 "Z desno tipko miške kliknite, da nastavite na črno-belo."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1015
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -30298,20 +30298,14 @@ msgstr ""
 "shranjevanje konča."
 
 #: libs/ui/KisDocument.cpp:844
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Ni bilo mogoče shraniti v SVG: %1"
+msgstr "Ni bilo mogoče začeti shranjevanja %1. Slika je zasedena."
 
 #: libs/ui/KisDocument.cpp:849
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Ni bilo mogoče začeti shranjevanje %1. Počakajte, da se trenutna operacija "
-"shranjevanje konča."
+msgstr "Ni bilo mogoče začeti shranjevanja %1. Prišlo je do neznane težave."
 
 #: libs/ui/KisDocument.cpp:989
 #, kde-format
@@ -36027,10 +36021,9 @@ msgid "About &KDE"
 msgstr "O namizju &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Enota:"
+msgstr "Enota"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -40009,10 +40002,9 @@ msgid "File extension:"
 msgstr "Pripona datoteke:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgid "Clean Up"
-msgstr "Počisti: "
+msgstr "Počisti"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format

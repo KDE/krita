@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-16 01:54+0000\n"
+"POT-Creation-Date: 2024-11-21 01:47+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -16794,7 +16794,7 @@ msgstr "Sturrodat"
 #: plugins/dockers/griddocker/grid_config_widget.ui:717
 #: plugins/dockers/recorder/recorder_export.ui:478
 #: plugins/dockers/recorder/recorder_export.ui:516
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:479
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:36
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
@@ -17178,7 +17178,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2664
+#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2663
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17764,13 +17764,13 @@ msgctxt "Layer name for translation of template"
 msgid "Layout"
 msgstr ""
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "off"
 msgstr "eret"
 
-#: libs/image/krita_utils.cpp:351
+#: libs/image/krita_utils.cpp:359
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
@@ -19527,18 +19527,18 @@ msgstr ""
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:777
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
-#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:727
+#: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
 #: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1006
-#: libs/ui/KisDocument.cpp:1013 libs/ui/KisDocument.cpp:1033
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:2022
-#: libs/ui/KisDocument.cpp:2028 libs/ui/KisDocument.cpp:2041
-#: libs/ui/KisDocument.cpp:2045 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1012 libs/ui/KisDocument.cpp:1032
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisDocument.cpp:2021
+#: libs/ui/KisDocument.cpp:2027 libs/ui/KisDocument.cpp:2040
+#: libs/ui/KisDocument.cpp:2044 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19550,7 +19550,7 @@ msgstr ""
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
@@ -21750,8 +21750,8 @@ msgstr "Dokumeanta"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:668
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:875
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:89
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
@@ -21791,8 +21791,8 @@ msgstr "Govdodat:"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:688
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:895
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
@@ -21976,8 +21976,8 @@ msgstr ""
 #: libs/ui/widgets/KoFillConfigWidget.ui:275
 #: plugins/dockers/griddocker/grid_config_widget.ui:259
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:631
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:838
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:37
 #: plugins/impex/webp/kis_wdg_options_webp.ui:424
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
@@ -28664,7 +28664,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr ""
 
-#: libs/ui/kis_clipboard.cc:728 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:700
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -28889,7 +28889,7 @@ msgstr ""
 msgid "New Filter Layer"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:324
+#: libs/ui/kis_layer_manager.cc:774 libs/ui/kis_mimedata.cpp:327
 #, kde-format
 msgid "Fill Layer"
 msgstr ""
@@ -29927,62 +29927,62 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:744
+#: libs/ui/KisDocument.cpp:743
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:794
+#: libs/ui/KisDocument.cpp:793
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:811
+#: libs/ui/KisDocument.cpp:810
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Exporting Document..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:834
+#: libs/ui/KisDocument.cpp:833
 #, kde-format
 msgid "Saving Document..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:849
+#: libs/ui/KisDocument.cpp:848
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:854
+#: libs/ui/KisDocument.cpp:853
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:859
+#: libs/ui/KisDocument.cpp:858
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:998
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1007 libs/ui/KisDocument.cpp:1014
+#: libs/ui/KisDocument.cpp:1006 libs/ui/KisDocument.cpp:1013
 #, kde-format
 msgid "Could not save %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1036
+#: libs/ui/KisDocument.cpp:1035
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -29990,83 +29990,83 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1042
+#: libs/ui/KisDocument.cpp:1041
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1059
+#: libs/ui/KisDocument.cpp:1058
 #, kde-format
 msgid "Finished saving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1483
 #, kde-format
 msgid "Autosaving... %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1492
+#: libs/ui/KisDocument.cpp:1491
 #, kde-format
 msgid "Autosaving..."
 msgstr "Autovurkemin …"
 
-#: libs/ui/KisDocument.cpp:1498
+#: libs/ui/KisDocument.cpp:1497
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1640
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1655
+#: libs/ui/KisDocument.cpp:1654
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1912
+#: libs/ui/KisDocument.cpp:1911
 #, kde-format
 msgid ""
 "Malformed Path\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1977
 #, kde-format
 msgid "File %1 does not exist."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2007
+#: libs/ui/KisDocument.cpp:2006
 #, kde-format
 msgid "Opening document"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2023 libs/ui/KisDocument.cpp:2029
+#: libs/ui/KisDocument.cpp:2022 libs/ui/KisDocument.cpp:2028
 #, kde-format
 msgid "Could not open %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2042 libs/ui/KisDocument.cpp:2046
+#: libs/ui/KisDocument.cpp:2041 libs/ui/KisDocument.cpp:2045
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2185
+#: libs/ui/KisDocument.cpp:2184
 #, kde-format
 msgid "Not Saved"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2671
+#: libs/ui/KisDocument.cpp:2670
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2733
+#: libs/ui/KisDocument.cpp:2732
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30418,8 +30418,8 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, ckCCAutoUpdate)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_5)
 #: libs/ui/KisImportExportManager.cpp:692
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:720
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:927
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:728
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:935
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:57
 #, kde-format
 msgid "Options"
@@ -32127,7 +32127,7 @@ msgstr ""
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
 
-#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:332
+#: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:335
 #, kde-format
 msgid ""
 "Krita could not initialize the OpenGL canvas:\n"
@@ -34176,8 +34176,8 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:966
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:809
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:610
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:817
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:219
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2194
 #, kde-format
@@ -37199,7 +37199,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:603
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:545
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:553
 #, kde-format
 msgid "Color History"
 msgstr ""
@@ -37234,8 +37234,8 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:708
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:925
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:554
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:562
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:769
 #, kde-format
 msgid "Layout"
 msgstr "Fárda"
@@ -40305,7 +40305,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:547
 #, kde-format
 msgid "Color Patches"
 msgstr ""
@@ -40314,8 +40314,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:568
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:775
 #, kde-format
 msgid "Orientation:"
 msgstr ""
@@ -40324,8 +40324,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsHorizontal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:590
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:797
 #, kde-format
 msgid "hori&zontal"
 msgstr ""
@@ -40334,8 +40334,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, rbCommonColorsVertical)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:600
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:807
 #, kde-format
 msgid "&vertical"
 msgstr ""
@@ -40344,8 +40344,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:636
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:843
 #, kde-format
 msgid "Along Orientation"
 msgstr ""
@@ -40354,8 +40354,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
 #, kde-format
 msgid "Laterally"
 msgstr ""
@@ -40364,8 +40364,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:649
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:856
 #, kde-format
 msgid "Scrolling:"
 msgstr ""
@@ -40374,8 +40374,8 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:659
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:866
 #, kde-format
 msgid "Patches"
 msgstr ""
@@ -40384,8 +40384,8 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:356
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:687
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:894
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:695
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:902
 #, kde-format
 msgid "Max Patches:"
 msgstr ""
@@ -40414,32 +40414,38 @@ msgstr ""
 msgid "Interaction ends"
 msgstr ""
 
+#. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
+#, kde-format
+msgid "Show Minimal Shade Selector"
+msgstr ""
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
 #, kde-format
 msgid "Line Count:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #, kde-format
 msgid "Line Height:"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:734
 #, kde-format
 msgid "Clear Button"
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:760
 #, kde-format
 msgid "Colors fro&m Image"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
-#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
+#: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:941
 #, kde-format
 msgid "Auto Update"
 msgstr ""
@@ -40644,7 +40650,7 @@ msgstr ""
 msgid "Wide Gamut Color Selector"
 msgstr ""
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:308
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
@@ -45387,12 +45393,12 @@ msgstr ""
 msgid "Vertical Wave"
 msgstr ""
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:24
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
 #, kde-format
 msgid "Image shape"
 msgstr ""
 
-#: plugins/flake/imageshape/ImageShapeFactory.cpp:26
+#: plugins/flake/imageshape/ImageShapeFactory.cpp:28
 #, kde-format
 msgid "A shape that shows an image (PNG/JPG/TIFF)"
 msgstr ""
@@ -51346,7 +51352,7 @@ msgstr "Boksa"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, btnAntialiasing)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:109
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:262
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:301
 #, kde-format
 msgid "The border of the brush will be smoothed to avoid aliasing"
 msgstr ""
@@ -51775,29 +51781,35 @@ msgid "Soft texturing"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:242
 #, kde-format
 msgid "Vertical Offset:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
+#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
+#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:265
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
 #, kde-format
-msgid "Invert Pattern"
+msgid "Random Offset"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpikes)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:291
 #, kde-format
 msgid "Horizontal Offset:"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
-#. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:294
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:307
+#. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:304
 #, kde-format
-msgid "Random Offset"
+msgid "Invert Pattern"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkAutoInvertOnErase)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
+#, kde-format
+msgid "Auto Invert For Eraser"
 msgstr ""
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
@@ -52520,7 +52532,7 @@ msgstr ""
 msgid "Lightness Strength"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:64
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:66
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"
@@ -53640,7 +53652,7 @@ msgstr "Ođasmahte"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Documents:"
 msgstr ""
 
@@ -55049,7 +55061,7 @@ msgid "The selected documents has been modified."
 msgstr ""
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:110
+#: plugins/python/exportlayers/uiexportlayers.py:113
 msgid "Export Layers"
 msgstr ""
 
@@ -55077,47 +55089,51 @@ msgstr ""
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:72
+#: plugins/python/exportlayers/uiexportlayers.py:39
+msgid "Add incrementing prefix"
+msgstr ""
+
+#: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:73
+#: plugins/python/exportlayers/uiexportlayers.py:75
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:87
+#: plugins/python/exportlayers/uiexportlayers.py:90
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:98
 msgid "Initial directory:"
 msgstr "Álgovuolggalaš máhppa:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "Export options:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:100
 msgid "Export size:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:102
 msgid "Images extensions:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:156
+#: plugins/python/exportlayers/uiexportlayers.py:159
 msgid "Select one document."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:158
+#: plugins/python/exportlayers/uiexportlayers.py:161
 msgid "Select the initial directory."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:162
+#: plugins/python/exportlayers/uiexportlayers.py:165
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:229
+#: plugins/python/exportlayers/uiexportlayers.py:235
 msgid "Select a Folder"
 msgstr ""
 

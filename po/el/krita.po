@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 01:47+0000\n"
+"POT-Creation-Date: 2024-11-22 01:49+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -22403,8 +22403,8 @@ msgstr "Προβολή"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2199
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -22509,8 +22509,8 @@ msgstr "Αφαίρεση στρώματος"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23881,92 +23881,92 @@ msgstr "Επιλογές"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Κομφετί"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Εξαγωγή εγγράφου ως"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Διαμόρφωση..."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Canvas 01"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Διαχείριση χρωμάτων"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Χρώμα"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Performance"
 msgstr "Επιδόσεις"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "Παλέτα"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Ρυθμίσεις φίλτρου"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Χρώμα καμβά:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
 #, fuzzy, kde-format
 #| msgid "Show Popup Palette"
 msgid "Pop-up Palette"
 msgstr "Εμφάνιση αναδυόμενης παλέτας"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Άγκυρα"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy, kde-format
 msgid "Author"
 msgstr "Άγκυρα"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
 #, fuzzy, kde-format
 #| msgid "Reset to Default"
 msgctxt "@action:button"
@@ -28169,6 +28169,27 @@ msgstr "Ιστορικό χρωμάτων"
 msgid "Show Rotation Ring"
 msgstr "Δακτύλιοι κορεσμού:"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:160
+#: libs/ui/kis_bookmarked_configurations_model.cc:56
+#, fuzzy, kde-format
+msgid "Last Used"
+msgstr "Τελευταία χρήση"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:165
+#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
+#, fuzzy, kde-format
+msgid "Hue/Saturation/Value"
+msgstr "Κορεσμού"
+
+#. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:173
+#, fuzzy, kde-format
+msgid "Sort Color History Ring By:"
+msgstr "Ιστορικό χρωμάτων"
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, fuzzy, kde-format
@@ -29923,11 +29944,6 @@ msgstr "Προσκόμιση τίτλου: 0% συμπληρωμένο"
 msgid "New configuration %1"
 msgstr "Νέα διαμόρφωση %1"
 
-#: libs/ui/kis_bookmarked_configurations_model.cc:56
-#, fuzzy, kde-format
-msgid "Last Used"
-msgstr "Τελευταία χρήση"
-
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, fuzzy, kde-format
 #| msgid "Opacity: "
@@ -30720,14 +30736,14 @@ msgstr "100%"
 msgid "Fit Canvas to View"
 msgstr "Μέγεθος καμβά"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:873
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "Επαναφορά χρωμάτων προσκηνίου και παρασκηνίου"
 
-#: libs/ui/kis_popup_palette.cpp:1009
+#: libs/ui/kis_popup_palette.cpp:1011
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -46075,12 +46091,6 @@ msgstr ""
 #| msgid "Type:"
 msgid "&Type:"
 msgstr "Τύπος:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
-#, fuzzy, kde-format
-msgid "Hue/Saturation/Value"
-msgstr "Κορεσμού"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64

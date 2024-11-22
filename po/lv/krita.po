@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 01:47+0000\n"
+"POT-Creation-Date: 2024-11-22 01:49+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -21794,8 +21794,8 @@ msgstr "Rādīt"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2199
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21898,8 +21898,8 @@ msgstr "Izņemt slāni"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23234,91 +23234,91 @@ msgstr "Alfa Opcijas"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Konfeti"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Eksportēt dokumentu kā"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Apstiprināt saglabāšanu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Audekla krāsa:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "Krāsa Vadība"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Krāsa"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Performance"
 msgstr "Veiktspēja"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Krāsu uzstādījumi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "Palete"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Divkāršot Ota"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Audekla krāsa:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "Palete"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autors"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27303,6 +27303,27 @@ msgstr "Krāsu izvēlētājs"
 msgid "Show Rotation Ring"
 msgstr "Piesātināšana"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:160
+#: libs/ui/kis_bookmarked_configurations_model.cc:56
+#, fuzzy, kde-format
+msgid "Last Used"
+msgstr "Ielīmēt tekstu"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:165
+#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
+#, fuzzy, kde-format
+msgid "Hue/Saturation/Value"
+msgstr "Piesātināšana"
+
+#. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:173
+#, fuzzy, kde-format
+msgid "Sort Color History Ring By:"
+msgstr "Krāsu izvēlētājs"
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, fuzzy, kde-format
@@ -29017,11 +29038,6 @@ msgstr ""
 msgid "New configuration %1"
 msgstr "Konfigurācija"
 
-#: libs/ui/kis_bookmarked_configurations_model.cc:56
-#, fuzzy, kde-format
-msgid "Last Used"
-msgstr "Ielīmēt tekstu"
-
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, fuzzy, kde-format
 msgid "Brush Opacity: %1%"
@@ -29795,14 +29811,14 @@ msgstr "100"
 msgid "Fit Canvas to View"
 msgstr "Audekla krāsa:"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:873
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "Priekšplāna krāsa"
 
-#: libs/ui/kis_popup_palette.cpp:1009
+#: libs/ui/kis_popup_palette.cpp:1011
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -44561,12 +44577,6 @@ msgstr ""
 #, fuzzy, kde-format
 msgid "&Type:"
 msgstr "&Tips"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
-#, fuzzy, kde-format
-msgid "Hue/Saturation/Value"
-msgstr "Piesātināšana"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64

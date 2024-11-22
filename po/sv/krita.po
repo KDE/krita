@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 01:47+0000\n"
+"POT-Creation-Date: 2024-11-22 01:49+0000\n"
 "PO-Revision-Date: 2024-10-19 16:57+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -21686,8 +21686,8 @@ msgstr "Huvudskärm:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2199
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21787,8 +21787,8 @@ msgstr "Import av videoanimering"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2167
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23183,90 +23183,90 @@ msgstr "Vitpunkt: %1, %2"
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Varning:</b> Nuvarande skärm stöder inte HDR-återgivning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
 #, kde-format
 msgid "Configure Krita"
 msgstr "Anpassa Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Snabbtangenter"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Genvägar"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Inställningar för dukinmatning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
 #, kde-format
 msgid "Canvas Input"
 msgstr "Dukinmatning"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Färghantering"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Färg"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #, kde-format
 msgid "Performance"
 msgstr "Prestanda"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
 #, kde-format
 msgid "Tablet settings"
 msgstr "Inställningar av ritplatta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgid "Tablet"
 msgstr "Ritplatta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Inställningar för enbart duk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, kde-format
 msgid "Canvas-only"
 msgstr "Enbart duk"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Palettruta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Upphovsman"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Upphovsman"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27468,6 +27468,28 @@ msgstr "Visa färghistorikring"
 msgid "Show Rotation Ring"
 msgstr "Visa rotationsring"
 
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:160
+#: libs/ui/kis_bookmarked_configurations_model.cc:56
+#, kde-format
+msgid "Last Used"
+msgstr "Senast använd"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:165
+#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
+#, kde-format
+msgid "Hue/Saturation/Value"
+msgstr "Färgton, mättnad, värde"
+
+#. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:173
+#, fuzzy, kde-format
+#| msgid "Show Color History Ring"
+msgid "Sort Color History Ring By:"
+msgstr "Visa färghistorikring"
+
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
 #, kde-format
@@ -29195,11 +29217,6 @@ msgstr "Väntar på att bildåtgärd ska bli färdig..."
 msgid "New configuration %1"
 msgstr "Ny inställning %1"
 
-#: libs/ui/kis_bookmarked_configurations_model.cc:56
-#, kde-format
-msgid "Last Used"
-msgstr "Senast använd"
-
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, kde-format
 msgid "Brush Opacity: %1%"
@@ -29949,7 +29966,7 @@ msgstr "100 %"
 msgid "Fit Canvas to View"
 msgstr "Anpassa duk till vy"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:873
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29958,7 +29975,7 @@ msgstr ""
 "Klicka för att byta förgrunds- och bakgrundsfärg.\n"
 "Högerklicka för att ställa in till svart och vitt."
 
-#: libs/ui/kis_popup_palette.cpp:1009
+#: libs/ui/kis_popup_palette.cpp:1011
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -45190,12 +45207,6 @@ msgstr "M&ax"
 #, kde-format
 msgid "&Type:"
 msgstr "&Typ:"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
-#, kde-format
-msgid "Hue/Saturation/Value"
-msgstr "Färgton, mättnad, värde"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64

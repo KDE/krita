@@ -141,6 +141,13 @@ KisBaseNode::PropertyList KisFileLayer::sectionModelProperties() const
         l << KisLayerPropertiesIcons::getErrorProperty(i18nc("a tooltip shown when a file layer cannot load its linked file",
                                                              "Failed to load linked file: %1", fileNameOrPlaceholder()));
     }
+
+    const KoColorSpace *cs = m_paintDevice->colorSpace();
+    KisImageSP image = this->image();
+    if (image && *image->colorSpace() != *cs) {
+        l << KisLayerPropertiesIcons::getColorSpaceMismatchProperty(cs);
+    }
+
     return l;
 }
 

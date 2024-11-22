@@ -3475,6 +3475,18 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="unifylayerscolorspace">
+      <icon/>
+      <text>Unify Layers Color Space</text>
+      <whatsThis/>
+      <toolTip>Convert all the layers into the image color space (if they happen to have a different color space)</toolTip>
+      <iconText>Unify Layers Color Space</iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>1</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="merge_layer">
       <icon>merge-layer-below</icon>
       <text>&amp;Merge with Layer Below</text>

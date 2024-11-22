@@ -45,6 +45,9 @@ ColorSpaceConversion::ColorSpaceConversion(QObject *parent, const QVariantList &
 
     action  = viewManager()->actionManager()->createAction("layercolorspaceconversion");
     connect(action, SIGNAL(triggered()), this, SLOT(slotLayerColorSpaceConversion()));
+
+    action  = viewManager()->actionManager()->createAction("unifylayerscolorspace");
+    connect(action, SIGNAL(triggered()), this, SLOT(slotUnifyLayersColorSpace()));
 }
 
 ColorSpaceConversion::~ColorSpaceConversion()
@@ -100,6 +103,13 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
         }
     }
     delete dlgColorSpaceConversion;
+}
+
+void ColorSpaceConversion::slotUnifyLayersColorSpace()
+{
+    KisImageSP image = viewManager()->image().toStrongRef();
+    if (!image) return;
+    image->unifyLayersColorSpace();
 }
 
 #include "colorspaceconversion.moc"

@@ -83,7 +83,8 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                                              m_d->proofingConfig->intent,
                                              m_d->proofingConfig->conversionFlags,
                                              m_d->proofingConfig->warningColor,
-                                             m_d->proofingConfig->adaptationState));
+                                             m_d->proofingConfig->adaptationState,
+                                             m_d->conversionOptions.m_conversionFlags));
         }
     }
 

@@ -75,7 +75,8 @@ public:
                                                 Intent proofingIntent,
                                                 ConversionFlags conversionFlags,
                                                 quint8 *gamutWarning,
-                                                double adaptationState
+                                                double adaptationState,
+                                                ConversionFlags displayConversionFlags
                                                 )
         : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState)
         , m_transform(0)
@@ -84,14 +85,10 @@ public:
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
 
-        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
-                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+        if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
+            !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
 
-            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
-                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
-                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
-                conversionFlags |= KoColorConversionTransformation::NoOptimization;
-            }
+            conversionFlags |= KoColorConversionTransformation::NoOptimization;
         }
         conversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
@@ -100,18 +97,37 @@ public:
         alarm[1] = (cmsUInt16Number)gamutWarning[1]*256;
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
         cmsSetAlarmCodes(alarm);
-        cmsSetAdaptationState(adaptationState);
+
 
         KIS_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
-        m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
-                                                 srcColorSpaceType,
-                                                 dstProfile->lcmsProfile(),
-                                                 dstColorSpaceType,
-                                                 dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
-                                                 renderingIntent,
-                                                 proofingIntent,
-                                                 conversionFlags);
-        cmsSetAdaptationState(1);
+
+        if (displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation)) {
+            // This more or less does the same thing as cmsCreateProofingTransform in LCMS' cmsxform.c file,
+            // except we try to enable blackpoint compentation on the second bcp too.
+            cmsHPROFILE proof = dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile();
+            cmsHPROFILE profiles[] = {srcProfile->lcmsProfile(),
+                                       proof,
+                                       proof,
+                                       dstProfile->lcmsProfile()};
+            bool doBCP1 = conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
+            bool doBCP2 = true; //displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
+            cmsBool bcp[] = {doBCP1, doBCP1, doBCP2, doBCP2};
+            cmsUInt32Number intents[] = {renderingIntent, renderingIntent, INTENT_RELATIVE_COLORIMETRIC, proofingIntent};
+            cmsFloat64Number adaptation[] = {adaptationState, adaptationState, adaptationState, adaptationState};
+            m_transform = cmsCreateExtendedTransform(cmsGetProfileContextID(srcProfile->lcmsProfile()), 4, profiles, bcp, intents, adaptation, proof, 1, srcColorSpaceType, dstColorSpaceType, conversionFlags);
+        } else {
+            cmsSetAdaptationState(adaptationState);
+            m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
+                                                     srcColorSpaceType,
+                                                     dstProfile->lcmsProfile(),
+                                                     dstColorSpaceType,
+                                                     dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
+                                                     renderingIntent,
+                                                     proofingIntent,
+                                                     conversionFlags);
+            cmsSetAdaptationState(1);
+        }
+
 
         Q_ASSERT(m_transform);
     }
@@ -266,7 +282,8 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 KoColorConversionTransformation::Intent proofingIntent,
                                                                                                 KoColorConversionTransformation::ConversionFlags conversionFlags,
                                                                                                 quint8 *gamutWarning,
-                                                                                                double adaptationState) const
+                                                                                                double adaptationState,
+                                                                                                KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
 {
     KIS_ASSERT(srcColorSpace);
     KIS_ASSERT(dstColorSpace);
@@ -277,7 +294,7 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
                 dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning,
-                adaptationState
+                adaptationState, displayConversionFlags
                 );
 }
 

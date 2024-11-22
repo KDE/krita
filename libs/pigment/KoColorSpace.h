@@ -399,7 +399,8 @@ public:
                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                              KoColorConversionTransformation::Intent proofingIntent,
                                                              KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                             quint8 *gamutWarning, double adaptationState) const;
+                                                             quint8 *gamutWarning, double adaptationState,
+                                                             KoColorConversionTransformation::ConversionFlags displayConversionFlags) const;
     /**
      * @brief proofPixelsTo
      * @param src source

@@ -223,9 +223,10 @@ public:
                                                                       KoColorConversionTransformation::Intent proofingIntent,
                                                                       KoColorConversionTransformation::ConversionFlags conversionFlags,
                                                                       KoColor gamutWarning,
-                                                                      double adaptationState)
+                                                                      double adaptationState,
+                                                                      KoColorConversionTransformation::ConversionFlags displayConversionFlags)
     {
-        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState, displayConversionFlags);
     }
 
     inline quint8* data() const {

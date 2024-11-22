@@ -24,9 +24,9 @@ public:
     ~ColorSpaceConversion() override;
 
 private Q_SLOTS:
-
     void slotImageColorSpaceConversion();
     void slotLayerColorSpaceConversion();
+    void slotUnifyLayersColorSpace();
 };
 
 #endif // COLORSPACECONVERSION_H

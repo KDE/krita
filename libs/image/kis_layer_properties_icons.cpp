@@ -85,7 +85,7 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
     m_d->icons.insert(openFileLayerFile.id(), IconsPair(KisIconUtils::loadIcon("document-open"), KisIconUtils::loadIcon("document-open")));
     m_d->icons.insert(layerError.id(), IconsPair(KisIconUtils::loadIcon("warning"), KisIconUtils::loadIcon("warning")));
-    m_d->icons.insert(layerColorSpaceMismatch.id(), IconsPair(KisIconUtils::loadIcon("color-adjustment-mode-channels"), KisIconUtils::loadIcon("color-adjustment-mode-channels")));
+    m_d->icons.insert(layerColorSpaceMismatch.id(), IconsPair(KisIconUtils::loadIcon("different-colorspace"), KisIconUtils::loadIcon("different-colorspace")));
     m_d->icons.insert(antialiased.id(), IconsPair(KisIconUtils::loadIcon("select-shape"), KisIconUtils::loadIcon("select-pixel")));
 }
 

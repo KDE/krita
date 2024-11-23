@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-22 03:17+0000\n"
+"POT-Creation-Date: 2024-11-23 03:15+0000\n"
 "PO-Revision-Date: 2024-11-15 09:32+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12551,8 +12551,29 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "Converteix l'espai de color de la capa"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3424 krita/krita.action:3427
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "Converteix l'espai de color de la capa"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3426
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424
+#: krita/krita.action:3436
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12562,14 +12583,14 @@ msgstr "Co&mbina amb la capa inferior"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3438 krita/krita.action:3439
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Combina amb la capa inferior"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436
+#: krita/krita.action:3448
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12579,14 +12600,14 @@ msgstr "A&plana la capa"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3450 krita/krita.action:3451
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Aplana la capa"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448
+#: krita/krita.action:3460
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12596,14 +12617,14 @@ msgstr "Aplana la imat&ge"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3462 krita/krita.action:3463
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "Aplana la imatge"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3472
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12613,7 +12634,7 @@ msgstr "Est&il de la capa..."
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3474 krita/krita.action:3475
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12625,7 +12646,7 @@ msgstr "Estil de la capa"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
+#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12637,7 +12658,7 @@ msgstr "Mou al grup anterior"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
+#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12649,14 +12670,14 @@ msgstr "Mou al grup posterior"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
+#: krita/krita.action:3508 krita/krita.action:3510 krita/krita.action:3511
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "Reanomena la capa actual"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3508
+#: krita/krita.action:3520
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12666,7 +12687,7 @@ msgstr "&Elimina la capa"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3510 krita/krita.action:3511
+#: krita/krita.action:3522 krita/krita.action:3523
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12676,7 +12697,7 @@ msgstr "Elimina la capa"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3520 krita/krita.action:3522
+#: krita/krita.action:3532 krita/krita.action:3534
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12686,14 +12707,14 @@ msgstr "Mou amunt la capa o màscara"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3532
+#: krita/krita.action:3542 krita/krita.action:3544
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Mou avall la capa o màscara"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540
+#: krita/krita.action:3552
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12703,28 +12724,28 @@ msgstr "&Propietats..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Propietats"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552
+#: krita/krita.action:3564
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr "Estableix la còpia &des de..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3554
+#: krita/krita.action:3566
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Estableix l'origen per a la/es capa/es clonada/es seleccionada/es."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3555
+#: krita/krita.action:3567
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -17211,17 +17232,25 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Converteix l'espai de color de la projecció"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1384
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Layer Color Space"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "Converteix l'espai de color de la capa"
+
+#: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Assigna un perfil a la capa"
 
-#: libs/image/kis_image.cc:1431
+#: libs/image/kis_image.cc:1455
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assigna un perfil"
 
-#: libs/image/kis_image.cc:2469
+#: libs/image/kis_image.cc:2493
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Seleccions escapçades"
@@ -41568,12 +41597,12 @@ msgstr "Sos&treu de la selecció actual"
 msgid "&Deselect"
 msgstr "&Desselecciona"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, kde-format
 msgid "Convert All Layers From %1"
 msgstr "Converteix totes les capes de %1"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "Converteix la capa actual de %1"

@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-22 03:17+0000\n"
+"POT-Creation-Date: 2024-11-23 03:15+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -12840,8 +12840,29 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "Converte  Spatio de Color de Strato"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3424 krita/krita.action:3427
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "Converte  Spatio de Color de Strato"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3426
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424
+#: krita/krita.action:3436
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12851,14 +12872,14 @@ msgstr "Divide in stratos (Layers)"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3438 krita/krita.action:3439
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Divide in stratos (Layers)"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436
+#: krita/krita.action:3448
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12868,14 +12889,14 @@ msgstr "&Face plan strato (Layer)"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3450 krita/krita.action:3451
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Face plan strato (Layer)"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448
+#: krita/krita.action:3460
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12885,14 +12906,14 @@ msgstr "Face plan ima&gine"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3462 krita/krita.action:3463
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "Face plan ima&gine"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3472
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12902,7 +12923,7 @@ msgstr "Stilo de strato (La&yer)"
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3474 krita/krita.action:3475
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12914,7 +12935,7 @@ msgstr "Stilo de strato (Layer)"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
+#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12926,7 +12947,7 @@ msgstr "Precedente"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
+#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12938,14 +12959,14 @@ msgstr "Remove strato (layer)"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
+#: krita/krita.action:3508 krita/krita.action:3510 krita/krita.action:3511
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "Move strato (layer)"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3508
+#: krita/krita.action:3520
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12955,7 +12976,7 @@ msgstr "&Remove strato (layer)"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3510 krita/krita.action:3511
+#: krita/krita.action:3522 krita/krita.action:3523
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12965,7 +12986,7 @@ msgstr "Remove strato (layer)"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3520 krita/krita.action:3522
+#: krita/krita.action:3532 krita/krita.action:3534
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12975,14 +12996,14 @@ msgstr "Duplica action"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3532
+#: krita/krita.action:3542 krita/krita.action:3544
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Duplica action"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540
+#: krita/krita.action:3552
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12992,28 +13013,28 @@ msgstr "&Proprietates..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Proprietates"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552
+#: krita/krita.action:3564
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr "Remove strato (layer)"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3554
+#: krita/krita.action:3566
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Modo de Scala:"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3555
+#: krita/krita.action:3567
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -17564,7 +17585,15 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Converte typo de strato (layer)"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1384
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Layer Color Space"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "Converte  Spatio de Color de Strato"
+
+#: libs/image/kis_image.cc:1414
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Align to top edge"
@@ -17572,12 +17601,12 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Alinea a limite in alto"
 
-#: libs/image/kis_image.cc:1431
+#: libs/image/kis_image.cc:1455
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Assigna Profilo"
 
-#: libs/image/kis_image.cc:2469
+#: libs/image/kis_image.cc:2493
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Tonde Selectiones"
@@ -41802,14 +41831,14 @@ msgstr "Inverte selection"
 msgid "&Deselect"
 msgstr "&De-selectiona"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert Layer Type"
 msgid "Convert All Layers From %1"
 msgstr "Converte typo de strato (layer)"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, fuzzy, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "Move strato (layer)"

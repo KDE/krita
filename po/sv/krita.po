@@ -52,15 +52,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-22 03:17+0000\n"
-"PO-Revision-Date: 2024-10-26 19:38+0200\n"
+"POT-Creation-Date: 2024-11-23 03:15+0000\n"
+"PO-Revision-Date: 2024-11-22 20:04+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12571,8 +12571,29 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "Konvertera lagerfärgrymd"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3424 krita/krita.action:3427
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "Konvertera lagerfärgrymd"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3426
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424
+#: krita/krita.action:3436
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12582,14 +12603,14 @@ msgstr "Sa&mmanfoga med lager under"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3438 krita/krita.action:3439
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Sammanfoga med lager under"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436
+#: krita/krita.action:3448
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12599,14 +12620,14 @@ msgstr "&Platta ut lager"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3450 krita/krita.action:3451
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Platta ut lager"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448
+#: krita/krita.action:3460
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12616,14 +12637,14 @@ msgstr "Platta ut &bild"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3462 krita/krita.action:3463
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "Platta ut bild"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3472
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12633,7 +12654,7 @@ msgstr "La&gerstil..."
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3474 krita/krita.action:3475
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12645,7 +12666,7 @@ msgstr "Lagerstil"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
+#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12657,7 +12678,7 @@ msgstr "Flytta in i föregående grupp"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
+#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12669,14 +12690,14 @@ msgstr "Flytta in i nästa grupp"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
+#: krita/krita.action:3508 krita/krita.action:3510 krita/krita.action:3511
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "Byt namn på aktuellt lager"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3508
+#: krita/krita.action:3520
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12686,7 +12707,7 @@ msgstr "&Ta bort lager"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3510 krita/krita.action:3511
+#: krita/krita.action:3522 krita/krita.action:3523
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12696,7 +12717,7 @@ msgstr "Ta bort lager"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3520 krita/krita.action:3522
+#: krita/krita.action:3532 krita/krita.action:3534
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12706,14 +12727,14 @@ msgstr "Flytta lager eller mask uppåt"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3532
+#: krita/krita.action:3542 krita/krita.action:3544
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Flytta lager eller mask neråt"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540
+#: krita/krita.action:3552
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12723,28 +12744,28 @@ msgstr "Egenska&per..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Egenskaper"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552
+#: krita/krita.action:3564
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr "Ställ in Kopiera f&rån..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3554
+#: krita/krita.action:3566
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Ställ in källan för markerade dupliceringslager."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3555
+#: krita/krita.action:3567
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -17225,17 +17246,25 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertera projektionens färgrymd"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1384
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Layer Color Space"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "Konvertera lagerfärgrymd"
+
+#: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Tilldela profil till lager"
 
-#: libs/image/kis_image.cc:1431
+#: libs/image/kis_image.cc:1455
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tilldela profil"
 
-#: libs/image/kis_image.cc:2469
+#: libs/image/kis_image.cc:2493
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskär markeringar"
@@ -30317,20 +30346,14 @@ msgstr ""
 "är färdig."
 
 #: libs/ui/KisDocument.cpp:844
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Kunde inte spara som SVG: %1"
+msgstr "Kunde inte börja spara %1. Bilden är upptagen."
 
 #: libs/ui/KisDocument.cpp:849
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Kunde inte börja spara %1. Vänta tills den pågående åtgärden för att spara "
-"är färdig."
+msgstr "Kunde inte börja spara %1. Okänt fel har inträffat."
 
 #: libs/ui/KisDocument.cpp:989
 #, kde-format
@@ -36031,10 +36054,9 @@ msgid "About &KDE"
 msgstr "Om &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Enhet:"
+msgstr "Enhet"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -41456,12 +41478,12 @@ msgstr "Subtrahera från aktuell &markering"
 msgid "&Deselect"
 msgstr "A&vmarkera"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, kde-format
 msgid "Convert All Layers From %1"
 msgstr "Konvertera alla lager från %1"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr "Konvertera aktuellt lager från %1"

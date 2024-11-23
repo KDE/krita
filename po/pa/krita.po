@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-22 03:17+0000\n"
+"POT-Creation-Date: 2024-11-23 03:15+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -13369,8 +13369,28 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3424 krita/krita.action:3427
+#, fuzzy, kde-format
+#| msgid "Create Layer"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3426
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3424
+#: krita/krita.action:3436
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -13381,7 +13401,7 @@ msgstr "ਲੇਅਰ ਹਟਾਓ"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3426 krita/krita.action:3427
+#: krita/krita.action:3438 krita/krita.action:3439
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "action"
@@ -13389,7 +13409,7 @@ msgid "Merge with Layer Below"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3436
+#: krita/krita.action:3448
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13400,7 +13420,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3438 krita/krita.action:3439
+#: krita/krita.action:3450 krita/krita.action:3451
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13408,7 +13428,7 @@ msgid "Flatten Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3448
+#: krita/krita.action:3460
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13419,7 +13439,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3450 krita/krita.action:3451
+#: krita/krita.action:3462 krita/krita.action:3463
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "action"
@@ -13427,7 +13447,7 @@ msgid "Flatten image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3460
+#: krita/krita.action:3472
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "action"
@@ -13438,7 +13458,7 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3462 krita/krita.action:3463
+#: krita/krita.action:3474 krita/krita.action:3475
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgctxt "action"
@@ -13451,7 +13471,7 @@ msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3472 krita/krita.action:3474 krita/krita.action:3475
+#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -13464,7 +13484,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3484 krita/krita.action:3486 krita/krita.action:3487
+#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
 #, fuzzy, kde-format
 #| msgid "Add a new slide or layer"
 msgctxt "action"
@@ -13477,7 +13497,7 @@ msgstr "ਨਵੀਂ ਸਲਾਈਡ ਜਾਂ ਲੇਅਰ ਸ਼ਾਮਲ"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3496 krita/krita.action:3498 krita/krita.action:3499
+#: krita/krita.action:3508 krita/krita.action:3510 krita/krita.action:3511
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13485,7 +13505,7 @@ msgid "Rename current layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3508
+#: krita/krita.action:3520
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13496,7 +13516,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3510 krita/krita.action:3511
+#: krita/krita.action:3522 krita/krita.action:3523
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgctxt "action"
@@ -13507,7 +13527,7 @@ msgstr "ਲੇਅਰ ਬਣਾਓ"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3520 krita/krita.action:3522
+#: krita/krita.action:3532 krita/krita.action:3534
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13518,7 +13538,7 @@ msgstr "ਨਵੀਂ ਲੇਅਰ"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3532
+#: krita/krita.action:3542 krita/krita.action:3544
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "action"
@@ -13526,7 +13546,7 @@ msgid "Move Layer or Mask Down"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540
+#: krita/krita.action:3552
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "action"
@@ -13537,7 +13557,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3554 krita/krita.action:3555
 #, fuzzy, kde-format
 #| msgid "Position"
 msgctxt "Layer Properties"
@@ -13545,7 +13565,7 @@ msgid "Properties"
 msgstr "ਸਥਿਤੀ"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552
+#: krita/krita.action:3564
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -13553,7 +13573,7 @@ msgid "Set Copy F&rom..."
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3554
+#: krita/krita.action:3566
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -13565,7 +13585,7 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3555
+#: krita/krita.action:3567
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt "action"
@@ -18547,21 +18567,28 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_image.cc:1390
+#: libs/image/kis_image.cc:1384
+#, fuzzy
+#| msgid "Create Layer"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "ਲੇਅਰ ਬਣਾਓ"
+
+#: libs/image/kis_image.cc:1414
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/image/kis_image.cc:1431
+#: libs/image/kis_image.cc:1455
 #, fuzzy
 #| msgid "Active tool: %1"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/image/kis_image.cc:2469
+#: libs/image/kis_image.cc:2493
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
@@ -44308,13 +44335,13 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 msgid "&Deselect"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Convert All Layers From %1"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Convert Current Layer From %1"

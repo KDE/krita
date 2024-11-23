@@ -96,6 +96,10 @@ public:
         // content depends on style setting.
         InfoTextRole,
 
+        // If the data item represents a node that is a filter mask that has a color property,
+        // it will return the color used by that filter. Otherwise, it will return an null variant.
+        FilterMaskColorRole,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,
 

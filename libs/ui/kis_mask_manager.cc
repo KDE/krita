@@ -287,6 +287,30 @@ KisNodeSP KisMaskManager::createTransformMask(KisNodeSP activeNode)
     return mask;
 }
 
+KisNodeSP KisMaskManager::createFastColorOverlayMask(KisNodeSP activeNode)
+{
+    if (!m_view->nodeManager()->canModifyLayer(activeNode)) return 0;
+
+    KisLayerSP activeLayer = qobject_cast<KisLayer*>(activeNode.data());
+    Q_ASSERT(activeLayer);
+
+    KisFilterConfigurationSP filter =
+        KisFilterRegistry::instance()->value("fastcoloroverlay")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    if (!filter) return nullptr;
+
+    m_commandsAdapter->beginMacro(kundo2_i18n("Add Fast Color Overlay"));
+
+    KisFilterMaskSP mask = new KisFilterMask(m_view->image(), "");
+    mask->initSelection(activeLayer);
+    mask->setName(createMaskNameCommon(activeLayer, "KisFilterMask", i18n("Color Overlay Mask")));
+    mask->setFilter(filter->cloneWithResourcesSnapshot());
+
+    m_commandsAdapter->addNode(mask, activeLayer, activeLayer->lastChild());
+    m_commandsAdapter->endMacro();
+
+    return mask;
+}
+
 void KisMaskManager::maskProperties()
 {
     if (!activeMask()) return;

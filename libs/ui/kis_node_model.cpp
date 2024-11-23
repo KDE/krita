@@ -32,6 +32,7 @@
 #include <kis_shape_controller.h>
 
 #include "kis_dummies_facade_base.h"
+#include "kis_filter_mask.h"
 #include "kis_node_dummies_graph.h"
 #include "kis_model_index_converter.h"
 #include "kis_model_index_converter_show_all.h"
@@ -604,6 +605,16 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
             infoText = i18nc("%1 is the percent value, % is the percent sign", "%1% %2", opacityString, compositeOpDesc);
         }
         return infoText;
+    }
+    case FilterMaskColorRole: {
+        if (node->inherits("KisFilterMask")) {
+            KisFilterMaskSP mask = qobject_cast<KisFilterMask*>(node.data());
+            // The main use case is "fastcoloroverlay" filter, to display its color in the UI.
+            if (mask->filter()->hasProperty("color")) {
+                return mask->filter()->getColor("color").toQColor();
+            }
+        }
+        return QVariant();
     }
     default:
 

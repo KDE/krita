@@ -753,6 +753,33 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
         x += scm.border();
     }
 
+    // Draw a color preview "icon" for some types of filter masks,
+    // but especially for KisFilterFastColorOverlay.
+
+    if (index.data(KisNodeModel::FilterMaskColorRole).isNull() == false) {
+        if (!(option.state & QStyle::State_Enabled)) {
+            p->setOpacity(0.35);
+        } else {
+            p->setOpacity(1.0);
+        }
+        // Filter masks have two unused properties/icons,
+        // and we can use that space to draw the filter's selected color.
+
+        QRect colorRect;
+        const int dx = scm.iconSize() + scm.iconMargin();
+        if (option.direction == Qt::RightToLeft) {
+            // The free space is at the beginning on the left.
+            colorRect.setRect(0, 0, rc.width() - dx, rc.height());
+        } else {
+            // The free space is at the end on the right.
+            colorRect.setRect(dx, 0, rc.width() - dx, rc.height());
+        }
+        colorRect = colorRect.marginsRemoved(QMargins(8, 10, 8, 10));
+
+        p->fillRect(colorRect, index.data(KisNodeModel::FilterMaskColorRole).value<QColor>());
+        p->drawRect(colorRect);
+    }
+
     p->setTransform(oldTransform);
     p->setPen(oldPen);
 }

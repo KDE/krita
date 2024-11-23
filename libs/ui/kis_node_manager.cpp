@@ -376,6 +376,9 @@ void KisNodeManager::setup(KisKActionCollection * actionCollection, KisActionMan
 
     NEW_LAYER_ACTION("add_new_filter_mask", "KisFilterMask");
 
+    // NOTE: FastColorOverlayFilterMask is just an identifier, not an actual class name
+    NEW_LAYER_ACTION("add_new_fast_color_overlay_mask", "FastColorOverlayFilterMask");
+
     NEW_LAYER_ACTION("add_new_colorize_mask", "KisColorizeMask");
 
     NEW_LAYER_ACTION("add_new_transform_mask", "KisTransformMask");
@@ -662,12 +665,13 @@ KisNodeSP  KisNodeManager::createNode(const QString & nodeType, bool quiet, KisP
         if (nodes.isEmpty()) {
             nodes.append(activeNode);
         }
-
         return m_d->layerManager.addCloneLayer(nodes);
     } else if (nodeType == "KisTransparencyMask") {
         return m_d->maskManager.createTransparencyMask(activeNode, copyFrom, false);
     } else if (nodeType == "KisFilterMask") {
         return m_d->maskManager.createFilterMask(activeNode, copyFrom, quiet, false);
+    } else if (nodeType == "FastColorOverlayFilterMask") {
+        return m_d->maskManager.createFastColorOverlayMask(activeNode);
     } else if (nodeType == "KisColorizeMask") {
         return m_d->maskManager.createColorizeMask(activeNode);
     } else if (nodeType == "KisTransformMask") {

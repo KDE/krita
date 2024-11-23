@@ -79,6 +79,7 @@ private:
     KisNodeSP createColorizeMask(KisNodeSP activeNode);
     KisNodeSP createTransformMask(KisNodeSP activeNode);
     KisNodeSP createTransparencyMask(KisNodeSP activeNode, KisPaintDeviceSP copyFrom, bool convertActiveNode);
+    KisNodeSP createFastColorOverlayMask(KisNodeSP activeNode);
 
     KisViewManager * m_view;
     QPointer<KisView>m_imageView;

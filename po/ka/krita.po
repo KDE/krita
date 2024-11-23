@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-22 01:49+0000\n"
+"POT-Creation-Date: 2024-11-23 01:47+0000\n"
 "PO-Revision-Date: 2024-07-07 07:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -12591,8 +12591,29 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "ფენის ფერის სივრცის გარდაქმნა"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3480 krita/krita.action:3483
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "ფენის ფერის სივრცის გარდაქმნა"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3482
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3480
+#: krita/krita.action:3492
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12602,14 +12623,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3482 krita/krita.action:3483
+#: krita/krita.action:3494 krita/krita.action:3495
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "ქვედა ფენასთან შერწყმა"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3492
+#: krita/krita.action:3504
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12619,14 +12640,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3494 krita/krita.action:3495
+#: krita/krita.action:3506 krita/krita.action:3507
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "ფენის გაბრტყელება"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3504
+#: krita/krita.action:3516
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12636,14 +12657,14 @@ msgstr "&გამოსახულების გაბრტყელებ�
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3506 krita/krita.action:3507
+#: krita/krita.action:3518 krita/krita.action:3519
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "გამოსახულების გაბრტყელება"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3516
+#: krita/krita.action:3528
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12653,7 +12674,7 @@ msgstr "ფენის &სტილი..."
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3518 krita/krita.action:3519
+#: krita/krita.action:3530 krita/krita.action:3531
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12665,7 +12686,7 @@ msgstr "ფენის სტილი"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3528 krita/krita.action:3530 krita/krita.action:3531
+#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12677,7 +12698,7 @@ msgstr "წინა ჯგუფში გადატანა"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12689,14 +12710,14 @@ msgstr "შემდეგ ჯგუფში გადატანა"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
+#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "მიმდინარე ფენის სახელის გადარქმევა"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3564
+#: krita/krita.action:3576
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12706,7 +12727,7 @@ msgstr "&ფენის წაშლა"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3566 krita/krita.action:3567
+#: krita/krita.action:3578 krita/krita.action:3579
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12716,7 +12737,7 @@ msgstr "ფენის წაშლა"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3576 krita/krita.action:3578
+#: krita/krita.action:3588 krita/krita.action:3590
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12726,14 +12747,14 @@ msgstr ""
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3586 krita/krita.action:3588
+#: krita/krita.action:3598 krita/krita.action:3600
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr ""
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3596
+#: krita/krita.action:3608
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12743,28 +12764,28 @@ msgstr "&თვისებები..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3598 krita/krita.action:3599
+#: krita/krita.action:3610 krita/krita.action:3611
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "პარამეტრები"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3608
+#: krita/krita.action:3620
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr ""
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3610
+#: krita/krita.action:3622
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr ""
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3611
+#: krita/krita.action:3623
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -12774,7 +12795,7 @@ msgstr ""
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3620 krita/krita.action:3622
+#: krita/krita.action:3632 krita/krita.action:3634
 #, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
@@ -12784,7 +12805,7 @@ msgstr ""
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3632 krita/krita.action:3634
+#: krita/krita.action:3644 krita/krita.action:3646
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "New layer from visible"
@@ -17180,7 +17201,7 @@ msgid "Mitchell"
 msgstr "მიტჩელი"
 
 #: libs/image/kis_group_layer.cc:350
-#: libs/image/kis_layer_properties_icons.cpp:26
+#: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Pass Through"
 msgstr "გატარება"
@@ -17286,17 +17307,25 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "პროექციის ფერის სივრცის გარდაქმნა"
 
-#: libs/image/kis_image.cc:1407
+#: libs/image/kis_image.cc:1401
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Layer Color Space"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "ფენის ფერის სივრცის გარდაქმნა"
+
+#: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "პროფილის ფენაზე მინიჭება"
 
-#: libs/image/kis_image.cc:1448
+#: libs/image/kis_image.cc:1472
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "პროფილის მინიჭება"
 
-#: libs/image/kis_image.cc:2484
+#: libs/image/kis_image.cc:2508
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "მონიშნულების ამოჭრა"
@@ -17366,41 +17395,41 @@ msgstr "%1%"
 msgid "Blending Mode"
 msgstr "შერწყმის რეჟიმი"
 
-#: libs/image/kis_layer_properties_icons.cpp:20
+#: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
 msgid "Locked"
 msgstr "დაბლოკილი"
 
-#: libs/image/kis_layer_properties_icons.cpp:21
+#: libs/image/kis_layer_properties_icons.cpp:24
 #: plugins/python/channels2layers/channels2layers.py:78
 #, kde-format
 msgid "Visible"
 msgstr "ხილული"
 
-#: libs/image/kis_layer_properties_icons.cpp:22
+#: libs/image/kis_layer_properties_icons.cpp:25
 #, kde-format
 msgid "Layer Style"
 msgstr "ფენის სტილი"
 
-#: libs/image/kis_layer_properties_icons.cpp:23
+#: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
 msgid "Inherit Alpha"
 msgstr ""
 
-#: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:209
+#: libs/image/kis_layer_properties_icons.cpp:27
+#: libs/image/kis_paint_layer.cc:215
 #, kde-format
 msgid "Alpha Locked"
 msgstr "ალფა ჩაკეტილია"
 
-#: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:212
+#: libs/image/kis_layer_properties_icons.cpp:28
+#: libs/image/kis_paint_layer.cc:218
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:31
 #, kde-format
 msgid "Onion Skins"
 msgstr ""
 
-#: libs/image/kis_layer_properties_icons.cpp:27
+#: libs/image/kis_layer_properties_icons.cpp:30
 #: libs/resources/KisResourceModel.cpp:142
 #: libs/resources/KisStorageModel.cpp:484
 #: libs/resources/KisTagResourceModel.cpp:644
@@ -17409,46 +17438,62 @@ msgstr ""
 msgid "Active"
 msgstr "აქტიური"
 
-#: libs/image/kis_layer_properties_icons.cpp:28
+#: libs/image/kis_layer_properties_icons.cpp:31
 #, kde-format
 msgid "Color Label"
 msgstr ""
 
-#: libs/image/kis_layer_properties_icons.cpp:29
+#: libs/image/kis_layer_properties_icons.cpp:32
 #, kde-format
 msgid "Update Result"
 msgstr "განახლების შედეგი"
 
-#: libs/image/kis_layer_properties_icons.cpp:30
+#: libs/image/kis_layer_properties_icons.cpp:33
 #, kde-format
 msgid "Edit Key Strokes"
 msgstr ""
 
-#: libs/image/kis_layer_properties_icons.cpp:31
+#: libs/image/kis_layer_properties_icons.cpp:34
 #, kde-format
 msgid "Show Coloring"
 msgstr ""
 
-#: libs/image/kis_layer_properties_icons.cpp:32
+#: libs/image/kis_layer_properties_icons.cpp:35
 #, kde-format
 msgid "Open File"
 msgstr "ფაილის გახსნა"
 
-#: libs/image/kis_layer_properties_icons.cpp:33
+#: libs/image/kis_layer_properties_icons.cpp:36
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 #, kde-format
 msgid "Error"
 msgstr "შეცდომა"
 
+#: libs/image/kis_layer_properties_icons.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgid "Layer Color Space Mismatch"
+msgstr "ფენის ფერის სივრცის გარდაქმნა"
+
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
-#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/image/kis_layer_properties_icons.cpp:38
 #: libs/ui/flake/kis_shape_layer.cc:339
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
 msgid "Anti-aliasing"
 msgstr "მომრგვალება"
+
+#: libs/image/kis_layer_properties_icons.cpp:126
+#, kde-format
+msgctxt "a tooltip shown in when hovering layer's property"
+msgid ""
+"Layer color space is different from the image color space:\n"
+"%1 [%2],\n"
+"operations may be slow"
+msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -38619,17 +38664,17 @@ msgstr ""
 msgid "&Add"
 msgstr "&დამატება"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1305
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:46
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "No"
 msgstr "არა"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:46
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "Yes"
 msgstr "დიახ"
@@ -41003,12 +41048,12 @@ msgstr ""
 msgid "&Deselect"
 msgstr "&მონიშვნის მოხსნა"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, kde-format
 msgid "Convert All Layers From %1"
 msgstr ""
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, kde-format
 msgid "Convert Current Layer From %1"
 msgstr ""

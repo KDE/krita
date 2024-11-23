@@ -17,6 +17,7 @@
 #include "kis_transform_utils.h"
 #include "kis_config_notifier.h"
 #include <kstandardguiitem.h>
+#include <KisSpinBoxI18nHelper.h>
 
 
 template<typename T> inline T sign(T x) {
@@ -140,6 +141,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     scaleYBox->setRange(-10000, 10000);
     scaleXBox->setValue(100.0);
     scaleYBox->setValue(100.0);
+    KisSpinBoxI18nHelper::setText(scaleXBox, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+    KisSpinBoxI18nHelper::setText(scaleYBox, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     m_scaleRatio = 1.0;
 

@@ -9,7 +9,6 @@
 #include "wdg_resource_preview.h"
 #include "KisResourceItemViewer.h"
 #include <kis_config.h>
-#include "KisResourceItemListView.h"
 #include "dlg_create_bundle.h"
 
 #include <QPainter>
@@ -41,7 +40,7 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
     m_ui->formLayout->addWidget(m_wdgResourcePreview);
 
     connect(m_wdgResourcePreview, SIGNAL(signalResourcesSelectionChanged(QModelIndex)), this, SLOT(slotResourcesSelectionChanged(QModelIndex)));
-    connect(m_wdgResourcePreview, SIGNAL(resourceTypeSelected(int)), this, SLOT(slotresourceTypeSelected(int)));
+    connect(m_wdgResourcePreview, SIGNAL(resourceTypeSelected(int)), this, SLOT(slotResourceTypeSelected(int)));
 
     m_resourceItemWidget = new KisResourceItemListWidget(this);
     m_ui->verticalLayout_2->insertWidget(1, m_resourceItemWidget);
@@ -155,7 +154,9 @@ void PageResourceChooser::slotViewDetails()
 
 void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
 {
-    QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
+    Q_UNUSED(selected);
+
+    QModelIndexList list = m_wdgResourcePreview->getResourceItemsSelected();
     KisTagFilterResourceProxyModel* proxyModel = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
 
 
@@ -186,8 +187,10 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
     m_resourceItemWidget->sortItems();
 }
 
-void PageResourceChooser::slotresourceTypeSelected(int idx)
+void PageResourceChooser::slotResourceTypeSelected(int idx)
 {
+    Q_UNUSED(idx);
+
     if (!m_bundle) {
         QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
         m_resourceItemWidget->clear();

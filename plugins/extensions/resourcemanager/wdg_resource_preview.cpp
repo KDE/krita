@@ -289,7 +289,7 @@ QSharedPointer<KisTag> WdgResourcePreview::getCurrentTag()
     return m_ui->cmbTag->currentData(Qt::UserRole + KisAllTagsModel::KisTagRole).value<KisTagSP>();
 }
 
-QModelIndexList WdgResourcePreview::geResourceItemsSelected()
+QModelIndexList WdgResourcePreview::getResourceItemsSelected()
 {
     QModelIndexList list = m_ui->resourceItemView->selectionModel()->selection().indexes();
     return list;

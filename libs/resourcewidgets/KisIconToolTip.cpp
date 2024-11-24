@@ -18,7 +18,6 @@
 #include <klocalizedstring.h>
 
 #include "KoCheckerBoardPainter.h"
-#include "kis_assert.h"
 
 KisIconToolTip::KisIconToolTip()
 {

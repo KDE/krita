@@ -73,7 +73,7 @@ DlgResourceManager::~DlgResourceManager()
 void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
 {
     Q_UNUSED(index);
-    QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
+    QModelIndexList list = m_wdgResourcePreview->getResourceItemsSelected();
     KisTagFilterResourceProxyModel* model = m_wdgResourcePreview->getResourceProxyModelsForResourceType()[m_wdgResourcePreview->getCurrentResourceType()];
     if (list.size() == 1) {
         const QModelIndex idx = list[0];
@@ -161,7 +161,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
 
 void DlgResourceManager::slotDeleteResources()
 {
-    QModelIndexList list = m_wdgResourcePreview->geResourceItemsSelected();
+    QModelIndexList list = m_wdgResourcePreview->getResourceItemsSelected();
     QMap<QString, KisTagFilterResourceProxyModel*> resourceProxyModelsForResourceType = m_wdgResourcePreview->getResourceProxyModelsForResourceType();
 
     if (!resourceProxyModelsForResourceType.contains(m_wdgResourcePreview->getCurrentResourceType()) || list.empty()) {

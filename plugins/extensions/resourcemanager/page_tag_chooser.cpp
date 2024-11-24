@@ -29,15 +29,12 @@
 #include "wdgtagpreview.h"
 #include <KisTag.h>
 
-
 #include <kis_workspace_resource.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <dlg_embed_tags.h>
-#include "KisGlobalResourcesInterface.h"
 
 #include <kis_config.h>
 
-#define ICON_SIZE 48
 
 PageTagChooser::PageTagChooser(KoResourceBundleSP bundle, QWidget *parent) :
     QWizardPage(parent),

@@ -57,7 +57,7 @@ private Q_SLOTS:
 public:
     QString getCurrentResourceType();
     QSharedPointer<KisTag> getCurrentTag();
-    QModelIndexList geResourceItemsSelected();
+    QModelIndexList getResourceItemsSelected();
     int getCurrentStorageId();
     QMap<QString, KisTagFilterResourceProxyModel*> getResourceProxyModelsForResourceType();
 

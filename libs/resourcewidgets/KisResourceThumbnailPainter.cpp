@@ -50,7 +50,6 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
     }
 
     QRect innerRect = addMargin ? rect.adjusted(2, 2, -2, -2) : rect;
-    QSize imageSize = thumbnail.size();
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
@@ -66,7 +65,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         }
     } else if (resourceType == ResourceType::Patterns) {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (!thumbnail.isNull() && (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width())) {
+        if (!thumbnail.isNull() && (thumbnail.height() > innerRect.height() || thumbnail.width() > innerRect.width())) {
             thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
                                                                          innerRect.size() * devicePixelRatioF,
                                                                          Qt::KeepAspectRatio,
@@ -85,23 +84,17 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         painter->setPen(before);
     } else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (!thumbnail.isNull()) {
-            if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
-                thumbnail =
-                    KisResourceThumbnailCache::instance()->getImage(index,
-                                                                     innerRect.size() * devicePixelRatioF,
-                                                                     Qt::KeepAspectRatio,
-                                                                     Qt::SmoothTransformation);
-                thumbnail.setDevicePixelRatio(devicePixelRatioF);
-            } else if (imageSize.height() < innerRect.height() * devicePixelRatioF
-                       || imageSize.width() < innerRect.width() * devicePixelRatioF) {
-                thumbnail =
-                    KisResourceThumbnailCache::instance()->getImage(index,
-                                                                     innerRect.size() * devicePixelRatioF,
-                                                                     Qt::KeepAspectRatio,
-                                                                     Qt::FastTransformation);
-                thumbnail.setDevicePixelRatio(devicePixelRatioF);
-            }
+        if (!thumbnail.isNull() && !(thumbnail.height() == innerRect.height() * devicePixelRatioF &&
+                                     thumbnail.width() == innerRect.width() * devicePixelRatioF)) {
+            bool needsUpscaling = thumbnail.height() < innerRect.height() * devicePixelRatioF
+                                || thumbnail.width() < innerRect.width() * devicePixelRatioF;
+
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                        innerRect.size() * devicePixelRatioF,
+                                                                        Qt::KeepAspectRatio,
+                                                                        needsUpscaling ? Qt::FastTransformation
+                                                                                       : Qt::SmoothTransformation);
+            thumbnail.setDevicePixelRatio(devicePixelRatioF);
         }
         QPoint topleft(innerRect.topLeft());
 

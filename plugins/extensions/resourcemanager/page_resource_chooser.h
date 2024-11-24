@@ -37,7 +37,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotResourcesSelectionChanged(QModelIndex selected);
-    void slotresourceTypeSelected(int);
+    void slotResourceTypeSelected(int);
     void slotRemoveSelected(bool);
     void slotViewThumbnail();
     void slotViewDetails();

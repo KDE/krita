@@ -51,8 +51,6 @@
 #include <wdgtagselection.h>
 
 
-#define ICON_SIZE 48
-
 DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     : QWizard(parent)
     , m_ui(new Ui::WdgDlgCreateBundle)
@@ -126,7 +124,7 @@ void DlgCreateBundle::updateTitle(int id)
     if (!m_bundle) {
         QString title = i18n("Create Resource Bundle");
 
-        switch(currentId()) {
+        switch(id) {
         case 1: title = i18n("Choose Resources"); break;
         case 2: title = i18n("Choose Tags"); break;
         case 3: title = i18n("Enter Bundle Details"); break;
@@ -137,7 +135,7 @@ void DlgCreateBundle::updateTitle(int id)
     } else {
         QString title = i18n("Edit Resource Bundle");
         
-        switch(currentId()) {
+        switch(id) {
         case 1: title = i18n("Edit Resources"); break;
         case 2: title = i18n("Edit Tags"); break;
         case 3: title = i18n("Edit Bundle Details"); break;
@@ -314,11 +312,6 @@ void DlgCreateBundle::saveToConfiguration(bool full)
     cfg.writeEntry<QString>("BundleAuthorEmail", m_pageMetadataInfo->email());
     cfg.writeEntry<QString>("BundleWebsite", m_pageMetadataInfo->website());
     cfg.writeEntry<QString>("BundleLicense", m_pageMetadataInfo->license());
-}
-
-QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode) {
-    QPixmap pixmap(ICON_SIZE, ICON_SIZE);
-    return pixmap;
 }
 
 void DlgCreateBundle::accept()

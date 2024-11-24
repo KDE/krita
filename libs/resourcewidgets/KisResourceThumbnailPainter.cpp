@@ -75,8 +75,8 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         QBrush patternBrush(thumbnail);
         patternBrush.setTransform(QTransform::fromTranslate(innerRect.x(), innerRect.y()));
         painter->fillRect(innerRect, patternBrush);
-    } else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
-        // TODO: thumbnails for workspaces and window layouts?
+    } else if (resourceType == ResourceType::WindowLayouts) {
+        // TODO: thumbnails for window layouts?
         painter->fillRect(innerRect, Qt::white);
         QPen before = painter->pen();
         painter->setPen(Qt::black);

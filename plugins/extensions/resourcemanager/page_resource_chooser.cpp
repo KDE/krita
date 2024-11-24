@@ -27,7 +27,7 @@
 
 #include <config-seexpr.h>
 
-#define ICON_SIZE 128
+#define ICON_SIZE 56
 
 PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *parent) :
     QWizardPage(parent),
@@ -103,22 +103,10 @@ PageResourceChooser::PageResourceChooser(KoResourceBundleSP bundle, QWidget *par
         KisResourceModel model(standarizedResourceType);
         for (int i = 0; i < model.rowCount(); i++) {
             QModelIndex idx = model.index(i, 0);
-            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
             int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
-            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
-            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-
-            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            }
-
-            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-            item->setData(Qt::UserRole, id);
-
             if (m_selectedResourcesIds.contains(id)) {
-                m_resourceItemWidget->addItem(item);
+                selectResource(&model, idx);
             }
         }
 
@@ -162,23 +150,8 @@ void PageResourceChooser::slotResourcesSelectionChanged(QModelIndex selected)
 
     Q_FOREACH (QModelIndex idx, list) {
         int id = proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
-        QImage image = (proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Thumbnail)).value<QImage>();
-        QString name = proxyModel->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString();
-
-        // Function imageToIcon(QImage()) returns a square white pixmap and a warning "QImage::scaled: Image is a null image"
-        //  while QPixmap() returns an empty pixmap.
-        // The difference between them is relevant in case of Workspaces which has no images.
-        // Using QPixmap() makes them appear in a dense list without icons, while imageToIcon(QImage())
-        //  would give a list with big white rectangles and names of the workspaces.
-        Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-        if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-            scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-        }
-        QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-        item->setData(Qt::UserRole, id);
-
-        if (m_selectedResourcesIds.contains(id) == false) {
-            m_resourceItemWidget->addItem(item);
+        if (!m_selectedResourcesIds.contains(id)) {
+            selectResource(proxyModel, idx);
             m_selectedResourcesIds.append(id);
             updateCount(true);
         }
@@ -191,73 +164,45 @@ void PageResourceChooser::slotResourceTypeSelected(int idx)
 {
     Q_UNUSED(idx);
 
-    if (!m_bundle) {
-        QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
-        m_resourceItemWidget->clear();
-        QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+    QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
+    m_resourceItemWidget->clear();
+    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-        KisResourceModel model(standarizedResourceType);
-        for (int i = 0; i < model.rowCount(); i++) {
-            QModelIndex idx = model.index(i, 0);
-            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-            int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+    KisResourceModel model(standarizedResourceType);
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
 
-            if (resourceType == ResourceType::Gradients) {
-                if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
-                    continue;
-                }
-            }
-
-            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
-            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-
-            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            }
-            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-            item->setData(Qt::UserRole, id);
-
-            if (m_selectedResourcesIds.contains(id)) {
-                m_resourceItemWidget->addItem(item);
-            }
-        }
-    } else {
-        m_resourceItemWidget->clear();
-
-        QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
-        QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
-
-        KisResourceModel model(standarizedResourceType);
-        for (int i = 0; i < model.rowCount(); i++) {
-            QModelIndex idx = model.index(i, 0);
-            QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-            int id = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
-
-            if (resourceType == ResourceType::Gradients) {
-                if (filename == "Foreground to Transparent" || filename == "Foreground to Background") {
-                    continue;
-                }
-            }
-
-            QImage image = (model.data(idx, Qt::UserRole + KisAbstractResourceModel::Thumbnail)).value<QImage>();
-            QString name = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
-
-            Qt::AspectRatioMode scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            if (image.height() == 1) { // affects mostly gradients, which are very long but only 1px tall
-                scalingAspectRatioMode = Qt::IgnoreAspectRatio;
-            }
-            QListWidgetItem *item = new QListWidgetItem(image.isNull() ? QPixmap() : imageToIcon(image, scalingAspectRatioMode), name);
-            item->setData(Qt::UserRole, id);
-
-            if (m_selectedResourcesIds.contains(id)) {
-                m_resourceItemWidget->addItem(item);
-            }
+        if (m_selectedResourcesIds.contains(id)) {
+            selectResource(&model, idx);
         }
     }
 
     m_resourceItemWidget->sortItems();
+}
 
+void PageResourceChooser::selectResource(QSortFilterProxyModel *model, const QModelIndex idx)
+{
+    QString name = model->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString();
+
+    // Don't try to bundle special resources
+    QString resourceType = m_wdgResourcePreview->getCurrentResourceType();
+    if (resourceType == ResourceType::Gradients) {
+        if (name == "Foreground to Transparent" || name == "Foreground to Background") {
+            return;
+         }
+     }
+
+    int id = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+    QPixmap pixmap(ICON_SIZE, ICON_SIZE);
+    QPainter painter(&pixmap);
+    KisResourceThumbnailPainter().paint(&painter, idx, pixmap.rect(), this->palette(), false, true);
+
+    QListWidgetItem *item = new QListWidgetItem(pixmap, name);
+    item->setData(Qt::UserRole, id);
+    item->setData(Qt::UserRole + KisAbstractResourceModel::Name, name);
+
+    m_resourceItemWidget->addItem(item);
 }
 
 void PageResourceChooser::slotRemoveSelected(bool)
@@ -271,19 +216,6 @@ void PageResourceChooser::slotRemoveSelected(bool)
     }
 
     m_resourceItemWidget->setCurrentRow(row);
-}
-
-QPixmap PageResourceChooser::imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode)
-{
-    QPixmap pixmap(ICON_SIZE, ICON_SIZE);
-    pixmap.fill();
-    QImage scaled = img.scaled(ICON_SIZE, ICON_SIZE, aspectRatioMode, Qt::SmoothTransformation);
-    int x = (ICON_SIZE - scaled.width()) / 2;
-    int y = (ICON_SIZE - scaled.height()) / 2;
-    QPainter gc(&pixmap);
-    gc.drawImage(x, y, scaled);
-    gc.end();
-    return pixmap;
 }
 
 QList<int> PageResourceChooser::getSelectedResourcesIds()

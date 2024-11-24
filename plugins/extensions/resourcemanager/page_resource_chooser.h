@@ -38,12 +38,12 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotResourcesSelectionChanged(QModelIndex selected);
     void slotResourceTypeSelected(int);
+    void selectResource(QSortFilterProxyModel *model, const QModelIndex idx);
     void slotRemoveSelected(bool);
     void slotViewThumbnail();
     void slotViewDetails();
 
 public:
-    QPixmap imageToIcon(const QImage &img, Qt::AspectRatioMode aspectRatioMode);
     QList<int> getSelectedResourcesIds();
     void updateCount(bool);
     void updateResources(QString resourceType, int count);

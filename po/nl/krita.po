@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-15 11:45+0100\n"
+"PO-Revision-Date: 2024-11-23 12:10+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -12597,12 +12597,10 @@ msgstr "Kleurruimte van laag converteren"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Kleurruimte van laag converteren"
+msgstr "Kleurruimte van lagen gelijktrekken"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12612,6 +12610,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Alle lagen converteren in de kleurruimte van de afbeelding (als ze een "
+"verschillende kleurruimte hebben)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -17242,17 +17242,17 @@ msgstr "Laag draaien"
 #: libs/image/kis_image.cc:1252
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
-msgstr "Masker schuintrekken"
+msgstr "Masker schuin trekken"
 
 #: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr "Laag schuintrekken"
+msgstr "Laag schuin trekken"
 
 #: libs/image/kis_image.cc:1262
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr "Afbeelding schuintrekken"
+msgstr "Afbeelding schuin trekken"
 
 #: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
@@ -17270,12 +17270,9 @@ msgid "Convert Projection Color Space"
 msgstr "Kleurruimte van de projectie converteren"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Kleurruimte van laag converteren"
+msgstr "Kleurruimte van lagen gelijktrekken"
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"

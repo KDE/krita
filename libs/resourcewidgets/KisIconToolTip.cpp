@@ -54,22 +54,18 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     if (!m_fixedToolTipThumbnailSize.isEmpty() && !thumb.isNull()) {
         int pixelSize = 48; //  // let's say, 48x48?
         if (!thumb.isNull()) {
-            if (thumb.size().width() < pixelSize || thumb.size().height() < pixelSize) {
-                // this allows the pixel patterns to be displayed correctly,
-                // while the presets (which have 200x200 thumbnails) will still be pretty
-                // Fast Transformation == Nearest Neighbour
+            // affects mostly gradients, which are very long but only 1px tall
+            Qt::AspectRatioMode aspectRatioMode = thumb.height() == 1 ? Qt::IgnoreAspectRatio : Qt::KeepAspectRatio;
+            // this allows the pixel patterns to be displayed correctly,
+            // while the presets (which have 200x200 thumbnails) will still be pretty
+            // Fast Transformation == Nearest Neighbour
+            Qt::TransformationMode transformationMode = (thumb.width() < pixelSize || thumb.height() < pixelSize) ? Qt::FastTransformation : Qt::SmoothTransformation;
+
                 thumb = KisResourceThumbnailCache::instance()->getImage(index,
                                                                         m_fixedToolTipThumbnailSize
                                                                             * devicePixelRatioF(),
-                                                                        Qt::IgnoreAspectRatio,
-                                                                        Qt::FastTransformation);
-            } else {
-                thumb = KisResourceThumbnailCache::instance()->getImage(index,
-                                                                        m_fixedToolTipThumbnailSize
-                                                                            * devicePixelRatioF(),
-                                                                        Qt::IgnoreAspectRatio,
-                                                                        Qt::SmoothTransformation);
-            }
+                                                                        aspectRatioMode,
+                                                                        transformationMode);
         }
     }
 

@@ -12591,12 +12591,10 @@ msgstr "转换图层色彩空间"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "转换图层色彩空间"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -17305,12 +17303,9 @@ msgid "Convert Projection Color Space"
 msgstr "转换视图色彩空间"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "转换图层色彩空间"
+msgstr ""
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17467,11 +17462,9 @@ msgid "Error"
 msgstr "错误"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "转换图层色彩空间"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -27301,10 +27294,9 @@ msgstr "色相/饱和度/明度 (HSV)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "显示颜色历史环"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-11-22 09:16+0200\n"
+"PO-Revision-Date: 2024-11-23 08:59+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12619,12 +12619,10 @@ msgstr "Перетворити простір кольорів шару"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Перетворити простір кольорів шару"
+msgstr "Уніфікувати простори кольорів шарів"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12634,6 +12632,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Перетворити усі шари до простору кольорів зображення (якщо вони належать до "
+"іншого простору кольорів)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17562,14 +17562,11 @@ msgstr ""
 "перетворення простору кольорів проєкції"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
 msgstr ""
-"Перетворити простір кольорів шару\n"
-"перетворення простору кольорів шару"
+"Уніфікувати простори кольорів шарів\n"
+"уніфікацію просторів кольорів шарів"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17732,11 +17729,9 @@ msgid "Error"
 msgstr "Помилка"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Перетворити простір кольорів шару"
+msgstr "Невідповідність простору кольорів шару"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17756,6 +17751,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Простір кольорів шару відрізняється від простору кольорів зображення:\n"
+"%1 [%2],\n"
+"дії із шаром можуть відбуватися повільно"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format

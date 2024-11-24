@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-11-21 09:41+0100\n"
+"PO-Revision-Date: 2024-11-23 14:24+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12622,12 +12622,10 @@ msgstr "Pretvori barvni prostor plasti"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Pretvori barvni prostor plasti"
+msgstr "Poenoti barvni prostor plasti"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12637,6 +12635,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Pretvorite vse plasti v barvni prostor slike (če imajo drugačen barvni "
+"prostor)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17371,12 +17371,9 @@ msgid "Convert Projection Color Space"
 msgstr "Pretvori barvni prostor projekcije"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Pretvori barvni prostor plasti"
+msgstr "Poenoti barvni prostor plasti"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17533,11 +17530,9 @@ msgid "Error"
 msgstr "Napaka"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Pretvori barvni prostor plasti"
+msgstr "Neujemanje barvnega prostora plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17557,6 +17552,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Barvni prostor plasti se razlikuje od barvnega prostora slike:\n"
+"%1 [%2],\n"
+"operacije so lahko počasne"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -27514,10 +27512,9 @@ msgstr "Obarvanost/nasičenost/vrednost"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Pokaži obroč zgodovine barv"
+msgstr "Razvrsti obroč zgodovine barv po:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41

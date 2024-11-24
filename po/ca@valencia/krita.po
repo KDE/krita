@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-11-20 10:22+0100\n"
+"PO-Revision-Date: 2024-11-23 11:24+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -12638,12 +12638,10 @@ msgstr "Convertix l'espai de color de la capa"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Convertix l'espai de color de la capa"
+msgstr "Unifica l'espai de color de les capes"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12653,6 +12651,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Convertix totes les capes a l'espai de color de la imatge (si tenen un espai "
+"de color diferent)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17395,12 +17395,9 @@ msgid "Convert Projection Color Space"
 msgstr "Convertix l'espai de color de la projecció"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Convertix l'espai de color de la capa"
+msgstr "Unifica l'espai de color de les capes"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17557,11 +17554,9 @@ msgid "Error"
 msgstr "S'ha produït un error"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Convertix l'espai de color de la capa"
+msgstr "No hi ha coincidència de l'espai de color de les capes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17581,6 +17576,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"L'espai de color de la capa és diferent de l'espai de color de la imatge:\n"
+"%1 [%2],\n"
+"les operacions podrien ser lentes"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -27588,10 +27586,9 @@ msgstr "To, saturació, valor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Mostra l'anell de l'historial de colors"
+msgstr "Ordena l'anell de l'historial de colors per:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41

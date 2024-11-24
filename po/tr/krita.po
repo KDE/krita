@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-11-22 18:06+0300\n"
+"PO-Revision-Date: 2024-11-23 21:10+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12615,12 +12615,10 @@ msgstr "Katman Renk Uzayını Dönüştür"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Katman Renk Uzayını Dönüştür"
+msgstr "Katmanların Renk Uzayını Aynı Yap"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12630,6 +12628,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Tüm katmanları görsel renk uzayına dönüştür (başka bir renk uzayına "
+"sahiplerse)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17359,12 +17359,9 @@ msgid "Convert Projection Color Space"
 msgstr "Yansıma Renk Uzayını Dönüştür"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Katman Renk Uzayını Dönüştür"
+msgstr "Katmanların Renk Uzayını Aynı Yap"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17521,11 +17518,9 @@ msgid "Error"
 msgstr "Hata"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Katman Renk Uzayını Dönüştür"
+msgstr "Katman Renk Uzayı Uyumsuzluğu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17545,6 +17540,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Katman renk uzayı, görsel renk uzayından farklı:\n"
+"%1 [%2],\n"
+"İşlemler yavaş olabilir."
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format

@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-10-19 16:57+0200\n"
+"PO-Revision-Date: 2024-11-23 20:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.2\n"
+"X-Generator: Lokalize 24.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12658,12 +12658,10 @@ msgstr "Konvertera lagerfärgrymd"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Konvertera lagerfärgrymd"
+msgstr "Förena lagerfärgrymd"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12673,6 +12671,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Konvertera alla lager till bildens färgrymd (om de råkar ha en annan "
+"färgrymd)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17395,12 +17395,9 @@ msgid "Convert Projection Color Space"
 msgstr "Konvertera projektionens färgrymd"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Konvertera lagerfärgrymd"
+msgstr "Förena lagerfärgrymd"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17557,11 +17554,9 @@ msgid "Error"
 msgstr "Fel"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Konvertera lagerfärgrymd"
+msgstr "Lagerfärgrymd matchar inte"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17581,6 +17576,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Lagerfärgrymd skiljer sig från bildens färgrymd:\n"
+"%1 [%2],\n"
+"operationer kan vara långsam"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -27530,10 +27528,9 @@ msgstr "Färgton, mättnad, värde"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Visa färghistorikring"
+msgstr "Sortera färghistorikring enligt:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -29249,13 +29246,12 @@ msgid "Import animation"
 msgstr "Importera animering"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Väntar på att bildåtgärd ska bli färdig..."
+msgstr "Väntar på att åtgärden ska bli färdig..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -30686,20 +30682,14 @@ msgstr ""
 "är färdig."
 
 #: libs/ui/KisDocument.cpp:853
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Kunde inte spara som SVG: %1"
+msgstr "Kunde inte börja spara %1. Bilden är upptagen."
 
 #: libs/ui/KisDocument.cpp:858
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Kunde inte börja spara %1. Vänta tills den pågående åtgärden för att spara "
-"är färdig."
+msgstr "Kunde inte börja spara %1. Okänt fel har inträffat."
 
 #: libs/ui/KisDocument.cpp:998
 #, kde-format
@@ -41630,10 +41620,9 @@ msgstr "Interaktion slutar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Minimal skuggväljare"
+msgstr "Visa minimal skuggväljare"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -53517,7 +53506,7 @@ msgstr "Invertera mönster"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "Invertera automatiskt för radergummi"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -54199,10 +54188,9 @@ msgstr "Färgton medurs"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50 % är aktiv färg)"
+msgstr "(0 % är aktiv färg)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -56961,7 +56949,7 @@ msgstr "Justera exportstorlek till lagerinnehåll"
 
 #: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Lägg till ökande prefix"
 
 #: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"

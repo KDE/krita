@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 01:47+0000\n"
-"PO-Revision-Date: 2024-11-22 11:31+0100\n"
+"PO-Revision-Date: 2024-11-23 12:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -12712,12 +12712,10 @@ msgstr "Kleurruimte van laag converteren"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Kleurruimte van laag converteren"
+msgstr "Kleurruimte van lagen gelijktrekken"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12727,6 +12725,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Alle lagen converteren in de kleurruimte van de afbeelding (als ze een "
+"verschillende kleurruimte hebben)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17420,7 +17420,7 @@ msgstr[1] "%1 lagen draaien"
 #: libs/image/kis_image.cc:1268
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
-msgstr "Masker schuintrekken"
+msgstr "Masker schuin trekken"
 
 #: libs/image/kis_image.cc:1272
 #, kde-format
@@ -17433,7 +17433,7 @@ msgstr[1] "%1 lagen schuintrekken"
 #: libs/image/kis_image.cc:1279
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr "Afbeelding schuintrekken"
+msgstr "Afbeelding schuin trekken"
 
 #: libs/image/kis_image.cc:1297
 msgctxt "(qtundo-format)"
@@ -17451,12 +17451,9 @@ msgid "Convert Projection Color Space"
 msgstr "Kleurruimte van de projectie converteren"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Kleurruimte van laag converteren"
+msgstr "Kleurruimte van lagen gelijktrekken"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17613,11 +17610,9 @@ msgid "Error"
 msgstr "Fout"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Kleurruimte van laag converteren"
+msgstr "Niet overeenkomende kleurruimte van laag"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17637,6 +17632,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Kleurruimte van laag verschilt van de kleurruimte van de afbeelding:\n"
+"%1 [%2],\n"
+"bewerkingen kunnen langzaam zijn"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format

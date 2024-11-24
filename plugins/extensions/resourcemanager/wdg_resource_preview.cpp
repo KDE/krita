@@ -40,6 +40,8 @@
 #include <kis_config.h>
 #include "KisResourceItemViewer.h"
 
+#include <config-seexpr.h>
+
 
 WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
     QWidget(parent),

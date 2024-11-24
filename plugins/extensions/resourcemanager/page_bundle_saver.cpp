@@ -11,6 +11,8 @@
 #include <kis_config.h>
 #include <KoFileDialog.h>
 
+#include <config-seexpr.h>
+
 PageBundleSaver::PageBundleSaver(KoResourceBundleSP bundle, QWidget *parent) :
     QWizardPage(parent),
     m_ui(new Ui::PageBundleSaver)

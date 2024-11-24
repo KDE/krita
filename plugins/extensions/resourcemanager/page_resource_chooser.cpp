@@ -26,6 +26,7 @@
 #include "ResourceListViewModes.h"
 #include "KisGlobalResourcesInterface.h"
 
+#include <config-seexpr.h>
 
 #define ICON_SIZE 128
 

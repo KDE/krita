@@ -73,8 +73,9 @@ WdgResourcePreview::WdgResourcePreview(WidgetType type, QWidget *parent) :
         resourceTypes << ResourceType::Patterns << ResourceType::Palettes << ResourceType::Workspaces;
 
         for (int i = 0; i < resourceTypes.size(); i++) {
-            m_ui->cmbResourceType->addItem(ResourceName::resourceTypeToName(resourceTypes[i]), resourceTypes[i]);
-        }
+            m_ui->cmbResourceType->addItem(ResourceName::resourceTypeToName(resourceTypes[i]));
+            m_ui->cmbResourceType->setItemData(m_ui->cmbResourceType->count()-1, resourceTypes[i], Qt::UserRole + KisResourceTypeModel::ResourceType);
+         }
     }
 
     connect(m_ui->cmbResourceType, SIGNAL(activated(int)), SLOT(slotResourceTypeSelected(int)));
@@ -280,20 +281,7 @@ void WdgResourcePreview::slotShowDeletedChanged(int newState)
 
 QString WdgResourcePreview::getCurrentResourceType()
 {
-    if (m_type == WidgetType::ResourceManager) {
-        return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
-    } else {
-        QString s = m_ui->cmbResourceType->currentText();
-        if (s == "Brush Presets") return "paintoppresets";
-        if (s == "Brush Tips") return "brushes";
-        if (s == "Gradients") return "gradients";
-        if (s == "Gamut Masks") return "gamutmasks";
-        if (s == "SeExpr Scripts") return "seexpr_scripts";
-        if (s == "Palettes") return "palettes";
-        if (s == "Patterns") return "patterns";
-        if (s == "Workspaces") return "workspaces";
-    }
-    return "";
+    return m_ui->cmbResourceType->currentData(Qt::UserRole + KisResourceTypeModel::ResourceType).toString();
 }
 
 QSharedPointer<KisTag> WdgResourcePreview::getCurrentTag()

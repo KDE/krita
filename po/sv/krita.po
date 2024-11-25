@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-22 20:04+0100\n"
+"PO-Revision-Date: 2024-11-24 09:47+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -12576,12 +12576,10 @@ msgstr "Konvertera lagerfärgrymd"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Konvertera lagerfärgrymd"
+msgstr "Förena lagerfärgrymd"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12591,6 +12589,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Konvertera alla lager till bildens färgrymd (om de råkar ha en annan "
+"färgrymd)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -17247,12 +17247,9 @@ msgid "Convert Projection Color Space"
 msgstr "Konvertera projektionens färgrymd"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Konvertera lagerfärgrymd"
+msgstr "Förena lagerfärgrymd"
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"

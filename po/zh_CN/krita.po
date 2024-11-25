@@ -12594,7 +12594,7 @@ msgstr "转换图层色彩空间"
 #, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr ""
+msgstr "统一图层色彩空间"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12603,7 +12603,7 @@ msgctxt "action"
 msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
-msgstr ""
+msgstr "将所有图层转换为图像的色彩空间 (如果图层的色彩空间与图像不统一)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17305,7 +17305,7 @@ msgstr "转换视图色彩空间"
 #: libs/image/kis_image.cc:1401
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr ""
+msgstr "统一图层色彩空间"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17464,7 +17464,7 @@ msgstr "错误"
 #: libs/image/kis_layer_properties_icons.cpp:37
 #, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr ""
+msgstr "图层色彩空间不匹配"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17484,6 +17484,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"图层的色彩空间与图像的色彩空间不统一：\n"
+"%1 [%2]，\n"
+"操作可能较慢"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -27296,7 +27299,7 @@ msgstr "色相/饱和度/明度 (HSV)"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
 #, kde-format
 msgid "Sort Color History Ring By:"
-msgstr ""
+msgstr "颜色历史环排序方式："
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41

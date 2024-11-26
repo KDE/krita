@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-23 01:47+0000\n"
+"POT-Creation-Date: 2024-11-26 01:49+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17311,8 +17311,8 @@ msgstr "Tamanho"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:133
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:134
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:135
 #, kde-format
 msgid " px"
 msgstr " pontos"
@@ -22926,7 +22926,7 @@ msgid "No configuration options are available for this filter"
 msgstr "Não existem opções de configuração para este filtro"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -23135,6 +23135,8 @@ msgstr "Propriedades da Camada"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:144
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -62172,34 +62174,34 @@ msgstr ""
 msgid "Transform a layer or a selection"
 msgstr "Transformar uma camada ou uma selecção"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
 #, kde-format
 msgid "Default (Affine)"
 msgstr "Predefinição (Afinidade)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
 #, kde-format
 msgid "Strong (Rigid)"
 msgstr "Forte (Rígido)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:89
 #, kde-format
 msgid "Strongest (Similitude)"
 msgstr "Mais Forte (Semelhança)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:214
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:217
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Size of the deformation brush"
 msgstr "Tamanho do pincel de deformação"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:221
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:224
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Amount of the deformation you get"
 msgstr "Quantidade da deformação que obtém"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:228
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62208,7 +62210,7 @@ msgstr ""
 "Quando estiver no modo de não-composição, mostra quão rapidamente se atinge "
 "o limite de deformação."
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:233
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62221,81 +62223,81 @@ msgstr ""
 "O modo de lavagem deforma gradualmente a peça para o nível de deformação "
 "seleccionado."
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:241
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:244
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Space between two sequential applications of the deformation"
 msgstr "Espaço entre duas aplicações sequenciais da deformação"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:246
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Size</b> value according to current stylus pressure"
 msgstr ""
 "Ajustar o valor do <b>Tamanho</b> de acordo com a pressão actual da caneta"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:251
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Amount</b> value according to current stylus pressure"
 msgstr ""
 "Ajustar o valor da <b>Quantidade</b> de acordo com a pressão actual da caneta"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:256
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:259
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reverse direction of the current deformation tool"
 msgstr "Inverter a direcção da ferramenta de deformação actual"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:272
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
 msgstr "Mover: arrastar a imagem em conjunto com o traço do pincel"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:273
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
 msgstr "Dimensionar: aumentar/encolher a imagem sob o cursor"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:274
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
 msgstr "Rodar: rodar a imagem sob o cursor"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:275
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
 msgstr "Deslocar: Deslocar a imagem para a direita da direcção do traço"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
 msgstr "Desfazer: anular as acções das outras ferramentas"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:617
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:620
 #, kde-format
 msgid "Switch between editing and deforming cage"
 msgstr "Mudar entre a envolvência de edição e deformação"
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:681
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "Bloquear os Pontos"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:680
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:683
 #, kde-format
 msgid "Unlock Points"
 msgstr "Desbloquear os Pontos"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:760
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"

@@ -563,8 +563,8 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
     }
 
     if (d->tiledPreview) {
-        int width = d->previewScroller->width() * 4;
-        int height = d->previewScroller->height() * 4;
+        int width = d->previewScroller->width() * 4 * devicePixelRatioF();
+        int height = d->previewScroller->height() * 4 * devicePixelRatioF();
         QImage img(width, height, image.format());
         QPainter gc(&img);
         gc.fillRect(img.rect(), Qt::white);
@@ -588,6 +588,7 @@ void KisResourceItemChooser::updatePreview(const QModelIndex &idx)
             }
         }
     }
+    image.setDevicePixelRatio(devicePixelRatioF());
     d->previewLabel->setPixmap(QPixmap::fromImage(image));
 }
 
@@ -689,12 +690,14 @@ void KisResourceItemChooser::resizeEvent(QResizeEvent *event)
     QWidget::resizeEvent(event);
     changeLayoutBasedOnSize();
     updateView();
+    updatePreview(d->view->currentIndex());
 }
 
 void KisResourceItemChooser::showEvent(QShowEvent *event)
 {
     QWidget::showEvent(event);
     updateView();
+    updatePreview(d->view->currentIndex());
 }
 
 void KisResourceItemChooser::hideEverything()

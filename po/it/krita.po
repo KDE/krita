@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-12 18:52+0100\n"
+"PO-Revision-Date: 2024-11-22 12:25+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -8288,14 +8288,14 @@ msgstr "Mostra il registro dei crash per le segnalazioni di errore."
 #, kde-format
 msgctxt "action"
 msgid "Search Actions"
-msgstr "Azioni di ricerca"
+msgstr "Cerca azioni"
 
 #. i18n: context: toolTip @ Action (command_bar_open), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:199
 #, kde-format
 msgctxt "action"
 msgid "Open the command bar to search through actions."
-msgstr "Apri la barra dei comandi per la ricerca mediante azioni."
+msgstr "Apri la barra dei comandi per ricercare tra le azioni."
 
 #. i18n: context: text @ Action (rename_composition), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:207
@@ -58876,7 +58876,7 @@ msgstr "Strumento Selezione rettangolare"
 #, kde-format
 msgctxt "action"
 msgid "Similar Color Selection Tool"
-msgstr "Strumento Selezione colori simili"
+msgstr "Strumento di selezione dei colori simili"
 
 #: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
 msgctxt "(qtundo-format)"

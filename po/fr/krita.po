@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-13 12:04+0100\n"
+"PO-Revision-Date: 2024-11-24 15:42+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -12652,12 +12652,10 @@ msgstr "Convertir l'espace colorimétrique du calque"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Convertir l'espace colorimétrique du calque"
+msgstr "Uniformiser l'espace colorimétrique des calques"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12667,6 +12665,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Convertir tous les calques dans l'espace colorimétrique de l'image (Dans le "
+"cas où ils auraient un espace colorimétrique différent)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -17334,12 +17334,9 @@ msgid "Convert Projection Color Space"
 msgstr "Convertir l'espace de couleur de projection"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Convertir l'espace colorimétrique du calque de couleurs"
+msgstr "Uniformiser l'espace colorimétrique des calques"
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"

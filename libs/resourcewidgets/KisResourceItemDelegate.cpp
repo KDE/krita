@@ -51,7 +51,7 @@ void KisResourceItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
                 QSize iconSize = option.decorationSize; // or specify a desired size
                 QPixmap pixmap = icon.pixmap(iconSize);
                 preview = pixmap.toImage();
-             }
+            }
 
             painter->drawImage(paintRect.x(), paintRect.y(), preview);
         } else {

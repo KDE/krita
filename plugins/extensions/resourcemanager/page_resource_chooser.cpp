@@ -194,9 +194,11 @@ void PageResourceChooser::selectResource(QSortFilterProxyModel *model, const QMo
      }
 
     int id = model->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
-    QPixmap pixmap(ICON_SIZE, ICON_SIZE);
+    QRect paintRect = QRect(0, 0, ICON_SIZE, ICON_SIZE);
+    QPixmap pixmap(paintRect.size() * devicePixelRatioF());
+    pixmap.setDevicePixelRatio(devicePixelRatioF());
     QPainter painter(&pixmap);
-    KisResourceThumbnailPainter().paint(&painter, idx, pixmap.rect(), this->palette(), false, true);
+    KisResourceThumbnailPainter().paint(&painter, idx, paintRect, this->palette(), false, true);
 
     QListWidgetItem *item = new QListWidgetItem(pixmap, name);
     item->setData(Qt::UserRole, id);

@@ -51,6 +51,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
 
     QRect innerRect = addMargin ? rect.adjusted(2, 2, -2, -2) : rect;
     QSize imageSize = thumbnail.size();
+    QSize innerRectSizeDPI = innerRect.size() * devicePixelRatioF;
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
@@ -58,7 +59,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
         if (!thumbnail.isNull()) {
             thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
-                                                                         innerRect.size() * devicePixelRatioF,
+                                                                         innerRectSizeDPI,
                                                                          Qt::IgnoreAspectRatio,
                                                                          Qt::SmoothTransformation);
             thumbnail.setDevicePixelRatio(devicePixelRatioF);
@@ -66,18 +67,23 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         }
     } else if (resourceType == ResourceType::Patterns) {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (!thumbnail.isNull() && (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width())) {
-            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
-                                                                         innerRect.size() * devicePixelRatioF,
-                                                                         Qt::KeepAspectRatio,
-                                                                         Qt::SmoothTransformation);
-            thumbnail.setDevicePixelRatio(devicePixelRatioF);
+        // for large patterns, scale down to no less than 50% zoom and crop it,
+        // to see distinguishing details without being too zoomed in
+        double scale = qMin(double(thumbnail.height()) / innerRectSizeDPI.height(), double(thumbnail.width()) / innerRectSizeDPI.width());
+        if (!thumbnail.isNull() && (scale >= 1.0)) {
+            scale = qMin(scale, 2.0);
+            QRect sourceRect = QRect(0, 0, innerRectSizeDPI.width() * scale, innerRectSizeDPI.height() * scale);
+            painter->drawImage(innerRect, thumbnail, sourceRect);
+        } else {
+            // crisply transform small patterns, which get scaled up to user-space,
+            // preventing them from being too tiny to see on hi-dpi
+            painter->setRenderHint(QPainter::SmoothPixmapTransform, false);
+            QBrush patternBrush(thumbnail);
+            painter->setBrushOrigin(innerRect.topLeft());
+            painter->fillRect(innerRect, patternBrush);
         }
-        QBrush patternBrush(thumbnail);
-        patternBrush.setTransform(QTransform::fromTranslate(innerRect.x(), innerRect.y()));
-        painter->fillRect(innerRect, patternBrush);
-    } else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
-        // TODO: thumbnails for workspaces and window layouts?
+    } else if (resourceType == ResourceType::WindowLayouts) {
+        // TODO: thumbnails for window layouts?
         painter->fillRect(innerRect, Qt::white);
         QPen before = painter->pen();
         painter->setPen(Qt::black);
@@ -85,30 +91,24 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
         painter->setPen(before);
     } else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
-        if (!thumbnail.isNull()) {
-            if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
-                thumbnail =
-                    KisResourceThumbnailCache::instance()->getImage(index,
-                                                                     innerRect.size() * devicePixelRatioF,
-                                                                     Qt::KeepAspectRatio,
-                                                                     Qt::SmoothTransformation);
-                thumbnail.setDevicePixelRatio(devicePixelRatioF);
-            } else if (imageSize.height() < innerRect.height() * devicePixelRatioF
-                       || imageSize.width() < innerRect.width() * devicePixelRatioF) {
-                thumbnail =
-                    KisResourceThumbnailCache::instance()->getImage(index,
-                                                                     innerRect.size() * devicePixelRatioF,
-                                                                     Qt::KeepAspectRatio,
-                                                                     Qt::FastTransformation);
-                thumbnail.setDevicePixelRatio(devicePixelRatioF);
-            }
+        if (!thumbnail.isNull() && !(thumbnail.height() == innerRectSizeDPI.height() &&
+                                     thumbnail.width() == innerRectSizeDPI.width())) {
+            bool needsUpscaling = thumbnail.height() < innerRectSizeDPI.height()
+                                || thumbnail.width() < innerRectSizeDPI.width();
+
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                        innerRectSizeDPI,
+                                                                        Qt::KeepAspectRatio,
+                                                                        needsUpscaling ? Qt::FastTransformation
+                                                                                       : Qt::SmoothTransformation);
+            thumbnail.setDevicePixelRatio(devicePixelRatioF);
         }
         QPoint topleft(innerRect.topLeft());
 
-        if (thumbnail.width() < innerRect.width()*devicePixelRatioF) {
+        if (thumbnail.width() < innerRectSizeDPI.width()) {
             topleft.setX(topleft.x() + (innerRect.width() - thumbnail.width()/devicePixelRatioF) / 2);
         }
-        if (thumbnail.height() < innerRect.height()*devicePixelRatioF) {
+        if (thumbnail.height() < innerRectSizeDPI.height()) {
             topleft.setY(topleft.y() + (innerRect.height() - thumbnail.height()/devicePixelRatioF) / 2);
         }
         painter->drawImage(topleft, thumbnail);

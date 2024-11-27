@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-26 01:49+0000\n"
+"POT-Creation-Date: 2024-11-27 01:51+0000\n"
 "PO-Revision-Date: 2024-11-24 15:42+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -25482,7 +25482,7 @@ msgstr "(Dés)Activer le masque chromatique"
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
 msgstr "Sélectionner un masque dans le panneau « Masques Chromatiques »"
@@ -35404,7 +35404,7 @@ msgstr "Panneaux disponibles"
 msgid "Current dockers"
 msgstr "Panneaux courants"
 
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
 msgid "Mask is disabled"
 msgstr "Le masque est désactivé."
@@ -42250,12 +42250,12 @@ msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
 msgstr "Modifier la teinte de la couleur sélectionnée dans le sens antihoraire"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:49
 #, kde-format
 msgid "Wide Gamut Color Selector"
 msgstr "Sélecteur de couleurs à Gamut étendu"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:308
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:317
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."

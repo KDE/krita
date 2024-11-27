@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-26 01:49+0000\n"
+"POT-Creation-Date: 2024-11-27 01:51+0000\n"
 "PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -26273,7 +26273,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
 msgstr "Wählen Sie eine Maske im „Farbraummasken“-Dialog"
@@ -35915,7 +35915,7 @@ msgstr "Verfügbare Eigenschaften:"
 msgid "Current dockers"
 msgstr "Aktuelle Ebene"
 
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
 msgid "Mask is disabled"
 msgstr ""
@@ -42999,13 +42999,13 @@ msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
 msgstr "Pinselfarbenfarbton gegen den Uhrzeigersinn verstellen"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:49
 #, fuzzy, kde-format
 #| msgid "Hide Shade Selector"
 msgid "Wide Gamut Color Selector"
 msgstr "Farbtonwähler ausblenden"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:308
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Configure..."

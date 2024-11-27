@@ -82,7 +82,7 @@ bool KisSeExprScript::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP res
     d->data = dev->readAll();
 
     // TODO: test
-    KIS_ASSERT_RECOVER_RETURN_VALUE(d->data.size() != 0, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->data.size() != 0, false);
 
     if (filename().isNull()) {
         warnFlake << "Cannot load SeExpr script" << name() << ", there is no filename set";

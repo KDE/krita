@@ -279,20 +279,6 @@ QStringList KoResourceBundle::resourceTypes() const
     return m_manifest.types();
 }
 
-void KoResourceBundle::setThumbnail(QString filename)
-{
-    if (QFileInfo(filename).exists()) {
-        m_thumbnail = QImage(filename);
-        m_thumbnail = m_thumbnail.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
-    else {
-        m_thumbnail = QImage(256, 256, QImage::Format_ARGB32);
-        QPainter gc(&m_thumbnail);
-        gc.fillRect(0, 0, 256, 256, Qt::red);
-        gc.end();
-    }
-}
-
 void KoResourceBundle::setThumbnail(QImage image)
 {
     if (!image.isNull()) {

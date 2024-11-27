@@ -262,11 +262,7 @@ void DlgCreateBundle::putMetaDataInTheBundle(KoResourceBundleSP bundle) const
     bundle->setMetaData(KisResourceStorage::s_meta_license, m_pageMetadataInfo->license());
     bundle->setMetaData(KisResourceStorage::s_meta_website, m_pageMetadataInfo->website());
 
-    if (m_bundle) {
-        bundle->setThumbnail(m_pageMetadataInfo->thumbnail());
-    } else {
-        bundle->setThumbnail(m_pageMetadataInfo->previewImage());
-    }
+    bundle->setThumbnail(m_pageMetadataInfo->thumbnail());
 
     // For compatibility
     bundle->setMetaData("email", m_pageMetadataInfo->email());

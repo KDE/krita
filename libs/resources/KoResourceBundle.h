@@ -80,7 +80,6 @@ public:
 
     QList<QString> getTagsList();
 
-    void setThumbnail(QString);
     void setThumbnail(QImage);
 
     /**

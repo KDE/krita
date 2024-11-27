@@ -111,6 +111,7 @@ void PageMetadataInfo::getPreviewImage()
     QImage img(m_previewImage);
     img = img.scaled(256, 256, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_ui->lblPreview->setPixmap(QPixmap::fromImage(img));
+    m_thumbnail = img;
 }
 
 void PageMetadataInfo::showWarning()

@@ -21,7 +21,7 @@ class KoProperties;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDocumentResourceManager;
-class QStringList;
+#include <QStringList>
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"

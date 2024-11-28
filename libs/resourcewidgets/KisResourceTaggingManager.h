@@ -16,7 +16,7 @@
 #define KISRESOURCETAGGINGMANAGER_H
 
 #include <QObject>
-
+#include <QStringList>
 #include <KoResource.h>
 #include <KisTag.h>
 #include <KisTagModel.h>
@@ -24,7 +24,6 @@
 #include <kis_debug.h>
 
 class QWidget;
-class QStringList;
 class QString;
 class QPoint;
 

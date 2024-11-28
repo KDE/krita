@@ -31,7 +31,7 @@ class QWidget;
 class QCursor;
 class QPainter;
 class QString;
-class QStringList;
+#include <QStringList>
 class QRectF;
 class QPointF;
 class QInputMethodEvent;

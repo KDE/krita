@@ -13,7 +13,7 @@
 
 class QString;
 class QTransform;
-class QStringList;
+#include <QStringList>
 class KoXmlWriter;
 class KoSvgTextProperties;
 

@@ -9,12 +9,13 @@
 
 #include <kritawidgetutils_export.h>
 
+#include <QStringList>
+
 class KisKXMLGUIBuilderPrivate;
 class KisKXMLGUIClient;
 
 class QAction;
 class QDomElement;
-class QStringList;
 class QWidget;
 
 /**

@@ -18,7 +18,7 @@
 
 class QOpenGLContext;
 class QString;
-class QStringList;
+#include <QStringList>
 class QSurfaceFormat;
 
 /**

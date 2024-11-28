@@ -466,8 +466,8 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(isUnsafeAsDivisor(src))
-        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
+    if(tmp::isZeroValue(src))
+        return tmp::isZeroValue(dst) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
 }

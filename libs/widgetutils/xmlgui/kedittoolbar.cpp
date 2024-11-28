@@ -48,7 +48,7 @@
 #include "kis_action_registry.h"
 #include <KisKineticScroller.h>
 
-static const char separatorstring[] = I18N_NOOP("--- separator ---");
+static const char separatorstring[] = QT_TRANSLATE_NOOP("KEditToolBar", "--- separator ---");
 
 #define SEPARATORSTRING i18n(separatorstring)
 

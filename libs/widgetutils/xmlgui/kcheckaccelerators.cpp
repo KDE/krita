@@ -25,6 +25,7 @@
 #include <QClipboard>
 #include <QProcess>
 #include <QDialogButtonBox>
+#include <QFile>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

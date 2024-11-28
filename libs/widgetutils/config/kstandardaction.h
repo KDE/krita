@@ -11,9 +11,9 @@
 #include <kstandardshortcut.h>
 #include <QList>
 #include <QStringList>
+#include <QWidget>
 
 class QObject;
-class QWidget;
 class QAction;
 class KRecentFilesAction;
 class KDualAction;

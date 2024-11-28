@@ -31,7 +31,11 @@ bool KisResourceUserOperations::userAllowsOverwrite(QWidget* widgetParent, QStri
 bool KisResourceUserOperations::resourceNameIsAlreadyUsed(KisResourceModel *resourceModel, QString resourceName, int resourceIdToIgnore)
 {
     auto sizeFilteredById = [resourceIdToIgnore] (QVector<KoResourceSP> list) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         int sumHere = 0;
+#else
+        long long int sumHere = 0;
+#endif
         if (resourceIdToIgnore < 0) {
             return list.size();
         }

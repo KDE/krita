@@ -701,7 +701,11 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
              * TODO: in the future replace the whole widget with QKeySequenceEdit,
              *       it uses QKeyMapper directly.
              */
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            const QList<int> vec = QKeyMapper::possibleKeys(e);
+#else
             const QList<QKeyCombination> vec = QKeyMapper::possibleKeys(e);
+#endif
 
             if (!vec.isEmpty() && e->modifiers() != Qt::NoModifier) {
                 /**

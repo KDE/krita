@@ -41,7 +41,12 @@ bool KisResourceItemView::viewportEvent(QEvent *event)
 
     if (event->type() == QEvent::ToolTip) {
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QStyleOptionViewItem option = viewOptions();
+#else
+        QStyleOptionViewItem option;
+        initViewItemOption(&option);
+#endif
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
             option.rect = visualRect(index);

@@ -345,7 +345,12 @@ void KisAnimTimelineTimeHeader::paintSection1(QPainter *painter, const QRect &re
     const int spanEnd = qMin(count(), logicalIndex + spanWidth);
     QRect spanRect(rect.topLeft(), QSize(width * (spanEnd - logicalIndex), textHeight));
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStyleOptionViewItem option = viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+#endif
     const int gridHint = style()->styleHint(QStyle::SH_Table_GridLineColor, &option, this);
     const QColor gridColor = static_cast<QRgb>(gridHint);
     const QPen gridPen = QPen(gridColor);

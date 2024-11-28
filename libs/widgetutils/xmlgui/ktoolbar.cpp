@@ -31,6 +31,7 @@
 #include <QDBusMessage>
 #endif
 #include <QDebug>
+#include <QActionGroup>
 
 #include <kconfig.h>
 #include <ksharedconfig.h>

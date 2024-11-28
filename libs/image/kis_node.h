@@ -16,7 +16,7 @@
 #include <KisRegion.h>
 
 class QRect;
-class QStringList;
+#include <QStringList>
 
 class KoProperties;
 

@@ -10,7 +10,7 @@
 
 class QApplication;
 class QByteArray;
-class QStringList;
+#include <QStringList>
 class KisDocument;
 
 #include "kritaui_export.h"

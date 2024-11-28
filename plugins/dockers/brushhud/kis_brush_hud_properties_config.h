@@ -13,7 +13,7 @@
 #include "brushengine/kis_uniform_paintop_property.h"
 
 class QDomDocument;
-class QStringList;
+#include <QStringList>
 class QString;
 
 

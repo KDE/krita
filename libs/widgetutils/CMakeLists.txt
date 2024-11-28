@@ -114,12 +114,18 @@ qt_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
 kis_add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set (QtGui_PRIVATE_INCLUDE_DIRS ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
+else()
+    set (QtGui_PRIVATE_INCLUDE_DIRS ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+endif()
+
 target_include_directories(kritawidgetutils
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
     PRIVATE
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${QtGui_PRIVATE_INCLUDE_DIRS}
 )
 
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)

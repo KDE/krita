@@ -5,7 +5,12 @@ add_subdirectory( integration )
 add_subdirectory( "pics/branding/${BRANDING}" )
 
 if (ANDROID)
-    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        set (QtAndroidExtras_INCLUDE_DIRS ${Qt6AndroidExtras_INCLUDE_DIRS})
+    else()
+        set (QtAndroidExtras_INCLUDE_DIRS ${Qt5AndroidExtras_INCLUDE_DIRS})
+    endif()
+    include_directories (${QtAndroidExtras_INCLUDE_DIRS})
 endif()
 
 set(krita_SRCS main.cc)

@@ -10,7 +10,6 @@
 #include "kis_assert.h"
 
 #include <KoCompositeOpRegistry.h>
-#include <KoCompositeOpFunctions.h>
 
 #include "KisMaskingBrushCompositeOp.h"
 

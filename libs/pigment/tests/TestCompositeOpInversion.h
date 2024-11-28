@@ -15,6 +15,11 @@ public:
 private Q_SLOTS:
     void test();
     void test_data();
+
+    void testBurnInF32Mode();
+
+    void testFloatModes();
+    void testFloatModes_data();
 };
 
 #endif // TESTCOMPOSITEOPINVERSION_H

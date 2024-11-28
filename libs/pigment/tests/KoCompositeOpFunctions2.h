@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
+#ifdef KOCOMPOSITEOP_FUNCTIONS_H_
+#error "ssksjdkjs"
+#endif
+
 #ifndef KOCOMPOSITEOP_FUNCTIONS_H_
 #define KOCOMPOSITEOP_FUNCTIONS_H_
 
@@ -15,6 +19,231 @@
 #ifdef HAVE_OPENEXR
 #include "half.h"
 #endif
+
+template <typename T>
+struct ClampPolicyInteger {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static inline channels_type clampInputSrc(channels_type value) {
+        return value;
+    }
+
+    static inline channels_type clampResultAllowNegative(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline compositetype fixInfiniteAfterDivision(compositetype value) {
+        return value;
+    }
+};
+
+template <typename T>
+struct ClampPolicyFloatSDR {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static channels_type clampInputSrc(channels_type value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampResultAllowNegative(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static compositetype fixInfiniteAfterDivision(compositetype value) {
+        // Constantly dividing by small numbers can quickly make the result
+        // become infinity or NaN, so we check that and correct (kind of clamping)
+        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::unitValue;
+    }
+};
+
+template <typename T>
+struct ClampPolicyFloatHDR {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static channels_type clampInputSrc(channels_type value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampResultAllowNegative(compositetype value) {
+        return value;
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDRBottom<channels_type>(value);
+    }
+
+    static channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDRTop<channels_type>(value);
+    }
+
+    static compositetype fixInfiniteAfterDivision(compositetype value) {
+        // Constantly dividing by small numbers can quickly make the result
+        // become infinity or NaN, so we check that and correct (kind of clamping)
+        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::max;
+    }
+};
+
+namespace tmp {
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isNullValueClamped(double d)
+{
+    return d <= 0.000000000001;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(float f)
+{
+    return f <= 0.00001f;
+}
+
+#ifdef HAVE_OPENEXR
+
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isNullValueClamped(half h)
+{
+    return h.isZero() || h.isNegative();
+}
+
+#endif /* HAVE_OPENEXR */
+
+template <typename T>
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(T v)
+{
+    return v <= 0;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isUnitValueClamped(double d)
+{
+    return d > 1.0 - 0.000000000001;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(float f)
+{
+    return f > 1.0 - 0.00001f;
+}
+
+#ifdef HAVE_OPENEXR
+
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValueClamped(half h)
+{
+    return h > 1.0f - 0.0001f;
+}
+
+#endif /* HAVE_OPENEXR */
+
+template <typename T>
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(T v)
+{
+    return v >= KoColorSpaceMathsTraits<T>::unitValue;
+}
+
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
+{
+    return KoColorSpaceMaths<T>::isZeroValue(v);
+}
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
+{
+    return KoColorSpaceMaths<T>::isUnitValue(v);
+}
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  T clampChannelToSDRBottom(T v)
+{
+    return v;
+}
+
+template <>
+Q_REQUIRED_RESULT  inline Q_DECL_UNUSED  float clampChannelToSDRBottom<float>(float v)
+{
+    return qMax<float>(KoColorSpaceMathsTraits<float>::zeroValue, v);
+}
+
+template <typename T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  composite_type divideInCompositeSpace(composite_type a, composite_type b)
+{
+    return a / b;
+}
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint8>::compositetype
+    divideInCompositeSpace<quint8>(KoColorSpaceMathsTraits<quint8>::compositetype a,
+                                   KoColorSpaceMathsTraits<quint8>::compositetype b)
+
+{
+    return a * KoColorSpaceMathsTraits<quint8>::unitValue / b;
+}
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint16>::compositetype
+    divideInCompositeSpace<quint16>(KoColorSpaceMathsTraits<quint16>::compositetype a,
+                                    KoColorSpaceMathsTraits<quint16>::compositetype b)
+
+{
+    return a * KoColorSpaceMathsTraits<quint16>::unitValue / b;
+}
+
+template <typename T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  composite_type multiplyInCompositeSpace(composite_type a, composite_type b)
+{
+    return a * b;
+}
+
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint8>::compositetype
+    multiplyInCompositeSpace<quint8>(KoColorSpaceMathsTraits<quint8>::compositetype a,
+                                   KoColorSpaceMathsTraits<quint8>::compositetype b)
+
+{
+    return a * b / KoColorSpaceMathsTraits<quint8>::unitValue;
+}
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint16>::compositetype
+    multiplyInCompositeSpace<quint16>(KoColorSpaceMathsTraits<quint16>::compositetype a,
+                                    KoColorSpaceMathsTraits<quint16>::compositetype b)
+
+{
+    return a * b / KoColorSpaceMathsTraits<quint16>::unitValue;
+}
+
+
+
+}
 
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
@@ -207,79 +436,71 @@ inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, T
     }
 }
 
-template<class T>
-inline T colorBurnHelper(T src, T dst) {
-    using namespace Arithmetic;
-    // Handle the case where the denominator is 0. See color dodge for a
-    // detailed explanation
-    if(src == zeroValue<T>()) {
-        return dst == unitValue<T>() ? inv(dst) : unitValue<T>();
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFColorBurn : ClampedSourceCompositeFunctorBase<T>
+{
+    using clamp_policy = ClampPolicy<T>;
+
+    static T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        // Handle the case where the denominator is 0. See color dodge for a
+        // detailed explanation
+        if(tmp::isZeroValue(src)) {
+            return !tmp::isUnitValueClamped(dst) ? zeroValue<T>() : clamp_policy::clampResultAllowNegative(dst);
+        }
+        return inv<T>(
+                    clamp_policy::clampInvertedResult(
+                        clamp_policy::fixInfiniteAfterDivision(
+                            div(inv(dst), src)
+                            )
+                        )
+                    );
     }
+};
 
-    return clampToSDR<T>(div(inv(dst), src));
-}
 
-// Integer version of color burn
-template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-cfColorBurn(T src, T dst) {
-    using namespace Arithmetic;
-    return inv(colorBurnHelper(src, dst));
-}
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFLinearBurn : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using clamp_policy = ClampPolicy<T>;
+        using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-// Floating point version of color burn
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-cfColorBurn(T src, T dst) {
-    using namespace Arithmetic;
-    const T result = colorBurnHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
-}
-
-template<class T>
-inline T cfLinearBurn(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clampToSDR<T>(composite_type(src) + dst - unitValue<T>());
-}
-
-template<class T>
-inline T colorDodgeHelper(T src, T dst) {
-    using namespace Arithmetic;
-    // Handle the case where the denominator is 0.
-    // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
-    // dividing by 0 we treat the denominator as an infinitely small number,
-    // so the result of the formula would approach infinity. As in the generic
-    // case, that result is clamped to the maximum value (which for integer
-    // types is the same as the unit value).
-    // Another special case is when both numerator and denominator are 0. In
-    // this case we also treat the denominator as an infinitely small number,
-    // and the numerator can remain as 0, so dividing 0 over a number (no matter
-    // how small it is) gives 0.
-    if (KoColorSpaceMaths<T>::isUnitValue(src)) {
-        return KoColorSpaceMaths<T>::isZeroValue(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+        return clamp_policy::clampResult(composite_type(src) + dst - unitValue<T>());
     }
-    return Arithmetic::clampToSDR<T>(div(dst, inv(src)));
-}
+};
 
-// Integer version of color dodge
-template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-cfColorDodge(T src, T dst) {
-    return colorDodgeHelper(src, dst);
-}
+template<typename T,
+         template <typename> typename ClampPolicy>
+struct CFColorDodge : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using clamp_policy = ClampPolicy<T>;
 
-// Floating point version of color dodge
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-cfColorDodge(T src, T dst) {
-    const T result = colorDodgeHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue;
-}
+        // Handle the case where the denominator is 0.
+        // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
+        // dividing by 0 we treat the denominator as an infinitely small number,
+        // so the result of the formula would approach infinity. As in the generic
+        // case, that result is clamped to the maximum value (which for integer
+        // types is the same as the unit value).
+        // Another special case is when both numerator and denominator are 0. In
+        // this case we also treat the denominator as an infinitely small number,
+        // and the numerator can remain as 0, so dividing 0 over a number (no matter
+        // how small it is) gives 0.
+        if (KoColorSpaceMaths<T>::isUnitValue(src)) {
+            return tmp::isNullValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+        }
+
+        return clamp_policy::clampResultAllowNegative(
+                    clamp_policy::fixInfiniteAfterDivision(
+                        div(dst, inv(src))
+                        )
+                    );
+    }
+};
 
 template<class T>
 inline T cfAddition(T src, T dst) {
@@ -315,102 +536,147 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(isUnsafeAsDivisor(src))
-        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
+    if(tmp::isZeroValue(src))
+        return tmp::isZeroValue(dst) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
 }
 
 template<class T>
-inline T cfHardLight(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
-    composite_type src2 = composite_type(src) + src;
-    
-    if(src > halfValue<T>()) {
-        // screen(src*2.0 - 1.0, dst)
-        src2 -= unitValue<T>();
+struct CFHardLight : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-        // src2 is guaranteed to be smaller than unitValue<T>() now
-        return Arithmetic::unionShapeOpacity(T(src2), dst);
-    }
-    
-    // src2 is guaranteed to be smaller than unitValue<T>() due to 'if'
-    return Arithmetic::mul(T(src2), dst);
-}
-
-template<class T>
-inline T cfSoftLightSvg(T src, T dst) {
-    using namespace Arithmetic;
-
-    qreal fsrc = scale<qreal>(src);
-    qreal fdst = scale<qreal>(dst);
-
-    if(fsrc > 0.5) {
-        qreal D = (fdst > 0.25) ? sqrt(fdst) : ((16.0*fdst - 12.0)*fdst + 4.0)*fdst;
-        return scale<T>(fdst + (2.0*fsrc - 1.0) * (D - fdst));
-    }
-
-    return scale<T>(fdst - (1.0 - 2.0 * fsrc) * fdst * (1.0 - fdst));
-}
-
-
-template<class T>
-inline T cfSoftLight(T src, T dst) {
-    using namespace Arithmetic;
-    
-    qreal fsrc = scale<qreal>(src);
-    qreal fdst = scale<qreal>(dst);
-    
-    if(fsrc > 0.5) {
-        return scale<T>(fdst + (2.0 * fsrc - 1.0) * (sqrt(fdst) - fdst));
-    }
-    
-    return scale<T>(fdst - (1.0 - 2.0*fsrc) * fdst * (1.0 - fdst));
-}
-
-template<class T>
-inline T cfVividLight(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
-    if(src < halfValue<T>()) {
-        if(isUnsafeAsDivisor(src))
-            return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
-
-        // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
-        composite_type dsti = inv(dst);
-        return clamp<T>(unitValue<T>() - (dsti * unitValue<T>() / src2));
+
+        if(src > halfValue<T>()) {
+            // screen(src*2.0 - 1.0, dst)
+            src2 -= unitValue<T>();
+
+            // src2 is guaranteed to be smaller than unitValue<T>() now
+            return Arithmetic::unionShapeOpacity(T(src2), dst);
+        }
+
+        // src2 is guaranteed to be smaller than unitValue<T>() due to 'if'
+        return Arithmetic::mul(T(src2), dst);
     }
-    
-    if(src == unitValue<T>())
-        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
-    
-    // min(1,max(0, dst / (2*(1-src)))
-    composite_type srci2 = inv(src);
-    srci2 += srci2;
-    return clamp<T>(composite_type(dst) * unitValue<T>() / srci2);
-}
+};
 
 template<class T>
-inline T cfPinLight(T src, T dst) {
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    // TODO: verify that the formula is correct (the first max would be useless here)
-    // max(0, max(2*src-1, min(dst, 2*src)))
-    composite_type src2 = composite_type(src) + src;
-    composite_type a    = qMin<composite_type>(dst, src2);
-    composite_type b    = qMax<composite_type>(src2-Arithmetic::unitValue<T>(), a);
-    return T(b);
-}
+struct CFSoftLightSvg : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        // TODO: check if dst-clamping should happen at higher level
+
+        /**
+         * soft-light scales the color using sqrt and pow2
+         * functions, hence we cannot support HDR values
+         */
+        dst = clampChannelToSDR<T>(dst);
+
+        qreal fsrc = scale<qreal>(src);
+        qreal fdst = scale<qreal>(dst);
+
+        if(fsrc > 0.5) {
+            qreal D = (fdst > 0.25) ? sqrt(fdst) : ((16.0*fdst - 12.0)*fdst + 4.0)*fdst;
+            return scale<T>(fdst + (2.0*fsrc - 1.0) * (D - fdst));
+        }
+
+        return scale<T>(fdst - (1.0 - 2.0 * fsrc) * fdst * (1.0 - fdst));
+    }
+};
+
+
+template<class T>
+struct CFSoftLight : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        // TODO: check if dst-clamping should happen at higher level
+
+        /**
+         * soft-light scales the color using sqrt and pow2
+         * functions, hence we cannot support HDR values
+         */
+        dst = clampChannelToSDR<T>(dst);
+
+        qreal fsrc = scale<qreal>(src);
+        qreal fdst = scale<qreal>(dst);
+
+        if(fsrc > 0.5) {
+            // lerp(dst, sqrt(dst), (2.0 * fsrc - 1.0))
+            return scale<T>(fdst + (2.0 * fsrc - 1.0) * (sqrt(fdst) - fdst));
+        }
+
+        // lerp(dst, dst^2, (1.0 - 2.0 * fsrc))
+        return scale<T>(fdst - (1.0 - 2.0*fsrc) * fdst * (1.0 - fdst));
+    }
+};
+
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFVividLight : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using clamp_policy = ClampPolicy<T>;
+        using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+        if (src < halfValue<T>()) {
+            if (tmp::isZeroValue(src)) {
+                return tmp::isUnitValueClamped(dst) ? clamp_policy::clampResultAllowNegative(dst) : zeroValue<T>();
+            }
+
+            // min(1,max(0,1-(1-dst) / (2*src)))
+            composite_type src2 = composite_type(src) + src;
+            composite_type dsti = inv(dst);
+            return clamp_policy::clampResult(
+                        unitValue<T>() -
+                        clamp_policy::fixInfiniteAfterDivision(
+                            tmp::divideInCompositeSpace<T>(dsti, src2)
+                            )
+                        );
+        }
+
+        if (tmp::isUnitValue(src)) {
+            return tmp::isNullValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
+        }
+
+        // min(1,max(0, dst / (2*(1-src)))
+        composite_type srci2 = inv(src);
+        srci2 += srci2;
+        return clamp_policy::clampResultAllowNegative(
+                    clamp_policy::fixInfiniteAfterDivision(
+                        tmp::divideInCompositeSpace<T>(composite_type(dst), srci2)
+                        )
+                    );
+    }
+};
+
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFPinLight : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using clamp_policy = ClampPolicy<T>;
+        using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+        // TODO: verify that the formula is correct (the first max would be useless here)
+        // max(0, max(2*src-1, min(dst, 2*src)))
+        composite_type src2 = composite_type(src) + src;
+        composite_type a    = qMin<composite_type>(dst, src2);
+        composite_type b    = qMax<composite_type>(src2-Arithmetic::unitValue<T>(), a);
+        return clamp_policy::clampResult(b);
+    }
+};
 
 template<class T>
 inline T cfArcTangent(T src, T dst) {
     using namespace Arithmetic;
     
-    if(dst == zeroValue<T>())
-        return (src == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
+    if (tmp::isZeroValue(dst))
+        return tmp::isZeroValue(src) ? zeroValue<T>() : unitValue<T>();
     
     return scale<T>(2.0 * atan(scale<qreal>(src) / scale<qreal>(dst)) / Arithmetic::pi);
 }
@@ -433,32 +699,38 @@ inline T cfLinearLight(T src, T dst) {
 }
 
 template<class T>
-inline T cfParallel(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
-    const bool srcIsSafe = !isUnsafeAsDivisor(src);
-    const bool dstIsSafe = !isUnsafeAsDivisor(dst);
+struct CFParallel : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
 
-    if (!srcIsSafe || !dstIsSafe) {
-        return zeroValue<T>();
+        const bool srcIsSafe = !isUnsafeAsDivisor(src);
+        const bool dstIsSafe = !isUnsafeAsDivisor(dst);
+
+        if (!srcIsSafe || !dstIsSafe) {
+            return zeroValue<T>();
+        }
+
+        // min(max(2 / (1/dst + 1/src), 0), 1)
+        composite_type unit = unitValue<T>();
+        composite_type s    = div<T>(unit, src);
+        composite_type d    = div<T>(unit, dst);
+
+        return clamp<T>((unit+unit) * unit / (d+s));
     }
-
-    // min(max(2 / (1/dst + 1/src), 0), 1)
-    composite_type unit = unitValue<T>();
-    composite_type s    = div<T>(unit, src);
-    composite_type d    = div<T>(unit, dst);
-
-    return clamp<T>((unit+unit) * unit / (d+s));
-}
+};
 
 template<class T>
-inline T cfEquivalence(T src, T dst) {
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    // 1 - abs(dst - src)
-    composite_type x = composite_type(dst) - src;
-    return (x < Arithmetic::zeroValue<T>()) ? T(-x) : T(x);
-}
+struct CFEquivalence : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        // TODO: is the formula correct?
+        // 1 - abs(dst - src)
+        composite_type x = qAbs(composite_type(dst) - src);
+        return clamp<T>(x);
+    }
+};
 
 template<class T>
 inline T cfGrainMerge(T src, T dst) {
@@ -474,10 +746,22 @@ inline T cfGrainExtract(T src, T dst) {
     return clamp<T>(composite_type(dst) - src + halfValue<T>());
 }
 
-template<class T>
-inline T cfHardMix(T src, T dst) {
-    return (dst > Arithmetic::halfValue<T>()) ? cfColorDodge(src,dst) : cfColorBurn(src,dst);
-}
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFHardMix : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        /**
+         * We do not clamp dst here, because it is supposed to be modified by
+         * cfColorDodge if it is too bright. The result will be clamped in the
+         * subordinate function.
+         */
+        return dst > halfValue<T>() ?
+            CFColorDodge<T, ClampPolicy>::composeChannel(src,dst) :
+            CFColorBurn<T, ClampPolicy>::composeChannel(src,dst);
+    }
+};
 
 template<class T>
 inline T cfHardMixPhotoshop(T src, T dst) {
@@ -504,41 +788,58 @@ inline T cfHardMixSofterPhotoshop(T src, T dst) {
 }
 
 template<class T>
-inline T cfAdditiveSubtractive(T src, T dst) {
-    using namespace Arithmetic;
-    // min(1,max(0,abs(sqr(CB)-sqr(CT))))
-    qreal x = sqrt(scale<qreal>(dst)) - sqrt(scale<qreal>(src));
-    return scale<T>((x < 0.0) ? -x : x);
-}
+struct CFAdditiveSubtractive : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        // min(1,max(0,abs(sqr(CB)-sqr(CT))))
+        qreal x = sqrt(scale<qreal>(dst)) - sqrt(scale<qreal>(src));
+        return scale<T>(qAbs(x));
+    }
+};
 
 template<class T>
-inline T cfGammaDark(T src, T dst) {
-    using namespace Arithmetic;
-    
-    if(src == zeroValue<T>())
-        return zeroValue<T>();
-    
-    // power(dst, 1/src)
-    return scale<T>(pow(scale<qreal>(dst), 1.0/scale<qreal>(src)));
-}
+struct CFGammaDark : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        if(tmp::isZeroValue(src)) {
+            return zeroValue<T>();
+        }
+
+        // power(dst, 1/src)
+        return scale<T>(pow(scale<qreal>(dst), 1.0/scale<qreal>(src)));
+    }
+};
 
 template<class T>
-inline T cfGammaLight(T src, T dst) {
-    using namespace Arithmetic;
-    return scale<T>(pow(scale<qreal>(dst), scale<qreal>(src)));
-}
+struct CFGammaLight : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+
+        if (tmp::isZeroValue(dst)) {
+            return tmp::isZeroValue(src) ? unitValue<T>() : zeroValue<T>();
+        }
+
+        return scale<T>(pow(scale<qreal>(dst), scale<qreal>(src)));
+    }
+};
 
 template<class T>
-inline T cfGammaIllumination(T src, T dst) {
-    using namespace Arithmetic;
-    return inv(cfGammaDark(inv(src),inv(dst)));
-}
+struct CFGammaIllumination : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        return inv(CFGammaDark<T>::composeChannel(inv(src),inv(dst)));
+    }
+};
 
 template<class T>
-inline T cfGeometricMean(T src, T dst) {
-    using namespace Arithmetic;
-    return scale<T>(sqrt(scale<qreal>(dst) * scale<qreal>(src)));
-}
+struct CFGeometricMean : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        return scale<T>(sqrt(scale<qreal>(dst) * scale<qreal>(src)));
+    }
+};
 
 template<class T>
 inline T cfOver(T src, T dst) { Q_UNUSED(dst); return src; }
@@ -549,21 +850,33 @@ inline T cfOverlay(T src, T dst) { return cfHardLight(dst, src); }
 template<class T>
 inline T cfMultiply(T src, T dst) { return Arithmetic::mul(src, dst); }
 
-template<class T>
-inline T cfHardOverlay(T src, T dst) {
-    using namespace Arithmetic;
+template<class T,
+         template <typename> typename ClampPolicy>
+struct CFHardOverlay : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        using clamp_policy = ClampPolicy<T>;
+        using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-    qreal fsrc = scale<qreal>(src);
-    qreal fdst = scale<qreal>(dst);
-    
-    if (fsrc == 1.0) {
-        return scale<T>(1.0);}
+        if (tmp::isUnitValue(src)) {
+            return unitValue<T>();
+        }
 
-    if(fsrc > 0.5) {
-        return scale<T>(cfDivide(inv(2.0 * fsrc - 1.0), fdst));
+        if(src >= halfValue<T>()) {
+            return clamp_policy::clampResultAllowNegative(
+                        clamp_policy::fixInfiniteAfterDivision(
+                            tmp::divideInCompositeSpace<T>(composite_type(dst),
+                                                           2 * composite_type(inv(src)))
+                            )
+                        );
+        }
+
+        return clamp_policy::clampResultAllowNegative(
+                    tmp::multiplyInCompositeSpace<T>(composite_type(dst),
+                                                     2 * composite_type(src))
+                    );
     }
-    return scale<T>(mul(2.0 * fsrc, fdst));
-}
+};
 
 template<class T>
 inline T cfDifference(T src, T dst) { return qMax(src,dst) - qMin(src,dst); }

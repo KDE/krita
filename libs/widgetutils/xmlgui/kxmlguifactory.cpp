@@ -34,6 +34,8 @@
 #include <kis_icon_utils.h>
 #include <WidgetUtilsDebug.h>
 
+#include <KisPortingUtils.h>
+
 Q_DECLARE_METATYPE(QList<QKeySequence>)
 
 using namespace KisKXMLGUI;
@@ -168,8 +170,9 @@ bool KisKXMLGUIFactory::saveConfigFile(const QDomDocument &doc,
     }
 
     // write out our document
+
     QTextStream ts(&file);
-    ts.setCodec(QTextCodec::codecForName("UTF-8"));
+    KisPortingUtils::setUtf8OnStream(ts);
     ts << doc;
 
     file.close();

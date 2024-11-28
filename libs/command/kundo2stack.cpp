@@ -255,7 +255,7 @@ void KUndo2Command::undo()
 
 QString KUndo2Command::actionText() const
 {
-    if(d->actionText!=0)
+    if (!d->actionText.isEmpty())
         return d->actionText;
     else
         return QString();

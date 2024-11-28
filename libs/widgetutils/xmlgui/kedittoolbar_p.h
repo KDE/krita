@@ -52,7 +52,7 @@ protected:
         return QStringList() << QStringLiteral("application/x-kde-action-list");
     }
 
-    QMimeData *mimeData(const QList<QListWidgetItem *> items) const override;
+    QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
 
     bool dropMimeData(int index, const QMimeData *data, Qt::DropAction action) override;
 

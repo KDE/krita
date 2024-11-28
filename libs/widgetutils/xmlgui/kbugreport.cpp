@@ -27,6 +27,7 @@
 #include <QStandardPaths>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QFile>
 
 #include <kaboutdata.h>
 #include <kconfig.h>

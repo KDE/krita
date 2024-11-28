@@ -9,6 +9,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QWidget>
 
 #include <klocalizedstring.h>
 #include <kstandardshortcut.h>

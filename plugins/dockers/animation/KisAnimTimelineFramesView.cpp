@@ -876,7 +876,12 @@ bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
         QModelIndex index = model()->buddy(indexAt(he->pos()));
         if (index.isValid()) {
-            QStyleOptionViewItem option = viewOptions();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        QStyleOptionViewItem option = viewOptions();
+#else
+        QStyleOptionViewItem option;
+        initViewItemOption(&option);
+#endif
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
             m_d->tip.showTip(this, he->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
@@ -997,7 +1002,12 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
     } else if (event->button() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(event->pos()));
         if (index.isValid()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             QStyleOptionViewItem option = viewOptions();
+#else
+            QStyleOptionViewItem option;
+            initViewItemOption(&option);
+#endif
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
             m_d->tip.showTip(this, event->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
@@ -1070,7 +1080,12 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
     } else if (e->buttons() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(e->pos()));
         if (index.isValid()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             QStyleOptionViewItem option = viewOptions();
+#else
+            QStyleOptionViewItem option;
+            initViewItemOption(&option);
+#endif
             option.rect = visualRect(index);
             // The offset of the headers is needed to get the correct position inside the view.
             m_d->tip.showTip(this, e->pos() + QPoint(verticalHeader()->width(), horizontalHeader()->height()), option, index);
@@ -1679,7 +1694,12 @@ int KisAnimTimelineFramesView::scrollPositionFromColumn(int column) {
 
 QStyleOptionViewItem KisAnimTimelineFramesView::Private::viewOptionsV4() const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStyleOptionViewItem option = q->viewOptions();
+#else
+    QStyleOptionViewItem option;
+    q->initViewItemOption(&option);
+#endif
     option.locale = q->locale();
     option.locale.setNumberOptions(QLocale::OmitGroupSeparator);
     option.widget = q;

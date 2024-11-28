@@ -4,10 +4,14 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
+#ifdef _KOCOMPOSITEOP_GENERIC_H_
+#error "ssksjdkjs"
+#endif
+
+
 #ifndef _KOCOMPOSITEOP_GENERIC_H_
 #define _KOCOMPOSITEOP_GENERIC_H_
 
-//#include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
 
 /**
@@ -79,7 +83,10 @@ public:
 
                         dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
 
-                        //qDebug() << i << ppVar(result) << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace)) << div(result, newDstAlpha);
+//                        qDebug() << i << ppVar(result)
+//                                 << ppVar(srcInBlendSpace)
+//                                 << ppVar(dstInBlendSpace)
+//                                 << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace)) << div(result, newDstAlpha);
                     }
                 }
             }

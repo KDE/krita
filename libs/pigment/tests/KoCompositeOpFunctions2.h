@@ -4,6 +4,10 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
+#ifdef KOCOMPOSITEOP_FUNCTIONS_H_
+#error "ssksjdkjs"
+#endif
+
 #ifndef KOCOMPOSITEOP_FUNCTIONS_H_
 #define KOCOMPOSITEOP_FUNCTIONS_H_
 
@@ -15,6 +19,164 @@
 #ifdef HAVE_OPENEXR
 #include "half.h"
 #endif
+
+template <typename T>
+struct ClampPolicyInteger {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static inline channels_type clampInputSrc(channels_type value) {
+        return value;
+    }
+
+    static inline channels_type clampResultAllowNegative(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline compositetype fixInfiniteAfterDivision(compositetype value) {
+        return value;
+    }
+};
+
+template <typename T>
+struct ClampPolicyFloatSDR {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static channels_type clampInputSrc(channels_type value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampResultAllowNegative(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static compositetype fixInfiniteAfterDivision(compositetype value) {
+        // Constantly dividing by small numbers can quickly make the result
+        // become infinity or NaN, so we check that and correct (kind of clamping)
+        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::unitValue;
+    }
+};
+
+template <typename T>
+struct ClampPolicyFloatHDR {
+    using channels_type = T;
+    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    static channels_type clampInputSrc(channels_type value) {
+        using namespace Arithmetic;
+        return clampToSDR<channels_type>(value);
+    }
+
+    static channels_type clampResultAllowNegative(compositetype value) {
+        return value;
+    }
+
+    static inline channels_type clampResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDRBottom<channels_type>(value);
+    }
+
+    static channels_type clampInvertedResult(compositetype value) {
+        using namespace Arithmetic;
+        return clampToSDRTop<channels_type>(value);
+    }
+
+    static compositetype fixInfiniteAfterDivision(compositetype value) {
+        // Constantly dividing by small numbers can quickly make the result
+        // become infinity or NaN, so we check that and correct (kind of clamping)
+        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::max;
+    }
+};
+
+namespace tmp {
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isNullValueClamped(double d)
+{
+    return d <= 0.000000000001;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(float f)
+{
+    return f <= 0.00001f;
+}
+
+#ifdef HAVE_OPENEXR
+
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isNullValueClamped(half h)
+{
+    return h.isZero() || h.isNegative();
+}
+
+#endif /* HAVE_OPENEXR */
+
+template <typename T>
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(T v)
+{
+    return v <= 0;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isUnitValueClamped(double d)
+{
+    return d > 1.0 - 0.000000000001;
+}
+
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(float f)
+{
+    return f > 1.0 - 0.00001f;
+}
+
+#ifdef HAVE_OPENEXR
+
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValueClamped(half h)
+{
+    return h > 1.0f - 0.0001f;
+}
+
+#endif /* HAVE_OPENEXR */
+
+template <typename T>
+Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(T v)
+{
+    return v >= KoColorSpaceMathsTraits<T>::unitValue;
+}
+
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
+{
+    return KoColorSpaceMaths<T>::isZeroValue(v);
+}
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
+{
+    return KoColorSpaceMaths<T>::isUnitValue(v);
+}
+
+}
 
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
@@ -207,47 +369,48 @@ inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, T
     }
 }
 
-template<class T>
-inline T colorBurnHelper(T src, T dst) {
+template<class T,
+         template <typename> typename ClampPolicy>
+T cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
+    using clamp_policy = ClampPolicy<T>;
+
+    src = clamp_policy::clampInputSrc(src);
+
     // Handle the case where the denominator is 0. See color dodge for a
     // detailed explanation
-    if(src == zeroValue<T>()) {
-        return dst == unitValue<T>() ? inv(dst) : unitValue<T>();
+    if(tmp::isZeroValue(src)) {
+        return !tmp::isUnitValueClamped(dst) ? zeroValue<T>() : clamp_policy::clampResultAllowNegative(dst);
     }
 
-    return clampToSDR<T>(div(inv(dst), src));
+    return inv<T>(
+                clamp_policy::clampInvertedResult(
+                    clamp_policy::fixInfiniteAfterDivision(
+                        div(inv(dst), src)
+                        )
+                    )
+                );
 }
 
-// Integer version of color burn
-template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-cfColorBurn(T src, T dst) {
-    using namespace Arithmetic;
-    return inv(colorBurnHelper(src, dst));
-}
-
-// Floating point version of color burn
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-cfColorBurn(T src, T dst) {
-    using namespace Arithmetic;
-    const T result = colorBurnHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
-}
-
-template<class T>
+template<class T,
+         template <typename> typename ClampPolicy>
 inline T cfLinearBurn(T src, T dst) {
     using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clampToSDR<T>(composite_type(src) + dst - unitValue<T>());
+    using clamp_policy = ClampPolicy<T>;
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    src = clamp_policy::clampInputSrc(src);
+    return clamp_policy::clampResult(composite_type(src) + dst - unitValue<T>());
 }
 
-template<class T>
-inline T colorDodgeHelper(T src, T dst) {
+template<typename T,
+         template <typename> typename ClampPolicy>
+inline T cfColorDodge(T src, T dst) {
     using namespace Arithmetic;
+    using clamp_policy = ClampPolicy<T>;
+
+    src = clamp_policy::clampInputSrc(src);
+
     // Handle the case where the denominator is 0.
     // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
     // dividing by 0 we treat the denominator as an infinitely small number,
@@ -259,26 +422,14 @@ inline T colorDodgeHelper(T src, T dst) {
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
     if (KoColorSpaceMaths<T>::isUnitValue(src)) {
-        return KoColorSpaceMaths<T>::isZeroValue(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+        return tmp::isNullValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
     }
-    return Arithmetic::clampToSDR<T>(div(dst, inv(src)));
-}
 
-// Integer version of color dodge
-template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-cfColorDodge(T src, T dst) {
-    return colorDodgeHelper(src, dst);
-}
-
-// Floating point version of color dodge
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-cfColorDodge(T src, T dst) {
-    const T result = colorDodgeHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue;
+    return clamp_policy::clampResultAllowNegative(
+                clamp_policy::fixInfiniteAfterDivision(
+                    div(dst, inv(src))
+                    )
+                );
 }
 
 template<class T>

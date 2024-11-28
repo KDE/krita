@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-27 01:51+0000\n"
+"POT-Creation-Date: 2024-11-28 01:48+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17790,6 +17790,7 @@ msgstr "Loitonna"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:287
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:146
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:153
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
 #: plugins/python/exportlayers/uiexportlayers.py:29
@@ -26469,12 +26470,14 @@ msgstr "Kuvapisteruudukko:"
 #. i18n: ectx: property (text), widget (QLabel, colorLabel2)
 #. i18n: ectx: property (text), widget (QLabel, colorLabel1)
 #. i18n: ectx: property (text), widget (QLabel, colorLabel3)
+#. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:26
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:462
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:558
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:660
@@ -28975,6 +28978,7 @@ msgstr "Siirtotyökalu"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
 #. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
@@ -28991,6 +28995,7 @@ msgstr "Siirtotyökalu"
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
 #: plugins/extensions/resourcemanager/wdgside.ui:23
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
 #, fuzzy, kde-format
 msgid "Form"
 msgstr "Kovempi"
@@ -31606,9 +31611,11 @@ msgstr "Kuvion koko"
 
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
@@ -33935,6 +33942,7 @@ msgstr "K&orostustapa:"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:49
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:52
 #: libs/ui/layerstyles/WdgSatin.ui:51
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:59
 #, kde-format
 msgid "Set the blend mode for the layer"
 msgstr "Aseta tason sekoitustapa"
@@ -47174,6 +47182,20 @@ msgstr "Maksimoi kanava"
 msgid "Minimize Channel"
 msgstr "Minimoi kanava"
 
+#: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgid "Fast Color &Overlay..."
+msgstr "Värikerrostus"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: plugins/filters/colors/KisFilterFastColorOverlay.h:28
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgid "Fast Color Overlay"
+msgstr "Värikerrostus"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
@@ -47190,6 +47212,26 @@ msgstr "Maalauskynnys:"
 #| msgid "Color name:"
 msgid "Color Sampler:"
 msgstr "Värin nimi:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
+#, fuzzy, kde-format
+#| msgid "&Blend Mode:"
+msgid "Blend Mode:"
+msgstr "S&ekoitustapa:"
+
+#. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
+#, fuzzy, kde-format
+msgid "Set the master opacity for the overlay color"
+msgstr "Valitse tason sekoitustapa."
+
+#. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
+#, fuzzy, kde-format
+#| msgid "Adjust the transparency of the layer"
+msgid "Adjust the transparency of the overlay color"
+msgstr "Säädä tason läpinäkyvyyttä"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)

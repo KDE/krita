@@ -69,7 +69,10 @@ static void initializeLanguages()
         if (languages.isEmpty()) {
             qputenv("LANGUAGE", languageCode);
         } else {
-            qputenv("LANGUAGE", languageCode + ":" + languages);
+            QByteArray ba(languageCode);
+            ba.append(":");
+            ba.append(languages);
+            qputenv("LANGUAGE", ba);
         }
     }
     //qDebug() << ">>>>>>>>>>>>>> LANGUAGE" << qgetenv("LANGUAGE");

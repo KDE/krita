@@ -10,23 +10,23 @@
 
 const char* const KoZoomMode::modes[] =
 {
-    I18N_NOOP("%1%"),
-    I18N_NOOP("Fit View"),
-    I18N_NOOP("Fit View Width"),
+    QT_TRANSLATE_NOOP("", "%1%"),
+    QT_TRANSLATE_NOOP("", "Fit View"),
+    QT_TRANSLATE_NOOP("", "Fit View Width"),
     0,
-    I18N_NOOP("Actual Pixels"),
-    0,
-    0,
-    0,
-    I18N_NOOP("Fit Text Width"),
+    QT_TRANSLATE_NOOP("", "Actual Pixels"),
     0,
     0,
+    0,
+    QT_TRANSLATE_NOOP("", "Fit Text Width"),
     0,
     0,
     0,
     0,
     0,
-    I18N_NOOP("Fit View Height")
+    0,
+    0,
+    QT_TRANSLATE_NOOP("", "Fit View Height")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;

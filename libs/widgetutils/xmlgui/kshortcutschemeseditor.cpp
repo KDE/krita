@@ -100,7 +100,7 @@ void KisKShortcutSchemesEditor::newScheme()
     }
 
     if (m_schemesList->findText(newName) != -1) {
-        KMessageBox::sorry(m_dialog, i18n("A scheme with this name already exists."));
+        KMessageBox::error(m_dialog, i18n("A scheme with this name already exists."));
         return;
     }
 

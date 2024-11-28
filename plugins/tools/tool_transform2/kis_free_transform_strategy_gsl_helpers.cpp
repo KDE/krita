@@ -435,7 +435,7 @@ namespace GSL
     {
         QMessageBox::warning(qApp->activeWindow(),
                              i18nc("@title:window", "Krita"),
-                             i18n("Sorry, Krita was built without the support "
+                             i18n("Krita was built without the support "
                                   "of GNU Scientific Library, so you cannot scale "
                                   "the selection with handles. Please compile "
                                   "Krita with GNU Scientific Library support, or use "

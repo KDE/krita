@@ -10,6 +10,8 @@
 
 #include <kis_properties_configuration.h>
 
+#include <KisSpinBoxI18nHelper.h>
+
 #include "kis_wdg_options_webp.h"
 
 KisWdgOptionsWebP::KisWdgOptionsWebP(QWidget *parent)
@@ -71,6 +73,7 @@ void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
     preset->setCurrentIndex(cfg->getInt("preset", 0));
     lossless->setChecked(cfg->getBool("lossless", true));
     quality->setValue(cfg->getDouble("quality", 75.0));
+    KisSpinBoxI18nHelper::setText(quality, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     tradeoff->setValue(cfg->getInt("method", 4));
     dithering->setChecked(cfg->getBool("dithering", true));
 
@@ -78,27 +81,34 @@ void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
     targetPSNR->setValue(cfg->getDouble("target_PSNR", 0.0));
     segments->setValue(cfg->getInt("segments", 4));
     snsStrength->setValue(cfg->getInt("sns_strength", 50));
+    KisSpinBoxI18nHelper::setText(snsStrength, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     filterStrength->setValue(cfg->getInt("filter_strength", 60));
+    KisSpinBoxI18nHelper::setText(filterStrength, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     filterSharpness->setValue(cfg->getInt("filter_sharpness", 0));
     filterType->setCurrentIndex(cfg->getInt("filter_type", 1));
     autofilter->setChecked(cfg->getBool("autofilter", false));
     alphaCompression->setCurrentIndex(cfg->getInt("alpha_compression", 1));
     alphaFiltering->setValue(cfg->getInt("alpha_filtering", 1));
     alphaQuality->setValue(cfg->getInt("alpha_quality", 100));
+    KisSpinBoxI18nHelper::setText(alphaQuality, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     pass->setValue(cfg->getInt("pass", 1));
     showCompressed->setChecked(cfg->getBool("show_compressed", false));
     preprocessing->setCurrentIndex(cfg->getInt("preprocessing", 0));
     partitions->setValue(cfg->getInt("partitions", 0));
     partitionLimit->setValue(cfg->getInt("partition_limit", 0));
+    KisSpinBoxI18nHelper::setText(partitionLimit, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     emulateJPEGSize->setChecked(cfg->getBool("emulate_jpeg_size", false));
     threadLevel->setChecked(cfg->getBool("thread_level", false));
     lowMemory->setChecked(cfg->getBool("low_memory", false));
     nearLossless->setValue(cfg->getInt("near_lossless", 100));
+    KisSpinBoxI18nHelper::setText(nearLossless, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     exact->setChecked(cfg->getBool("exact", false));
     useSharpYUV->setChecked(cfg->getBool("use_sharp_yuv", false));
 #if WEBP_ENCODER_ABI_VERSION >= 0x020f
     qMin->setValue(cfg->getInt("qmin", 0));
+    KisSpinBoxI18nHelper::setText(qMin, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     qMax->setValue(cfg->getInt("qmax", 100));
+    KisSpinBoxI18nHelper::setText(qMax, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 #endif
 
     exif->setChecked(cfg->getBool("exif", true));

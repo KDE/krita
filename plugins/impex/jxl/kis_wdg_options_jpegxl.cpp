@@ -12,6 +12,8 @@
 
 #include <KoColorModelStandardIds.h>
 
+#include <KisSpinBoxI18nHelper.h>
+
 KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     : KisConfigWidget(parent)
 {
@@ -256,6 +258,13 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     modularPredictor->setCurrentIndex(modularPredictor->findData(cfg->getInt("modularPredictor", -1)));
     modularMATreeLearningPercent->setValue(cfg->getInt("modularMATreeLearningPercent", -1));
     jpegReconCFL->setCurrentIndex(jpegReconCFL->findData(cfg->getInt("jpegReconCFL", -1)));
+
+    KisSpinBoxI18nHelper::setText(channelColorsGlobalPercent,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+    KisSpinBoxI18nHelper::setText(channelColorsGroupPercent,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+    KisSpinBoxI18nHelper::setText(modularMATreeLearningPercent,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     chkAuthor->setChecked(cfg->getBool("storeAuthor", false));
     exif->setChecked(cfg->getBool("exif", true));

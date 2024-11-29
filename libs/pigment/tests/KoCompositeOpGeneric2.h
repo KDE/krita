@@ -66,7 +66,7 @@ public:
         }
         else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
-            
+
             if(newDstAlpha != zeroValue<channels_type>()) {
 
                 for(qint32 i=0; i <channels_nb; i++) {
@@ -83,10 +83,17 @@ public:
 
                         dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
 
-//                        qDebug() << i << ppVar(result)
-//                                 << ppVar(srcInBlendSpace)
-//                                 << ppVar(dstInBlendSpace)
-//                                 << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace)) << div(result, newDstAlpha);
+                        // qDebug() << i
+                        //          << ppVar(src[i])
+                        //          << ppVar(dst[i])
+                        //          << fixed << qSetRealNumberPrecision(10)
+                        //          << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace))
+                        //          << ppVar(result)
+                        //          << div(result, newDstAlpha)
+                        //          << reset
+                        //          << ppVar(newDstAlpha)
+                        //          << ppVar(srcAlpha)
+                        //          << ppVar(dstAlpha);
                     }
                 }
             }

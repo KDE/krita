@@ -176,6 +176,46 @@ Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
     return KoColorSpaceMaths<T>::isUnitValue(v);
 }
 
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  T clampChannelToSDRBottom(T v)
+{
+    return v;
+}
+
+template <>
+Q_REQUIRED_RESULT  inline Q_DECL_UNUSED  float clampChannelToSDRBottom<float>(float v)
+{
+    return qMax<float>(KoColorSpaceMathsTraits<float>::zeroValue, v);
+}
+
+template <typename T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  composite_type divideInCompositeSpace(composite_type a, composite_type b)
+{
+    return a / b;
+}
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint8>::compositetype
+    divideInCompositeSpace<quint8>(KoColorSpaceMathsTraits<quint8>::compositetype a,
+                                   KoColorSpaceMathsTraits<quint8>::compositetype b)
+
+{
+    return a * KoColorSpaceMathsTraits<quint8>::unitValue / b;
+}
+
+template <>
+Q_REQUIRED_RESULT inline Q_DECL_UNUSED
+    KoColorSpaceMathsTraits<quint16>::compositetype
+    divideInCompositeSpace<quint16>(KoColorSpaceMathsTraits<quint16>::compositetype a,
+                                    KoColorSpaceMathsTraits<quint16>::compositetype b)
+
+{
+    return a * KoColorSpaceMathsTraits<quint16>::unitValue / b;
+}
+
+
+
 }
 
 template<class HSXType, class TReal>
@@ -425,6 +465,12 @@ inline T cfColorDodge(T src, T dst) {
         return tmp::isNullValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
     }
 
+    // qDebug() << ppVar(src) << ppVar(dst) << (clamp_policy::clampResultAllowNegative(
+    //     clamp_policy::fixInfiniteAfterDivision(
+    //         div(dst, inv(src))
+    //         )
+    //     ));
+
     return clamp_policy::clampResultAllowNegative(
                 clamp_policy::fixInfiniteAfterDivision(
                     div(dst, inv(src))
@@ -472,11 +518,15 @@ inline T cfDivide(T src, T dst) {
     return clamp<T>(div(dst, src));
 }
 
-template<class T>
+template<class T,
+         template <typename> typename ClampPolicy>
 inline T cfHardLight(T src, T dst) {
     using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
+    using clamp_policy = ClampPolicy<T>;
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    src = clamp_policy::clampInputSrc(src);
+
     composite_type src2 = composite_type(src) + src;
     
     if(src > halfValue<T>()) {
@@ -495,6 +545,17 @@ template<class T>
 inline T cfSoftLightSvg(T src, T dst) {
     using namespace Arithmetic;
 
+    /**
+     * Driver channel is always clamped to 0...1.0 range
+     */
+    src = clampChannelToSDR<T>(src);
+
+    /**
+     * soft-light scales the color using sqrt and pow2
+     * functions, hence we cannot support HDR values
+     */
+    dst = clampChannelToSDR<T>(dst);
+
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
 
@@ -510,50 +571,83 @@ inline T cfSoftLightSvg(T src, T dst) {
 template<class T>
 inline T cfSoftLight(T src, T dst) {
     using namespace Arithmetic;
-    
+    /**
+     * Driver channel is always clamped to 0...1.0 range
+     */
+    src = clampChannelToSDR<T>(src);
+
+    /**
+     * soft-light scales the color using sqrt and pow2
+     * functions, hence we cannot support HDR values
+     */
+    dst = clampChannelToSDR<T>(dst);
+
     qreal fsrc = scale<qreal>(src);
     qreal fdst = scale<qreal>(dst);
     
     if(fsrc > 0.5) {
+        // lerp(dst, sqrt(dst), (2.0 * fsrc - 1.0))
         return scale<T>(fdst + (2.0 * fsrc - 1.0) * (sqrt(fdst) - fdst));
     }
-    
+
+    // lerp(dst, dst^2, (1.0 - 2.0 * fsrc))
     return scale<T>(fdst - (1.0 - 2.0*fsrc) * fdst * (1.0 - fdst));
 }
 
-template<class T>
+template<class T,
+         template <typename> typename ClampPolicy>
 inline T cfVividLight(T src, T dst) {
     using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    using clamp_policy = ClampPolicy<T>;
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
     
-    if(src < halfValue<T>()) {
-        if(isUnsafeAsDivisor(src))
-            return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
+    src = clamp_policy::clampInputSrc(src);
+
+    if (src < halfValue<T>()) {
+        if (tmp::isZeroValue(src)) {
+            return tmp::isUnitValueClamped(dst) ? clamp_policy::clampResultAllowNegative(dst) : zeroValue<T>();
+        }
 
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
         composite_type dsti = inv(dst);
-        return clamp<T>(unitValue<T>() - (dsti * unitValue<T>() / src2));
+        return clamp_policy::clampResult(
+            unitValue<T>() -
+            clamp_policy::fixInfiniteAfterDivision(
+                tmp::divideInCompositeSpace<T>(dsti, src2)
+                )
+            );
     }
     
-    if(src == unitValue<T>())
-        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
+    if (tmp::isUnitValue(src)) {
+        return tmp::isNullValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
+    }
     
     // min(1,max(0, dst / (2*(1-src)))
     composite_type srci2 = inv(src);
     srci2 += srci2;
-    return clamp<T>(composite_type(dst) * unitValue<T>() / srci2);
+    return clamp_policy::clampResultAllowNegative(
+        clamp_policy::fixInfiniteAfterDivision(
+            tmp::divideInCompositeSpace<T>(composite_type(dst), srci2)
+            )
+        );
 }
 
-template<class T>
+template<class T,
+         template <typename> typename ClampPolicy>
 inline T cfPinLight(T src, T dst) {
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    using namespace Arithmetic;
+    using clamp_policy = ClampPolicy<T>;
+    using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+    src = clampChannelToSDR(src);
+
     // TODO: verify that the formula is correct (the first max would be useless here)
     // max(0, max(2*src-1, min(dst, 2*src)))
     composite_type src2 = composite_type(src) + src;
     composite_type a    = qMin<composite_type>(dst, src2);
     composite_type b    = qMax<composite_type>(src2-Arithmetic::unitValue<T>(), a);
-    return T(b);
+    return clamp_policy::clampResult(b);
 }
 
 template<class T>

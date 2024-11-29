@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QDir>
 #include <QGlobalStatic>
+#include <QRegExp>
 
 #include <KoResourcePaths.h>
 #include <kconfig.h>
@@ -452,5 +453,13 @@ void KisInputProfileManager::Private::createActions()
 
 QString KisInputProfileManager::Private::profileFileName(const QString &profileName)
 {
-    return profileName.toLower().remove(QRegExp("[^a-z0-9]")).append(".profile");
+    QRegExp reg("[^a-z0-9]");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+     return profileName.toLower().remove(QRegExp("[^a-z0-9]")).append(".profile");
+#else
+    QString pf = profileName.toLower();
+    reg.removeIn(pf);
+    return pf.append(".profile");
+#endif
+
 }

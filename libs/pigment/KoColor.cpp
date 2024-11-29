@@ -490,8 +490,12 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
         QString csName = colorSpace()->profile()->name();
         // remove forbidden characters
         // https://www.w3.org/TR/SVG11/types.html#DataTypeName
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         csName.remove(QRegExp("[\\(\\),\\s]"));
-
+#else
+        QRegExp reg("[\\(\\),\\s]");
+        reg.removeIn(csName);
+#endif
         //reuse existing name if possible. We're looking for the color profile, because svg doesn't care about depth.
         csName = profileList->key(colorSpace()->profile(), csName);
 

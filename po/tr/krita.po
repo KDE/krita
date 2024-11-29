@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-23 21:10+0300\n"
+"PO-Revision-Date: 2024-11-28 15:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -31855,7 +31855,7 @@ msgstr "Genel Harmanlama"
 #: libs/ui/layerstyles/WdgSatin.ui:33
 #, kde-format
 msgid "Ble&nd Mode:"
-msgstr "Harma&n Kipi:"
+msgstr "&Harman kipi:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAdvancedBlending)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:91
@@ -32138,7 +32138,7 @@ msgstr "&Gürültü:"
 #: libs/ui/layerstyles/wdgdropshadow.ui:119 libs/ui/layerstyles/WdgStroke.ui:88
 #, kde-format
 msgid "&Blend Mode:"
-msgstr "Harmanlama &Kipi:"
+msgstr "&Harman kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/layerstyles/wdgdropshadow.ui:149 libs/ui/layerstyles/WdgSatin.ui:67
@@ -56967,7 +56967,7 @@ msgstr "Dolgu için özel bir matlık ayarla"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "Dolgu için özel bir harmanlama kipi ayarla"
+msgstr "Dolgu için özel bir harman kipi ayarla"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:628
 #, kde-format

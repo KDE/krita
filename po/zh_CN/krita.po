@@ -44506,14 +44506,14 @@ msgstr "最小化通道"
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
 #, kde-format
 msgid "Fast Color &Overlay..."
-msgstr ""
+msgstr "快速颜色叠加(&O)..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
 #, kde-format
 msgid "Fast Color Overlay"
-msgstr ""
+msgstr "快速颜色叠加"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -44535,19 +44535,19 @@ msgstr "拾色器："
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
 #, kde-format
 msgid "Blend Mode:"
-msgstr ""
+msgstr "混合模式："
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
 #, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr ""
+msgstr "设置叠加颜色的主体不透明度"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
 #, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr ""
+msgstr "调整叠加颜色的透明度"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)

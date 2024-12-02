@@ -5,7 +5,7 @@
 # Mikko Ikola <ikola@iki.fi>, 2003.
 # Ilpo Kantonen <ilpo@iki.fi>, 2005.
 # Mikko Piippo <piippo@cc.helsinki.fi>, 2007.
-# Tommi Nieminen <translator@legisign.org>, 2010, 2012, 2014, 2015.
+# SPDX-FileCopyrightText: 2010, 2012, 2014, 2015, 2024 Tommi Nieminen <translator@legisign.org>
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014, 2015, 2016.
 # Tapio Kautto <eleknader@phnet.fi>, 2004.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2006.
@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-04-18 16:16+0300\n"
+"PO-Revision-Date: 2024-11-21 09:19+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -97,8 +97,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-POT-Import-Date: 2013-01-13 22:09:51+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2035,7 +2034,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Basic_wet_soft.kpp"
 msgid "Basic wet soft"
-msgstr ""
+msgstr "Tavallinen märkä pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -3321,7 +3320,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 pintakuvio-rätinä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3329,7 +3328,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 pintakuvio-kasvillisuus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3337,7 +3336,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 pintakuvio-rengashaarniska"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3345,7 +3344,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 pintakuvio-lisko"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3353,7 +3352,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23-dynaaminen-näyttösävy-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3361,7 +3360,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24-dynaaminen-näyttösävy-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3369,7 +3368,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25-dynaaminen-näyttösävy-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3377,7 +3376,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/26_brush-"
 "marks.png"
 msgid "26 brush-marks"
-msgstr ""
+msgstr "26 siveltimen-jäljet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -4033,7 +4032,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-debris."
 "gbr"
 msgid "flat-tip-dirty"
-msgstr ""
+msgstr "lattea-kärki-likainen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4155,7 +4154,7 @@ msgstr "kolmio"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/vegetal.gbr"
 msgid "tree flowers speedpainting strokes"
-msgstr ""
+msgstr "puu kukat pikamaalaus vedot"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4269,7 +4268,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-1_Hard.kpp"
 msgid "c) Pencil-1 Hard"
-msgstr ""
+msgstr "c) Lyijykynä-1 kova"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4288,7 +4287,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-3_Large_4B.kpp"
 msgid "c) Pencil-3 Large 4B"
-msgstr ""
+msgstr "c) Lyijykynä-3 suuri 4B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4297,7 +4296,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-4_Soft.kpp"
 msgid "c) Pencil-4 Soft"
-msgstr ""
+msgstr "c) Lyijykynä-4 pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4317,7 +4316,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "c)_Pencil-6_Quick_Shade.kpp"
 msgid "c) Pencil-6 Quick Shade"
-msgstr ""
+msgstr "c) Lyijykynä-6 pikavarjostus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4336,7 +4335,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-2_Fineliner.kpp"
 msgid "d) Ink-2 Fineliner"
-msgstr ""
+msgstr "d) Muste-2 hieno rajaus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4354,7 +4353,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-4_Pen_Rough.kpp"
 msgid "d) Ink-4 Pen Rough"
-msgstr ""
+msgstr "d) Muste-4 kynä karkea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4363,7 +4362,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "d)_Ink-7_Brush_Rough.kpp"
 msgid "d) Ink-7 Brush Rough"
-msgstr ""
+msgstr "d) Muste-7 sivellin karkea"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4381,7 +4380,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "e)_Marker_Chisel_Smooth.kpp"
 msgid "e) Marker Chisel Smooth"
-msgstr ""
+msgstr "e) Korostuskynä taltta pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4459,7 +4458,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "f)_Charcoal_Rock_Soft.kpp"
 msgid "f) Charcoal Rock Soft"
-msgstr ""
+msgstr "f) Hiilikivi pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4543,7 +4542,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "h)_Charcoal_pencil_large.kpp"
 msgid "h) Charcoal pencil large"
-msgstr ""
+msgstr "h) Hiilikynä suuri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4552,7 +4551,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "h)_Charcoal_Pencil_Medium.kpp"
 msgid "h) Charcoal Pencil Medium"
-msgstr ""
+msgstr "h) Hiilikynä keskikokoinen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4561,7 +4560,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "h)_Charcoal_Pencil_Thin.kpp"
 msgid "h) Charcoal Pencil Thin"
-msgstr ""
+msgstr "h) Hiilikynä ohut"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4626,7 +4625,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Smear.kpp"
 msgid "i) Wet Smear"
-msgstr ""
+msgstr "i) Märkä tahra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4635,7 +4634,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "i)_Wet_Textured_Soft.kpp"
 msgid "i) Wet Textured Soft"
-msgstr ""
+msgstr "i) Märkä pintakuvioitu pehmeä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4664,7 +4663,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Hard_Edges.kpp"
 msgid "j) Waterpaint Hard Edges"
-msgstr ""
+msgstr "j) Vesiväri terävät reunat"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4673,7 +4672,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Soft_Edges.kpp"
 msgid "j) Waterpaint Soft Edges"
-msgstr ""
+msgstr "j) Vesiväri sumeat reunat"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4890,7 +4889,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Grow.kpp"
 msgid "v) Distort Grow"
-msgstr ""
+msgstr "v) Vääristys kasvu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4899,7 +4898,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Move.kpp"
 msgid "v) Distort Move"
-msgstr ""
+msgstr "v) Vääristys liike"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4908,7 +4907,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Shrink.kpp"
 msgid "v) Distort Shrink"
-msgstr ""
+msgstr "v) Vääristys kutistus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4954,7 +4953,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Texture_Impressionism.kpp"
 msgid "v) Texture Impressionism"
-msgstr ""
+msgstr "v) Pintakuvio impressionismi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5147,7 +5146,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Texture_Wood_Fiber.kpp"
 msgid "y) Texture Wood Fiber"
-msgstr ""
+msgstr "y) Pintakuvio puukuitu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5165,7 +5164,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Floor.kpp"
 msgid "z) Stamp Floor"
-msgstr ""
+msgstr "z) Leima lattia"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5174,7 +5173,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Grass.kpp"
 msgid "z) Stamp Grass"
-msgstr ""
+msgstr "z) Leima ruoho"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5192,7 +5191,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Hearts.kpp"
 msgid "z) Stamp Hearts"
-msgstr ""
+msgstr "z) Leima sydämet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5201,7 +5200,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Herbals.kpp"
 msgid "z) Stamp Herbals"
-msgstr ""
+msgstr "z) Leima yrtit"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5219,7 +5218,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Mountains_Distant.kpp"
 msgid "z) Stamp Mountains Distant"
-msgstr ""
+msgstr "z) Leima kaukaiset vuoret"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5237,7 +5236,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Sparkles.kpp"
 msgid "z) Stamp Sparkles"
-msgstr ""
+msgstr "z) Leima säkenöinti"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5246,7 +5245,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Stylised_Tree.kpp"
 msgid "z) Stamp Stylised Tree"
-msgstr ""
+msgstr "z) Leima tyylitelty puu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5255,7 +5254,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Vegetal.kpp"
 msgid "z) Stamp Vegetal"
-msgstr ""
+msgstr "z) Leima kasvillisuus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5264,7 +5263,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "z)_Stamp_Water.kpp"
 msgid "z) Stamp Water"
-msgstr ""
+msgstr "z) Leima vesi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -5279,7 +5278,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/02_rough-"
 "canvas.png"
 msgid "02 rough-canvas"
-msgstr ""
+msgstr "02 karkea-kangas"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5432,7 +5431,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/19_texture-"
 "crackle.png"
 msgid "19 texture-crackle"
-msgstr ""
+msgstr "19 pintakuvio-rätinä"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5440,7 +5439,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/20_texture-"
 "vegetal.png"
 msgid "20 texture-vegetal"
-msgstr ""
+msgstr "20 pintakuvio-kasvillisuus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5448,7 +5447,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/21_texture-"
 "chainmail.png"
 msgid "21 texture-chainmail"
-msgstr ""
+msgstr "21 pintakuvio-rengashaarniska"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5456,7 +5455,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr ""
+msgstr "22 pintakuvio-lisko"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5464,7 +5463,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/23-dynamic-"
 "screentone-A.png"
 msgid "23-dynamic-screentone-A"
-msgstr ""
+msgstr "23-dynaaminen-näyttösävy-A"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5472,7 +5471,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/24-dynamic-"
 "screentone-B.png"
 msgid "24-dynamic-screentone-B"
-msgstr ""
+msgstr "24-dynaaminen-näyttösävy-B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5480,7 +5479,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/25-dynamic-"
 "screentone-C.png"
 msgid "25-dynamic-screentone-C"
-msgstr ""
+msgstr "25-dynaaminen-näyttösävy-C"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5488,7 +5487,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/26_brush-"
 "marks.png"
 msgid "26 brush-marks"
-msgstr ""
+msgstr "26 siveltimen-jäljet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -17363,7 +17362,7 @@ msgstr " Teksti:"
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
-msgstr ""
+msgstr "<text>Paikkavarausteksti</text>"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:139
 #, kde-format
@@ -21713,7 +21712,7 @@ msgstr "Kopioi yhdistelmä"
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a vector format "
-msgstr ""
+msgstr "Valilnta on jo vektorimuodossa "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:476
 #: libs/ui/actions/kis_selection_action_factories.cpp:496
@@ -21727,7 +21726,7 @@ msgstr ""
 #, kde-format
 msgctxt "floating message"
 msgid "Selection is already in a raster format "
-msgstr ""
+msgstr "Valinta on jo rasterimuodossa "
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:537
 #, fuzzy, kde-format
@@ -21848,7 +21847,7 @@ msgstr "Lanczos3"
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
-msgstr ""
+msgstr "naapuri"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
 #, fuzzy, kde-format
@@ -21860,7 +21859,7 @@ msgstr "BSpline"
 #, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr ""
+msgstr "ei käyt."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
@@ -21939,7 +21938,7 @@ msgstr ""
 #, kde-format
 msgctxt "FPS as a unit following a value, like 60 FPS"
 msgid " FPS"
-msgstr ""
+msgstr " FPS"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:88
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:94
@@ -22265,7 +22264,7 @@ msgstr "Profiili:"
 #: libs/ui/animation/video_export_options_dialog.ui:178
 #, kde-format
 msgid "Tune:"
-msgstr ""
+msgstr "Sävy:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileH265)
 #: libs/ui/animation/video_export_options_dialog.ui:168
@@ -22411,6 +22410,8 @@ msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
+"Lisää mahdolliset FFmpeg-suodatusvalinnat tähän. Ne sijoitetaan FFmpeg-"
+"ilmentymässä lähde- ja kohdevirtojen väliin"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -22621,14 +22622,14 @@ msgstr "Liitä"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
-msgstr ""
+msgstr "nollalatenssi"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
-msgstr ""
+msgstr "ei mitään"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:76
 #, kde-format
@@ -22641,7 +22642,7 @@ msgstr ""
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
-msgstr ""
+msgstr "ei mitään"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
@@ -22687,7 +22688,7 @@ msgstr "oletus"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
-msgstr ""
+msgstr "ei mitään"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, fuzzy, kde-format
@@ -22700,13 +22701,13 @@ msgstr "piirros"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
-msgstr ""
+msgstr "kuvake"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
-msgstr ""
+msgstr "valokuva"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:90
 #, kde-format
@@ -22745,7 +22746,7 @@ msgstr "Lisää avainruutu"
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr ""
+msgstr "ei mitään"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, fuzzy, kde-format
@@ -22790,7 +22791,7 @@ msgstr "sierra2_4a"
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr ""
+msgstr "ei mitään"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
 #, fuzzy, kde-format
@@ -23092,6 +23093,8 @@ msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
 "imported."
 msgstr ""
+"Käytä FFmpeg:tä havaitsemaan samankaltaiset kuvat ja vähentämään tuotavien "
+"kuvien kokonaismäärää."
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
 #: libs/ui/animation/VideoImportDialog.ui:273
@@ -23564,6 +23567,9 @@ msgid ""
 " in Trilinear or High Quality filtering modes.\n"
 "Current mode is %1"
 msgstr ""
+"Välitöntä esikatselua tuetaan\n"
+"trilineaarisessa ja korkealaatuisessa suodatustilassa.\n"
+"Nykyinen tila on %1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:377
 #, fuzzy, kde-format
@@ -23735,6 +23741,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Kehitysrahasto</h1><p align=\"center"
+"\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align="
+"\"center\">Kertalahjoittajat</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -23747,6 +23763,8 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
+".</p><p><i>Kritan kehityksen tukemisesta neuvoin, kuvakkein, sivellinjoukoin "
+"ja muuten.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
@@ -24335,7 +24353,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
-msgstr ""
+msgstr "Tiedostovalitsimen sijainnin tallentaminen voi hidastaa käynnistystä!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, fuzzy, kde-format
@@ -24346,7 +24364,7 @@ msgstr "Sisäinen virhe"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD-kortti"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:510
 #, fuzzy, kde-format
@@ -24472,7 +24490,7 @@ msgstr "OpenGL"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
-msgstr ""
+msgstr "Ohjelmistohahmonnus (hyvin hidasta)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1680
 #, kde-format
@@ -24510,7 +24528,7 @@ msgstr "Näkymä:"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #, kde-format
 msgid "Display Name: %1 %2"
-msgstr ""
+msgstr "Näyttönimi: %1 %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1792
 #, fuzzy, kde-format
@@ -24657,7 +24675,7 @@ msgstr "Dynaaminen sivellin"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
-msgstr ""
+msgstr "Luodaan välimuistia uudelleen…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, fuzzy, kde-format
@@ -24697,6 +24715,11 @@ msgid ""
 "\n"
 "Rendering cancelled."
 msgstr ""
+"Vanhan kuvatiedoston poistaminen epäonnistui:\n"
+"\n"
+"%1\n"
+"\n"
+"Hahmonnus peruttiin."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
 #, fuzzy, kde-format
@@ -25006,6 +25029,8 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
+"Tiedostolle löytyi automaattitallenne. Haluatko jatkaa?\n"
+"Varoitus: jos hylkäät automaattitallenteen nyt, se poistetaan."
 
 # pmap: =:gen=Kritan:
 # pmap: =:elat=Kritasta:
@@ -25027,7 +25052,7 @@ msgstr "Poista tekijäprofiili"
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:44
 #, kde-format
 msgid "Discard autosave, open the main file"
-msgstr ""
+msgstr "Hylkää automaattitallenne ja avaa päätiedosto"
 
 #. i18n: ectx: property (text), widget (QPushButton, btOk)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
@@ -25108,7 +25133,7 @@ msgstr "Aloitus"
 #: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:643
 #, kde-format
 msgid "DEV BUILD"
-msgstr ""
+msgstr "KEHITYSKOOSTE"
 
 #. i18n: ectx: property (text), widget (QToolButton, newFileLink)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
@@ -26157,7 +26182,7 @@ msgstr "Kankaan koristeet"
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr ""
+msgstr "Kankaan &grafiikan kiihdytys"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -26218,7 +26243,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Suora (suositeltu)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
@@ -26231,7 +26256,7 @@ msgstr "Animaatio käyrät"
 #: libs/ui/forms/wdgdisplaysettings.ui:189
 #, kde-format
 msgid "Large Pixmap Cache"
-msgstr ""
+msgstr "Suuri bittikarttavälimuisti"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -26421,7 +26446,7 @@ msgstr "Antialiasoidaan"
 #: libs/ui/forms/wdgdisplaysettings.ui:549
 #, kde-format
 msgid "Hide layer thumbnail popup"
-msgstr ""
+msgstr "Piilota tason pienoiskuvaponnahdusikkuna"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:556
@@ -26847,10 +26872,9 @@ msgstr "Käytä Hi-DPI-tukea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkHiDPIFractionalScaling)
 #: libs/ui/forms/wdggeneralsettings.ui:600
-#, fuzzy, kde-format
-#| msgid "Sobel vertically"
+#, kde-format
 msgid "Enable fractional scale factor"
-msgstr "Pystysuuntainen sobel"
+msgstr "Ota käyttöön murto-osamittakaava"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_14)
@@ -26926,7 +26950,7 @@ msgstr "Muunna tason tai valinnan perspektiiviä"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr ""
+msgstr "Lähennysaskelet 2:n potensseina"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -27129,6 +27153,7 @@ msgid ""
 "Note: This applies to drops in the Info window, the canvas, and paste "
 "actions."
 msgstr ""
+"Huomaa: Tämä koskee tietoikkunaan ja kankaalle pudottamista ja liittämistä."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPasteContext)
 #: libs/ui/forms/wdggeneralsettings.ui:1070
@@ -27137,12 +27162,14 @@ msgid ""
 "Some applications, like Google Chrome, provide multiple formats when pasting "
 "or dropping an image."
 msgstr ""
+"Jotkin sovellukset kuten Google Chrome tarjoavat liitettäessä tai kuvaa "
+"pudotettaessa eri tiedostomuotoja."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnLocal)
 #: libs/ui/forms/wdggeneralsettings.ui:1077
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
-msgstr ""
+msgstr "Suosi paikallista kopiota (jos käytettävissä; metatiedot menetetään)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1084
@@ -27151,6 +27178,8 @@ msgid ""
 "Paste the attached sRGB bitmap (no filesystem or Internet access required, "
 "but metadata will be lost)"
 msgstr ""
+"Liitä liitteenä oleva sRGB-bittikartta (tiedostojärjestelmää tai internetiä "
+"ei tarvita, mutta metatiedot menetetään)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsk)
 #: libs/ui/forms/wdggeneralsettings.ui:1091
@@ -27183,7 +27212,7 @@ msgstr "Tuotaessa kuvia tasoina, muunna kuvan väritilaan."
 #: libs/ui/forms/wdggeneralsettings.ui:1212
 #, kde-format
 msgid "Only applies to new or newly opened images."
-msgstr ""
+msgstr "Tämä koskee vain uusia tai vasta avattuja kuvia."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeneralsettings.ui:1202
@@ -27270,7 +27299,7 @@ msgstr "Animaatio"
 #: libs/ui/forms/wdggeneralsettings.ui:1393
 #, kde-format
 msgid "Automatically pin new layers to timeline"
-msgstr ""
+msgstr "Kiinnitä uudet tasot automaattisesti aikajanalle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkAdaptivePlaybackRange)
 #: libs/ui/forms/wdggeneralsettings.ui:1403
@@ -27284,7 +27313,7 @@ msgstr "Lisää avainkuva"
 #: libs/ui/forms/wdggeneralsettings.ui:1413
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr ""
+msgstr "Fontin DPI:n hätäkorjaus"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1428
@@ -27303,6 +27332,17 @@ msgid ""
 "After saving the file in Krita 5.0 at least once, no conversions will be "
 "needed anymore."
 msgstr ""
+"Joissakin Kritan 5.0:aa edeltäneissä versioissa tekstin koko saattoi riippua "
+"näytön DPI:stä (mikä oli ohjelmavirhe).\n"
+"Krita 5.0:ssa virhe on korjattu, minkä vuoksi aiemmilla versioilla luodut "
+"tiedostot voivat näyttää erilaisilta.\n"
+"\n"
+"Vanhoja tiedostoja avattaessa Krita yrittää säätää fonttikoon näytön "
+"nykyiseen DPI:hin.\n"
+"Jos tiedosto on luotu eri näytöllä, kokeile säätää arvoa itse.\n"
+"\n"
+"Muunnosta ei enää tarvita, kun tiedosto on vähintään kerran tallennettu "
+"Krita 5.0:ssa."
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1431
@@ -27323,6 +27363,12 @@ msgid ""
 "To restore the old behavior you can force Krita to use Display DPI for fonts "
 "by entering it in this field."
 msgstr ""
+"Joissakin Kritan 4.4.3:a edeltäneissä versioissa tekstin koko saattoi "
+"riippua näytön DPI:stä (mikä oli ohjelmavirhe).\n"
+"Krita 4.4.3:ssa virhe on korjattu, minkä vuoksi aiemmilla versioilla luodut "
+"tiedostot voivat näyttää erilaisilta.\n"
+"Jos haluat aiemman toimintatavan, Kritan voi pakottaa käyttämään fonteille "
+"haluttua DPI:tä kirjoittamalla sen tähän."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
@@ -27860,6 +27906,8 @@ msgid ""
 "The image data you are trying to paste has no color profile information. How "
 "do you want to interpret this data?"
 msgstr ""
+"Kuvatiedossa, jota yrität liittää, ei ole väriprofiilitietoa. Kuinka haluat "
+"tulkita kuvaa?"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
@@ -27868,6 +27916,8 @@ msgid ""
 "Use standard colors that are displayed from computer monitors. This is the "
 "most common way that images are stored."
 msgstr ""
+"Käytä tietokonenäytöillä käytettyjä vakiovärejä. Tämä on yleisin "
+"kuvantallennustapa."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:79
@@ -27889,6 +27939,8 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
+"Jos tiedät jotakin värienhallinnasta ja haluat käyttää näyttöäsi "
+"määrittämään väriprofiilin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
@@ -27998,6 +28050,7 @@ msgid ""
 "Number of layers that the image will start with, including optional "
 "background layer."
 msgstr ""
+"Tasojen määrä, jolla kuva aloitetaan; sisältää valinnaisen taustatason."
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
 #: libs/ui/forms/wdgnewimage.ui:491
@@ -28020,7 +28073,7 @@ msgstr "Tausta:"
 #: libs/ui/forms/wdgnewimage.ui:551
 #, kde-format
 msgid "Use background color and opacity to create a background raster layer."
-msgstr ""
+msgstr "Käytä taustaväriä ja peittävyyttä luomaan taustarasteritaso."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:554
@@ -28250,7 +28303,7 @@ msgstr "Täytä alue taustavärillä"
 #: libs/ui/forms/wdgpaintopsettings.ui:919
 #, kde-format
 msgid "Reset area to white"
-msgstr ""
+msgstr "Palauta alue valkoiseksi"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPasteFormat)
 #: libs/ui/forms/wdgPasteFormat.ui:20
@@ -28266,6 +28319,8 @@ msgid ""
 "There are multiple formats for the image you're trying to paste. Which one "
 "do you want to use?"
 msgstr ""
+"Kuvalle, jota yrität liittää, on useita tiedostomuotoja. Mitä niistä haluat "
+"käyttää?"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdgPasteFormat.ui:66
@@ -28278,7 +28333,7 @@ msgstr "Tallennustilaa ei voida luoda"
 #: libs/ui/forms/wdgPasteFormat.ui:79
 #, kde-format
 msgid "Preserves the original metadata and color profile."
-msgstr ""
+msgstr "Säilyttää alkuperäisen metatiedon ja väriprofiilin."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseLocal)
 #: libs/ui/forms/wdgPasteFormat.ui:92
@@ -28294,12 +28349,13 @@ msgid ""
 "Depending on the source application, it may not have all of the original's "
 "metadata or color profile."
 msgstr ""
+"Lähdesovelluksesta riippuen kaikkea metatietoa tai väriprofiilia ei ehkä ole."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseBitmap)
 #: libs/ui/forms/wdgPasteFormat.ui:118
 #, kde-format
 msgid "Paste the attached &bitmap"
-msgstr ""
+msgstr "Liitä liitteenä oleva &bittikartta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgPasteFormat.ui:131
@@ -28308,6 +28364,8 @@ msgid ""
 "Use the bitmap provided by the source application. You will be asked for its "
 "profile."
 msgstr ""
+"Käytä lähdesovelluksen tarjoamaan bittikarttaa. Sinulta kysytään sen "
+"profiili."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRemember)
 #: libs/ui/forms/wdgPasteFormat.ui:144
@@ -28380,12 +28438,14 @@ msgid ""
 "When undo information reaches this limit, it will be stored in a temporary "
 "file and memory will be freed. Undo will be slower."
 msgstr ""
+"Kumoamistiedon saavuttaessa tämän rajan se talletetaan väliaikaistiedostoon "
+"ja muistia vapautuu. Kumoaminen hidastuu."
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgperformancesettings.ui:150
 #, kde-format
 msgid "Swap Undo After:"
-msgstr ""
+msgstr "Sivuta kumoaminen kun:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgperformancesettings.ui:184
@@ -28484,7 +28544,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:326
 #, kde-format
 msgid "Limit frames per second while painting:"
-msgstr ""
+msgstr "Rajoita kuvanopeus maalattaessa:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFpsLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:339
@@ -28507,13 +28567,13 @@ msgstr "Tunnisteen asetukset"
 #: libs/ui/forms/wdgperformancesettings.ui:352
 #, kde-format
 msgid "Debug logging of OpenGL framerate"
-msgstr ""
+msgstr "OpenGL-kuvanopeuden virheenpaikannusloki"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBrushSpeedLogging)
 #: libs/ui/forms/wdgperformancesettings.ui:359
 #, kde-format
 msgid "Debug logging for brush rendering speed"
-msgstr ""
+msgstr "Siveltimen hahmonnusnopeuden virheenpaikannusloki"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisableAVXOptimizations)
 #: libs/ui/forms/wdgperformancesettings.ui:366
@@ -28644,7 +28704,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:471
 #, kde-format
 msgid "Limit cached frame size:"
-msgstr ""
+msgstr "Rajoita välimuistikuvan koko:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:484
@@ -28696,7 +28756,7 @@ msgstr "<html><head/><body><p>Toiminnon kuvaus</p></body></html>"
 #: libs/ui/forms/wdgperformancesettings.ui:517
 #, kde-format
 msgid "Enable background cache generation"
-msgstr ""
+msgstr "Käytä välimuistin luontia taustalla"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: libs/ui/forms/wdgperformancesettings.ui:541
@@ -29493,7 +29553,7 @@ msgstr "Korkeus:"
 #: libs/ui/imagesize/wdg_imagesize.ui:202
 #, kde-format
 msgid "Wid&th:"
-msgstr ""
+msgstr "Le&veys:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, adjustPrintSizeSeparatelyCkb)
 #: libs/ui/imagesize/wdg_imagesize.ui:352
@@ -29645,7 +29705,7 @@ msgstr ""
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "Tämän toiminnon pikanäpppäimelle löytyi ristiriita."
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -29655,7 +29715,7 @@ msgstr "Poista pikanäppäin"
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:112
 #, kde-format
 msgid "Deleting last shortcut for this action!"
-msgstr ""
+msgstr "Poistetaan tämän toiminnon viimeinen pikanäppäin!"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:113
 #, kde-format
@@ -30481,7 +30541,7 @@ msgstr "Piirtopöydän testaus"
 #, kde-format
 msgctxt "Screen rect when choosing Wintab/Qt settings"
 msgid "%1x%2 offset: %3,%4"
-msgstr ""
+msgstr "%1×%2 siirtymä: %3, %4"
 
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:48
 #, kde-format
@@ -31308,6 +31368,8 @@ msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
 "to tag them and then select the tag here."
 msgstr ""
+"Tässä ponnahdusikkunassa näytettäviä luokituksia ei ole. Esiasetusten "
+"lisäämiseksi luokittele ne ja valitse sitten luokka tässä."
 
 #: libs/ui/kis_selection_manager.cc:592
 #, fuzzy, kde-format
@@ -31455,7 +31517,7 @@ msgstr ""
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
 msgid "Toggle Fullscreen"
-msgstr ""
+msgstr "Vaihda koko näytön tilaan tai tilasta"
 
 #: libs/ui/kis_statusbar.cc:245
 #, fuzzy, kde-format
@@ -31520,7 +31582,7 @@ msgstr "Piilotettu"
 #: libs/ui/kis_statusbar.cc:378
 #, kde-format
 msgid "Ants"
-msgstr ""
+msgstr "Muurahaiset"
 
 #: libs/ui/kis_statusbar.cc:378
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:53
@@ -31551,7 +31613,7 @@ msgstr "Ei profiilia"
 #, kde-format
 msgctxt "<color space> <image profile>"
 msgid "%1  %2"
-msgstr ""
+msgstr "%1  %2"
 
 #: libs/ui/kis_zoom_manager.cc:319
 #, kde-format
@@ -31627,6 +31689,9 @@ msgid ""
 "\n"
 "Krita will quit now."
 msgstr ""
+"%1\n"
+"\n"
+"Krita lopetetaan nyt."
 
 #: libs/ui/KisApplication.cpp:375 libs/ui/KisApplication.cpp:381
 #, fuzzy, kde-format
@@ -31842,7 +31907,7 @@ msgstr "Sen työtilan nimi, johon Krita avataan"
 #: libs/ui/KisApplicationArguments.cpp:85
 #, kde-format
 msgid "The name of the window layout to open Krita with"
-msgstr ""
+msgstr "Ikkuna-asettelu, johon Krita avautuu"
 
 #: libs/ui/KisApplicationArguments.cpp:86
 #, kde-format
@@ -31890,7 +31955,7 @@ msgstr "Vietävän tiedoston nimi"
 #: libs/ui/KisApplicationArguments.cpp:98
 #, kde-format
 msgid "File layer to be added to existing or new file"
-msgstr ""
+msgstr "Olemassa olevaan tai uuteen tiedostoon lisättävä tiedostotaso"
 
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
@@ -32014,7 +32079,7 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 tallennettiin, mutta jäi kesken."
 
 #: libs/ui/KisDocument.cpp:1032
 #, kde-format
@@ -32042,7 +32107,7 @@ msgstr "Tallennetaan automaattisesti…"
 #: libs/ui/KisDocument.cpp:1488
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr ""
+msgstr "Automaattitallennusta viivästettiin: tiedosto on varattu…"
 
 #: libs/ui/KisDocument.cpp:1631
 #, fuzzy, kde-format
@@ -32268,7 +32333,7 @@ msgstr "Lupa evätty: Kritalla ei ole lupaa kirjoittaa tiedostoon."
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
 msgid "There is not enough disk space left to save the file."
-msgstr ""
+msgstr "Levytila ei riitä tiedoston tallentamiseen."
 
 #: libs/ui/KisImportExportErrorCode.cpp:168
 #, fuzzy, kde-format
@@ -32285,7 +32350,7 @@ msgstr "Krita ei tue tätä tiedostomuotoa"
 #: libs/ui/KisImportExportErrorCode.cpp:174
 #, kde-format
 msgid "The action was cancelled by the user."
-msgstr ""
+msgstr "Käyttäjä perui toiminnon."
 
 #: libs/ui/KisImportExportErrorCode.cpp:178
 #: plugins/impex/libkra/kra_converter.cpp:390
@@ -32326,6 +32391,8 @@ msgid ""
 "%1 has only zero bytes in the first 1000 bytes, it's probably corrupt. Try "
 "saving again under a different name, in another location."
 msgstr ""
+"Tiedoston %1 ensimmäiset tuhat tavua ovat nollia: se on todennäköisesti "
+"vioittunut. Yritä tallentaa toiseen paikkaan toisella nimellä."
 
 #: libs/ui/KisImportExportFilter.cpp:248
 #, kde-format
@@ -32605,6 +32672,10 @@ msgid ""
 "\n"
 "Please select a location where the original file will not be overridden!"
 msgstr ""
+"Tallennat tiedostoa, kun kuvaa vielä hahmonnetaan. Tallennettu tiedosto jää "
+"kesken tai vialliseksi.\n"
+"\n"
+"Valitse sijainti, jossa alkuperäistä tiedostoa ei korvata!"
 
 #: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
@@ -32735,7 +32806,7 @@ msgstr "T&eemat"
 #: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
-msgstr ""
+msgstr "Laajeneva erotin"
 
 #: libs/ui/KisNodeActivationActionCreatorVisitor.cpp:26
 #, fuzzy, kde-format
@@ -32921,6 +32992,8 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"Haluatko ladata kuvan lähteestä: %1?\n"
+"Kuvan koko linkin näkee napsauttamalla ”Näytä tiedot”."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
 #, fuzzy, kde-format
@@ -33231,7 +33304,7 @@ msgstr "Nimetön"
 #: libs/ui/KisWelcomePageWidget.cpp:161
 #, kde-format
 msgid "Enable news and check for new releases"
-msgstr ""
+msgstr "Näytä uutiset ja tarkista uudet julkaisut"
 
 #: libs/ui/KisWelcomePageWidget.cpp:163
 #, kde-format
@@ -33253,7 +33326,7 @@ msgstr "Kieli:"
 #: libs/ui/KisWelcomePageWidget.cpp:167
 #, kde-format
 msgid "English news is always up to date."
-msgstr ""
+msgstr "Englanninkieliset uutiset ovat aina ajan tasalla."
 
 #: libs/ui/KisWelcomePageWidget.cpp:666
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
@@ -33265,7 +33338,7 @@ msgstr "Vie ”%1”"
 #: libs/ui/KisWelcomePageWidget.cpp:757
 #, kde-format
 msgid "New version of Krita is available."
-msgstr ""
+msgstr "Kritaan on saatavilla uusi versio."
 
 #: libs/ui/KisWelcomePageWidget.cpp:786
 #, fuzzy, kde-format
@@ -33276,7 +33349,7 @@ msgstr "Ei voitu lukea tiedoston alkua."
 #: libs/ui/KisWelcomePageWidget.cpp:792
 #, kde-format
 msgid "Restart is required."
-msgstr ""
+msgstr "Uudelleenkäynnistys vaaditaan."
 
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
@@ -35018,7 +35091,7 @@ msgstr "(oletus)"
 #, kde-format
 msgctxt "Not Applicable, used where there's no colorants or gamma curve found"
 msgid "N/A"
-msgstr ""
+msgstr "ei käyt."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:156
 #, kde-format
@@ -36145,10 +36218,9 @@ msgid "Overwrite"
 msgstr "Korvaa"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:209
-#, fuzzy, kde-format
-#| msgid "Save the current flipbook"
+#, kde-format
 msgid "Save current workspace."
-msgstr "Tallenna nykyinen pläri"
+msgstr "Tallenna nykyinen työtila."
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:253
 #, fuzzy, kde-format
@@ -36449,7 +36521,7 @@ msgstr "Anna ryhmän nimi:"
 #, kde-format
 msgctxt "@title:window"
 msgid "Name Already Exists"
-msgstr ""
+msgstr "Tiedostonimi on jo olemassa"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:656
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:208
@@ -36730,7 +36802,7 @@ msgstr "Tunniste:"
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr ""
+msgstr "A:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -36801,7 +36873,7 @@ msgstr ""
 #, kde-format
 msgctxt "Degrees symbol"
 msgid "˚"
-msgstr ""
+msgstr "˚"
 
 #: libs/widgets/KisAngleSelector.cpp:222
 #, fuzzy, kde-format
@@ -39871,7 +39943,7 @@ msgstr ""
 #, kde-format
 msgctxt "Value (Keep short!)"
 msgid "Val:"
-msgstr ""
+msgstr "Arvo:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
@@ -40736,7 +40808,7 @@ msgstr "Isometrinen "
 #: plugins/dockers/griddocker/grid_config_widget.cpp:348
 #, kde-format
 msgid "Isometric (requires OpenGL)"
-msgstr ""
+msgstr "Isometrinen (vaatii OpenGL:ää)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -41637,7 +41709,7 @@ msgstr "Kopioi taso leikepöydälle"
 #: plugins/dockers/recorder/recorder_export.cpp:531
 #, kde-format
 msgid "Select FFmpeg Executable File"
-msgstr ""
+msgstr "Valitse FFmpeg-ohjelmatiedosto"
 
 #: plugins/dockers/recorder/recorder_export.cpp:577
 #, fuzzy, kde-format
@@ -41746,7 +41818,7 @@ msgstr "Muokkaa profiileja"
 #: plugins/dockers/recorder/recorder_export.ui:303
 #, kde-format
 msgid "ffmpeg"
-msgstr ""
+msgstr "ffmpeg"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:348
@@ -44924,10 +44996,9 @@ msgstr "Toiminta:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab3)
 #: plugins/extensions/pykrita/plugin/info.ui:163
-#, fuzzy, kde-format
-#| msgid "Configuration:"
+#, kde-format
 msgid "Configuration Pages"
-msgstr "Asetustiedosto:"
+msgstr "Asetussivut"
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, fullName)
 #: plugins/extensions/pykrita/plugin/info.ui:171
@@ -44947,10 +45018,9 @@ msgstr "Sivu:"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, topics)
 #: plugins/extensions/pykrita/plugin/info.ui:269
-#, fuzzy, kde-format
-#| msgid "Select Color Blending Mode"
+#, kde-format
 msgid "Select a Plugin or Built-in Module"
-msgstr "Valitse väri sekoitustila"
+msgstr "Valitse liitännäinen tai sisään rakennettu moduuli"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, ExceptHookDialog)
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:18
@@ -45076,10 +45146,9 @@ msgstr "Ctrl+O"
 
 #. i18n: ectx: property (toolTip), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:138
-#, fuzzy, kde-format
-#| msgid "Save the current flipbook"
+#, kde-format
 msgid "Save the current script"
-msgstr "Tallenna nykyinen pläri"
+msgstr "Tallenna nykyinen skripti"
 
 #. i18n: ectx: property (shortcut), widget (QPushButton, lCurveButton)
 #. i18n: ectx: property (shortcut), widget (QStatusBar, statusbar)
@@ -45093,13 +45162,14 @@ msgstr "Ctrl+S"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/pykrita/plugin/manager.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Note:</span> you "
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
-"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;"
-"\">Viimeaikaiset tiedostot</span></p></body></html>"
+"<html><head/><body><p><span style=\" font-weight:600;\">Huom!</span> Krita "
+"pitää käynnistää uudelleen liitännäisten käyttöön ottamiseksi tai käytöstä "
+"poistamiseksi.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
 #: plugins/extensions/pykrita/plugin/manager.ui:43
@@ -45118,10 +45188,9 @@ msgid ""
 msgstr ""
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
-#, fuzzy, kde-format
-#| msgid "Color Management"
+#, kde-format
 msgid "Python Plugin Manager"
-msgstr "Värien hallinta"
+msgstr "Python-liitännäisten hallinta"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
 #, kde-format
@@ -45180,11 +45249,10 @@ msgid "Internal engine failure"
 msgstr "Moottorin sisäinen virhe"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:369
-#, fuzzy, kde-format
-#| msgid "Could not load bundle %1."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Module not loaded:<br/>%1"
-msgstr "Pakettia %1 ei voitu ladata."
+msgstr "Moduulia ei ladattu:<br/>%1"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginsModel.cpp:51
 #, kde-format
@@ -45204,10 +45272,9 @@ msgid "G'MIC filter"
 msgstr "G’MIC-suodatin"
 
 #: plugins/extensions/qmic/QMic.cpp:54
-#, fuzzy, kde-format
-#| msgid "The following autosave files can be recovered:"
+#, kde-format
 msgid "The GMic plugin is not installed or could not be loaded."
-msgstr "Seuraavat automaattitallennustiedostot voi palauttaa:"
+msgstr "GMic-liitännäistä ei ole asennettu tai ei voi ladata."
 
 #: plugins/extensions/qmic/QMic.cpp:79
 #, fuzzy, kde-format
@@ -45216,15 +45283,12 @@ msgid "Krita cannot launch the gmic-qt plugin. No bundled library found."
 msgstr "Krita ei löydä lainkaan sivellinesiasetuksia! Krita lopetetaan nyt."
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:134
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Manage Resources"
+#, kde-format
 msgid "Manage Resource Libraries"
-msgstr "Hallitse resursseja"
+msgstr "Hallitse resurssikirjastoja"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:141
-#, fuzzy, kde-format
-#| msgid "Import"
+#, kde-format
 msgctxt "In bundle manager; press button to import a resource library"
 msgid "Import"
 msgstr "Tuo"
@@ -45322,10 +45386,9 @@ msgid "The resource bundle name cannot be empty."
 msgstr "Resurssipaketin nimi ei voi olla tyhjä."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
-#, fuzzy, kde-format
-#| msgid "The resource bundle name cannot be empty."
+#, kde-format
 msgid "The save location cannot be empty."
-msgstr "Resurssipaketin nimi ei voi olla tyhjä."
+msgstr "Tallennuspaikka ei voi olla tyhjä."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:392
 #, fuzzy, kde-format
@@ -46523,9 +46586,9 @@ msgstr "Säilytä valoisuus"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupType)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Desaturation method:"
-msgstr "Kylläisyys"
+msgstr "Kylläisyydenpoistomenetelmä:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioLightness)
 #: plugins/filters/colorsfilters/wdg_desaturate.ui:51
@@ -46663,10 +46726,9 @@ msgstr "Kanava:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDriverChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:385
-#, fuzzy, kde-format
-#| msgid "&Active Channels"
+#, kde-format
 msgid "Driver channel"
-msgstr "&Aktiiviset kanavat"
+msgstr "Ajurikanava"
 
 #. i18n: context: text @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_height to normal), Actions (Filters), ActionCollection (Krita)
@@ -47053,10 +47115,9 @@ msgstr "Jälkikäsittely"
 #. i18n: ectx: property (text), widget (QLabel, labelHardness)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:113
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:84
-#, fuzzy, kde-format
-#| msgid "Sharpness:"
+#, kde-format
 msgid "Hardness:"
-msgstr "Terävyys:"
+msgstr "Kovuus:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelInvert)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
@@ -47067,10 +47128,9 @@ msgstr "Käännä:"
 #. i18n: ectx: property (text), widget (QLabel, labelForeground)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:144
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:685
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgid "Foreground:"
-msgstr "Edusta"
+msgstr "Edusta:"
 
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
@@ -55893,9 +55953,9 @@ msgstr "Osaset:"
 
 #. i18n: ectx: property (text), widget (QLabel, opacity)
 #: plugins/paintops/particle/wdgparticleoptions.ui:79
-#, fuzzy, kde-format
+#, kde-format
 msgid "Opacity weight:"
-msgstr "peittävyys"
+msgstr "Peittävyyden paino:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_5)
 #: plugins/paintops/particle/wdgparticleoptions.ui:108
@@ -58958,9 +59018,9 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:433
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scalable Distance"
-msgstr "Etäisyys kohteeseen:"
+msgstr "Skaalattava etäisyys"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:110
@@ -58979,9 +59039,9 @@ msgid "Assistant Magnetism"
 msgstr "Avustajien vetovoima"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:462
-#, fuzzy, kde-format
+#, kde-format
 msgid "Magnetism:"
-msgstr "Magentat"
+msgstr "Magnetismi:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:465
 #, kde-format
@@ -59101,36 +59161,31 @@ msgid "Reset"
 msgstr "Palauta"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:615
-#, fuzzy, kde-format
-#| msgid "Failed to save the selection for filter mask %1."
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "Suodinmaskin %1 valinnan tallennus epäonnistui."
+msgstr "Täytä aktiivinen valinta tai koko kangas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:616
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert Comment"
+#, kde-format
 msgid "Fill a contiguous region"
-msgstr "Lisää kommentti"
+msgstr "Täytä yhtenäinen alue"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:617
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "Täytä alue taustavärillä"
+msgstr "Täytä kaikki alueet samankaltaisella värillä"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set the scale of the pattern"
-msgstr "Aseta tason sekoitustapa"
+msgstr "Aseta kuvion mittakaava"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:623
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set the rotation of the pattern"
-msgstr "Valitse tason sekoitustapa."
+msgstr "Aseta kuvion kierto"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
@@ -59140,9 +59195,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:625
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "Valitse tason sekoitustapa."
+msgstr "Aseta täytölle mukautettu peittävyys"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:626
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
@@ -59184,13 +59239,13 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, fuzzy, kde-format
-#| msgctxt "Tooltip for 'Use selection as boundary' checkbox"
-#| msgid "When checked, use selection borders as boundary when filling"
+#, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when filling the region"
-msgstr "Jos valittu, täytettäessä rajana käytetään valinnan reunoja"
+msgstr ""
+"Aseta, tulisiko aktiivisen valinnan ääriviiva nähdä rajaksi aluetta "
+"täytettäessä"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526

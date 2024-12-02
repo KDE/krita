@@ -693,7 +693,8 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
                id == COMPOSITE_ALPHA_DARKEN ||
                id == COMPOSITE_DESTINATION_ATOP ||
                id == COMPOSITE_DESTINATION_IN ||
-               id == COMPOSITE_ERASE) {
+               id == COMPOSITE_ERASE ||
+               id == COMPOSITE_COPY) {
         op = cs->compositeOp(id);
     }
 
@@ -842,7 +843,8 @@ void TestCompositeOpInversion::testFloatModes()
                                 id != COMPOSITE_ALPHA_DARKEN &&
                                 id != COMPOSITE_DESTINATION_ATOP &&
                                 id != COMPOSITE_DESTINATION_IN &&
-                                id != COMPOSITE_ERASE) {
+                                id != COMPOSITE_ERASE &&
+                                id != COMPOSITE_COPY) {
                             KoColor resultColorU2 = dstColorU;
 
                             opU2->composite(resultColorU2.data(), 0, srcColorU.data(), 0,
@@ -1128,6 +1130,7 @@ void TestCompositeOpInversion::testFloatModes_data()
     sdrPreservingIds << COMPOSITE_DESTINATION_IN;
     sdrPreservingIds << COMPOSITE_DESTINATION_ATOP;
     sdrPreservingIds << COMPOSITE_ERASE;
+    sdrPreservingIds << COMPOSITE_COPY;
 
     QStringList strictSdrPreservingIds;
     strictSdrPreservingIds << COMPOSITE_MULT;

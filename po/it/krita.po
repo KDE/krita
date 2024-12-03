@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 01:48+0000\n"
-"PO-Revision-Date: 2024-11-22 12:25+0100\n"
+"PO-Revision-Date: 2024-11-28 17:16+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -12671,12 +12671,10 @@ msgstr "Converti lo spazio dei colori del livello"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Converti lo spazio dei colori del livello"
+msgstr "Unifica lo spazio dei colori dei livelli"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12686,6 +12684,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Converti tutti i livelli all'interno dello spazio dei colori dell'immagine "
+"(se dovessero avere spazio dei colori differenti)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -17414,12 +17414,9 @@ msgid "Convert Projection Color Space"
 msgstr "Converti lo spazio dei colori della proiezione"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Converti lo spazio dei colori del livello"
+msgstr "Unifica lo spazio dei colori dei livelli"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17576,11 +17573,9 @@ msgid "Error"
 msgstr "Errore"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Converti lo spazio dei colori del livello"
+msgstr "Discrepanza dello spazio dei colori del livello"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17600,6 +17595,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Lo spazio dei colori del livello è diverso da quello dell'immagine:\n"
+"%1 [%2],\n"
+"le operazioni potrebbero rallentare"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -45193,18 +45191,16 @@ msgid "Minimize Channel"
 msgstr "Minimizza canale"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Sovrapposizione colore"
+msgstr "S&ovrapposizione rapida colore..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "Sovrapposizione colore"
+msgstr "Sovrapposizione rapida del colore"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -45224,24 +45220,21 @@ msgstr "Campionatore dei colori:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "Modalità di &fusione:"
+msgstr "Metodo di fusione:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Imposta l'opacità principale del livello"
+msgstr "Imposta l'opacità principale per il colore di sovrapposizione"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
-#, fuzzy, kde-format
-#| msgid "Adjust the transparency of the layer"
+#, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Regola la trasparenza del livello"
+msgstr "Regola la trasparenza del colore di sovrapposizione"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)

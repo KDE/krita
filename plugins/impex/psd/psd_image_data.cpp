@@ -17,8 +17,6 @@
 
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceMaths.h>
-#include <KoColorSpaceTraits.h>
 #include <kis_iterator_ng.h>
 #include <kis_paint_device.h>
 

@@ -129,7 +129,7 @@ template<>
 class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<float>
 {
 public:
-    typedef double compositetype;
+    typedef float compositetype;
     typedef double mixtype;
     static const float zeroValue;
     static const float unitValue;
@@ -396,7 +396,7 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 }
 
 template<>
-inline double KoColorSpaceMaths<float>::clamp(double a)
+inline float KoColorSpaceMaths<float>::clamp(float a)
 {
     return a;
 }

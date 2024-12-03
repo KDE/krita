@@ -14,14 +14,6 @@
 
 #include "KoCompositeOpBase.h"
 
-bool qFuzzyCompare(quint8 a, quint8 b) {
-    return a == b;
-}
-
-bool qFuzzyCompare(quint16 a, quint16 b) {
-    return a == b;
-}
-
 namespace tmp2 {
 template <typename T>
 Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
@@ -39,6 +31,12 @@ template <>
 Q_REQUIRED_RESULT  inline Q_DECL_UNUSED  float clampChannelToSDRBottom<float>(float v)
 {
     return qMax<float>(KoColorSpaceMathsTraits<float>::zeroValue, v);
+}
+
+template <typename T>
+Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
+{
+    return KoColorSpaceMaths<T>::isUnitValue(v);
 }
 
 }
@@ -136,16 +134,22 @@ public:
         
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
 
+        if (tmp2::isZeroValue(srcAlpha)) {
+            return dstAlpha;
+        }
+
         if(alphaLocked) {
             if(!tmp2::isZeroValue(dstAlpha)) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                         const channels_type srcInBlendSpace =
-                                BlendingPolicy::toAdditiveSpace(
-                                    CompositeOpFunctor::clampSourceChannelValue(src[i]));
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        src[i]));
                         const channels_type dstInBlendSpace =
-                                BlendingPolicy::toAdditiveSpace(
-                                    CompositeOpFunctor::clampDestinationChannelValue(dst[i]));
+                                CompositeOpFunctor::clampDestinationChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        dst[i]));
 
                         dst[i] = BlendingPolicy::fromAdditiveSpace(
                             lerp(dstInBlendSpace,
@@ -156,8 +160,54 @@ public:
             }
             
             return dstAlpha;
-        }
-        else {
+        } else if (tmp2::isZeroValue(dstAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(src[i])));
+                }
+            }
+            return srcAlpha;
+        } else if (tmp2::isUnitValue(dstAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    const channels_type srcInBlendSpace =
+                            CompositeOpFunctor::clampSourceChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    src[i]));
+                    const channels_type dstInBlendSpace =
+                            CompositeOpFunctor::clampDestinationChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    dst[i]));
+
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                        lerp(dstInBlendSpace,
+                             CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace),
+                             srcAlpha));
+                }
+            }
+            return unitValue<channels_type>();
+        }  else if (tmp2::isUnitValue(srcAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    const channels_type srcInBlendSpace =
+                            CompositeOpFunctor::clampSourceChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    src[i]));
+                    const channels_type dstInBlendSpace =
+                            CompositeOpFunctor::clampDestinationChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    dst[i]));
+
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                        lerp(srcInBlendSpace,
+                             CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace),
+                             dstAlpha));
+                }
+            }
+            return unitValue<channels_type>();
+        } else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
 
             if (!tmp2::isZeroValue(newDstAlpha)) {
@@ -165,32 +215,34 @@ public:
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                         const channels_type srcInBlendSpace =
-                                BlendingPolicy::toAdditiveSpace(
-                                    CompositeOpFunctor::clampSourceChannelValue(src[i]));
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        src[i]));
                         const channels_type dstInBlendSpace =
-                                BlendingPolicy::toAdditiveSpace(
-                                    CompositeOpFunctor::clampDestinationChannelValue(dst[i]));
+                                CompositeOpFunctor::clampDestinationChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        dst[i]));
 
                         channels_type result =
                             blend(srcInBlendSpace, srcAlpha,
                                   dstInBlendSpace, dstAlpha,
                                   CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace));
 
-
-
                         dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
 
-                        // qDebug() << i
-                        //          << fixed << qSetRealNumberPrecision(10)
-                        //          << ppVar(src[i])
-                        //          << ppVar(dst[i])
-                        //          << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace))
-                        //          << ppVar(result)
-                        //          << div(result, newDstAlpha)
-                        //          << reset
-                        //          << ppVar(newDstAlpha)
-                        //          << ppVar(srcAlpha)
-                        //          << ppVar(dstAlpha);
+//                         qDebug() << i
+//                                  << fixed << qSetRealNumberPrecision(10)
+//                                  << ppVar(src[i])
+//                                  << ppVar(dst[i])
+//                                  << ppVar(CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace))
+//                                  << ppVar(result)
+//                                  << div(result, newDstAlpha)
+//                                  << reset
+//                                  << ppVar(newDstAlpha)
+//                                  << ppVar(srcAlpha)
+//                                  << ppVar(dstAlpha)
+//                                  << ppVar(tmp2::isUnitValue(result))
+//                                  << ppVar(tmp2::isUnitValue(newDstAlpha));
                     }
                 }
             }

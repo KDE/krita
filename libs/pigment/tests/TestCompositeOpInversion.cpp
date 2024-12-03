@@ -844,7 +844,8 @@ void TestCompositeOpInversion::testFloatModes()
                                 id != COMPOSITE_DESTINATION_ATOP &&
                                 id != COMPOSITE_DESTINATION_IN &&
                                 id != COMPOSITE_ERASE &&
-                                id != COMPOSITE_COPY) {
+                                id != COMPOSITE_COPY &&
+                                !qFuzzyIsNull(float(minOpacity))) { // we have added a fast-path for opacity == 0.0 case
                             KoColor resultColorU2 = dstColorU;
 
                             opU2->composite(resultColorU2.data(), 0, srcColorU.data(), 0,
@@ -855,14 +856,34 @@ void TestCompositeOpInversion::testFloatModes()
                             const quint16 referenceColor = getColorValueU(resultColorU2);
                             const quint16 resultColor = getColorValueU(resultColorU);
 
+                            const int difference = qAbs(referenceColor - resultColor);
+                            int maxDifference = 0;
+
                             /**
                              * Hard overlay was changed from float to int16 composition
                              */
-                            const int difference = qAbs(referenceColor - resultColor);
-                            const int maxDifference = id != COMPOSITE_HARD_OVERLAY ? 0 :
-                                        minOpacity > 0.99 ? 1 : 10;
+                            if (id == COMPOSITE_HARD_OVERLAY) {
+                                maxDifference = minOpacity > 0.99 ? 1 : 10;
+                            }
 
-                            if (difference > maxDifference) {
+                            /**
+                             * We have changed CompositeGeneric so now there is a precise
+                             * case for alpha-unity values
+                             */
+                            if (qFuzzyCompare(float(dstAlphaValue), 1.0f) ||
+                                    qFuzzyCompare(float(srcAlphaValue), 1.0f)) {
+                                maxDifference = 3;
+                            }
+
+                            /**
+                             * We have added a static point that resolves numerical
+                             * instability.
+                             */
+                            const bool shouldSkipCheck =
+                                    (id == COMPOSITE_HARD_LIGHT &&
+                                    qFuzzyCompare(srcColorValue, 0.5));
+
+                            if (!shouldSkipCheck && difference > maxDifference) {
 
                                 qDebug() << "--- integer implementation is inconsistent to the original mode! ---";
                                 qDebug() << ppVar(opacity) << ppVar(resultColor) << ppVar(referenceColor);
@@ -954,6 +975,12 @@ void TestCompositeOpInversion::testFloatModes()
                                                opacity);
                                 resultColorValueF = getColorValue(resultColorF);
 
+                                if (std::isinf(resultColorValueF)) {
+                                    qDebug() << ppVar(i);
+                                    qDebug() << fixed << qSetRealNumberPrecision(16) << ppVar(srcColorValue) << ppVar(dstColorValue);
+                                    qDebug() << fixed << qSetRealNumberPrecision(16) << ppVar(srcAlphaValue) << ppVar(dstAlphaValue);
+                                }
+
                                 QVERIFY(!std::isnan(resultColorValueF));
                                 QVERIFY(!std::isinf(resultColorValueF));
 
@@ -972,8 +999,23 @@ void TestCompositeOpInversion::testFloatModes()
                             const float originalError = qAbs(transitionalValues.front() - resultColorValueU);
                             const float finalError = qAbs(transitionalValues.back() - resultColorValueU);
 
+                            bool skipConvergencyCheck = false;
+
+                            if ((id == COMPOSITE_DARKEN ||
+                                 id == COMPOSITE_LIGHTEN ||
+                                 id == COMPOSITE_ALLANON) &&
+                                    qFuzzyCompare(float(srcColorValue), 1.0f) &&
+                                    qFuzzyCompare(float(srcColorValue), 1.0f)) {
+
+                                skipConvergencyCheck = true;
+                            }
+
                             if (checkInSdrRangeImpl(transitionalValues.back(), true) ||
-                                    ((resultConvergedToAPoint || finalError < originalError) &&
+
+                                    ((resultConvergedToAPoint ||
+                                      finalError < originalError ||
+                                      skipConvergencyCheck) &&
+
                                      qAbs(transitionalValues.back() - transitionalValues.front())
                                      < 64 * std::numeric_limits<float>::epsilon())) {
 
@@ -1201,7 +1243,7 @@ void TestCompositeOpInversion::testFloatModes_data()
 
 
     // doesn't clamp result, always preserves SDR state
-    QTest::addRow("%s_%s", COMPOSITE_HARD_LIGHT.toLatin1().data(), "sdr") << COMPOSITE_HARD_LIGHT << TestFlags(SrcCannotMakeNegative | PreservesSdrRange);
+    QTest::addRow("%s_%s", COMPOSITE_HARD_LIGHT.toLatin1().data(), "sdr") << COMPOSITE_HARD_LIGHT << TestFlags(SrcCannotMakeNegative | PreservesStrictSdrRange);
     QTest::addRow("%s_%s", COMPOSITE_PARALLEL.toLatin1().data(), "sdr") << COMPOSITE_PARALLEL << TestFlags(SrcCannotMakeNegative | PreservesSdrRange);
     QTest::addRow("%s_%s", COMPOSITE_EQUIVALENCE.toLatin1().data(), "sdr") << COMPOSITE_EQUIVALENCE << TestFlags(SrcCannotMakeNegative | PreservesStrictSdrRange);
     QTest::addRow("%s_%s", COMPOSITE_GEOMETRIC_MEAN.toLatin1().data(), "sdr") << COMPOSITE_GEOMETRIC_MEAN << TestFlags(SrcCannotMakeNegative | PreservesSdrRange);

@@ -25,10 +25,6 @@ struct ClampPolicyInteger {
     using channels_type = T;
     using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-    static inline channels_type clampInputSrc(channels_type value) {
-        return value;
-    }
-
     static inline channels_type clampResultAllowNegative(compositetype value) {
         using namespace Arithmetic;
         return clampToSDR<channels_type>(value);
@@ -53,11 +49,6 @@ template <typename T>
 struct ClampPolicyFloatSDR {
     using channels_type = T;
     using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
-
-    static channels_type clampInputSrc(channels_type value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
 
     static channels_type clampResultAllowNegative(compositetype value) {
         using namespace Arithmetic;
@@ -85,11 +76,6 @@ template <typename T>
 struct ClampPolicyFloatHDR {
     using channels_type = T;
     using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
-
-    static channels_type clampInputSrc(channels_type value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
 
     static channels_type clampResultAllowNegative(compositetype value) {
         return value;
@@ -241,7 +227,27 @@ Q_REQUIRED_RESULT inline Q_DECL_UNUSED
     return a * b / KoColorSpaceMathsTraits<quint16>::unitValue;
 }
 
+template <typename T>
+inline bool isHalfValue(T v)
+{
+    return v == KoColorSpaceMathsTraits<T>::halfValue;
+}
 
+template <>
+inline bool isHalfValue<float>(float v)
+{
+    return qFuzzyCompare(v, KoColorSpaceMathsTraits<float>::halfValue);
+}
+
+#ifdef HAVE_OPENEXR
+
+template <>
+inline bool isHalfValue<half>(half v)
+{
+    return qAbs(v - KoColorSpaceMathsTraits<half>::halfValue) < 0.0001f;
+}
+
+#endif /* HAVE_OPENEXR */
 
 }
 
@@ -447,7 +453,7 @@ struct CFColorBurn : ClampedSourceCompositeFunctorBase<T>
 
         // Handle the case where the denominator is 0. See color dodge for a
         // detailed explanation
-        if(tmp::isZeroValue(src)) {
+        if (tmp::isZeroValue(src)) {
             return !tmp::isUnitValueClamped(dst) ? zeroValue<T>() : clamp_policy::clampResultAllowNegative(dst);
         }
         return inv<T>(
@@ -536,7 +542,7 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(tmp::isZeroValue(src))
+    if (tmp::isZeroValue(src))
         return tmp::isZeroValue(dst) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
@@ -547,6 +553,10 @@ struct CFHardLight : ClampedSourceCompositeFunctorBase<T> {
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
         using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
+
+        if (tmp::isHalfValue(src)) {
+            return dst;
+        }
 
         composite_type src2 = composite_type(src) + src;
 
@@ -803,12 +813,16 @@ struct CFGammaDark : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
 
-        if(tmp::isZeroValue(src)) {
+        if (tmp::isZeroValue(src)) {
             return zeroValue<T>();
         }
 
+        if (tmp::isUnitValue(dst)) {
+            return unitValue<T>();
+        }
+
         // power(dst, 1/src)
-        return scale<T>(pow(scale<qreal>(dst), 1.0/scale<qreal>(src)));
+        return scale<T>(pow(scale<qreal>(dst), 1.0 / scale<qreal>(src)));
     }
 };
 
@@ -819,6 +833,10 @@ struct CFGammaLight : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
 
         if (tmp::isZeroValue(dst)) {
             return tmp::isZeroValue(src) ? unitValue<T>() : zeroValue<T>();
+        }
+
+        if (tmp::isUnitValue(dst)) {
+            return unitValue<T>();
         }
 
         return scale<T>(pow(scale<qreal>(dst), scale<qreal>(src)));
@@ -837,6 +855,11 @@ template<class T>
 struct CFGeometricMean : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
+
+        if (tmp::isUnitValue(src) && tmp::isUnitValue(dst)) {
+            return unitValue<T>();
+        }
+
         return scale<T>(sqrt(scale<qreal>(dst) * scale<qreal>(src)));
     }
 };
@@ -1347,7 +1370,7 @@ inline T cfFlatLight(T src, T dst) {
     using namespace Arithmetic;
     
     if (src == zeroValue<T>()) {
-    return zeroValue<T>();
+        return zeroValue<T>();
     }  
     
     return clamp<T>(cfHardMixPhotoshop(inv(src),dst)==unitValue<T>() ? cfPenumbraB(src,dst) : cfPenumbraA(src,dst)); 

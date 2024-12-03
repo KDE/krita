@@ -15,30 +15,7 @@
 #include "KoCompositeOpBase.h"
 
 namespace tmp2 {
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
-{
-    return KoColorSpaceMaths<T>::isZeroValue(v);
-}
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  T clampChannelToSDRBottom(T v)
-{
-    return v;
-}
-
-template <>
-Q_REQUIRED_RESULT  inline Q_DECL_UNUSED  float clampChannelToSDRBottom<float>(float v)
-{
-    return qMax<float>(KoColorSpaceMathsTraits<float>::zeroValue, v);
-}
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
-{
-    return KoColorSpaceMaths<T>::isUnitValue(v);
-}
-
+using namespace Arithmetic;
 }
 
 template <class Traits,

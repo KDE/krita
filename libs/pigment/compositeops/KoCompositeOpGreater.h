@@ -23,18 +23,7 @@
 #include "KoCompositeOpBase.h"
 
 namespace tmp3 {
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
-{
-    return KoColorSpaceMaths<T>::isZeroValue(v);
-}
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
-{
-    return KoColorSpaceMaths<T>::isUnitValue(v);
-}
-
+using namespace Arithmetic;
 }
 
 /**

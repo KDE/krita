@@ -99,156 +99,7 @@ struct ClampPolicyFloatHDR {
 };
 
 namespace tmp {
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isNullValueClamped(double d)
-{
-    return d <= 0.000000000001;
-}
-
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(float f)
-{
-    return f <= 0.00001f;
-}
-
-#ifdef HAVE_OPENEXR
-
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isNullValueClamped(half h)
-{
-    return h.isZero() || h.isNegative();
-}
-
-#endif /* HAVE_OPENEXR */
-
-template <typename T>
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isNullValueClamped(T v)
-{
-    return v <= 0;
-}
-
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED bool isUnitValueClamped(double d)
-{
-    return d > 1.0 - 0.000000000001;
-}
-
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(float f)
-{
-    return f > 1.0 - 0.00001f;
-}
-
-#ifdef HAVE_OPENEXR
-
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValueClamped(half h)
-{
-    return h > 1.0f - 0.0001f;
-}
-
-#endif /* HAVE_OPENEXR */
-
-template <typename T>
-Q_REQUIRED_RESULT Q_DECL_CONSTEXPR static inline Q_DECL_UNUSED  bool isUnitValueClamped(T v)
-{
-    return v >= KoColorSpaceMathsTraits<T>::unitValue;
-}
-
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isZeroValue(T v)
-{
-    return KoColorSpaceMaths<T>::isZeroValue(v);
-}
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  bool isUnitValue(T v)
-{
-    return KoColorSpaceMaths<T>::isUnitValue(v);
-}
-
-template <typename T>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  T clampChannelToSDRBottom(T v)
-{
-    return v;
-}
-
-template <>
-Q_REQUIRED_RESULT  inline Q_DECL_UNUSED  float clampChannelToSDRBottom<float>(float v)
-{
-    return qMax<float>(KoColorSpaceMathsTraits<float>::zeroValue, v);
-}
-
-template <typename T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  composite_type divideInCompositeSpace(composite_type a, composite_type b)
-{
-    return a / b;
-}
-
-template <>
-Q_REQUIRED_RESULT inline Q_DECL_UNUSED
-    KoColorSpaceMathsTraits<quint8>::compositetype
-    divideInCompositeSpace<quint8>(KoColorSpaceMathsTraits<quint8>::compositetype a,
-                                   KoColorSpaceMathsTraits<quint8>::compositetype b)
-
-{
-    return a * KoColorSpaceMathsTraits<quint8>::unitValue / b;
-}
-
-template <>
-Q_REQUIRED_RESULT inline Q_DECL_UNUSED
-    KoColorSpaceMathsTraits<quint16>::compositetype
-    divideInCompositeSpace<quint16>(KoColorSpaceMathsTraits<quint16>::compositetype a,
-                                    KoColorSpaceMathsTraits<quint16>::compositetype b)
-
-{
-    return a * KoColorSpaceMathsTraits<quint16>::unitValue / b;
-}
-
-template <typename T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
-Q_REQUIRED_RESULT static inline Q_DECL_UNUSED  composite_type multiplyInCompositeSpace(composite_type a, composite_type b)
-{
-    return a * b;
-}
-
-
-template <>
-Q_REQUIRED_RESULT inline Q_DECL_UNUSED
-    KoColorSpaceMathsTraits<quint8>::compositetype
-    multiplyInCompositeSpace<quint8>(KoColorSpaceMathsTraits<quint8>::compositetype a,
-                                   KoColorSpaceMathsTraits<quint8>::compositetype b)
-
-{
-    return a * b / KoColorSpaceMathsTraits<quint8>::unitValue;
-}
-
-template <>
-Q_REQUIRED_RESULT inline Q_DECL_UNUSED
-    KoColorSpaceMathsTraits<quint16>::compositetype
-    multiplyInCompositeSpace<quint16>(KoColorSpaceMathsTraits<quint16>::compositetype a,
-                                    KoColorSpaceMathsTraits<quint16>::compositetype b)
-
-{
-    return a * b / KoColorSpaceMathsTraits<quint16>::unitValue;
-}
-
-template <typename T>
-inline bool isHalfValue(T v)
-{
-    return v == KoColorSpaceMathsTraits<T>::halfValue;
-}
-
-template <>
-inline bool isHalfValue<float>(float v)
-{
-    return qFuzzyCompare(v, KoColorSpaceMathsTraits<float>::halfValue);
-}
-
-#ifdef HAVE_OPENEXR
-
-template <>
-inline bool isHalfValue<half>(half v)
-{
-    return qAbs(v - KoColorSpaceMathsTraits<half>::halfValue) < 0.0001f;
-}
-
-#endif /* HAVE_OPENEXR */
-
+using namespace Arithmetic;
 }
 
 template<class HSXType, class TReal>
@@ -497,7 +348,7 @@ struct CFColorDodge : ClampedSourceCompositeFunctorBase<T> {
         // and the numerator can remain as 0, so dividing 0 over a number (no matter
         // how small it is) gives 0.
         if (KoColorSpaceMaths<T>::isUnitValue(src)) {
-            return tmp::isNullValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+            return tmp::isZeroValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
         }
 
         return clamp_policy::clampResultAllowNegative(
@@ -650,7 +501,7 @@ struct CFVividLight : ClampedSourceCompositeFunctorBase<T> {
         }
 
         if (tmp::isUnitValue(src)) {
-            return tmp::isNullValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
+            return tmp::isZeroValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
         }
 
         // min(1,max(0, dst / (2*(1-src)))

@@ -274,8 +274,20 @@ public:
     }
 
     inline static _T clampChannelToSDR(_T val) {
-        // integer version, float versions are specialized separately
-        return val;
+        if constexpr (std::numeric_limits<_T>::is_integer) {
+            return val;
+        } else {
+            return qBound<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val, KoColorSpaceMathsTraits<_T>::unitValue);
+        }
+    }
+
+    inline static _T clampChannelToSDRBottom(_T val)
+    {
+        if constexpr (std::numeric_limits<_T>::is_integer) {
+            return val;
+        } else {
+            return qMax<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val);
+        }
     }
 
     inline static dst_compositetype clampToSDR(dst_compositetype val) {
@@ -290,6 +302,22 @@ public:
         return qMax<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val);
     }
 
+    inline static dst_compositetype divideInCompositeSpace(dst_compositetype a, dst_compositetype b) {
+        if constexpr (std::numeric_limits<_Tdst>::is_integer) {
+            return a * KoColorSpaceMathsTraits<_Tdst>::unitValue / b;
+        } else {
+            return a / b;
+        }
+    }
+
+    inline static dst_compositetype multiplyInCompositeSpace(dst_compositetype a, dst_compositetype b) {
+        if constexpr (std::numeric_limits<_Tdst>::is_integer) {
+            return a * b / KoColorSpaceMathsTraits<_Tdst>::unitValue;
+        } else {
+            return a * b;
+        }
+    }
+
     /**
      * Clamps the composite type on higher border only. That is a fast path
      * for scale-only transformations
@@ -299,15 +327,34 @@ public:
     }
 
     inline static _T isUnsafeAsDivisor(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
     }
 
     inline static bool isUnitValue(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::unitValue;
     }
 
     inline static bool isZeroValue(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
+    }
+
+    inline static bool isZeroValueClamped(_T v) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v <= 0;
+    }
+
+    static inline bool isUnitValueClamped(_T v) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v >= KoColorSpaceMathsTraits<_T>::unitValue;
+    }
+
+    static inline bool isHalfValue(_T v)
+    {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v == KoColorSpaceMathsTraits<_T>::halfValue;
     }
 };
 
@@ -347,6 +394,35 @@ inline double KoColorSpaceMaths<double>::clamp(double a)
 template<>
 inline double KoColorSpaceMaths<double>::isUnsafeAsDivisor(double value) {
     return value < 1e-6; // negative values are also unsafe!
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isUnitValue(double value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::unitValue);
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isZeroValue(double value) {
+    return qFuzzyIsNull(value);
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isZeroValueClamped(double d)
+{
+    // constant is from qFuzzyIsNull()
+    return d <= 0.000000000001;
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isUnitValueClamped(double d)
+{
+    // constant is from qFuzzyIsNull()
+    return d > 1.0 - 0.000000000001;
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isHalfValue(double value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::halfValue);
 }
 
 //------------------------------ float specialization ------------------------------//
@@ -417,8 +493,22 @@ inline bool KoColorSpaceMaths<float>::isZeroValue(float value) {
 }
 
 template<>
-inline float KoColorSpaceMaths<float>::clampChannelToSDR(float val) {
-    return qBound<float>(KoColorSpaceMathsTraits<float>::zeroValue, val, KoColorSpaceMathsTraits<float>::unitValue);
+inline bool KoColorSpaceMaths<float>::isZeroValueClamped(float f)
+{
+    // constant is from qFuzzyIsNull()
+    return f <= 0.00001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isUnitValueClamped(float f)
+{
+    // constant is from qFuzzyIsNull()
+    return f > 1.0 - 0.00001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isHalfValue(float value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::halfValue);
 }
 
 //------------------------------ half specialization ------------------------------//
@@ -498,10 +588,36 @@ inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
 }
 
 template<>
-inline half KoColorSpaceMaths<half>::clampChannelToSDR(half val) {
-    return qBound<half>(KoColorSpaceMathsTraits<half>::zeroValue, val, KoColorSpaceMathsTraits<half>::unitValue);
+inline bool KoColorSpaceMaths<half>::isUnitValue(half value) {
+    // TODO: check actual constant
+    return qAbs(value - KoColorSpaceMathsTraits<half>::unitValue) < 0.0001f;
 }
 
+template<>
+inline bool KoColorSpaceMaths<half>::isZeroValue(half value) {
+    // TODO: check actual constant
+    return qAbs(value) < 0.0001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isZeroValueClamped(half f)
+{
+    // TODO: check actual constant
+    return f <= 0.0001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isUnitValueClamped(half f)
+{
+    // TODO: check actual constant
+    return f > 1.0 - 0.0001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isHalfValue(half value) {
+    // TODO: check actual constant
+    return qAbs(value - 0.5f) < 0.0001f;
+}
 
 #endif
 
@@ -652,13 +768,18 @@ namespace Arithmetic
     }
 
     template<class T>
-    inline T clampToSDR(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-        return KoColorSpaceMaths<T>::clampToSDR(a);
+    inline T clampChannelToSDR(T a) {
+        return KoColorSpaceMaths<T>::clampChannelToSDR(a);
     }
 
     template<class T>
-    inline T clampChannelToSDR(T a) {
-        return KoColorSpaceMaths<T>::clampChannelToSDR(a);
+    inline T clampChannelToSDRBottom(T a) {
+        return KoColorSpaceMaths<T>::clampChannelToSDRBottom(a);
+    }
+
+    template<class T>
+    inline T clampToSDR(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        return KoColorSpaceMaths<T>::clampToSDR(a);
     }
 
     template<class T>
@@ -670,7 +791,47 @@ namespace Arithmetic
     inline T clampToSDRBottom(typename KoColorSpaceMathsTraits<T>::compositetype a) {
         return KoColorSpaceMaths<T>::clampToSDRBottom(a);
     }
+
+    template<class T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+    inline composite_type divideInCompositeSpace(composite_type a, composite_type b) {
+        return KoColorSpaceMaths<T>::divideInCompositeSpace(a, b);
+    }
+
+    template<class T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+    inline composite_type multiplyInCompositeSpace(composite_type a, composite_type b) {
+        return KoColorSpaceMaths<T>::multiplyInCompositeSpace(a, b);
+    }
     
+    template <typename T>
+    static inline bool isZeroValue(T v)
+    {
+        return KoColorSpaceMaths<T>::isZeroValue(v);
+    }
+
+    template <typename T>
+    static inline bool isUnitValue(T v)
+    {
+        return KoColorSpaceMaths<T>::isUnitValue(v);
+    }
+
+    template <typename T>
+    static inline bool isZeroValueClamped(T v)
+    {
+        return KoColorSpaceMaths<T>::isZeroValueClamped(v);
+    }
+
+    template <typename T>
+    static inline bool isUnitValueClamped(T v)
+    {
+        return KoColorSpaceMaths<T>::isUnitValueClamped(v);
+    }
+
+    template <typename T>
+    static inline bool isHalfValue(T v)
+    {
+        return KoColorSpaceMaths<T>::isHalfValue(v);
+    }
+
     template<class T>
     inline T min(T a, T b, T c) {
         b = (a < b) ? a : b;

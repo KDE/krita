@@ -21,13 +21,13 @@
 
 template <typename T>
 static inline T safeDivideWithRound(T dividend,
-                                    std::enable_if_t<std::is_floating_point<T>::value, T> divisor) {
+                                    std::enable_if_t<!std::numeric_limits<T>::is_integer, T> divisor) {
     return dividend / divisor;
 }
 
 template <typename T>
 static inline T safeDivideWithRound(T dividend,
-                                    std::enable_if_t<std::is_integral<T>::value, T> divisor) {
+                                    std::enable_if_t<std::numeric_limits<T>::is_integer, T> divisor) {
     return (dividend + divisor / 2) / divisor;
 }
 

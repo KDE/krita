@@ -777,7 +777,11 @@ void TestCompositeOpInversion::testFloatModes()
                                0 - std::numeric_limits<float>::epsilon(),
                                0,
                                0 + std::numeric_limits<float>::epsilon(),
-                               0.1, 0.2, 0.5, 0.8, 0.9,
+                               0.1, 0.2,
+                               0.5 - 2 * std::numeric_limits<float>::epsilon(),
+                               0.5,
+                               0.5 + 2 * std::numeric_limits<float>::epsilon(),
+                               0.8, 0.9,
                                1.0 - std::numeric_limits<float>::epsilon(),
                                1.0,
                                1.0 + std::numeric_limits<float>::epsilon(),
@@ -880,8 +884,9 @@ void TestCompositeOpInversion::testFloatModes()
                              * instability.
                              */
                             const bool shouldSkipCheck =
-                                    (id == COMPOSITE_HARD_LIGHT &&
-                                    qFuzzyCompare(srcColorValue, 0.5));
+                                    id == COMPOSITE_HARD_LIGHT &&
+                                 (qFuzzyCompare(float(srcColorValue), 0.5f) ||
+                                  qFuzzyCompare(float(dstColorValue), 0.5f));
 
                             if (!shouldSkipCheck && difference > maxDifference) {
 

@@ -1655,8 +1655,8 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.deleteAllAssistantsButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_options.deleteAllAssistantsButton->setIconSize(QSize(16, 16));
 
-        m_options.ShowDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
-        m_options.ShowDockerOptionsButton->setIconSize(QSize(16, 16));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
+        m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));
 
         QList<KoID> assistants;
         Q_FOREACH (const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
@@ -1770,7 +1770,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));
 
         //Show panel for docker tool option visibility
-        connect(m_options.ShowDockerOptionsButton, SIGNAL(clicked()), this, SLOT(slotToggleDockToolOptionsVisible()));
+        connect(m_options.showDockerOptionsButton, SIGNAL(clicked()), this, SLOT(slotToggleDockToolOptionsVisible()));
         //set editor widget buttons on first startup.
         AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
 
@@ -1870,16 +1870,16 @@ void KisAssistantTool::slotSelectedAssistantTypeChanged()
 void KisAssistantTool::slotToggleDockToolOptionsVisible(){
 
     ToggleDockToolOptionsVisible = ToggleDockToolOptionsVisible ? false:true;
-    m_options.ShowDockerOptionsContainer->setVisible(ToggleDockToolOptionsVisible);
+    m_options.showDockerOptionsContainer->setVisible(ToggleDockToolOptionsVisible);
 
     if (ToggleDockToolOptionsVisible){
-        m_options.ShowDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-down.svg"));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-down.svg"));
     }
     else{
-        m_options.ShowDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
     }
     
-    m_options.ShowDockerOptionsButton->setIconSize(QSize(16, 16));
+    m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));
    
 }
 void KisAssistantTool::slotToggleMoveButton(int index)

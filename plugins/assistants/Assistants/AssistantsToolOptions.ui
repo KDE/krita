@@ -251,9 +251,10 @@
       </widget>
     </item>
    <item>
-    <layout class="QHBoxLayout" name="ShowDockerOptionsLayout">
+    <layout class="QHBoxLayout" name="showDockerOptionsLayout">
+
       <item>
-        <widget class="QToolButton" name="ShowDockerOptionsButton">
+        <widget class="QToolButton" name="showDockerOptionsButton">
         <property name="iconSize">
           <size>
           <width>18</width>
@@ -263,7 +264,7 @@
         </widget>
         </item>
         <item>
-          <widget class="QLabel" name="ShowDockerOptionsLabel">
+          <widget class="QLabel" name="showDockerOptionsLabel">
             <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -278,7 +279,7 @@
       </layout>
      </item>
    <item>
-    <widget class=" QWidget" name="ShowDockerOptionsContainer">
+    <widget class=" QWidget" name="showDockerOptionsContainer">
       <property name="visible">
           <bool>false</bool>
         </property>

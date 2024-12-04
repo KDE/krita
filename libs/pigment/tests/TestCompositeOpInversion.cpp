@@ -228,6 +228,31 @@ void TestCompositeOpInversion::testBurnInF32Mode()
 
 }
 
+#include <KisColorPairSampler.h>
+
+void TestCompositeOpInversion::testColorPairSampler()
+{
+    const KoColorSpace* csU = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), 0);
+    const KoColorSpace* csF = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+
+    KisColorPairSampler sampler;
+
+    sampler.alphaValues = {0.0, 0.3, 0.9};
+    sampler.colorValues = {0.1, 0.4, 0.6, 1.0};
+
+    KisColorPairSampler::const_iterator it = sampler.begin();
+    KisColorPairSampler::const_iterator end = sampler.end();
+
+    QCOMPARE(sampler.numSamples(), 3 * 3 * 3 * 4 * 4);
+    QCOMPARE(std::distance(it, end), sampler.numSamples());
+
+    for (; it != end; ++it) {
+        qDebug() << ppVar(it.opacity()) << ppVar(it.srcColor(csF)) << ppVar(it.dstColor(csF));
+    }
+}
+
+
+
 namespace {
 struct Wrapper {
     KoColor color;

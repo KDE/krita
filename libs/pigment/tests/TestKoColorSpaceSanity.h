@@ -15,6 +15,7 @@ class TestKoColorSpaceSanity : public QObject
 private Q_SLOTS:
 
     void testChannelsInfo();
+    void testIterator();
 };
 
 #endif

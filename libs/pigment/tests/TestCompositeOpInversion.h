@@ -18,6 +18,8 @@ private Q_SLOTS:
 
     void testBurnInF32Mode();
 
+    void testColorPairSampler();
+
     void testFloatModes();
     void testFloatModes_data();
 };

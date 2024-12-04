@@ -285,6 +285,13 @@ target_link_libraries(kritaflake
         libunibreak::libunibreak
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+target_link_libraries(kritaflake
+    PUBLIC
+        Qt${QT_MAJOR_VERSION}::OpenGLWidgets
+)
+endif()
+
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
 )

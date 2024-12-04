@@ -456,6 +456,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         REQUIRED COMPONENTS
         Core5Compat
         OpenGL
+        OpenGLWidgets
     )
 endif()
 

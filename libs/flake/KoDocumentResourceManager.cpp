@@ -154,6 +154,6 @@ KoShapeController *KoDocumentResourceManager::globalShapeController() const
 void KoDocumentResourceManager::setGlobalShapeController(KoShapeController *shapeController)
 {
     QVariant variant;
-    variant.setValue<KoShapeController *>(shapeController);
+    variant.setValue(shapeController);
     setResource(GlobalShapeController, variant);
 }

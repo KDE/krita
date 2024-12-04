@@ -49,6 +49,11 @@ struct KisColorPairSampler
             opacityIndex = rest;
         }
 
+        SampleIndex(const SampleIndex &rhs) = default;
+        SampleIndex(SampleIndex &&rhs) = default;
+        SampleIndex& operator=(const SampleIndex &rhs) = default;
+        SampleIndex& operator=(SampleIndex &&rhs) = default;
+
         size_t opacityIndex = 0;
         size_t srcAlphaIndex = 0;
         size_t dstAlphaIndex = 0;
@@ -62,37 +67,55 @@ struct KisColorPairSampler
                                         boost::random_access_traversal_tag,
                                         boost::none_t>
     {
-    public:
-        const_iterator()
-            : m_sampler(0),
-            m_index(0) {}
+        static size_t clampIndex(int index, const KisColorPairSampler &sampler) {
+            const size_t numSamples = sampler.numSamples();
+            KIS_ASSERT(numSamples > 0);
+            return numSamples > 0 ?
+                std::min<size_t>(numSamples - 1, index) : 0;
+        }
 
+    public:
         const_iterator(const KisColorPairSampler *sampler, int index)
-            : m_sampler(sampler),
-            m_index(index) {}
+            : m_sampler(sampler)
+            , m_index(index)
+            , m_sampleIndex(clampIndex(index, *sampler), *sampler)
+        {}
 
         KoColor srcColor(const KoColorSpace *colorSpace) const {
-            SampleIndex idx(m_index, *m_sampler);
-            return createColor(m_sampler->colorValues[idx.srcColorIndex],
-                               m_sampler->alphaValues[idx.srcAlphaIndex],
+            return createColor(m_sampler->colorValues[m_sampleIndex.srcColorIndex],
+                               m_sampler->alphaValues[m_sampleIndex.srcAlphaIndex],
                                colorSpace);
 
         }
 
         KoColor dstColor(const KoColorSpace *colorSpace) const {
-            SampleIndex idx(m_index, *m_sampler);
-            return createColor(m_sampler->colorValues[idx.dstColorIndex],
-                               m_sampler->alphaValues[idx.dstAlphaIndex],
+            return createColor(m_sampler->colorValues[m_sampleIndex.dstColorIndex],
+                               m_sampler->alphaValues[m_sampleIndex.dstAlphaIndex],
                                colorSpace);
         }
 
         qreal opacity() const {
-            SampleIndex idx(m_index, *m_sampler);
-            return m_sampler->alphaValues[idx.opacityIndex];
+            return m_sampler->alphaValues[m_sampleIndex.opacityIndex];
+        }
+
+        qreal srcAlpha() const {
+            return m_sampler->alphaValues[m_sampleIndex.srcAlphaIndex];
+        }
+
+        qreal dstAlpha() const {
+            return m_sampler->alphaValues[m_sampleIndex.dstAlphaIndex];
+        }
+
+        qreal srcColor() const {
+            return m_sampler->colorValues[m_sampleIndex.srcColorIndex];
+        }
+
+        qreal dstColor() const {
+            return m_sampler->colorValues[m_sampleIndex.dstColorIndex];
         }
 
     private:
-        KoColor createColorU (qreal colorF, qreal alphaF, const KoColorSpace *colorSpace) const {
+        static KoColor createColorU (qreal colorF, qreal alphaF, const KoColorSpace *colorSpace) {
             using namespace Arithmetic;
 
             /**
@@ -112,7 +135,7 @@ struct KisColorPairSampler
             return c;
         };
 
-        KoColor createColorF(qreal color, qreal alpha, const KoColorSpace *colorSpace) const {
+        static KoColor createColorF(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
             KoColor c(colorSpace);
             float *ptr = reinterpret_cast<float*>(c.data());
             ptr[0] = color;
@@ -120,7 +143,7 @@ struct KisColorPairSampler
             return c;
         };
 
-        KoColor createColor(qreal color, qreal alpha, const KoColorSpace *colorSpace) const {
+        static KoColor createColor(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
             KoColor result;
 
             if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
@@ -138,6 +161,7 @@ struct KisColorPairSampler
 
         void increment() {
             m_index++;
+            m_sampleIndex = SampleIndex(clampIndex(m_index, *m_sampler), *m_sampler);
         }
 
         bool equal(const_iterator const& other) const {
@@ -147,10 +171,12 @@ struct KisColorPairSampler
 
         void decrement() {
             m_index--;
+            m_sampleIndex = SampleIndex(clampIndex(m_index, *m_sampler), *m_sampler);
         }
 
         void advance(difference_type n) {
             m_index += n;
+            m_sampleIndex = SampleIndex(clampIndex(m_index, *m_sampler), *m_sampler);
         }
 
         difference_type distance_to(const const_iterator &rhs) {
@@ -160,6 +186,7 @@ struct KisColorPairSampler
     private:
         const KisColorPairSampler *m_sampler;
         size_t m_index;
+        SampleIndex m_sampleIndex;
     };
 
     const_iterator begin() const {

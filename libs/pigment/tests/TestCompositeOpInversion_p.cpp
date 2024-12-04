@@ -273,22 +273,22 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
     } else if (id == COMPOSITE_HARD_MIX_PHOTOSHOP) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfHardMixPhotoshop<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFHardMixPhotoshop<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfHardMixPhotoshop<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFHardMixPhotoshop<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
-    } else if (id == COMPOSITE_HARD_MIX_PHOTOSHOP) {
+    } else if (id == COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfHardMixSofterPhotoshop<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFHardMixSofterPhotoshop<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfHardMixSofterPhotoshop<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFHardMixSofterPhotoshop<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_LUMINOSITY_SAI) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {

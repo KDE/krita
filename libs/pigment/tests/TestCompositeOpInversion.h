@@ -16,12 +16,28 @@ private Q_SLOTS:
     void test();
     void test_data();
 
-    void testBurnInF32Mode();
-
     void testColorPairSampler();
 
-    void testFloatModes();
-    void testFloatModes_data();
+    void testF32ModesNaN();
+    void testF32ModesNaN_data();
+
+    void testU16ModesConsistent();
+    void testU16ModesConsistent_data();
+
+    void testF32vsU16ConsistencyInSDR_data();
+    void testF32vsU16ConsistencyInSDR();
+
+    void testPreservesStrictSdrRange();
+    void testPreservesStrictSdrRange_data();
+
+    void testPreservesLooseSdrRange();
+    void testPreservesLooseSdrRange_data();
+
+    void testSrcCannotMakeNegative();
+    void testSrcCannotMakeNegative_data();
+
+private:
+    void testPreservesSdrRangeImpl(bool useStrictRange);
 };
 
 #endif // TESTCOMPOSITEOPINVERSION_H

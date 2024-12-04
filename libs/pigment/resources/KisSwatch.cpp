@@ -9,6 +9,7 @@
 #include "KisSwatch.h"
 #include <QDomDocument>
 #include <QDomElement>
+#include <QIODevice>
 
 KisSwatch::KisSwatch(const KoColor &color, const QString &name)
     : m_color(color)

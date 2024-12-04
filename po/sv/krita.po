@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 01:48+0000\n"
-"PO-Revision-Date: 2024-11-23 20:39+0100\n"
+"PO-Revision-Date: 2024-12-03 21:44+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -45006,18 +45006,16 @@ msgid "Minimize Channel"
 msgstr "Minimiera kanal"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Färgöverlagring"
+msgstr "Snabb färgö&verlagring..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "Färgöverlagring"
+msgstr "Snabb färgöverlagring"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -45037,24 +45035,21 @@ msgstr "Färghämtare:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "&Blandningsläge:"
+msgstr "Blandningsläge:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Ställ in lagrets huvudogenomskinlighet"
+msgstr "Ställ in huvudogenomskinlighet för överlagringsfärgen"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
-#, fuzzy, kde-format
-#| msgid "Adjust the transparency of the layer"
+#, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Justera lagrets genomskinlighet"
+msgstr "Justera överlagringsfärgens genomskinlighet"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)

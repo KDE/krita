@@ -36,7 +36,7 @@ struct KoGradientStop : public boost::equality_comparable<KoGradientStop>
         position = _position;
     }
 
-    bool operator == (const KoGradientStop& other) 
+    bool operator == (const KoGradientStop& other) const
     { 
         return this->type == other.type && this->color == other.color && this->position == other.position;
     }

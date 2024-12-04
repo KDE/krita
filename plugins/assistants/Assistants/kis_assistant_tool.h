@@ -85,6 +85,8 @@ private:
     // This uses m_handleDrag or m_newAssistant to figure out what handle to snap and where
     bool snap(KoPointerEvent *event);
 
+    //Recorded state for toggle panel for docker tool options visibility
+    bool ToggleDockToolOptionsVisible = false;
     void beginActionImpl(KoPointerEvent *event);
     void continueActionImpl(KoPointerEvent *event);
     void endActionImpl(KoPointerEvent *event);
@@ -120,6 +122,8 @@ private Q_SLOTS:
 
     void slotSelectedAssistantTypeChanged();
     void slotChangeFixedLengthUnit(int index);
+
+    void slotToggleDockToolOptionsVisible();
 
     //When the user checks an editor widget button checkbox, update the AssistantEditorData
     //struct within the current document's KisPaintingAssistantsDecoration instance

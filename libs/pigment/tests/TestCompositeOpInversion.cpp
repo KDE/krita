@@ -304,10 +304,12 @@ enum TestFlag {
     None = 0x0,
     HDR = 0x1,
     SrcCannotMakeNegative = 0x2,
-    UseStrictSdrRange = 0x4,
-    PreservesSdrRange = 0x8,
-    PreservesStrictSdrRange = 0x10,
-    HasUnboundedRange = 0x20
+    VerifyConsistencyInStrictSdrRange = 0x4,
+    SdrRangePreserveStable = 0x8,
+    SdrRangePreserveUnstable = 0x10,
+    HasUnboundedRange = 0x20,
+    PositivePreserveStable = 0x40,
+    PositivePreserveUnstable = 0x80,
 };
 Q_DECLARE_FLAGS(TestFlags, TestFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TestFlags)
@@ -349,26 +351,29 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
     std::vector<std::pair<QString, TestFlags>> result;
 
     auto addSdrPreservingHdrOp = [&] (const QString &id) {
-        result.emplace_back(id, HDR | SrcCannotMakeNegative | PreservesStrictSdrRange);
-        result.emplace_back(id, SrcCannotMakeNegative | PreservesSdrRange);
+        result.emplace_back(id, HDR | SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+        result.emplace_back(id, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
     };
 
     addSdrPreservingHdrOp(COMPOSITE_PIN_LIGHT);
     addSdrPreservingHdrOp(COMPOSITE_BURN);
     addSdrPreservingHdrOp(COMPOSITE_LINEAR_BURN);
 
-    auto addSdrNonPreservingHdrOp = [&] (const QString &id) {
-        result.emplace_back(id, HDR | SrcCannotMakeNegative);
-        result.emplace_back(id, SrcCannotMakeNegative | PreservesSdrRange);
-    };
+    // Hard-mix is the only stable positive-preserving mode
+    result.emplace_back(COMPOSITE_HARD_MIX, HDR | SrcCannotMakeNegative | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HARD_MIX, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
 
-    addSdrNonPreservingHdrOp(COMPOSITE_HARD_MIX);
-    addSdrNonPreservingHdrOp(COMPOSITE_HARD_OVERLAY);
-    addSdrNonPreservingHdrOp(COMPOSITE_DODGE);
-    addSdrNonPreservingHdrOp(COMPOSITE_VIVID_LIGHT);
+    result.emplace_back(COMPOSITE_HARD_OVERLAY, HDR | SrcCannotMakeNegative | PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_HARD_OVERLAY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+
+    result.emplace_back(COMPOSITE_DODGE, HDR | SrcCannotMakeNegative | PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_DODGE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+
+    result.emplace_back(COMPOSITE_VIVID_LIGHT, HDR | SrcCannotMakeNegative | PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_VIVID_LIGHT, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
 
     auto addSdrPreservingOp = [&] (const QString &id) {
-        result.emplace_back(id, PreservesSdrRange);
+        result.emplace_back(id, SdrRangePreserveStable | PositivePreserveStable);
     };
 
     addSdrPreservingOp(COMPOSITE_DARKEN);
@@ -382,9 +387,13 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
     addSdrPreservingOp(COMPOSITE_ERASE);
     addSdrPreservingOp(COMPOSITE_COPY);
     addSdrPreservingOp(COMPOSITE_GREATER);
+    addSdrPreservingOp(COMPOSITE_GRAIN_MERGE);
+    addSdrPreservingOp(COMPOSITE_GRAIN_EXTRACT);
+    addSdrPreservingOp(COMPOSITE_EXCLUSION);
+    addSdrPreservingOp(COMPOSITE_NEGATION);
 
     auto addStrictSdrPreservingOp = [&] (const QString &id) {
-        result.emplace_back(id, PreservesStrictSdrRange);
+        result.emplace_back(id, SdrRangePreserveUnstable | PositivePreserveStable);
     };
 
     addStrictSdrPreservingOp(COMPOSITE_MULT);
@@ -393,36 +402,36 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
 
 
     auto addUnboundedRangeOp = [&] (const QString &id) {
-        result.emplace_back(id, HasUnboundedRange);
+        result.emplace_back(id, HasUnboundedRange | PositivePreserveStable);
     };
 
     addUnboundedRangeOp(COMPOSITE_ADD);
-    addUnboundedRangeOp(COMPOSITE_SUBTRACT);
-    addUnboundedRangeOp(COMPOSITE_INVERSE_SUBTRACT);
-    addUnboundedRangeOp(COMPOSITE_DIVIDE);
     addUnboundedRangeOp(COMPOSITE_LUMINOSITY_SAI);
-    addUnboundedRangeOp(COMPOSITE_EXCLUSION);
-    addUnboundedRangeOp(COMPOSITE_NEGATION);
-    addUnboundedRangeOp(COMPOSITE_GRAIN_MERGE);
-    addUnboundedRangeOp(COMPOSITE_GRAIN_EXTRACT);
+
+
+
+
+    result.emplace_back(COMPOSITE_DIVIDE, PositivePreserveUnstable);
+    result.emplace_back(COMPOSITE_INVERSE_SUBTRACT, HasUnboundedRange);
+    result.emplace_back(COMPOSITE_SUBTRACT, HasUnboundedRange);
 
     // both channels are clamped, sdr only!
-    result.emplace_back(COMPOSITE_SOFT_LIGHT_SVG, SrcCannotMakeNegative | PreservesSdrRange);
-    result.emplace_back(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, SrcCannotMakeNegative | PreservesSdrRange);
+    result.emplace_back(COMPOSITE_SOFT_LIGHT_SVG, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_SOFT_LIGHT_PHOTOSHOP, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
 
-    result.emplace_back(COMPOSITE_HARD_MIX_PHOTOSHOP, SrcCannotMakeNegative | UseStrictSdrRange | PreservesStrictSdrRange);
-    result.emplace_back(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, SrcCannotMakeNegative | UseStrictSdrRange | PreservesStrictSdrRange);
-    result.emplace_back(COMPOSITE_ARC_TANGENT, UseStrictSdrRange | PreservesStrictSdrRange);
+    result.emplace_back(COMPOSITE_HARD_MIX_PHOTOSHOP, SrcCannotMakeNegative | VerifyConsistencyInStrictSdrRange | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, SrcCannotMakeNegative | VerifyConsistencyInStrictSdrRange | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_ARC_TANGENT, VerifyConsistencyInStrictSdrRange | SdrRangePreserveUnstable | PositivePreserveUnstable);
 
     // doesn't clamp result, always preserves SDR state
-    result.emplace_back(COMPOSITE_HARD_LIGHT, SrcCannotMakeNegative | PreservesStrictSdrRange);
-    result.emplace_back(COMPOSITE_PARALLEL, SrcCannotMakeNegative | PreservesSdrRange);
-    result.emplace_back(COMPOSITE_EQUIVALENCE, SrcCannotMakeNegative | PreservesStrictSdrRange);
-    result.emplace_back(COMPOSITE_GEOMETRIC_MEAN, SrcCannotMakeNegative | PreservesSdrRange);
-    result.emplace_back(COMPOSITE_ADDITIVE_SUBTRACTIVE, SrcCannotMakeNegative | PreservesSdrRange);
-    result.emplace_back(COMPOSITE_GAMMA_DARK, SrcCannotMakeNegative | PreservesStrictSdrRange);
-    result.emplace_back(COMPOSITE_GAMMA_LIGHT, SrcCannotMakeNegative | PreservesSdrRange);
-    result.emplace_back(COMPOSITE_GAMMA_ILLUMINATION, SrcCannotMakeNegative | PreservesStrictSdrRange);
+    result.emplace_back(COMPOSITE_HARD_LIGHT, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_PARALLEL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_EQUIVALENCE, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_GEOMETRIC_MEAN, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_ADDITIVE_SUBTRACTIVE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_GAMMA_DARK, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_GAMMA_LIGHT, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_GAMMA_ILLUMINATION, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
 
     return result;
 }
@@ -655,7 +664,7 @@ void TestCompositeOpInversion::testF32vsU16ConsistencyInSDR()
         };
 
         auto checkInSdrRange = [=] (qreal value) {
-            return checkInSdrRangeImpl(value, flags.testFlag(UseStrictSdrRange));
+            return checkInSdrRangeImpl(value, flags.testFlag(VerifyConsistencyInStrictSdrRange));
         };
 
         const bool isInSdrRange =
@@ -824,8 +833,8 @@ void TestCompositeOpInversion::testPreservesStrictSdrRange_data()
 
     KritaUtils::filterContainer(ids,
                                 [&] (const std::pair<QString, TestFlags> &op) {
-                                    return op.second.testFlag(PreservesSdrRange) ||
-                                        op.second.testFlag(PreservesStrictSdrRange);
+                                    return op.second.testFlag(SdrRangePreserveStable) ||
+                                        op.second.testFlag(SdrRangePreserveUnstable);
                                 });
 
     addAllOps(ids);
@@ -842,7 +851,7 @@ void TestCompositeOpInversion::testPreservesLooseSdrRange_data()
 
     KritaUtils::filterContainer(ids,
                                 [&] (const std::pair<QString, TestFlags> &op) {
-                                    return op.second.testFlag(PreservesSdrRange);
+                                    return op.second.testFlag(SdrRangePreserveStable);
                                 });
 
     addAllOps(ids);
@@ -902,6 +911,124 @@ void TestCompositeOpInversion::testSrcCannotMakeNegative()
     }
 }
 
+void TestCompositeOpInversion::testPreservesStrictNegative_data()
+{
+    auto ids = generateCompositeOpIdSet();
 
+    KritaUtils::filterContainer(ids,
+                                [&] (const std::pair<QString, TestFlags> &op) {
+                                    return op.second.testFlag(PositivePreserveStable) ||
+                                        op.second.testFlag(PositivePreserveUnstable);
+                                });
+
+
+    addAllOps(ids);
+}
+
+void TestCompositeOpInversion::testPreservesStrictNegative()
+{
+    testNegativeImpl(true);
+}
+
+void TestCompositeOpInversion::testPreservesLooseNegative_data()
+{
+    auto ids = generateCompositeOpIdSet();
+
+    KritaUtils::filterContainer(ids,
+                                [&] (const std::pair<QString, TestFlags> &op) {
+                                    return op.second.testFlag(PositivePreserveStable);
+                                });
+
+
+    addAllOps(ids);
+}
+
+void TestCompositeOpInversion::testPreservesLooseNegative()
+{
+    testNegativeImpl(false);
+}
+
+void TestCompositeOpInversion::testNegativeImpl(bool useStrictZeroCheck)
+{
+    QFETCH(QString, id);
+    QFETCH(TestFlags, flags);
+
+    const KoColorSpace* csF = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+    const KoCompositeOp *opF = createOp(csF, id, flags.testFlag(HDR));
+
+    KisColorPairSampler sampler;
+    sampler.alphaValues = generateOpacityValues();
+    sampler.colorValues = generateWideColorValues();
+
+    for (auto it = sampler.begin(); it != sampler.end(); ++it) {
+        KoColor srcColorF = it.srcColor(csF);
+        KoColor dstColorF = it.dstColor(csF);
+        KoColor resultColorF = dstColorF;
+
+        opF->composite(resultColorF.data(), 0, srcColorF.data(), 0,
+                       0, 0,
+                       1, 1,
+                       it.opacity());
+
+        const float resultColorValueF = getColorValue(resultColorF);
+
+        const bool srcCheckValid = useStrictZeroCheck ?
+            it.srcColor() > 0.0 : float(it.srcColor()) >= -std::numeric_limits<float>::epsilon();
+
+        const bool dstCheckValid = useStrictZeroCheck ?
+            it.dstColor() > 0.0 : float(it.dstColor()) >= -std::numeric_limits<float>::epsilon();
+
+        const bool resultCheckValid = useStrictZeroCheck ?
+            resultColorValueF > -1.0f * std::numeric_limits<float>::epsilon() :
+            resultColorValueF >= -2.0f * std::numeric_limits<float>::epsilon();
+
+        if (srcCheckValid &&
+            dstCheckValid &&
+            !resultCheckValid) {
+
+            qDebug() << "--- resulting value in SDR range generates negative result! ---";
+            qDebug() << ppVar(useStrictZeroCheck);
+            qDebug() << ppVar(it.opacity());
+            qDebug() << "F32:" << fixed << qSetRealNumberPrecision(8)
+                     << "s:" << dumpPixel(srcColorF) << "+" << "d:" << dumpPixel(dstColorF) << "->" << dumpPixel(resultColorF);
+            QFAIL("resulting value in SDR range generates negative result!");
+        }
+    }
+}
+
+
+
+void TestCompositeOpInversion::dumpOpCategories()
+{
+    auto ids = generateCompositeOpIdSet();
+    std::sort(ids.begin(), ids.end());
+
+    auto printCategory = [ids] (const QString &categoryName, TestFlags includeFlags, bool flagsFound = true) {
+        qDebug().noquote().nospace() << categoryName << ":";
+        for (auto it = ids.begin(); it != ids.end(); ++it) {
+            if (bool(it->second & includeFlags) == flagsFound) {
+                const QString hdrSuffix = it->second.testFlag(HDR) ? " HDR" : "";
+
+                qDebug().noquote().nospace() << "    * \"" << KoCompositeOpRegistry::instance().getCompositeOpDisplayName(it->first) << "\" (" << it->first << ")" << hdrSuffix;
+            }
+        }
+    };
+
+    qDebug();
+    qDebug();
+    printCategory("Preserve SDR range (stable)", SdrRangePreserveStable);
+    qDebug();
+    printCategory("Preserve SDR range (unstable)", SdrRangePreserveUnstable);
+    qDebug();
+    printCategory("Does NOT preserve SDR range", SdrRangePreserveStable | SdrRangePreserveUnstable, false);
+
+    qDebug();
+    qDebug();
+    printCategory("Preserve positive range (stable)", PositivePreserveStable);
+    qDebug();
+    printCategory("Preserve positive range (unstable)", PositivePreserveUnstable);
+    qDebug();
+    printCategory("Does NOT preserve positive range", PositivePreserveStable | PositivePreserveUnstable, false);
+}
 
 SIMPLE_TEST_MAIN(TestCompositeOpInversion)

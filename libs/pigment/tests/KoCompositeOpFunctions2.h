@@ -373,20 +373,24 @@ inline T cfSubtract(T src, T dst) {
 }
 
 template<class T>
-inline T cfInverseSubtract(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(dst) - inv(src));
-}
+struct CFInverseSubtract : ClampedSourceCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return clamp<T>(composite_type(dst) - inv(src));
+    }
+};
 
 template<class T>
-inline T cfExclusion(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
-    composite_type x = mul(src, dst);
-    return clamp<T>(composite_type(dst) + src - (x + x));
-}
+struct CFExclusion : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+
+        composite_type x = mul(src, dst);
+        return clamp<T>(composite_type(dst) + src - (x + x));
+    }
+};
 
 template<class T>
 inline T cfDivide(T src, T dst) {
@@ -594,18 +598,22 @@ struct CFEquivalence : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> 
 };
 
 template<class T>
-inline T cfGrainMerge(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(dst) + src - halfValue<T>());
-}
+struct CFGrainMerge : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return clampToSDR<T>(composite_type(dst) + src - halfValue<T>());
+    }
+};
 
 template<class T>
-inline T cfGrainExtract(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(dst) - src + halfValue<T>());
-}
+struct CFGrainExtract : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return clampToSDR<T>(composite_type(dst) - src + halfValue<T>());
+    }
+};
 
 template<class T,
          template <typename> typename ClampPolicy>
@@ -952,18 +960,21 @@ inline T cfSoftLightPegtopDelphi(T src, T dst) {
     return clamp<T>(cfAddition(mul(dst,cfScreen(src,dst)),mul(mul(src,dst),inv(dst)))); 
 }
 
+
 template<class T>
-inline T cfNegation(T src, T dst) {
-    using namespace Arithmetic;
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+struct CFNegation : ClampedSourceAndDestinationCompositeFunctorBase<T> {
+    static inline T composeChannel(T src, T dst) {
+        using namespace Arithmetic;
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
         
-    composite_type unit = unitValue<T>();
-    composite_type a = unit - src - dst;
-    composite_type s = std::abs(a);
-    composite_type d = unit - s;
+        composite_type unit = unitValue<T>();
+        composite_type a = unit - src - dst;
+        composite_type s = std::abs(a);
+        composite_type d = unit - s;
         
-    return T(d);
-}
+        return T(d);
+    }
+};
 
 template<class T>
 inline T cfNor(T src, T dst) {

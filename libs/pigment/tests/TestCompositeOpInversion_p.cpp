@@ -168,12 +168,12 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
     } else if (id == COMPOSITE_INVERSE_SUBTRACT) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfInverseSubtract<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFInverseSubtract<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfInverseSubtract<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFInverseSubtract<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_MULT) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
@@ -198,12 +198,12 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
     } else if (id == COMPOSITE_EXCLUSION) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfExclusion<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFExclusion<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfExclusion<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFExclusion<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_DIFF) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
@@ -248,12 +248,12 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
     } else if (id == COMPOSITE_NEGATION) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfNegation<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFNegation<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfNegation<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFNegation<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_HARD_MIX) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
@@ -343,22 +343,22 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
     } else if (id == COMPOSITE_GRAIN_MERGE) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfGrainMerge<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFGrainMerge<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfGrainMerge<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFGrainMerge<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_GRAIN_EXTRACT) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfGrainExtract<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFGrainExtract<float>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfGrainExtract<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
+            using func = CFGrainExtract<quint16>;
+            op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_GEOMETRIC_MEAN) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {

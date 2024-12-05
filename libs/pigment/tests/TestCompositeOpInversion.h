@@ -36,7 +36,16 @@ private Q_SLOTS:
     void testSrcCannotMakeNegative();
     void testSrcCannotMakeNegative_data();
 
+    void testPreservesStrictNegative();
+    void testPreservesStrictNegative_data();
+
+    void testPreservesLooseNegative();
+    void testPreservesLooseNegative_data();
+
+    void dumpOpCategories();
+
 private:
+    void testNegativeImpl(bool useStrictZeroCheck);
     void testPreservesSdrRangeImpl(bool useStrictRange);
 };
 

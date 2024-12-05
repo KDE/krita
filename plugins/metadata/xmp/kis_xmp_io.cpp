@@ -8,6 +8,9 @@
 
 #include <string>
 
+#include <QIODevice>
+#include <QRegExp>
+
 #include <kis_exiv2_common.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_parser.h>
@@ -16,6 +19,7 @@
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_type_info.h>
 #include <kis_meta_data_value.h>
+
 
 #include <kis_debug.h>
 

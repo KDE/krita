@@ -90,7 +90,11 @@ if (GSL_FOUND)
 endif ()
 
 if (ANDROID)
-    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt${QT_MAJOR_VERSION}::AndroidExtras log)
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} log)
+    else()
+        target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
+    endif()
 endif()
 
 if(APPLE)

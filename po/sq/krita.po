@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-23 03:15+0000\n"
+"POT-Creation-Date: 2024-12-05 03:24+0000\n"
 "PO-Revision-Date: 2011-06-01 01:29-0400\n"
 "Last-Translator: Agron Selimaj <linuxmaster@verizon.net>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -13522,12 +13522,9 @@ msgstr "Imazhi"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:399 krita/kritamenu.action:400
-#: krita/kritamenu.action:412
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
@@ -13535,9 +13532,12 @@ msgstr "Imazhi"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
+#: krita/kritamenu.action:412
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"

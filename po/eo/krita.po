@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-23 03:15+0000\n"
+"POT-Creation-Date: 2024-12-05 03:24+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -13535,12 +13535,9 @@ msgstr "Alglui en &Novan Bildon"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:399 krita/kritamenu.action:400
-#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
@@ -13548,9 +13545,12 @@ msgstr "Alglui en Novan Bildon"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
+#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"

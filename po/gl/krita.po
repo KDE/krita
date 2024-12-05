@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-23 03:15+0000\n"
-"PO-Revision-Date: 2024-11-13 21:25+0100\n"
+"POT-Creation-Date: 2024-12-05 03:24+0000\n"
+"PO-Revision-Date: 2024-12-04 20:56+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -12611,12 +12611,10 @@ msgstr "Converter o espazo de cores da capa"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Converter o espazo de cores da capa"
+msgstr "Unificar o espazo de cores das capas"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12626,6 +12624,7 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Converter todas as capas ao espazo de cores da imaxe (se teñen un distinto)."
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3436
@@ -13580,12 +13579,9 @@ msgstr "Pegar nunha &nova Imaxe"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:399 krita/kritamenu.action:400
-#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
@@ -13593,9 +13589,12 @@ msgstr "Pegar nunha nova Imaxe"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
+#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
@@ -17287,12 +17286,9 @@ msgid "Convert Projection Color Space"
 msgstr "Converter o espazo de cores de proxección"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Converter o espazo de cores da capa"
+msgstr "Unificar o espazo de cores das capas"
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"

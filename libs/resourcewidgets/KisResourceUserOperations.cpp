@@ -34,7 +34,7 @@ bool KisResourceUserOperations::resourceNameIsAlreadyUsed(KisResourceModel *reso
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         int sumHere = 0;
 #else
-        long long int sumHere = 0;
+        qsizetype sumHere = 0;
 #endif
         if (resourceIdToIgnore < 0) {
             return list.size();

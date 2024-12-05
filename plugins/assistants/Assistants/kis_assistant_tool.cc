@@ -1870,7 +1870,7 @@ void KisAssistantTool::slotSelectedAssistantTypeChanged()
 void KisAssistantTool::slotToggleDockToolOptionsVisible(){
 
     ToggleDockToolOptionsVisible = ToggleDockToolOptionsVisible ? false:true;
-    m_options.showDockerOptionsContainer->setVisible(ToggleDockToolOptionsVisible);
+    m_options.showDockerOptionsPanel->setVisible(ToggleDockToolOptionsVisible);
 
     if (ToggleDockToolOptionsVisible){
         m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-down"));

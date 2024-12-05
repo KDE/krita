@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-28 01:48+0000\n"
-"PO-Revision-Date: 2024-11-13 21:25+0100\n"
+"POT-Creation-Date: 2024-12-05 01:50+0000\n"
+"PO-Revision-Date: 2024-12-04 20:56+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -12696,12 +12696,10 @@ msgstr "Converter o espazo de cores da capa"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Converter o espazo de cores da capa"
+msgstr "Unificar o espazo de cores das capas"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -12711,6 +12709,7 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Converter todas as capas ao espazo de cores da imaxe (se teñen un distinto)."
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
@@ -13685,12 +13684,9 @@ msgstr "Pegar nunha &nova Imaxe"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:399 krita/kritamenu.action:400
-#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
@@ -13698,9 +13694,12 @@ msgstr "Pegar nunha nova Imaxe"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
+#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
@@ -17439,12 +17438,9 @@ msgid "Convert Projection Color Space"
 msgstr "Converter o espazo de cores de proxección"
 
 #: libs/image/kis_image.cc:1401
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Converter o espazo de cores da capa"
+msgstr "Unificar o espazo de cores das capas"
 
 #: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
@@ -17601,11 +17597,9 @@ msgid "Error"
 msgstr "Erro"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Converter o espazo de cores da capa"
+msgstr "O espazo de cores da capa non coincide"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17625,6 +17619,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"O espazo de cores da capa é distinto do da imaxe:\n"
+"%1 (%2),\n"
+"o que pode enlentecer as operacións."
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -27597,10 +27594,9 @@ msgstr "Ton, Saturación, Valor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Escoller o anel de historial de cores."
+msgstr "Ordenar o anel de historial de cores por:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -41736,10 +41732,9 @@ msgstr "A interacción remata"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Selector de sombras mínimo"
+msgstr "Amosar un selector de sombras mínimo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -45118,18 +45113,16 @@ msgid "Minimize Channel"
 msgstr "Minimizar a canle"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Sobreposición de cor"
+msgstr "S&obreposición rápida de cor…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "Sobreposición de cor"
+msgstr "Sobreposición rápida de cor"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -45149,24 +45142,21 @@ msgstr "Tomador de mostras de cor:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "Método de &fusión:"
+msgstr "Método de fusión:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Definir a opacidade principal da capa."
+msgstr "Definir a opacidade principal da cor de sobreposición."
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
-#, fuzzy, kde-format
-#| msgid "Adjust the transparency of the layer"
+#, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Axustar a transparencia da capa"
+msgstr "Axustar a transparencia da cor de sobreposición"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -53697,7 +53687,7 @@ msgstr "Inverter o padrón"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "Inverter automaticamente para o borrador."
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -57148,7 +57138,7 @@ msgstr "Axustar o tamaño da exportación ao contido da capa"
 
 #: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Engadir un prefixo incremental."
 
 #: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"

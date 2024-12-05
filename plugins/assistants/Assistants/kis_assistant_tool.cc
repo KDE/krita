@@ -1655,7 +1655,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.deleteAllAssistantsButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_options.deleteAllAssistantsButton->setIconSize(QSize(16, 16));
 
-        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
         m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));
 
         QList<KoID> assistants;
@@ -1873,10 +1873,10 @@ void KisAssistantTool::slotToggleDockToolOptionsVisible(){
     m_options.showDockerOptionsContainer->setVisible(ToggleDockToolOptionsVisible);
 
     if (ToggleDockToolOptionsVisible){
-        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-down.svg"));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
     }
     else{
-        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("16_light_draw-arrow-forward.svg"));
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     }
     
     m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));

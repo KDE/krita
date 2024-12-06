@@ -287,7 +287,7 @@ target_link_libraries(kritaflake
 
 if (QT_MAJOR_VERSION STREQUAL "6")
 target_link_libraries(kritaflake
-    PUBLIC
+    PRIVATE
         Qt${QT_MAJOR_VERSION}::OpenGLWidgets
 )
 endif()

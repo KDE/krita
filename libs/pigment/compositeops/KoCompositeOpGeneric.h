@@ -3,12 +3,31 @@
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
 */
-
 #ifndef _KOCOMPOSITEOP_GENERIC_H_
 #define _KOCOMPOSITEOP_GENERIC_H_
 
-//#include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
+#include "KoCompositeOpGenericFunctorBase.h"
+
+namespace detail {
+
+/**
+ * A special class to convert old-style composite function into a functor
+ * with clamping properties
+ */
+
+template <class Traits,
+          typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type)>
+struct CompositeFunctionWrapper : KoCompositeOpGenericFunctorBase<typename Traits::channels_type>
+{
+    using channels_type = typename Traits::channels_type;
+
+    static inline channels_type composeChannel(channels_type src, channels_type dst) {
+        return compositeFunc(src, dst);
+    }
+};
+
+}
 
 /**
  * Generic CompositeOp for separable channel compositing functions
@@ -19,19 +38,19 @@
  */
 template<
     class Traits,
-    typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type),
+    typename CompositeOpFunctor,
     typename BlendingPolicy
 >
-class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc,BlendingPolicy> >
+class KoCompositeOpGenericSCFunctor: public KoCompositeOpBase< Traits, KoCompositeOpGenericSCFunctor<Traits,CompositeOpFunctor,BlendingPolicy> >
 {
-    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc,BlendingPolicy> > base_class;
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSCFunctor<Traits,CompositeOpFunctor,BlendingPolicy> > base_class;
     typedef typename Traits::channels_type                                            channels_type;
     
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;
     
 public:
-    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& category)
+    KoCompositeOpGenericSCFunctor(const KoColorSpace* cs, const QString& id, const QString& category)
         : base_class(cs, id, category) { }
 
 public:
@@ -43,43 +62,101 @@ public:
         
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
 
+        if (isZeroValue(srcAlpha)) {
+            return dstAlpha;
+        }
+
         if(alphaLocked) {
-            if(dstAlpha != zeroValue<channels_type>()) {
+            if(!isZeroValue(dstAlpha)) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        const channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
-                        const channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
+                        const channels_type srcInBlendSpace =
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        src[i]));
+                        const channels_type dstInBlendSpace =
+                                CompositeOpFunctor::clampDestinationChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        dst[i]));
 
                         dst[i] = BlendingPolicy::fromAdditiveSpace(
                             lerp(dstInBlendSpace,
-                                 compositeFunc(srcInBlendSpace, dstInBlendSpace),
+                                 CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace),
                                  srcAlpha));
                     }
                 }
             }
             
             return dstAlpha;
-        }
-        else {
+        } else if (isZeroValue(dstAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(src[i])));
+                }
+            }
+            return srcAlpha;
+        } else if (isUnitValue(dstAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    const channels_type srcInBlendSpace =
+                            CompositeOpFunctor::clampSourceChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    src[i]));
+                    const channels_type dstInBlendSpace =
+                            CompositeOpFunctor::clampDestinationChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    dst[i]));
+
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                        lerp(dstInBlendSpace,
+                             CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace),
+                             srcAlpha));
+                }
+            }
+            return unitValue<channels_type>();
+        }  else if (isUnitValue(srcAlpha)) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    const channels_type srcInBlendSpace =
+                            CompositeOpFunctor::clampSourceChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    src[i]));
+                    const channels_type dstInBlendSpace =
+                            CompositeOpFunctor::clampDestinationChannelValue(
+                                BlendingPolicy::toAdditiveSpace(
+                                    dst[i]));
+
+                    dst[i] = BlendingPolicy::fromAdditiveSpace(
+                        lerp(srcInBlendSpace,
+                             CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace),
+                             dstAlpha));
+                }
+            }
+            return unitValue<channels_type>();
+        } else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
-            
-            if(newDstAlpha != zeroValue<channels_type>()) {
+
+            if (!isZeroValue(newDstAlpha)) {
 
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                        const channels_type srcInBlendSpace = BlendingPolicy::toAdditiveSpace(src[i]);
-                        const channels_type dstInBlendSpace = BlendingPolicy::toAdditiveSpace(dst[i]);
+                        const channels_type srcInBlendSpace =
+                                CompositeOpFunctor::clampSourceChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        src[i]));
+                        const channels_type dstInBlendSpace =
+                                CompositeOpFunctor::clampDestinationChannelValue(
+                                    BlendingPolicy::toAdditiveSpace(
+                                        dst[i]));
 
                         channels_type result =
                             blend(srcInBlendSpace, srcAlpha,
                                   dstInBlendSpace, dstAlpha,
-                                  compositeFunc(srcInBlendSpace, dstInBlendSpace));
-
-
+                                  CompositeOpFunctor::composeChannel(srcInBlendSpace, dstInBlendSpace));
 
                         dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
-
-                        //qDebug() << i << ppVar(result) << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace)) << div(result, newDstAlpha);
                     }
                 }
             }
@@ -89,6 +166,19 @@ public:
     }
 };
 
+
+template<
+    class Traits,
+    typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type),
+    typename BlendingPolicy
+>
+class KoCompositeOpGenericSC : public KoCompositeOpGenericSCFunctor<Traits, detail::CompositeFunctionWrapper<Traits, compositeFunc>, BlendingPolicy>
+{
+protected:
+    using base_class = KoCompositeOpGenericSCFunctor<Traits, detail::CompositeFunctionWrapper<Traits, compositeFunc>, BlendingPolicy>;
+public:
+    using base_class::base_class;
+};
 
 /**
  * Generic CompositeOp for nonseparable/HSL channel compositing functions

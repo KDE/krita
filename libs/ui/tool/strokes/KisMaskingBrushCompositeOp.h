@@ -136,7 +136,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, fal
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(src, dst);
+        return CFOverlay<channels_type>::composeChannel(src, dst);
     }
 };
 
@@ -148,7 +148,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, tru
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return CFOverlay<channels_type>::composeChannel(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 
@@ -165,7 +165,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, tru
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(Arithmetic::unionShapeOpacity(src, invertedStrength), dst);
+        return CFOverlay<channels_type>::composeChannel(Arithmetic::unionShapeOpacity(src, invertedStrength), dst);
     }
 };
 
@@ -268,25 +268,12 @@ inline T colorBurnAlphaHelper(T src, T dst)
                   composite_type(KoColorSpaceMathsTraits<T>::unitValue));
 }
 
-// Integer version of color burn alpha
 template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-colorBurnAlpha(T src, T dst)
+inline T colorBurnAlpha(T src, T dst)
 {
     using namespace Arithmetic;
-    return inv(colorBurnHelper(src, dst));
-}
-
-// Floating point version of color burn alpha
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-colorBurnAlpha(T src, T dst)
-{
-    using namespace Arithmetic;
-    const T result = colorBurnAlphaHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
+    using namespace KoCompositeOpClampPolicy;
+    return FunctorWithSDRClampPolicy<CFColorBurn, T>::composeChannel(src, dst);
 }
 
 template <typename channels_type>
@@ -431,7 +418,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixPhotoshop(src, dst);
+        return CFHardMixPhotoshop<channels_type>::composeChannel(src, dst);
     }
 };
 
@@ -443,7 +430,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixPhotoshop(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return CFHardMixPhotoshop<channels_type>::composeChannel(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 
@@ -461,7 +448,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
     channels_type apply(channels_type src, channels_type dst)
     {
         using namespace Arithmetic;
-        return mul(cfHardMixPhotoshop(unionShapeOpacity(src, invertedStrength), dst),
+        return mul(CFHardMixPhotoshop<channels_type>::composeChannel(unionShapeOpacity(src, invertedStrength), dst),
                    unionShapeOpacity(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };

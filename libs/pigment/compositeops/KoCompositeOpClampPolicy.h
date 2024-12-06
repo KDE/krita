@@ -58,7 +58,7 @@ struct ClampAsFloatSDR {
     static compositetype fixInfiniteAfterDivision(compositetype value) {
         // Constantly dividing by small numbers can quickly make the result
         // become infinity or NaN, so we check that and correct (kind of clamping)
-        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::unitValue;
+        return std::isfinite(value) ? value : compositetype(KoColorSpaceMathsTraits<T>::unitValue);
     }
 };
 
@@ -84,9 +84,21 @@ struct ClampAsFloatHDR {
     static compositetype fixInfiniteAfterDivision(compositetype value) {
         // Constantly dividing by small numbers can quickly make the result
         // become infinity or NaN, so we check that and correct (kind of clamping)
-        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::max;
+        return std::isfinite(value) ? value : compositetype(KoColorSpaceMathsTraits<T>::max);
     }
 };
+
+
+template <template <typename U,
+                  template <typename V> typename Policy> typename Functor,
+         typename T>
+struct FunctorWithSDRClampPolicy :
+    std::conditional_t<std::numeric_limits<T>::is_integer,
+                       Functor<T, ClampAsInteger>,
+                       Functor<T, ClampAsFloatSDR>>
+{
+};
+
 }
 
 #endif // KOCOMPOSITEOPCLAMPPOLICY_H

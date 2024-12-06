@@ -28,6 +28,7 @@
 #include "compositeops/KoCompositeOpGreater.h"
 #include "compositeops/KoAlphaDarkenParamsWrapper.h"
 #include "compositeops/KoColorSpaceBlendingPolicy.h"
+#include "compositeops/KoCompositeOpClampPolicy.h"
 #include "KoOptimizedCompositeOpFactory.h"
 
 namespace _Private {
@@ -131,6 +132,7 @@ struct AddGeneralOps<Traits, true>
      typedef typename Traits::channels_type Arg;
      typedef Arg (*CompositeFunc)(Arg, Arg);
      static const qint32 alpha_pos = Traits::alpha_pos;
+     static constexpr bool IsIntegerSpace = std::numeric_limits<Arg>::is_integer;
 
      template<CompositeFunc func>
      static void add(KoColorSpace* cs, const QString& id, const QString& category) {
@@ -145,7 +147,22 @@ struct AddGeneralOps<Traits, true>
         }
      }
 
+     template<typename Functor>
+     static void add(KoColorSpace* cs, const QString& id, const QString& category) {
+         if constexpr (std::is_base_of_v<KoCmykTraits<typename Traits::channels_type>, Traits>) {
+             if (useSubtractiveBlendingForCmykColorSpaces()) {
+                 cs->addCompositeOp(new KoCompositeOpGenericSCFunctor<Traits, Functor, KoSubtractiveBlendingPolicy<Traits>>(cs, id, category));
+             } else {
+                 cs->addCompositeOp(new KoCompositeOpGenericSCFunctor<Traits, Functor, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+             }
+         } else {
+             cs->addCompositeOp(new KoCompositeOpGenericSCFunctor<Traits, Functor, KoAdditiveBlendingPolicy<Traits>>(cs, id, category));
+         }
+     }
+
      static void add(KoColorSpace* cs) {
+         using namespace KoCompositeOpClampPolicy;
+
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createOverOp(cs));
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createAlphaDarkenOp(cs));
          cs->addCompositeOp(OptimizedOpsSelector<Traits>::createCopyOp(cs));
@@ -174,37 +191,54 @@ struct AddGeneralOps<Traits, true>
             cs->addCompositeOp(new KoCompositeOpGreater<Traits, KoAdditiveBlendingPolicy<Traits>>(cs));
          }
 
-         add<&cfOverlay<Arg>       >(cs, COMPOSITE_OVERLAY       , KoCompositeOp::categoryMix());
-         add<&cfGrainMerge<Arg>    >(cs, COMPOSITE_GRAIN_MERGE   , KoCompositeOp::categoryMix());
-         add<&cfGrainExtract<Arg>  >(cs, COMPOSITE_GRAIN_EXTRACT , KoCompositeOp::categoryMix());
-         add<&cfHardMix<Arg>       >(cs, COMPOSITE_HARD_MIX      , KoCompositeOp::categoryMix());
-         add<&cfHardMixPhotoshop<Arg>>(cs, COMPOSITE_HARD_MIX_PHOTOSHOP, KoCompositeOp::categoryMix());
-         add<&cfHardMixSofterPhotoshop<Arg>>(cs, COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, KoCompositeOp::categoryMix());
-         add<&cfGeometricMean<Arg> >(cs, COMPOSITE_GEOMETRIC_MEAN, KoCompositeOp::categoryMix());
-         add<&cfParallel<Arg>      >(cs, COMPOSITE_PARALLEL      , KoCompositeOp::categoryMix());
+         add<CFOverlay<Arg>        >(cs, COMPOSITE_OVERLAY       , KoCompositeOp::categoryMix());
+         add<CFGrainMerge<Arg>     >(cs, COMPOSITE_GRAIN_MERGE   , KoCompositeOp::categoryMix());
+         add<CFGrainExtract<Arg>   >(cs, COMPOSITE_GRAIN_EXTRACT , KoCompositeOp::categoryMix());
+         add<FunctorWithSDRClampPolicy<CFHardMix, Arg>>(cs, COMPOSITE_HARD_MIX, KoCompositeOp::categoryMix());
+         if constexpr (!IsIntegerSpace) {
+             add<CFHardMix<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_HARD_MIX_HDR, KoCompositeOp::categoryMix());
+         }
+
+         add<CFHardMixPhotoshop<Arg>>(cs, COMPOSITE_HARD_MIX_PHOTOSHOP, KoCompositeOp::categoryMix());
+         add<CFHardMixSofterPhotoshop<Arg>>(cs, COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, KoCompositeOp::categoryMix());
+         add<CFGeometricMean<Arg>  >(cs, COMPOSITE_GEOMETRIC_MEAN, KoCompositeOp::categoryMix());
+         add<CFParallel<Arg>       >(cs, COMPOSITE_PARALLEL      , KoCompositeOp::categoryMix());
          add<&cfAllanon<Arg>       >(cs, COMPOSITE_ALLANON       , KoCompositeOp::categoryMix());
-         add<&cfHardOverlay<Arg>   >(cs, COMPOSITE_HARD_OVERLAY  , KoCompositeOp::categoryMix());
+         add<FunctorWithSDRClampPolicy<CFHardOverlay, Arg>>(cs, COMPOSITE_HARD_OVERLAY, KoCompositeOp::categoryMix());
+         if constexpr (!IsIntegerSpace) {
+             add<CFHardOverlay<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_HARD_OVERLAY_HDR, KoCompositeOp::categoryMix());
+         }
+
          add<&cfInterpolation<Arg> >(cs, COMPOSITE_INTERPOLATION , KoCompositeOp::categoryMix());
          add<&cfInterpolationB<Arg>>(cs, COMPOSITE_INTERPOLATIONB, KoCompositeOp::categoryMix());
-         add<&cfPenumbraA<Arg>     >(cs, COMPOSITE_PENUMBRAA     , KoCompositeOp::categoryMix());
-         add<&cfPenumbraB<Arg>     >(cs, COMPOSITE_PENUMBRAB     , KoCompositeOp::categoryMix());
+         add<CFPenumbraA<Arg>      >(cs, COMPOSITE_PENUMBRAA     , KoCompositeOp::categoryMix());
+         add<CFPenumbraB<Arg>      >(cs, COMPOSITE_PENUMBRAB     , KoCompositeOp::categoryMix());
          add<&cfPenumbraC<Arg>     >(cs, COMPOSITE_PENUMBRAC     , KoCompositeOp::categoryMix());
          add<&cfPenumbraD<Arg>     >(cs, COMPOSITE_PENUMBRAD     , KoCompositeOp::categoryMix());
 
          add<&cfScreen<Arg>      >(cs, COMPOSITE_SCREEN      , KoCompositeOp::categoryLight());
-         add<&cfColorDodge<Arg>  >(cs, COMPOSITE_DODGE       , KoCompositeOp::categoryLight());
+
+         add<FunctorWithSDRClampPolicy<CFColorDodge, Arg>>(cs, COMPOSITE_DODGE, KoCompositeOp::categoryLight());
+         if constexpr (!IsIntegerSpace) {
+             add<CFColorDodge<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_DODGE_HDR, KoCompositeOp::categoryLight());
+         }
+
          add<&cfAddition<Arg>    >(cs, COMPOSITE_LINEAR_DODGE, KoCompositeOp::categoryLight());
          add<&cfLightenOnly<Arg> >(cs, COMPOSITE_LIGHTEN     , KoCompositeOp::categoryLight());
-         add<&cfHardLight<Arg>   >(cs, COMPOSITE_HARD_LIGHT  , KoCompositeOp::categoryLight());
+         add<CFHardLight<Arg>    >(cs, COMPOSITE_HARD_LIGHT  , KoCompositeOp::categoryLight());
          add<&cfSoftLightIFSIllusions<Arg>>(cs, COMPOSITE_SOFT_LIGHT_IFS_ILLUSIONS, KoCompositeOp::categoryLight());
          add<&cfSoftLightPegtopDelphi<Arg>>(cs, COMPOSITE_SOFT_LIGHT_PEGTOP_DELPHI, KoCompositeOp::categoryLight());
-         add<&cfSoftLightSvg<Arg>>(cs, COMPOSITE_SOFT_LIGHT_SVG, KoCompositeOp::categoryLight());
-         add<&cfSoftLight<Arg>   >(cs, COMPOSITE_SOFT_LIGHT_PHOTOSHOP, KoCompositeOp::categoryLight());
-         add<&cfGammaLight<Arg>  >(cs, COMPOSITE_GAMMA_LIGHT , KoCompositeOp::categoryLight());
-         add<&cfGammaIllumination<Arg>>(cs, COMPOSITE_GAMMA_ILLUMINATION, KoCompositeOp::categoryLight());
-         add<&cfVividLight<Arg>  >(cs, COMPOSITE_VIVID_LIGHT , KoCompositeOp::categoryLight());
-         add<&cfFlatLight<Arg>   >(cs, COMPOSITE_FLAT_LIGHT  , KoCompositeOp::categoryLight());
-         add<&cfPinLight<Arg>    >(cs, COMPOSITE_PIN_LIGHT   , KoCompositeOp::categoryLight());
+         add<CFSoftLightSvg<Arg> >(cs, COMPOSITE_SOFT_LIGHT_SVG, KoCompositeOp::categoryLight());
+         add<CFSoftLight<Arg>    >(cs, COMPOSITE_SOFT_LIGHT_PHOTOSHOP, KoCompositeOp::categoryLight());
+         add<CFGammaLight<Arg>   >(cs, COMPOSITE_GAMMA_LIGHT , KoCompositeOp::categoryLight());
+         add<CFGammaIllumination<Arg>>(cs, COMPOSITE_GAMMA_ILLUMINATION, KoCompositeOp::categoryLight());
+
+         add<FunctorWithSDRClampPolicy<CFVividLight, Arg>>(cs, COMPOSITE_VIVID_LIGHT, KoCompositeOp::categoryLight());
+         if constexpr (!IsIntegerSpace) {
+             add<CFVividLight<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_VIVID_LIGHT_HDR, KoCompositeOp::categoryLight());
+         }
+         add<CFFlatLight<Arg>    >(cs, COMPOSITE_FLAT_LIGHT  , KoCompositeOp::categoryLight());
+         add<CFPinLight<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_PIN_LIGHT, KoCompositeOp::categoryLight()); // using HDR mode as default
          add<&cfLinearLight<Arg> >(cs, COMPOSITE_LINEAR_LIGHT, KoCompositeOp::categoryLight());
          add<&cfPNormA<Arg>      >(cs, COMPOSITE_PNORM_A     , KoCompositeOp::categoryLight());
          add<&cfPNormB<Arg>      >(cs, COMPOSITE_PNORM_B     , KoCompositeOp::categoryLight());
@@ -213,17 +247,17 @@ struct AddGeneralOps<Traits, true>
          add<&cfFogLightenIFSIllusions<Arg>>(cs, COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS, KoCompositeOp::categoryLight());
          add<&cfEasyDodge<Arg>   >(cs, COMPOSITE_EASY_DODGE  , KoCompositeOp::categoryLight());
 
-         add<&cfColorBurn<Arg>  >(cs, COMPOSITE_BURN        , KoCompositeOp::categoryDark());
-         add<&cfLinearBurn<Arg> >(cs, COMPOSITE_LINEAR_BURN , KoCompositeOp::categoryDark());
+         add<CFColorBurn<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_BURN, KoCompositeOp::categoryDark()); // using HDR mode as default
+         add<CFLinearBurn<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_LINEAR_BURN , KoCompositeOp::categoryDark()); // using HDR mode as default
          add<&cfDarkenOnly<Arg> >(cs, COMPOSITE_DARKEN      , KoCompositeOp::categoryDark());
-         add<&cfGammaDark<Arg>  >(cs, COMPOSITE_GAMMA_DARK  , KoCompositeOp::categoryDark());
+         add<CFGammaDark<Arg>   >(cs, COMPOSITE_GAMMA_DARK  , KoCompositeOp::categoryDark());
          add<&cfShadeIFSIllusions<Arg>>(cs, COMPOSITE_SHADE_IFS_ILLUSIONS, KoCompositeOp::categoryDark());
          add<&cfFogDarkenIFSIllusions<Arg>>(cs, COMPOSITE_FOG_DARKEN_IFS_ILLUSIONS, KoCompositeOp::categoryDark());
          add<&cfEasyBurn<Arg>   >(cs, COMPOSITE_EASY_BURN   , KoCompositeOp::categoryDark());
 
          add<&cfAddition<Arg>        >(cs, COMPOSITE_ADD             , KoCompositeOp::categoryArithmetic());
          add<&cfSubtract<Arg>        >(cs, COMPOSITE_SUBTRACT        , KoCompositeOp::categoryArithmetic());
-         add<&cfInverseSubtract<Arg> >(cs, COMPOSITE_INVERSE_SUBTRACT, KoCompositeOp::categoryArithmetic());
+         add<CFInverseSubtract<Arg>  >(cs, COMPOSITE_INVERSE_SUBTRACT, KoCompositeOp::categoryArithmetic());
          add<&cfMultiply<Arg>        >(cs, COMPOSITE_MULT            , KoCompositeOp::categoryArithmetic());
          add<&cfDivide<Arg>          >(cs, COMPOSITE_DIVIDE          , KoCompositeOp::categoryArithmetic());
 
@@ -236,10 +270,10 @@ struct AddGeneralOps<Traits, true>
 
          add<&cfArcTangent<Arg>         >(cs, COMPOSITE_ARC_TANGENT         , KoCompositeOp::categoryNegative());
          add<&cfDifference<Arg>         >(cs, COMPOSITE_DIFF                , KoCompositeOp::categoryNegative());
-         add<&cfExclusion<Arg>          >(cs, COMPOSITE_EXCLUSION           , KoCompositeOp::categoryNegative());
-         add<&cfEquivalence<Arg>        >(cs, COMPOSITE_EQUIVALENCE         , KoCompositeOp::categoryNegative());
-         add<&cfAdditiveSubtractive<Arg>>(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE, KoCompositeOp::categoryNegative());
-         add<&cfNegation<Arg>           >(cs, COMPOSITE_NEGATION            , KoCompositeOp::categoryNegative());
+         add<CFExclusion<Arg>           >(cs, COMPOSITE_EXCLUSION           , KoCompositeOp::categoryNegative());
+         add<CFEquivalence<Arg>         >(cs, COMPOSITE_EQUIVALENCE         , KoCompositeOp::categoryNegative());
+         add<CFAdditiveSubtractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE, KoCompositeOp::categoryNegative());
+         add<CFNegation<Arg>            >(cs, COMPOSITE_NEGATION            , KoCompositeOp::categoryNegative());
          
          add<&cfXor<Arg>        >(cs, COMPOSITE_XOR            , KoCompositeOp::categoryBinary());
          add<&cfOr<Arg>         >(cs, COMPOSITE_OR             , KoCompositeOp::categoryBinary());
@@ -256,10 +290,10 @@ struct AddGeneralOps<Traits, true>
          add<&cfGlow<Arg>   >(cs, COMPOSITE_GLOW   , KoCompositeOp::categoryQuadratic());
          add<&cfFreeze<Arg> >(cs, COMPOSITE_FREEZE , KoCompositeOp::categoryQuadratic());
          add<&cfHeat<Arg>   >(cs, COMPOSITE_HEAT   , KoCompositeOp::categoryQuadratic());
-         add<&cfGleat<Arg>  >(cs, COMPOSITE_GLEAT  , KoCompositeOp::categoryQuadratic());
-         add<&cfHelow<Arg>  >(cs, COMPOSITE_HELOW  , KoCompositeOp::categoryQuadratic());
-         add<&cfReeze<Arg>  >(cs, COMPOSITE_REEZE  , KoCompositeOp::categoryQuadratic());
-         add<&cfFrect<Arg>  >(cs, COMPOSITE_FRECT  , KoCompositeOp::categoryQuadratic());
+         add<CFGleat<Arg>   >(cs, COMPOSITE_GLEAT  , KoCompositeOp::categoryQuadratic());
+         add<CFHelow<Arg>   >(cs, COMPOSITE_HELOW  , KoCompositeOp::categoryQuadratic());
+         add<CFReeze<Arg>   >(cs, COMPOSITE_REEZE  , KoCompositeOp::categoryQuadratic());
+         add<CFFrect<Arg>   >(cs, COMPOSITE_FRECT  , KoCompositeOp::categoryQuadratic());
          add<&cfFhyrd<Arg>  >(cs, COMPOSITE_FHYRD  , KoCompositeOp::categoryQuadratic());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));

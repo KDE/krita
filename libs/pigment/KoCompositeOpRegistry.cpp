@@ -69,12 +69,14 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[2], KoID(COMPOSITE_EASY_BURN       ,  i18nc("Blending mode - Easy Burn", "Easy Burn")));
 
     m_map.insert(m_categories[3], KoID(COMPOSITE_DODGE       ,  i18nc("Blending mode - Color Dodge", "Color Dodge")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_DODGE_HDR   ,  i18nc("Blending mode - Color Dodge HDR", "Color Dodge HDR")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_LINEAR_DODGE,  i18nc("Blending mode - Linear Dodge", "Linear Dodge")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_LIGHTEN     ,  i18nc("Blending mode - Lighten", "Lighten")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_LINEAR_LIGHT,  i18nc("Blending mode - Linear Light", "Linear Light")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_SCREEN      ,  i18nc("Blending mode - Screen", "Screen")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_PIN_LIGHT   ,  i18nc("Blending mode - Pin Light", "Pin Light")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_VIVID_LIGHT ,  i18nc("Blending mode - Vivid Light", "Vivid Light")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_VIVID_LIGHT_HDR , i18nc("Blending mode - Vivid Light HDR", "Vivid Light HDR")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_FLAT_LIGHT  ,  i18nc("Blending mode - Flat Light", "Flat Light")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_HARD_LIGHT  ,  i18nc("Blending mode - Hard Light", "Hard Light")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_SOFT_LIGHT_IFS_ILLUSIONS,  i18nc("Blending mode - Soft Light (IFS Illusions)", "Soft Light (IFS Illusions)")));
@@ -115,6 +117,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_ERASE           ,  i18nc("Blending mode - Erase", "Erase")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_ALPHA_DARKEN    ,  i18nc("Blending mode - Alpha Darken", "Alpha Darken")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX        ,  i18nc("Blending mode - Hard Mix", "Hard Mix")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_HDR    ,  i18nc("Blending mode - Hard Mix HDR", "Hard Mix HDR")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_PHOTOSHOP,  i18nc("Blending mode - Hard Mix (Photoshop)", "Hard Mix (Photoshop)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP,  i18nc("Blending mode - Hard Mix Softer (Photoshop)", "Hard Mix Softer (Photoshop)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GRAIN_MERGE     ,  i18nc("Blending mode - Grain Merge", "Grain Merge")));
@@ -125,6 +128,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_DESTINATION_ATOP,  i18nc("Blending mode - Destination Atop", "Destination Atop")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_DESTINATION_IN  ,  i18nc("Blending mode - Destination In", "Destination In")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_OVERLAY    ,  i18nc("Blending mode - Hard Overlay", "Hard Overlay")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_OVERLAY_HDR,  i18nc("Blending mode - Hard Overlay HDR", "Hard Overlay HDR")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_INTERPOLATION   ,  i18nc("Blending mode - Interpolation", "Interpolation")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_INTERPOLATIONB  ,  i18nc("Blending mode - Interpolation - 2X", "Interpolation - 2X")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_PENUMBRAA       ,  i18nc("Blending mode - Penumbra A", "Penumbra A")));

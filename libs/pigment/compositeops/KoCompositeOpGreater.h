@@ -22,10 +22,6 @@
 
 #include "KoCompositeOpBase.h"
 
-namespace tmp3 {
-using namespace Arithmetic;
-}
-
 /**
  * Greater-than compositor - uses the greater of two alpha values to determine the color
  */
@@ -51,10 +47,10 @@ public:
                                                      const QBitArray& channelFlags                    )  {
         using namespace Arithmetic;
                 
-        if (tmp3::isUnitValue(dstAlpha)) return dstAlpha;
+        if (isUnitValue(dstAlpha)) return dstAlpha;
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
         
-        if (tmp3::isZeroValue(appliedAlpha)) return dstAlpha;
+        if (isZeroValue(appliedAlpha)) return dstAlpha;
         channels_type newDstAlpha;
         
         float dA = scale<float>(dstAlpha);
@@ -75,9 +71,9 @@ public:
 		float fakeOpacity = 1.0f - (1.0f - a)/(1.0f - dA + 1e-16f);
         newDstAlpha=scale<channels_type>(a);
 
-        if (tmp3::isZeroValue(newDstAlpha)) {
+        if (isZeroValue(newDstAlpha)) {
           // just do nothing with color channels and return null opacity
-        } else if (!tmp3::isZeroValue(dstAlpha)) {
+        } else if (!isZeroValue(dstAlpha)) {
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
                 {

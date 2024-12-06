@@ -14,59 +14,62 @@
 #include <KoCompositeOpGeneric2.h>
 #include <KoCompositeOpFunctions2.h>
 #include "compositeops/KoColorSpaceBlendingPolicy.h"
+#include "compositeops/KoCompositeOpClampPolicy.h"
 
 
 const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool isHDR)
 {
+    using namespace KoCompositeOpClampPolicy;
+
     const KoCompositeOp *op = nullptr;
 
     if (id == COMPOSITE_DODGE) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFColorDodge<float, ClampPolicyFloatHDR>;
+                using func = CFColorDodge<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryLight());
             } else {
-                using func = CFColorDodge<float, ClampPolicyFloatSDR>;
+                using func = CFColorDodge<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryLight());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFColorDodge<quint16, ClampPolicyInteger>;
+            using func = CFColorDodge<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryLight());
         }
     } else if (id == COMPOSITE_BURN) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFColorBurn<float, ClampPolicyFloatHDR>;
+                using func = CFColorBurn<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func,
                                                        KoAdditiveBlendingPolicy<Traits>>
                     (cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFColorBurn<float, ClampPolicyFloatSDR>;
+                using func = CFColorBurn<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func,
                                                        KoAdditiveBlendingPolicy<Traits>>
                     (cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFColorBurn<quint16, ClampPolicyInteger>;
+            using func = CFColorBurn<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
         }
     } else if (id == COMPOSITE_LINEAR_BURN) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFLinearBurn<float, ClampPolicyFloatHDR>;
+                using func = CFLinearBurn<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFLinearBurn<float, ClampPolicyFloatSDR>;
+                using func = CFLinearBurn<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFLinearBurn<quint16, ClampPolicyInteger>;
+            using func = CFLinearBurn<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
         }
 
@@ -104,45 +107,45 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFVividLight<float, ClampPolicyFloatHDR>;
+                using func = CFVividLight<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFVividLight<float, ClampPolicyFloatSDR>;
+                using func = CFVividLight<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFVividLight<quint16, ClampPolicyInteger>;
+            using func = CFVividLight<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_HARD_OVERLAY) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFHardOverlay<float, ClampPolicyFloatHDR>;
+                using func = CFHardOverlay<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFHardOverlay<float, ClampPolicyFloatSDR>;
+                using func = CFHardOverlay<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFHardOverlay<quint16, ClampPolicyInteger>;
+            using func = CFHardOverlay<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_PIN_LIGHT) {
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFPinLight<float, ClampPolicyFloatHDR>;
+                using func = CFPinLight<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFPinLight<float, ClampPolicyFloatSDR>;
+                using func = CFPinLight<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFPinLight<quint16, ClampPolicyInteger>;
+            using func = CFPinLight<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_ADD) {
@@ -259,15 +262,15 @@ const KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool is
         if (cs->colorDepthId() == Float32BitsColorDepthID) {
             using Traits = KoRgbF32Traits;
             if (isHDR) {
-                using func = CFHardMix<float, ClampPolicyFloatHDR>;
+                using func = CFHardMix<float, ClampAsFloatHDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             } else {
-                using func = CFHardMix<float, ClampPolicyFloatSDR>;
+                using func = CFHardMix<float, ClampAsFloatSDR>;
                 op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryDark());
             }
         } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
             using Traits = KoRgbU16Traits;
-            using func = CFHardMix<quint16, ClampPolicyInteger>;
+            using func = CFHardMix<quint16, ClampAsInteger>;
             op = new KoCompositeOpGenericSCFunctor<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
     } else if (id == COMPOSITE_HARD_MIX_PHOTOSHOP) {

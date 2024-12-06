@@ -20,88 +20,6 @@
 #include "half.h"
 #endif
 
-template <typename T>
-struct ClampPolicyInteger {
-    using channels_type = T;
-    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
-
-    static inline channels_type clampResultAllowNegative(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static inline channels_type clampResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static inline channels_type clampInvertedResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static inline compositetype fixInfiniteAfterDivision(compositetype value) {
-        return value;
-    }
-};
-
-template <typename T>
-struct ClampPolicyFloatSDR {
-    using channels_type = T;
-    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
-
-    static channels_type clampResultAllowNegative(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static inline channels_type clampResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static channels_type clampInvertedResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDR<channels_type>(value);
-    }
-
-    static compositetype fixInfiniteAfterDivision(compositetype value) {
-        // Constantly dividing by small numbers can quickly make the result
-        // become infinity or NaN, so we check that and correct (kind of clamping)
-        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::unitValue;
-    }
-};
-
-template <typename T>
-struct ClampPolicyFloatHDR {
-    using channels_type = T;
-    using compositetype = typename KoColorSpaceMathsTraits<T>::compositetype;
-
-    static channels_type clampResultAllowNegative(compositetype value) {
-        return value;
-    }
-
-    static inline channels_type clampResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDRBottom<channels_type>(value);
-    }
-
-    static channels_type clampInvertedResult(compositetype value) {
-        using namespace Arithmetic;
-        return clampToSDRTop<channels_type>(value);
-    }
-
-    static compositetype fixInfiniteAfterDivision(compositetype value) {
-        // Constantly dividing by small numbers can quickly make the result
-        // become infinity or NaN, so we check that and correct (kind of clamping)
-        return std::isfinite(value) ? value : KoColorSpaceMathsTraits<T>::max;
-    }
-};
-
-namespace tmp {
-using namespace Arithmetic;
-}
-
 template<class HSXType, class TReal>
 inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
 {
@@ -304,8 +222,8 @@ struct CFColorBurn : ClampedSourceCompositeFunctorBase<T>
 
         // Handle the case where the denominator is 0. See color dodge for a
         // detailed explanation
-        if (tmp::isZeroValue(src)) {
-            return !tmp::isUnitValueClamped(dst) ? zeroValue<T>() : clamp_policy::clampResultAllowNegative(dst);
+        if (isZeroValue(src)) {
+            return !isUnitValueClamped(dst) ? zeroValue<T>() : clamp_policy::clampResultAllowNegative(dst);
         }
         return inv<T>(
                     clamp_policy::clampInvertedResult(
@@ -348,7 +266,7 @@ struct CFColorDodge : ClampedSourceCompositeFunctorBase<T> {
         // and the numerator can remain as 0, so dividing 0 over a number (no matter
         // how small it is) gives 0.
         if (KoColorSpaceMaths<T>::isUnitValue(src)) {
-            return tmp::isZeroValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+            return isZeroValueClamped(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
         }
 
         return clamp_policy::clampResultAllowNegative(
@@ -397,8 +315,8 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     //typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if (tmp::isZeroValue(src))
-        return tmp::isZeroValue(dst) ? zeroValue<T>() : unitValue<T>();
+    if (isZeroValue(src))
+        return isZeroValue(dst) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
 }
@@ -409,7 +327,7 @@ struct CFHardLight : ClampedSourceCompositeFunctorBase<T> {
         using namespace Arithmetic;
         using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-        if (tmp::isHalfValue(src)) {
+        if (isHalfValue(src)) {
             return dst;
         }
 
@@ -489,8 +407,8 @@ struct CFVividLight : ClampedSourceCompositeFunctorBase<T> {
         using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
         if (src < halfValue<T>()) {
-            if (tmp::isZeroValue(src)) {
-                return tmp::isUnitValueClamped(dst) ? clamp_policy::clampResultAllowNegative(dst) : zeroValue<T>();
+            if (isZeroValue(src)) {
+                return isUnitValueClamped(dst) ? clamp_policy::clampResultAllowNegative(dst) : zeroValue<T>();
             }
 
             // min(1,max(0,1-(1-dst) / (2*src)))
@@ -499,13 +417,13 @@ struct CFVividLight : ClampedSourceCompositeFunctorBase<T> {
             return clamp_policy::clampResult(
                         unitValue<T>() -
                         clamp_policy::fixInfiniteAfterDivision(
-                            tmp::divideInCompositeSpace<T>(dsti, src2)
+                            divideInCompositeSpace<T>(dsti, src2)
                             )
                         );
         }
 
-        if (tmp::isUnitValue(src)) {
-            return tmp::isZeroValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
+        if (isUnitValue(src)) {
+            return isZeroValueClamped(dst) ? zeroValue<T>() : unitValue<T>();
         }
 
         // min(1,max(0, dst / (2*(1-src)))
@@ -513,7 +431,7 @@ struct CFVividLight : ClampedSourceCompositeFunctorBase<T> {
         srci2 += srci2;
         return clamp_policy::clampResultAllowNegative(
                     clamp_policy::fixInfiniteAfterDivision(
-                        tmp::divideInCompositeSpace<T>(composite_type(dst), srci2)
+                        divideInCompositeSpace<T>(composite_type(dst), srci2)
                         )
                     );
     }
@@ -540,8 +458,8 @@ template<class T>
 inline T cfArcTangent(T src, T dst) {
     using namespace Arithmetic;
     
-    if (tmp::isZeroValue(dst))
-        return tmp::isZeroValue(src) ? zeroValue<T>() : unitValue<T>();
+    if (isZeroValue(dst))
+        return isZeroValue(src) ? zeroValue<T>() : unitValue<T>();
     
     return scale<T>(2.0 * atan(scale<qreal>(src) / scale<qreal>(dst)) / Arithmetic::pi);
 }
@@ -677,11 +595,11 @@ struct CFGammaDark : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
 
-        if (tmp::isZeroValue(src)) {
+        if (isZeroValue(src)) {
             return zeroValue<T>();
         }
 
-        if (tmp::isUnitValue(dst)) {
+        if (isUnitValue(dst)) {
             return unitValue<T>();
         }
 
@@ -695,11 +613,11 @@ struct CFGammaLight : ClampedSourceAndDestinationBottomCompositeFunctorBase<T> {
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
 
-        if (tmp::isZeroValue(dst)) {
-            return tmp::isZeroValue(src) ? unitValue<T>() : zeroValue<T>();
+        if (isZeroValue(dst)) {
+            return isZeroValue(src) ? unitValue<T>() : zeroValue<T>();
         }
 
-        if (tmp::isUnitValue(dst)) {
+        if (isUnitValue(dst)) {
             return unitValue<T>();
         }
 
@@ -720,7 +638,7 @@ struct CFGeometricMean : ClampedSourceAndDestinationBottomCompositeFunctorBase<T
     static inline T composeChannel(T src, T dst) {
         using namespace Arithmetic;
 
-        if (tmp::isUnitValue(src) && tmp::isUnitValue(dst)) {
+        if (isUnitValue(src) && isUnitValue(dst)) {
             return unitValue<T>();
         }
 
@@ -745,21 +663,21 @@ struct CFHardOverlay : ClampedSourceCompositeFunctorBase<T> {
         using clamp_policy = ClampPolicy<T>;
         using composite_type = typename KoColorSpaceMathsTraits<T>::compositetype;
 
-        if (tmp::isUnitValue(src)) {
+        if (isUnitValue(src)) {
             return unitValue<T>();
         }
 
         if(src >= halfValue<T>()) {
             return clamp_policy::clampResultAllowNegative(
                         clamp_policy::fixInfiniteAfterDivision(
-                            tmp::divideInCompositeSpace<T>(composite_type(dst),
+                            divideInCompositeSpace<T>(composite_type(dst),
                                                            2 * composite_type(inv(src)))
                             )
                         );
         }
 
         return clamp_policy::clampResultAllowNegative(
-                    tmp::multiplyInCompositeSpace<T>(composite_type(dst),
+                    multiplyInCompositeSpace<T>(composite_type(dst),
                                                      2 * composite_type(src))
                     );
     }

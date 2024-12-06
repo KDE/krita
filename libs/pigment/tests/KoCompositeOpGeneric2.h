@@ -14,10 +14,6 @@
 
 #include "KoCompositeOpBase.h"
 
-namespace tmp2 {
-using namespace Arithmetic;
-}
-
 template <class Traits,
           typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type)>
 struct CompositeFunctionWrapper
@@ -55,12 +51,12 @@ struct ClampedSourceAndDestinationBottomCompositeFunctorBase
 {
     static inline T clampSourceChannelValue(T value) {
         using namespace Arithmetic;
-        return tmp2::clampChannelToSDRBottom(value);
+        return clampChannelToSDRBottom(value);
     }
 
     static inline T clampDestinationChannelValue(T value) {
         using namespace Arithmetic;
-        return tmp2::clampChannelToSDRBottom(value);
+        return clampChannelToSDRBottom(value);
     }
 };
 
@@ -111,12 +107,12 @@ public:
         
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
 
-        if (tmp2::isZeroValue(srcAlpha)) {
+        if (isZeroValue(srcAlpha)) {
             return dstAlpha;
         }
 
         if(alphaLocked) {
-            if(!tmp2::isZeroValue(dstAlpha)) {
+            if(!isZeroValue(dstAlpha)) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                         const channels_type srcInBlendSpace =
@@ -137,7 +133,7 @@ public:
             }
             
             return dstAlpha;
-        } else if (tmp2::isZeroValue(dstAlpha)) {
+        } else if (isZeroValue(dstAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     dst[i] = BlendingPolicy::fromAdditiveSpace(
@@ -146,7 +142,7 @@ public:
                 }
             }
             return srcAlpha;
-        } else if (tmp2::isUnitValue(dstAlpha)) {
+        } else if (isUnitValue(dstAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     const channels_type srcInBlendSpace =
@@ -165,7 +161,7 @@ public:
                 }
             }
             return unitValue<channels_type>();
-        }  else if (tmp2::isUnitValue(srcAlpha)) {
+        }  else if (isUnitValue(srcAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     const channels_type srcInBlendSpace =
@@ -187,7 +183,7 @@ public:
         } else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
 
-            if (!tmp2::isZeroValue(newDstAlpha)) {
+            if (!isZeroValue(newDstAlpha)) {
 
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
@@ -218,8 +214,8 @@ public:
 //                                  << ppVar(newDstAlpha)
 //                                  << ppVar(srcAlpha)
 //                                  << ppVar(dstAlpha)
-//                                  << ppVar(tmp2::isUnitValue(result))
-//                                  << ppVar(tmp2::isUnitValue(newDstAlpha));
+//                                  << ppVar(isUnitValue(result))
+//                                  << ppVar(isUnitValue(newDstAlpha));
                     }
                 }
             }

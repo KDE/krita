@@ -45,6 +45,11 @@ private Q_SLOTS:
     void dumpOpCategories();
 
 private:
+    // TODO: disabled for now
+    void testF16Modes();
+    void testF16Modes_data();
+
+private:
     void testNegativeImpl(bool useStrictZeroCheck);
     void testPreservesSdrRangeImpl(bool useStrictRange);
 };

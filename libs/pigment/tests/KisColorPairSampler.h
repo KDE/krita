@@ -135,9 +135,17 @@ struct KisColorPairSampler
             return c;
         };
 
-        static KoColor createColorF(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
+        static KoColor createColorF32(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
             KoColor c(colorSpace);
             float *ptr = reinterpret_cast<float*>(c.data());
+            ptr[0] = color;
+            ptr[3] = alpha;
+            return c;
+        };
+
+        static KoColor createColorF16(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
+            KoColor c(colorSpace);
+            half *ptr = reinterpret_cast<half*>(c.data());
             ptr[0] = color;
             ptr[3] = alpha;
             return c;
@@ -147,7 +155,9 @@ struct KisColorPairSampler
             KoColor result;
 
             if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-                result = createColorF(color, alpha, colorSpace);
+                result = createColorF32(color, alpha, colorSpace);
+            } else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
+                result = createColorF16(color, alpha, colorSpace);
             } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
                 result = createColorU(color, alpha, colorSpace);
             } else {

@@ -259,10 +259,15 @@ QDebug operator<<(QDebug debug, const Wrapper &w) {
     if (c.colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         const float *ptr = reinterpret_cast<const float*>(c.data());
         debug.nospace() << "(" << ptr[w.index] << ", " << ptr[3] << ")";
+    } else if (c.colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        const half *ptr = reinterpret_cast<const half*>(c.data());
+        debug.nospace() << "(" << ptr[w.index] << ", " << ptr[3] << ")";
     } else if (c.colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
         using namespace Arithmetic;
         const quint16 *ptr = reinterpret_cast<const quint16*>(c.data());
         debug.nospace() << "(" << qreal(ptr[2 - w.index]) / unitValue<quint16>() << ", " << qreal(ptr[3]) / unitValue<quint16>() << ")";
+    } else {
+        qFatal("not implemented");
     }
 
     return debug.space();
@@ -277,6 +282,9 @@ float getColorValue(const KoColor &c) {
 
     if (c.colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         const float *ptr = reinterpret_cast<const float*>(c.data());
+        result = ptr[0];
+    } else if (c.colorSpace()->colorDepthId() == Float16BitsColorDepthID) {
+        const half *ptr = reinterpret_cast<const half*>(c.data());
         result = ptr[0];
     } else if (c.colorSpace()->colorDepthId() == Integer16BitsColorDepthID) {
         using namespace Arithmetic;
@@ -294,7 +302,6 @@ quint16 getColorValueU(const KoColor &c) {
     const quint16 *ptr = reinterpret_cast<const quint16*>(c.data());
     return ptr[2];
 }
-
 
 }
 
@@ -315,33 +322,35 @@ Q_DECLARE_FLAGS(TestFlags, TestFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TestFlags)
 Q_DECLARE_METATYPE(TestFlags)
 
+template<typename T = float>
 std::vector<qreal> generateOpacityValues()
 {
     return {
         1.0,
-        1.0 - 2 * std::numeric_limits<float>::epsilon(),
+        1.0 - 2 * std::numeric_limits<T>::epsilon(),
         1.0 - 1.0f / 255.0f,
         0.1, 0.2, 0.5, 0.8, 0.9,
         1.0f / 255.0f,
-        0 + 2 * std::numeric_limits<float>::epsilon(),
+        0 + 2 * std::numeric_limits<T>::epsilon(),
         0.0
         };
 }
 
+template<typename T = float>
 std::vector<qreal> generateWideColorValues()
 {
     return {-0.1,
-            0 - std::numeric_limits<float>::epsilon(),
+            0 - std::numeric_limits<T>::epsilon(),
             0,
-            0 + std::numeric_limits<float>::epsilon(),
+            0 + std::numeric_limits<T>::epsilon(),
             0.1, 0.2,
-            0.5 - 2 * std::numeric_limits<float>::epsilon(),
+            0.5 - 2 * std::numeric_limits<T>::epsilon(),
             0.5,
-            0.5 + 2 * std::numeric_limits<float>::epsilon(),
+            0.5 + 2 * std::numeric_limits<T>::epsilon(),
             0.8, 0.9,
-            1.0 - std::numeric_limits<float>::epsilon(),
+            1.0 - std::numeric_limits<T>::epsilon(),
             1.0,
-            1.0 + std::numeric_limits<float>::epsilon(),
+            1.0 + std::numeric_limits<T>::epsilon(),
             1.1,
             1.5};
 }
@@ -1029,6 +1038,70 @@ void TestCompositeOpInversion::dumpOpCategories()
     printCategory("Preserve positive range (unstable)", PositivePreserveUnstable);
     qDebug();
     printCategory("Does NOT preserve positive range", PositivePreserveStable | PositivePreserveUnstable, false);
+}
+
+void TestCompositeOpInversion::testF16Modes_data()
+{
+    addAllOps(generateCompositeOpIdSet());
+}
+
+void TestCompositeOpInversion::testF16Modes()
+{
+    QFETCH(QString, id);
+    QFETCH(TestFlags, flags);
+
+    const KoColorSpace* csF32 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+    const KoCompositeOp *opF32 = createOp(csF32, id, flags.testFlag(HDR));
+
+    const KoColorSpace* csF16 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
+    const KoCompositeOp *opF16 = createOp(csF16, id, flags.testFlag(HDR));
+
+    KisColorPairSampler samplerF16;
+    samplerF16.alphaValues = generateOpacityValues<half>();
+    samplerF16.colorValues = generateWideColorValues<half>();
+
+    KisColorPairSampler samplerF32;
+    samplerF32.alphaValues = generateOpacityValues<float>();
+    samplerF32.colorValues = generateWideColorValues<float>();
+
+
+    for (auto itF16 = samplerF16.begin(), itF32 = samplerF32.begin(); itF16 != samplerF16.end(); ++itF16, ++itF32) {
+        KoColor srcColorF32 = itF32.srcColor(csF32);
+        KoColor dstColorF32 = itF32.dstColor(csF32);
+        KoColor resultColorF32 = dstColorF32;
+
+        opF32->composite(resultColorF32.data(), 0, srcColorF32.data(), 0,
+                       0, 0,
+                       1, 1,
+                       itF32.opacity());
+
+        float resultColorValueF32 = getColorValue(resultColorF32);
+
+        KoColor srcColorF16 = itF16.srcColor(csF16);
+        KoColor dstColorF16 = itF16.dstColor(csF16);
+        KoColor resultColorF16 = dstColorF16;
+
+        opF16->composite(resultColorF16.data(), 0, srcColorF16.data(), 0,
+                         0, 0,
+                         1, 1,
+                         itF16.opacity());
+
+        float resultColorValueF16 = getColorValue(resultColorF16);
+
+        float tolerance = 4.0f * std::numeric_limits<half>::epsilon();
+
+        if (qAbs(resultColorValueF32 - resultColorValueF16) > tolerance) {
+
+            qDebug() << "--- resulting value in SDR range generates negative result! ---";
+            qDebug() << ppVar(itF16.opacity());
+            qDebug() << "F32:" << fixed << qSetRealNumberPrecision(8)
+                     << "s:" << dumpPixel(srcColorF32) << "+" << "d:" << dumpPixel(dstColorF32) << "->" << dumpPixel(resultColorF32);
+            qDebug() << "F16:" << fixed << qSetRealNumberPrecision(8)
+                     << "s:" << dumpPixel(srcColorF16) << "+" << "d:" << dumpPixel(dstColorF16) << "->" << dumpPixel(resultColorF16);
+            QFAIL("resulting value in SDR range generates negative result!");
+        }
+
+    }
 }
 
 SIMPLE_TEST_MAIN(TestCompositeOpInversion)

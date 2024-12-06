@@ -589,34 +589,34 @@ inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
 
 template<>
 inline bool KoColorSpaceMaths<half>::isUnitValue(half value) {
-    // TODO: check actual constant
-    return qAbs(value - KoColorSpaceMathsTraits<half>::unitValue) < 0.0001f;
+    // ~ 2 * HALF_ESPILON
+    return qAbs(value - KoColorSpaceMathsTraits<half>::unitValue) < 0.002f;
 }
 
 template<>
 inline bool KoColorSpaceMaths<half>::isZeroValue(half value) {
-    // TODO: check actual constant
-    return qAbs(value) < 0.0001f;
+    // ~ 2 * HALF_ESPILON
+    return qAbs(value) < 0.002f;
 }
 
 template<>
 inline bool KoColorSpaceMaths<half>::isZeroValueClamped(half f)
 {
-    // TODO: check actual constant
-    return f <= 0.0001f;
+    // ~ 2 * HALF_ESPILON
+    return f <= 0.002f;
 }
 
 template<>
 inline bool KoColorSpaceMaths<half>::isUnitValueClamped(half f)
 {
-    // TODO: check actual constant
-    return f > 1.0 - 0.0001f;
+    // ~ 2 * HALF_ESPILON
+    return f > 1.0 - 0.002f;
 }
 
 template<>
 inline bool KoColorSpaceMaths<half>::isHalfValue(half value) {
     // TODO: check actual constant
-    return qAbs(value - 0.5f) < 0.0001f;
+    return qAbs(value - 0.5f) < 0.001f;
 }
 
 #endif

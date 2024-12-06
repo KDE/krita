@@ -11,8 +11,9 @@
 
 #include "kritapigment_export.h"
 
-#include <QVariant>
 #include <QString>
+
+class QVariant;
 
 /**
  * This is the base class of all color transform that takes n pixels in input

@@ -6,6 +6,7 @@
 
 #include "KoColorTransformation.h"
 #include <QDebug>
+#include <QVariant>
 
 KoColorTransformation::~KoColorTransformation()
 {

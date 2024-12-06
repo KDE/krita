@@ -31,6 +31,8 @@
 #include <QAction>
 #include <QMetaMethod>
 #include <QTextStream>
+#include <QWidget>
+
 #include <stdio.h>
 
 #if defined(KCONFIG_BEFORE_5_24)

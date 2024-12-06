@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-05 01:50+0000\n"
+"POT-Creation-Date: 2024-12-06 01:49+0000\n"
 "PO-Revision-Date: 2024-11-28 10:58+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -21748,8 +21748,8 @@ msgstr "Visualització mestra:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2199
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21849,8 +21849,8 @@ msgstr "Importa l'animació de vídeo"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2167
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22765,7 +22765,9 @@ msgstr "Propietats de la capa"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1446
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1450
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1454
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1537 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
@@ -22775,6 +22777,17 @@ msgstr "Propietats de la capa"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:265
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:267
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:76
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:84
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:86
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:93
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:99
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:104
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:109
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:111
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
@@ -23252,95 +23265,95 @@ msgstr "Primari blau: %1, %2"
 msgid "White Point: %1, %2"
 msgstr "Punt blanc: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2049
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2051
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Avís:</b> La pantalla actual no permet la renderització HDR"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2160
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2162
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configureu Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2177
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres de teclat"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Dreceres"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2189
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Configureu l'entrada del llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2190
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2192
 #, kde-format
 msgid "Canvas Input"
 msgstr "Entrada del llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Gestió del color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Performance"
 msgstr "Rendiment"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgid "Tablet settings"
 msgstr "Configureu la tauleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgid "Tablet"
 msgstr "Tauleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Configuració només el llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
 #, kde-format
 msgid "Canvas-only"
 msgstr "Només el llenç"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta emergent"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autoria"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autoria"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -48160,21 +48173,21 @@ msgstr ""
 "resolució."
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "Rec. 2100 HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "Rec. 2100 PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:545
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48187,7 +48200,7 @@ msgstr ""
 "2048). Recomanat per a imatges en HDR on la brillantor absoluta és important."
 
 #: plugins/impex/heif/HeifExport.cpp:547
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48200,14 +48213,14 @@ msgstr ""
 "possible que la pantalla no comprenga HDR."
 
 #: plugins/impex/heif/HeifExport.cpp:553
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:202
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr "Conserva els colorants, codifica en PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:554
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48220,14 +48233,14 @@ msgstr ""
 "Recomanat per a imatges on la brillantor absoluta és important."
 
 #: plugins/impex/heif/HeifExport.cpp:558
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr "Conserva els colorants, codifica en HLG"
 
 #: plugins/impex/heif/HeifExport.cpp:559
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:214
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48239,14 +48252,14 @@ msgstr ""
 "poden entendre PQ"
 
 #: plugins/impex/heif/HeifExport.cpp:563
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:217
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Conserva els colorants, codifica en SMPTE ST 428"
 
 #: plugins/impex/heif/HeifExport.cpp:564
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48779,36 +48792,36 @@ msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
 msgstr "L'animació declara una velocitat dels fotogrames de més de 240 FPS."
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
 msgstr "Predeterminat (només per a baixa qualitat)"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
 msgstr "Sense reducció de mostreig"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "2x2 downsampling"
 msgstr "Reducció de mostreig 2x2"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "4x4 downsampling"
 msgstr "Reducció de mostreig 4x4"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "8x8 downsampling"
@@ -48818,20 +48831,20 @@ msgstr "Reducció de mostreig 8x8"
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
 #. i18n: ectx: property (text), widget (QLabel, lblNone2)
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:47
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:59
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:77
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:83
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:43
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:49
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:55
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:61
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:67
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:73
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:79
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:85
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:91
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:98
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:132
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:708
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:760
@@ -48841,198 +48854,198 @@ msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
 msgstr "Predeterminada (tria el codificador)"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:42
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:48
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:60
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:72
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:78
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:84
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:97
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:131
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:38
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:44
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:50
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:62
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:74
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:80
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:86
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:92
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:99
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:133
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "Desactivada"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:43
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:49
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:61
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:73
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:79
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:85
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:98
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:132
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:39
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:63
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:75
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:81
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:87
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:100
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:134
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "Activada"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:54
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:56
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
 msgstr "Mode VarDCT (p. ex., per a imatges fotogràfiques)"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:55
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:57
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
 msgstr "Mode modular (p. ex., per a imatges sense pèrdua)"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:66
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:68
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Scanline order"
 msgstr "Ordre de l'escaneig de les línies"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:67
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:69
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
 msgstr "Ordre primer el centre"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:91
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:93
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
 msgstr "Passada de baixa resolució 64x64"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:92
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:94
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
 msgstr "Passades de baixa resolució 512x512 + 64x64"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:105
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
 msgstr "128"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:106
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "256"
 msgstr "256"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:105
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:107
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
 msgstr "512"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:106
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
 msgstr "1024"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
 msgstr "Zero"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "Esquerra"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "Superior"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
 msgstr "Mitjana0"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "Selecció"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "Degradat"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "Ponderat"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "Superior dreta"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "Superior esquerra"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
 msgstr "Esquerra esquerra"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
 msgstr "Mitjana1"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
 msgstr "Mitjana2"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:125
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
 msgstr "Mitjana3"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
 msgstr "Mitjana predictiva superior superior"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:125
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient + Weighted"
 msgstr "Degradat + ponderat"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
 msgstr "Utilitza tots els predictors"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:181
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
 #, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "Anomena i guarda com és"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:185
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -51665,79 +51678,79 @@ msgctxt "make a very small file, but take a long time saving"
 msgid "Small"
 msgstr "Xicotet"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:33
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:35
 #, kde-format
 msgctxt "WebP presets"
 msgid "Default"
 msgstr "Predeterminat"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:34
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:36
 #, kde-format
 msgctxt "WebP presets"
 msgid "Portrait"
 msgstr "Vertical"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:35
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:37
 #, kde-format
 msgctxt "WebP presets"
 msgid "Outdoor photo"
 msgstr "Fotografia exterior"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:36
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:38
 #, kde-format
 msgctxt "WebP presets"
 msgid "Line drawing"
 msgstr "Dibuix de línies"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:37
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:39
 #, kde-format
 msgctxt "WebP presets"
 msgid "Icon"
 msgstr "Icona"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:38
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:40
 #, kde-format
 msgctxt "WebP presets"
 msgid "Text"
 msgstr "Text"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:40
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:42
 #, kde-format
 msgctxt "WebP filters"
 msgid "Simple"
 msgstr "Senzill"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:41
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:43
 #, kde-format
 msgctxt "WebP filters"
 msgid "Strong"
 msgstr "Fort"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:43
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:45
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "None"
 msgstr "Sense"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:44
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:46
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "Lossless"
 msgstr "Sense pèrdua"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:47
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:49
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "None"
 msgstr "Cap"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:49
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:51
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Segment-smooth"
 msgstr "Segment-suau"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:52
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:54
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Pseudo-random dithering"

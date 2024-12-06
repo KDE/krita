@@ -11,6 +11,7 @@
 #include <QToolButton>
 #include <QActionGroup>
 #include <QApplication>
+#include <QWidget>
 
 #include <klocalizedstring.h>
 #include <kstandardshortcut.h>

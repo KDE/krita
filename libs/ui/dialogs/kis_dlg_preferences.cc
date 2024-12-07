@@ -1150,7 +1150,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
         m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     }
 
-    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
+    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->displayIntent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
@@ -1255,7 +1255,7 @@ void ColorSettingsTab::setDefault()
     if (proofingSpace) {
         m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     }
-    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
+    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->displayIntent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
     m_page->sldAdaptationState->setValue(0);
 

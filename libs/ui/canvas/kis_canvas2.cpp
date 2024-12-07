@@ -760,14 +760,14 @@ void KisCanvas2::fetchProofingOptions()
 
 void KisCanvas2::updateProofingState()
 {
-    KoColorConversionTransformation::ConversionFlags conversionFlags = m_d->proofingConfig->conversionFlags;
-    conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, false);
+    KoColorConversionTransformation::ConversionFlags displayFlags = m_d->proofingConfig->displayFlags;
+    displayFlags.setFlag(KoColorConversionTransformation::SoftProofing, false);
 
     if (image()->colorSpace()->colorDepthId().id().contains("U")) {
-        conversionFlags.setFlag(KoColorConversionTransformation::SoftProofing, imageView()->softProofing());
-        conversionFlags.setFlag(KoColorConversionTransformation::GamutCheck, imageView()->gamutCheck());
+        displayFlags.setFlag(KoColorConversionTransformation::SoftProofing, imageView()->softProofing());
+        displayFlags.setFlag(KoColorConversionTransformation::GamutCheck, imageView()->gamutCheck());
     }
-    m_d->proofingConfig->conversionFlags = conversionFlags;
+    m_d->proofingConfig->displayFlags = displayFlags;
 
     m_d->proofingConfigUpdated = true;
 }

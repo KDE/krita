@@ -7,7 +7,7 @@
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
 #include <KoDialog.h>
-#include "KisProofingConfiguration.h"
+#include "KisProofingConfigModel.h"
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
@@ -43,6 +43,7 @@ private Q_SLOTS:
     void setAnnotation(const QString& type);
     void setCurrentColor();
     void setProofingConfig();
+    void updateProofingWidgets();
 
     void slotSaveDialogState();
 
@@ -51,7 +52,7 @@ private:
 
     WdgImageProperties *m_page;
     KisImageWSP m_image;
-    KisProofingConfigurationSP m_proofingConfig;
+    KisProofingConfigModel *m_proofingModel;
     bool m_firstProofingConfigChange {true};
     QLabel *m_colorWarningLabel {0};
     KisSignalCompressor *m_compressor {0};

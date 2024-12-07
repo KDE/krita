@@ -85,12 +85,14 @@ public:
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
 
-        if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
-            !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
+        bool doBCP1 = conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
+        bool doBCP2 = displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
 
-            conversionFlags |= KoColorConversionTransformation::NoOptimization;
+        if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
+            !displayConversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
+            displayConversionFlags |= KoColorConversionTransformation::NoOptimization;
         }
-        conversionFlags |= KoColorConversionTransformation::CopyAlpha;
+        displayConversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
         quint16 alarm[cmsMAXCHANNELS];//this seems to be bgr???
         alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
@@ -98,36 +100,20 @@ public:
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
         cmsSetAlarmCodes(alarm);
 
-
         KIS_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
 
-        if (displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation)) {
-            // This more or less does the same thing as cmsCreateProofingTransform in LCMS' cmsxform.c file,
-            // except we try to enable blackpoint compentation on the second bcp too.
-            cmsHPROFILE proof = dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile();
-            cmsHPROFILE profiles[] = {srcProfile->lcmsProfile(),
-                                       proof,
-                                       proof,
-                                       dstProfile->lcmsProfile()};
-            bool doBCP1 = conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
-            bool doBCP2 = true; //displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
-            cmsBool bcp[] = {doBCP1, doBCP1, doBCP2, doBCP2};
-            cmsUInt32Number intents[] = {renderingIntent, renderingIntent, INTENT_RELATIVE_COLORIMETRIC, proofingIntent};
-            cmsFloat64Number adaptation[] = {adaptationState, adaptationState, adaptationState, adaptationState};
-            m_transform = cmsCreateExtendedTransform(cmsGetProfileContextID(srcProfile->lcmsProfile()), 4, profiles, bcp, intents, adaptation, proof, 1, srcColorSpaceType, dstColorSpaceType, conversionFlags);
-        } else {
-            cmsSetAdaptationState(adaptationState);
-            m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
-                                                     srcColorSpaceType,
-                                                     dstProfile->lcmsProfile(),
-                                                     dstColorSpaceType,
-                                                     dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
-                                                     renderingIntent,
-                                                     proofingIntent,
-                                                     conversionFlags);
-            cmsSetAdaptationState(1);
-        }
-
+        // This more or less does the same thing as cmsCreateProofingTransform in LCMS' cmsxform.c file,
+        // except we try to allow enabling blackpoint compentation on the second bcp too.
+        cmsHPROFILE proof = dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile();
+        cmsHPROFILE profiles[] = {srcProfile->lcmsProfile(),
+                                  proof,
+                                  proof,
+                                  dstProfile->lcmsProfile()};
+        cmsBool bcp[] = {doBCP1, doBCP1, doBCP2, doBCP2};
+        // Note that of the two transforms that create the proofing transform, the proofing intent is the second intent, not the first!
+        cmsUInt32Number intents[] = {renderingIntent, renderingIntent, INTENT_RELATIVE_COLORIMETRIC, proofingIntent};
+        cmsFloat64Number adaptation[] = {adaptationState, adaptationState, adaptationState, adaptationState};
+        m_transform = cmsCreateExtendedTransform(cmsGetProfileContextID(srcProfile->lcmsProfile()), 4, profiles, bcp, intents, adaptation, proof, 1, srcColorSpaceType, dstColorSpaceType, displayConversionFlags);
 
         Q_ASSERT(m_transform);
     }

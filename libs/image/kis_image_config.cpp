@@ -517,7 +517,8 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
     proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
     proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
     proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
-    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 3);
+    proofingConfig->displayIntent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", INTENT_ABSOLUTE_COLORIMETRIC);
+    proofingConfig->conversionIntent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingConversionIntent", INTENT_RELATIVE_COLORIMETRIC);
     if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
         proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
     } else {

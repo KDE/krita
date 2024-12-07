@@ -63,7 +63,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
         [this] () {
             return !m_d->proofingTransform &&
                 m_d->proofingConfig &&
-                m_d->proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::SoftProofing);
+                m_d->proofingConfig->displayFlags.testFlag(KoColorConversionTransformation::SoftProofing);
         };
 
     // lazily create transform
@@ -74,17 +74,19 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
             const KoColorSpace *proofingSpace = KoColorSpaceRegistry::instance()->colorSpace(m_d->proofingConfig->proofingModel,
                                                                                              m_d->proofingConfig->proofingDepth,
                                                                                              m_d->proofingConfig->proofingProfile);
+            KoColorConversionTransformation::Intent displayIntent = m_d->proofingConfig->determineDisplayIntent(m_d->conversionOptions.m_renderingIntent);
+            KoColorConversionTransformation::ConversionFlags displayFlags =  m_d->proofingConfig->determineDisplayFlags(m_d->conversionOptions.m_conversionFlags);
 
             m_d->proofingTransform.reset(KisTextureTileUpdateInfo::generateProofingTransform(
                                              projection->colorSpace(),
                                              m_d->conversionOptions.m_destinationColorSpace,
                                              proofingSpace,
-                                             m_d->conversionOptions.m_renderingIntent,
-                                             m_d->proofingConfig->intent,
+                                             m_d->proofingConfig->conversionIntent,
+                                             displayIntent,
                                              m_d->proofingConfig->conversionFlags,
                                              m_d->proofingConfig->warningColor,
-                                             m_d->proofingConfig->adaptationState,
-                                             m_d->conversionOptions.m_conversionFlags));
+                                             m_d->proofingConfig->determineAdaptationState(),
+                                             displayFlags));
         }
     }
 

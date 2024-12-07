@@ -284,7 +284,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             proofingConfig->proofingDepth = attr;
         }
         if (!(attr = imageElement.attribute(PROOFINGINTENT)).isNull()) {
-            proofingConfig->intent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+            proofingConfig->displayIntent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
         }
 
         if (!(attr = imageElement.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {

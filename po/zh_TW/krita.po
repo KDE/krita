@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -17403,7 +17403,7 @@ msgid "Rotation (Z)"
 msgstr "旋轉 (Z)"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19567,10 +19567,10 @@ msgstr "輸入"
 msgid "Out"
 msgstr "輸出"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20181,26 +20181,26 @@ msgstr ""
 "這個資源檔案已存在於資源資料夾內，您確定要覆寫它嗎？\n"
 "資源檔案名稱：%1"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "匯入資源失敗"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "無法匯入資源。"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "重新命名資源？"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20211,25 +20211,25 @@ msgstr ""
 "這個名稱已被另一項資源使用。您希望多項資源使用相同的名稱嗎？\n"
 "(如選擇取消，將不會重新命名該資源。)"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "重新命名資源失敗"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "無法重新命名資源。"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "覆寫資源？"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20240,13 +20240,13 @@ msgstr ""
 "這個檔案名稱已被另一項資源使用。您希望覆寫該資源嗎？\n"
 "(如選擇取消，將不會作出任何動作。)"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "加入資源？"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20257,33 +20257,33 @@ msgstr ""
 "這個名稱已被另一項資源使用。您希望多項資源使用相同的名稱嗎？\n"
 "(如選擇取消，將不會加入該資源。)"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "加入資源失敗"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "無法加入資源。"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr "覆寫資源失敗"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "無法覆寫資源。"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21159,7 +21159,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -26107,7 +26107,7 @@ msgstr "新增影像…"
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -26465,7 +26465,6 @@ msgstr "儲存目前尺寸"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
@@ -31065,7 +31064,6 @@ msgid "Saving As"
 msgstr "正在儲存為"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "建立檔案"
@@ -32843,7 +32841,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "濾鏡「%1」"
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -32862,7 +32860,7 @@ msgstr "工具箱"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
@@ -32929,7 +32927,7 @@ msgstr "啟動後隱藏。"
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, kde-format
@@ -35516,31 +35514,6 @@ msgstr "距離："
 msgid "Tool Options"
 msgstr "工具選項"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, kde-format
-msgid "Fit View"
-msgstr "適合檢視"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, kde-format
-msgid "Fit View Width"
-msgstr "適合檢視寬度"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, kde-format
-msgid "Actual Pixels"
-msgstr "實際像素"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "適合文字寬度"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, kde-format
-msgid "Fit View Height"
-msgstr "適合檢視高度"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
@@ -35590,502 +35563,51 @@ msgstr "沒有條目"
 msgid "Clear List"
 msgstr "清空列表"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "後退(&B)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "前進(&F)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "首頁(&H)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "說明(&H)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, kde-format
 msgid "Show &Menubar"
 msgstr "顯示選單列(&M)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr "顯示選單列<p>隱藏選單欄後再次顯示選單欄</p>"
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, kde-format
 msgid "Show St&atusbar"
 msgstr "顯示狀態列(&A)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr "顯示狀態列<p>顯示狀態列，即位於視窗底部用於顯示狀態訊息的長條。</p>"
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "建立(&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "&Open..."
-msgstr "開啟(&O)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "Open an existing document"
-msgstr "開啟現存檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open &Recent"
-msgstr "開啟最近檔案(&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open a document which was recently opened"
-msgstr "開啟最近使用過的檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, kde-format
-msgid "Save document"
-msgstr "儲存檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save &As..."
-msgstr "另存為(&A)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save document under a new name"
-msgstr "以新名稱儲存檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Re&vert"
-msgstr "還原(&V)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr "還原檔案中未儲存的變更"
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, kde-format
-msgid "Close document"
-msgstr "關閉檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "&Print..."
-msgstr "列印(&P)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "Print document"
-msgstr "列印檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Print Previe&w"
-msgstr "列印預覽(&W)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr "顯示檔案的列印預覽"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "&Mail..."
-msgstr "郵件(&M)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "Send document by mail"
-msgstr "透過郵件發送檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr "退出(&Q)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "Quit application"
-msgstr "退出應用程式"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "&Undo"
-msgstr "復原(&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "Undo last action"
-msgstr "復原上一步操作"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Re&do"
-msgstr "重做(&D)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Redo last undone action"
-msgstr "重做上次復原的操作"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr "剪下(&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cut selection to clipboard"
-msgstr "將選取內容剪下到剪貼簿"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "&Copy"
-msgstr "複製(&C)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "Copy selection to clipboard"
-msgstr "將選取內容複製到剪貼簿"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "&Paste"
-msgstr "貼上(&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "Paste clipboard content"
-msgstr "貼上剪貼簿內容"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, kde-format
-msgid "C&lear"
-msgstr "清空(&L)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, kde-format
-msgid "Select &All"
-msgstr "全部選取(&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, kde-format
-msgid "Dese&lect"
-msgstr "取消選取(&L)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, kde-format
-msgid "&Find..."
-msgstr "尋找(&F)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, kde-format
-msgid "Find &Next"
-msgstr "尋找下一個(&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, kde-format
-msgid "Find Pre&vious"
-msgstr "尋找上一個(&V)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "取代(&R)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "實際大小(&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr "以實際大小顯示檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "&Fit to Page"
-msgstr "適合頁面(&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "Zoom to fit page in window"
-msgstr "縮放到整個頁面適合視窗"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Fit to Page &Width"
-msgstr "適合頁寬(&W)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "縮放到頁面寬度適合視窗"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Fit to Page &Height"
-msgstr "適合頁高(&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "縮放到頁面高度適合視窗"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, kde-format
-msgid "Zoom &In"
-msgstr "放大(&I)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, kde-format
-msgid "Zoom &Out"
-msgstr "縮小(&O)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "&Zoom..."
-msgstr "縮放(&Z)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "Select zoom level"
-msgstr "選擇縮放級別"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "重新顯示(&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "Redisplay document"
-msgstr "重新顯示檔案"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "&Up"
-msgstr "向上(&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "轉到上級"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "&Previous Page"
-msgstr "上一頁(&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "Go to previous page"
-msgstr "轉到上一頁"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "&Next Page"
-msgstr "下一頁(&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "Go to next page"
-msgstr "轉到下一頁"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, kde-format
-msgid "&Go To..."
-msgstr "轉到(&G)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, kde-format
-msgid "&Go to Page..."
-msgstr "轉到頁(&G)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, kde-format
-msgid "&Go to Line..."
-msgstr "轉到行(&G)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "&First Page"
-msgstr "第一頁(&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "Go to first page"
-msgstr "轉到第一頁"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "&Last Page"
-msgstr "最後一頁(&L)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "Go to last page"
-msgstr "轉到最後一頁"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "&Back"
-msgstr "後退(&B)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "Go back in document"
-msgstr "在檔案中後退"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "&Forward"
-msgstr "前進(&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "Go forward in document"
-msgstr "在檔案中前進"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, kde-format
-msgid "&Add Bookmark"
-msgstr "新增書籤(&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "編輯書籤(&E)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "&Spelling..."
-msgstr "拼寫(&S)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "Check spelling in document"
-msgstr "檢查檔案中的拼寫"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, kde-format
-msgid "Show or hide menubar"
-msgstr "顯示或隱藏選單列"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show &Toolbar"
-msgstr "顯示工具列(&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show or hide toolbar"
-msgstr "顯示或隱藏工具列"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, kde-format
-msgid "Show or hide statusbar"
-msgstr "顯示或隱藏狀態列"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, kde-format
-msgid "F&ull Screen Mode"
-msgstr "全螢幕模式(&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, kde-format
-msgid "&Save Settings"
-msgstr "儲存設定(&S)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "設定快捷鍵(&H)..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, kde-format
-msgid "&Configure %1..."
-msgstr "設定 %1(&C)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, kde-format
-msgid "Configure Tool&bars..."
-msgstr "設定工具列(&B)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, kde-format
-msgid "Configure &Notifications..."
-msgstr "設定通知(&N)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, kde-format
-msgid "Reset Configurations"
-msgstr "重設設定"
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1 手冊(&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr "這是什麼(&T)？"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "每日提示(&D)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, kde-format
-msgid "&Report Bug..."
-msgstr "回報錯誤(&R)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, kde-format
-msgid "Switch Application &Language..."
-msgstr "切換應用程式語言(&L)…"
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, kde-format
-msgid "&About %1"
-msgstr "關於 %1(&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, kde-format
-msgid "About &KDE"
-msgstr "關於 KDE(&K)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -36341,13 +35863,13 @@ msgstr "加入 KDE 團隊(&J)"
 msgid "&Support KDE"
 msgstr "資助 KDE(&S)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr "提交錯誤報告"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
@@ -36356,35 +35878,35 @@ msgstr ""
 "正在提交錯誤報告的應用程式。如果不正確，請使用正確的程式選單中的「回報錯誤」"
 "選項"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, kde-format
 msgid "Application: "
 msgstr "應用程式："
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr "此應用程式的版本。請在發送錯誤報告前確定應用程式沒有新的版本"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, kde-format
 msgid "Version:"
 msgstr "版本："
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr "沒有設定版本 (編程器錯誤)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "作業系統："
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -36400,88 +35922,83 @@ msgstr ""
 "\">https://bugs.kde.org</a> 的瀏覽器視窗，這裡您能看到能讓您填寫的表單。</"
 "p><p><b>請把下面的資訊貼到錯誤報告中！</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "提交錯誤報告(&S)"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "Dr. Klash' 加速器診斷"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "停用自動檢查"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>加速器改變</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, kde-format
 msgid "Old Text"
 msgstr "舊文字"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "新文字"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>加速器已移除</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>注意：組合鍵已新增</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr "--- 分隔符 ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "變更文字"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "圖示文字(&X)："
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "當工具列項目同時具有文字和圖示時隱藏文字(&H)"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "設定工具列"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr "確定要重設應用程式的全部工具列為預設狀態嗎？變更將會立即生效。"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "重設工具列"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, kde-format
 msgid "&Toolbar:"
 msgstr "工具列(&T)："
@@ -36493,51 +36010,51 @@ msgstr "工具列(&T)："
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "可用的操作(&V)："
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "篩選"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "目前操作(&E)："
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "篩選"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "此元素將被一個嵌入元件的全部元素代替。"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, kde-format
 msgid "<Merge>"
 msgstr "<合併>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<合併 %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -36546,13 +36063,13 @@ msgstr ""
 "這是一個動態更新的操作列表。它可以被移動，但如果移除了它，將無法將其重新新增"
 "回來。"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
 msgid "ActionList: %1"
 msgstr "動作列表：%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36643,6 +36160,7 @@ msgid "Alternate"
 msgstr "備選"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -36827,192 +36345,196 @@ msgid "A scheme with this name already exists."
 msgstr "具有此名稱的方案已存在。"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do you really want to delete the scheme %1?\n"
+#| "Note that this will not remove any system wide shortcut schemes."
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 "確定要刪除快捷鍵方案 %1 嗎？\n"
 "提示：此操作不會刪除系統全域的快捷鍵方案。"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
 msgid "Export Shortcuts"
 msgstr "檔案快捷鍵"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, kde-format
 msgid "Save Shortcuts"
 msgstr "儲存快捷鍵設定"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, kde-format
 msgid "Import Shortcuts"
 msgstr "匯入快捷鍵設定"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, kde-format
 msgid "Switch Application Language"
 msgstr "切換應用程式語言"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "請選擇此應用程式所要使用的語言："
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "新增備選語言"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
 msgstr "再選擇一個在目前語言沒有合適翻譯時備用的語言。"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "應用程式語言已變更"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
 msgstr "應用程式使用的語言已變更。此修改將在程式下一次啟動時生效。"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Fallback language:"
 msgstr "備選語言："
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Primary language:"
 msgstr "首選語言："
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "這是應用程式的首選語言，它將會在其他任何語言之前被使用。"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr "如果之前選取的語言沒有合適的翻譯，則使用此語言。"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "顯示文字"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "工具列設定"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "位置"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "頂部"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "左側"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "右側"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "底部"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, kde-format
 msgid "Text Position"
 msgstr "文字位置"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Icons Only"
 msgstr "僅圖示"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Only"
 msgstr "僅文字"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr "文字與圖示並排"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "文字在圖示下方"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr "小(%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr "中(%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr "大(%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, kde-format
 msgid "Huge (%1x%2)"
 msgstr "巨大 (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "鎖定工具列位置"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -38381,47 +37903,47 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "縮放時間軸：按住並左右拖曳。"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "插入或移除保持影格"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "輸入影格數"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, kde-format
 msgid "Edit Frames:"
 msgstr "編輯影格："
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "關鍵影格"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "保持影格"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, kde-format
 msgid "Edit Columns:"
 msgstr "編輯影格列："
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "關鍵影格列"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -43167,6 +42689,12 @@ msgstr "例外"
 #, kde-format
 msgid "Script Editor"
 msgstr "指令稿編輯器"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "建立(&N)"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -58779,8 +58307,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "請輸入要儲存設定檔的名稱："
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
+#, fuzzy, kde-format
+#| msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr "對不起，輸入的名稱無效。"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -60648,12 +60177,16 @@ msgid "Patch Radius:"
 msgstr "補丁半徑："
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
+#| "you cannot scale the selection with handles. Please compile Krita with "
+#| "GNU Scientific Library support, or use options widget for editing scale "
+#| "values manually."
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 "對不起，此 Krita 副本在編譯時未啟用 GNU 科學計算程式庫支援 。如果不能用控制柄"
 "縮放選取區域，請在該庫支援下編譯 Krita，或使用透過工具選項面板手動輸入數值。"
@@ -61518,6 +61051,288 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgid "Fit View"
+#~ msgstr "適合檢視"
+
+#~ msgid "Fit View Width"
+#~ msgstr "適合檢視寬度"
+
+#~ msgid "Actual Pixels"
+#~ msgstr "實際像素"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "適合文字寬度"
+
+#~ msgid "Fit View Height"
+#~ msgstr "適合檢視高度"
+
+#~ msgid "&Open..."
+#~ msgstr "開啟(&O)…"
+
+#~ msgid "Open an existing document"
+#~ msgstr "開啟現存檔案"
+
+#~ msgid "Open &Recent"
+#~ msgstr "開啟最近檔案(&R)"
+
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "開啟最近使用過的檔案"
+
+#~ msgid "Save document"
+#~ msgstr "儲存檔案"
+
+#~ msgid "Save &As..."
+#~ msgstr "另存為(&A)…"
+
+#~ msgid "Save document under a new name"
+#~ msgstr "以新名稱儲存檔案"
+
+#~ msgid "Re&vert"
+#~ msgstr "還原(&V)"
+
+#~ msgid "Revert unsaved changes made to document"
+#~ msgstr "還原檔案中未儲存的變更"
+
+#~ msgid "Close document"
+#~ msgstr "關閉檔案"
+
+#~ msgid "&Print..."
+#~ msgstr "列印(&P)…"
+
+#~ msgid "Print document"
+#~ msgstr "列印檔案"
+
+#~ msgid "Print Previe&w"
+#~ msgstr "列印預覽(&W)"
+
+#~ msgid "Show a print preview of document"
+#~ msgstr "顯示檔案的列印預覽"
+
+#~ msgid "&Mail..."
+#~ msgstr "郵件(&M)..."
+
+#~ msgid "Send document by mail"
+#~ msgstr "透過郵件發送檔案"
+
+#~ msgid "&Quit"
+#~ msgstr "退出(&Q)"
+
+#~ msgid "Quit application"
+#~ msgstr "退出應用程式"
+
+#~ msgid "&Undo"
+#~ msgstr "復原(&U)"
+
+#~ msgid "Undo last action"
+#~ msgstr "復原上一步操作"
+
+#~ msgid "Re&do"
+#~ msgstr "重做(&D)"
+
+#~ msgid "Redo last undone action"
+#~ msgstr "重做上次復原的操作"
+
+#~ msgid "Cu&t"
+#~ msgstr "剪下(&T)"
+
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "將選取內容剪下到剪貼簿"
+
+#~ msgid "&Copy"
+#~ msgstr "複製(&C)"
+
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "將選取內容複製到剪貼簿"
+
+#~ msgid "&Paste"
+#~ msgstr "貼上(&P)"
+
+#~ msgid "Paste clipboard content"
+#~ msgstr "貼上剪貼簿內容"
+
+#~ msgid "C&lear"
+#~ msgstr "清空(&L)"
+
+#~ msgid "Select &All"
+#~ msgstr "全部選取(&A)"
+
+#~ msgid "Dese&lect"
+#~ msgstr "取消選取(&L)"
+
+#~ msgid "&Find..."
+#~ msgstr "尋找(&F)…"
+
+#~ msgid "Find &Next"
+#~ msgstr "尋找下一個(&N)"
+
+#~ msgid "Find Pre&vious"
+#~ msgstr "尋找上一個(&V)"
+
+#~ msgid "&Replace..."
+#~ msgstr "取代(&R)…"
+
+#~ msgid "&Actual Size"
+#~ msgstr "實際大小(&A)"
+
+#~ msgid "View document at its actual size"
+#~ msgstr "以實際大小顯示檔案"
+
+#~ msgid "&Fit to Page"
+#~ msgstr "適合頁面(&F)"
+
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "縮放到整個頁面適合視窗"
+
+#~ msgid "Fit to Page &Width"
+#~ msgstr "適合頁寬(&W)"
+
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "縮放到頁面寬度適合視窗"
+
+#~ msgid "Fit to Page &Height"
+#~ msgstr "適合頁高(&H)"
+
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "縮放到頁面高度適合視窗"
+
+#~ msgid "Zoom &In"
+#~ msgstr "放大(&I)"
+
+#~ msgid "Zoom &Out"
+#~ msgstr "縮小(&O)"
+
+#~ msgid "&Zoom..."
+#~ msgstr "縮放(&Z)..."
+
+#~ msgid "Select zoom level"
+#~ msgstr "選擇縮放級別"
+
+#~ msgid "&Redisplay"
+#~ msgstr "重新顯示(&R)"
+
+#~ msgid "Redisplay document"
+#~ msgstr "重新顯示檔案"
+
+#~ msgid "&Up"
+#~ msgstr "向上(&U)"
+
+#~ msgid "Go up"
+#~ msgstr "轉到上級"
+
+#~ msgid "&Previous Page"
+#~ msgstr "上一頁(&P)"
+
+#~ msgid "Go to previous page"
+#~ msgstr "轉到上一頁"
+
+#~ msgid "&Next Page"
+#~ msgstr "下一頁(&N)"
+
+#~ msgid "Go to next page"
+#~ msgstr "轉到下一頁"
+
+#~ msgid "&Go To..."
+#~ msgstr "轉到(&G)..."
+
+#~ msgid "&Go to Page..."
+#~ msgstr "轉到頁(&G)..."
+
+#~ msgid "&Go to Line..."
+#~ msgstr "轉到行(&G)..."
+
+#~ msgid "&First Page"
+#~ msgstr "第一頁(&F)"
+
+#~ msgid "Go to first page"
+#~ msgstr "轉到第一頁"
+
+#~ msgid "&Last Page"
+#~ msgstr "最後一頁(&L)"
+
+#~ msgid "Go to last page"
+#~ msgstr "轉到最後一頁"
+
+#~ msgid "&Back"
+#~ msgstr "後退(&B)"
+
+#~ msgid "Go back in document"
+#~ msgstr "在檔案中後退"
+
+#~ msgid "&Forward"
+#~ msgstr "前進(&F)"
+
+#~ msgid "Go forward in document"
+#~ msgstr "在檔案中前進"
+
+#~ msgid "&Add Bookmark"
+#~ msgstr "新增書籤(&A)"
+
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "編輯書籤(&E)..."
+
+#~ msgid "&Spelling..."
+#~ msgstr "拼寫(&S)..."
+
+#~ msgid "Check spelling in document"
+#~ msgstr "檢查檔案中的拼寫"
+
+#~ msgid "Show or hide menubar"
+#~ msgstr "顯示或隱藏選單列"
+
+#~ msgid "Show &Toolbar"
+#~ msgstr "顯示工具列(&T)"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "顯示或隱藏工具列"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "顯示或隱藏狀態列"
+
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "全螢幕模式(&U)"
+
+#~ msgid "&Save Settings"
+#~ msgstr "儲存設定(&S)"
+
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "設定快捷鍵(&H)..."
+
+#~ msgid "&Configure %1..."
+#~ msgstr "設定 %1(&C)…"
+
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "設定工具列(&B)…"
+
+#~ msgid "Configure &Notifications..."
+#~ msgstr "設定通知(&N)…"
+
+#~ msgid "Reset Configurations"
+#~ msgstr "重設設定"
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1 手冊(&H)"
+
+#~ msgid "What's &This?"
+#~ msgstr "這是什麼(&T)？"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "每日提示(&D)"
+
+#~ msgid "&Report Bug..."
+#~ msgstr "回報錯誤(&R)…"
+
+#~ msgid "Switch Application &Language..."
+#~ msgstr "切換應用程式語言(&L)…"
+
+#~ msgid "&About %1"
+#~ msgstr "關於 %1(&A)"
+
+#~ msgid "About &KDE"
+#~ msgstr "關於 KDE(&K)"
+
+#~ msgid "--- separator ---"
+#~ msgstr "--- 分隔符 ---"
 
 #~ msgid ""
 #~ "<html><head/><body><table width=\"100%\" cellpadding="

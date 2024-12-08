@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
 "PO-Revision-Date: 2024-07-07 07:51+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -17383,7 +17383,7 @@ msgid "Rotation (Z)"
 msgstr "შებრუნება (Z)"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19532,10 +19532,10 @@ msgstr ""
 msgid "Out"
 msgstr "გარე"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20143,26 +20143,26 @@ msgid ""
 "Resource filename: %1"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "რესურსის შემოტანის შეცდომა"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "რესურსის შემოტანის შეცდომა."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "გადავარქვა სახელი რესურსს?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20171,25 +20171,25 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "რესურსის სახელის გადარქმევის შეცდომა"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "რესურსის სახელის გადარქმევის შეცდომა."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "გადავაწერო ამ რესურსს?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20198,13 +20198,13 @@ msgid ""
 "(If you decline now, nothing will be done)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "დავამატო რესურსი?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20213,33 +20213,33 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "რესურსის დამატების შეცდომა"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "რესურსის დამატების შეცდომა."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr "რესურსის თავზე გადაწერის შეცდომა"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "რესურსის თავზე გადაწერის შეცდომა."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21087,7 +21087,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -25870,7 +25870,7 @@ msgstr "გამოსახულებების დამატება..
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -26222,7 +26222,6 @@ msgstr "მიმდინარე ზომების შენახვა"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
@@ -30669,7 +30668,6 @@ msgid "Saving As"
 msgstr "შენახვა, როგორც"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "ახალი დოკუმენტის შექმნა"
@@ -32419,7 +32417,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "\"%1\"-ის გაფილტვრ"
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -32438,7 +32436,7 @@ msgstr "ხელსაწყოები"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
@@ -32500,7 +32498,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, kde-format
@@ -34920,31 +34918,6 @@ msgstr "მანძილი:"
 msgid "Tool Options"
 msgstr "ხელსაწყოების გამართვა"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, kde-format
-msgid "Fit View"
-msgstr "ხედის ჩატევა"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, kde-format
-msgid "Fit View Width"
-msgstr "ხედის სიგანეში ჩატევა"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, kde-format
-msgid "Actual Pixels"
-msgstr "რეალური პიქსელები"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "ტექსტის სიგანეში ჩატევა"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, kde-format
-msgid "Fit View Height"
-msgstr "ხედის სიმაღლის ჩატევა"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
@@ -34992,50 +34965,48 @@ msgstr "ჩანაწერის გარეშე"
 msgid "Clear List"
 msgstr "სიის გასუფთავება"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "&უკან"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "&წინ"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "&სახლი"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "&დახმარება"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, kde-format
 msgid "Show &Menubar"
 msgstr "&მენიუს ზოლის ჩვენება"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 "მენიუს ზოლის ჩვენება<p>მენიუს ზოლის თავიდან ჩვენება მას შემდეგ, რაც ის "
 "დამალეთ</p>"
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, kde-format
 msgid "Show St&atusbar"
 msgstr "სტატუსის &ზოლის ჩვენება"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
@@ -35043,455 +35014,6 @@ msgid ""
 msgstr ""
 "სტატუსის ზოლის ჩვენება<p>სტატუსის ზოლის ჩვენება. ეს ფანჯრის ქვედა მხის "
 "ზოლია, სადაც სტატუსის ინფორმაციის წაკითხვა შეგიძლიათ.</p>"
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "&ახალი"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "&Open..."
-msgstr "&გახსნა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "Open an existing document"
-msgstr "უკვე არსებული დოკუმენტის გახსნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open &Recent"
-msgstr "ბოლოს გახსნილი ფაილების გახსნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open a document which was recently opened"
-msgstr "ახლახანს გახსნილი დოკუმენტის გახსნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, kde-format
-msgid "Save document"
-msgstr "დოკუმენტის შენახვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save &As..."
-msgstr "შენახვა &როგორც..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save document under a new name"
-msgstr "დოკუმენტის ახალი სახელით შენახვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Re&vert"
-msgstr "&დაბრუნება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr "დოკუმენტზე განხორციელებული ცვლილებების გაუქმება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, kde-format
-msgid "Close document"
-msgstr "დოკუმენტის დახურვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "&Print..."
-msgstr "&ამობეჭდვა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "Print document"
-msgstr "დოკუმენტის დაბეჭდვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Print Previe&w"
-msgstr "&დასაბეჭდის გადახედვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr "მიმდინარე დოკუმენტების დაბეჭდვისწინა გადახედვის ჩვენება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "&Mail..."
-msgstr "&ფოსტა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "Send document by mail"
-msgstr "დოკუმენტის ელფოსტით გაგზავნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr "&გასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "Quit application"
-msgstr "აპლიკაციიდან გასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "&Undo"
-msgstr "&დაბრუნება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "Undo last action"
-msgstr "ბოლო ბრძანების გაუქმება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Re&do"
-msgstr "&გამეორება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Redo last undone action"
-msgstr "ბოლო დაბრუნებული ცვლილების გამეორება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr "ამ&ოჭრა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cut selection to clipboard"
-msgstr "მონიშნულის ბუფერში ამოჭრა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "&Copy"
-msgstr "&კპირება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "Copy selection to clipboard"
-msgstr "მონიშნულის ბუფერში კოპირება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "&Paste"
-msgstr "&ჩასმა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "Paste clipboard content"
-msgstr "გაცვლის ბუფერიდან ჩასმა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, kde-format
-msgid "C&lear"
-msgstr "გასუ&ფთავება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, kde-format
-msgid "Select &All"
-msgstr "ყველაფრის &მონიშვნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, kde-format
-msgid "Dese&lect"
-msgstr "&მონიშვნის მოხსნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, kde-format
-msgid "&Find..."
-msgstr "&პოვნა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, kde-format
-msgid "Find &Next"
-msgstr "&მომდევნოს მოძებნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, kde-format
-msgid "Find Pre&vious"
-msgstr "&წინას მოძებნა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "&ჩანაცვლება..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "&რეალური ზომა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr "დოკუმენტის რეალური ზომებით ნახვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "&Fit to Page"
-msgstr "&გვერდში ჩატევა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "Zoom to fit page in window"
-msgstr "გვერდში ჩატევამდე გადიდება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Fit to Page &Width"
-msgstr "გვერდის &სიგანეში ჩატევა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "გვერდის სიგანეში ჩატევამდე გადიდება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Fit to Page &Height"
-msgstr "გვერდის &სიმაღლეში ჩატევა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "გვერდის სიმაღლეში ჩატევამდე გადიდება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, kde-format
-msgid "Zoom &In"
-msgstr "გადიდება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, kde-format
-msgid "Zoom &Out"
-msgstr "გადიდება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "&Zoom..."
-msgstr "&გადიდება..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "Select zoom level"
-msgstr "გადიდების დონე"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "&თავიდან ჩვენება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "Redisplay document"
-msgstr "დოკუმენტის ხელახლა ჩვენება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "&Up"
-msgstr "&მაღლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "მაღლა ასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "&Previous Page"
-msgstr "&წინა გვერდი"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "Go to previous page"
-msgstr "წინა გვერდზე"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "&Next Page"
-msgstr "&შემდეგი გვერდი"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "Go to next page"
-msgstr "შემდეგ გვერდზე გადასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, kde-format
-msgid "&Go To..."
-msgstr "&გადასვლა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, kde-format
-msgid "&Go to Page..."
-msgstr "&გადადით გვერდზე..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, kde-format
-msgid "&Go to Line..."
-msgstr "&გადადით ხაზზე..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "&First Page"
-msgstr "&პირველი გვერდი"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "Go to first page"
-msgstr "პირველ გვერდზე"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "&Last Page"
-msgstr "&ბოლო გვერდი"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "Go to last page"
-msgstr "ბოლო გვერდზე"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "&Back"
-msgstr "&უკან"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "Go back in document"
-msgstr "დოკუმენტში უკან გადასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "&Forward"
-msgstr "&წინ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "Go forward in document"
-msgstr "დოკუმენტში წინ გადასვლა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, kde-format
-msgid "&Add Bookmark"
-msgstr "სანიშნის &დამატება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "სანიშნების &ჩასწორება..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "&Spelling..."
-msgstr "&მართლწერა..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "Check spelling in document"
-msgstr "დოკუმენტის მართლწერის შემოწმება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, kde-format
-msgid "Show or hide menubar"
-msgstr "მენიუს ზოლის ჩვენება/დამალვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show &Toolbar"
-msgstr "&პანელის ჩვენება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show or hide toolbar"
-msgstr "ხელსაწყოთა ზოლის ჩვენება/დამალვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, kde-format
-msgid "Show or hide statusbar"
-msgstr "სტატუსის ზოლის ჩვენება/დამალვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, kde-format
-msgid "F&ull Screen Mode"
-msgstr "&მთელ-ეკრანზე"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, kde-format
-msgid "&Save Settings"
-msgstr "&პარამეტრების შენახვა"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, kde-format
-msgid "&Configure %1..."
-msgstr "%1-ის &მორგება..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, kde-format
-msgid "Configure Tool&bars..."
-msgstr "ხელსაწყოების &პანელების მორგება...."
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, kde-format
-msgid "Configure &Notifications..."
-msgstr "&შეტყობინებების მორგება..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, kde-format
-msgid "Reset Configurations"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1-ის &სახელმძღვანელო"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr "რა არის &ეს?"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "&დღის მინიშნება"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, kde-format
-msgid "&Report Bug..."
-msgstr "&შეცდომის ანგარიში..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, kde-format
-msgid "Switch Application &Language..."
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, kde-format
-msgid "&About %1"
-msgstr "%1-ის &შესახებ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, kde-format
-msgid "About &KDE"
-msgstr "&KDE-ს შესახებ"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -35743,13 +35265,13 @@ msgstr "KDE &გუნდს მიერთება"
 msgid "&Support KDE"
 msgstr "KDE-ის &მხარდაჭერა"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr "შეცდომის პატაკის გაგზავნა"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
@@ -35758,12 +35280,12 @@ msgstr ""
 "პროგრამა რომლის შესახებ შეცდომის პატაკი გამოგზავნას გსურთ - თუ მცდარია. "
 "გთხოვთ გამოიყენოთ მართებული პროგრამის მენიუს /\"შეცდომის პატაკი/\" ელემენტი"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, kde-format
 msgid "Application: "
 msgstr "პროგრამა: "
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
@@ -35772,23 +35294,23 @@ msgstr ""
 "პროგრამის ვერსია - ვიდრე შეცდომის პატაკს გაგზავნიდეთ, გადაამოწმეთ - ხომ არ "
 "გამოსულა ახალი ვერსია"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, kde-format
 msgid "Version:"
 msgstr "ვერსია:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr "ვერსია არ მითითებულა (პროგრამისტის შეცდომა!)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "ოს-ი:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -35799,77 +35321,72 @@ msgid ""
 "paste the following information into the bug report!</b></p></qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "&შეცდომის პატაკის გაგზავნა"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "Dr. Klash-ის დამაჩქარებლის დიაგნოსტიკა"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "თვითშემოწმების &ამორთვა"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>დამაჩქარებლები შეიცვალა</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, kde-format
 msgid "Old Text"
 msgstr "ძველი ტექსტი"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "ახალი ტექსტი"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>დამაჩქარებლები ამოიშალა</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>დამაჩქარებლები დაემატა (ცნობისთვის)</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr "--- გამყოფი ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "ტექსტის შეცვლა"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "ხატულის ტე&ქსტი:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 "&ტექსტის დამალვა, როცა ხელსაწყოთა პანელი ხატულების გასწვრივ ტექსტს აჩვენებს"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "ხელსაწყოთა ზოლების გამართვა"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -35878,12 +35395,12 @@ msgstr ""
 "ნამდვილად გსურთ ყველა პულტისა და პროგრამის საწყისად აღდგენა? ცვლილებები "
 "დაუყოვნებლივ შევა ძალაში."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "ხელსაწყოთა ზოლების საწყისი მნიშვნელობები"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&ხელსაწყოთა ზოლი:"
@@ -35895,51 +35412,51 @@ msgstr "&ხელსაწყოთა ზოლი:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "&შესაძლო ქმედებები:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "ფილტრი"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "&მიმდინარე ქმედებები:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "ფილტრი"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "ელემენტი სრულად ჩაინაცვლება ჩადგმული კომპონენტის ელემენტებით."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, kde-format
 msgid "<Merge>"
 msgstr "<შერწყმა>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<შერწყმა - %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -35948,13 +35465,13 @@ msgstr ""
 "ეს ქმედებების დინამიური სიაა. შეგიძლიათ გადაიტანოთ, მაგრამ ამოშლის "
 "შემთხვევაში მას ვეღარ დაამატებთ."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
 msgid "ActionList: %1"
 msgstr "ქმედებების სია: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36046,6 +35563,7 @@ msgid "Alternate"
 msgstr "ალტერნატული"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -36237,46 +35755,50 @@ msgid "A scheme with this name already exists."
 msgstr "სქემა ამ სახელით უკვე არსებობს."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do you really want to delete the scheme %1?\n"
+#| "Note that this will not remove any system wide shortcut schemes."
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 "მართლა გნებავთ %1 სქემის წაშლა?\n"
 "გაითვალისწინეთ, რომ ეს არ წაშლის არცერთ სისტემურ სქემას."
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
 msgid "Export Shortcuts"
 msgstr "მალსახმობების გატანა"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, kde-format
 msgid "Save Shortcuts"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, kde-format
 msgid "Import Shortcuts"
 msgstr "მალსახმობების შემოტანა"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, kde-format
 msgid "Switch Application Language"
 msgstr "აპლიკაციის ენის შეცვლა"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "აირჩეთ ამ აპლიკაციის მიერ გამოსაყენებელი ენა:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "ენა, თუ არჩეული ენა არ მუშაობს"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -36285,13 +35807,13 @@ msgstr ""
 "დაამატეთ ერთი ან მეტი ენა, რომელიც გამოყენებული იქნება, როცა არჩეულ "
 "თარგმანში სწორი სტრიქონი ვერ იქნება ნაპოვნი."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "აპლიკაციის ენა შეიცვალა"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -36300,17 +35822,17 @@ msgstr ""
 "აპლიკაციის ენა შეიცვალა. ცვლილებებს დაინახავთ აპლიკაციის გაშვების შემდეგ "
 "ჯერზე."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Fallback language:"
 msgstr "ენა, თუ არჩეული ენა არ მუშაობს:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Primary language:"
 msgstr "პირველადი ენა:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
@@ -36319,116 +35841,116 @@ msgstr ""
 "ეს არის აპლიკაციის მთავარი ენა, რომელიც პირველი ჩაიტვირთება, ყველა სხვა "
 "დანარჩენ ენამდე."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr "ეს არის ენა, თუ ყველა სხვა წინა ენაში სწორი თარგმანი ნაპოვნი არაა."
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "ტექსტის ჩვენება"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "ხელსაწყოების ზოლის მორგება"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "ორიენტაცია"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "თავში"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "მარცხნივ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "მარჯვნივ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "ბოლოში"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, kde-format
 msgid "Text Position"
 msgstr "ტექსტის განთავსება"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Icons Only"
 msgstr "მხოლოდ ხატულები"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Only"
 msgstr "მხოლოდ ტექსტი"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr "წარწერები გვერდიდან"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "წარწერები ქვემოთ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr "პატარა (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr "საშუალო (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr "მოზრდილი (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, kde-format
 msgid "Huge (%1x%2)"
 msgstr "ვეება (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "ხელსაწყოთა ზოლის მდებარეობის ჩაკეტვა"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -37790,47 +37312,47 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "შეიყვანეთ კადრების რაოდენობა"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, kde-format
 msgid "Edit Frames:"
 msgstr "კადრების ჩასწორება:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "საკვანძო კადრები"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, kde-format
 msgid "Edit Columns:"
 msgstr "სვეტების ჩასწორება:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -42522,6 +42044,12 @@ msgstr "გამონაკლისი"
 #, kde-format
 msgid "Script Editor"
 msgstr "სკრიპტის რედაქტორი"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "&ახალი"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -57651,8 +57179,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "შეიყვანეთ სახელი, რომლითაც გნებავთ, ეს პროფილი შეინახოთ:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
+#, fuzzy, kde-format
+#| msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr "შეყვანილი სახელი არასწორია."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -59503,10 +59032,9 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -60367,6 +59895,279 @@ msgstr "გადიდების ხელსაწყო"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
+
+#~ msgid "Fit View"
+#~ msgstr "ხედის ჩატევა"
+
+#~ msgid "Fit View Width"
+#~ msgstr "ხედის სიგანეში ჩატევა"
+
+#~ msgid "Actual Pixels"
+#~ msgstr "რეალური პიქსელები"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "ტექსტის სიგანეში ჩატევა"
+
+#~ msgid "Fit View Height"
+#~ msgstr "ხედის სიმაღლის ჩატევა"
+
+#~ msgid "&Open..."
+#~ msgstr "&გახსნა..."
+
+#~ msgid "Open an existing document"
+#~ msgstr "უკვე არსებული დოკუმენტის გახსნა"
+
+#~ msgid "Open &Recent"
+#~ msgstr "ბოლოს გახსნილი ფაილების გახსნა"
+
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "ახლახანს გახსნილი დოკუმენტის გახსნა"
+
+#~ msgid "Save document"
+#~ msgstr "დოკუმენტის შენახვა"
+
+#~ msgid "Save &As..."
+#~ msgstr "შენახვა &როგორც..."
+
+#~ msgid "Save document under a new name"
+#~ msgstr "დოკუმენტის ახალი სახელით შენახვა"
+
+#~ msgid "Re&vert"
+#~ msgstr "&დაბრუნება"
+
+#~ msgid "Revert unsaved changes made to document"
+#~ msgstr "დოკუმენტზე განხორციელებული ცვლილებების გაუქმება"
+
+#~ msgid "Close document"
+#~ msgstr "დოკუმენტის დახურვა"
+
+#~ msgid "&Print..."
+#~ msgstr "&ამობეჭდვა..."
+
+#~ msgid "Print document"
+#~ msgstr "დოკუმენტის დაბეჭდვა"
+
+#~ msgid "Print Previe&w"
+#~ msgstr "&დასაბეჭდის გადახედვა"
+
+#~ msgid "Show a print preview of document"
+#~ msgstr "მიმდინარე დოკუმენტების დაბეჭდვისწინა გადახედვის ჩვენება"
+
+#~ msgid "&Mail..."
+#~ msgstr "&ფოსტა..."
+
+#~ msgid "Send document by mail"
+#~ msgstr "დოკუმენტის ელფოსტით გაგზავნა"
+
+#~ msgid "&Quit"
+#~ msgstr "&გასვლა"
+
+#~ msgid "Quit application"
+#~ msgstr "აპლიკაციიდან გასვლა"
+
+#~ msgid "&Undo"
+#~ msgstr "&დაბრუნება"
+
+#~ msgid "Undo last action"
+#~ msgstr "ბოლო ბრძანების გაუქმება"
+
+#~ msgid "Re&do"
+#~ msgstr "&გამეორება"
+
+#~ msgid "Redo last undone action"
+#~ msgstr "ბოლო დაბრუნებული ცვლილების გამეორება"
+
+#~ msgid "Cu&t"
+#~ msgstr "ამ&ოჭრა"
+
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "მონიშნულის ბუფერში ამოჭრა"
+
+#~ msgid "&Copy"
+#~ msgstr "&კპირება"
+
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "მონიშნულის ბუფერში კოპირება"
+
+#~ msgid "&Paste"
+#~ msgstr "&ჩასმა"
+
+#~ msgid "Paste clipboard content"
+#~ msgstr "გაცვლის ბუფერიდან ჩასმა"
+
+#~ msgid "C&lear"
+#~ msgstr "გასუ&ფთავება"
+
+#~ msgid "Select &All"
+#~ msgstr "ყველაფრის &მონიშვნა"
+
+#~ msgid "Dese&lect"
+#~ msgstr "&მონიშვნის მოხსნა"
+
+#~ msgid "&Find..."
+#~ msgstr "&პოვნა..."
+
+#~ msgid "Find &Next"
+#~ msgstr "&მომდევნოს მოძებნა"
+
+#~ msgid "Find Pre&vious"
+#~ msgstr "&წინას მოძებნა"
+
+#~ msgid "&Replace..."
+#~ msgstr "&ჩანაცვლება..."
+
+#~ msgid "&Actual Size"
+#~ msgstr "&რეალური ზომა"
+
+#~ msgid "View document at its actual size"
+#~ msgstr "დოკუმენტის რეალური ზომებით ნახვა"
+
+#~ msgid "&Fit to Page"
+#~ msgstr "&გვერდში ჩატევა"
+
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "გვერდში ჩატევამდე გადიდება"
+
+#~ msgid "Fit to Page &Width"
+#~ msgstr "გვერდის &სიგანეში ჩატევა"
+
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "გვერდის სიგანეში ჩატევამდე გადიდება"
+
+#~ msgid "Fit to Page &Height"
+#~ msgstr "გვერდის &სიმაღლეში ჩატევა"
+
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "გვერდის სიმაღლეში ჩატევამდე გადიდება"
+
+#~ msgid "Zoom &In"
+#~ msgstr "გადიდება"
+
+#~ msgid "Zoom &Out"
+#~ msgstr "გადიდება"
+
+#~ msgid "&Zoom..."
+#~ msgstr "&გადიდება..."
+
+#~ msgid "Select zoom level"
+#~ msgstr "გადიდების დონე"
+
+#~ msgid "&Redisplay"
+#~ msgstr "&თავიდან ჩვენება"
+
+#~ msgid "Redisplay document"
+#~ msgstr "დოკუმენტის ხელახლა ჩვენება"
+
+#~ msgid "&Up"
+#~ msgstr "&მაღლა"
+
+#~ msgid "Go up"
+#~ msgstr "მაღლა ასვლა"
+
+#~ msgid "&Previous Page"
+#~ msgstr "&წინა გვერდი"
+
+#~ msgid "Go to previous page"
+#~ msgstr "წინა გვერდზე"
+
+#~ msgid "&Next Page"
+#~ msgstr "&შემდეგი გვერდი"
+
+#~ msgid "Go to next page"
+#~ msgstr "შემდეგ გვერდზე გადასვლა"
+
+#~ msgid "&Go To..."
+#~ msgstr "&გადასვლა..."
+
+#~ msgid "&Go to Page..."
+#~ msgstr "&გადადით გვერდზე..."
+
+#~ msgid "&Go to Line..."
+#~ msgstr "&გადადით ხაზზე..."
+
+#~ msgid "&First Page"
+#~ msgstr "&პირველი გვერდი"
+
+#~ msgid "Go to first page"
+#~ msgstr "პირველ გვერდზე"
+
+#~ msgid "&Last Page"
+#~ msgstr "&ბოლო გვერდი"
+
+#~ msgid "Go to last page"
+#~ msgstr "ბოლო გვერდზე"
+
+#~ msgid "&Back"
+#~ msgstr "&უკან"
+
+#~ msgid "Go back in document"
+#~ msgstr "დოკუმენტში უკან გადასვლა"
+
+#~ msgid "&Forward"
+#~ msgstr "&წინ"
+
+#~ msgid "Go forward in document"
+#~ msgstr "დოკუმენტში წინ გადასვლა"
+
+#~ msgid "&Add Bookmark"
+#~ msgstr "სანიშნის &დამატება"
+
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "სანიშნების &ჩასწორება..."
+
+#~ msgid "&Spelling..."
+#~ msgstr "&მართლწერა..."
+
+#~ msgid "Check spelling in document"
+#~ msgstr "დოკუმენტის მართლწერის შემოწმება"
+
+#~ msgid "Show or hide menubar"
+#~ msgstr "მენიუს ზოლის ჩვენება/დამალვა"
+
+#~ msgid "Show &Toolbar"
+#~ msgstr "&პანელის ჩვენება"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "ხელსაწყოთა ზოლის ჩვენება/დამალვა"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "სტატუსის ზოლის ჩვენება/დამალვა"
+
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "&მთელ-ეკრანზე"
+
+#~ msgid "&Save Settings"
+#~ msgstr "&პარამეტრების შენახვა"
+
+#~ msgid "&Configure %1..."
+#~ msgstr "%1-ის &მორგება..."
+
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "ხელსაწყოების &პანელების მორგება...."
+
+#~ msgid "Configure &Notifications..."
+#~ msgstr "&შეტყობინებების მორგება..."
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1-ის &სახელმძღვანელო"
+
+#~ msgid "What's &This?"
+#~ msgstr "რა არის &ეს?"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "&დღის მინიშნება"
+
+#~ msgid "&Report Bug..."
+#~ msgstr "&შეცდომის ანგარიში..."
+
+#~ msgid "&About %1"
+#~ msgstr "%1-ის &შესახებ"
+
+#~ msgid "About &KDE"
+#~ msgstr "&KDE-ს შესახებ"
+
+#~ msgid "--- separator ---"
+#~ msgstr "--- გამყოფი ---"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "CPU-ის შეზღუდვა"

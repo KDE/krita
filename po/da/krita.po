@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -18049,7 +18049,7 @@ msgid "Rotation (Z)"
 msgstr "Rotation"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -20321,10 +20321,10 @@ msgstr "Ind"
 msgid "Out"
 msgstr "Ud"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20976,7 +20976,7 @@ msgstr ""
 "En profil med det navn findes allerede!\n"
 "Vil du overskrive den?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Import resource"
@@ -20984,15 +20984,15 @@ msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "Importér ressource"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 #| msgid "Select file to use as dynamic file layer."
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "Vælg fil der skal bruges som dynamisk fillag."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -21000,7 +21000,7 @@ msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "Slet ressource"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21009,7 +21009,7 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Create shape"
@@ -21017,21 +21017,21 @@ msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "Opret session"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "Kunne ikke oprette en handling."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, fuzzy, kde-format
 #| msgid "Overwrite Preset"
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "Overskriv forvalg"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, fuzzy, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21042,7 +21042,7 @@ msgstr ""
 "En profil med det navn findes allerede!\n"
 "Vil du overskrive den?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Delete resource"
@@ -21050,7 +21050,7 @@ msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "Slet ressource"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21059,36 +21059,36 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 #| msgid "Unable to undelete tag"
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "Kan ikke fortryde sletning af mærke"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 #| msgid "Unable to undelete tag"
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "Kan ikke fortryde sletning af mærke"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "Referencebillede:"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -22004,7 +22004,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -27085,7 +27085,7 @@ msgstr "tilføj billed"
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -27446,7 +27446,6 @@ msgstr "Gem de aktuelle dimensioner"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
@@ -32146,7 +32145,6 @@ msgid "Saving As"
 msgstr "Format til gemning"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Opretter et tomt dokument"
@@ -33970,7 +33968,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filter \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -33989,7 +33987,7 @@ msgstr "Værktøjskasse"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
@@ -34055,7 +34053,7 @@ msgstr "Skjul efter opstart."
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, kde-format
@@ -36626,32 +36624,6 @@ msgstr "Afstand:"
 msgid "Tool Options"
 msgstr "Værktøjsindstillinger"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-msgid "Fit View"
-msgstr "Vis"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
-msgid "Fit View Width"
-msgstr "Pas til sidebredden"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, kde-format
-msgid "Actual Pixels"
-msgstr "Faktiske pixels"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "Pas til tekstbredden"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-msgid "Fit View Height"
-msgstr "Pas til sidebredden"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, fuzzy, kde-format
 #| msgid "Pixelize"
@@ -36701,508 +36673,53 @@ msgstr "Ingen indgange"
 msgid "Clear List"
 msgstr "Ryd listen"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, fuzzy, kde-format
 #| msgid "Back"
 msgctxt "go back"
 msgid "&Back"
 msgstr "Tilbage"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, fuzzy, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "&Videresend"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "&Hjem"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, fuzzy, kde-format
 #| msgid "&Help"
 msgctxt "show help"
 msgid "&Help"
 msgstr "&Hjælp"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, fuzzy, kde-format
 msgid "Show &Menubar"
 msgstr "Vis menulinje"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, fuzzy, kde-format
 msgid "Show St&atusbar"
 msgstr "Vis statuslinje"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr ""
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "&Ny"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, fuzzy, kde-format
-msgid "&Open..."
-msgstr "Å&bn..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "Open an existing document"
-msgstr "Åbn et eksisterende dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, fuzzy, kde-format
-msgid "Open &Recent"
-msgstr "Åbn nylige"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, fuzzy, kde-format
-msgid "Open a document which was recently opened"
-msgstr "Opret nyt dokument fra en skabelon"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, fuzzy, kde-format
-msgid "Save document"
-msgstr "Gem dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, fuzzy, kde-format
-msgid "Save &As..."
-msgstr "Gem..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, fuzzy, kde-format
-msgid "Save document under a new name"
-msgstr "Gem dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, fuzzy, kde-format
-#| msgid "&Invert"
-msgid "Re&vert"
-msgstr "&Invertér"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, fuzzy, kde-format
-msgid "Close document"
-msgstr "Luk dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, fuzzy, kde-format
-msgid "&Print..."
-msgstr "Udskriv"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, fuzzy, kde-format
-msgid "Print document"
-msgstr "Udskriv dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Print Previe&w"
-msgstr "Vis u&dskrift"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, fuzzy, kde-format
-msgid "&Mail..."
-msgstr "E-mail"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, fuzzy, kde-format
-msgid "Send document by mail"
-msgstr "Gem dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr "&Afslut"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, fuzzy, kde-format
-msgid "Quit application"
-msgstr "Brug af store bogstaver"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, fuzzy, kde-format
-msgid "&Undo"
-msgstr "&Fortryd"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, fuzzy, kde-format
-msgid "Undo last action"
-msgstr "Fortryd %1 handling"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, fuzzy, kde-format
-msgid "Re&do"
-msgstr "Gendan"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, fuzzy, kde-format
-msgid "Redo last undone action"
-msgstr "Omgør %1 handling"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, fuzzy, kde-format
-msgid "Cu&t"
-msgstr "K&lip"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, fuzzy, kde-format
-msgid "Cut selection to clipboard"
-msgstr "Klip markering ud til nyt lag"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, fuzzy, kde-format
-msgid "&Copy"
-msgstr "&Kopiér"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, fuzzy, kde-format
-msgid "Copy selection to clipboard"
-msgstr "Kompletteringsord"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "&Paste"
-msgstr "&Indsæt"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, fuzzy, kde-format
-msgid "Paste clipboard content"
-msgstr "Opret fra udklipsholderen"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, fuzzy, kde-format
-msgid "C&lear"
-msgstr "R&yd"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, fuzzy, kde-format
-msgid "Select &All"
-msgstr "Markér &alt"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, fuzzy, kde-format
-msgid "Dese&lect"
-msgstr "Fravælg"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, fuzzy, kde-format
-msgid "&Find..."
-msgstr "Find:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, fuzzy, kde-format
-msgid "Find &Next"
-msgstr "Tilføj tekst"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, fuzzy, kde-format
-msgid "Find Pre&vious"
-msgstr "Find &forrige"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "&Erstat..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "&Faktisk størrelse"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, fuzzy, kde-format
-msgid "&Fit to Page"
-msgstr "Tilpas siden"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, fuzzy, kde-format
-msgid "Zoom to fit page in window"
-msgstr "Første side:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, fuzzy, kde-format
-msgid "Fit to Page &Width"
-msgstr "Pas til sidebredden"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, fuzzy, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "Første side:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, fuzzy, kde-format
-msgid "Fit to Page &Height"
-msgstr "Pas til sidebredden"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, fuzzy, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "Første side:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, fuzzy, kde-format
-msgid "Zoom &In"
-msgstr "Zoom &ind"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, fuzzy, kde-format
-msgid "Zoom &Out"
-msgstr "Zoom &ud"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "&Zoom..."
-msgstr "Zoom"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "Select zoom level"
-msgstr "Vælg et filter:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "Vis i&gen"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, fuzzy, kde-format
-msgid "Redisplay document"
-msgstr "Anvend på dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, fuzzy, kde-format
-#| msgid "Up"
-msgid "&Up"
-msgstr "Op"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "Gå op"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, fuzzy, kde-format
-msgid "&Previous Page"
-msgstr "Forrige side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, fuzzy, kde-format
-msgid "Go to previous page"
-msgstr "Flyt ind i forrige gruppe"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, fuzzy, kde-format
-msgid "&Next Page"
-msgstr "Næste side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, fuzzy, kde-format
-msgid "Go to next page"
-msgstr "Tilføj ny side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, fuzzy, kde-format
-msgid "&Go To..."
-msgstr "Hovedside..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, fuzzy, kde-format
-msgid "&Go to Page..."
-msgstr "Gå til side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, fuzzy, kde-format
-msgid "&Go to Line..."
-msgstr "Gå til linje"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, fuzzy, kde-format
-msgid "&First Page"
-msgstr "&Første side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, fuzzy, kde-format
-msgid "Go to first page"
-msgstr "Første side:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, fuzzy, kde-format
-msgid "&Last Page"
-msgstr "Sidste side"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, fuzzy, kde-format
-msgid "Go to last page"
-msgstr "Sidste side:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-#| msgid "Back"
-msgid "&Back"
-msgstr "Tilbage"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-msgid "Go back in document"
-msgstr "Importér dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "&Forward"
-msgstr "&Videresend"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "Go forward in document"
-msgstr "Importér dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, kde-format
-msgid "&Add Bookmark"
-msgstr "&Tilføj bogmærke"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "&Redigér bogmærker..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, fuzzy, kde-format
-msgid "&Spelling..."
-msgstr "Stavning"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, fuzzy, kde-format
-msgid "Check spelling in document"
-msgstr "Åbner dokument"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, fuzzy, kde-format
-msgid "Show or hide menubar"
-msgstr "Viser eller skjuler gitteret"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show &Toolbar"
-msgstr "Vis værk&tøjslinjen"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, fuzzy, kde-format
-msgid "Show or hide toolbar"
-msgstr "Viser eller skjuler gitteret"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, fuzzy, kde-format
-msgid "Show or hide statusbar"
-msgstr "Viser eller skjuler hjælpere"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, fuzzy, kde-format
-msgid "F&ull Screen Mode"
-msgstr "&Fuldskærmstilstand"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, fuzzy, kde-format
-msgid "&Save Settings"
-msgstr "Gem indstillinger"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "Indstil &genveje..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, fuzzy, kde-format
-msgid "&Configure %1..."
-msgstr "&Indstil %1..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, fuzzy, kde-format
-msgid "Configure Tool&bars..."
-msgstr "Indstil værktøjslinjer"
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, kde-format
-msgid "Configure &Notifications..."
-msgstr "Indstil &bekendtgørelser..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, fuzzy, kde-format
-#| msgid "Configuration:"
-msgid "Reset Configurations"
-msgstr "Konfiguration:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1-&håndbogen"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, fuzzy, kde-format
-msgid "What's &This?"
-msgstr "Hvad er &dette?"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "&Dagens tip"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, fuzzy, kde-format
-msgid "&Report Bug..."
-msgstr "&Rapportér programfejl..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, fuzzy, kde-format
-msgid "Switch Application &Language..."
-msgstr "Brug af store bogstaver"
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, fuzzy, kde-format
-msgid "&About %1"
-msgstr "Om"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, fuzzy, kde-format
-msgid "About &KDE"
-msgstr "Om"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -37457,48 +36974,48 @@ msgstr ""
 msgid "&Support KDE"
 msgstr "Om Krita"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, fuzzy, kde-format
 msgid "Application: "
 msgstr "Program"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, kde-format
 msgid "Version:"
 msgstr "Version:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "OS:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -37509,88 +37026,83 @@ msgid ""
 "paste the following information into the bug report!</b></p></qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, fuzzy, kde-format
 msgid "Old Text"
 msgstr "Tilføj tekst"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "Ny tekst"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr "--- adskiller ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "Ændr tekst"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, fuzzy, kde-format
 msgid "Icon te&xt:"
 msgstr "Ikontekst"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "Indstil værktøjslinjer"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, fuzzy, kde-format
 msgid "Reset Toolbars"
 msgstr "Skjul %1-opgavelinje"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, fuzzy, kde-format
 msgid "&Toolbar:"
 msgstr "Værktøjslinje"
@@ -37602,66 +37114,66 @@ msgstr "Værktøjslinje"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, fuzzy, kde-format
 msgid "A&vailable actions:"
 msgstr "Tilgængelige handlinger"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, fuzzy, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, fuzzy, kde-format
 msgid "Curr&ent actions:"
 msgstr "Orientering:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, fuzzy, kde-format
 msgid "Filter"
 msgstr "Filter"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, fuzzy, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, fuzzy, kde-format
 #| msgid "Merge"
 msgid "<Merge>"
 msgstr "Sammenflet"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, fuzzy, kde-format
 #| msgid "Merge"
 msgid "<Merge %1>"
 msgstr "Sammenflet"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, fuzzy, kde-format
 msgid "ActionList: %1"
 msgstr "Aktivt værktøj: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, fuzzy, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -37752,6 +37264,7 @@ msgid "Alternate"
 msgstr "Alternativ"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -37941,187 +37454,188 @@ msgstr ""
 #, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, fuzzy, kde-format
 msgid "Export Shortcuts"
 msgstr "Eksportér dokument som"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, kde-format
 msgid "Save Shortcuts"
 msgstr "Gem genveje"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, fuzzy, kde-format
 msgid "Import Shortcuts"
 msgstr "Importér kontakt"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, fuzzy, kde-format
 msgid "Switch Application Language"
 msgstr "Brug af store bogstaver"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, fuzzy, kde-format
 msgid "Add Fallback Language"
 msgstr "Alle sprog"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, fuzzy, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "Brug af store bogstaver"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Fallback language:"
 msgstr "Alle sprog"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Primary language:"
 msgstr "Sprog:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "Vis tekst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "&Indstillinger"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, fuzzy, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "Orientering"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Øverst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Venstre"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "Højre"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Nederst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, fuzzy, kde-format
 msgid "Text Position"
 msgstr "Tekstposition:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Icons Only"
 msgstr "Kun ikoner"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Only"
 msgstr "Kun tekst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, fuzzy, kde-format
 msgid "Text Alongside Icons"
 msgstr "Tekstretning:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "Tekst under ikoner"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr "Lille (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, fuzzy, kde-format
 msgid "Medium (%1x%2)"
 msgstr "Mellem (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr "Stor (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, fuzzy, kde-format
 msgid "Huge (%1x%2)"
 msgstr "Enorm (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, fuzzy, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "&Indstillinger"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, fuzzy, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -39558,51 +39072,51 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Indtast gruppenavn:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Gem de aktuelle dimensioner"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "Kopiér fra"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, fuzzy, kde-format
 #| msgid "Columns:"
 msgid "Edit Columns:"
 msgstr "Kolonner:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, fuzzy, kde-format
 #| msgid "Remove Comment"
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "Fjern kommentar"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -44679,6 +44193,12 @@ msgstr "Undtagelse"
 #, fuzzy, kde-format
 msgid "Script Editor"
 msgstr "Penselredigering"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "&Ny"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -61054,7 +60574,7 @@ msgstr "Indsæt navnet under hvilket du vil gemme denne profil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, fuzzy, kde-format
-msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr "Beklager, det angivne navn er ugyldigt!"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -63030,10 +62550,9 @@ msgstr "Lodret radius"
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -63926,6 +63445,357 @@ msgstr "&Zoomværktøj"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referencebilleder"
+
+#, fuzzy
+#~ msgid "Fit View"
+#~ msgstr "Vis"
+
+#, fuzzy
+#~| msgid "Fit Page Width"
+#~ msgid "Fit View Width"
+#~ msgstr "Pas til sidebredden"
+
+#~ msgid "Actual Pixels"
+#~ msgstr "Faktiske pixels"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "Pas til tekstbredden"
+
+#, fuzzy
+#~ msgid "Fit View Height"
+#~ msgstr "Pas til sidebredden"
+
+#, fuzzy
+#~ msgid "&Open..."
+#~ msgstr "Å&bn..."
+
+#~ msgid "Open an existing document"
+#~ msgstr "Åbn et eksisterende dokument"
+
+#, fuzzy
+#~ msgid "Open &Recent"
+#~ msgstr "Åbn nylige"
+
+#, fuzzy
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "Opret nyt dokument fra en skabelon"
+
+#, fuzzy
+#~ msgid "Save document"
+#~ msgstr "Gem dokument"
+
+#, fuzzy
+#~ msgid "Save &As..."
+#~ msgstr "Gem..."
+
+#, fuzzy
+#~ msgid "Save document under a new name"
+#~ msgstr "Gem dokument"
+
+#, fuzzy
+#~| msgid "&Invert"
+#~ msgid "Re&vert"
+#~ msgstr "&Invertér"
+
+#, fuzzy
+#~ msgid "Close document"
+#~ msgstr "Luk dokument"
+
+#, fuzzy
+#~ msgid "&Print..."
+#~ msgstr "Udskriv"
+
+#, fuzzy
+#~ msgid "Print document"
+#~ msgstr "Udskriv dokument"
+
+#~ msgid "Print Previe&w"
+#~ msgstr "Vis u&dskrift"
+
+#, fuzzy
+#~ msgid "&Mail..."
+#~ msgstr "E-mail"
+
+#, fuzzy
+#~ msgid "Send document by mail"
+#~ msgstr "Gem dokument"
+
+#~ msgid "&Quit"
+#~ msgstr "&Afslut"
+
+#, fuzzy
+#~ msgid "Quit application"
+#~ msgstr "Brug af store bogstaver"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "&Fortryd"
+
+#, fuzzy
+#~ msgid "Undo last action"
+#~ msgstr "Fortryd %1 handling"
+
+#, fuzzy
+#~ msgid "Re&do"
+#~ msgstr "Gendan"
+
+#, fuzzy
+#~ msgid "Redo last undone action"
+#~ msgstr "Omgør %1 handling"
+
+#, fuzzy
+#~ msgid "Cu&t"
+#~ msgstr "K&lip"
+
+#, fuzzy
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "Klip markering ud til nyt lag"
+
+#, fuzzy
+#~ msgid "&Copy"
+#~ msgstr "&Kopiér"
+
+#, fuzzy
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "Kompletteringsord"
+
+#~ msgid "&Paste"
+#~ msgstr "&Indsæt"
+
+#, fuzzy
+#~ msgid "Paste clipboard content"
+#~ msgstr "Opret fra udklipsholderen"
+
+#, fuzzy
+#~ msgid "C&lear"
+#~ msgstr "R&yd"
+
+#, fuzzy
+#~ msgid "Select &All"
+#~ msgstr "Markér &alt"
+
+#, fuzzy
+#~ msgid "Dese&lect"
+#~ msgstr "Fravælg"
+
+#, fuzzy
+#~ msgid "&Find..."
+#~ msgstr "Find:"
+
+#, fuzzy
+#~ msgid "Find &Next"
+#~ msgstr "Tilføj tekst"
+
+#, fuzzy
+#~ msgid "Find Pre&vious"
+#~ msgstr "Find &forrige"
+
+#~ msgid "&Replace..."
+#~ msgstr "&Erstat..."
+
+#~ msgid "&Actual Size"
+#~ msgstr "&Faktisk størrelse"
+
+#, fuzzy
+#~ msgid "&Fit to Page"
+#~ msgstr "Tilpas siden"
+
+#, fuzzy
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "Første side:"
+
+#, fuzzy
+#~ msgid "Fit to Page &Width"
+#~ msgstr "Pas til sidebredden"
+
+#, fuzzy
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "Første side:"
+
+#, fuzzy
+#~ msgid "Fit to Page &Height"
+#~ msgstr "Pas til sidebredden"
+
+#, fuzzy
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "Første side:"
+
+#, fuzzy
+#~ msgid "Zoom &In"
+#~ msgstr "Zoom &ind"
+
+#, fuzzy
+#~ msgid "Zoom &Out"
+#~ msgstr "Zoom &ud"
+
+#, fuzzy
+#~ msgid "&Zoom..."
+#~ msgstr "Zoom"
+
+#, fuzzy
+#~ msgid "Select zoom level"
+#~ msgstr "Vælg et filter:"
+
+#~ msgid "&Redisplay"
+#~ msgstr "Vis i&gen"
+
+#, fuzzy
+#~ msgid "Redisplay document"
+#~ msgstr "Anvend på dokument"
+
+#, fuzzy
+#~| msgid "Up"
+#~ msgid "&Up"
+#~ msgstr "Op"
+
+#~ msgid "Go up"
+#~ msgstr "Gå op"
+
+#, fuzzy
+#~ msgid "&Previous Page"
+#~ msgstr "Forrige side"
+
+#, fuzzy
+#~ msgid "Go to previous page"
+#~ msgstr "Flyt ind i forrige gruppe"
+
+#, fuzzy
+#~ msgid "&Next Page"
+#~ msgstr "Næste side"
+
+#, fuzzy
+#~ msgid "Go to next page"
+#~ msgstr "Tilføj ny side"
+
+#, fuzzy
+#~ msgid "&Go To..."
+#~ msgstr "Hovedside..."
+
+#, fuzzy
+#~ msgid "&Go to Page..."
+#~ msgstr "Gå til side"
+
+#, fuzzy
+#~ msgid "&Go to Line..."
+#~ msgstr "Gå til linje"
+
+#, fuzzy
+#~ msgid "&First Page"
+#~ msgstr "&Første side"
+
+#, fuzzy
+#~ msgid "Go to first page"
+#~ msgstr "Første side:"
+
+#, fuzzy
+#~ msgid "&Last Page"
+#~ msgstr "Sidste side"
+
+#, fuzzy
+#~ msgid "Go to last page"
+#~ msgstr "Sidste side:"
+
+#, fuzzy
+#~| msgid "Back"
+#~ msgid "&Back"
+#~ msgstr "Tilbage"
+
+#, fuzzy
+#~ msgid "Go back in document"
+#~ msgstr "Importér dokument"
+
+#, fuzzy
+#~ msgid "&Forward"
+#~ msgstr "&Videresend"
+
+#, fuzzy
+#~ msgid "Go forward in document"
+#~ msgstr "Importér dokument"
+
+#~ msgid "&Add Bookmark"
+#~ msgstr "&Tilføj bogmærke"
+
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "&Redigér bogmærker..."
+
+#, fuzzy
+#~ msgid "&Spelling..."
+#~ msgstr "Stavning"
+
+#, fuzzy
+#~ msgid "Check spelling in document"
+#~ msgstr "Åbner dokument"
+
+#, fuzzy
+#~ msgid "Show or hide menubar"
+#~ msgstr "Viser eller skjuler gitteret"
+
+#~ msgid "Show &Toolbar"
+#~ msgstr "Vis værk&tøjslinjen"
+
+#, fuzzy
+#~ msgid "Show or hide toolbar"
+#~ msgstr "Viser eller skjuler gitteret"
+
+#, fuzzy
+#~ msgid "Show or hide statusbar"
+#~ msgstr "Viser eller skjuler hjælpere"
+
+#, fuzzy
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "&Fuldskærmstilstand"
+
+#, fuzzy
+#~ msgid "&Save Settings"
+#~ msgstr "Gem indstillinger"
+
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "Indstil &genveje..."
+
+#, fuzzy
+#~ msgid "&Configure %1..."
+#~ msgstr "&Indstil %1..."
+
+#, fuzzy
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "Indstil værktøjslinjer"
+
+#~ msgid "Configure &Notifications..."
+#~ msgstr "Indstil &bekendtgørelser..."
+
+#, fuzzy
+#~| msgid "Configuration:"
+#~ msgid "Reset Configurations"
+#~ msgstr "Konfiguration:"
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1-&håndbogen"
+
+#, fuzzy
+#~ msgid "What's &This?"
+#~ msgstr "Hvad er &dette?"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "&Dagens tip"
+
+#, fuzzy
+#~ msgid "&Report Bug..."
+#~ msgstr "&Rapportér programfejl..."
+
+#, fuzzy
+#~ msgid "Switch Application &Language..."
+#~ msgstr "Brug af store bogstaver"
+
+#, fuzzy
+#~ msgid "&About %1"
+#~ msgstr "Om"
+
+#, fuzzy
+#~ msgid "About &KDE"
+#~ msgstr "Om"
+
+#~ msgid "--- separator ---"
+#~ msgstr "--- adskiller ---"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

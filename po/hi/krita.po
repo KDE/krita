@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -17556,7 +17556,7 @@ msgid "Rotation (Z)"
 msgstr "परिक्रमण (Z)"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19730,10 +19730,10 @@ msgstr "In"
 msgid "Out"
 msgstr "बाहर"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20350,26 +20350,26 @@ msgstr ""
 "हैं?\n"
 "संसाधन फ़ाइल का नाम : %1"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "संसाधन आयात करने में विफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "संसाधन आयात करने में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "संसाधन का नाम बदलें ?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20378,25 +20378,25 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "संसाधन का नाम बदलने में असफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "संसाधन का नाम बदलने में असफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "संसाधन को मिटाकर लिखें?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20408,13 +20408,13 @@ msgstr ""
 "संसाधन को मिटाकर लिखना चाहते हैं?\n"
 "(यदि आप अभी मना करते हैं, तो कुछ भी नहीं किया जाएगा)।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "संसाधन जोड़ें?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20423,33 +20423,33 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "संसाधन को जोडनें में विफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "संसाधन को जोडनें में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "संसाधन को मिटाकर लिखने में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21314,7 +21314,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -26234,7 +26234,7 @@ msgstr "चित्र जोड़ें..."
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -26587,7 +26587,6 @@ msgstr "वर्तमान आयाम सहेजें"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
@@ -31126,7 +31125,6 @@ msgid "Saving As"
 msgstr "सहेजा जा रहा है"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "नया दस्तावेज़ बनाएँ"
@@ -32899,7 +32897,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "फ़िल्टर \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -32918,7 +32916,7 @@ msgstr "औज़ार पेटी"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
@@ -32982,7 +32980,7 @@ msgstr "प्रारंभ होने के बाद छुपाएं�
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, kde-format
@@ -35501,35 +35499,6 @@ msgstr "दूरी :"
 msgid "Tool Options"
 msgstr "औजार विकल्प"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
-msgid "Fit View"
-msgstr "दृश्य"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
-msgid "Fit View Width"
-msgstr "पृष्ठ चौड़ाई में फिट करें"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, kde-format
-msgid "Actual Pixels"
-msgstr "वास्तविक पिक्सल्स"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "पाठ को चौड़ाई के अनुरूप बैठाएँ"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
-msgid "Fit View Height"
-msgstr "पृष्ठ ऊँचाई के अनुरूप"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
@@ -35577,502 +35546,51 @@ msgstr "कोई प्रविष्टि नहीं"
 msgid "Clear List"
 msgstr "सूची साफ करें"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "पीछे जाएं (&B)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "आगे (&F)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "घर"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "मदद (&H)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, kde-format
 msgid "Show &Menubar"
 msgstr "मेन्यू पट्टी दिखाएँ (&M)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, kde-format
 msgid "Show St&atusbar"
 msgstr "स्थिति पट्टी दिखाएँ (&a)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr ""
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "नया (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "&Open..."
-msgstr "खोलें... (&O)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "Open an existing document"
-msgstr "मौजूदा दस्तावेज़ खोलें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open &Recent"
-msgstr "हाल ही का खोलें  (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open a document which was recently opened"
-msgstr "हाल ही में खोला गया एक दस्तावेज़ खोलें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, kde-format
-msgid "Save document"
-msgstr "दस्तावेज़ सहेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save &As..."
-msgstr " ऐसे सहेजें... (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save document under a new name"
-msgstr "दस्तावेज़ को नए नाम से सहेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Re&vert"
-msgstr "पलटें (&v)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, kde-format
-msgid "Close document"
-msgstr "दस्तावेज़ बन्द करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "&Print..."
-msgstr "छापें...(&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "Print document"
-msgstr "दस्तावेज़ छापें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Print Previe&w"
-msgstr "छपाई का पूर्वावलोकन (&w)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr "दस्तावेज़ का छपाई का पूर्वावलोकन दिखाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "&Mail..."
-msgstr "डाक... (&M)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "Send document by mail"
-msgstr "दस्तावेज़ डाक से भेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr "बाहर जाएँ (&Q)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "Quit application"
-msgstr "अनुप्रयोग छोड़ें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "&Undo"
-msgstr "पूर्ववत करें (&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "Undo last action"
-msgstr "पिछली क्रिया पूर्ववत करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Re&do"
-msgstr "फिर करें (&d)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Redo last undone action"
-msgstr "पिछली पूर्ववत की गई क्रिया फिर से करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr "काटें (&t)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cut selection to clipboard"
-msgstr "चयन काट कर क्लिपबोर्ड पर रखें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "&Copy"
-msgstr "नक़ल (&C)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "Copy selection to clipboard"
-msgstr "चयन को क्लिपबोर्ड में नक़ल करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "&Paste"
-msgstr "चिपकाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "Paste clipboard content"
-msgstr "क्लिपबोर्ड से वस्तुएं चिपकाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, kde-format
-msgid "C&lear"
-msgstr "साफ करें (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, kde-format
-msgid "Select &All"
-msgstr "सभी का चयन करें (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, kde-format
-msgid "Dese&lect"
-msgstr "अचयनित (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, kde-format
-msgid "&Find..."
-msgstr "ढूंढें...(&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, kde-format
-msgid "Find &Next"
-msgstr "अगला ढूंढें (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, kde-format
-msgid "Find Pre&vious"
-msgstr "पिछला ढूंढें (&v)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "प्रतिस्थापित... (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "वास्तविक आकार (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr "दस्तावेज़ को उसके मूल आकार में देखें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "&Fit to Page"
-msgstr "पृष्ठ के अनुरूप (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "Zoom to fit page in window"
-msgstr "विंडो में पृष्ठ बिठाने के लिए ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Fit to Page &Width"
-msgstr "पृष्ठ चौड़ाई के अनुरूप बैठाएँ (&W)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "विंडो में पृष्ठ चौड़ाई के अनुरूप बैठाने हेतु ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Fit to Page &Height"
-msgstr "पृष्ठ ऊँचाई के अनुरूप (&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "विंडो में पृष्ठ ऊँचाई के अनुरूप बैठाने हेतु ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, kde-format
-msgid "Zoom &In"
-msgstr "ज़ूम इन (&I)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, kde-format
-msgid "Zoom &Out"
-msgstr "ज़ूम आउट (&O)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "&Zoom..."
-msgstr "ज़ूम... (&Z)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "Select zoom level"
-msgstr "जूम स्तर चुनें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "फिर से दिखाएँ (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "Redisplay document"
-msgstr "दस्तावेज़ फिर से दिखाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "&Up"
-msgstr "ऊपर (&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "ऊपर जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "&Previous Page"
-msgstr "पिछला पृष्ठ (&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "Go to previous page"
-msgstr "पिछले पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "&Next Page"
-msgstr "अगला पृष्ठ (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "Go to next page"
-msgstr "अगले पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, kde-format
-msgid "&Go To..."
-msgstr "यहाँ जाएं... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, kde-format
-msgid "&Go to Page..."
-msgstr "पृष्ठ पर जाएं... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, kde-format
-msgid "&Go to Line..."
-msgstr "पंक्ति पर जाएँ... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "&First Page"
-msgstr "प्रथम पृष्ठ (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "Go to first page"
-msgstr "प्रथम पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "&Last Page"
-msgstr "अंतिम पृष्ठ (&L)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "Go to last page"
-msgstr "अन्तिम पृष्ठ पर जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "&Back"
-msgstr "पीछे जाएं (&B)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "Go back in document"
-msgstr "दस्तावेज़ में पीछे जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "&Forward"
-msgstr "आगे (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "Go forward in document"
-msgstr "दस्तावेज़ में आगे जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, kde-format
-msgid "&Add Bookmark"
-msgstr "पुस्तचिन्ह जोड़ें (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "पुस्तचिह्न संपादित करें... (&E)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "&Spelling..."
-msgstr "वर्तनी...(&S)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "Check spelling in document"
-msgstr "दस्तावेज़ में वर्तनी जांचें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, kde-format
-msgid "Show or hide menubar"
-msgstr "मेन्यू पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show &Toolbar"
-msgstr "औज़ार पट्टी दिखाएँ (&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show or hide toolbar"
-msgstr "औज़ार पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, kde-format
-msgid "Show or hide statusbar"
-msgstr "स्थिति पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, kde-format
-msgid "F&ull Screen Mode"
-msgstr "पूर्ण स्क्रीन मोड (&u)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, kde-format
-msgid "&Save Settings"
-msgstr "विन्यास सहेजें (&S)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "शार्टकटों को विन्यस्त करें... (&h)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, kde-format
-msgid "&Configure %1..."
-msgstr "%1 विन्यस्त करें...(&C)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, kde-format
-msgid "Configure Tool&bars..."
-msgstr "औज़ार पट्टी विन्यस्त करें... (&b)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, kde-format
-msgid "Configure &Notifications..."
-msgstr "सूचनाएँ विन्यस्त करें.... (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, kde-format
-msgid "Reset Configurations"
-msgstr "विन्यास को रीसेट करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1 हैंडबुक (&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr "यह क्या है? (&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "आज का नुस्ख़ा (&D)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, kde-format
-msgid "&Report Bug..."
-msgstr "त्रुटि दर्ज करें... (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, kde-format
-msgid "Switch Application &Language..."
-msgstr "अनुप्रयोग की भाषा बदलें... (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, kde-format
-msgid "&About %1"
-msgstr "%1 के बारे में (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, kde-format
-msgid "About &KDE"
-msgstr "केडीई के बारे में (&K)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -36332,13 +35850,13 @@ msgstr "केडीई में शामिल हों (&J)"
 msgid "&Support KDE"
 msgstr "केडीई का समर्थन करें (&S)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr "बग रपट जमा करें"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
@@ -36347,12 +35865,12 @@ msgstr ""
 "जिस अनुप्रयोग के लिए आप बग रिपोर्ट दर्ज करना चाहते हैं - यदि गलत है, तो कृपया सही "
 "अनुप्रयोग के रिपोर्ट बग मेनू का उपयोग करें"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, kde-format
 msgid "Application: "
 msgstr "अनुप्रयोग : "
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
@@ -36361,23 +35879,23 @@ msgstr ""
 "इस अनुप्रयोग का संस्करण. बग रिपोर्ट भेजने से पहले कृपया सुनिश्चित हों कि कोई नया वर्सन "
 "उपलब्ध तो नहीं है"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, kde-format
 msgid "Version:"
 msgstr "संस्करण :"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr "कोई संस्करण नियत नहीं (प्रोग्रामर त्रुटि)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "ओ एस :"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -36394,76 +35912,71 @@ msgstr ""
 "जहां आपको भरने के लिए एक प्रपत्र मिलेगा।</p><p><b> कृपया निम्नलिखित जानकारी को बग "
 "रिपोर्ट में चिपकाएँ !</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "बग रपट जमा करें (&S)"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "डा. क्लॉश का त्वरक निदान"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "स्वचलित जांच अक्षम करें"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>त्वरक बदले हैं</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, kde-format
 msgid "Old Text"
 msgstr "पुराना पाठ"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "नया पाठ"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>त्वरक हटाए गए</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>त्वरक जोड़ा (सिर्फ आपकी जानकारी के लिए)</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr "--- विभाजक ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "पाठ बदलें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "प्रतीक पाठ (&x):"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "जब टूलबार प्रतीकों के बगल में पाठ दिखाता है तो पाठ छिपाएं (&H)"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "औज़ार पट्टी विन्यस्त करें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -36472,12 +35985,12 @@ msgstr ""
 "क्या आप सचमुच इस अनुप्रयोग के सभी औजारपट्टियों को उनके पूर्वन्यस्त अवस्था पर रीसेट करना "
 "चाहते हैं? परिवर्तनों को तत्काल लागू किया जाएगा ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "औजार-पट्टी रीसेट करें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, kde-format
 msgid "&Toolbar:"
 msgstr "औज़ार पट्टी (&T) :"
@@ -36489,51 +36002,51 @@ msgstr "औज़ार पट्टी (&T) :"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "उपलब्ध क्रियाएँ: (&v)"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "फ़िल्टर"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "वर्तमान क्रियाएं (&e) :"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "फ़िल्टर"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "यह अवयव एक एम्बेडेड अवयव के सभी अवयव के साथ बदल जाएगा ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, kde-format
 msgid "<Merge>"
 msgstr "<Merge>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<Merge %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -36542,13 +36055,13 @@ msgstr ""
 "यह क्रियाओं की गतिशील सूची है. आप इसे स्थानांतरित सकते हैं, पर यदि आपने इसे मिटा दिया तो "
 "आप इसे फिर से जोड़ नहीं सकते ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
 msgid "ActionList: %1"
 msgstr "कार्य सूची: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36639,6 +36152,7 @@ msgid "Alternate"
 msgstr "वैकल्पिक"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -36821,41 +36335,42 @@ msgstr "इस नाम की योजना पहले से ही म�
 #, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
 msgid "Export Shortcuts"
 msgstr "शॉर्टकट्स निर्यात करें"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, kde-format
 msgid "Save Shortcuts"
 msgstr "शॉर्टकट सहेजें"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, kde-format
 msgid "Import Shortcuts"
 msgstr "शॉर्टकट्स आयात करें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, kde-format
 msgid "Switch Application Language"
 msgstr "अनुप्रयोग की भाषा बदलें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "कृपया वह भाषा चुनें जिसका उपयोग इस अनुप्रयोग के लिए किया जाना चाहिए:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "निवर्तन भाषा जोड़ें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -36863,13 +36378,13 @@ msgid ""
 msgstr ""
 "एक और भाषा जोड़ता है जिसका उपयोग अन्य अनुवादों में उचित अनुवाद नहीं होने पर किया जाएगा।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "अनुप्रयोग भाषा परिवर्तित हुइ"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -36878,24 +36393,24 @@ msgstr ""
 "इस अनुप्रयोग की भाषा बदल दी गई है। अगली बार अनुप्रयोग शुरू होने पर परिवर्तन प्रभावी "
 "होगा।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Fallback language:"
 msgstr "निवर्तन भाषा"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Primary language:"
 msgstr "प्राथमिक भाषा:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "यह मुख्य अनुप्रयोग भाषा है जिसका पहले उपयोग होगा किसी भी अन्य भाषा से पहले।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
@@ -36903,109 +36418,109 @@ msgid ""
 msgstr ""
 "यह वह भाषा है जिसका उपयोग तब किया जाएगा जब किसी पिछली भाषा में उचित अनुवाद न हो।"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "पाठ दिखाएँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "औज़ार पट्टी सेटिंग"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "दिशा निर्धारण"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "सिरा"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "बायाँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "दायाँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "तल"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, kde-format
 msgid "Text Position"
 msgstr "पाठ स्थिति"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Icons Only"
 msgstr "सिर्फ प्रतीक"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Only"
 msgstr "सिर्फ पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr "प्रतीकों के बाज़ू में पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "प्रतीकों के नीचे पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr "छोटा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr "मध्यम (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr "बहुत बड़ा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, kde-format
 msgid "Huge (%1x%2)"
 msgstr "बड़ा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "औज़ार-पट्टियों की स्थितियां तालाबंद"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -38407,49 +37922,49 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "परत का नाम :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "समूह नाम भरें :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, kde-format
 msgid "Edit Frames:"
 msgstr "फ़्रेम संपादित करें :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "की-फ़्रेम"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "फ़्रेमों को होल्ड करें"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, kde-format
 msgid "Edit Columns:"
 msgstr "कॉलम संपादित करें:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, fuzzy, kde-format
 #| msgid "Remove Segment"
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "खण्ड मिटाएँ"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -43352,6 +42867,12 @@ msgstr "अपवाद :"
 #, kde-format
 msgid "Script Editor"
 msgstr "स्क्रिप्ट संपादक"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "नया (&N)"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -58994,8 +58515,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
+#, fuzzy, kde-format
+#| msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr "क्षमा करें, आपके द्वारा दर्ज किया गया नाम अमान्य है।"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -60921,10 +60443,9 @@ msgstr "धब्बे की त्रिज्या :"
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -61788,6 +61309,292 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "View"
+#~ msgid "Fit View"
+#~ msgstr "दृश्य"
+
+#, fuzzy
+#~| msgid "Fit Page Width"
+#~ msgid "Fit View Width"
+#~ msgstr "पृष्ठ चौड़ाई में फिट करें"
+
+#~ msgid "Actual Pixels"
+#~ msgstr "वास्तविक पिक्सल्स"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "पाठ को चौड़ाई के अनुरूप बैठाएँ"
+
+#, fuzzy
+#~| msgid "Fit Page Height"
+#~ msgid "Fit View Height"
+#~ msgstr "पृष्ठ ऊँचाई के अनुरूप"
+
+#~ msgid "&Open..."
+#~ msgstr "खोलें... (&O)"
+
+#~ msgid "Open an existing document"
+#~ msgstr "मौजूदा दस्तावेज़ खोलें"
+
+#~ msgid "Open &Recent"
+#~ msgstr "हाल ही का खोलें  (&R)"
+
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "हाल ही में खोला गया एक दस्तावेज़ खोलें"
+
+#~ msgid "Save document"
+#~ msgstr "दस्तावेज़ सहेजें"
+
+#~ msgid "Save &As..."
+#~ msgstr " ऐसे सहेजें... (&A)"
+
+#~ msgid "Save document under a new name"
+#~ msgstr "दस्तावेज़ को नए नाम से सहेजें"
+
+#~ msgid "Re&vert"
+#~ msgstr "पलटें (&v)"
+
+#~ msgid "Close document"
+#~ msgstr "दस्तावेज़ बन्द करें"
+
+#~ msgid "&Print..."
+#~ msgstr "छापें...(&P)"
+
+#~ msgid "Print document"
+#~ msgstr "दस्तावेज़ छापें"
+
+#~ msgid "Print Previe&w"
+#~ msgstr "छपाई का पूर्वावलोकन (&w)"
+
+#~ msgid "Show a print preview of document"
+#~ msgstr "दस्तावेज़ का छपाई का पूर्वावलोकन दिखाएँ"
+
+#~ msgid "&Mail..."
+#~ msgstr "डाक... (&M)"
+
+#~ msgid "Send document by mail"
+#~ msgstr "दस्तावेज़ डाक से भेजें"
+
+#~ msgid "&Quit"
+#~ msgstr "बाहर जाएँ (&Q)"
+
+#~ msgid "Quit application"
+#~ msgstr "अनुप्रयोग छोड़ें"
+
+#~ msgid "&Undo"
+#~ msgstr "पूर्ववत करें (&U)"
+
+#~ msgid "Undo last action"
+#~ msgstr "पिछली क्रिया पूर्ववत करें"
+
+#~ msgid "Re&do"
+#~ msgstr "फिर करें (&d)"
+
+#~ msgid "Redo last undone action"
+#~ msgstr "पिछली पूर्ववत की गई क्रिया फिर से करें"
+
+#~ msgid "Cu&t"
+#~ msgstr "काटें (&t)"
+
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "चयन काट कर क्लिपबोर्ड पर रखें"
+
+#~ msgid "&Copy"
+#~ msgstr "नक़ल (&C)"
+
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "चयन को क्लिपबोर्ड में नक़ल करें"
+
+#~ msgid "&Paste"
+#~ msgstr "चिपकाएँ"
+
+#~ msgid "Paste clipboard content"
+#~ msgstr "क्लिपबोर्ड से वस्तुएं चिपकाएँ"
+
+#~ msgid "C&lear"
+#~ msgstr "साफ करें (&l)"
+
+#~ msgid "Select &All"
+#~ msgstr "सभी का चयन करें (&A)"
+
+#~ msgid "Dese&lect"
+#~ msgstr "अचयनित (&l)"
+
+#~ msgid "&Find..."
+#~ msgstr "ढूंढें...(&F)"
+
+#~ msgid "Find &Next"
+#~ msgstr "अगला ढूंढें (&N)"
+
+#~ msgid "Find Pre&vious"
+#~ msgstr "पिछला ढूंढें (&v)"
+
+#~ msgid "&Replace..."
+#~ msgstr "प्रतिस्थापित... (&R)"
+
+#~ msgid "&Actual Size"
+#~ msgstr "वास्तविक आकार (&A)"
+
+#~ msgid "View document at its actual size"
+#~ msgstr "दस्तावेज़ को उसके मूल आकार में देखें"
+
+#~ msgid "&Fit to Page"
+#~ msgstr "पृष्ठ के अनुरूप (&F)"
+
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "विंडो में पृष्ठ बिठाने के लिए ज़ूम करें"
+
+#~ msgid "Fit to Page &Width"
+#~ msgstr "पृष्ठ चौड़ाई के अनुरूप बैठाएँ (&W)"
+
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "विंडो में पृष्ठ चौड़ाई के अनुरूप बैठाने हेतु ज़ूम करें"
+
+#~ msgid "Fit to Page &Height"
+#~ msgstr "पृष्ठ ऊँचाई के अनुरूप (&H)"
+
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "विंडो में पृष्ठ ऊँचाई के अनुरूप बैठाने हेतु ज़ूम करें"
+
+#~ msgid "Zoom &In"
+#~ msgstr "ज़ूम इन (&I)"
+
+#~ msgid "Zoom &Out"
+#~ msgstr "ज़ूम आउट (&O)"
+
+#~ msgid "&Zoom..."
+#~ msgstr "ज़ूम... (&Z)"
+
+#~ msgid "Select zoom level"
+#~ msgstr "जूम स्तर चुनें"
+
+#~ msgid "&Redisplay"
+#~ msgstr "फिर से दिखाएँ (&R)"
+
+#~ msgid "Redisplay document"
+#~ msgstr "दस्तावेज़ फिर से दिखाएँ"
+
+#~ msgid "&Up"
+#~ msgstr "ऊपर (&U)"
+
+#~ msgid "Go up"
+#~ msgstr "ऊपर जाएं"
+
+#~ msgid "&Previous Page"
+#~ msgstr "पिछला पृष्ठ (&P)"
+
+#~ msgid "Go to previous page"
+#~ msgstr "पिछले पृष्ठ पर जाएँ"
+
+#~ msgid "&Next Page"
+#~ msgstr "अगला पृष्ठ (&N)"
+
+#~ msgid "Go to next page"
+#~ msgstr "अगले पृष्ठ पर जाएँ"
+
+#~ msgid "&Go To..."
+#~ msgstr "यहाँ जाएं... (&G)"
+
+#~ msgid "&Go to Page..."
+#~ msgstr "पृष्ठ पर जाएं... (&G)"
+
+#~ msgid "&Go to Line..."
+#~ msgstr "पंक्ति पर जाएँ... (&G)"
+
+#~ msgid "&First Page"
+#~ msgstr "प्रथम पृष्ठ (&F)"
+
+#~ msgid "Go to first page"
+#~ msgstr "प्रथम पृष्ठ पर जाएँ"
+
+#~ msgid "&Last Page"
+#~ msgstr "अंतिम पृष्ठ (&L)"
+
+#~ msgid "Go to last page"
+#~ msgstr "अन्तिम पृष्ठ पर जाएं"
+
+#~ msgid "&Back"
+#~ msgstr "पीछे जाएं (&B)"
+
+#~ msgid "Go back in document"
+#~ msgstr "दस्तावेज़ में पीछे जाएँ"
+
+#~ msgid "&Forward"
+#~ msgstr "आगे (&F)"
+
+#~ msgid "Go forward in document"
+#~ msgstr "दस्तावेज़ में आगे जाएं"
+
+#~ msgid "&Add Bookmark"
+#~ msgstr "पुस्तचिन्ह जोड़ें (&A)"
+
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "पुस्तचिह्न संपादित करें... (&E)"
+
+#~ msgid "&Spelling..."
+#~ msgstr "वर्तनी...(&S)"
+
+#~ msgid "Check spelling in document"
+#~ msgstr "दस्तावेज़ में वर्तनी जांचें"
+
+#~ msgid "Show or hide menubar"
+#~ msgstr "मेन्यू पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "Show &Toolbar"
+#~ msgstr "औज़ार पट्टी दिखाएँ (&T)"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "औज़ार पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "स्थिति पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "पूर्ण स्क्रीन मोड (&u)"
+
+#~ msgid "&Save Settings"
+#~ msgstr "विन्यास सहेजें (&S)"
+
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "शार्टकटों को विन्यस्त करें... (&h)"
+
+#~ msgid "&Configure %1..."
+#~ msgstr "%1 विन्यस्त करें...(&C)"
+
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "औज़ार पट्टी विन्यस्त करें... (&b)"
+
+#~ msgid "Configure &Notifications..."
+#~ msgstr "सूचनाएँ विन्यस्त करें.... (&N)"
+
+#~ msgid "Reset Configurations"
+#~ msgstr "विन्यास को रीसेट करें"
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1 हैंडबुक (&H)"
+
+#~ msgid "What's &This?"
+#~ msgstr "यह क्या है? (&T)"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "आज का नुस्ख़ा (&D)"
+
+#~ msgid "&Report Bug..."
+#~ msgstr "त्रुटि दर्ज करें... (&R)"
+
+#~ msgid "Switch Application &Language..."
+#~ msgstr "अनुप्रयोग की भाषा बदलें... (&l)"
+
+#~ msgid "&About %1"
+#~ msgstr "%1 के बारे में (&A)"
+
+#~ msgid "About &KDE"
+#~ msgstr "केडीई के बारे में (&K)"
+
+#~ msgid "--- separator ---"
+#~ msgstr "--- विभाजक ---"
 
 #, fuzzy
 #~| msgid ""

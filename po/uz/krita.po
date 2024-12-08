@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -17605,7 +17605,7 @@ msgid "Rotation (Z)"
 msgstr "Burish"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19803,10 +19803,10 @@ msgstr ""
 msgid "Out"
 msgstr "Boshqa"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20427,26 +20427,26 @@ msgstr ""
 "Huddi shunday nomli hujjat allaqachon mavjud.\n"
 "Uni almashtirishni istaysizmi?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "Hujjatni import qilish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "Toʻgʻri burchak maydonni tanlash"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "Matnni oʻchirish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20455,25 +20455,25 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "Namunani yaratish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "Yangi qatlam yaratish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "Bosim:"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, fuzzy, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20484,13 +20484,13 @@ msgstr ""
 "Huddi shunday nomli hujjat allaqachon mavjud.\n"
 "Uni almashtirishni istaysizmi?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "Matnni oʻchirish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20499,33 +20499,33 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "Skript '%1' faylini ochish muvaffaqiyatsiz tugadi"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "Skript '%1' faylini ochish muvaffaqiyatsiz tugadi"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "Rasmning nomini oʻzgartirish"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21391,7 +21391,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -26226,7 +26226,7 @@ msgstr "Rasmlarga"
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, fuzzy, kde-format
@@ -26582,7 +26582,6 @@ msgstr "Joriy qatlamni oʻchirish"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, fuzzy, kde-format
 msgid "&Save"
@@ -31086,7 +31085,6 @@ msgid "Saving As"
 msgstr "Vaqtni koʻrinishi"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "Boʻsh hujjatni yaratish"
@@ -32859,7 +32857,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Filter: "
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -32878,7 +32876,7 @@ msgstr "Andoza rang"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, fuzzy, kde-format
 msgid "Icon Size"
@@ -32940,7 +32938,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, fuzzy, kde-format
@@ -35403,31 +35401,6 @@ msgstr "Oʻrnini almashtirishmoq"
 msgid "Tool Options"
 msgstr "Toʻldirish moslamalari"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-msgid "Fit View"
-msgstr "&Rasm chizish"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-msgid "Fit View Width"
-msgstr "Eniga moslash"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, fuzzy, kde-format
-msgid "Actual Pixels"
-msgstr "Aktiz shrift"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, fuzzy, kde-format
-msgid "Fit Text Width"
-msgstr "Eniga moslash"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-msgid "Fit View Height"
-msgstr "Eniga moslash"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -35475,504 +35448,51 @@ msgstr "Hech narsa yoʻq"
 msgid "Clear List"
 msgstr "Shriftni oʻzgartirish"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, fuzzy, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "Qulflangan"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, fuzzy, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "Sanani koʻrinishi"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, fuzzy, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "Matnni oʻchirish"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, fuzzy, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "Koʻrsatish/&bekitish"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, fuzzy, kde-format
 msgid "Show &Menubar"
 msgstr "%1 asboblar panelini koʻrsatish"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, fuzzy, kde-format
 msgid "Show St&atusbar"
 msgstr "Asl qatlamni koʻrsatish"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr ""
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "&Yangi"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, fuzzy, kde-format
-msgid "&Open..."
-msgstr "&Ochish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, fuzzy, kde-format
-msgid "Open an existing document"
-msgstr "Mavjud hujjatni &ochish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, fuzzy, kde-format
-msgid "Open &Recent"
-msgstr "Yaqinda ochi&lgan hujjatni ochish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, fuzzy, kde-format
-msgid "Open a document which was recently opened"
-msgstr "Namuna bilan yangi hujjatni ochish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, fuzzy, kde-format
-msgid "Save document"
-msgstr "Boshqa hujjat sifatida saqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, fuzzy, kde-format
-msgid "Save &As..."
-msgstr "Koʻchi&rish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, fuzzy, kde-format
-msgid "Save document under a new name"
-msgstr "Boshqa hujjat sifatida saqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, fuzzy, kde-format
-#| msgid "&Invert"
-msgid "Re&vert"
-msgstr "&Teskari"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, fuzzy, kde-format
-msgid "Close document"
-msgstr "Hujjatni yaratish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, fuzzy, kde-format
-msgid "&Print..."
-msgstr "&Eksport qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, fuzzy, kde-format
-msgid "Print document"
-msgstr "Hujjatni import qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, fuzzy, kde-format
-msgid "Print Previe&w"
-msgstr "Betni koʻrib chiqish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, fuzzy, kde-format
-msgid "&Mail..."
-msgstr "&Pochtani birlashtirish..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, fuzzy, kde-format
-msgid "Send document by mail"
-msgstr "Boshqa hujjat sifatida saqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, fuzzy, kde-format
-msgid "Quit application"
-msgstr "Fayl:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, fuzzy, kde-format
-msgid "&Undo"
-msgstr "Bekor qilish: %1"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, fuzzy, kde-format
-msgid "Undo last action"
-msgstr "%1 ta amalni bekor qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Re&do"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, fuzzy, kde-format
-msgid "Redo last undone action"
-msgstr "%1 ta amalni qaytarish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, fuzzy, kde-format
-msgid "Cut selection to clipboard"
-msgstr "Tanlangani yangi qatlamga koʻchirish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, fuzzy, kde-format
-msgid "&Copy"
-msgstr "Tashkilot"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, fuzzy, kde-format
-msgid "Copy selection to clipboard"
-msgstr "Avtomatik tugatish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, fuzzy, kde-format
-msgid "&Paste"
-msgstr "Sana"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, fuzzy, kde-format
-msgid "Paste clipboard content"
-msgstr "Yaratish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, fuzzy, kde-format
-msgid "C&lear"
-msgstr "Ayiqlar"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, fuzzy, kde-format
-msgid "Select &All"
-msgstr "Belgini tanlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, fuzzy, kde-format
-msgid "Dese&lect"
-msgstr "Belgini tanlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, fuzzy, kde-format
-msgid "&Find..."
-msgstr "Qidirish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, fuzzy, kde-format
-msgid "Find &Next"
-msgstr "Matnni qoʻshish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, fuzzy, kde-format
-msgid "Find Pre&vious"
-msgstr "Oldingi bet"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, fuzzy, kde-format
-msgid "&Replace..."
-msgstr "&Almashtirish:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, fuzzy, kde-format
-msgid "&Actual Size"
-msgstr "Aktiz shrift"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, fuzzy, kde-format
-msgid "&Fit to Page"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, fuzzy, kde-format
-msgid "Zoom to fit page in window"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, fuzzy, kde-format
-msgid "Fit to Page &Width"
-msgstr "Eniga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, fuzzy, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, fuzzy, kde-format
-msgid "Fit to Page &Height"
-msgstr "Eniga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, fuzzy, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, fuzzy, kde-format
-msgid "Zoom &In"
-msgstr "Kattalashtirish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, fuzzy, kde-format
-msgid "Zoom &Out"
-msgstr "Kichiklashtirish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "&Zoom..."
-msgstr "&Boshqa..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "Select zoom level"
-msgstr "Filterni tanlash:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, fuzzy, kde-format
-msgid "&Redisplay"
-msgstr "Koʻrinadigan matn:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, fuzzy, kde-format
-msgid "Redisplay document"
-msgstr "Boʻsh hujjat"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, fuzzy, kde-format
-#| msgid "Up"
-msgid "&Up"
-msgstr "Yuqoriga"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, fuzzy, kde-format
-msgid "&Previous Page"
-msgstr "Oldingi bet"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, fuzzy, kde-format
-msgid "Go to previous page"
-msgstr "Qatlamni yuqoriga koʻchirish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, fuzzy, kde-format
-msgid "&Next Page"
-msgstr "Keyingi bet"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, fuzzy, kde-format
-msgid "Go to next page"
-msgstr "Yangi satr qoʻshish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, fuzzy, kde-format
-msgid "&Go To..."
-msgstr "Matnni qoʻyish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, fuzzy, kde-format
-msgid "&Go to Page..."
-msgstr "Matnni qoʻyish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, fuzzy, kde-format
-msgid "&Go to Line..."
-msgstr "Pastki kolontitul"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, fuzzy, kde-format
-msgid "&First Page"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, fuzzy, kde-format
-msgid "Go to first page"
-msgstr "Betga moslash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, fuzzy, kde-format
-msgid "&Last Page"
-msgstr "Matnni qoʻyish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, fuzzy, kde-format
-msgid "Go to last page"
-msgstr "Matnni qoʻyish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-msgid "&Back"
-msgstr "Qulflangan"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-msgid "Go back in document"
-msgstr "Hujjatni import qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "&Forward"
-msgstr "Sanani koʻrinishi"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "Go forward in document"
-msgstr "Hujjatni import qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, fuzzy, kde-format
-msgid "&Add Bookmark"
-msgstr "Xatchoʻp"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, fuzzy, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "Xatchoʻp"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, fuzzy, kde-format
-msgid "&Spelling..."
-msgstr "Saqlanmoqda..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, fuzzy, kde-format
-msgid "Check spelling in document"
-msgstr "Hujjatni ochish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, fuzzy, kde-format
-msgid "Show or hide menubar"
-msgstr "%1 asboblar panelini koʻrsatish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, fuzzy, kde-format
-msgid "Show &Toolbar"
-msgstr "%1 asboblar panelini koʻrsatish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, fuzzy, kde-format
-msgid "Show or hide toolbar"
-msgstr "%1 asboblar panelini koʻrsatish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, fuzzy, kde-format
-msgid "Show or hide statusbar"
-msgstr "%1 asboblar panelini koʻrsatish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, fuzzy, kde-format
-msgid "F&ull Screen Mode"
-msgstr "Butun ekranga"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, fuzzy, kde-format
-msgid "&Save Settings"
-msgstr "Qator:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, fuzzy, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "Saqlashni tasdiqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, fuzzy, kde-format
-msgid "&Configure %1..."
-msgstr "Saqlashni tasdiqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, fuzzy, kde-format
-msgid "Configure Tool&bars..."
-msgstr "Saqlashni tasdiqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, fuzzy, kde-format
-msgid "Configure &Notifications..."
-msgstr "Saqlashni tasdiqlash"
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, fuzzy, kde-format
-msgid "Reset Configurations"
-msgstr "Moslash..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, fuzzy, kde-format
-msgid "&Report Bug..."
-msgstr "&Eksport qilish"
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, fuzzy, kde-format
-msgid "Switch Application &Language..."
-msgstr "Fayl:"
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, fuzzy, kde-format
-msgid "&About %1"
-msgstr "Krita"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, fuzzy, kde-format
-msgid "About &KDE"
-msgstr "Krita"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -36202,48 +35722,48 @@ msgstr ""
 msgid "&Support KDE"
 msgstr "Krita"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, fuzzy, kde-format
 msgid "Application: "
 msgstr "Fayl:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, fuzzy, kde-format
 msgid "Version:"
 msgstr "Versiya"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -36254,88 +35774,83 @@ msgid ""
 "paste the following information into the bug report!</b></p></qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, fuzzy, kde-format
 msgid "Old Text"
 msgstr "Matnni qoʻshish"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, fuzzy, kde-format
 msgid "New Text"
 msgstr "Matnni qoʻshish"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr ""
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, fuzzy, kde-format
 msgid "Change Text"
 msgstr "Belgi uslubini oʻzgartirish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, fuzzy, kde-format
 msgid "Icon te&xt:"
 msgstr "Matnni qoʻshish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, fuzzy, kde-format
 msgid "Configure Toolbars"
 msgstr "Saqlashni tasdiqlash"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
 "default? The changes will be applied immediately."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, fuzzy, kde-format
 msgid "Reset Toolbars"
 msgstr "%1 asboblar panelini bekitish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, fuzzy, kde-format
 msgid "&Toolbar:"
 msgstr "%1 asboblar panelini koʻrsatish"
@@ -36347,64 +35862,64 @@ msgstr "%1 asboblar panelini koʻrsatish"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, fuzzy, kde-format
 msgid "A&vailable actions:"
 msgstr "Rasmning xossalari"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, fuzzy, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Keyin:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, fuzzy, kde-format
 msgid "Curr&ent actions:"
 msgstr "namoyish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, fuzzy, kde-format
 msgid "Filter"
 msgstr "Keyin:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, fuzzy, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1%"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, fuzzy, kde-format
 msgid "<Merge>"
 msgstr "Qizildan nusxa olish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, fuzzy, kde-format
 msgid "<Merge %1>"
 msgstr "Qizildan nusxa olish"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, fuzzy, kde-format
 msgid "ActionList: %1"
 msgstr "Amal:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, fuzzy, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36495,6 +36010,7 @@ msgid "Alternate"
 msgstr "Burish"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -36677,187 +36193,188 @@ msgstr ""
 #, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, fuzzy, kde-format
 msgid "Export Shortcuts"
 msgstr "Hujjatni eksport qilish"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, fuzzy, kde-format
 msgid "Save Shortcuts"
 msgstr "Saqlashni tasdiqlash"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, fuzzy, kde-format
 msgid "Import Shortcuts"
 msgstr "Hujjatni import qilish"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, fuzzy, kde-format
 msgid "Switch Application Language"
 msgstr "Fayl:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, fuzzy, kde-format
 msgid "Add Fallback Language"
 msgstr "Hamma tillar"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
 "contain a proper translation."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, fuzzy, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "Fayl:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
 "effect the next time the application is started."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Fallback language:"
 msgstr "Hamma tillar"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Primary language:"
 msgstr "Til"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
 "contain a proper translation."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "Matnni qoʻshish"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "Qator:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, fuzzy, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "namoyish"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Yuq&ori:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Chap:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "&Oʻng"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Avtomatik tekislash"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, fuzzy, kde-format
 msgid "Text Position"
 msgstr "Joylashishi"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, fuzzy, kde-format
 msgid "Icons Only"
 msgstr "Rangi:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, fuzzy, kde-format
 msgid "Text Only"
 msgstr "Matnni qoʻshish"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, fuzzy, kde-format
 msgid "Text Alongside Icons"
 msgstr "&Matnning rangi:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, fuzzy, kde-format
 msgid "Text Under Icons"
 msgstr "&Matnning rangi:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, kde-format
 msgid "Huge (%1x%2)"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, fuzzy, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "Qator:"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, fuzzy, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1%"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, fuzzy, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -38233,48 +37750,48 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Qatlamning nomi:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Guruhning nomini kiriting:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Joriy qatlamni oʻchirish"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Qatlamning nomi:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "Yashildan nusxa olish"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, fuzzy, kde-format
 msgid "Edit Columns:"
 msgstr "Qiymati"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "Tanlangan rangni olib tashlash"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -43025,6 +42542,12 @@ msgstr "Amal:"
 #, fuzzy, kde-format
 msgid "Script Editor"
 msgstr "Boʻyoqning oʻlchami"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "&Yangi"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -58625,7 +58148,7 @@ msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format
-msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -60519,10 +60042,9 @@ msgstr "Uskuna:"
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -61394,6 +60916,340 @@ msgstr "Kattalashtirish vositasi"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Rasmning nomini oʻzgartirish"
+
+#, fuzzy
+#~ msgid "Fit View"
+#~ msgstr "&Rasm chizish"
+
+#, fuzzy
+#~ msgid "Fit View Width"
+#~ msgstr "Eniga moslash"
+
+#, fuzzy
+#~ msgid "Actual Pixels"
+#~ msgstr "Aktiz shrift"
+
+#, fuzzy
+#~ msgid "Fit Text Width"
+#~ msgstr "Eniga moslash"
+
+#, fuzzy
+#~ msgid "Fit View Height"
+#~ msgstr "Eniga moslash"
+
+#, fuzzy
+#~ msgid "&Open..."
+#~ msgstr "&Ochish"
+
+#, fuzzy
+#~ msgid "Open an existing document"
+#~ msgstr "Mavjud hujjatni &ochish"
+
+#, fuzzy
+#~ msgid "Open &Recent"
+#~ msgstr "Yaqinda ochi&lgan hujjatni ochish"
+
+#, fuzzy
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "Namuna bilan yangi hujjatni ochish"
+
+#, fuzzy
+#~ msgid "Save document"
+#~ msgstr "Boshqa hujjat sifatida saqlash"
+
+#, fuzzy
+#~ msgid "Save &As..."
+#~ msgstr "Koʻchi&rish"
+
+#, fuzzy
+#~ msgid "Save document under a new name"
+#~ msgstr "Boshqa hujjat sifatida saqlash"
+
+#, fuzzy
+#~| msgid "&Invert"
+#~ msgid "Re&vert"
+#~ msgstr "&Teskari"
+
+#, fuzzy
+#~ msgid "Close document"
+#~ msgstr "Hujjatni yaratish"
+
+#, fuzzy
+#~ msgid "&Print..."
+#~ msgstr "&Eksport qilish"
+
+#, fuzzy
+#~ msgid "Print document"
+#~ msgstr "Hujjatni import qilish"
+
+#, fuzzy
+#~ msgid "Print Previe&w"
+#~ msgstr "Betni koʻrib chiqish"
+
+#, fuzzy
+#~ msgid "&Mail..."
+#~ msgstr "&Pochtani birlashtirish..."
+
+#, fuzzy
+#~ msgid "Send document by mail"
+#~ msgstr "Boshqa hujjat sifatida saqlash"
+
+#, fuzzy
+#~ msgid "Quit application"
+#~ msgstr "Fayl:"
+
+#, fuzzy
+#~ msgid "&Undo"
+#~ msgstr "Bekor qilish: %1"
+
+#, fuzzy
+#~ msgid "Undo last action"
+#~ msgstr "%1 ta amalni bekor qilish"
+
+#, fuzzy
+#~ msgid "Redo last undone action"
+#~ msgstr "%1 ta amalni qaytarish"
+
+#, fuzzy
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "Tanlangani yangi qatlamga koʻchirish"
+
+#, fuzzy
+#~ msgid "&Copy"
+#~ msgstr "Tashkilot"
+
+#, fuzzy
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "Avtomatik tugatish"
+
+#, fuzzy
+#~ msgid "&Paste"
+#~ msgstr "Sana"
+
+#, fuzzy
+#~ msgid "Paste clipboard content"
+#~ msgstr "Yaratish"
+
+#, fuzzy
+#~ msgid "C&lear"
+#~ msgstr "Ayiqlar"
+
+#, fuzzy
+#~ msgid "Select &All"
+#~ msgstr "Belgini tanlash"
+
+#, fuzzy
+#~ msgid "Dese&lect"
+#~ msgstr "Belgini tanlash"
+
+#, fuzzy
+#~ msgid "&Find..."
+#~ msgstr "Qidirish"
+
+#, fuzzy
+#~ msgid "Find &Next"
+#~ msgstr "Matnni qoʻshish"
+
+#, fuzzy
+#~ msgid "Find Pre&vious"
+#~ msgstr "Oldingi bet"
+
+#, fuzzy
+#~ msgid "&Replace..."
+#~ msgstr "&Almashtirish:"
+
+#, fuzzy
+#~ msgid "&Actual Size"
+#~ msgstr "Aktiz shrift"
+
+#, fuzzy
+#~ msgid "&Fit to Page"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "Fit to Page &Width"
+#~ msgstr "Eniga moslash"
+
+#, fuzzy
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "Fit to Page &Height"
+#~ msgstr "Eniga moslash"
+
+#, fuzzy
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "Zoom &In"
+#~ msgstr "Kattalashtirish"
+
+#, fuzzy
+#~ msgid "Zoom &Out"
+#~ msgstr "Kichiklashtirish"
+
+#, fuzzy
+#~ msgid "&Zoom..."
+#~ msgstr "&Boshqa..."
+
+#, fuzzy
+#~ msgid "Select zoom level"
+#~ msgstr "Filterni tanlash:"
+
+#, fuzzy
+#~ msgid "&Redisplay"
+#~ msgstr "Koʻrinadigan matn:"
+
+#, fuzzy
+#~ msgid "Redisplay document"
+#~ msgstr "Boʻsh hujjat"
+
+#, fuzzy
+#~| msgid "Up"
+#~ msgid "&Up"
+#~ msgstr "Yuqoriga"
+
+#, fuzzy
+#~ msgid "&Previous Page"
+#~ msgstr "Oldingi bet"
+
+#, fuzzy
+#~ msgid "Go to previous page"
+#~ msgstr "Qatlamni yuqoriga koʻchirish"
+
+#, fuzzy
+#~ msgid "&Next Page"
+#~ msgstr "Keyingi bet"
+
+#, fuzzy
+#~ msgid "Go to next page"
+#~ msgstr "Yangi satr qoʻshish"
+
+#, fuzzy
+#~ msgid "&Go To..."
+#~ msgstr "Matnni qoʻyish"
+
+#, fuzzy
+#~ msgid "&Go to Page..."
+#~ msgstr "Matnni qoʻyish"
+
+#, fuzzy
+#~ msgid "&Go to Line..."
+#~ msgstr "Pastki kolontitul"
+
+#, fuzzy
+#~ msgid "&First Page"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "Go to first page"
+#~ msgstr "Betga moslash"
+
+#, fuzzy
+#~ msgid "&Last Page"
+#~ msgstr "Matnni qoʻyish"
+
+#, fuzzy
+#~ msgid "Go to last page"
+#~ msgstr "Matnni qoʻyish"
+
+#, fuzzy
+#~ msgid "&Back"
+#~ msgstr "Qulflangan"
+
+#, fuzzy
+#~ msgid "Go back in document"
+#~ msgstr "Hujjatni import qilish"
+
+#, fuzzy
+#~ msgid "&Forward"
+#~ msgstr "Sanani koʻrinishi"
+
+#, fuzzy
+#~ msgid "Go forward in document"
+#~ msgstr "Hujjatni import qilish"
+
+#, fuzzy
+#~ msgid "&Add Bookmark"
+#~ msgstr "Xatchoʻp"
+
+#, fuzzy
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "Xatchoʻp"
+
+#, fuzzy
+#~ msgid "&Spelling..."
+#~ msgstr "Saqlanmoqda..."
+
+#, fuzzy
+#~ msgid "Check spelling in document"
+#~ msgstr "Hujjatni ochish"
+
+#, fuzzy
+#~ msgid "Show or hide menubar"
+#~ msgstr "%1 asboblar panelini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Show &Toolbar"
+#~ msgstr "%1 asboblar panelini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Show or hide toolbar"
+#~ msgstr "%1 asboblar panelini koʻrsatish"
+
+#, fuzzy
+#~ msgid "Show or hide statusbar"
+#~ msgstr "%1 asboblar panelini koʻrsatish"
+
+#, fuzzy
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "Butun ekranga"
+
+#, fuzzy
+#~ msgid "&Save Settings"
+#~ msgstr "Qator:"
+
+#, fuzzy
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "Saqlashni tasdiqlash"
+
+#, fuzzy
+#~ msgid "&Configure %1..."
+#~ msgstr "Saqlashni tasdiqlash"
+
+#, fuzzy
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "Saqlashni tasdiqlash"
+
+#, fuzzy
+#~ msgid "Configure &Notifications..."
+#~ msgstr "Saqlashni tasdiqlash"
+
+#, fuzzy
+#~ msgid "Reset Configurations"
+#~ msgstr "Moslash..."
+
+#, fuzzy
+#~ msgid "&Report Bug..."
+#~ msgstr "&Eksport qilish"
+
+#, fuzzy
+#~ msgid "Switch Application &Language..."
+#~ msgstr "Fayl:"
+
+#, fuzzy
+#~ msgid "&About %1"
+#~ msgstr "Krita"
+
+#, fuzzy
+#~ msgid "About &KDE"
+#~ msgstr "Krita"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

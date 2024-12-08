@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-06 01:49+0000\n"
-"PO-Revision-Date: 2024-12-06 20:17+0000\n"
+"POT-Creation-Date: 2024-12-08 01:47+0000\n"
+"PO-Revision-Date: 2024-12-07 21:06+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -12441,126 +12441,122 @@ msgstr "Aðskilja í smábylgjur"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr "Spegla lárétt"
+msgstr "S&pegla lögum lárétt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230 krita/krita.action:3231
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr "Spegla lagi lárétt"
+msgstr "Spegla lögum lárétt"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr "Spegla lóðrétt"
+msgstr "Spe&gla lögum lóðrétt"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242 krita/krita.action:3243
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr "Spegla lagi lóðrétt"
+msgstr "Spegla lögum lóðrétt"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "Snúa lagi"
+msgstr "S&núa lögum"
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254 krita/krita.action:3255
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr "Snúa lagi"
+msgstr "Snúa lögum"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3264
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr "Snúa mynd til hægri"
+msgstr "Snúa &lögum 90° til hægri"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3266 krita/krita.action:3267
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr "Snúa mynd til hægri"
+msgstr "Snúa lögum 90° til hægri"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3276
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr "Snúa mynd til vinstri"
+msgstr "Snúa lögum &90° til vinstri"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3278 krita/krita.action:3279
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr "Snúa mynd til vinstri"
+msgstr "Snúa lögum 90° til vinstri"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3288
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr "Snúa lagi"
+msgstr "Snúa lögum &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3290 krita/krita.action:3291
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr "Snúa lagi"
+msgstr "Snúa lögum 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3300
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Kvarða mynd"
+msgstr "Kvarða &lög í nýja stærð..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3302 krita/krita.action:3303
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr "Kvarða mynd"
+msgstr "Kvarða lög í nýja stærð"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3312
@@ -12765,10 +12761,10 @@ msgstr "&Breyta lýsigögnum..."
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3446 krita/krita.action:3447
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Edit metadata"
-msgstr "Breyta metagögnum"
+msgstr "Breyta lýsigögnum"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3456
@@ -12782,7 +12778,7 @@ msgstr "&Litatíðnirit..."
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3458 krita/krita.action:3459
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Histogram"
 msgstr "Litatíðnirit"
@@ -12828,48 +12824,44 @@ msgstr ""
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
-msgstr "Kvarða lag"
+msgstr "Sa&meina við lag fyrir neðan"
 
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3494 krita/krita.action:3495
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
-msgstr "Kvarða lag"
+msgstr "Sameina við lag fyrir neðan"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
-msgstr "Fletja mynd"
+msgstr "&Fletja lag"
 
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3506 krita/krita.action:3507
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten image"
+#, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
-msgstr "Fletja mynd"
+msgstr "Fletja lag"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3516
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
-msgstr "Fletja mynd"
+msgstr "Fletja m&ynd"
 
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
@@ -12883,20 +12875,20 @@ msgstr "Fletja mynd"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3528
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr "Mynd"
+msgstr "Stíll la&gs..."
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3530 krita/krita.action:3531
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Layer Style"
-msgstr "Mynd"
+msgstr "Stíll lags"
 
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
@@ -12973,7 +12965,7 @@ msgstr "Flytja lag"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3608
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Properties..."
 msgstr "&Eiginleikar..."
@@ -13205,7 +13197,7 @@ msgstr ""
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "File"
 msgstr "Skrá"
@@ -13226,56 +13218,56 @@ msgstr "Búa til nýtt skjal"
 
 #. i18n: context: iconText @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "New"
 msgstr "Nýtt"
 
 #. i18n: context: text @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:19
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "Opna"
+msgstr "&Opna..."
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open an existing document"
-msgstr "Opna skjal"
+msgstr "Opna fyrirliggjandi skjal"
 
 #. i18n: context: iconText @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:22
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open"
-msgstr "&Opna"
+msgstr "Opna"
 
 #. i18n: context: text @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open &Recent"
-msgstr "Opna ný&legt"
+msgstr "O&pna nýlegt"
 
 #. i18n: context: toolTip @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:33
 #, kde-format
 msgctxt "action"
 msgid "Open a document which was recently opened"
-msgstr "Opna nýlega opnað skjal"
+msgstr "Opna skjal sem var nýlega opnað"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open Recent"
-msgstr "Opna ný&legt"
+msgstr "Opna nýlegt"
 
 #. i18n: context: text @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:43
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Save"
 msgstr "Vi&sta"
@@ -13285,17 +13277,17 @@ msgstr "Vi&sta"
 #. i18n: context: toolTip @ Action (file_save), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_save), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:45 krita/kritamenu.action:46
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save"
 msgstr "Vista"
 
 #. i18n: context: text @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:55
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "Vista &sem..."
+msgstr "Vist&a sem..."
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -13306,34 +13298,31 @@ msgstr "Vista skjal með nýju heiti"
 
 #. i18n: context: iconText @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Save As"
 msgstr "Vista sem"
 
 #. i18n: context: text @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:67
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Settings..."
+#, kde-format
 msgctxt "action"
 msgid "Sessions..."
-msgstr "Stillingar..."
+msgstr "Setur..."
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Open session manager"
-msgstr "Mynd"
+msgstr "Opna setustýringuna"
 
 #. i18n: context: iconText @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:70
-#, fuzzy, kde-format
-#| msgid "Dimensions"
+#, kde-format
 msgctxt "action"
 msgid "Sessions"
-msgstr "Stærðir"
+msgstr "Setur"
 
 #. i18n: context: text @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:80
@@ -13354,7 +13343,7 @@ msgstr "Opna þetta skjal"
 
 #. i18n: context: text @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:92
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "E&xport..."
 msgstr "&Flytja út..."
@@ -13367,7 +13356,7 @@ msgstr "&Flytja út..."
 #. i18n: context: iconText @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:94 krita/kritamenu.action:95
 #: krita/kritamenu.action:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Export"
 msgstr "Flytja út"
@@ -13557,7 +13546,7 @@ msgstr "Loka &öllu"
 #. i18n: context: toolTip @ Action (file_close_all), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close_all), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:227 krita/kritamenu.action:228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Close All"
 msgstr "Loka öllu"
@@ -13574,14 +13563,14 @@ msgstr "&Loka"
 #. i18n: context: toolTip @ Action (file_close), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_close), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:239 krita/kritamenu.action:240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Close"
 msgstr "Loka"
 
 #. i18n: context: text @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:249
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Quit"
 msgstr "&Hætta"
@@ -13591,18 +13580,18 @@ msgstr "&Hætta"
 #, kde-format
 msgctxt "action"
 msgid "Quit application"
-msgstr "Loka forriti"
+msgstr "Hætta í forritinu"
 
 #. i18n: context: iconText @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Quit"
-msgstr "&Hætta"
+msgstr "Hætta"
 
 #. i18n: context: text @ Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:262
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Edit"
 msgstr "Breyta"
@@ -13612,7 +13601,7 @@ msgstr "Breyta"
 #. i18n: context: text @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_undo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:265 krita/kritamenu.action:268
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Undo"
 msgstr "Afturkalla"
@@ -13629,14 +13618,14 @@ msgstr "Afturkalla síðustu aðgerð"
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:277 krita/kritamenu.action:280
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Redo"
 msgstr "Endurtaka"
 
 #. i18n: context: toolTip @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:279
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Redo last undone action"
 msgstr "Endurtaka síðustu aðgerð"
@@ -13664,7 +13653,7 @@ msgstr "Klippa"
 
 #. i18n: context: text @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:301
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Copy"
 msgstr "&Afrita"
@@ -13678,7 +13667,7 @@ msgstr "Afrita val á klippispjald"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Copy"
 msgstr "Afrita"
@@ -13753,21 +13742,21 @@ msgstr ""
 
 #. i18n: context: text @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Paste"
 msgstr "&Líma"
 
 #. i18n: context: toolTip @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:363
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste clipboard content"
-msgstr "Senda efni"
+msgstr "Líma efni af klippispjaldi"
 
 #. i18n: context: iconText @ Action (edit_paste), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:364
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Paste"
 msgstr "Líma"
@@ -13868,7 +13857,7 @@ msgstr "Viltu virkilega skrifa yfir sniðið '%1' sem þegar er til?"
 
 #. i18n: context: text @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:446
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "C&lear"
 msgstr "Hr&einsa"
@@ -13878,7 +13867,7 @@ msgstr "Hr&einsa"
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:448 krita/kritamenu.action:449
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Clear"
 msgstr "Hreinsa"
@@ -13983,10 +13972,10 @@ msgstr "Draga í val"
 #. i18n: context: iconText @ Action (delete_keyframe), Actions (EditFill), ActionCollection (Menu)
 #: krita/kritamenu.action:561 krita/kritamenu.action:563
 #: krita/kritamenu.action:564
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Delete keyframe"
-msgstr "Setja inn athugasemd"
+msgstr "Eyða lykilramma"
 
 #. i18n: context: text @ Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (window), Actions (Settings), ActionCollection (Menu)
@@ -14003,7 +13992,7 @@ msgstr "Gluggi"
 
 #. i18n: context: text @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:578
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&New Window"
 msgstr "&Nýr gluggi"
@@ -14013,24 +14002,24 @@ msgstr "&Nýr gluggi"
 #. i18n: context: toolTip @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_newwindow), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:580 krita/kritamenu.action:581
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "New Window"
 msgstr "Nýr gluggi"
 
 #. i18n: context: text @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:590
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "N&ext"
-msgstr "Á&fram >"
+msgstr "Næst&a"
 
 #. i18n: context: toolTip @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (windows_next), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:592 krita/kritamenu.action:593
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Next"
 msgstr "Næsta"
@@ -14043,14 +14032,14 @@ msgstr "Næsta"
 #. i18n: context: iconText @ Action (windows_previous), Actions (Window), ActionCollection (Menu)
 #: krita/kritamenu.action:602 krita/kritamenu.action:604
 #: krita/kritamenu.action:605
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Previous"
-msgstr "Fyrri"
+msgstr "Fyrra"
 
 #. i18n: context: text @ Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:613
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "View"
 msgstr "Skoða"
@@ -15462,24 +15451,24 @@ msgstr "Ramma myndval"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1585
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "S&mooth"
-msgstr "Mjúkt"
+msgstr "&Mýking"
 
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1587 krita/kritamenu.action:1588
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Smooth"
-msgstr "Mjúkt"
+msgstr "Mýking"
 
 #. i18n: context: text @ Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1598
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Filter"
 msgstr "Sía"
@@ -15526,10 +15515,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (adjust_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1625 krita/kritamenu.action:1627
 #: krita/kritamenu.action:1628
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Adjust"
-msgstr "Breyta"
+msgstr "Aðlaga"
 
 #. i18n: context: text @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
@@ -15539,10 +15528,10 @@ msgstr "Breyta"
 #. i18n: context: iconText @ Action (artistic_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1635 krita/kritamenu.action:1637
 #: krita/kritamenu.action:1638
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Artistic"
-msgstr "Texti"
+msgstr "Listrænt"
 
 #. i18n: context: text @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
@@ -15552,7 +15541,7 @@ msgstr "Texti"
 #. i18n: context: iconText @ Action (color_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1655 krita/kritamenu.action:1657
 #: krita/kritamenu.action:1658
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Colors"
 msgstr "Litir"
@@ -15565,12 +15554,10 @@ msgstr "Litir"
 #. i18n: context: iconText @ Action (edge_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1665 krita/kritamenu.action:1667
 #: krita/kritamenu.action:1668
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Erode Selection"
+#, kde-format
 msgctxt "action"
 msgid "Edge Detection"
-msgstr "Ramma myndval"
+msgstr "Greining brúna"
 
 #. i18n: context: text @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
@@ -15580,10 +15567,10 @@ msgstr "Ramma myndval"
 #. i18n: context: iconText @ Action (enhance_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1675 krita/kritamenu.action:1677
 #: krita/kritamenu.action:1678
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Enhance"
-msgstr "Bæta"
+msgstr "Bæting"
 
 #. i18n: context: text @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
@@ -15593,10 +15580,10 @@ msgstr "Bæta"
 #. i18n: context: iconText @ Action (emboss_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1685 krita/kritamenu.action:1687
 #: krita/kritamenu.action:1688
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Emboss"
-msgstr "Upphleypt"
+msgstr "Upphleypa"
 
 #. i18n: context: text @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
@@ -15606,7 +15593,7 @@ msgstr "Upphleypt"
 #. i18n: context: iconText @ Action (map_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1695 krita/kritamenu.action:1697
 #: krita/kritamenu.action:1698
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Map"
 msgstr "Vörpun"
@@ -15619,7 +15606,7 @@ msgstr "Vörpun"
 #. i18n: context: iconText @ Action (other_filters), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1705 krita/kritamenu.action:1707
 #: krita/kritamenu.action:1708
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Other"
 msgstr "Annað"
@@ -15674,58 +15661,58 @@ msgstr "Stillingar"
 
 #. i18n: context: text @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1739
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
-msgstr "&Stilla %1..."
+msgstr "&Grunnstilla Krita..."
 
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1741 krita/kritamenu.action:1742
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Configure Krita"
-msgstr "Stilla"
+msgstr "Grunnstilla Krita"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1751
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
-msgstr "Stjórna auðlindum"
+msgstr "Sýsla &með tilföng aðgerðasafna..."
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1753
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Manage Resource Libraries"
-msgstr "Stjórna auðlindum"
+msgstr "Sýsla með tilföng aðgerðasafna"
 
 #. i18n: context: iconText @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1754
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Manage Resources Libraries"
-msgstr "Stjórna auðlindum"
+msgstr "Sýsla með tilföng aðgerðasafna"
 
 #. i18n: context: text @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1763
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
-msgstr "Stjórna auðlindum"
+msgstr "Sýsla með tilföng..."
 
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1765 krita/kritamenu.action:1766
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Manage Resources"
-msgstr "Stjórna auðlindum"
+msgstr "Sýsla með tilföng"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1775
@@ -15746,60 +15733,54 @@ msgstr "Skipta um tungumál forrits"
 
 #. i18n: context: text @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1785
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Show Dockers"
-msgstr "Sérsniðið skjal"
+msgstr "&Birta spjöld"
 
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockers), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1787 krita/kritamenu.action:1788
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Rulers"
+#, kde-format
 msgctxt "action"
 msgid "Show Dockers"
-msgstr "Birta mælistikur"
+msgstr "Birta spjöld"
 
 #. i18n: context: text @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1797
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Rulers"
+#, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Birta mælistikur"
+msgstr "Birta &titilslár spjalda"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1799 krita/kritamenu.action:1800
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Rulers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Titlebars"
-msgstr "Birta mælistikur"
+msgstr "Birta titilslár spjalda"
 
 #. i18n: context: text @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1809
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
-msgstr "Stilla verk&færaslár..."
+msgstr "Grunnstilla ver&kfærastikur..."
 
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1811 krita/kritamenu.action:1812
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Configure Toolbars"
-msgstr "Stilla tækjaslár"
+msgstr "Grunnstilla verkfærastikur"
 
 #. i18n: context: text @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
@@ -15809,10 +15790,10 @@ msgstr "Stilla tækjaslár"
 #. i18n: context: iconText @ Action (settings_dockers_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1821 krita/kritamenu.action:1823
 #: krita/kritamenu.action:1824
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Dockers"
-msgstr "Sérsniðið skjal"
+msgstr "Spjöld"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1831
@@ -15826,26 +15807,24 @@ msgstr "Þ&emu"
 #. i18n: context: toolTip @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1833 krita/kritamenu.action:1834
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Themes"
 msgstr "Þemu"
 
 #. i18n: context: text @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1841
-#, fuzzy, kde-format
-#| msgid "Styles"
+#, kde-format
 msgctxt "action"
 msgid "&Styles"
-msgstr "Stílar"
+msgstr "Stí&lar"
 
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1843 krita/kritamenu.action:1844
-#, fuzzy, kde-format
-#| msgid "Styles"
+#, kde-format
 msgctxt "action"
 msgid "Styles"
 msgstr "Stílar"
@@ -15865,26 +15844,24 @@ msgstr "Penslar"
 
 #. i18n: context: text @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1861
-#, fuzzy, kde-format
-#| msgid "Reset All"
+#, kde-format
 msgctxt "action"
 msgid "Reset All Settings"
-msgstr "Endurstilla Allt"
+msgstr "Endurstilla allar stillingar"
 
 #. i18n: context: toolTip @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1863
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
-msgstr "Sjálfgefið"
+msgstr "Frumstilla allar stillingar á sjálfgefin gildi"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1864
-#, fuzzy, kde-format
-#| msgid "Reset All"
+#, kde-format
 msgctxt "action"
 msgid "Reset Settings"
-msgstr "Endurstilla Allt"
+msgstr "Frumstilla stillingar"
 
 #. i18n: context: text @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1871
@@ -15898,47 +15875,45 @@ msgstr "Stilla &flýtilykla..."
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1873 krita/kritamenu.action:1874
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Configure Shortcuts"
 msgstr "Stilla flýtilykla"
 
 #. i18n: context: text @ Action (window), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1883
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Window"
 msgstr "&Gluggi"
 
 #. i18n: context: text @ Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1894
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Help"
 msgstr "Hjálp"
 
 #. i18n: context: text @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1897
-#, fuzzy, kde-format
-#| msgid "%1 &Handbook"
+#, kde-format
 msgctxt "action"
 msgid "Krita &Handbook"
-msgstr "%1 &handbók"
+msgstr "Krita &handbókin"
 
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_contents), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1899 krita/kritamenu.action:1900
-#, fuzzy, kde-format
-#| msgid "%1 &Handbook"
+#, kde-format
 msgctxt "action"
 msgid "Krita Handbook"
-msgstr "%1 &handbók"
+msgstr "Krita handbókin"
 
 #. i18n: context: text @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1907
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
 msgstr "Senda &villuskýrslu..."
@@ -15951,24 +15926,24 @@ msgstr "Senda &villuskýrslu..."
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
-msgstr "Senda villutilkynningu"
+msgstr "Senda villuskýrslu"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1917
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&About Krita"
-msgstr "Krita"
+msgstr "&Um Krita"
 
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1919 krita/kritamenu.action:1920
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "About Krita"
-msgstr "Krita"
+msgstr "Um Krita"
 
 #. i18n: context: text @ Action (help_about_kde), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1927
@@ -15992,28 +15967,28 @@ msgstr "Um KDE"
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "Penslar og dót"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1941
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Gradients"
-msgstr "Þéttleiki: %1"
+msgstr "&Litstiglar"
 
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1943 krita/kritamenu.action:1944
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Gradients"
 msgstr "Litstiglar"
 
 #. i18n: context: text @ Action (patterns), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1951
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Patterns"
 msgstr "&Mynstur"
@@ -16030,7 +16005,7 @@ msgstr "Mynstur"
 
 #. i18n: context: text @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1961
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Color"
 msgstr "&Litur"
@@ -16040,46 +16015,44 @@ msgstr "&Litur"
 #. i18n: context: toolTip @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (dual), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1963 krita/kritamenu.action:1964
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Color"
-msgstr "Litir"
+msgstr "Litur"
 
 #. i18n: context: text @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1971
-#, fuzzy, kde-format
-#| msgid "Foreground Color"
+#, kde-format
 msgctxt "action"
 msgid "&Choose Foreground Color"
-msgstr "Forgrunnslitur"
+msgstr "Vel&du forgrunnslit"
 
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseForegroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1973 krita/kritamenu.action:1974
-#, fuzzy, kde-format
-#| msgid "Foreground Color"
+#, kde-format
 msgctxt "action"
 msgid "Choose Foreground Color"
-msgstr "Forgrunnslitur"
+msgstr "Veldu forgrunnslit"
 
 #. i18n: context: text @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1981
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Choose Background Color"
-msgstr "Bakgrunnslitur"
+msgstr "Vel&du bakgrunnslit"
 
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (chooseBackgroundColor), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1983 krita/kritamenu.action:1984
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Choose Background Color"
-msgstr "Bakgrunnslitur"
+msgstr "Veldu bakgrunnslit"
 
 #. i18n: context: text @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider1), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16164,24 +16137,24 @@ msgstr "Samsetning pensils"
 #. i18n: context: iconText @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2041 krita/kritamenu.action:2043
 #: krita/kritamenu.action:2044
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Mirror"
 msgstr "Spegla"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2051
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Layouts"
-msgstr "Uppsetning á síðu"
+msgstr "Framsetningar"
 
 #. i18n: context: toolTip @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2053
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select layout"
-msgstr "Velja letur"
+msgstr "Veldu framsetningu"
 
 #. i18n: context: text @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (workspaces), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -17743,7 +17716,7 @@ msgid "Rotation (Z)"
 msgstr "Z snúningur:"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, fuzzy, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19964,10 +19937,10 @@ msgstr "Inn"
 msgid "Out"
 msgstr "Út"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20592,26 +20565,26 @@ msgstr ""
 "Það er þegar til skjal með þessu nafni.\n"
 "Viltu skrifa yfir það?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "Flytja inn skjal"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "Valtól"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "Eyða auðlind"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20620,25 +20593,25 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "Búa til textaramma"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "Búa til textaramma"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "Skrifa yfir pensil?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, fuzzy, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20649,13 +20622,13 @@ msgstr ""
 "Það er þegar til skjal með þessu nafni.\n"
 "Viltu skrifa yfir það?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "Eyða auðlind"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20664,33 +20637,33 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "Gat ekki eytt %1..."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "Gat ekki eytt %1..."
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, fuzzy, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "Setja inn athugasemd"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21563,7 +21536,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -26421,7 +26394,7 @@ msgstr "Bæta við myndum..."
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -26782,7 +26755,6 @@ msgstr "Stighækkandi"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, fuzzy, kde-format
 msgid "&Save"
@@ -31382,7 +31354,6 @@ msgid "Saving As"
 msgstr "Snið"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Búa til nýtt skjal"
@@ -33151,7 +33122,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "Sía \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -33170,7 +33141,7 @@ msgstr "Tækjaslá"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, fuzzy, kde-format
 msgid "Icon Size"
@@ -33232,7 +33203,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, fuzzy, kde-format
@@ -35696,32 +35667,6 @@ msgstr "Fjarlægð:"
 msgid "Tool Options"
 msgstr "Valkostir áhalda"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-msgid "Fit View"
-msgstr "Skoða"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-msgid "Fit View Width"
-msgstr "Laga að breidd glugga"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, fuzzy, kde-format
-msgid "Actual Pixels"
-msgstr "Dílar"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "Laga að breidd glugga"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit to Page &Height"
-msgid "Fit View Height"
-msgstr "Passa á síðu&hæð"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, fuzzy, kde-format
 msgid "Pixel Size"
@@ -35769,48 +35714,46 @@ msgstr "Engar færslur"
 msgid "Clear List"
 msgstr "Hreinsa lista"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, fuzzy, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "Til &baka"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, fuzzy, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "Á&fram"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, fuzzy, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "&Heim"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, fuzzy, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "&Hjálp"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, kde-format
 msgid "Show &Menubar"
 msgstr "Sýna &valslá"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr "Sýna valslá<p>Sýnir valslána aftur eftir að hún hefur verið falin</p>"
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, kde-format
 msgid "Show St&atusbar"
 msgstr "Sýn&a stöðuslá"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, fuzzy, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
@@ -35818,455 +35761,6 @@ msgid ""
 msgstr ""
 "Sýna stöðuslá<br /><br />Sýnir stöðuslána sem er sláin neðst í glugganum sem "
 "birtir stöðuupplýsingar."
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, fuzzy, kde-format
-msgid "&New"
-msgstr "&Ný"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, fuzzy, kde-format
-msgid "&Open..."
-msgstr "Opna"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, fuzzy, kde-format
-msgid "Open an existing document"
-msgstr "Opna skjal"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, fuzzy, kde-format
-msgid "Open &Recent"
-msgstr "Opna ný&legt"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open a document which was recently opened"
-msgstr "Opna nýlega opnað skjal"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, kde-format
-msgid "Save document"
-msgstr "Vista skjal"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, fuzzy, kde-format
-msgid "Save &As..."
-msgstr "Vista &sem..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save document under a new name"
-msgstr "Vista skjal með nýju heiti"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, fuzzy, kde-format
-msgid "Re&vert"
-msgstr "&Bakka"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr "Afturkalla óvistaðar breytingar sem gerðar hafa verið á skjalinu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, fuzzy, kde-format
-msgid "Close document"
-msgstr "Loka skjalinu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "&Print..."
-msgstr "&Prenta..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, fuzzy, kde-format
-msgid "Print document"
-msgstr "Prenta skjal"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, fuzzy, kde-format
-msgid "Print Previe&w"
-msgstr "Forsýna pren&tun"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr "Birta prentskoðun skjals"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "&Mail..."
-msgstr "&Póstsenda..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "Send document by mail"
-msgstr "Senda skjal sem tölvupóst"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, fuzzy, kde-format
-msgid "&Quit"
-msgstr "&Hætta"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "Quit application"
-msgstr "Loka forrit"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "&Undo"
-msgstr "&Afturkalla"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "Undo last action"
-msgstr "Afturkalla síðustu aðgerð"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, fuzzy, kde-format
-msgid "Re&do"
-msgstr "Endur&taka"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, fuzzy, kde-format
-msgid "Redo last undone action"
-msgstr "Endurtaka síðustu aðgerð"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr "&Klippa"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cut selection to clipboard"
-msgstr "Klippa val á klippispjald"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, fuzzy, kde-format
-msgid "&Copy"
-msgstr "&Afrita"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "Copy selection to clipboard"
-msgstr "Afrita val á klippispjald"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, fuzzy, kde-format
-msgid "&Paste"
-msgstr "&Líma"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, fuzzy, kde-format
-msgid "Paste clipboard content"
-msgstr "Senda efni"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, fuzzy, kde-format
-msgid "C&lear"
-msgstr "Hr&einsa"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, fuzzy, kde-format
-msgid "Select &All"
-msgstr "Velja &allt"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, kde-format
-msgid "Dese&lect"
-msgstr "&Afvelja"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, kde-format
-msgid "&Find..."
-msgstr "&Finna..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, fuzzy, kde-format
-msgid "Find &Next"
-msgstr "Finna &næsta"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, kde-format
-msgid "Find Pre&vious"
-msgstr "Finna &fyrra"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "&Skipta út..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "&Raunveruleg stærð"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr "Skoða skjal í raunstærð þess"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "&Fit to Page"
-msgstr "&Passa á síðu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, fuzzy, kde-format
-msgid "Zoom to fit page in window"
-msgstr "Laga aðdrátt síðu að glugga"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Fit to Page &Width"
-msgstr "Passa á síðu&breidd"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, fuzzy, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "Laga aðdrátt breiddar síðu að glugga"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Fit to Page &Height"
-msgstr "Passa á síðu&hæð"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "Laga hæð síðu að glugga"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, fuzzy, kde-format
-msgid "Zoom &In"
-msgstr "Renna &að"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, fuzzy, kde-format
-msgid "Zoom &Out"
-msgstr "Renna &frá"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "&Zoom..."
-msgstr "S&tækkun..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, fuzzy, kde-format
-msgid "Select zoom level"
-msgstr "Velja viku"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "Sýna &aftur"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, fuzzy, kde-format
-msgid "Redisplay document"
-msgstr "Sýna &aftur"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "&Up"
-msgstr "&Upp"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "Fara upp"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "&Previous Page"
-msgstr "&Fyrri síða"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, fuzzy, kde-format
-msgid "Go to previous page"
-msgstr "Fara á fyrri síðu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "&Next Page"
-msgstr "&Næsta síða"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, fuzzy, kde-format
-msgid "Go to next page"
-msgstr "Fara á næstu síðu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, kde-format
-msgid "&Go To..."
-msgstr "&Fara að..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, kde-format
-msgid "&Go to Page..."
-msgstr "Fara á &síðu..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, kde-format
-msgid "&Go to Line..."
-msgstr "Fara að &línu..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "&First Page"
-msgstr "F&yrsta síða"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, fuzzy, kde-format
-msgid "Go to first page"
-msgstr "Fara á fyrstu síðu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "&Last Page"
-msgstr "&Síðasta síða"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, fuzzy, kde-format
-msgid "Go to last page"
-msgstr "Fara á öftustu síðu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-msgid "&Back"
-msgstr "Til &baka"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, fuzzy, kde-format
-msgid "Go back in document"
-msgstr "Afturá&bak í skjalinu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "&Forward"
-msgstr "Á&fram"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, fuzzy, kde-format
-msgid "Go forward in document"
-msgstr "Á&fram í skjalinu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, fuzzy, kde-format
-msgid "&Add Bookmark"
-msgstr "&Setja bókamerki"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, fuzzy, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "Sýsla m&eð bókamerki..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "&Spelling..."
-msgstr "&Stafsetning..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, fuzzy, kde-format
-msgid "Check spelling in document"
-msgstr "Yfirfara stafsetningu"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, fuzzy, kde-format
-msgid "Show or hide menubar"
-msgstr "Sýna &valslá"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, fuzzy, kde-format
-msgid "Show &Toolbar"
-msgstr "Sýna t&ækjaslá"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, fuzzy, kde-format
-msgid "Show or hide toolbar"
-msgstr "Sýna tækjaslá"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, fuzzy, kde-format
-msgid "Show or hide statusbar"
-msgstr "Sýna eða fela tækjastiku"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, fuzzy, kde-format
-msgid "F&ull Screen Mode"
-msgstr "&Fylla skjá"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, kde-format
-msgid "&Save Settings"
-msgstr "&Vista stillingar"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "Stilla &flýtilykla..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, fuzzy, kde-format
-msgid "&Configure %1..."
-msgstr "&Stilla %1..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, kde-format
-msgid "Configure Tool&bars..."
-msgstr "Stilla tæk&jaslár..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, fuzzy, kde-format
-msgid "Configure &Notifications..."
-msgstr "Stilla t&ilkynningar..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, fuzzy, kde-format
-msgid "Reset Configurations"
-msgstr "Uppsetning"
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1 &handbók"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr "Hvað er þ&etta?"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "Vísbending &dagsins"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, fuzzy, kde-format
-msgid "&Report Bug..."
-msgstr "Senda &villuskýrslu..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, kde-format
-msgid "Switch Application &Language..."
-msgstr "Skipta um &tungumál forrits..."
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, kde-format
-msgid "&About %1"
-msgstr "&Um %1"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, kde-format
-msgid "About &KDE"
-msgstr "Um &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -36534,13 +36028,13 @@ msgstr "&Ganga í KDE hópinn"
 msgid "&Support KDE"
 msgstr "&Styðja KDE"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr "Senda villuskýrslu"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, fuzzy, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
@@ -36549,12 +36043,12 @@ msgstr ""
 "Forritið sem þú vilt senda inn villutilkynningu um - Ef það er rangt getur "
 "þú notað \"Senda villuskýrslu\" hnappinn í réttu forriti"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, kde-format
 msgid "Application: "
 msgstr "Forrit: "
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
@@ -36563,23 +36057,23 @@ msgstr ""
 "Útgáfa forritsins - Vinsamlega gaktu úr skugga um að ekki sé til nýrri "
 "útgáfa áður en þú sendir villutilkynningu"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, fuzzy, kde-format
 msgid "Version:"
 msgstr "Útgáfa:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr "ekkert útgáfunúmer gefið (villa forritara)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "Kerfi:"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, fuzzy, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -36595,77 +36089,72 @@ msgstr ""
 "\">http://bugs.kde.org</a> þar sem er eyðublað fyrir villuskýrslur.\n"
 "Upplýsingarnar hér að ofan verða sendar þangað.</qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, fuzzy, kde-format
 #| msgid "Submit Bug Report"
 msgid "&Submit Bug Report"
 msgstr "Senda villuskýrslu"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "Dr. Klash' flýtilyklaskoðun"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "Aftengja sjáfvirka athugun"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>Flýtilyklum breytt</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, kde-format
 msgid "Old Text"
 msgstr "Eldri texti"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "Nýr texti"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>Flýtilyklar fjarlægðir</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>Flýtilyklum bætt við (þér til fróðleiks)</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, fuzzy, kde-format
-msgid "--- separator ---"
-msgstr "--- aðskiljari ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "Breyta texta"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "Te&xti táknmyndar:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "&Fela texta þegar tækjasláin sýnir texta við hlið táknmynda"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, fuzzy, kde-format
 msgid "Configure Toolbars"
 msgstr "Stilla tækjaslár"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -36674,12 +36163,12 @@ msgstr ""
 "Ertu viss um að þú viljir frumstilla allar tækjaslár forritsins? "
 "Breytingarnar munu taka gildi strax."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "Frumstilla tækjaslár"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, kde-format
 msgid "&Toolbar:"
 msgstr "&Tækjaslá:"
@@ -36691,51 +36180,51 @@ msgstr "&Tækjaslá:"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "Tiltækar &aðgerðir:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, fuzzy, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "Sía"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "Núv&erandi aðgerðir:"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, fuzzy, kde-format
 msgid "Filter"
 msgstr "Sía"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, fuzzy, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "Þessum hluta verður skipt út fyrir alla hluta ígræddra eininga."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, fuzzy, kde-format
 msgid "<Merge>"
 msgstr "blátt"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, fuzzy, kde-format
 msgid "<Merge %1>"
 msgstr "blátt"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -36744,13 +36233,13 @@ msgstr ""
 "Þetta er breytilegur aðgerðalisti. Þú getur fært hann, en ef honum er eytt, "
 "er ekki hægt að setja hann aftur inn."
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
 msgid "ActionList: %1"
 msgstr "Aðgerðalisti: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36842,6 +36331,7 @@ msgid "Alternate"
 msgstr "Varaleið"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -37037,46 +36527,50 @@ msgid "A scheme with this name already exists."
 msgstr "Skema með þessu nafni er þegar til staðar."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Do you really want to delete the scheme %1?\n"
+#| "Note that this will not remove any system wide shortcut schemes."
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 "Viltu í alvörunni eyða skemanu %1?\n"
 "Athugaðu að það mun ekki eyða neinu af kerfislægu flýtilyklaskemunum."
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
 msgid "Export Shortcuts"
 msgstr "Flytja út flýtilykla"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, fuzzy, kde-format
 msgid "Save Shortcuts"
 msgstr "Stilla..."
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, kde-format
 msgid "Import Shortcuts"
 msgstr "Flytja inn flýtilykla"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, kde-format
 msgid "Switch Application Language"
 msgstr "Skipta um tungumál forrits"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "Veldu það tungumál sem nota ætti í þessu forriti:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "Bæta við varatungumáli"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -37085,13 +36579,13 @@ msgstr ""
 "Bætir við einu tungumáli í viðbót sem notað verður ef önnur mál eiga ekki "
 "fullnægjandi þýðingar."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "Skipt var um tungumál forrits"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -37100,24 +36594,24 @@ msgstr ""
 "Tungumálið sem forritið notar hefur breyst, umskiptin verða sýnileg næst "
 "þegar forritið verður ræst."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Fallback language:"
 msgstr "Tungumál til vara:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, fuzzy, kde-format
 msgid "Primary language:"
 msgstr "Aðaltungumál:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "Þetta er tungumálið sem fyrst verður notað, á undan nokkru öðru máli."
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
@@ -37126,109 +36620,109 @@ msgstr ""
 "Þetta er tungumálið sem notað verður ef ekkert framantalinna tungumála eiga "
 "sér fullnægjandi þýðingar."
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "Birta texta"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, fuzzy, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "Stillingar tækjasláar"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "Stefna"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Efst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Til vinstri"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "Til hægri"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, fuzzy, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Neðst"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, fuzzy, kde-format
 msgid "Text Position"
 msgstr "Textastaða"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, fuzzy, kde-format
 msgid "Icons Only"
 msgstr "Aðeins táknmyndir"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, fuzzy, kde-format
 msgid "Text Only"
 msgstr "Einungis texti"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr "Texti við hlið táknmynda"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "Texti undir táknmyndum"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, fuzzy, kde-format
 msgid "Small (%1x%2)"
 msgstr "Lítið (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr "Miðlungs (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, fuzzy, kde-format
 msgid "Large (%1x%2)"
 msgstr "Stórt (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, fuzzy, kde-format
 msgid "Huge (%1x%2)"
 msgstr "Risastórt (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "Festa staðsetningu tækjasláa"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -38623,50 +38117,50 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Skrifaðu nafn á hóp:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, fuzzy, kde-format
 #| msgctxt "./krita/data/palettes/swatch-rgb.gpl"
 #| msgid "Swatch RGB"
 msgid "Edit Frames:"
 msgstr "RGB litaprufa"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "grænt"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, fuzzy, kde-format
 msgid "Edit Columns:"
 msgstr "Dálkar"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "Fjarlægja athugasemd"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -43501,6 +42995,12 @@ msgstr "~Undantekning (-)"
 #| msgid "Script error"
 msgid "Script Editor"
 msgstr "Skriftuvilla"
+
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, fuzzy, kde-format
+msgid "&New"
+msgstr "&Ný"
 
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
@@ -59394,7 +58894,7 @@ msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format
-msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -60055,10 +59555,10 @@ msgstr "Fjarlægja sniðskrá"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "SVG Text Tool"
-msgstr "Texti"
+msgstr "SVG-textaverkfæri"
 
 #. i18n: context: text @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (SvgTextTool), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60325,8 +59825,7 @@ msgstr "Skáletrað"
 #: plugins/tools/svgtexttool/SvgTextTool.action:186
 #: plugins/tools/svgtexttool/SvgTextTool.action:188
 #: plugins/tools/svgtexttool/SvgTextTool.action:193
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "action"
 msgid "Normal"
 msgstr "Venjulegt"
@@ -60354,7 +59853,7 @@ msgstr "Hálf-feitletrað"
 #: plugins/tools/svgtexttool/SvgTextTool.action:206
 #: plugins/tools/svgtexttool/SvgTextTool.action:208
 #: plugins/tools/svgtexttool/SvgTextTool.action:213
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Black"
 msgstr "Svart"
@@ -60368,10 +59867,10 @@ msgstr "Svart"
 #: plugins/tools/svgtexttool/SvgTextTool.action:216
 #: plugins/tools/svgtexttool/SvgTextTool.action:218
 #: plugins/tools/svgtexttool/SvgTextTool.action:223
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Light"
-msgstr "Létt"
+msgstr "Ljóst"
 
 #. i18n: context: iconText @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60386,17 +59885,17 @@ msgstr "Hæð línu"
 
 #. i18n: context: toolTip @ Action (svg_line_height), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Line Height in em"
-msgstr "línuhæð"
+msgstr "Hæð línu í em"
 
 #. i18n: context: toolTip @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:238
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Text Editor Settings"
-msgstr "Síustillingar"
+msgstr "Stillingar textaritils"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:243
@@ -60418,11 +59917,10 @@ msgstr "Stillingar..."
 #: plugins/tools/svgtexttool/SvgTextTool.action:246
 #: plugins/tools/svgtexttool/SvgTextTool.action:253
 #: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-#| msgid "Color space:"
+#, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Litrýmd:"
+msgstr "Litsýnataka"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60433,10 +59931,10 @@ msgstr "Litrýmd:"
 #: plugins/tools/svgtexttool/SvgTextTool.action:256
 #: plugins/tools/svgtexttool/SvgTextTool.action:258
 #: plugins/tools/svgtexttool/SvgTextTool.action:263
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr "Aðvörun"
+msgstr "Stafhnikun"
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60750,7 +60248,7 @@ msgstr "Utanskurðarverkfæri"
 #, kde-format
 msgctxt "action"
 msgid "Crop the image to an area"
-msgstr ""
+msgstr "Skera utan af mynd að svæði"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, boolCenter)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:66
@@ -60896,10 +60394,10 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:7
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:9
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.action:10
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Enclose and Fill Tool"
-msgstr "Málaratól"
+msgstr "Umlykja og fylliverkfæri"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:268
 msgctxt "(qtundo-format)"
@@ -61299,10 +60797,9 @@ msgstr "Gildi"
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -61942,10 +61439,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (KritaShape/KisToolRectangle), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:17 plugins/tools/tools.action:19
 #: plugins/tools/tools.action:20
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rectangle Tool"
-msgstr "Rétthyrningur"
+msgstr "Rétthyrningsverkfæri"
 
 #. i18n: context: text @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -62177,6 +61674,338 @@ msgstr "S&tækkunaráhald"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Stillingar"
+
+#, fuzzy
+#~ msgid "Fit View"
+#~ msgstr "Skoða"
+
+#, fuzzy
+#~ msgid "Fit View Width"
+#~ msgstr "Laga að breidd glugga"
+
+#, fuzzy
+#~ msgid "Actual Pixels"
+#~ msgstr "Dílar"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "Laga að breidd glugga"
+
+#, fuzzy
+#~| msgid "Fit to Page &Height"
+#~ msgid "Fit View Height"
+#~ msgstr "Passa á síðu&hæð"
+
+#, fuzzy
+#~ msgid "&Open..."
+#~ msgstr "Opna"
+
+#, fuzzy
+#~ msgid "Open an existing document"
+#~ msgstr "Opna skjal"
+
+#, fuzzy
+#~ msgid "Open &Recent"
+#~ msgstr "Opna ný&legt"
+
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "Opna nýlega opnað skjal"
+
+#~ msgid "Save document"
+#~ msgstr "Vista skjal"
+
+#, fuzzy
+#~ msgid "Save &As..."
+#~ msgstr "Vista &sem..."
+
+#~ msgid "Save document under a new name"
+#~ msgstr "Vista skjal með nýju heiti"
+
+#, fuzzy
+#~ msgid "Re&vert"
+#~ msgstr "&Bakka"
+
+#~ msgid "Revert unsaved changes made to document"
+#~ msgstr "Afturkalla óvistaðar breytingar sem gerðar hafa verið á skjalinu"
+
+#, fuzzy
+#~ msgid "Close document"
+#~ msgstr "Loka skjalinu"
+
+#~ msgid "&Print..."
+#~ msgstr "&Prenta..."
+
+#, fuzzy
+#~ msgid "Print document"
+#~ msgstr "Prenta skjal"
+
+#, fuzzy
+#~ msgid "Print Previe&w"
+#~ msgstr "Forsýna pren&tun"
+
+#~ msgid "Show a print preview of document"
+#~ msgstr "Birta prentskoðun skjals"
+
+#~ msgid "&Mail..."
+#~ msgstr "&Póstsenda..."
+
+#~ msgid "Send document by mail"
+#~ msgstr "Senda skjal sem tölvupóst"
+
+#, fuzzy
+#~ msgid "&Quit"
+#~ msgstr "&Hætta"
+
+#~ msgid "Quit application"
+#~ msgstr "Loka forrit"
+
+#~ msgid "&Undo"
+#~ msgstr "&Afturkalla"
+
+#~ msgid "Undo last action"
+#~ msgstr "Afturkalla síðustu aðgerð"
+
+#, fuzzy
+#~ msgid "Re&do"
+#~ msgstr "Endur&taka"
+
+#, fuzzy
+#~ msgid "Redo last undone action"
+#~ msgstr "Endurtaka síðustu aðgerð"
+
+#~ msgid "Cu&t"
+#~ msgstr "&Klippa"
+
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "Klippa val á klippispjald"
+
+#, fuzzy
+#~ msgid "&Copy"
+#~ msgstr "&Afrita"
+
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "Afrita val á klippispjald"
+
+#, fuzzy
+#~ msgid "&Paste"
+#~ msgstr "&Líma"
+
+#, fuzzy
+#~ msgid "Paste clipboard content"
+#~ msgstr "Senda efni"
+
+#, fuzzy
+#~ msgid "C&lear"
+#~ msgstr "Hr&einsa"
+
+#, fuzzy
+#~ msgid "Select &All"
+#~ msgstr "Velja &allt"
+
+#~ msgid "Dese&lect"
+#~ msgstr "&Afvelja"
+
+#~ msgid "&Find..."
+#~ msgstr "&Finna..."
+
+#, fuzzy
+#~ msgid "Find &Next"
+#~ msgstr "Finna &næsta"
+
+#~ msgid "Find Pre&vious"
+#~ msgstr "Finna &fyrra"
+
+#~ msgid "&Replace..."
+#~ msgstr "&Skipta út..."
+
+#~ msgid "&Actual Size"
+#~ msgstr "&Raunveruleg stærð"
+
+#~ msgid "View document at its actual size"
+#~ msgstr "Skoða skjal í raunstærð þess"
+
+#~ msgid "&Fit to Page"
+#~ msgstr "&Passa á síðu"
+
+#, fuzzy
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "Laga aðdrátt síðu að glugga"
+
+#~ msgid "Fit to Page &Width"
+#~ msgstr "Passa á síðu&breidd"
+
+#, fuzzy
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "Laga aðdrátt breiddar síðu að glugga"
+
+#~ msgid "Fit to Page &Height"
+#~ msgstr "Passa á síðu&hæð"
+
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "Laga hæð síðu að glugga"
+
+#, fuzzy
+#~ msgid "Zoom &In"
+#~ msgstr "Renna &að"
+
+#, fuzzy
+#~ msgid "Zoom &Out"
+#~ msgstr "Renna &frá"
+
+#, fuzzy
+#~ msgid "&Zoom..."
+#~ msgstr "S&tækkun..."
+
+#, fuzzy
+#~ msgid "Select zoom level"
+#~ msgstr "Velja viku"
+
+#~ msgid "&Redisplay"
+#~ msgstr "Sýna &aftur"
+
+#, fuzzy
+#~ msgid "Redisplay document"
+#~ msgstr "Sýna &aftur"
+
+#~ msgid "&Up"
+#~ msgstr "&Upp"
+
+#~ msgid "Go up"
+#~ msgstr "Fara upp"
+
+#~ msgid "&Previous Page"
+#~ msgstr "&Fyrri síða"
+
+#, fuzzy
+#~ msgid "Go to previous page"
+#~ msgstr "Fara á fyrri síðu"
+
+#~ msgid "&Next Page"
+#~ msgstr "&Næsta síða"
+
+#, fuzzy
+#~ msgid "Go to next page"
+#~ msgstr "Fara á næstu síðu"
+
+#~ msgid "&Go To..."
+#~ msgstr "&Fara að..."
+
+#~ msgid "&Go to Page..."
+#~ msgstr "Fara á &síðu..."
+
+#~ msgid "&Go to Line..."
+#~ msgstr "Fara að &línu..."
+
+#~ msgid "&First Page"
+#~ msgstr "F&yrsta síða"
+
+#, fuzzy
+#~ msgid "Go to first page"
+#~ msgstr "Fara á fyrstu síðu"
+
+#~ msgid "&Last Page"
+#~ msgstr "&Síðasta síða"
+
+#, fuzzy
+#~ msgid "Go to last page"
+#~ msgstr "Fara á öftustu síðu"
+
+#, fuzzy
+#~ msgid "&Back"
+#~ msgstr "Til &baka"
+
+#, fuzzy
+#~ msgid "Go back in document"
+#~ msgstr "Afturá&bak í skjalinu"
+
+#, fuzzy
+#~ msgid "&Forward"
+#~ msgstr "Á&fram"
+
+#, fuzzy
+#~ msgid "Go forward in document"
+#~ msgstr "Á&fram í skjalinu"
+
+#, fuzzy
+#~ msgid "&Add Bookmark"
+#~ msgstr "&Setja bókamerki"
+
+#, fuzzy
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "Sýsla m&eð bókamerki..."
+
+#~ msgid "&Spelling..."
+#~ msgstr "&Stafsetning..."
+
+#, fuzzy
+#~ msgid "Check spelling in document"
+#~ msgstr "Yfirfara stafsetningu"
+
+#, fuzzy
+#~ msgid "Show or hide menubar"
+#~ msgstr "Sýna &valslá"
+
+#, fuzzy
+#~ msgid "Show &Toolbar"
+#~ msgstr "Sýna t&ækjaslá"
+
+#, fuzzy
+#~ msgid "Show or hide toolbar"
+#~ msgstr "Sýna tækjaslá"
+
+#, fuzzy
+#~ msgid "Show or hide statusbar"
+#~ msgstr "Sýna eða fela tækjastiku"
+
+#, fuzzy
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "&Fylla skjá"
+
+#~ msgid "&Save Settings"
+#~ msgstr "&Vista stillingar"
+
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "Stilla &flýtilykla..."
+
+#, fuzzy
+#~ msgid "&Configure %1..."
+#~ msgstr "&Stilla %1..."
+
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "Stilla tæk&jaslár..."
+
+#, fuzzy
+#~ msgid "Configure &Notifications..."
+#~ msgstr "Stilla t&ilkynningar..."
+
+#, fuzzy
+#~ msgid "Reset Configurations"
+#~ msgstr "Uppsetning"
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1 &handbók"
+
+#~ msgid "What's &This?"
+#~ msgstr "Hvað er þ&etta?"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "Vísbending &dagsins"
+
+#, fuzzy
+#~ msgid "&Report Bug..."
+#~ msgstr "Senda &villuskýrslu..."
+
+#~ msgid "Switch Application &Language..."
+#~ msgstr "Skipta um &tungumál forrits..."
+
+#~ msgid "&About %1"
+#~ msgstr "&Um %1"
+
+#~ msgid "About &KDE"
+#~ msgstr "Um &KDE"
+
+#, fuzzy
+#~ msgid "--- separator ---"
+#~ msgstr "--- aðskiljari ---"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

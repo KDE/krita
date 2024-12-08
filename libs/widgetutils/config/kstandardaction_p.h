@@ -101,6 +101,7 @@ static constexpr KStandardActionInfo g_rgActionInfo[] = {
     { SwitchApplicationLanguage, KStandardShortcut::SwitchApplicationLanguage, "switch_application_language", QT_TRANSLATE_NOOP("KStandardActions", "Configure &Language…"), {}, "preferences-desktop-locale" },
     { AboutApp,      KStandardShortcut::AccelNone, "help_about_app", QT_TRANSLATE_NOOP("KStandardActions", "&About %1"), {}, nullptr },
     { AboutKDE,      KStandardShortcut::AccelNone, "help_about_kde", QT_TRANSLATE_NOOP("KStandardActions", "About &KDE"), {}, "kde" },
+    { ActionNone,    KStandardShortcut::AccelNone, {}, {}, {}, {} },
     };
 
 

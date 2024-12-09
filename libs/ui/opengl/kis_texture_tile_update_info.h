@@ -202,9 +202,10 @@ public:
 
     void proofTo(const KoColorSpace* dstCS,
                    KoColorConversionTransformation::ConversionFlags conversionFlags,
+                   KoColorConversionTransformation::ConversionFlags displayFlags,
                    KoColorConversionTransformation *proofingTransform)
     {
-        if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty) return;
+        if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty && displayFlags == KoColorConversionTransformation::Empty) return;
 
         if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();

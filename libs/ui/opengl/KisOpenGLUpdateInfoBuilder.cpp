@@ -146,7 +146,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
 
                 if (convertColorSpace) {
                     if (m_d->proofingTransform) {
-                        tileInfo->proofTo(m_d->conversionOptions.m_destinationColorSpace, m_d->proofingConfig->conversionFlags, m_d->proofingTransform.data());
+                        tileInfo->proofTo(m_d->conversionOptions.m_destinationColorSpace, m_d->proofingConfig->conversionFlags, m_d->proofingConfig->displayFlags, m_d->proofingTransform.data());
                     } else {
                         tileInfo->convertTo(m_d->conversionOptions.m_destinationColorSpace, m_d->conversionOptions.m_renderingIntent, m_d->conversionOptions.m_conversionFlags);
                     }

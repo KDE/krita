@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 01:47+0000\n"
-"PO-Revision-Date: 2024-12-07 21:06+0000\n"
+"PO-Revision-Date: 2024-12-08 22:38+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -2842,12 +2842,12 @@ msgid "ink precision 03"
 msgstr "Undirskipting:"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/pixel1."
 "kpp"
 msgid "pixel1"
-msgstr "pixlar"
+msgstr "mynddíll1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -4548,14 +4548,12 @@ msgstr "Búa til sniðmát"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/pixelart-16.gpl"
-#| msgid "PixelArt 16"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art.kpp"
 msgid "u) Pixel Art"
-msgstr "PixelArt 16"
+msgstr "u) Pixel Art"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4568,14 +4566,12 @@ msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/pixelart-16.gpl"
-#| msgid "PixelArt 16"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "u)_Pixel_Art_Fill.kpp"
 msgid "u) Pixel Art Fill"
-msgstr "PixelArt 16"
+msgstr "u) Pixel Art fylling"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5935,16 +5931,16 @@ msgid "m) RGBA 06 Rock"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "memory/gradients/Foreground to Background.svg"
 msgid "0. Foreground to Background"
-msgstr "bakgrunnur"
+msgstr "0. Forgrunnslitur yfir í bakgrunnslit"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "memory/gradients/Foreground to Transparent.svg"
 msgid "1. Foreground to Transparent"
-msgstr "bakgrunnur"
+msgstr "1. Forgrunnslitur yfir í gegnsætt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_eroded.gih:1
@@ -6739,9 +6735,7 @@ msgstr "Merki"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16.gpl:2
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/pixelart-16.gpl"
-#| msgid "PixelArt 16"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-16."
 "gpl"
@@ -6750,9 +6744,7 @@ msgstr "PixelArt 16"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32.gpl:2
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/pixelart-32.gpl"
-#| msgid "PixelArt 32"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/pixelart-32."
 "gpl"
@@ -12785,33 +12777,30 @@ msgstr "Litatíðnirit"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3468
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr "Litrými myndar"
+msgstr "&Umbreyta litrýmd lags..."
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3470 krita/krita.action:3471
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
-msgstr "Litrými myndar"
+msgstr "Umbreyta litrýmd lags"
 
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3480 krita/krita.action:3483
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Litrými myndar"
+msgstr "Sameina litrýmdir laga"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3482
@@ -13028,7 +13017,7 @@ msgstr "Stillingar"
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:32
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:5
-#, fuzzy, kde-format
+#, kde-format
 msgid "&File"
 msgstr "&Skrá"
 
@@ -13036,18 +13025,18 @@ msgstr "&Skrá"
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:4
 #: plugins/extensions/samplescreencolor/samplescreencolor.xmlgui:4
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:11
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Edit"
 msgstr "Br&eyta"
 
 #: krita/krita5.xmlgui:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill Special"
-msgstr "Óge&gnsæi:"
+msgstr "Sérfylling"
 
 #: krita/krita5.xmlgui:83 libs/widgetutils/xmlgui/ui_standards.xmlgui:101
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:28
-#, fuzzy, kde-format
+#, kde-format
 msgid "&View"
 msgstr "S&koða"
 
@@ -13062,31 +13051,31 @@ msgid "&Zoom, Rotate, and Mirror"
 msgstr ""
 
 #: krita/krita5.xmlgui:131
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Snap To"
-msgstr "Jafna við hnitanet"
+msgstr "&Grípa í"
 
 #: krita/krita5.xmlgui:154
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:4
 #: plugins/extensions/offsetimage/offsetimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:4
 #: plugins/extensions/shearimage/shearimage.xmlgui:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Image"
-msgstr "%1 (%2 mynd)"
+msgstr "&Mynd"
 
 #: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Rotate"
 msgstr "S&núa"
 
 #: krita/krita5.xmlgui:191 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Layer"
-msgstr "Lög"
+msgstr "&Lag"
 
 #: krita/krita5.xmlgui:197
 #, fuzzy, kde-format
@@ -13095,14 +13084,14 @@ msgid "&New"
 msgstr "&Ný"
 
 #: krita/krita5.xmlgui:219
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Import/Export"
-msgstr "Flytja inn / Flytja út"
+msgstr "Flytja &inn/út"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
 #: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Import"
 msgstr "Flytja inn"
 
@@ -13117,9 +13106,9 @@ msgstr "&Umbreyta"
 #: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Select"
-msgstr "Valið"
+msgstr "&Velja"
 
 #: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
 #, fuzzy, kde-format
@@ -13128,19 +13117,19 @@ msgid "&Group"
 msgstr "Hópur"
 
 #: krita/krita5.xmlgui:259
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Transform"
 msgstr "U&mmynda"
 
 #: krita/krita5.xmlgui:276
-#, fuzzy, kde-format
+#, kde-format
 msgid "Transform &All Layers"
-msgstr "Breyta lagi"
+msgstr "Ummynd&a öll lög"
 
 #: krita/krita5.xmlgui:291
-#, fuzzy, kde-format
+#, kde-format
 msgid "S&plit"
-msgstr "Kljúfa"
+msgstr "&Kljúfa"
 
 #: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1268
 #, fuzzy, kde-format
@@ -13148,52 +13137,52 @@ msgid "S&plit Alpha"
 msgstr "Mynstur"
 
 #: krita/krita5.xmlgui:338
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select &Opaque"
-msgstr "Valtól"
+msgstr "Velja ó&gegnsætt"
 
 #: krita/krita5.xmlgui:353
-#, fuzzy, kde-format
+#, kde-format
 msgid "Filte&r"
-msgstr "Sía"
+msgstr "Sí&a"
 
 #: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Tools"
-msgstr "Á&höld"
+msgstr "Verk&færi"
 
 #: krita/krita5.xmlgui:375
-#, fuzzy, kde-format
+#, kde-format
 msgid "Scripts"
-msgstr "Lýsing:"
+msgstr "Skriftur"
 
 #: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "Setti&ngs"
-msgstr "Stillingar"
+msgstr "Stilli&ngar"
 
 #: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Help"
 msgstr "&Hjálp"
 
 #: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
-#, fuzzy, kde-format
+#, kde-format
 msgid "File"
 msgstr "Skrá"
 
 #: krita/krita5.xmlgui:432
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit"
 msgstr "Breyta"
 
 #: krita/krita5.xmlgui:437
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "Penslar og dót"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -14680,10 +14669,10 @@ msgstr "Viðbót"
 #. i18n: context: iconText @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1049 krita/kritamenu.action:1051
 #: krita/kritamenu.action:1052
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr "Mynddíll"
+msgstr "Grípa mynddíl"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -14793,10 +14782,10 @@ msgstr "Tilvitnanir"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Image"
-msgstr "%1 (%2 mynd)"
+msgstr "Mynd"
 
 #. i18n: context: text @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1149
@@ -14818,43 +14807,41 @@ msgstr "Eiginleikar"
 
 #. i18n: context: text @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Image Background Color and Transparency..."
-msgstr "Bakgrunnslitur"
+msgstr "Bakgrunnsl&itur myndar og gegnsæi..."
 
 #. i18n: context: toolTip @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1163
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Change the background color of the image"
-msgstr "bakgrunnur"
+msgstr "Breyta bakgrunnslit myndarinnar"
 
 #. i18n: context: iconText @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1164
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Image Background Color and Transparency"
-msgstr "Bakgrunnslitur"
+msgstr "Bakgrunnslitur myndar og gegnsæi"
 
 #. i18n: context: text @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1173
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "Litrými myndar"
+msgstr "&Umbreyta litrýmd myndar..."
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1175 krita/kritamenu.action:1176
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Convert Image Color Space"
-msgstr "Litrými myndar"
+msgstr "Umbreyta litrýmd myndar"
 
 #. i18n: context: text @ Action (trim_to_image), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1185
@@ -14919,78 +14906,78 @@ msgstr "Snúa mynd"
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1223 krita/kritamenu.action:1224
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image"
 msgstr "Snúa mynd"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1233
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
-msgstr "Snúa mynd til hægri"
+msgstr "Snúa mynd 90° t&il hægri"
 
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1235 krita/kritamenu.action:1236
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
-msgstr "Snúa mynd til hægri"
+msgstr "Snúa mynd 90° til hægri"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
-msgstr "Snúa mynd til vinstri"
+msgstr "Snúa mynd &90° til vinstri"
 
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1247 krita/kritamenu.action:1248
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
-msgstr "Snúa mynd til vinstri"
+msgstr "Snúa mynd 90° til vinstri"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
-msgstr "Snúa mynd?"
+msgstr "Snúa mynd um &180°"
 
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1259 krita/kritamenu.action:1260
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
-msgstr "Snúa mynd?"
+msgstr "Snúa mynd um 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "Velja mynd"
+msgstr "&Skekkja mynd..."
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1271 krita/kritamenu.action:1272
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Shear Image"
-msgstr "Kvarða mynd"
+msgstr "Skekkja mynd"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1281
@@ -15028,29 +15015,27 @@ msgstr "Spegla mynd lóðrétt"
 
 #. i18n: context: text @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
-msgstr "Kvarða mynd"
+msgstr "Kvarða mynd í &nýja stærð..."
 
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1307 krita/kritamenu.action:1308
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Scale Image To New Size"
-msgstr "Kvarða mynd"
+msgstr "Kvarða mynd í nýja stærð"
 
 #. i18n: context: text @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1317
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Image"
+#, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
-msgstr "Hliðra mynd"
+msgstr "&Hliðra mynd..."
 
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
@@ -15064,30 +15049,27 @@ msgstr "Hliðra mynd"
 
 #. i18n: context: text @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1329
-#, fuzzy, kde-format
-#| msgid "Facing pages"
+#, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr "Passa á síðu"
+msgstr "Br&eyta stærð myndflatar..."
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1331 krita/kritamenu.action:1332
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Resize shapes"
+#, kde-format
 msgctxt "action"
 msgid "Resize Canvas"
-msgstr "Breyta stærð spjalds tilbaka"
+msgstr "Breyta stærð myndflatar"
 
 #. i18n: context: text @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1341
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Im&age Split "
-msgstr "Stærð myndar"
+msgstr "Kljúf&a mynd "
 
 #. i18n: context: toolTip @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesplit), Actions (Image), ActionCollection (Menu)
@@ -15101,24 +15083,24 @@ msgstr "Kljúfa mynd"
 
 #. i18n: context: text @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1353
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr "Velja mynd"
+msgstr "Sérstök myn&d..."
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1355 krita/kritamenu.action:1356
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Separate Image"
-msgstr "Líma skyggnu"
+msgstr "Sérstök mynd"
 
 #. i18n: context: text @ Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1366
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select"
 msgstr "Velja"
@@ -15142,12 +15124,10 @@ msgstr "Velja allt"
 
 #. i18n: context: text @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1381
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgctxt "action"
 msgid "&Deselect"
-msgstr "Afvelja"
+msgstr "A&fvelja"
 
 #. i18n: context: toolTip @ Action (deselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (deselect), Actions (Select), ActionCollection (Menu)
@@ -15161,58 +15141,54 @@ msgstr "Afvelja"
 
 #. i18n: context: text @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1393
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgctxt "action"
 msgid "&Reselect"
-msgstr "Afvelja"
+msgstr "Endu&rvelja"
 
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reselect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1395 krita/kritamenu.action:1396
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgctxt "action"
 msgid "Reselect"
-msgstr "Afvelja"
+msgstr "Endurvelja"
 
 #. i18n: context: text @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1405
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Convert to Vector Selection"
-msgstr "Fjaðra val"
+msgstr "&Umbreyta í vektorval"
 
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1407 krita/kritamenu.action:1408
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert to Vector Selection"
-msgstr "Fjaðra val"
+msgstr "Umbreyta í vektorval"
 
 #. i18n: context: text @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1417
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Convert to Raster Selection"
-msgstr "Fjaðra val"
+msgstr "&Umbreyta í rastaval"
 
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_to_raster_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1419 krita/kritamenu.action:1420
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert to Raster Selection"
-msgstr "Fjaðra val"
+msgstr "Umbreyta í rastaval"
 
 #. i18n: context: text @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
@@ -15222,232 +15198,214 @@ msgstr "Fjaðra val"
 #. i18n: context: iconText @ Action (edit_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1429 krita/kritamenu.action:1431
 #: krita/kritamenu.action:1432
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Erode Selection"
+#, kde-format
 msgctxt "action"
 msgid "Edit Selection"
-msgstr "Ramma myndval"
+msgstr "Breyta völdu"
 
 #. i18n: context: text @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1441
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert Shapes to &Vector Selection"
-msgstr "Fjaðra val"
+msgstr "Umbreyta lögunum í &vektorval"
 
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (convert_shapes_to_vector_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1443 krita/kritamenu.action:1444
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Convert Shapes to Vector Selection"
-msgstr "Fjaðra val"
+msgstr "Umbreyta lögunum í vektorval"
 
 #. i18n: context: text @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1453
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr "Fjaðra val"
+msgstr "&Fjaðra myndval..."
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1455 krita/kritamenu.action:1456
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Feather Selection"
-msgstr "Fjaðra val"
+msgstr "Fjaðra myndval"
 
 #. i18n: context: text @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1465
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Dis&play Selection"
-msgstr "&Val"
+msgstr "&Birta valið"
 
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (toggle_display_selection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1467 krita/kritamenu.action:1468
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Display Selection"
-msgstr "Ekkert valið"
+msgstr "Birta valið"
 
 #. i18n: context: text @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1477
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Sca&le..."
-msgstr "Kvarði"
+msgstr "&Kvarða..."
 
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1479 krita/kritamenu.action:1480
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Scale"
-msgstr "Kvarði"
+msgstr "Kvarða"
 
 #. i18n: context: text @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1489
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
-msgstr "Velja mynd"
+msgstr "V&elja úr litasviði..."
 
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1491 krita/kritamenu.action:1492
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
-msgstr "Valtól"
+msgstr "Velja úr litasviði"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1501
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt (skipta út)"
 
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1503 krita/kritamenu.action:1504
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1513
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt (bæt&a við)"
 
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1515 krita/kritamenu.action:1516
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt (bæta við)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1525
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
-msgstr "Valtól"
+msgstr "Velja ógegn&sætt (draga frá)"
 
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1527 krita/kritamenu.action:1528
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt (draga frá)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1537
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
-msgstr "Valtól"
+msgstr "Vel&ja ógegnsætt (skörun)"
 
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1539 krita/kritamenu.action:1540
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Opaque"
+#, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
-msgstr "Valtól"
+msgstr "Velja ógegnsætt (skörun)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1549
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "Víkka val"
+msgstr "&Víkka myndval..."
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1551 krita/kritamenu.action:1552
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Grow Selection"
-msgstr "Víkka val"
+msgstr "Víkka myndval"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Minnka val"
+msgstr "Minnka m&yndval..."
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1563 krita/kritamenu.action:1564
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
-msgstr "Minnka val"
+msgstr "Minnka myndval"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1573
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Ramma myndval"
+msgstr "Va&l útjaðars..."
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1575 krita/kritamenu.action:1576
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Border Selection"
-msgstr "Ramma myndval"
+msgstr "Val útjaðars"
 
 #. i18n: context: text @ Action (smoothselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1585
@@ -15475,27 +15433,27 @@ msgstr "Sía"
 
 #. i18n: context: text @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1601
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "&Apply Filter Again"
-msgstr "Virkja síu"
+msgstr "Beit&a síu aftur"
 
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_again), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1603 krita/kritamenu.action:1604
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Apply Filter Again"
-msgstr "Virkja síu"
+msgstr "Beita síu aftur"
 
 #. i18n: context: text @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1613
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Apply Filter Again (Reprompt)"
-msgstr "Virkja síu"
+msgstr "Beita síu aftur (endurkvaðning)"
 
 #. i18n: context: toolTip @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (filter_apply_reprompt), Actions (Filter), ActionCollection (Menu)
@@ -15613,20 +15571,20 @@ msgstr "Annað"
 
 #. i18n: context: text @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1715
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
-msgstr "Stjarnan"
+msgstr "Ræsa G'MIC-Qt"
 
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1717 krita/kritamenu.action:1718
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
-msgstr "Stjarnan"
+msgstr "Ræsa G'Mic-Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1725
@@ -16198,9 +16156,9 @@ msgid ""
 msgstr ""
 
 #: krita/main.cc:716 krita/main.cc:721
-#, fuzzy, kde-format
+#, kde-format
 msgid "Krita Tablet Support"
-msgstr "Penslar"
+msgstr "Stuðningur Krita við teiknitöflur"
 
 #: krita/main.cc:717
 #, kde-format
@@ -16225,18 +16183,17 @@ msgstr "PNG stillingar"
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
 msgid "Autosmooth curve"
-msgstr ""
+msgstr "Mýkja sveiglínu sjálfkrafa"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:558
-#, fuzzy, kde-format
-#| msgid "Start angle:"
+#, kde-format
 msgid "Activate angle snap"
-msgstr "Upphafshorn:"
+msgstr "Virkja grip í horn"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
 #: libs/basicflakes/tools/KoPencilTool.cpp:297
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Precision:"
 msgstr "Nákvæmni:"
 
@@ -16249,9 +16206,9 @@ msgstr "Hrá"
 #: libs/basicflakes/tools/KoPencilTool.cpp:300
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "Curve"
-msgstr "Boglína"
+msgstr "Sveiglína"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
@@ -16260,9 +16217,9 @@ msgstr "Beint"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:310
 #: libs/basicflakes/tools/KoPencilTool.cpp:316
-#, fuzzy, kde-format
+#, kde-format
 msgid "Optimize"
-msgstr "Bestað"
+msgstr "Besta"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:322
 #, fuzzy, kde-format
@@ -16279,7 +16236,7 @@ msgstr "Blýantur"
 #: libs/basicflakes/tools/KoPencilTool.cpp:361
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
-#, fuzzy, kde-format
+#, kde-format
 msgid "Line"
 msgstr "Lína"
 
@@ -16315,7 +16272,7 @@ msgstr "Afturkalla"
 
 #: libs/command/kundo2group.cpp:359 libs/command/kundo2stack.cpp:1145
 #: libs/ui/KisUndoActionsUpdateManager.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undo %1"
 msgstr "Afturkalla %1"
 
@@ -16327,19 +16284,19 @@ msgstr "Endurtaka"
 
 #: libs/command/kundo2group.cpp:386 libs/command/kundo2stack.cpp:1171
 #: libs/ui/KisUndoActionsUpdateManager.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgid "Redo %1"
 msgstr "Endurtaka %1"
 
 #: libs/command/kundo2model.cpp:54
 #: plugins/dockers/historydocker/KisUndoModel.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "<empty>"
-msgstr "Tómt"
+msgstr "<tómt>"
 
 #: libs/command/kundo2stack.cpp:1397 libs/ui/input/KisTouchGestureAction.cpp:22
 #: libs/widgetutils/xmlgui/kundoactions.cpp:32
-#, fuzzy, kde-format
+#, kde-format
 msgid "Redo"
 msgstr "Endurtaka"
 
@@ -16347,7 +16304,7 @@ msgstr "Endurtaka"
 #: libs/command/kundo2stack.cpp:1416 libs/ui/input/KisTouchGestureAction.cpp:21
 #: libs/widgetutils/xmlgui/kundoactions.cpp:51
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1930
-#, fuzzy, kde-format
+#, kde-format
 msgid "Undo"
 msgstr "Afturkalla"
 
@@ -16463,18 +16420,17 @@ msgstr "Setja bakgrunn"
 
 #: libs/flake/commands/KoShapeClipCommand.cpp:57
 #: libs/flake/commands/KoShapeClipCommand.cpp:72
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Clip Shape"
-msgstr "Sporbaugur"
+msgstr "Afmarka við lögun"
 
 #: libs/flake/commands/KoShapeCreateCommand.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] "Búa til textaramma"
-msgstr[1] ""
+msgstr[0] "Búa til lögun"
+msgstr[1] "Búa til %1 laganir"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
@@ -16489,24 +16445,21 @@ msgstr[0] "Eyða lögun"
 msgstr[1] "Eyða lögunum"
 
 #: libs/flake/commands/KoShapeDistributeCommand.cpp:117
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Distribute shapes"
-msgstr "Búa til sniðmát"
+msgstr "Dreifa lögunum"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
-msgstr "Klárun"
+msgstr "Hópa laganir"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:69
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add shapes to group"
-msgstr "Bæta við hóp"
+msgstr "Bæta lögunum í hóp"
 
 #: libs/flake/commands/KoShapeKeepAspectRatioCommand.cpp:14
 msgctxt "(qtundo-format)"
@@ -16514,10 +16467,9 @@ msgid "Keep Aspect Ratio"
 msgstr "Halda stærðarhlutföllum"
 
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
-msgstr "Bylgja"
+msgstr "Læsa lögunum"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
 #, fuzzy
@@ -16639,12 +16591,12 @@ msgstr ""
 #: libs/flake/html/HtmlWriter.cpp:82
 #, kde-format
 msgid "saving to html failed"
-msgstr ""
+msgstr "vistun í HTML mistókst"
 
 #: libs/flake/html/HtmlWriter.cpp:86
 #, kde-format
 msgid "Cannot save %1 to html"
-msgstr ""
+msgstr "Get ekki vistað %1 í HTML"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
@@ -16674,10 +16626,9 @@ msgid "%1 Options"
 msgstr "Valmöguleikar %1"
 
 #: libs/flake/KoToolManager.cpp:574
-#, fuzzy, kde-format
-#| msgid "ActionList: %1"
+#, kde-format
 msgid "Active tool: %1"
-msgstr "Aðgerðalisti: %1"
+msgstr "Virkt verkfæri: %1"
 
 #: libs/flake/svg/SvgParser.cpp:1857
 #, kde-format
@@ -16708,9 +16659,9 @@ msgid "SVG Text Shape"
 msgstr "Form"
 
 #: libs/flake/text/KoSvgTextShape.cpp:1601
-#, fuzzy, kde-format
+#, kde-format
 msgid "SVG Text"
-msgstr "Texti:"
+msgstr "SVG-texti"
 
 #: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
@@ -16747,7 +16698,7 @@ msgstr "Breyta jöfnun"
 #: libs/flake/tools/KoPathTool.cpp:126
 #, kde-format
 msgid "Edit Shape"
-msgstr "Form"
+msgstr "Breyta lögun"
 
 #: libs/flake/tools/KoPathTool.cpp:608
 #, kde-format
@@ -17033,7 +16984,7 @@ msgstr "Punktar (pt)"
 #: libs/global/KoUnit.cpp:50
 #, kde-format
 msgid "Pixels (px)"
-msgstr "Punktar (pt)"
+msgstr "Mynddílar (px)"
 
 #: libs/global/KoUnit.cpp:52
 #, fuzzy, kde-format
@@ -17401,7 +17352,7 @@ msgid "Fill Layer Render"
 msgstr "Öll lög"
 
 #: libs/image/kis_adjustment_layer.cc:124
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "property of a filter layer, noun"
 msgid "Filter"
 msgstr "Sía"
@@ -17806,10 +17757,9 @@ msgid "Error"
 msgstr "Villa: "
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#, fuzzy, kde-format
-#| msgid "Image Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Litrými myndar"
+msgstr "Misræmi í litrýmdum laga"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17819,7 +17769,7 @@ msgstr "Litrými myndar"
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
 msgid "Anti-aliasing"
-msgstr "Mýkja brúnir"
+msgstr "Afstöllun"
 
 #: libs/image/kis_layer_properties_icons.cpp:126
 #, kde-format
@@ -18151,10 +18101,10 @@ msgid "Tones"
 msgstr "Miðtónar"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:74
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Textures"
-msgstr "Efnisáferð"
+msgstr "Áferðir"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:75
 #, fuzzy, kde-format
@@ -18432,7 +18382,7 @@ msgid ""
 msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Gimp Brush"
 msgstr "GIMP-pensill"
@@ -18456,52 +18406,52 @@ msgid "Krita Brush Preset"
 msgstr "Penslar"
 
 #: libs/koplugin/KisMimeDatabase.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "MyPaint Brush"
-msgstr "MyPaint"
+msgstr "MyPaint-málunarpensill"
 
 #: libs/koplugin/KisMimeDatabase.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Assistant"
-msgstr "Leysa upp"
+msgstr "Krita-leiðarvísir"
 
 #: libs/koplugin/KisMimeDatabase.cpp:199
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "R32 Heightmap"
-msgstr "Hæð"
+msgstr "R32-hæðakort"
 
 #: libs/koplugin/KisMimeDatabase.cpp:204
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "R16 Heightmap"
-msgstr "Hæð"
+msgstr "R16-hæðakort"
 
 #: libs/koplugin/KisMimeDatabase.cpp:209
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "R8 Heightmap"
-msgstr "Hæð"
+msgstr "R8-hæðakort"
 
 #: libs/koplugin/KisMimeDatabase.cpp:214
 #, kde-format
 msgctxt "description of a file type"
 msgid "Spriter SCML"
-msgstr ""
+msgstr "Spriter SCML"
 
 #: libs/koplugin/KisMimeDatabase.cpp:219
 #, kde-format
 msgctxt "description of a file type"
 msgid "Starview Metafile"
-msgstr ""
+msgstr "Starview-lýsiskrá"
 
 #: libs/koplugin/KisMimeDatabase.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "OpenRaster Image"
-msgstr "Mynd"
+msgstr "OpenRaster-mynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:229
 #, kde-format
@@ -18516,12 +18466,10 @@ msgid "Color Palette"
 msgstr "Litaspjald"
 
 #: libs/koplugin/KisMimeDatabase.cpp:239
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Color Palette"
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Color Palette"
-msgstr "Litaspjald"
+msgstr "Krita-litaspjald"
 
 #: libs/koplugin/KisMimeDatabase.cpp:244
 #, fuzzy, kde-format
@@ -18536,10 +18484,10 @@ msgid "GIMP Gradients"
 msgstr "GIMP litstiglar"
 
 #: libs/koplugin/KisMimeDatabase.cpp:254
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "GIMP Patterns"
-msgstr "Mynstur"
+msgstr "GIMP-mynstur"
 
 #: libs/koplugin/KisMimeDatabase.cpp:259
 #, fuzzy, kde-format
@@ -18548,22 +18496,22 @@ msgid "Krita Resource Bundle"
 msgstr "Mynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:264
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Workspace"
-msgstr "Vinnusvæði"
+msgstr "Krita-vinnusvæði"
 
 #: libs/koplugin/KisMimeDatabase.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Window Layout"
-msgstr "Bakgrunnur glugga"
+msgstr "Krita framsetning glugga"
 
 #: libs/koplugin/KisMimeDatabase.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Krita Session"
-msgstr "Leysa upp"
+msgstr "Krita-seta"
 
 #: libs/koplugin/KisMimeDatabase.cpp:279
 #, fuzzy, kde-format
@@ -18590,10 +18538,10 @@ msgid "Krita Shortcut Scheme"
 msgstr "Flýtilyklaskemu"
 
 #: libs/koplugin/KisMimeDatabase.cpp:299
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Camera Raw Files"
-msgstr "%1| RAW skrár myndavélar"
+msgstr "RAW-skrár myndavélar"
 
 #: libs/koplugin/KisMimeDatabase.cpp:304
 #, fuzzy, kde-format
@@ -18605,19 +18553,19 @@ msgstr "JPEG útflutningsvalkostir"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Photoshop Image (Large)"
-msgstr ""
+msgstr "Photoshop-mynd (stór)"
 
 #: libs/koplugin/KisMimeDatabase.cpp:314
 #, kde-format
 msgctxt "description of a file type"
 msgid "HEIC/HEIF Image"
-msgstr ""
+msgstr "HEIC/HEIF-mynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:319
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "AVIF Image"
-msgstr "%1 (%2 mynd)"
+msgstr "AVIF-mynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:329
 #, kde-format
@@ -18632,16 +18580,16 @@ msgid "Krita Archival Image Format"
 msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "Animated PNG Image"
-msgstr "Hreyfimynd..."
+msgstr "PNG-hreyfimynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "description of a file type"
 msgid "JPEG-XL Image"
-msgstr "%1 (%2 mynd)"
+msgstr "JPEG-XL mynd"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
 #, fuzzy, kde-format
@@ -20179,9 +20127,9 @@ msgstr "Verkfæri"
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:55
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:90
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:400
-#, fuzzy, kde-format
+#, kde-format
 msgid "Image"
-msgstr "%1 (%2 mynd)"
+msgstr "Mynd"
 
 #: libs/resources/KisResourceModel.cpp:136
 #: libs/resources/KisTagResourceModel.cpp:638
@@ -20302,63 +20250,58 @@ msgid "Invalid"
 msgstr "Ógilt"
 
 #: libs/resources/KisResourceTypes.cpp:43
-#, fuzzy, kde-format
-#| msgid "Brush Presets"
+#, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
-msgstr "Penslar"
+msgstr "Forstillingar pensla"
 
 #: libs/resources/KisResourceTypes.cpp:44
-#, fuzzy, kde-format
-#| msgid "Brush Tip"
+#, kde-format
 msgctxt "resource type"
 msgid "Brush Tips"
-msgstr "Penslar"
+msgstr "Pensiloddar"
 
 #: libs/resources/KisResourceTypes.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "Litstiglar"
 
 #: libs/resources/KisResourceTypes.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Palettes"
-msgstr "Litatöflur"
+msgstr "Litaspjöld"
 
 #: libs/resources/KisResourceTypes.cpp:47
-#, fuzzy, kde-format
-#| msgid "Patterns"
+#, kde-format
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "Mynstur"
 
 #: libs/resources/KisResourceTypes.cpp:48
-#, fuzzy, kde-format
-#| msgid "Workspaces"
+#, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "Vinnusvæði"
 
 #: libs/resources/KisResourceTypes.cpp:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
-msgstr "Vigralag"
+msgstr "Táknasöfn"
 
 #: libs/resources/KisResourceTypes.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
-msgstr "Bakgrunnur glugga"
+msgstr "Framsetningar glugga"
 
 #: libs/resources/KisResourceTypes.cpp:51
-#, fuzzy, kde-format
-#| msgid "Dimensions"
+#, kde-format
 msgctxt "resource type"
 msgid "Sessions"
-msgstr "Stærðir"
+msgstr "Setur"
 
 #: libs/resources/KisResourceTypes.cpp:52
 #, fuzzy, kde-format
@@ -20367,16 +20310,16 @@ msgid "Gamut Masks"
 msgstr "Málaratól"
 
 #: libs/resources/KisResourceTypes.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
-msgstr "Lýsing:"
+msgstr "SeExpr-skriftur"
 
 #: libs/resources/KisResourceTypes.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Filter Effects"
-msgstr "Síustillingar"
+msgstr "Síuáhrif"
 
 #: libs/resources/KisResourceTypes.cpp:55
 #, fuzzy, kde-format
@@ -20386,10 +20329,10 @@ msgid "Task Sets"
 msgstr "Mynd"
 
 #: libs/resources/KisResourceTypes.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
-msgstr "Mynd"
+msgstr "Stílar laga"
 
 #: libs/resources/KisStorageModel.cpp:476
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -20999,37 +20942,34 @@ msgid "Render Animation"
 msgstr "Stefna"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:95
-#, fuzzy, kde-format
-#| msgid "Bicubic"
+#, kde-format
 msgctxt "bicubic filtering"
 msgid "bicubic"
-msgstr "Býkúpu"
+msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
-msgstr "Tvílínulegt"
+msgstr "tvílínulegt"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:97
 #, kde-format
 msgctxt "lanczos3 filtering"
 msgid "lanczos3"
-msgstr ""
+msgstr "lanczos3"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:98
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
-msgstr ""
+msgstr "nágranni"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Split"
+#, kde-format
 msgctxt "spline filtering"
 msgid "spline"
-msgstr "Kljúfa"
+msgstr "splína"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
 #, kde-format
@@ -21177,23 +21117,22 @@ msgid "Select your Video File"
 msgstr "Velja lag"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:383
-#, fuzzy, kde-format
-#| msgid "Width: "
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Width: %1 px"
-msgstr "Breidd: "
+msgstr "Breidd: %1 px"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
-msgstr "Lengd:"
+msgstr "Hæð: %1 px"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Color Primaries: %1"
-msgstr "Mettun"
+msgstr "Frumlitir: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:391
 #, fuzzy, kde-format
@@ -21202,23 +21141,22 @@ msgid "Color Transfer: %1"
 msgstr "Innihald"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:394
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Duration: %1 s"
-msgstr "Lengd:"
+msgstr "Tímalengd: %1 s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:395
-#, fuzzy, kde-format
-#| msgid "frame"
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Frames: %1"
-msgstr "rammi"
+msgstr "Rammar: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:396
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "video importer: video file statistics"
 msgid "FPS: %1"
-msgstr "r/s"
+msgstr "FPS: %1"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:400
 #, kde-format
@@ -21704,7 +21642,7 @@ msgstr "Millímetrar (mm)"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "psnr"
-msgstr ""
+msgstr "psnr"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:66
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:74
@@ -21712,42 +21650,42 @@ msgstr ""
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "ssim"
-msgstr ""
+msgstr "ssim"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:67
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
-msgstr "Líma"
+msgstr "fastdecode"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:68
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zerolatency"
-msgstr ""
+msgstr "zerolatency"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:70
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
-msgstr ""
+msgstr "ekkert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:76
 #, kde-format
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "zero-latency"
-msgstr ""
+msgstr "núll-biðtími"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:78
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
-msgstr ""
+msgstr "ekkert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
@@ -21775,13 +21713,13 @@ msgid "paeth"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:83
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "apng prediction option name"
 msgid "mixed"
-msgstr "Fast"
+msgstr "blandað"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:85
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "webp preset option name"
 msgid "default"
 msgstr "sjálfgefið"
@@ -21790,10 +21728,10 @@ msgstr "sjálfgefið"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
-msgstr ""
+msgstr "ekkert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "webp preset option name"
 msgid "drawing"
 msgstr "teikning"
@@ -21802,26 +21740,25 @@ msgstr "teikning"
 #, kde-format
 msgctxt "webp preset option name"
 msgid "icon"
-msgstr ""
+msgstr "táknmynd"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:89
 #, kde-format
 msgctxt "webp preset option name"
 msgid "photo"
-msgstr ""
+msgstr "ljósmynd"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:90
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "webp preset option name"
 msgid "picture"
-msgstr "Mynd"
+msgstr "mynd"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:91
-#, fuzzy, kde-format
-#| msgid "No text"
+#, kde-format
 msgctxt "webp preset option name"
 msgid "text"
-msgstr "Engin texti"
+msgstr "texti"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
 #, kde-format
@@ -21830,7 +21767,7 @@ msgid "Global/Full"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "Mismunur"
@@ -21845,49 +21782,49 @@ msgstr "Setja inn athugasemd"
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr ""
+msgstr "ekkert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
-msgstr "Lög"
+msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
-msgstr ""
+msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
-msgstr ""
+msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
-msgstr ""
+msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
-msgstr ""
+msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr ""
+msgstr "ekkert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "Rétthyrningur"
+msgstr "rétthyrningur"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -21897,22 +21834,22 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "&Opna"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
 msgctxt "h264 codec name, check simplescreenrecorder for standard translations"
 msgid "H.264, MPEG-4 Part 10"
-msgstr ""
+msgstr "H.264, MPEG-4 Part 10"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:294
 #, kde-format
 msgctxt "h265 codec name, check simplescreenrecorder for standard translations"
 msgid "H.265, MPEG-H Part 2 (HEVC)"
-msgstr ""
+msgstr "H.265, MPEG-H Part 2 (HEVC)"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:297
 #, kde-format
@@ -21925,7 +21862,7 @@ msgstr "VP9"
 msgctxt ""
 "theora codec name, check simplescreenrecorder for standard translations"
 msgid "Theora"
-msgstr ""
+msgstr "Theora"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:305
 #, kde-format
@@ -22282,7 +22219,7 @@ msgstr "Skjal"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
-#, fuzzy, kde-format
+#, kde-format
 msgid "Width:"
 msgstr "Breidd:"
 
@@ -22321,7 +22258,7 @@ msgstr "Breidd:"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:41
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height:"
 msgstr "Hæð:"
 
@@ -22507,10 +22444,10 @@ msgid "None"
 msgstr "Ekkert"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr "Láréttar línur"
+msgstr "Lárétt speglun: %1 "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
@@ -22525,10 +22462,10 @@ msgid "ON"
 msgstr ""
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about rotation"
 msgid "Rotation: %1° "
-msgstr "Snúningur"
+msgstr "Snúningur: %1° "
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:293
 #, kde-format
@@ -22630,7 +22567,7 @@ msgstr "Leiðsagnarsíður"
 #: libs/ui/canvas/kis_guides_manager.cpp:778
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:56
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:85
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixel"
 msgstr "Mynddíll"
 
@@ -23008,13 +22945,13 @@ msgstr "Eiginleikar mynda"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:129
 #, kde-format
 msgctxt "layer dimensions"
 msgid "(%1, %2), (%3, %4)"
-msgstr ""
+msgstr "(%1, %2), (%3, %4)"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:165
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:166
@@ -23105,10 +23042,10 @@ msgid "Outer Glow"
 msgstr "Stig"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1217
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "layer styles parameter"
 msgid "Spread:"
-msgstr "Dreifa"
+msgstr "Dreifing:"
 
 #: libs/ui/dialogs/kis_dlg_missing_color_profile.cpp:18
 #, kde-format
@@ -23137,7 +23074,7 @@ msgstr "Tækjamynd"
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgid "Arrow"
 msgstr "Ör"
 
@@ -23164,15 +23101,14 @@ msgid "Triangle Lefthanded"
 msgstr "Penslar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:215
-#, fuzzy, kde-format
+#, kde-format
 msgid "Black Pixel"
-msgstr "Mynddíll"
+msgstr "Svartur mynddíll"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:216
-#, fuzzy, kde-format
-#| msgid "White Point:"
+#, kde-format
 msgid "White Pixel"
-msgstr "Hvítpunktur:"
+msgstr "Hvítur mynddíll"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, fuzzy, kde-format
@@ -23311,11 +23247,9 @@ msgstr "Skjár"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1169
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:191
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Missing Color Profile"
+#, kde-format
 msgid "Install Color Profiles"
-msgstr "Litasnið sem vantar"
+msgstr "Setja upp litasnið"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1382
 #, kde-format
@@ -23361,10 +23295,10 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix for \"seconds\""
 msgid " sec"
-msgstr "%1 sekúnda"
+msgstr " sek"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1525
 #, kde-format
@@ -23372,7 +23306,7 @@ msgid " fps"
 msgstr "rammar á sek"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1754
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
@@ -23390,22 +23324,22 @@ msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1759
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
-msgstr "OpenGL"
+msgstr "OpenGL ES"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1766
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Óþekkt"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1786
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
-msgstr "Sjálfvirkt"
+msgstr "Sjálfvirkt (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1867
 #, fuzzy, kde-format
@@ -23923,7 +23857,7 @@ msgstr "Nafn:"
 #: libs/ui/flake/kis_shape_controller.cpp:196
 #, kde-format
 msgid "Vector Layer %1"
-msgstr "Lag %1"
+msgstr "Vektorlag %1"
 
 #: libs/ui/flake/kis_take_all_shapes_command.cpp:15
 #, fuzzy
@@ -24176,7 +24110,7 @@ msgstr "línuhæð"
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:76
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:199
 #: plugins/tools/basictools/wdgmultihandtool.ui:152
-#, fuzzy, kde-format
+#, kde-format
 msgid "Type:"
 msgstr "Tegund:"
 
@@ -24590,7 +24524,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorsettings.ui:159
 #, kde-format
 msgid "Color profile for imported EXR files:"
-msgstr ""
+msgstr "Litasnið fyrir innfluttar EXR-skrár:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:178
@@ -24688,10 +24622,10 @@ msgstr "Tegund:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:56
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of Color Depth in Color Space Selector dialogue"
 msgid "Depth:"
-msgstr "Dýpt:"
+msgstr "Litadýpt:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgcolorspaceselector.ui:73
@@ -24750,10 +24684,10 @@ msgstr "Dýpt"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:95
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "ICC color profile"
 msgid "Profile"
-msgstr "Snið"
+msgstr "Litasnið"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:151
@@ -25080,9 +25014,9 @@ msgstr "Litur bendils:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:404
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixel Grid:"
-msgstr "Mynd"
+msgstr "Mynddílanet:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -25167,7 +25101,7 @@ msgstr "Heildartími ritunar:"
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:49
 #: plugins/paintops/mypaint/MyPaintSensorPack.cpp:50
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid "%"
 msgstr "%"
 
@@ -25334,10 +25268,10 @@ msgstr "Skrifaðu nafn á hóp:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfiles)
 #: libs/ui/forms/wdgdlgpngimport.ui:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of ICC Color Profile in PNG import dialogue"
 msgid "Profile:"
-msgstr "Lýsing:"
+msgstr "Litasnið:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxPreview)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -26290,7 +26224,7 @@ msgstr "Stærðir"
 #: libs/ui/forms/wdgimageproperties.ui:119
 #, kde-format
 msgid "pixels-per-inch"
-msgstr "punktar/tommu"
+msgstr "mynddílar-á-tommu"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgimageproperties.ui:122
@@ -26322,7 +26256,7 @@ msgstr "Fjöldi lína:"
 #: libs/ui/forms/wdgimageproperties.ui:216
 #, kde-format
 msgid "Image Color Space"
-msgstr "Litrými myndar"
+msgstr "Litrýmd myndar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkConvertLayers)
 #: libs/ui/forms/wdgimageproperties.ui:225
@@ -26509,10 +26443,10 @@ msgstr "Litrýmd:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProfileTitle)
 #: libs/ui/forms/wdglayerproperties.ui:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of ICC Color Profile in Layer Properties dialogue"
 msgid "Profile:"
-msgstr "Lýsing:"
+msgstr "Litasnið:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorLabel)
 #: libs/ui/forms/wdglayerproperties.ui:167
@@ -26632,9 +26566,7 @@ msgstr "Leysa upp"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgMissingColorProfile)
 #: libs/ui/forms/wdgMissingColorProfile.ui:20
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Missing Color Profile"
+#, kde-format
 msgid "Missing Color Profile"
 msgstr "Litasnið sem vantar"
 
@@ -26645,6 +26577,8 @@ msgid ""
 "The image data you are trying to paste has no color profile information. How "
 "do you want to interpret this data?"
 msgstr ""
+"Myndgögnin innihalda engar litasniðsupplýsingar. Hvernig viltu túlka þessi "
+"gögn?"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
@@ -26741,10 +26675,10 @@ msgstr "Kvarða mynd"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMode)
 #: libs/ui/forms/wdgnewimage.ui:354
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Label of Color as color space in Create New Image dialogue"
 msgid "Color"
-msgstr "Litir"
+msgstr "Litur"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnSaveAsPredefined)
 #: libs/ui/forms/wdgnewimage.ui:410
@@ -26991,33 +26925,33 @@ msgstr "Krassblað"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
 #: libs/ui/forms/wdgpaintopsettings.ui:843
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill area with brush preset icon"
-msgstr "Fylla með bakgrunnslit"
+msgstr "Fylla svæði með tákn forstillingar pensils"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillLayer)
 #: libs/ui/forms/wdgpaintopsettings.ui:862
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill area with current image"
-msgstr "Fylla með mynstri"
+msgstr "Fylla svæði með fyrirliggjandi mynd"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillGradient)
 #: libs/ui/forms/wdgpaintopsettings.ui:881
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill area with gradient"
-msgstr "Fylla með mynstri"
+msgstr "Fylla svæði með litstigli"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, fillSolid)
 #: libs/ui/forms/wdgpaintopsettings.ui:900
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fill area with background color"
-msgstr "Fylla með bakgrunnslit"
+msgstr "Fylla svæði með bakgrunnslit"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, eraseScratchPad)
 #: libs/ui/forms/wdgpaintopsettings.ui:919
 #, kde-format
 msgid "Reset area to white"
-msgstr ""
+msgstr "Endurstilla svæði á hvítt"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPasteFormat)
 #: libs/ui/forms/wdgPasteFormat.ui:20
@@ -27043,7 +26977,7 @@ msgstr "Get ekki búið til geymslu"
 #: libs/ui/forms/wdgPasteFormat.ui:79
 #, kde-format
 msgid "Preserves the original metadata and color profile."
-msgstr ""
+msgstr "Viðheldur upprunalegum lýsigögnum og litasniði."
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseLocal)
 #: libs/ui/forms/wdgPasteFormat.ui:92
@@ -27754,9 +27688,9 @@ msgstr "Smámyndir"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadScratchPadThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:150
-#, fuzzy, kde-format
+#, kde-format
 msgid "Load Scratchpad Thumbnail"
-msgstr "Smámyndir"
+msgstr "Hlaða smámynd fyrir krassblað"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
@@ -28208,21 +28142,21 @@ msgstr "Festipunktur"
 
 #: libs/ui/imagesize/wdg_imagesize.cc:54
 #: libs/ui/widgets/kis_custom_image_widget.cc:57
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixels/Inch"
-msgstr "punktar/tommu"
+msgstr "mynddílar/tommu"
 
 #: libs/ui/imagesize/wdg_imagesize.cc:60
 #: libs/ui/widgets/kis_custom_image_widget.cc:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixels/Centimeter"
-msgstr "Sentímetrar (cm)"
+msgstr "mynddílar/sentímetra"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixel Dimensions"
-msgstr "Punktastærðir"
+msgstr "Stærðir mynddíla"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
@@ -29326,7 +29260,7 @@ msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr ""
+msgstr "Bíð eftir að aðgerðinni ljúki..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, fuzzy, kde-format
@@ -29472,11 +29406,10 @@ msgstr ""
 "Viltu skrifa yfir það?"
 
 #: libs/ui/kis_file_layer.cpp:134
-#, fuzzy, kde-format
-#| msgid "Profile name"
+#, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
-msgstr "Lýsingar heiti"
+msgstr "<ekkert skráarheiti er sett>"
 
 #: libs/ui/kis_file_layer.cpp:139
 #, kde-format
@@ -29540,10 +29473,10 @@ msgid "Merge with Layer Below"
 msgstr "Kvarða lag"
 
 #: libs/ui/kis_layer_manager.cc:217
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
-msgstr "Mynd"
+msgstr "Lagið er tómt "
 
 #: libs/ui/kis_layer_manager.cc:256
 #, fuzzy, kde-format
@@ -29618,20 +29551,18 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_layer_manager.cc:880
-#, fuzzy, kde-format
-#| msgid "Layer is locked."
+#, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
-msgstr[0] "Mynd"
-msgstr[1] "Mynd"
+msgstr[0] "Lagið er læst"
+msgstr[1] "Lögin eru læst"
 
 #: libs/ui/kis_layer_manager.cc:902
-#, fuzzy, kde-format
-#| msgid "Layer is locked."
+#, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
-msgstr "Mynd"
+msgstr "Lagið er læst"
 
 #: libs/ui/kis_layer_manager.cc:919
 #, kde-format
@@ -29858,10 +29789,10 @@ msgstr ""
 "%1"
 
 #: libs/ui/kis_node_manager.cpp:1310
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
-msgstr "Mynd"
+msgstr "Lagið er ekki með nein mynddílagögn"
 
 #: libs/ui/kis_node_manager.cpp:1334
 #, fuzzy, kde-format
@@ -29919,18 +29850,16 @@ msgid "Quick Clipping Group"
 msgstr "Fjarlægi hóp"
 
 #: libs/ui/kis_node_manager.cpp:1635
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
-msgstr "Fjarlægi hóp"
+msgstr "Afmörkunarhópur"
 
 #: libs/ui/kis_node_manager.cpp:1636
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Layer"
+#, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
-msgstr "Líma lag"
+msgstr "Laghula"
 
 #: libs/ui/kis_node_manager.cpp:1663
 #, kde-format
@@ -30005,18 +29934,16 @@ msgstr "Stillingar"
 #: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr "grænt"
+msgstr "Ógegnsæi: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:268
-#, fuzzy, kde-format
-#| msgid "Flow:"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Flow: {n}%"
-msgstr "Hægt"
+msgstr "Flæði: {n}%"
 
 #. i18n: ectx: property (text), widget (QLabel, brushRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
@@ -30077,25 +30004,25 @@ msgid ""
 msgstr "Velja"
 
 #: libs/ui/kis_paintop_options_model.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "option category"
 msgid "General"
 msgstr "Almennt"
 
 #: libs/ui/kis_paintop_options_model.cpp:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "option category"
 msgid "Color"
-msgstr "Litir"
+msgstr "Litur"
 
 #: libs/ui/kis_paintop_options_model.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "option category"
 msgid "Texture"
 msgstr "Efnisáferð"
 
 #: libs/ui/kis_paintop_options_model.cpp:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "option category"
 msgid "Filter"
 msgstr "Sía"
@@ -30210,7 +30137,7 @@ msgstr "Valtól"
 #, kde-format
 msgctxt "splash image credit"
 msgid "Artwork by: %1"
-msgstr ""
+msgstr "Myndskreyting eftir: %1"
 
 #: libs/ui/kis_splash_screen.cpp:181
 #, fuzzy, kde-format
@@ -30306,6 +30233,10 @@ msgid ""
 "  - projections:\t %3\n"
 "  - instant preview:\t %4\n"
 msgstr ""
+"Stærð myndar:\t %1\n"
+"  - lög:\t\t %2\n"
+"  - varpanir:\t %3\n"
+"  - rauntímaforskoðun:\t %4\n"
 
 #: libs/ui/kis_statusbar.cc:288
 #, kde-format
@@ -30318,6 +30249,12 @@ msgid ""
 "\n"
 "Swap used:\t %8"
 msgstr ""
+"Minni í notkun:\t %1 / %2\n"
+"  myndgögn:\t %3 / %4\n"
+"  söfnun/pool:\t\t %5 / %6\n"
+"  afturköllunargögn:\t %7\n"
+"\n"
+"Diskminni í notkun:\t %8"
 
 #: libs/ui/kis_statusbar.cc:323
 #, kde-format
@@ -30371,10 +30308,10 @@ msgid "%1  %2"
 msgstr "%1  %2"
 
 #: libs/ui/kis_zoom_manager.cc:319
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
-msgstr "Aðdráttur"
+msgstr "Aðdráttur: %1 %"
 
 #: libs/ui/KisApplication.cpp:328
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
@@ -30877,7 +30814,7 @@ msgstr "Bakgrunnur"
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
 msgid "Waiting for saving to complete..."
-msgstr ""
+msgstr "Bíð eftir að vistun ljúki..."
 
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 #, fuzzy
@@ -31913,10 +31850,10 @@ msgid "Open in &private app location"
 msgstr ""
 
 #: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
-msgstr "Nafnlaus"
+msgstr "Nafnlaust"
 
 #: libs/ui/KisWelcomePageWidget.cpp:161
 #, kde-format
@@ -33371,10 +33308,10 @@ msgstr "Gegnsætt"
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:101
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:163
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr "Staða:"
+msgstr "Staða: {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, fuzzy, kde-format
@@ -34162,7 +34099,7 @@ msgid "Auto"
 msgstr "Sjálfvirkt"
 
 #: libs/ui/widgets/kis_color_filter_combo.cpp:215
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "combo box: show all layers"
 msgid "All"
 msgstr "Allt"
@@ -34358,9 +34295,9 @@ msgid "Toggle showing presets"
 msgstr "Leysa upp"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "Leysa upp"
+msgstr "Víxla birtingu krassblaðs af/á"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, fuzzy, kde-format
@@ -34410,10 +34347,10 @@ msgid "Feather: "
 msgstr "Ytri radíus:"
 
 #: libs/ui/widgets/kis_selection_options.cc:219
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Pixel Selection"
-msgstr "Flytja val"
+msgstr "Val mynddíla"
 
 #: libs/ui/widgets/kis_selection_options.cc:221
 #, fuzzy, kde-format
@@ -34943,12 +34880,10 @@ msgid "Change filling gradient"
 msgstr "Breyta"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:638
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "default prefix for the saved gradient"
 msgid "gradient"
-msgstr ""
-"litblöndun {pos/accessibility.po, pos/svdraw.po, pos/UI_2.po}; litstigull "
-"{pos/cui.po, pos/cui.po, pos/dialog_2.po, pos/dialog_2.po}"
+msgstr "litstigull"
 
 #: libs/ui/widgets/KoFillConfigWidget.cpp:647
 #, fuzzy, kde-format
@@ -35668,9 +35603,9 @@ msgid "Tool Options"
 msgstr "Valkostir áhalda"
 
 #: libs/widgets/KoZoomWidget.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixel Size"
-msgstr "Mynd"
+msgstr "Stærð mynddíla"
 
 #: libs/widgets/KoZoomWidget.cpp:128
 #, kde-format
@@ -35715,25 +35650,25 @@ msgid "Clear List"
 msgstr "Hreinsa lista"
 
 #: libs/widgetutils/config/kstandardaction.cpp:79
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "Til &baka"
 
 #: libs/widgetutils/config/kstandardaction.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "Á&fram"
 
 #: libs/widgetutils/config/kstandardaction.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "&Heim"
 
 #: libs/widgetutils/config/kstandardaction.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "&Hjálp"
@@ -36255,7 +36190,7 @@ msgstr "vinstri músarhnappur"
 #, kde-format
 msgctxt "middle mouse button"
 msgid "middle button"
-msgstr "mið músarhnappur"
+msgstr "mið-músarhnappur"
 
 #: libs/widgetutils/xmlgui/kgesture.cpp:498
 #, kde-format
@@ -36344,7 +36279,7 @@ msgstr ""
 #, kde-format
 msgctxt "header for an applications shortcut list"
 msgid "Shortcuts for %1"
-msgstr "Flýtihnappar fyrir %1"
+msgstr "Flýtilyklar fyrir %1"
 
 #. i18n: ectx: property (text), widget (QLabel, priLabel)
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:262
@@ -36639,25 +36574,25 @@ msgid "Orientation"
 msgstr "Stefna"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:320
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "Efst"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:322
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "Til vinstri"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "Til hægri"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:324
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "Neðst"
@@ -37847,10 +37782,10 @@ msgstr "Rammatíðni:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
-msgstr "Hraði"
+msgstr "Hraði: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:91
@@ -38254,10 +38189,10 @@ msgid "Make clones Unique"
 msgstr "Sameina punkta"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:48
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Tint: {n}%"
-msgstr "Litblær"
+msgstr "Litblær: {n}%"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
@@ -38412,10 +38347,9 @@ msgstr ""
 #: plugins/filters/palettize/palettize.ui:56
 #: plugins/python/colorspace/colorspace.py:16
 #: plugins/python/colorspace/uicolorspace.py:74
-#, fuzzy, kde-format
-#| msgid "Color space:"
+#, kde-format
 msgid "Color Space"
-msgstr "Litrýmd:"
+msgstr "Litrýmd"
 
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsy)
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:52
@@ -39263,10 +39197,10 @@ msgid "Exposure: %1"
 msgstr "Lýsing: %1"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:281
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message about gamma"
 msgid "Gamma: %1"
-msgstr "Litróf (gamma)"
+msgstr "Litróf (gamma): %1"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:351
 #, kde-format
@@ -39610,7 +39544,7 @@ msgid "Recording info"
 msgstr "Upptaka"
 
 #: plugins/dockers/recorder/recorder_export.cpp:394
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
@@ -40327,7 +40261,7 @@ msgstr "Name=HeimasvÃ¦Ã°iÃ° Ã¾itt"
 #, kde-format
 msgctxt "snapshot names, e.g. \"Snapshot 1\""
 msgid "Snapshot %1"
-msgstr ""
+msgstr "Skyndiafrit %1"
 
 #: plugins/dockers/snapshotdocker/SnapshotDocker.cpp:63
 #, fuzzy, kde-format
@@ -40366,10 +40300,9 @@ msgstr "Name=HeimasvÃ¦Ã°iÃ° Ã¾itt"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
-#, fuzzy, kde-format
-#| msgid "Color space:"
+#, kde-format
 msgid "Set color space"
-msgstr "Litrýmd:"
+msgstr "Stilla litrýmd"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
@@ -40466,7 +40399,7 @@ msgstr "Valtól"
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:920
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix in spin box in storyboard that means 'seconds'"
 msgid "s"
 msgstr "s"
@@ -40477,7 +40410,7 @@ msgstr "s"
 #, kde-format
 msgctxt "suffix in spin box in storyboard that means 'frames'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: plugins/dockers/storyboarddocker/StoryboardDockerDock.cpp:172
 #, kde-format
@@ -40530,7 +40463,7 @@ msgstr ""
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "
-msgstr ""
+msgstr "myndsvið "
 
 #: plugins/dockers/storyboarddocker/StoryboardView.cpp:298
 #, kde-format
@@ -40552,60 +40485,59 @@ msgstr "Tvífalda"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:28
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Mode"
 msgstr "Hamur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnColumnMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Column"
-msgstr "Dálkar"
+msgstr "Dálkur"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnRowMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:42
-#, fuzzy, kde-format
-#| msgid "&Rows:"
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Row"
-msgstr "&Raðir:"
+msgstr "Röð"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnGridMode)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:49
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view layout mode"
 msgid "Grid"
 msgstr "Hnitanet"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "View"
 msgstr "Skoða"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAllView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:70
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "All"
 msgstr "Allt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnThumbnailsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Thumbnails Only"
-msgstr "Smámyndir"
+msgstr "Aðeins smámyndir"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnCommentsView)
 #: plugins/dockers/storyboarddocker/wdgarrangemenu.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "list view fields visibility"
 msgid "Comments Only"
-msgstr "Athugasemdir"
+msgstr "Aðeins athugasemdir"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgExportStoryboard)
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:20
@@ -40847,9 +40779,9 @@ msgstr "Velja"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "Valtól"
+msgstr "Litrýmd myndvals:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
@@ -44321,9 +44253,9 @@ msgstr "Sverðlilja"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:245
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:50
 #: plugins/tools/basictools/kis_tool_gradient.cc:249
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape:"
-msgstr "Form:"
+msgstr "Lögun:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -45154,11 +45086,10 @@ msgstr "Annað"
 #: plugins/filters/halftone/halftone.action:7
 #: plugins/filters/halftone/halftone.action:9
 #: plugins/filters/halftone/halftone.action:10
-#, fuzzy, kde-format
-#| msgid "Change Log"
+#, kde-format
 msgctxt "action"
 msgid "Halftone Filter"
-msgstr "Breytingaannáll"
+msgstr "Hálftónasía"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
@@ -45288,12 +45219,12 @@ msgid "Index Colors"
 msgstr "Litir"
 
 #: plugins/filters/indexcolors/kiswdgindexcolors.cpp:40
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "suffix for a spinbox"
 msgid " color"
 msgid_plural " colors"
-msgstr[0] "Litur"
-msgstr[1] "Litir"
+msgstr[0] " litur"
+msgstr[1] " litir"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
@@ -45530,10 +45461,10 @@ msgid "Brush size"
 msgstr "Penslar"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "smooth out the painting strokes the filter creates"
 msgid "Smooth"
-msgstr "Jafna út"
+msgstr "Mýking"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.h:26
 #, kde-format
@@ -45776,15 +45707,14 @@ msgid "&Pixelize..."
 msgstr "Mynd"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
-#, fuzzy, kde-format
-#| msgid "Line width"
+#, kde-format
 msgid "Pixel width"
-msgstr "Línubreidd"
+msgstr "Breidd mynddíla"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pixel height"
-msgstr "línuhæð"
+msgstr "Hæð mynddíla"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.h:27
 #, fuzzy, kde-format
@@ -46163,7 +46093,7 @@ msgstr "Kaka"
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.cpp:21
 #, kde-format
 msgid "Chord"
-msgstr "Strengur"
+msgstr "Snæri"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, EllipseShapeConfigWidget)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:18
@@ -46185,12 +46115,12 @@ msgstr "Lokahorn"
 
 #. i18n: ectx: property (text), widget (QPushButton, closeEllipse)
 #: plugins/flake/pathshapes/ellipse/EllipseShapeConfigWidget.ui:63
-#, fuzzy, kde-format
+#, kde-format
 msgid "Close ellipse"
-msgstr "Loka"
+msgstr "Loka sporbaug"
 
 #: plugins/flake/pathshapes/ellipse/EllipseShapeFactory.cpp:23
-#, fuzzy, kde-format
+#, kde-format
 msgid "An ellipse"
 msgstr "Sporbaugur"
 
@@ -46205,12 +46135,12 @@ msgid "An enhanced path"
 msgstr "Valtól"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:151
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cross"
 msgstr "Kross"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:153
-#, fuzzy, kde-format
+#, kde-format
 msgid "A cross"
 msgstr "Kross"
 
@@ -46218,17 +46148,17 @@ msgstr "Kross"
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:223
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:257
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:291
-#, fuzzy, kde-format
+#, kde-format
 msgid "An arrow"
 msgstr "Ör"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:368
-#, fuzzy, kde-format
+#, kde-format
 msgid "Callout"
 msgstr "Talblaðra"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:370
-#, fuzzy, kde-format
+#, kde-format
 msgid "A callout"
 msgstr "Talblaðra"
 
@@ -46236,7 +46166,7 @@ msgstr "Talblaðra"
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:416
 #, kde-format
 msgid "Smiley"
-msgstr ""
+msgstr "Broskall"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:494
 #, kde-format
@@ -46244,20 +46174,19 @@ msgid "Circular Arrow"
 msgstr "Hringlaga ör"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:496
-#, fuzzy, kde-format
-#| msgid "Circular Arrow"
+#, kde-format
 msgid "A circular-arrow"
 msgstr "Hringlaga ör"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:539
 #, kde-format
 msgid "Gearhead"
-msgstr ""
+msgstr "Tannhjól"
 
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:541
 #, kde-format
 msgid "A gearhead"
-msgstr ""
+msgstr "Tannhjól"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
@@ -46266,26 +46195,24 @@ msgstr "Breyta rétthyrning"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Rectangle Shape"
-msgstr "Rétthyrningur"
+msgstr "Rétthyrningslögun"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:42
-#, fuzzy, kde-format
-#| msgid "Inner radius:"
+#, kde-format
 msgid "Corner radius x:"
-msgstr "Innri radíus:"
+msgstr "Radíus horns x:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:52
-#, fuzzy, kde-format
-#| msgid "Inner radius:"
+#, kde-format
 msgid "Corner radius y:"
-msgstr "Innri radíus:"
+msgstr "Radíus horns y:"
 
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "A rectangle"
 msgstr "Rétthyrningur"
 
@@ -46300,21 +46227,21 @@ msgid "Clockwise"
 msgstr "Réttsælis"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Anticlockwise"
-msgstr "Réttsæ&lis"
+msgstr "Rangsælis"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, SpiralShapeConfigWidget)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spiral Shape"
-msgstr "Spírall"
+msgstr "Spírallögun"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Fade:"
-msgstr "Deyfa út"
+msgstr "Deyfing:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.ui:60
@@ -46323,14 +46250,14 @@ msgid "Direction:"
 msgstr "Stefna:"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeFactory.cpp:19
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spiral"
 msgstr "Spírall"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeFactory.cpp:21
-#, fuzzy, kde-format
+#, kde-format
 msgid "A spiral shape"
-msgstr "Lögun bendils:"
+msgstr "Spírallögun"
 
 #: plugins/flake/pathshapes/star/StarShapeConfigCommand.cpp:21
 #, fuzzy
@@ -46342,13 +46269,13 @@ msgstr "Breyta"
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:18
 #, fuzzy, kde-format
 msgid "Star shape"
-msgstr "Lögun bendils:"
+msgstr "Stjörnulögun"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Polygon:"
-msgstr "Marghyrningur"
+msgstr "Marghyrningur:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:41
@@ -46364,25 +46291,25 @@ msgstr "Innri radíus:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/flake/pathshapes/star/StarShapeConfigWidget.ui:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Outer radius:"
 msgstr "Ytri radíus:"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "A star shape"
-msgstr "Lögun bendils:"
+msgstr "Stjörnulögun"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:27
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "A star"
-msgstr "Stjarna."
+msgstr "Stjarna"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Star"
-msgstr "Stjarnan"
+msgstr "Stjarna"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:51
 #, kde-format
@@ -46390,19 +46317,19 @@ msgid "Flower"
 msgstr "Blóm"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:53
-#, fuzzy, kde-format
+#, kde-format
 msgid "A flower"
-msgstr "Neðri"
+msgstr "Blóm"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pentagon"
 msgstr "Fimmhyrningur"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgid "A pentagon"
-msgstr "Stefna"
+msgstr "Fimmhyrningur"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:84
 #, kde-format
@@ -46410,9 +46337,9 @@ msgid "Hexagon"
 msgstr "Sexhyrningur"
 
 #: plugins/flake/pathshapes/star/StarShapeFactory.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "A hexagon"
-msgstr "Mynstur"
+msgstr "Sexhyrningur"
 
 #: plugins/generators/gradient/KisGradientGenerator.cpp:20
 #, fuzzy, kde-format
@@ -46421,28 +46348,28 @@ msgstr "Litstigull"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn linearly"
 msgid "Linear"
 msgstr "Línulegt"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:29
 #: plugins/tools/basictools/kis_tool_gradient.cc:253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
-msgstr "Tvílínuleg"
+msgstr "Tvílínulegt"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_gradient.cc:254
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
 msgstr "Frá miðju"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
 #: plugins/tools/basictools/kis_tool_gradient.cc:255
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn in a square around a centre"
 msgid "Square"
 msgstr "Ferningur"
@@ -46452,37 +46379,35 @@ msgstr "Ferningur"
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
-msgstr ""
+msgstr "Kónískt"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
 #: plugins/tools/basictools/kis_tool_gradient.cc:257
 #, kde-format
 msgctxt "the gradient will be drawn as a symmetric cone"
 msgid "Conical Symmetric"
-msgstr ""
+msgstr "Kónískt samhverft"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:34
 #: plugins/tools/basictools/kis_tool_gradient.cc:258
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn as a spiral"
 msgid "Spiral"
 msgstr "Spírall"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:35
 #: plugins/tools/basictools/kis_tool_gradient.cc:259
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reverse paths"
+#, kde-format
 msgctxt "the gradient will be drawn as a reverse spiral"
 msgid "Reverse Spiral"
-msgstr "Snúa við ferlum"
+msgstr "Öfugur spírall"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:36
 #: plugins/tools/basictools/kis_tool_gradient.cc:260
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn in a selection outline"
 msgid "Shaped"
-msgstr "Form"
+msgstr "Lögun"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:39
 #: plugins/tools/basictools/kis_tool_gradient.cc:267
@@ -46506,10 +46431,10 @@ msgid "Alternating"
 msgstr "Málaratól"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "The position will be set in pixels"
 msgid "Pixels"
-msgstr "Mynddíll"
+msgstr "Mynddílar"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:45
 #, fuzzy, kde-format
@@ -46645,9 +46570,9 @@ msgid "Obtuse Angles"
 msgstr ""
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:56
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cross Shape"
-msgstr "Lögun bendils:"
+msgstr "Krosslögun"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:57
 #, fuzzy, kde-format
@@ -46673,9 +46598,9 @@ msgstr "Penslar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShapes)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:25
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shapes"
-msgstr "Lögun"
+msgstr "Laganir"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:54
@@ -46857,16 +46782,16 @@ msgstr[0] "Spegla lóðrétt"
 msgstr[1] "Spegla lóðrétt"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
-msgstr "punktar/tommu"
+msgstr "mynddílar/tommu"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
-msgstr "punktar/tommu"
+msgstr "mynddílar/sm"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
@@ -47420,7 +47345,7 @@ msgstr "Fjaðra val"
 #: plugins/impex/heif/HeifError.cpp:45
 #, kde-format
 msgid "Color profile was not found in the document."
-msgstr ""
+msgstr "Litasnið fannst ekki í skjalinu."
 
 #: plugins/impex/heif/HeifError.cpp:49
 #, fuzzy, kde-format
@@ -47538,7 +47463,7 @@ msgstr ""
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
-msgstr ""
+msgstr "Engar breytingar, klippa af"
 
 #: plugins/impex/heif/HeifExport.cpp:570
 #, kde-format
@@ -47870,7 +47795,7 @@ msgstr "Nánar"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:176
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the result will be artificially smoothed to hide jpeg artifacts"
 msgid "Smooth:"
 msgstr "Mýking:"
@@ -48445,10 +48370,9 @@ msgstr "Fletja út mynd&ina"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color space:"
+#, kde-format
 msgid "Color profile"
-msgstr "Litrýmd:"
+msgstr "Litasnið"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48467,9 +48391,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
+#, kde-format
 msgid "HDR conversion"
-msgstr "Búa til textaramma"
+msgstr "HDR umbreyting"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -48481,11 +48405,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:396
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "Skipta um breytu"
+msgstr "Viðföng kóðara"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:402
@@ -48572,11 +48494,9 @@ msgstr "Í vinnslu"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:504
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Line Height"
+#, kde-format
 msgid "Maximum strength"
-msgstr "Línuhæð"
+msgstr "Hámarksstyrkur"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:521
@@ -49041,9 +48961,9 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save reference image %1."
-msgstr "Setja inn athugasemd"
+msgstr "Mistókst að vista viðmiðunarmynd %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -49051,25 +48971,25 @@ msgstr "Setja inn athugasemd"
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:162
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:179
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:189
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the metadata for layer %1."
-msgstr "Setja inn athugasemd"
+msgstr "Mistókst að vista lýsigögnin fyrir lagið %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:107
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:270
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to open %1."
-msgstr "Mistókst að opna %1 : %2"
+msgstr "Mistókst að opna %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:124
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the pixel data for layer %1."
-msgstr "Setja inn athugasemd"
+msgstr "Mistókst að vista mynddílagögnin fyrir lagið %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the annotations for layer %1."
-msgstr "Setja inn athugasemd"
+msgstr "Mistókst að vista glósurnar fyrir lagið %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:150
 #, kde-format
@@ -49087,9 +49007,9 @@ msgid "Failed to save the filter configuration for filter layer %1."
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to save the selection for layer %1."
-msgstr "Setja inn athugasemd"
+msgstr "Mistókst að vista myndvalið fyrir lagið %1."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:175
 #, fuzzy, kde-format
@@ -49247,9 +49167,9 @@ msgid "Could not save assistants."
 msgstr "Fjaðra val"
 
 #: plugins/impex/libkra/kra_converter.cpp:75
-#, fuzzy, kde-format
+#, kde-format
 msgid "Not a valid Krita file"
-msgstr "Mynd"
+msgstr "Ekki gild Krita-skrá"
 
 #: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
@@ -49283,38 +49203,36 @@ msgstr ""
 #: plugins/impex/libkra/kra_converter.cpp:350
 #, kde-format
 msgid "The format is not supported or the file is corrupted"
-msgstr ""
+msgstr "Ekki er stuðningur við skráasniðið eða að skráin er skemmd"
 
 #: plugins/impex/libkra/kra_converter.cpp:361
 #, kde-format
 msgid "The file is too new for this version of Krita (%1)."
-msgstr ""
+msgstr "Skráin er of ný fyrir þessa útgáfu Krita (%1)."
 
 #: plugins/impex/libkra/kra_converter.cpp:367
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgid "The file has no layers."
-msgstr "Skráin %1 er ekki til."
+msgstr "Skráin er með engin lög."
 
 #: plugins/impex/libkra/kra_converter.cpp:406
-#, fuzzy, kde-format
-#| msgid "The file %1 does not exist."
+#, kde-format
 msgid "The file does not contain an image."
-msgstr "Skráin %1 er ekki til."
+msgstr "Skráin inniheldur ekki mynd."
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:70
 #: plugins/impex/pdf/kis_pdf_import.cpp:71
 #, kde-format
 msgid "A password is required to read that pdf"
-msgstr ""
+msgstr "Lykilorðs er krafist til að lesa þessa PDF-skrá"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:80
-#, fuzzy, kde-format
+#, kde-format
 msgid "PDF Import Options"
-msgstr "PNG útflutningsvalkostir"
+msgstr "PDF-útflutningsvalkostir"
 
 #: plugins/impex/pdf/kis_pdf_import.cpp:107
-#, fuzzy, kde-format
+#, kde-format
 msgid "Page %1"
 msgstr "Síða %1"
 
@@ -49327,53 +49245,52 @@ msgstr "Innflutt mynd"
 
 #. i18n: ectx: property (title), widget (QGroupBox, buttonGroup1)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:24
-#, fuzzy, kde-format
+#, kde-format
 msgid "Pages"
 msgstr "Síður"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolAllPages)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:30
-#, fuzzy, kde-format
+#, kde-format
 msgid "All pa&ges"
-msgstr "Allar síður"
+msgstr "A&llar síður"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolFirstPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:37
-#, fuzzy, kde-format
-#| msgid "&First Page"
+#, kde-format
 msgid "&First page"
-msgstr "F&yrsta síða"
+msgstr "&Fyrsta síða"
 
 #. i18n: ectx: property (text), widget (QRadioButton, boolSelectionPage)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:47
-#, fuzzy, kde-format
+#, kde-format
 msgid "Selec&tion of page"
-msgstr "Valhamur"
+msgstr "Va&l á síðu"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intResolution)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "dpi"
-msgstr "dpi"
+msgstr "pát"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel5)
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:320
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "horizontal resolution"
 msgid "Resolution:"
 msgstr "Upplausn:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
 #: plugins/impex/png/kis_wdg_options_png.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "PNG Options"
-msgstr "PNG stillingar"
+msgstr "PNG-valkostir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/impex/png/kis_wdg_options_png.ui:44
-#, fuzzy, kde-format
+#, kde-format
 msgid "Transparent color: "
-msgstr "Gegnsær litur"
+msgstr "Gegnsær litur: "
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_2)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, compressionLevelDeflate)
@@ -49437,9 +49354,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMetaData)
 #: plugins/impex/png/kis_wdg_options_png.ui:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Store Metadata"
-msgstr "Metagögn"
+msgstr "Geyma lýsigögn"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/png/kis_wdg_options_png.ui:98
@@ -49546,9 +49463,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
 #: plugins/impex/png/kis_wdg_options_png.ui:197
-#, fuzzy, kde-format
+#, kde-format
 msgid "Embed sRGB profile"
-msgstr "Vi&sta Tækjaslár"
+msgstr "Ívefja sRGB-litasnið"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkAuthor)
 #: plugins/impex/png/kis_wdg_options_png.ui:204
@@ -49585,9 +49502,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsQImageIO)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:18
-#, fuzzy, kde-format
+#, kde-format
 msgid "WebP Options"
-msgstr "PNG stillingar"
+msgstr "WebP-valkostir"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:45
@@ -50706,14 +50623,14 @@ msgstr "Þjöppun:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:361
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "save the file quickly, but do not compress very well"
 msgid "Fast"
 msgstr "Hratt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmall)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:375
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "make the file small, at the price of a longer saving time"
 msgid "Small"
 msgstr "Lítil"
@@ -50726,14 +50643,14 @@ msgstr "Valkostir JPEG þjöppunar"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFast_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:473
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "save quickly, but do not compress a lot"
 msgid "Fast"
 msgstr "Hratt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSmall_2)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:487
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "make a very small file, but take a long time saving"
 msgid "Small"
 msgstr "Lítil"
@@ -51518,7 +51435,7 @@ msgid "Smoothing"
 msgstr "Mýking"
 
 #: plugins/paintops/defaultpaintops/defaultpaintops_plugin.cc:35
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Pixel paintbrush"
 msgid "Pixel"
 msgstr "Mynddíll"
@@ -51527,7 +51444,7 @@ msgstr "Mynddíll"
 #, kde-format
 msgctxt "clone paintbrush (previously \"Duplicate\")"
 msgid "Clone"
-msgstr ""
+msgstr "Klón"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbHealing)
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings.cpp:196
@@ -51748,7 +51665,7 @@ msgstr ""
 #: plugins/paintops/experiment/experiment_paintop_plugin.cpp:31
 #: plugins/paintops/hairy/wdghairyeoptions.ui:47
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Shape"
 msgstr "Lögun"
 
@@ -51786,7 +51703,7 @@ msgstr "Stillingar"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
 #, kde-format
 msgid "Shape creation:"
-msgstr "Mettun"
+msgstr "Lögun gerð:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, smoothCHBox)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:71
@@ -51827,13 +51744,13 @@ msgid "Global Pattern"
 msgstr "Fylla með mynstri"
 
 #: plugins/paintops/filterop/filterop.cpp:31
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Filter"
 msgstr "Sía"
 
 #: plugins/paintops/gridbrush/grid_paintop_plugin.cpp:27
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "type of a brush engine, shown in the list of brush engines"
 msgid "Grid"
 msgstr "Hnitanet"
@@ -51846,7 +51763,7 @@ msgstr "Leysa upp"
 #: plugins/paintops/gridbrush/KisGridShapeOptionWidget.cpp:44
 #, kde-format
 msgid "Particle type"
-msgstr "Gildi"
+msgstr "Tegund eindar"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -51854,7 +51771,7 @@ msgstr "Gildi"
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:80
 #, kde-format
 msgid "Anti-aliased pixel"
-msgstr "Málaratól"
+msgstr "Afstallaður mynddíll"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/gridbrush/wdggridoptions.ui:42
@@ -51991,9 +51908,9 @@ msgstr "Viðbót"
 
 #. i18n: ectx: attribute (title), widget (QWidget, brushTab)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:37
-#, fuzzy, kde-format
+#, kde-format
 msgid "Brush Shape"
-msgstr "Penslar"
+msgstr "Pensillögun"
 
 #. i18n: ectx: property (text), widget (QRadioButton, oneDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:53
@@ -52022,14 +51939,14 @@ msgstr "Stillingar"
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:144
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:42
-#, fuzzy, kde-format
+#, kde-format
 msgid "radius"
 msgstr "radíus"
 
 #. i18n: ectx: property (text), widget (QLabel, sigmaLabel)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:154
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:59
-#, fuzzy, kde-format
+#, kde-format
 msgid "sigma"
 msgstr "sigma"
 
@@ -52118,15 +52035,15 @@ msgstr "Mettun"
 
 #. i18n: ectx: property (text), widget (QRadioButton, oneDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:94
-#, fuzzy, kde-format
+#, kde-format
 msgid "&1D"
-msgstr "D"
+msgstr "&1D"
 
 #. i18n: ectx: property (text), widget (QRadioButton, twoDimBrushBtn)
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:104
-#, fuzzy, kde-format
+#, kde-format
 msgid "&2D"
-msgstr "D"
+msgstr "&2D"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, soakInkCBox)
 #: plugins/paintops/hairy/wdgInkOptions.ui:88
@@ -52287,9 +52204,9 @@ msgstr "Málaratól"
 
 #. i18n: ectx: property (text), widget (QCheckBox, subpixelPrecisionCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46
-#, fuzzy, kde-format
+#, kde-format
 msgid "Subpixel precision"
-msgstr "Undirskipting:"
+msgstr "Nákvæmni undirmynddíla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opaqueBackgroundCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:56
@@ -53717,9 +53634,9 @@ msgid "Direction Filter"
 msgstr "Stefna"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Snap To Pixel"
-msgstr "Mynddíll"
+msgstr "Grípa í mynddíl"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, fuzzy, kde-format
@@ -54004,7 +53921,7 @@ msgstr "Þéttleiki"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:334
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sketch"
 msgstr "Skissa"
 
@@ -54160,9 +54077,9 @@ msgid "Shape dynamics"
 msgstr ""
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Spray Shape"
-msgstr "Búa til textaramma"
+msgstr "Sprautulögun"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, fuzzy, kde-format
@@ -54369,7 +54286,7 @@ msgstr "Hlutfallslegt"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:176
-#, fuzzy, kde-format
+#, kde-format
 msgid "Texture:"
 msgstr "Efnisáferð:"
 
@@ -54576,15 +54493,13 @@ msgid "There is no active document."
 msgstr "Vista skjal"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:53
-#, fuzzy
 msgid "Assign Profile to Image"
-msgstr "Frá hægri til vinstri"
+msgstr "Úthluta litasniði á myndina"
 
 #: plugins/python/channels2layers/channels2layers.py:58
 #: plugins/python/channels2layers/channels2layers.py:59
-#, fuzzy
 msgid "Channels to layers"
-msgstr "Kvarða lag"
+msgstr "Litrásir í lög"
 
 #: plugins/python/channels2layers/channels2layers.py:67
 #, fuzzy
@@ -54648,7 +54563,6 @@ msgid "Original layer"
 msgstr "Kvarða lag"
 
 #: plugins/python/channels2layers/channels2layers.py:1117
-#, fuzzy
 msgctxt "the original layer"
 msgid "Original"
 msgstr "Upprunalegt"
@@ -54695,10 +54609,8 @@ msgid "Color depth:"
 msgstr "Litaskali"
 
 #: plugins/python/colorspace/uicolorspace.py:62
-#, fuzzy
-#| msgid "Color space:"
 msgid "Color profile:"
-msgstr "Litrýmd:"
+msgstr "Litasnið:"
 
 #: plugins/python/colorspace/uicolorspace.py:129
 #, fuzzy
@@ -55971,9 +55883,8 @@ msgid "Translation directory"
 msgstr "Valtól"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:25
-#, fuzzy
 msgid "Pixels"
-msgstr "Mynddíll"
+msgstr "Mynddílar"
 
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:27
 #, fuzzy
@@ -56311,10 +56222,8 @@ msgstr ""
 
 #: plugins/python/documenttools/documenttools.py:16
 #: plugins/python/documenttools/uidocumenttools.py:56
-#, fuzzy
-#| msgid "Document Information"
 msgid "Document Tools"
-msgstr "Upplýsingar um skjal"
+msgstr "Skjalaverkfæri"
 
 #: plugins/python/documenttools/documenttools.py:18
 msgid "Plugin to manipulate properties of selected documents."
@@ -56353,10 +56262,8 @@ msgstr "Opna nýlega opnað skjal"
 
 #: plugins/python/exportlayers/exportlayers.py:16
 #: plugins/python/exportlayers/uiexportlayers.py:113
-#, fuzzy
-#| msgid "Export as PDF"
 msgid "Export Layers"
-msgstr "Flytja út sem PDF"
+msgstr "Flytja út lög"
 
 #: plugins/python/exportlayers/exportlayers.py:17
 msgid "Plugin to export layers from a document."
@@ -56448,9 +56355,8 @@ msgstr "Valtól"
 
 #: plugins/python/filtermanager/filtermanager.py:16
 #: plugins/python/filtermanager/uifiltermanager.py:54
-#, fuzzy
 msgid "Filter Manager"
-msgstr "Mynstur"
+msgstr "Síustýring"
 
 #: plugins/python/filtermanager/filtermanager.py:17
 #, fuzzy
@@ -56588,10 +56494,8 @@ msgid "Create Script"
 msgstr "Búa til skjal"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
-#, fuzzy
-#| msgid "Custom Document"
 msgid "Last Documents Docker"
-msgstr "Sérsniðið skjal"
+msgstr "Spjald fyrir síðustu skjöl"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
 #, fuzzy
@@ -56731,10 +56635,10 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "Litastýring"
+msgstr "Innflutningur Python-viðbóta"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8
@@ -56817,7 +56721,7 @@ msgstr ""
 
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:29
 msgid "Quick Settings Docker"
-msgstr ""
+msgstr "Flýtistillingaspjald"
 
 #: plugins/python/scriptdocker/scriptdocker.py:16
 #, fuzzy
@@ -56825,9 +56729,8 @@ msgid "Add Script"
 msgstr "Lýsing:"
 
 #: plugins/python/scriptdocker/scriptdocker.py:24
-#, fuzzy
 msgid "Script Docker"
-msgstr "Lýsing:"
+msgstr "Skriftuspjald"
 
 #: plugins/python/scriptdocker/scriptdocker.py:41
 #, fuzzy, python-brace-format
@@ -56843,9 +56746,8 @@ msgstr ""
 
 #: plugins/python/scripter/scripter.py:20
 #: plugins/python/scripter/uicontroller.py:86
-#, fuzzy
 msgid "Scripter"
-msgstr "Lýsing:"
+msgstr "Skriftun"
 
 #: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:31
 #, fuzzy
@@ -56998,85 +56900,84 @@ msgstr "Vista"
 #. i18n: context: text @ Action (ten_brushes), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:4
 #: plugins/python/tenbrushes/tenbrushes.action:8
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ten Brushes"
-msgstr "Penslar"
+msgstr "Tíu penslar"
 
 #. i18n: context: text @ Action (activate_preset_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:21
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 1"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 2"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 3"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 4"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 5"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 6"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 7"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 8"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 9"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "Penslar"
+msgstr "Virkja forstillingu pensils 10"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
-#, fuzzy
 msgid "Ten Brushes"
-msgstr "Penslar"
+msgstr "Tíu penslar"
 
 #: plugins/python/tenbrushes/tenbrushes.py:29
 msgid "Assign ten brush presets to ten shortcuts."
@@ -57119,90 +57020,80 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ten Scripts"
-msgstr "Lýsing:"
+msgstr "Tíu skriftur"
 
 #. i18n: context: text @ Action (execute_script_1), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:7
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 1"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 1"
 
 #. i18n: context: text @ Action (execute_script_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:19
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 2"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 2"
 
 #. i18n: context: text @ Action (execute_script_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:31
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 3"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 3"
 
 #. i18n: context: text @ Action (execute_script_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:43
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 4"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 4"
 
 #. i18n: context: text @ Action (execute_script_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:55
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 5"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 5"
 
 #. i18n: context: text @ Action (execute_script_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:67
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 6"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 6"
 
 #. i18n: context: text @ Action (execute_script_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:79
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 7"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 7"
 
 #. i18n: context: text @ Action (execute_script_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:91
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 8"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 8"
 
 #. i18n: context: text @ Action (execute_script_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:103
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 9"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 9"
 
 #. i18n: context: text @ Action (execute_script_10), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:115
-#, fuzzy, kde-format
-#| msgid "Create object"
+#, kde-format
 msgctxt "action"
 msgid "Execute Script 10"
-msgstr "Búa til skjal"
+msgstr "Keyra skriftu 10"
 
 #: plugins/python/tenscripts/tenscripts.py:27
 #, fuzzy
@@ -57424,10 +57315,9 @@ msgid "Script files "
 msgstr "Mynstur"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
-#, fuzzy
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "Litastillingar"
+msgstr "Vinnuferlishnappar"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:59
 msgid "Open workflow buttons settings dialog"
@@ -57476,7 +57366,7 @@ msgid "Stabilizer"
 msgstr "Stöðugt"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:318
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Mynddíll"
@@ -57885,16 +57775,16 @@ msgid "Gradient"
 msgstr "Litstigull"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:282
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be drawn with the color order reversed"
 msgid "Reverse"
 msgstr "Snúa við"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:287
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
-msgstr "Annað"
+msgstr "Punktdreifing"
 
 #: plugins/tools/basictools/kis_tool_gradient.h:107
 #, fuzzy, kde-format
@@ -57940,10 +57830,10 @@ msgid "Line Tool"
 msgstr "Málaratól"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:77
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
-msgstr "°"
+msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
@@ -57964,13 +57854,13 @@ msgstr "Rétthyrningur"
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "X: %1 px, Y: %2 px"
-msgstr ""
+msgstr "X: %1 px, Y: %2 px"
 
 #: plugins/tools/basictools/kis_tool_move.cc:341
 #, kde-format
 msgctxt "floating message in move tool"
 msgid "Selected area has no pixels"
-msgstr ""
+msgstr "Valið svæði er ekki með neina mynddíla"
 
 #: plugins/tools/basictools/kis_tool_move.h:183
 #, kde-format
@@ -58551,17 +58441,16 @@ msgid "Markers, Stroke, Fill"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "grænt"
+msgstr "Ógegnsæi: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "grænt"
+msgstr "Ógegnsæi [*breytilegt*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58697,23 +58586,22 @@ msgid "Reference Images Tool"
 msgstr "Stillingar"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "grænt"
+msgstr "Ógegnsæi [*breytilegt*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Litmettun"
+msgstr "Litmettun: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Saturation Rings:"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Mettun"
+msgstr "Litmettun [*breytileg*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, fuzzy, kde-format
@@ -58812,14 +58700,14 @@ msgid "Delete All"
 msgstr "Eyða öllum"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
-#, fuzzy, kde-format
+#, kde-format
 msgid "A calligraphic shape"
-msgstr "Sporbaugur"
+msgstr "Skrautskriftarlögun"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:17
-#, fuzzy, kde-format
+#, kde-format
 msgid "Calligraphic Shape"
-msgstr "Sporbaugur"
+msgstr "Skrautskriftarlögun"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:59
 #, fuzzy, kde-format
@@ -59514,7 +59402,7 @@ msgid "Normal"
 msgstr "Venjulegt"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1595
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -59741,10 +59629,10 @@ msgstr "Auka leturstærð"
 #: plugins/tools/svgtexttool/SvgTextTool.action:126
 #: plugins/tools/svgtexttool/SvgTextTool.action:128
 #: plugins/tools/svgtexttool/SvgTextTool.action:133
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Subscript"
-msgstr "Lágletur"
+msgstr "Lágletrað"
 
 #. i18n: context: iconText @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_superscript), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59758,7 +59646,7 @@ msgstr "Lágletur"
 #, kde-format
 msgctxt "action"
 msgid "Superscript"
-msgstr "Brjóstletur"
+msgstr "Háletrað"
 
 #. i18n: context: iconText @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_underline), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60646,11 +60534,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Facing pages"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "Passa á síðu"
+msgstr "Hreinsun: {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
@@ -60905,10 +60792,10 @@ msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:1073
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
-msgstr "Breyta"
+msgstr " Get ekki umbreytt tómu lagi"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:1060
 #, kde-format
@@ -61491,10 +61378,10 @@ msgstr "Texti"
 #. i18n: context: iconText @ Action (PanTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:55 plugins/tools/tools.action:57
 #: plugins/tools/tools.action:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Pan Tool"
-msgstr "Texti"
+msgstr "Hliðrunarverkfæri"
 
 #. i18n: context: text @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61521,10 +61408,10 @@ msgstr ""
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:84 plugins/tools/tools.action:87
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Fill Tool"
-msgstr "Sporbaugur"
+msgstr "Fylliverkfæri"
 
 #. i18n: context: toolTip @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:86
@@ -61541,10 +61428,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (KritaShape/KisToolLine), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:94 plugins/tools/tools.action:96
 #: plugins/tools/tools.action:97
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Line Tool"
-msgstr "Málaratól"
+msgstr "Línuverkfæri"
 
 #. i18n: context: text @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61554,10 +61441,10 @@ msgstr "Málaratól"
 #. i18n: context: iconText @ Action (KritaShape/KisToolEllipse), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:104 plugins/tools/tools.action:106
 #: plugins/tools/tools.action:107
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Ellipse Tool"
-msgstr "Sporbaugur"
+msgstr "Sporbaugaverkfæri"
 
 #. i18n: context: text @ Action (KritaShape/KisToolBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61577,10 +61464,10 @@ msgstr "Valtól"
 #. i18n: context: text @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:124 plugins/tools/tools.action:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Gradient Tool"
-msgstr "Litblöndun"
+msgstr "Litstigulsverkfæri"
 
 #. i18n: context: toolTip @ Action (KritaFill/KisToolGradient), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:126
@@ -61594,7 +61481,7 @@ msgstr "Teiknaðu litstigul."
 #. i18n: context: text @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaShape/KisToolMeasure), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:134 plugins/tools/tools.action:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Measurement Tool"
 msgstr "Málband"
@@ -61618,7 +61505,7 @@ msgstr "Flutningsverkfæri"
 
 #. i18n: context: toolTip @ Action (KritaTransform/KisToolMove), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:146
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Move a layer"
 msgstr "Flytja lag"
@@ -61657,10 +61544,10 @@ msgstr "Sporbaugur"
 #. i18n: context: iconText @ Action (ZoomTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tools.action:174 plugins/tools/tools.action:176
 #: plugins/tools/tools.action:177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Zoom Tool"
-msgstr "S&tækkunaráhald"
+msgstr "Aðdráttarverkfæri"
 
 #. i18n: context: text @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (ToolReferenceImages), Actions (tool-shortcuts), ActionCollection (Tools)

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-08 01:47+0000\n"
-"PO-Revision-Date: 2024-11-28 10:58+0100\n"
+"PO-Revision-Date: 2024-12-08 07:45+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -36845,18 +36845,15 @@ msgid "A scheme with this name already exists."
 msgstr "Ja existeix un esquema amb aquest nom."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
 "Esteu segur/a que voleu suprimir l'esquema %1?\n"
-"Cal tenir en compte que això no eliminarà cap esquema de dreceres global del "
-"sistema."
+"                                             Cal tenir en compte que això no "
+"eliminarà cap esquema de dreceres global del sistema."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -59153,13 +59150,12 @@ msgstr "Nom del perfil"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr "Si us plau, inseriu el nom amb què voleu desar aquest perfil:"
+msgstr "Inseriu el nom amb què voleu desar aquest perfil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Ho sento, el nom que heu introduït no és vàlid."
+msgstr "El nom que heu introduït no és vàlid."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -61039,12 +61035,7 @@ msgstr "Radi del patró:"
 
 # skip-rule: kct-library
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "

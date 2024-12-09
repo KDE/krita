@@ -36307,17 +36307,12 @@ msgid "A scheme with this name already exists."
 msgstr "已存在同名快捷键方案。"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
-"您确定要删除快捷键方案 %1 吗？\n"
-"提示：此操作不会删除系统全局的快捷键方案。"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -58125,10 +58120,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "请输入要保存配置文件的名称："
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "对不起，您输入的名称无效。"
+msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -59986,20 +59980,12 @@ msgid "Patch Radius:"
 msgstr "补丁半径："
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
-"当前 Krita 副本在构建时并未启用 GNU Scientific 程序库支持，因此不能使用控制点"
-"缩放对象。请在工具选项面板手动输入数值，或者在启用了该程序库的环境下重新构建 "
-"Krita。"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format
@@ -60861,285 +60847,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Fit View"
-#~ msgstr "缩放到视图大小"
-
-#~ msgid "Fit View Width"
-#~ msgstr "缩放到视图宽度"
-
-#~ msgid "Actual Pixels"
-#~ msgstr "缩放到实际大小"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "缩放到文字宽度"
-
-#~ msgid "Fit View Height"
-#~ msgstr "缩放到视图高度"
-
-#~ msgid "&Open..."
-#~ msgstr "打开(&O)..."
-
-#~ msgid "Open an existing document"
-#~ msgstr "打开已有图像"
-
-#~ msgid "Open &Recent"
-#~ msgstr "打开最近图像(&R)"
-
-#~ msgid "Open a document which was recently opened"
-#~ msgstr "打开最近使用过的图像"
-
-#~ msgid "Save document"
-#~ msgstr "保存图像"
-
-#~ msgid "Save &As..."
-#~ msgstr "另存为(&A)..."
-
-#~ msgid "Save document under a new name"
-#~ msgstr "用新名称保存图像"
-
-#~ msgid "Re&vert"
-#~ msgstr "还原(&V)"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "回退图像中未保存的更改"
-
-#~ msgid "Close document"
-#~ msgstr "关闭图像"
-
-#~ msgid "&Print..."
-#~ msgstr "打印(&P)..."
-
-#~ msgid "Print document"
-#~ msgstr "打印图像"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "打印预览(&W)"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "显示图像的打印预览"
-
-#~ msgid "&Mail..."
-#~ msgstr "邮件(&M)..."
-
-#~ msgid "Send document by mail"
-#~ msgstr "通过邮件发送图像"
-
-#~ msgid "&Quit"
-#~ msgstr "退出(&Q)"
-
-#~ msgid "Quit application"
-#~ msgstr "退出应用程序"
-
-#~ msgid "&Undo"
-#~ msgstr "撤销(&U)"
-
-#~ msgid "Undo last action"
-#~ msgstr "撤销上一步操作"
-
-#~ msgid "Re&do"
-#~ msgstr "重做(&D)"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "重做上次撤销的操作"
-
-#~ msgid "Cu&t"
-#~ msgstr "剪切(&T)"
-
-#~ msgid "Cut selection to clipboard"
-#~ msgstr "剪切选中内容到剪贴板"
-
-#~ msgid "&Copy"
-#~ msgstr "复制(&C)"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "复制选中内容到剪贴板"
-
-#~ msgid "&Paste"
-#~ msgstr "粘贴(&P)"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "粘贴剪贴板内容"
-
-#~ msgid "C&lear"
-#~ msgstr "清除(&L)"
-
-#~ msgid "Select &All"
-#~ msgstr "全部选择(&A)"
-
-#~ msgid "Dese&lect"
-#~ msgstr "取消选择(&L)"
-
-#~ msgid "&Find..."
-#~ msgstr "查找(&F)..."
-
-#~ msgid "Find &Next"
-#~ msgstr "查找下一个(&N)"
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "查找上一个(&V)"
-
-#~ msgid "&Replace..."
-#~ msgstr "替换(&R)..."
-
-#~ msgid "&Actual Size"
-#~ msgstr "实际大小(&A)"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "以实际大小显示图像"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "缩放到视图大小(&F)"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "缩放到视图大小"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "缩放到视图宽度(&W)"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "缩放到视图宽度"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "缩放到视图高度(&H)"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "缩放到视图高度"
-
-#~ msgid "Zoom &In"
-#~ msgstr "放大(&I)"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "缩小(&O)"
-
-#~ msgid "&Zoom..."
-#~ msgstr "缩放(&Z)..."
-
-#~ msgid "Select zoom level"
-#~ msgstr "选择缩放级别"
-
-#~ msgid "&Redisplay"
-#~ msgstr "重新显示(&R)"
-
-#~ msgid "Redisplay document"
-#~ msgstr "重新显示图像"
-
-#~ msgid "&Up"
-#~ msgstr "向上(&U)"
-
-#~ msgid "Go up"
-#~ msgstr "转到上级"
-
-#~ msgid "&Previous Page"
-#~ msgstr "上一页(&P)"
-
-#~ msgid "Go to previous page"
-#~ msgstr "转到上一页"
-
-#~ msgid "&Next Page"
-#~ msgstr "下一页(&N)"
-
-#~ msgid "Go to next page"
-#~ msgstr "转到下一页"
-
-#~ msgid "&Go To..."
-#~ msgstr "转到(&G)..."
-
-#~ msgid "&Go to Page..."
-#~ msgstr "转到页(&G)..."
-
-#~ msgid "&Go to Line..."
-#~ msgstr "转到行(&G)..."
-
-#~ msgid "&First Page"
-#~ msgstr "第一页(&F)"
-
-#~ msgid "Go to first page"
-#~ msgstr "转到第一页"
-
-#~ msgid "&Last Page"
-#~ msgstr "最后一页(&L)"
-
-#~ msgid "Go to last page"
-#~ msgstr "转到最后一页"
-
-#~ msgid "&Back"
-#~ msgstr "后退(&B)"
-
-#~ msgid "Go back in document"
-#~ msgstr "在图像中后退"
-
-#~ msgid "&Forward"
-#~ msgstr "前进(&F)"
-
-#~ msgid "Go forward in document"
-#~ msgstr "在图像中前进"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "添加书签(&A)"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "编辑书签(&E)..."
-
-#~ msgid "&Spelling..."
-#~ msgstr "拼写(&S)..."
-
-#~ msgid "Check spelling in document"
-#~ msgstr "检查图像文本的拼写"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "显示/隐藏菜单栏"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "显示工具栏(&T)"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "显示/隐藏工具栏"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "显示/隐藏状态栏"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "全屏模式(&U)"
-
-#~ msgid "&Save Settings"
-#~ msgstr "保存设置(&S)"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "配置快捷键(&H)..."
-
-#~ msgid "&Configure %1..."
-#~ msgstr "配置 %1(&C)..."
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "配置工具栏(&B)..."
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "配置通知(&N)..."
-
-#~ msgid "Reset Configurations"
-#~ msgstr "重置配置"
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "%1 使用手册(&H)"
-
-#~ msgid "What's &This?"
-#~ msgstr "这是什么(&T)？"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "每日提示(&D)"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "报告程序缺陷(&R)..."
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "语言选项(&L)..."
-
-#~ msgid "&About %1"
-#~ msgstr "关于 %1(&A)"
-
-#~ msgid "About &KDE"
-#~ msgstr "关于 KDE(&K)"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- 分隔线 ---"

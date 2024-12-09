@@ -65,8 +65,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-05 03:24+0000\n"
-"PO-Revision-Date: 2024-11-23 12:25+0100\n"
-"Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
+"PO-Revision-Date: 2024-12-08 21:27+0100\n"
+"Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -15904,7 +15904,7 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 "Está ejecutando una versión no compatible de Windows: %1.\n"
-"Esto no está recomendado. Por favor, no informe de ningún error.\n"
+"Esto no está recomendado. No informe de ningún error.\n"
 "Actualice a una versión de Windows compatible: Windows 7, 8, 8.1 o 10."
 
 #: krita/main.cc:718 krita/main.cc:723
@@ -20618,7 +20618,7 @@ msgstr ""
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
 msgid "Please enter a file name to render to."
-msgstr "Por favor, introduzca un nombre de archivo en el que renderizar."
+msgstr "Introduzca un nombre de archivo en el que renderizar."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:40
 #, kde-format
@@ -22403,11 +22403,11 @@ msgstr ""
 "funciona Krita y modificarlo</li><li>Libertad para distribuir versiones "
 "modificadas de Krita</li></ul><p>La fundación Krita y sus proyectos de krita."
 "org están <b>comprometidos</b> con la preservación de Krita como software "
-"libre.</p><h1 align=\"center\">Su material gráfico</h1><p>Todo lo que usted "
-"haya creado con Krita es exclusivamente de su propiedad. Es completamente "
-"libre de usar su material gráfico como desee.</p><p>Esto significa que Krita "
-"puede usarse comercialmente para cualquier propósito. No hay restricciones "
-"de ningún tipo.</p><p>La licencia GPL de GNU de Krita le garantiza esta "
+"libre.</p><h1 align=\"center\">Su material gráfico</h1><p>Todo lo que haya "
+"creado con Krita es exclusivamente de su propiedad. Es completamente libre "
+"de usar su material gráfico como desee.</p><p>Esto significa que Krita puede "
+"usarse comercialmente para cualquier propósito. No hay restricciones de "
+"ningún tipo.</p><p>La licencia GPL de GNU de Krita le garantiza esta "
 "libertad. No se otorgará permiso a nadie para retirarla, a diferencia de las "
 "versiones de prueba o educativas de los programas comerciales que impiden su "
 "trabajo en situaciones comerciales.</p><br/><hr/><pre>"
@@ -29058,7 +29058,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>El controlador para su tableta de dibujo y Windows no "
 "coinciden con el tamaño de la pantalla a la que está conectada su tableta. "
-"Por favor, seleccione la opción correcta.</p></body></html>"
+"Seleccione la opción correcta.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioManual)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:56
@@ -29974,7 +29974,7 @@ msgstr ""
 "\n"
 "\n"
 "Advertencia:\tSe ha quedado sin memoria. Se ha iniciado el intercambio.\n"
-"\t\tPor favor, reserve más RAM para Krita en el diálogo de preferencias."
+"\t\tReserve más RAM para Krita en el diálogo de preferencias."
 
 #: libs/ui/kis_statusbar.cc:376
 #: plugins/python/channels2layers/channels2layers.py:79
@@ -30115,7 +30115,7 @@ msgid ""
 msgstr ""
 "Está trabajando con una compilación de 32 bits en un Windows de 64 bits.\n"
 "Esto es algo que no se recomienda en absoluto.\n"
-"Por favor, descargue e instale la compilación x64 en su lugar."
+"Descargue e instale la compilación x64 en su lugar."
 
 #: libs/ui/KisApplication.cpp:430
 #, kde-format
@@ -30257,8 +30257,8 @@ msgid ""
 msgstr ""
 "No se puede borrar %1\n"
 "\n"
-"Por favor, asegúrese de que ningún otro programa está usando el archivo y "
-"vuelva a intentarlo."
+"Asegúrese de que ningún otro programa está usando el archivo y vuelva a "
+"intentarlo."
 
 #: libs/ui/KisApplication.cpp:1106
 #, kde-format
@@ -30409,7 +30409,7 @@ msgstr "Clonar documento"
 #: libs/ui/KisDocument.cpp:734
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
-msgstr "No se puede escribir %1. Por favor, guárdelo con otro nombre."
+msgstr "No se puede escribir %1. Guárdelo con otro nombre."
 
 #: libs/ui/KisDocument.cpp:784
 #, kde-format
@@ -32729,8 +32729,8 @@ msgid ""
 "Shape selection does not fully support wraparound mode. Please use pixel "
 "selection instead"
 msgstr ""
-"La selección de formas no permite usar por completo el modo envolvente. Por "
-"favor, use la selección de píxeles en su lugar"
+"La selección de formas no permite usar por completo el modo envolvente. Use "
+"la selección de píxeles en su lugar"
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:358
 #, kde-format
@@ -32772,8 +32772,8 @@ msgid ""
 "The brush tool cannot paint on this layer.  Please select a paint layer or "
 "mask."
 msgstr ""
-"La herramienta de pincel no puede pintar en esta capa. Por favor, seleccione "
-"una capa de pintura o una máscara."
+"La herramienta de pincel no puede pintar en esta capa. Seleccione una capa "
+"de pintura o una máscara."
 
 #: libs/ui/tool/kis_tool_freehand.cc:218
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
@@ -32804,8 +32804,8 @@ msgid ""
 "This tool cannot paint on clone layers.  Please select a paint or vector "
 "layer or mask."
 msgstr ""
-"Esta herramienta no puede pintar en capas de clonación. Por favor, "
-"seleccione una capa de pintura o vectorial o una máscara."
+"Esta herramienta no puede pintar en capas de clonación. Seleccione una capa "
+"de pintura o vectorial o una máscara."
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:95
 #, kde-format
@@ -33720,9 +33720,9 @@ msgid ""
 msgstr ""
 "<p><b>Notas adicionales sobre los perfiles de Elle Stone:</b></p><p><i>Krita "
 "viene con un número de perfiles de alta calidad creados por <a href="
-"\"https://ninedegreesbelow.com\">Elle Stone</a>. Esto es un resumen. Por "
-"favor, revise <a href=\"https:// ninedegreesbelow.com/photography/lcms-make-"
-"icc-profiles.html\">la documentación completa</a> también.</i></p>"
+"\"https://ninedegreesbelow.com\">Elle Stone</a>. Esto es un resumen. Revise "
+"<a href=\"https:// ninedegreesbelow.com/photography/lcms-make-icc-profiles."
+"html\">la documentación completa</a> también.</i></p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:521
 #, kde-format
@@ -36497,8 +36497,8 @@ msgid ""
 "The version of this application - please make sure that no newer version is "
 "available before sending a bug report"
 msgstr ""
-"La versión de esta aplicación (por favor, asegúrese de que no existe una "
-"versión más reciente antes de enviar un informe de errores)."
+"La versión de esta aplicación (asegúrese de que no existe una versión más "
+"reciente antes de enviar un informe de errores)."
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
@@ -36526,13 +36526,12 @@ msgid ""
 "bugs.kde.org</a> where you will find a form to fill in. </p><p><b>Please "
 "paste the following information into the bug report!</b></p></qt>"
 msgstr ""
-"<qt><p>Por favor, lea <b><a href=\"https://docs.krita.org/en/"
-"untranslatable_pages/reporting_bugs.html\">esta guía</a></b> antes de "
-"notificar errores.</p><p>Para enviar un informe de error, pulse el botón "
-"inferior. Esto abrirá una ventana del navegador web en <a href=\"https://"
-"bugs.kde.org\">https://bugs.kde.org</a>, donde encontrará un formulario para "
-"rellenar.</p><p><b>Por favor, pegue la siguiente información en el informe "
-"de error.</b></p></qt>"
+"<qt><p>Lea <b><a href=\"https://docs.krita.org/en/untranslatable_pages/"
+"reporting_bugs.html\">esta guía</a></b> antes de notificar errores.</"
+"p><p>Para enviar un informe de error, pulse el botón inferior. Esto abrirá "
+"una ventana del navegador web en <a href=\"https://bugs.kde.org\">https://"
+"bugs.kde.org</a>, donde encontrará un formulario para rellenar.</"
+"p><p><b>Adjunte la siguiente información al informe de error.</b></p></qt>"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:207
 #, kde-format
@@ -36877,8 +36876,8 @@ msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
-"<qt>La combinación de teclas «%1» ya se usa por la acción <b>%2</b>.<br>Por "
-"favor, seleccione una combinación distinta.</qt>"
+"<qt>La combinación de teclas «%1» ya se usa por la acción <b>%2</b>."
+"<br>Seleccione una combinación distinta.</qt>"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
 #, kde-format
@@ -37013,7 +37012,7 @@ msgstr "Cambiar el idioma de la aplicación"
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
-msgstr "Por favor, escoja el idioma que se debe usar para esta aplicación:"
+msgstr "Escoja el idioma que se debe usar para esta aplicación:"
 
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
 #, kde-format
@@ -41407,7 +41406,7 @@ msgstr "Preferencias del selector de color de gama amplia"
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
 msgid "Please paste this information in your bug report"
-msgstr "Por favor, pegue esta información en su informe de fallo"
+msgstr "Adjunte esta información a su informe de fallo"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:38
 #, kde-format
@@ -41435,24 +41434,21 @@ msgstr "Conmutar registro"
 msgctxt "Caption of the dialog with Krita's Android system log for bug reports"
 msgid "Krita Logcat Dump: please paste this information to the bug report"
 msgstr ""
-"Volcado del registro de Krita: por favor, pegue esta información en el "
-"informe del fallo"
+"Volcado del registro de Krita: adjunte esta información al informe del fallo"
 
 #: plugins/extensions/buginfo/DlgCrashLog.cpp:35
 #, kde-format
 msgctxt "Caption of the dialog with crash log for bug reports"
 msgid "Krita Crash Log: please paste this information to the bug report"
 msgstr ""
-"Registro de cuelgues de Krita: por favor, pegue esta información en el "
-"informe del fallo"
+"Registro de cuelgues de Krita: adjunte esta información al informe del fallo"
 
 #: plugins/extensions/buginfo/DlgKritaLog.cpp:23
 #, kde-format
 msgctxt "Caption of the dialog with Krita usage log for bug reports"
 msgid "Krita Usage Log: please paste this information to the bug report"
 msgstr ""
-"Registro de uso de Krita: por favor, pegue esta información en el informe "
-"del fallo"
+"Registro de uso de Krita: adjunte esta información al informe del fallo"
 
 #: plugins/extensions/buginfo/DlgSysInfo.cpp:23
 #, kde-format
@@ -41460,14 +41456,14 @@ msgctxt "Caption of the dialog with system information for bug reports"
 msgid ""
 "Krita System Information: please paste this information to the bug report"
 msgstr ""
-"Información del sistema de Krita: por favor, pegue esta información en el "
-"informe del fallo"
+"Información del sistema de Krita: adjunte esta información al informe del "
+"fallo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/buginfo/wdg_buginfo.ui:39
 #, kde-format
 msgid "Please add this information to a bug report:"
-msgstr "Por favor, añada esta información a un informe de fallo:"
+msgstr "Añada esta información a un informe de fallo:"
 
 #: plugins/extensions/clonesarray/clonesarray.xmlgui:5
 #: plugins/extensions/colorspaceconversion/colorspaceconversion.xmlgui:7
@@ -47506,17 +47502,17 @@ msgstr "La entrada no coincide con el tamaño del archivo"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:107
 #, kde-format
 msgid "Please specify width and height"
-msgstr "Por favor, indique la anchura y la altura"
+msgstr "Indique la anchura y la altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:110
 #, kde-format
 msgid "Please specify width"
-msgstr "Por favor, indique la anchura"
+msgstr "Indique la anchura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:113
 #, kde-format
 msgid "Please specify height"
-msgstr "Por favor, indique la altura"
+msgstr "Indique la altura"
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:182
 #, kde-format
@@ -55610,8 +55606,8 @@ msgid ""
 "be written to."
 msgstr ""
 "Krita no dispone de permiso de escritura en esta carpeta, por lo que no "
-"puede crear archivos nuevos en ella. Por favor, configure el acceso a la "
-"carpeta o mueva el proyecto a una carpeta donde pueda escribir."
+"puede crear archivos nuevos en ella. Configure el acceso a la carpeta o "
+"mueva el proyecto a una carpeta donde pueda escribir."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
@@ -55773,7 +55769,7 @@ msgid ""
 "Please choose a different folder."
 msgstr ""
 "Krita no tiene permiso de escritura en esta carpeta, por lo que no puede "
-"crear archivos en ella. Por favor, seleccione otra carpeta."
+"crear archivos en ella. Seleccione otra carpeta."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
 msgid "Comic Project Setup"
@@ -56372,9 +56368,9 @@ msgid ""
 "menu. If you leave this blank a default entry will be created based on the "
 "name of the script. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>Lo que usted quiere que aparezca en el menú "
-"«Herramientas-&gt;Guiones». Si deja esto en blanco se creará una entrada por "
-"defecto basada en el nombre del guion.</p></body></html>"
+"<html><head/><body><p>Lo que quiere que aparezca en el menú «Herramientas-"
+"&gt;Guiones». Si deja esto en blanco se creará una entrada por defecto "
+"basada en el nombre del guion.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/python/krita_script_starter/bbdkss.ui:92
@@ -58362,7 +58358,7 @@ msgstr "Nombre del perfil"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr "Por favor, introduzca el nombre con el que quiere guardar este perfil:"
+msgstr "Introduzca el nombre con el que quiere guardar este perfil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format

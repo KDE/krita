@@ -102,7 +102,7 @@ void KisLayerStyleFilterEnvironment::setupFinalPainter(KisPainter *gc,
                                                        const QBitArray &channelFlags) const
 {
     Q_ASSERT(m_d->sourceLayer);
-    gc->setOpacityF(KritaUtils::mergeOpacityF(opacity, qRound(qreal(m_d->sourceLayer->opacity()) / OPACITY_OPAQUE_U8)));
+    gc->setOpacityF(KritaUtils::mergeOpacityF(qreal(opacity) / OPACITY_OPAQUE_U8, qreal(m_d->sourceLayer->opacity()) / OPACITY_OPAQUE_U8));
     gc->setChannelFlags(KritaUtils::mergeChannelFlags(channelFlags, m_d->sourceLayer->channelFlags()));
 
 }

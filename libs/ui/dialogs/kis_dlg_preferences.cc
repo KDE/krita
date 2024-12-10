@@ -1151,7 +1151,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     }
 
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->displayIntent);
-    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    m_page->ckbProofBlackPoint->setChecked(proofingConfig->useBlackPointCompensationFirstTransform);
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
@@ -1256,7 +1256,7 @@ void ColorSettingsTab::setDefault()
         m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     }
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->displayIntent);
-    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    m_page->ckbProofBlackPoint->setChecked(proofingConfig->useBlackPointCompensationFirstTransform);
     m_page->sldAdaptationState->setValue(0);
 
     //probably this should become the screenprofile?

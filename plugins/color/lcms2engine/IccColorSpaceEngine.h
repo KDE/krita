@@ -27,7 +27,7 @@ public:
             const KoColorSpace *proofingSpace,
             KoColorConversionTransformation::Intent renderingIntent,
             KoColorConversionTransformation::Intent proofingIntent,
-            KoColorConversionTransformation::ConversionFlags conversionFlags,
+            bool firstTransformBCP,
             quint8 *gamutWarning, double adaptationState,
             KoColorConversionTransformation::ConversionFlags displayConversionFlags) const override;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;

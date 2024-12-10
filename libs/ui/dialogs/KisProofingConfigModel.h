@@ -41,13 +41,7 @@ public:
     LAGER_QT_CURSOR(KoColorConversionTransformation::Intent, conversionIntent);
     LAGER_QT_CURSOR(bool, convBlackPointCompensation);
 
-    enum DisplayTransformState {
-        Monitor, ///< Use whichever settings are configured in the color management settings.
-        Paper,   ///< Use absolute colorimetric, 0% adaptation, and no blackpoint compensation.
-        Custom   ///< Let artists configure their own.
-    };
-    Q_ENUM(DisplayTransformState)
-    LAGER_QT_CURSOR(DisplayTransformState, displayTransformState);
+    LAGER_QT_CURSOR(KisProofingConfiguration::DisplayTransformState, displayTransformState);
 
     // Following are all part of the second transform if it is custom.
     LAGER_QT_CURSOR(KoColorConversionTransformation::Intent, displayIntent);

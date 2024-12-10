@@ -95,7 +95,6 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     }
     d->proofingModel->data.set(*config.data());
 
-
     m_page->gamutAlarm->setToolTip(i18n("Set color used for warning"));
     m_page->sldAdaptationState->setMaximum(d->proofingModel->adaptationRangeMax());
     m_page->sldAdaptationState->setMinimum(0);
@@ -107,16 +106,16 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     m_page->cmbIntent->setModel(m_page->cmbDisplayIntent->model());
 
-    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Monitor"), int(KisProofingConfigModel::Monitor));
+    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Use global display settings"), int(KisProofingConfiguration::Monitor));
 
-    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Paper"), int(KisProofingConfigModel::Paper));
-    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Custom"), int(KisProofingConfigModel::Custom));
+    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Simulate paper white and black"), int(KisProofingConfiguration::Paper));
+    m_page->cmbDisplayTransformState->addItem(i18nc("Display Mode", "Custom"), int(KisProofingConfiguration::Custom));
 
-    QModelIndex idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfigModel::Monitor)), 0);
+    QModelIndex idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfiguration::Monitor)), 0);
     m_page->cmbDisplayTransformState->model()->setData(idx, i18nc("@info:tooltip", "Use Rendering Intent, Blackpoint compensation and Adaptation set in the color management configuration."), Qt::ToolTipRole);
-    idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfigModel::Paper)), 0);
+    idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfiguration::Paper)), 0);
     m_page->cmbDisplayTransformState->model()->setData(idx, i18nc("@info:tooltip", "Simulate paper by using absolute colorimetric and disabling white point adaptation and blackpoint compensation."), Qt::ToolTipRole);
-    idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfigModel::Custom)), 0);
+    idx = m_page->cmbDisplayTransformState->model()->index(m_page->cmbDisplayTransformState->findData(int(KisProofingConfiguration::Custom)), 0);
     m_page->cmbDisplayTransformState->model()->setData(idx, i18nc("@info:tooltip", "Select custom settings for the second transform."), Qt::ToolTipRole);
 
     updateProofingWidgets();
@@ -200,8 +199,8 @@ void KisDlgImageProperties::setProofingConfig()
         d->firstProofingConfigChange = false;
     }
     if (m_page->chkSaveProofing->isChecked()) {
-        d->proofingModel->setdisplayTransformState(KisProofingConfigModel::DisplayTransformState(m_page->cmbDisplayTransformState->currentData(Qt::UserRole).toInt()));
-        if (d->proofingModel->displayTransformState() == KisProofingConfigModel::Custom) {
+        d->proofingModel->setdisplayTransformState(KisProofingConfiguration::DisplayTransformState(m_page->cmbDisplayTransformState->currentData(Qt::UserRole).toInt()));
+        if (d->proofingModel->displayTransformState() == KisProofingConfiguration::Custom) {
             d->proofingModel->setdisplayIntent(KoColorConversionTransformation::Intent(m_page->cmbDisplayIntent->currentData(Qt::UserRole).toInt()));
             d->proofingModel->setadaptationState(m_page->sldAdaptationState->value());
             d->proofingModel->setdispBlackPointCompensation(m_page->chkDisplayBlackPointCompensation->isChecked());
@@ -241,7 +240,7 @@ void KisDlgImageProperties::updateProofingWidgets()
 
     m_page->cmbDisplayTransformState->setCurrentIndex(m_page->cmbDisplayTransformState->findData(int(d->proofingModel->displayTransformState()), Qt::UserRole));
 
-    m_page->grbDisplayConversion->setEnabled(d->proofingModel->displayTransformState() == KisProofingConfigModel::Custom);
+    m_page->grbDisplayConversion->setEnabled(d->proofingModel->displayTransformState() == KisProofingConfiguration::Custom);
     m_page->sldAdaptationState->setEnabled(d->proofingModel->displayIntent() == KoColorConversionTransformation::IntentAbsoluteColorimetric);
     m_page->chkDisplayBlackPointCompensation->setEnabled(d->proofingModel->displayIntent() != KoColorConversionTransformation::IntentAbsoluteColorimetric);
 

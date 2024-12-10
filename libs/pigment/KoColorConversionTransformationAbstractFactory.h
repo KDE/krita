@@ -37,7 +37,7 @@ public:
                                                                        const KoColorSpace* proofingSpace,
                                                                        KoColorProofingConversionTransformation::Intent renderingIntent,
                                                                        KoColorProofingConversionTransformation::Intent proofingIntent,
-                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags,
+                                                                       bool bcpFirstTransform,
                                                                        quint8 *gamutWarning,
                                                                        double adaptationState,
                                                                        KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
@@ -47,7 +47,7 @@ public:
         Q_UNUSED(proofingSpace);
         Q_UNUSED(renderingIntent);
         Q_UNUSED(proofingIntent);
-        Q_UNUSED(conversionFlags);
+        Q_UNUSED(bcpFirstTransform);
         Q_UNUSED(gamutWarning);
         Q_UNUSED(adaptationState);
         Q_UNUSED(displayConversionFlags);

@@ -22,17 +22,11 @@ auto conversionFlag = [](KoColorConversionTransformation::ConversionFlag flag) {
 };
 
 auto displayState = lager::lenses::getset(
-    [] (const KisProofingConfiguration &conf) -> KisProofingConfigModel::DisplayTransformState {
-        if (conf.useMonitorSettings) {
-            return KisProofingConfigModel::Monitor;
-        } else if (conf.usePaperSettings) {
-            return KisProofingConfigModel::Paper;
-        }
-        return KisProofingConfigModel::Custom;
+    [] (const KisProofingConfiguration &conf) -> KisProofingConfiguration::DisplayTransformState {
+        return conf.displayMode;
     },
-    [] (KisProofingConfiguration conf, const KisProofingConfigModel::DisplayTransformState &state) -> KisProofingConfiguration {
-        conf.useMonitorSettings = state == KisProofingConfigModel::Monitor;
-        conf.usePaperSettings = state == KisProofingConfigModel::Paper;
+    [] (KisProofingConfiguration conf, const KisProofingConfiguration::DisplayTransformState &state) -> KisProofingConfiguration {
+        conf.displayMode = state;
 
         // TODO: Use kisconfig to get Monitor flags somehow?
         conf.displayIntent = conf.determineDisplayIntent(KoColorConversionTransformation::IntentRelativeColorimetric);
@@ -51,7 +45,7 @@ KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfigur
     , LAGER_QT(proofingDepth) {data[&KisProofingConfiguration::proofingDepth]}
     , LAGER_QT(storeSoftproofingInsideImage) {data[&KisProofingConfiguration::storeSoftproofingInsideImage]}
     , LAGER_QT(conversionIntent) {data[&KisProofingConfiguration::conversionIntent]}
-    , LAGER_QT(convBlackPointCompensation) {data[&KisProofingConfiguration::conversionFlags].zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation))}
+    , LAGER_QT(convBlackPointCompensation) {data[&KisProofingConfiguration::useBlackPointCompensationFirstTransform]}
     , LAGER_QT(displayTransformState) {data.zoom(displayState)}
     , LAGER_QT(displayIntent) {data[&KisProofingConfiguration::displayIntent]}
     , LAGER_QT(dispBlackPointCompensation) {data[&KisProofingConfiguration::displayFlags].zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation))}

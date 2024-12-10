@@ -23,7 +23,7 @@ public:
     ~KisProofingConfiguration();
     KoColorConversionTransformation::Intent conversionIntent; ///< This is the intent for the first transform.
     KoColorConversionTransformation::Intent displayIntent; ///< This is the intent for the second transform.
-    KoColorConversionTransformation::ConversionFlags conversionFlags; ///< Flags for the first transform.
+    bool useBlackPointCompensationFirstTransform; ///< Whether to use BCP on the first transform. All other flags are handled by displayFlags;
     KoColorConversionTransformation::ConversionFlags displayFlags; ///< flags for the second transform.
     KoColor warningColor;
     QString proofingProfile;
@@ -31,8 +31,13 @@ public:
     QString proofingDepth;
     double adaptationState;
     bool storeSoftproofingInsideImage;
-    bool useMonitorSettings; ///< Whether to use monitor rendering intent and flags for the second transform.
-    bool usePaperSettings; ///< Whether to use Paper settings (absolute colorimetric, 0% adaptation.
+
+    enum DisplayTransformState {
+        Monitor, ///< Whether to use monitor rendering intent and flags for the second transform.
+        Paper,   ///< Whether to use Paper settings (absolute colorimetric, 0% adaptation.)
+        Custom   ///< Let artists configure their own.
+    };
+    DisplayTransformState displayMode;
 
     KoColorConversionTransformation::Intent determineDisplayIntent(KoColorConversionTransformation::Intent monitorDisplayIntent);
     KoColorConversionTransformation::ConversionFlags determineDisplayFlags(KoColorConversionTransformation::ConversionFlags monitorDisplayFlags);

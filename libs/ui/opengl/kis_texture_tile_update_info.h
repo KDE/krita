@@ -201,11 +201,10 @@ public:
     }
 
     void proofTo(const KoColorSpace* dstCS,
-                   KoColorConversionTransformation::ConversionFlags conversionFlags,
                    KoColorConversionTransformation::ConversionFlags displayFlags,
                    KoColorConversionTransformation *proofingTransform)
     {
-        if (dstCS == m_patchColorSpace && conversionFlags == KoColorConversionTransformation::Empty && displayFlags == KoColorConversionTransformation::Empty) return;
+        if (dstCS == m_patchColorSpace && displayFlags == KoColorConversionTransformation::Empty) return;
 
         if (m_patchRect.isValid()) {
             const qint32 numPixels = m_patchRect.width() * m_patchRect.height();
@@ -222,12 +221,12 @@ public:
                                                                       const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
                                                                       KoColorConversionTransformation::Intent renderingIntent,
                                                                       KoColorConversionTransformation::Intent proofingIntent,
-                                                                      KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                      bool bcpFirstTransform,
                                                                       KoColor gamutWarning,
                                                                       double adaptationState,
                                                                       KoColorConversionTransformation::ConversionFlags displayConversionFlags)
     {
-        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning.data(), adaptationState, displayConversionFlags);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, bcpFirstTransform, gamutWarning.data(), adaptationState, displayConversionFlags);
     }
 
     inline quint8* data() const {

@@ -73,19 +73,19 @@ public:
                                                 const KoColorSpace *proofingSpace,
                                                 Intent renderingIntent,
                                                 Intent proofingIntent,
-                                                ConversionFlags conversionFlags,
+                                                bool bcpFirstTransform,
                                                 quint8 *gamutWarning,
                                                 double adaptationState,
                                                 ConversionFlags displayConversionFlags
                                                 )
-        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState)
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, bcpFirstTransform, gamutWarning, adaptationState, displayConversionFlags)
         , m_transform(0)
     {
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
 
-        bool doBCP1 = conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
+        bool doBCP1 = bcpFirstTransform;
         bool doBCP2 = displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
 
         if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
@@ -266,7 +266,7 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 const KoColorSpace *proofingSpace,
                                                                                                 KoColorConversionTransformation::Intent renderingIntent,
                                                                                                 KoColorConversionTransformation::Intent proofingIntent,
-                                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                                                bool firstTransformBCP,
                                                                                                 quint8 *gamutWarning,
                                                                                                 double adaptationState,
                                                                                                 KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
@@ -279,7 +279,7 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
     return new KoLcmsColorProofingConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning,
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, firstTransformBCP, gamutWarning,
                 adaptationState, displayConversionFlags
                 );
 }

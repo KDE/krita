@@ -519,11 +519,10 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
     proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
     proofingConfig->displayIntent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", INTENT_ABSOLUTE_COLORIMETRIC);
     proofingConfig->conversionIntent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingConversionIntent", INTENT_RELATIVE_COLORIMETRIC);
-    if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
-        proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
-    } else {
-        proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
-    }
+    proofingConfig->useBlackPointCompensationFirstTransform = m_config.readEntry("defaultProofingBlackpointCompensation", true);
+
+    proofingConfig->displayFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_config.readEntry("defaultProofingDisplayBlackpointCompensation", true));
+    proofingConfig->displayMode = KisProofingConfiguration::DisplayTransformState(m_config.readEntry("defaultProofingDisplayMode", int(KisProofingConfiguration::Paper)));
     QColor def(Qt::green);
     m_config.readEntry("defaultProofingGamutwarning", def);
     KoColor col(KoColorSpaceRegistry::instance()->rgb8());

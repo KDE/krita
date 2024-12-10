@@ -10,7 +10,7 @@
 KisProofingConfiguration::KisProofingConfiguration()
     : conversionIntent(KoColorConversionTransformation::IntentRelativeColorimetric),
       displayIntent(KoColorConversionTransformation::IntentAbsoluteColorimetric),
-      conversionFlags(KoColorConversionTransformation::BlackpointCompensation),
+      useBlackPointCompensationFirstTransform(true),
       displayFlags(KoColorConversionTransformation::HighQuality),
       warningColor(KoColor()),
       proofingProfile("Chemical proof"),
@@ -18,8 +18,7 @@ KisProofingConfiguration::KisProofingConfiguration()
       proofingDepth("U8"),
       adaptationState(1.0),
       storeSoftproofingInsideImage(false),
-      useMonitorSettings(false),
-      usePaperSettings(false)
+      displayMode(Custom)
 {
 }
 
@@ -29,17 +28,17 @@ KisProofingConfiguration::~KisProofingConfiguration()
 
 KoColorConversionTransformation::Intent KisProofingConfiguration::determineDisplayIntent(KoColorConversionTransformation::Intent monitorDisplayIntent)
 {
-    if (useMonitorSettings) return monitorDisplayIntent;
-    if (usePaperSettings) return KoColorConversionTransformation::IntentAbsoluteColorimetric;
+    if (displayMode == Monitor) return monitorDisplayIntent;
+    if (displayMode == Paper) return KoColorConversionTransformation::IntentAbsoluteColorimetric;
     return displayIntent;
 }
 
 KoColorConversionTransformation::ConversionFlags KisProofingConfiguration::determineDisplayFlags(KoColorConversionTransformation::ConversionFlags monitorDisplayFlags)
 {
     KoColorConversionTransformation::ConversionFlags flags;
-    if (useMonitorSettings) {
+    if (displayMode == Monitor) {
         flags = monitorDisplayFlags;
-    } else if (usePaperSettings) {
+    } else if (displayMode == Paper) {
         flags = KoColorConversionTransformation::HighQuality;
     } else {
         flags = displayFlags;
@@ -50,7 +49,7 @@ KoColorConversionTransformation::ConversionFlags KisProofingConfiguration::deter
 
 double KisProofingConfiguration::determineAdaptationState()
 {
-    if (usePaperSettings) return 0.0;
+    if (displayMode == Paper) return 0.0;
     return adaptationState;
 }
 

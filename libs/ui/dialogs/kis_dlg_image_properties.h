@@ -7,11 +7,9 @@
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
 #include <KoDialog.h>
-#include "KisProofingConfigModel.h"
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
-class KisSignalCompressor;
 
 class KoColorSpace;
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
@@ -50,12 +48,9 @@ private Q_SLOTS:
     void slotColorSpaceChanged(const KoColorSpace*);
 private:
 
+    struct Private;
+    QScopedPointer<Private> d;
     WdgImageProperties *m_page;
-    KisImageWSP m_image;
-    KisProofingConfigModel *m_proofingModel;
-    bool m_firstProofingConfigChange {true};
-    QLabel *m_colorWarningLabel {0};
-    KisSignalCompressor *m_compressor {0};
 };
 
 

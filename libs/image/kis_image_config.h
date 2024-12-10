@@ -96,8 +96,15 @@ public:
     int defaultFrameColorLabel() const;
     void setDefaultFrameColorLabel(int label);
 
-    KisProofingConfigurationSP defaultProofingconfiguration();
-    void setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState);
+    KisProofingConfigurationSP defaultProofingconfiguration(bool requestDefault = false);
+    void setDefaultProofingConfig(const KoColorSpace *proofingSpace,
+                                  int renderingIntent,
+                                  bool blackPointCompensation,
+                                  KoColor warningColor,
+                                  double adaptationState,
+                                  bool displayBlackPointCompensation,
+                                  int proofingIntent,
+                                  KisProofingConfiguration::DisplayTransformState proofingDisplayMode);
 
     bool useLodForColorizeMask(bool requestDefault = false) const;
     void setUseLodForColorizeMask(bool value);

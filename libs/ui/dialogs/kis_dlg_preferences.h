@@ -34,6 +34,7 @@
 class KoID;
 class KisInputConfigurationPage;
 class KoConfigAuthorPage;
+class KisProofingConfigModel;
 
 /**
  *  "General"-tab for preferences dialog
@@ -180,12 +181,18 @@ private Q_SLOTS:
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
     void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
+    void updateProofingWidgets();
+    void proofingDisplayModeUpdated();
+    void proofingConversionIntentUpdated();
+    void proofingDisplayIntentUpdated();
+
 public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
     QList<KisSqueezedComboBox*> m_monitorProfileWidgets;
+    QScopedPointer<KisProofingConfigModel> m_proofModel;
 };
 
 //=======================

@@ -12,13 +12,13 @@ KisProofingConfiguration::KisProofingConfiguration()
       displayIntent(KoColorConversionTransformation::IntentAbsoluteColorimetric),
       useBlackPointCompensationFirstTransform(true),
       displayFlags(KoColorConversionTransformation::HighQuality),
-      warningColor(KoColor()),
+      warningColor(KoColor(Qt::green, KoColorSpaceRegistry::instance()->rgb8())),
       proofingProfile("Chemical proof"),
       proofingModel("CMYKA"),
       proofingDepth("U8"),
       adaptationState(1.0),
       storeSoftproofingInsideImage(false),
-      displayMode(Custom)
+      displayMode(Paper)
 {
 }
 

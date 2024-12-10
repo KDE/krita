@@ -346,7 +346,12 @@ void NodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, in
 
 QStyleOptionViewItem NodeView::optionForIndex(const QModelIndex &index) const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStyleOptionViewItem option = viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+#endif
     option.rect = visualRect(index);
     if (index == currentIndex())
         option.state |= QStyle::State_HasFocus;
@@ -443,10 +448,15 @@ void NodeView::paintEvent(QPaintEvent *event)
 void NodeView::drawBranches(QPainter *painter, const QRect &rect,
                                const QModelIndex &index) const
 {
-    QStyleOptionViewItem options = viewOptions();
-    options.rect = rect;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QStyleOptionViewItem option = viewOptions();
+#else
+    QStyleOptionViewItem option;
+    initViewItemOption(&option);
+#endif
+    option.rect = rect;
     // This is not really a job for an item delegate, but the logic was already there
-    d->delegate.drawBranches(painter, options, index);
+    d->delegate.drawBranches(painter, option, index);
 }
 
 void NodeView::dropEvent(QDropEvent *ev)

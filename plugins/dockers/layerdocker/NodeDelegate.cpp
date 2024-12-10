@@ -438,7 +438,9 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
     KisBaseNode::PropertyList::const_iterator it = props.constBegin();
     KisBaseNode::PropertyList::const_iterator end = props.constEnd();
     for (; it != end; ++it) {
-        if (!it->isMutable && it->id != KisLayerPropertiesIcons::layerError.id()) continue;
+        if (!it->isMutable &&
+                it->id != KisLayerPropertiesIcons::layerError.id() &&
+                it->id != KisLayerPropertiesIcons::layerColorSpaceMismatch.id()) continue;
 
         if (it->id == KisLayerPropertiesIcons::visible.id()) {
             // noop...
@@ -1098,7 +1100,9 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
 
             auto hoveredProperty = d->propForMousePos(index, helpEvent->pos(), option);
-            if (hoveredProperty && hoveredProperty->id == KisLayerPropertiesIcons::layerError.id()) {
+            if (hoveredProperty &&
+                    (hoveredProperty->id == KisLayerPropertiesIcons::layerError.id() ||
+                     hoveredProperty->id == KisLayerPropertiesIcons::layerColorSpaceMismatch.id())) {
                 QToolTip::showText(helpEvent->globalPos(), hoveredProperty->state.toString(), d->view);
             } else {
                 d->tip.showTip(d->view, helpEvent->pos(), option, index);

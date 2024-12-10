@@ -11,6 +11,7 @@
 
 #include "kis_minmax_filters.h"
 #include "kis_color_to_alpha.h"
+#include "KisFilterFastColorOverlay.h"
 #include <filter/kis_filter_registry.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KritaExtensionsColorsFactory, "kritaextensioncolorsfilters.json", registerPlugin<KritaExtensionsColors>();)
@@ -22,6 +23,7 @@ KritaExtensionsColors::KritaExtensionsColors(QObject *parent, const QVariantList
     manager->add(new KisFilterMax());
     manager->add(new KisFilterMin());
     manager->add(new KisFilterColorToAlpha());
+    manager->add(new KisFilterFastColorOverlay());
 
 }
 

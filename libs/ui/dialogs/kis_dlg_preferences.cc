@@ -1957,6 +1957,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     gridColor.fromQColor(cfg.getPixelGridColor());
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold() * 100);
+    KisSpinBoxI18nHelper::setText(pixelGridDrawingThresholdBox, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 }
 
 void DisplaySettingsTab::setDefault()
@@ -2014,6 +2015,7 @@ void DisplaySettingsTab::setDefault()
     gridColor.fromQColor(cfg.getPixelGridColor(true));
     pixelGridColorButton->setColor(gridColor);
     pixelGridDrawingThresholdBox->setValue(cfg.getPixelGridDrawingThreshold(true) * 100);
+    KisSpinBoxI18nHelper::setText(pixelGridDrawingThresholdBox, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());

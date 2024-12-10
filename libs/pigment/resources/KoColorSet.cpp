@@ -20,6 +20,13 @@
 #include <QDomNodeList>
 #include <QString>
 #include <QStringList>
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <QStringView>
+#else
+#include <QStringRef>
+#endif
+
 #include <QImage>
 #include <QPainter>
 #include <QXmlStreamReader>
@@ -69,7 +76,6 @@ QStringList readAllLinesSafe(QByteArray *data)
     return lines;
 }
 }
-
 
 const QString KoColorSet::GLOBAL_GROUP_NAME = QString();
 const QString KoColorSet::KPL_VERSION_ATTR = "version";
@@ -1047,8 +1053,7 @@ void KoColorSet::Private::scribusParseColor(KoColorSet *set, QXmlStreamReader *x
     KisSwatch colorEntry;
     // It's a color, retrieve it
     QXmlStreamAttributes colorProperties = xml->attributes();
-
-    QStringRef colorName = colorProperties.value("NAME");
+    auto colorName = colorProperties.value("NAME");
     colorEntry.setName(colorName.isEmpty() || colorName.isNull() ? i18n("Untitled") : colorName.toString());
 
     // RGB or CMYK?
@@ -1056,7 +1061,7 @@ void KoColorSet::Private::scribusParseColor(KoColorSet *set, QXmlStreamReader *x
         dbgPigment << "Color " << colorProperties.value("NAME") << ", RGB " << colorProperties.value("RGB");
 
         KoColor currentColor(KoColorSpaceRegistry::instance()->rgb8());
-        QStringRef colorValue = colorProperties.value("RGB");
+        auto colorValue = colorProperties.value("RGB");
 
         if (colorValue.length() != 7 && colorValue.at(0) != '#') { // Color is a hexadecimal number
             xml->raiseError("Invalid rgb8 color (malformed): " + colorValue);
@@ -1094,8 +1099,8 @@ void KoColorSet::Private::scribusParseColor(KoColorSet *set, QXmlStreamReader *x
         dbgPigment << "Color " << colorProperties.value("NAME") << ", CMYK " << colorProperties.value("CMYK");
 
         KoColor currentColor(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), QString()));
+        auto colorValue = colorProperties.value("CMYK");
 
-        QStringRef colorValue = colorProperties.value("CMYK");
         if (colorValue.length() != 9 && colorValue.at(0) != '#') { // Color is a hexadecimal number
             xml->raiseError("Invalid cmyk color (malformed): " % colorValue);
             return;
@@ -1141,15 +1146,15 @@ bool KoColorSet::Private::loadScribusXmlPalette(KoColorSet *set, QXmlStreamReade
 
     //1. Get name
     QXmlStreamAttributes paletteProperties = xml->attributes();
-    QStringRef paletteName = paletteProperties.value("Name");
+    auto paletteName = paletteProperties.value("Name");
     dbgPigment << "Processed name of palette:" << paletteName;
     set->setName(paletteName.toString());
 
     //2. Inside the SCRIBUSCOLORS, there are lots of colors. Retrieve them
 
     while(xml->readNextStartElement()) {
-        QStringRef currentElement = xml->name();
-        if(QStringRef::compare(currentElement, "COLOR", Qt::CaseInsensitive) == 0) {
+        auto currentElement = xml->name();
+        if (currentElement.compare(QString("COLOR"), Qt::CaseInsensitive) == 0) {
             scribusParseColor(set, xml);
         }
         else {
@@ -1377,11 +1382,7 @@ bool KoColorSet::Private::loadGpl()
         if (lines[i].startsWith('#')) {
             comment += lines[i].mid(1).trimmed() + ' ';
         } else if (!lines[i].isEmpty()) {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
             QStringList a = lines[i].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
-#else
-            QStringList a = lines[i].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
-#endif
 
             if (a.count() < 3) {
                 continue;
@@ -1462,11 +1463,7 @@ bool KoColorSet::Private::loadPsp()
 
     for (int i = 0; i < entries; ++i)  {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList a = l[i + 3].replace('\t', ' ').split(' ', Qt::SkipEmptyParts);
-#else
-        QStringList a = l[i + 3].replace('\t', ' ').split(' ', QString::SkipEmptyParts);
-#endif
 
         if (a.count() != 3) {
             continue;
@@ -2369,8 +2366,8 @@ bool KoColorSet::Private::loadXml() {
     QXmlStreamReader *xml = new QXmlStreamReader(data);
 
     if (xml->readNextStartElement()) {
-        QStringRef paletteId = xml->name();
-        if (QStringRef::compare(paletteId, "SCRIBUSCOLORS", Qt::CaseInsensitive) == 0) { // Scribus
+        auto paletteId = xml->name();
+        if (paletteId.compare(QString("SCRIBUSCOLORS"), Qt::CaseInsensitive) == 0) { // Scribus
             dbgPigment << "XML palette: " << colorSet->filename() << ", Scribus format";
             res = loadScribusXmlPalette(colorSet, xml);
         }

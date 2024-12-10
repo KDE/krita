@@ -378,6 +378,14 @@ public:
                                 KoColorConversionTransformation::ConversionFlags conversionFlags);
 
     /**
+     * Unify layers color space
+     *
+     * If any of the layers have color space different from the image color space,
+     * convert them into the image color space.
+     */
+    void unifyLayersColorSpace();
+
+    /**
      * Convert layer and all its child layers to dstColorSpace
      */
     void convertLayerColorSpace(KisNodeSP node,

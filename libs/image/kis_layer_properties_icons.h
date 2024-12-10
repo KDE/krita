@@ -33,6 +33,7 @@ public:
     static const KoID colorizeShowColoring;
     static const KoID openFileLayerFile;
     static const KoID layerError;
+    static const KoID layerColorSpaceMismatch;
     static const KoID antialiased;
 
     static KisLayerPropertiesIcons* instance();
@@ -42,6 +43,7 @@ public:
                                               bool isInStasis, bool stateInStasis);
 
     static KisBaseNode::Property getErrorProperty(const QString &message);
+    static KisBaseNode::Property getColorSpaceMismatchProperty(const KoColorSpace *cs);
 
     /**
      * Sets the specified property of the node and updates it

@@ -17,7 +17,7 @@ class KisOpenPanePrivate;
 class KisTemplatesPane;
 class QPixmap;
 class QString;
-class QStringList;
+#include <QStringList>
 class QTreeWidgetItem;
 class QUrl;
 

@@ -8,6 +8,9 @@
 
 #include <exiv2/iptc.hpp>
 
+#include <QIODevice>
+#include <QRegExp>
+
 #include <kis_debug.h>
 #include <kis_exiv2_common.h>
 #include <kis_meta_data_entry.h>

@@ -42,7 +42,12 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
 
     QString dialogText = i18n("The current shortcut scheme is modified. Save before switching to the new one?");
     if (m_shortcutsEditor->isModified() &&
-        KMessageBox::questionYesNo( q,dialogText ) == KMessageBox::Yes) {
+            KMessageBox::questionTwoActions(q,
+                                         i18n("The current shortcut scheme is modified. Save before switching to the new one?"),
+                                         QString(),
+                                         KStandardGuiItem::save(),
+                                         KStandardGuiItem::discard())
+            == KMessageBox::PrimaryAction) {
         m_shortcutsEditor->save();
     } else {
         m_shortcutsEditor->undo();

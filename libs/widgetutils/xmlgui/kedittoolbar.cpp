@@ -48,7 +48,7 @@
 #include "kis_action_registry.h"
 #include <KisKineticScroller.h>
 
-static const char separatorstring[] = I18N_NOOP("--- separator ---");
+static const char separatorstring[] = QT_TRANSLATE_NOOP("KEditToolBar", "--- separator ---");
 
 #define SEPARATORSTRING i18n(separatorstring)
 
@@ -310,7 +310,11 @@ ToolBarListWidget::ToolBarListWidget(QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDrop); // no internal moves
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QMimeData *ToolBarListWidget::mimeData(const QList<QListWidgetItem *> items) const
+#else
+QMimeData *ToolBarListWidget::mimeData(const QList<QListWidgetItem *> &items) const
+#endif
 {
     if (items.isEmpty()) {
         return 0;

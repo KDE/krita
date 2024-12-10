@@ -11,6 +11,9 @@
 #include <QGlobalStatic>
 Q_GLOBAL_STATIC(KisLayerPropertiesIcons, s_instance)
 
+#include <KoColorSpace.h>
+#include <KoColorProfile.h>
+
 #include <kis_icon_utils.h>
 #include <kis_node.h>
 #include <commands/kis_node_property_list_command.h>
@@ -31,6 +34,7 @@ const KoID KisLayerPropertiesIcons::colorizeEditKeyStrokes("colorize-show-key-st
 const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
 const KoID KisLayerPropertiesIcons::openFileLayerFile("open-file-layer-file", ki18n("Open File"));
 const KoID KisLayerPropertiesIcons::layerError("layer-error", ki18n("Error"));
+const KoID KisLayerPropertiesIcons::layerColorSpaceMismatch("layer-color-space-mismatch", ki18n("Layer Color Space Mismatch"));
 const KoID KisLayerPropertiesIcons::antialiased("antialiased", ki18n("Anti-aliasing"));
 
 struct IconsPair {
@@ -81,6 +85,7 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
     m_d->icons.insert(openFileLayerFile.id(), IconsPair(KisIconUtils::loadIcon("document-open"), KisIconUtils::loadIcon("document-open")));
     m_d->icons.insert(layerError.id(), IconsPair(KisIconUtils::loadIcon("warning"), KisIconUtils::loadIcon("warning")));
+    m_d->icons.insert(layerColorSpaceMismatch.id(), IconsPair(KisIconUtils::loadIcon("different-colorspace"), KisIconUtils::loadIcon("different-colorspace")));
     m_d->icons.insert(antialiased.id(), IconsPair(KisIconUtils::loadIcon("select-shape"), KisIconUtils::loadIcon("select-pixel")));
 }
 
@@ -107,6 +112,26 @@ KisBaseNode::Property KisLayerPropertiesIcons::getErrorProperty(const QString &m
     KisBaseNode::Property prop;
     prop.id = layerError.id();
     prop.name =  layerError.name();
+    prop.state = message;
+    prop.onIcon = pair.on;
+    prop.offIcon = pair.off;
+
+    return prop;
+}
+
+KisBaseNode::Property KisLayerPropertiesIcons::getColorSpaceMismatchProperty(const KoColorSpace *cs)
+{
+    const QString message =
+        i18nc("a tooltip shown in when hovering layer's property",
+              "Layer color space is different from the image color space:\n%1 [%2],\noperations may be slow",
+              cs->name(),
+              cs->profile() ? cs->profile()->name() : "");
+
+    const IconsPair &pair = instance()->m_d->icons[layerColorSpaceMismatch.id()];
+
+    KisBaseNode::Property prop;
+    prop.id = layerColorSpaceMismatch.id();
+    prop.name =  layerColorSpaceMismatch.name();
     prop.state = message;
     prop.onIcon = pair.on;
     prop.offIcon = pair.off;

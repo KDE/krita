@@ -12,8 +12,8 @@
 #include <QList>
 #include <QStringList>
 
-class QObject;
 class QWidget;
+class QObject;
 class QAction;
 class KRecentFilesAction;
 class KDualAction;

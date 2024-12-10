@@ -1396,6 +1396,30 @@ void KisImage::convertImageProjectionColorSpace(const KoColorSpace *dstColorSpac
                                     KoColorConversionTransformation::internalConversionFlags());
 }
 
+void KisImage::unifyLayersColorSpace()
+{
+    const KUndo2MagicString actionName = kundo2_i18n("Unify Layers Color Space");
+
+    KisImageSignalVector emitSignals;
+
+    KisProcessingApplicator::ProcessingFlags flags =
+        KisProcessingApplicator::NO_UI_UPDATES | KisProcessingApplicator::RECURSIVE;
+
+    KisProcessingApplicator applicator(this, m_d->rootLayer,
+                                       flags,
+                                       emitSignals, actionName);
+
+    // src and dst color spaces coincide, since we should just unify
+    // all our layers
+    applicator.applyVisitor(
+                new KisConvertColorSpaceProcessingVisitor(
+                    m_d->colorSpace, m_d->colorSpace,
+                    KoColorConversionTransformation::internalRenderingIntent(),
+                    KoColorConversionTransformation::internalConversionFlags()),
+                KisStrokeJobData::CONCURRENT);
+
+    applicator.end();
+}
 
 bool KisImage::assignLayerProfile(KisNodeSP node, const KoColorProfile *profile)
 {

@@ -116,6 +116,12 @@ Q_SIGNALS:
      *        interaction has just finished
      */
     void sigInteraction(bool active);
+    /**
+     * @brief sigGamutMaskSupportChanged
+     * Signals whether gamut masks are supported by the current selector shape.
+     * @param supported -- whether the gamut mask is currently supported.
+     */
+    void sigGamutMaskSupportChanged(bool supported);
 
 protected:
     void resizeEvent(QResizeEvent *) override;

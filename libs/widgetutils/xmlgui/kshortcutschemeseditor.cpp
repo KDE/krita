@@ -100,7 +100,7 @@ void KisKShortcutSchemesEditor::newScheme()
     }
 
     if (m_schemesList->findText(newName) != -1) {
-        KMessageBox::sorry(m_dialog, i18n("A scheme with this name already exists."));
+        KMessageBox::error(m_dialog, i18n("A scheme with this name already exists."));
         return;
     }
 
@@ -123,9 +123,14 @@ void KisKShortcutSchemesEditor::newScheme()
 
 void KisKShortcutSchemesEditor::deleteScheme()
 {
-    if (KMessageBox::questionYesNo(m_dialog,
-                                   i18n("Do you really want to delete the scheme %1?\n\
-Note that this will not remove any system wide shortcut schemes.", currentScheme())) == KMessageBox::No) {
+    if (KMessageBox::questionTwoActions(m_dialog,
+                                        i18n("Do you really want to delete the scheme %1?\n\
+                                             Note that this will not remove any system wide shortcut schemes.",
+                                             currentScheme()),
+                                        QString(),
+                                        KStandardGuiItem::del(),
+                                        KStandardGuiItem::cancel())
+        == KMessageBox::SecondaryAction) {
         return;
     }
 

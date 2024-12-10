@@ -5,27 +5,45 @@
  */
 
 #include <QWidget>
+#include <QToolTip>
 #include "KisGamutMaskToolbar.h"
 #include <kis_icon_utils.h>
 #include <kis_canvas_resource_provider.h>
 #include <kis_signals_blocker.h>
 
+struct KisGamutMaskToolbar::Private {
+    Private()
+        : selectedMask(nullptr)
+        , selfUpdate(false)
+    {}
+
+    KoGamutMaskSP selectedMask;
+
+    QIcon iconMaskOff;
+    QIcon iconMaskOn;
+
+    QString textNoMask;
+    QString textMaskDisabled;
+
+    bool selfUpdate;
+};
+
 KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
-  , m_selectedMask(nullptr)
-  , m_selfUpdate(false)
+  , m_d(new Private())
 {
     m_ui.reset(new Ui_wdgGamutMaskToolbar());
     m_ui->setupUi(this);
 
-    m_iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
-    m_iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
+    m_d->iconMaskOff = KisIconUtils::loadIcon("gamut-mask-off");
+    m_d->iconMaskOn = KisIconUtils::loadIcon("gamut-mask-on");
 
-    m_textNoMask = i18n("Select a mask in \"Gamut Masks\" docker");
-    m_textMaskDisabled = i18n("Mask is disabled");
+    m_d->textNoMask = i18n("Select a mask in \"Gamut Masks\" docker");
+    m_d->textMaskDisabled = i18n("Mask is disabled");
+
+    m_ui->labelMaskName->hide();
 
     m_ui->bnToggleMask->setChecked(false);
-    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
-    m_ui->bnToggleMask->setEnabled(false);
+    m_ui->bnToggleMask->setIcon(m_d->iconMaskOn);
 
     m_ui->rotationAngleSelector->setDecimals(0);
     m_ui->rotationAngleSelector->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
@@ -34,6 +52,11 @@ KisGamutMaskToolbar::KisGamutMaskToolbar(QWidget* parent) : QWidget(parent)
     // gamut mask connections
     connect(m_ui->bnToggleMask, SIGNAL(toggled(bool)), SLOT(slotGamutMaskToggle(bool)));
     connect(m_ui->rotationAngleSelector, SIGNAL(angleChanged(qreal)), SLOT(slotGamutMaskRotate(qreal)));
+}
+
+KisGamutMaskToolbar::~KisGamutMaskToolbar()
+{
+
 }
 
 void KisGamutMaskToolbar::connectMaskSignals(KisCanvasResourceProvider* resourceProvider)
@@ -61,13 +84,13 @@ void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
         return;
     }
 
-    if (m_selfUpdate) {
+    if (m_d->selfUpdate) {
         return;
     }
 
-    m_selectedMask = mask;
+    m_d->selectedMask = mask;
 
-    if (m_selectedMask) {
+    if (m_d->selectedMask) {
         updateMaskState(true, false);
     } else {
         updateMaskState(false, false);
@@ -76,17 +99,14 @@ void KisGamutMaskToolbar::slotGamutMaskSet(KoGamutMaskSP mask)
 
 void KisGamutMaskToolbar::slotGamutMaskUnset()
 {
-    m_selectedMask = nullptr;
+    m_d->selectedMask = nullptr;
     m_ui->rotationAngleSelector->hide();
-    m_ui->labelMaskName->show();
-    m_ui->labelMaskName->setText(m_textNoMask);
-    m_ui->bnToggleMask->setIcon(m_iconMaskOn);
-    m_ui->bnToggleMask->setEnabled(false);
+    m_ui->bnToggleMask->setIcon(m_d->iconMaskOn);
 }
 
 void KisGamutMaskToolbar::slotGamutMaskDeactivate()
 {
-    if (m_selfUpdate) {
+    if (m_d->selfUpdate) {
         return;
     }
 
@@ -95,53 +115,57 @@ void KisGamutMaskToolbar::slotGamutMaskDeactivate()
 
 void KisGamutMaskToolbar::slotGamutMaskToggle(bool state)
 {
-    updateMaskState(state, true);
+    if (m_d->selectedMask) {
+        updateMaskState(state, true);
+    } else {
+        QToolTip::showText(QCursor::pos(), m_d->textNoMask, m_ui->bnToggleMask, m_ui->bnToggleMask->geometry());
+    }
 }
 
 void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)
 {
-    if (!m_selectedMask) {
+    if (!m_d->selectedMask) {
         return;
     }
 
-    m_selectedMask->setRotation(angle);
-    m_selfUpdate = true;
-    Q_EMIT sigGamutMaskChanged(m_selectedMask);
-    m_selfUpdate = false;
+    m_d->selectedMask->setRotation(angle);
+    m_d->selfUpdate = true;
+    Q_EMIT sigGamutMaskChanged(m_d->selectedMask);
+    m_d->selfUpdate = false;
 }
 
 void KisGamutMaskToolbar::updateMaskState(bool maskEnabled, bool internalChange)
 {
-    bool enabled = (m_selectedMask) ? maskEnabled : false;
+    bool enabled = (m_d->selectedMask) ? maskEnabled : false;
 
     m_ui->bnToggleMask->setChecked(enabled);
 
     if (enabled) {
         m_ui->bnToggleMask->setEnabled(true);
-        m_ui->bnToggleMask->setIcon(m_iconMaskOn);
+        m_ui->bnToggleMask->setIcon(m_d->iconMaskOn);
         m_ui->labelMaskName->hide();
         m_ui->rotationAngleSelector->show();
 
         m_ui->rotationAngleSelector->blockSignals(true);
-        m_ui->rotationAngleSelector->setAngle(static_cast<qreal>(m_selectedMask->rotation()));
+        m_ui->rotationAngleSelector->setAngle(static_cast<qreal>(m_d->selectedMask->rotation()));
         m_ui->rotationAngleSelector->blockSignals(false);
 
         if (internalChange) {
-            m_selfUpdate = true;
-            Q_EMIT sigGamutMaskChanged(m_selectedMask);
-            m_selfUpdate = false;
+            m_d->selfUpdate = true;
+            Q_EMIT sigGamutMaskChanged(m_d->selectedMask);
+            m_d->selfUpdate = false;
         }
 
     } else {
-        m_ui->bnToggleMask->setIcon(m_iconMaskOff);
+        m_ui->bnToggleMask->setIcon(m_d->iconMaskOff);
         m_ui->rotationAngleSelector->hide();
         m_ui->labelMaskName->show();
-        m_ui->labelMaskName->setText(m_textMaskDisabled);
+        m_ui->labelMaskName->setText(m_d->textMaskDisabled);
 
         if (internalChange) {
-            m_selfUpdate = true;
+            m_d->selfUpdate = true;
             Q_EMIT sigGamutMaskDeactivated();
-            m_selfUpdate = false;
+            m_d->selfUpdate = false;
         }
     }
 }

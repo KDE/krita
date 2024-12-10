@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-11-21 01:47+0000\n"
+"POT-Creation-Date: 2024-12-10 01:54+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -12680,8 +12680,29 @@ msgctxt "action"
 msgid "Convert Layer Color Space"
 msgstr "परत के रंग-स्थान को बदलें"
 
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3480 krita/krita.action:3483
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgctxt "action"
+msgid "Unify Layers Color Space"
+msgstr "परत के रंग-स्थान को बदलें"
+
+#. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3482
+#, kde-format
+msgctxt "action"
+msgid ""
+"Convert all the layers into the image color space (if they happen to have a "
+"different color space)"
+msgstr ""
+
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3480
+#: krita/krita.action:3492
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12691,14 +12712,14 @@ msgstr "निचले परत के साथ मिलाएँ (&M)"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3482 krita/krita.action:3483
+#: krita/krita.action:3494 krita/krita.action:3495
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "निचले परत के साथ मिलाएँ"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3492
+#: krita/krita.action:3504
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12708,14 +12729,14 @@ msgstr "परत समतल बनाएँ (&F)"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3494 krita/krita.action:3495
+#: krita/krita.action:3506 krita/krita.action:3507
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "परत समतल बनाएँ"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3504
+#: krita/krita.action:3516
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12725,14 +12746,14 @@ msgstr "चित्र समतल करें (&g)"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3506 krita/krita.action:3507
+#: krita/krita.action:3518 krita/krita.action:3519
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "चित्र समतल करें"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3516
+#: krita/krita.action:3528
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12742,7 +12763,7 @@ msgstr "परत की स्टाइल ... (&y)"
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3518 krita/krita.action:3519
+#: krita/krita.action:3530 krita/krita.action:3531
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12754,7 +12775,7 @@ msgstr "परत की स्टाइल"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3528 krita/krita.action:3530 krita/krita.action:3531
+#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12766,7 +12787,7 @@ msgstr "पिछले समुह में ले जाएं"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12778,14 +12799,14 @@ msgstr "अगले समुह में ले जाएं"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
+#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "वर्तमान परत का नाम बदलें"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3564
+#: krita/krita.action:3576
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12795,7 +12816,7 @@ msgstr "परत हटाएँ (&R)"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3566 krita/krita.action:3567
+#: krita/krita.action:3578 krita/krita.action:3579
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12805,7 +12826,7 @@ msgstr "परत हटाएँ"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3576 krita/krita.action:3578
+#: krita/krita.action:3588 krita/krita.action:3590
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12815,14 +12836,14 @@ msgstr "परत या मास्क ऊपर ले जाएं"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3586 krita/krita.action:3588
+#: krita/krita.action:3598 krita/krita.action:3600
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "परत या मास्क नीचे ले जाएं"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3596
+#: krita/krita.action:3608
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12832,28 +12853,28 @@ msgstr "गुण... (&P)"
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3598 krita/krita.action:3599
+#: krita/krita.action:3610 krita/krita.action:3611
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "गुण"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3608
+#: krita/krita.action:3620
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr "नकल का स्त्रोत सेट करें (&r)"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3610
+#: krita/krita.action:3622
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "चयनित प्रतिरूप परत(तों) का स्त्रोत निर्धारित करें"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3611
+#: krita/krita.action:3623
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Set Copy F&rom..."
@@ -12865,7 +12886,7 @@ msgstr "नकल का स्त्रोत सेट करें (&r)"
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3620 krita/krita.action:3622
+#: krita/krita.action:3632 krita/krita.action:3634
 #, fuzzy, kde-format
 #| msgid "Reference Images Tool"
 msgctxt "action"
@@ -12876,7 +12897,7 @@ msgstr "संदर्भ छवि औज़ार"
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3632 krita/krita.action:3634
+#: krita/krita.action:3644 krita/krita.action:3646
 #, fuzzy, kde-format
 #| msgid "Reference Images Tool"
 msgctxt "action"
@@ -13672,12 +13693,9 @@ msgstr "नई चित्र में चिपकाएँ (&N)"
 
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
-#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:399 krita/kritamenu.action:400
-#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste into New Image"
@@ -13685,9 +13703,12 @@ msgstr "नई चित्र में चिपकाएँ"
 
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
+#. i18n: context: iconText @ Action (paste_shape_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:409 krita/kritamenu.action:411
+#: krita/kritamenu.action:412
 #, kde-format
 msgctxt "action"
 msgid "Paste Shape Style"
@@ -16799,6 +16820,7 @@ msgstr "ज़ूम आउट (&m)"
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:287
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:146
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:153
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
 #: plugins/python/exportlayers/uiexportlayers.py:29
@@ -17016,8 +17038,8 @@ msgstr "आकार"
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:133
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:134
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:135
 #, kde-format
 msgid " px"
 msgstr " px"
@@ -17346,7 +17368,7 @@ msgid "Mitchell"
 msgstr "मिशेल"
 
 #: libs/image/kis_group_layer.cc:350
-#: libs/image/kis_layer_properties_icons.cpp:26
+#: libs/image/kis_layer_properties_icons.cpp:29
 #, kde-format
 msgid "Pass Through"
 msgstr "पास थ्रू"
@@ -17459,17 +17481,25 @@ msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "प्रोजेक्शन का रंग-स्थान बदलें"
 
-#: libs/image/kis_image.cc:1407
+#: libs/image/kis_image.cc:1401
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Convert Layer Color Space"
+msgctxt "(qtundo-format)"
+msgid "Unify Layers Color Space"
+msgstr "परत का रंग-स्थान बदलें"
+
+#: libs/image/kis_image.cc:1431
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "परत को प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:1448
+#: libs/image/kis_image.cc:1472
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "प्रोफ़ाइल निर्दिष्ट करें"
 
-#: libs/image/kis_image.cc:2484
+#: libs/image/kis_image.cc:2508
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "चयन को काँट छाँट करें"
@@ -17526,7 +17556,7 @@ msgid "Rotation (Z)"
 msgstr "परिक्रमण (Z)"
 
 #: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
+#: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -17539,41 +17569,41 @@ msgstr "%1%"
 msgid "Blending Mode"
 msgstr "सम्मिश्रण मोड"
 
-#: libs/image/kis_layer_properties_icons.cpp:20
+#: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
 msgid "Locked"
 msgstr "तालाबंद"
 
-#: libs/image/kis_layer_properties_icons.cpp:21
+#: libs/image/kis_layer_properties_icons.cpp:24
 #: plugins/python/channels2layers/channels2layers.py:78
 #, kde-format
 msgid "Visible"
 msgstr "दृश्यमान"
 
-#: libs/image/kis_layer_properties_icons.cpp:22
+#: libs/image/kis_layer_properties_icons.cpp:25
 #, kde-format
 msgid "Layer Style"
 msgstr "परत शैली"
 
-#: libs/image/kis_layer_properties_icons.cpp:23
+#: libs/image/kis_layer_properties_icons.cpp:26
 #, kde-format
 msgid "Inherit Alpha"
 msgstr "वंशानुक्रमित अल्फ़ा"
 
-#: libs/image/kis_layer_properties_icons.cpp:24
-#: libs/image/kis_paint_layer.cc:209
+#: libs/image/kis_layer_properties_icons.cpp:27
+#: libs/image/kis_paint_layer.cc:215
 #, kde-format
 msgid "Alpha Locked"
 msgstr "अल्फा लॉक"
 
-#: libs/image/kis_layer_properties_icons.cpp:25
-#: libs/image/kis_paint_layer.cc:212
+#: libs/image/kis_layer_properties_icons.cpp:28
+#: libs/image/kis_paint_layer.cc:218
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:31
 #, kde-format
 msgid "Onion Skins"
 msgstr "ओनियन स्किन"
 
-#: libs/image/kis_layer_properties_icons.cpp:27
+#: libs/image/kis_layer_properties_icons.cpp:30
 #: libs/resources/KisResourceModel.cpp:142
 #: libs/resources/KisStorageModel.cpp:484
 #: libs/resources/KisTagResourceModel.cpp:644
@@ -17582,46 +17612,62 @@ msgstr "ओनियन स्किन"
 msgid "Active"
 msgstr "सक्रिय"
 
-#: libs/image/kis_layer_properties_icons.cpp:28
+#: libs/image/kis_layer_properties_icons.cpp:31
 #, kde-format
 msgid "Color Label"
 msgstr "रंग लेबल"
 
-#: libs/image/kis_layer_properties_icons.cpp:29
+#: libs/image/kis_layer_properties_icons.cpp:32
 #, kde-format
 msgid "Update Result"
 msgstr "नतीजा अद्यतन करें"
 
-#: libs/image/kis_layer_properties_icons.cpp:30
+#: libs/image/kis_layer_properties_icons.cpp:33
 #, kde-format
 msgid "Edit Key Strokes"
 msgstr "कीस्ट्रोक्स संपादित करें"
 
-#: libs/image/kis_layer_properties_icons.cpp:31
+#: libs/image/kis_layer_properties_icons.cpp:34
 #, kde-format
 msgid "Show Coloring"
 msgstr "परत का रंग दिखाएँ"
 
-#: libs/image/kis_layer_properties_icons.cpp:32
+#: libs/image/kis_layer_properties_icons.cpp:35
 #, kde-format
 msgid "Open File"
 msgstr "फ़ाइल खोलें"
 
-#: libs/image/kis_layer_properties_icons.cpp:33
+#: libs/image/kis_layer_properties_icons.cpp:36
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 #, kde-format
 msgid "Error"
 msgstr "एरर"
 
+#: libs/image/kis_layer_properties_icons.cpp:37
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Convert Layer Color Space"
+msgid "Layer Color Space Mismatch"
+msgstr "परत के रंग-स्थान को बदलें"
+
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
-#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/image/kis_layer_properties_icons.cpp:38
 #: libs/ui/flake/kis_shape_layer.cc:339
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
 msgid "Anti-aliasing"
 msgstr "एन्टी-अलियासिंग"
+
+#: libs/image/kis_layer_properties_icons.cpp:126
+#, kde-format
+msgctxt "a tooltip shown in when hovering layer's property"
+msgid ""
+"Layer color space is different from the image color space:\n"
+"%1 [%2],\n"
+"operations may be slow"
+msgstr ""
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -19684,10 +19730,10 @@ msgstr "In"
 msgid "Out"
 msgstr "बाहर"
 
-#: libs/pigment/resources/KoColorSet.cpp:1052
-#: libs/pigment/resources/KoColorSet.cpp:1400
-#: libs/pigment/resources/KoColorSet.cpp:1483
-#: libs/pigment/resources/KoColorSet.cpp:1892
+#: libs/pigment/resources/KoColorSet.cpp:1057
+#: libs/pigment/resources/KoColorSet.cpp:1401
+#: libs/pigment/resources/KoColorSet.cpp:1480
+#: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20003,7 +20049,7 @@ msgstr "मेटाडाटा"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1881
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1885
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
-#: libs/widgets/KisDlgInternalColorSelector.cpp:326
+#: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
 #: plugins/python/channels2layers/channels2layers.py:853
 #, kde-format
@@ -20304,26 +20350,26 @@ msgstr ""
 "हैं?\n"
 "संसाधन फ़ाइल का नाम : %1"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to import the resource"
 msgstr "संसाधन आयात करने में विफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:74
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:78
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to import the resource."
 msgstr "संसाधन आयात करने में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:86
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:213
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:90
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Rename the resource?"
 msgstr "संसाधन का नाम बदलें ?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:87
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:91
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20332,25 +20378,25 @@ msgid ""
 "renamed)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to rename the resource"
 msgstr "संसाधन का नाम बदलने में असफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:97
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:101
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to rename the resource."
 msgstr "संसाधन का नाम बदलने में असफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:119
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Overwrite the resource?"
 msgstr "संसाधन को मिटाकर लिखें?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:120
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:124
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20362,13 +20408,13 @@ msgstr ""
 "संसाधन को मिटाकर लिखना चाहते हैं?\n"
 "(यदि आप अभी मना करते हैं, तो कुछ भी नहीं किया जाएगा)।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:133
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:137
 #, kde-format
 msgctxt "@title:window"
 msgid "Add the resource?"
 msgstr "संसाधन जोड़ें?"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:134
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:138
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -20377,33 +20423,33 @@ msgid ""
 "added)."
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to add resource"
 msgstr "संसाधन को जोडनें में विफल"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:150
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:154
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to add the resource."
 msgstr "संसाधन को जोडनें में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "@title:window"
 msgid "Failed to overwrite the resource"
 msgstr ""
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:193
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:226
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:197
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:230
 #, kde-format
 msgctxt "Warning message"
 msgid "Failed to overwrite the resource."
 msgstr "संसाधन को मिटाकर लिखने में विफल ।"
 
-#: libs/resourcewidgets/KisResourceUserOperations.cpp:214
+#: libs/resourcewidgets/KisResourceUserOperations.cpp:218
 #, kde-format
 msgctxt "Question in a dialog/messagebox"
 msgid ""
@@ -21268,7 +21314,7 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QPushButton, reset)
 #. i18n: ectx: property (text), widget (QPushButton, resetFilter)
 #: libs/ui/animation/video_export_options_dialog.ui:473
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:99
 #: plugins/dockers/digitalmixer/digitalmixer_dock.cc:141
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:337
@@ -21752,8 +21798,8 @@ msgstr "मुख्य प्रदर्शक :"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2199
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21853,8 +21899,8 @@ msgstr "परत मिटाएं"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2169
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -22569,7 +22615,7 @@ msgid "No configuration options are available for this filter"
 msgstr "इस फ़िल्टर के लिए कोई कॉन्फ़िगरेशन विकल्प उपलब्ध नहीं"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:76
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -22736,7 +22782,9 @@ msgstr "परत गुण"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1446
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1450
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1454
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1537 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1537
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1960
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2018 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
@@ -22746,6 +22794,17 @@ msgstr "परत गुण"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:265
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:267
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:76
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:84
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:86
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:93
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:99
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:104
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:109
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:111
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:44
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:53
 #: plugins/paintops/gridbrush/KisGridOpOptionWidget.cpp:58
@@ -22762,6 +22821,8 @@ msgstr "परत गुण"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:288
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:144
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -23209,95 +23270,95 @@ msgstr "नीला प्राथमिक : %1, %2"
 msgid "White Point: %1, %2"
 msgstr "श्वेत बिन्दु : %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2049
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2051
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2162
 #, kde-format
 msgid "Configure Krita"
 msgstr "क्रिता को विन्यस्त करें"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2179
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "कुंजीपटल शार्टकट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "शॉर्टकट्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "कैनवास इन्पुट सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2192
 #, kde-format
 msgid "Canvas Input"
 msgstr "कैनवास इन्पुट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "रंग प्रबंधन"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "रंग"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Performance"
 msgstr "निष्पादन"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgid "Tablet settings"
 msgstr "टैबलेट सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgid "Tablet"
 msgstr "टेबलेट"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "सिर्फ कैनवास सेटिंग्स"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
 #, kde-format
 msgid "Canvas-only"
 msgstr "सिर्फ कैनवास"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "पॉप-आप रंग पट्टिका"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "चित्रकार"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "चित्रकार"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -24874,12 +24935,14 @@ msgstr "पिक्सेल के ग्रिड:"
 #. i18n: ectx: property (text), widget (QLabel, colorLabel2)
 #. i18n: ectx: property (text), widget (QLabel, colorLabel1)
 #. i18n: ectx: property (text), widget (QLabel, colorLabel3)
+#. i18n: ectx: property (text), widget (QLabel, label_15)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: libs/ui/forms/wdgdisplaysettings.ui:410 libs/ui/layerstyles/WdgStroke.ui:163
 #: libs/ui/widgets/KoFillConfigWidget.ui:176
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:220
 #: plugins/filters/colors/wdgcolortoalphabase.ui:44
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:26
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:462
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:558
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:660
@@ -25230,7 +25293,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelMaskName)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:70
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:40
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
 msgstr ""
@@ -26171,7 +26234,7 @@ msgstr "चित्र जोड़ें..."
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:402
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
 #: plugins/python/channels2layers/channels2layers.py:80
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
@@ -26524,7 +26587,6 @@ msgstr "वर्तमान आयाम सहेजें"
 #. i18n: ectx: property (text), widget (QPushButton, bnSaveAsPredefined)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: libs/ui/forms/wdgnewimage.ui:413
-#: libs/widgetutils/config/kstandardaction_p.h:32
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:135
 #, kde-format
 msgid "&Save"
@@ -27248,6 +27310,7 @@ msgstr "स्थानांतरण औज़ार में"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, WdgFilterFastColorOverlay)
 #. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
@@ -27264,6 +27327,7 @@ msgstr "स्थानांतरण औज़ार में"
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:26
 #: plugins/extensions/resourcemanager/wdgside.ui:23
 #: plugins/extensions/resourcemanager/wdgtagpreview.ui:20
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:14
 #, kde-format
 msgid "Form"
 msgstr "फॉर्म"
@@ -27322,6 +27386,28 @@ msgstr "रंग इतिहास वृत्त दिखाएं"
 #, kde-format
 msgid "Show Rotation Ring"
 msgstr "परिक्रमण वृत्त दिखाएं"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:160
+#: libs/ui/kis_bookmarked_configurations_model.cc:56
+#, kde-format
+msgid "Last Used"
+msgstr "पिछला इस्तेमाल किया"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbColorHistorySorting)
+#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:165
+#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
+#, kde-format
+msgid "Hue/Saturation/Value"
+msgstr "वर्ण/संतृप्ति/मूल्य"
+
+#. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
+#: libs/ui/forms/WdgPopupPaletteSettings.ui:173
+#, fuzzy, kde-format
+#| msgid "Show Color History Ring"
+msgid "Sort Color History Ring By:"
+msgstr "रंग इतिहास वृत्त दिखाएं"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -29054,11 +29140,6 @@ msgstr "छवि संचालन पूर्ण होने की प्�
 msgid "New configuration %1"
 msgstr "नया कॉन्फ़िगरेशन %1"
 
-#: libs/ui/kis_bookmarked_configurations_model.cc:56
-#, kde-format
-msgid "Last Used"
-msgstr "पिछला इस्तेमाल किया"
-
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, kde-format
 msgid "Brush Opacity: %1%"
@@ -29725,9 +29806,11 @@ msgstr "पैटर्न आकार :"
 
 #. i18n: ectx: property (text), widget (QLabel, opacityLbl)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
@@ -29830,7 +29913,7 @@ msgstr "१००%"
 msgid "Fit Canvas to View"
 msgstr "केनवास आकार"
 
-#: libs/ui/kis_popup_palette.cpp:871
+#: libs/ui/kis_popup_palette.cpp:873
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29839,7 +29922,7 @@ msgstr ""
 "अग्रभूमि और पृष्ठभूमि रंग अदल-बदल करने के लिए क्लिक करें।\n"
 "काले और सफेद पर नियत करने के लिए दायाँ क्लिक करें।"
 
-#: libs/ui/kis_popup_palette.cpp:1009
+#: libs/ui/kis_popup_palette.cpp:1011
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -31042,7 +31125,6 @@ msgid "Saving As"
 msgstr "सहेजा जा रहा है"
 
 #: libs/ui/KisMainWindow.cpp:1739
-#: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "नया दस्तावेज़ बनाएँ"
@@ -31890,6 +31972,7 @@ msgstr "उज्वलित मोड (&i):"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:49
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:52
 #: libs/ui/layerstyles/WdgSatin.ui:51
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:59
 #, kde-format
 msgid "Set the blend mode for the layer"
 msgstr "परत के लिए सम्मिश्रण मोड निर्धारित करें"
@@ -32814,7 +32897,7 @@ msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
 msgstr "फ़िल्टर \"%1\""
 
-#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:346
+#: libs/ui/toolbox/KoToolBox.cpp:348 libs/widgetutils/xmlgui/ktoolbar.cpp:347
 #, kde-format
 msgctxt "@item:inmenu Icon size"
 msgid "Default"
@@ -32833,7 +32916,7 @@ msgstr "औज़ार पेटी"
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:141
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:73
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:344
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
 msgid "Icon Size"
@@ -32897,7 +32980,7 @@ msgstr "प्रारंभ होने के बाद छुपाएं�
 #. i18n: ectx: property (text), widget (QPushButton, bnClose)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #. i18n: ectx: property (text), widget (QPushButton, closeButton)
-#: libs/ui/wdgsplash.ui:1016 libs/widgetutils/config/kstandardaction_p.h:35
+#: libs/ui/wdgsplash.ui:1016
 #: plugins/extensions/pykrita/plugin/krita/excepthook.ui:61
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:63
 #, kde-format
@@ -34636,7 +34719,7 @@ msgstr "उपलब्ध गुण :"
 msgid "Current dockers"
 msgstr "मौजूदा परत"
 
-#: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
+#: libs/ui/widgets/KisGamutMaskToolbar.cpp:41
 #, kde-format
 msgid "Mask is disabled"
 msgstr "मास्क निष्क्रिय है"
@@ -35060,7 +35143,14 @@ msgctxt "Reset the angle to a predefined value"
 msgid "Reset angle"
 msgstr "कोण रीसेट करें"
 
-#: libs/widgets/KisDlgInternalColorSelector.cpp:146
+#: libs/widgets/KisDlgInternalColorSelector.cpp:95
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
+#, fuzzy, kde-format
+#| msgid "Add a new palette"
+msgid "Load a palette"
+msgstr "एक नई रंग पट्टिका जोड़ें"
+
+#: libs/widgets/KisDlgInternalColorSelector.cpp:147
 #, kde-format
 msgid ""
 "This is a hexcode input, for webcolors. It can only get colors in the sRGB "
@@ -35070,7 +35160,7 @@ msgstr ""
 "है।"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:314
+#: libs/widgets/KisDlgInternalColorSelector.cpp:315
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
@@ -35082,7 +35172,7 @@ msgstr "एचएसवी"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsl)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:317
+#: libs/widgets/KisDlgInternalColorSelector.cpp:318
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
@@ -35096,7 +35186,7 @@ msgstr "एचएसएल"
 #. i18n: ectx: property (text), widget (QRadioButton, bnHsi)
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:320
+#: libs/widgets/KisDlgInternalColorSelector.cpp:321
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
@@ -35109,7 +35199,7 @@ msgstr "एचएसआइ"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
-#: libs/widgets/KisDlgInternalColorSelector.cpp:323
+#: libs/widgets/KisDlgInternalColorSelector.cpp:324
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:70
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:79
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
@@ -35416,35 +35506,6 @@ msgstr "दूरी :"
 msgid "Tool Options"
 msgstr "औजार विकल्प"
 
-#: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
-msgid "Fit View"
-msgstr "दृश्य"
-
-#: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
-msgid "Fit View Width"
-msgstr "पृष्ठ चौड़ाई में फिट करें"
-
-#: libs/widgets/KoZoomMode.cpp:17
-#, kde-format
-msgid "Actual Pixels"
-msgstr "वास्तविक पिक्सल्स"
-
-#: libs/widgets/KoZoomMode.cpp:21
-#, kde-format
-msgid "Fit Text Width"
-msgstr "पाठ को चौड़ाई के अनुरूप बैठाएँ"
-
-#: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit Page Height"
-msgid "Fit View Height"
-msgstr "पृष्ठ ऊँचाई के अनुरूप"
-
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
@@ -35492,502 +35553,51 @@ msgstr "कोई प्रविष्टि नहीं"
 msgid "Clear List"
 msgstr "सूची साफ करें"
 
-#: libs/widgetutils/config/kstandardaction.cpp:78
+#: libs/widgetutils/config/kstandardaction.cpp:79
 #, kde-format
 msgctxt "go back"
 msgid "&Back"
 msgstr "पीछे जाएं (&B)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:85
+#: libs/widgetutils/config/kstandardaction.cpp:86
 #, kde-format
 msgctxt "go forward"
 msgid "&Forward"
 msgstr "आगे (&F)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:92
+#: libs/widgetutils/config/kstandardaction.cpp:93
 #, kde-format
 msgctxt "home page"
 msgid "&Home"
 msgstr "घर"
 
-#: libs/widgetutils/config/kstandardaction.cpp:95
+#: libs/widgetutils/config/kstandardaction.cpp:96
 #, kde-format
 msgctxt "show help"
 msgid "&Help"
 msgstr "मदद (&H)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:508
-#: libs/widgetutils/config/kstandardaction_p.h:84
+#: libs/widgetutils/config/kstandardaction.cpp:509
 #, kde-format
 msgid "Show &Menubar"
 msgstr "मेन्यू पट्टी दिखाएँ (&M)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:517
+#: libs/widgetutils/config/kstandardaction.cpp:518
 #, kde-format
 msgid "Show Menubar<p>Shows the menubar again after it has been hidden</p>"
 msgstr ""
 
-#: libs/widgetutils/config/kstandardaction.cpp:535
-#: libs/widgetutils/config/kstandardaction_p.h:86
+#: libs/widgetutils/config/kstandardaction.cpp:536
 #, kde-format
 msgid "Show St&atusbar"
 msgstr "स्थिति पट्टी दिखाएँ (&a)"
 
-#: libs/widgetutils/config/kstandardaction.cpp:538
+#: libs/widgetutils/config/kstandardaction.cpp:539
 #, kde-format
 msgid ""
 "Show Statusbar<p>Shows the statusbar, which is the bar at the bottom of the "
 "window used for status information.</p>"
 msgstr ""
-
-#. i18n: ectx: property (title), widget (QMenu, menu_New)
-#: libs/widgetutils/config/kstandardaction_p.h:29
-#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
-#, kde-format
-msgid "&New"
-msgstr "नया (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "&Open..."
-msgstr "खोलें... (&O)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:30
-#, kde-format
-msgid "Open an existing document"
-msgstr "मौजूदा दस्तावेज़ खोलें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open &Recent"
-msgstr "हाल ही का खोलें  (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:31
-#, kde-format
-msgid "Open a document which was recently opened"
-msgstr "हाल ही में खोला गया एक दस्तावेज़ खोलें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:32
-#, kde-format
-msgid "Save document"
-msgstr "दस्तावेज़ सहेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save &As..."
-msgstr " ऐसे सहेजें... (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:33
-#, kde-format
-msgid "Save document under a new name"
-msgstr "दस्तावेज़ को नए नाम से सहेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Re&vert"
-msgstr "पलटें (&v)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:34
-#, kde-format
-msgid "Revert unsaved changes made to document"
-msgstr ""
-
-#: libs/widgetutils/config/kstandardaction_p.h:35
-#, kde-format
-msgid "Close document"
-msgstr "दस्तावेज़ बन्द करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "&Print..."
-msgstr "छापें...(&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:36
-#, kde-format
-msgid "Print document"
-msgstr "दस्तावेज़ छापें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Print Previe&w"
-msgstr "छपाई का पूर्वावलोकन (&w)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:37
-#, kde-format
-msgid "Show a print preview of document"
-msgstr "दस्तावेज़ का छपाई का पूर्वावलोकन दिखाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "&Mail..."
-msgstr "डाक... (&M)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:38
-#, kde-format
-msgid "Send document by mail"
-msgstr "दस्तावेज़ डाक से भेजें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "&Quit"
-msgstr "बाहर जाएँ (&Q)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:39
-#, kde-format
-msgid "Quit application"
-msgstr "अनुप्रयोग छोड़ें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "&Undo"
-msgstr "पूर्ववत करें (&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:41
-#, kde-format
-msgid "Undo last action"
-msgstr "पिछली क्रिया पूर्ववत करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Re&do"
-msgstr "फिर करें (&d)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:42
-#, kde-format
-msgid "Redo last undone action"
-msgstr "पिछली पूर्ववत की गई क्रिया फिर से करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cu&t"
-msgstr "काटें (&t)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:43
-#, kde-format
-msgid "Cut selection to clipboard"
-msgstr "चयन काट कर क्लिपबोर्ड पर रखें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "&Copy"
-msgstr "नक़ल (&C)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:44
-#, kde-format
-msgid "Copy selection to clipboard"
-msgstr "चयन को क्लिपबोर्ड में नक़ल करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "&Paste"
-msgstr "चिपकाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:45
-#: libs/widgetutils/config/kstandardaction_p.h:46
-#, kde-format
-msgid "Paste clipboard content"
-msgstr "क्लिपबोर्ड से वस्तुएं चिपकाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:47
-#, kde-format
-msgid "C&lear"
-msgstr "साफ करें (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:48
-#, kde-format
-msgid "Select &All"
-msgstr "सभी का चयन करें (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:49
-#, kde-format
-msgid "Dese&lect"
-msgstr "अचयनित (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:50
-#, kde-format
-msgid "&Find..."
-msgstr "ढूंढें...(&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:51
-#, kde-format
-msgid "Find &Next"
-msgstr "अगला ढूंढें (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:52
-#, kde-format
-msgid "Find Pre&vious"
-msgstr "पिछला ढूंढें (&v)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:53
-#, kde-format
-msgid "&Replace..."
-msgstr "प्रतिस्थापित... (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "&Actual Size"
-msgstr "वास्तविक आकार (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:55
-#, kde-format
-msgid "View document at its actual size"
-msgstr "दस्तावेज़ को उसके मूल आकार में देखें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "&Fit to Page"
-msgstr "पृष्ठ के अनुरूप (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:56
-#, kde-format
-msgid "Zoom to fit page in window"
-msgstr "विंडो में पृष्ठ बिठाने के लिए ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Fit to Page &Width"
-msgstr "पृष्ठ चौड़ाई के अनुरूप बैठाएँ (&W)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:57
-#, kde-format
-msgid "Zoom to fit page width in window"
-msgstr "विंडो में पृष्ठ चौड़ाई के अनुरूप बैठाने हेतु ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Fit to Page &Height"
-msgstr "पृष्ठ ऊँचाई के अनुरूप (&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:58
-#, kde-format
-msgid "Zoom to fit page height in window"
-msgstr "विंडो में पृष्ठ ऊँचाई के अनुरूप बैठाने हेतु ज़ूम करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:59
-#, kde-format
-msgid "Zoom &In"
-msgstr "ज़ूम इन (&I)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:60
-#, kde-format
-msgid "Zoom &Out"
-msgstr "ज़ूम आउट (&O)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "&Zoom..."
-msgstr "ज़ूम... (&Z)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:61
-#, kde-format
-msgid "Select zoom level"
-msgstr "जूम स्तर चुनें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "&Redisplay"
-msgstr "फिर से दिखाएँ (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:62
-#, kde-format
-msgid "Redisplay document"
-msgstr "दस्तावेज़ फिर से दिखाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "&Up"
-msgstr "ऊपर (&U)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:64
-#, kde-format
-msgid "Go up"
-msgstr "ऊपर जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "&Previous Page"
-msgstr "पिछला पृष्ठ (&P)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:69
-#, kde-format
-msgid "Go to previous page"
-msgstr "पिछले पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "&Next Page"
-msgstr "अगला पृष्ठ (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:70
-#, kde-format
-msgid "Go to next page"
-msgstr "अगले पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:71
-#, kde-format
-msgid "&Go To..."
-msgstr "यहाँ जाएं... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:72
-#, kde-format
-msgid "&Go to Page..."
-msgstr "पृष्ठ पर जाएं... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:73
-#, kde-format
-msgid "&Go to Line..."
-msgstr "पंक्ति पर जाएँ... (&G)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "&First Page"
-msgstr "प्रथम पृष्ठ (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:74
-#, kde-format
-msgid "Go to first page"
-msgstr "प्रथम पृष्ठ पर जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "&Last Page"
-msgstr "अंतिम पृष्ठ (&L)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:75
-#, kde-format
-msgid "Go to last page"
-msgstr "अन्तिम पृष्ठ पर जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "&Back"
-msgstr "पीछे जाएं (&B)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:76
-#, kde-format
-msgid "Go back in document"
-msgstr "दस्तावेज़ में पीछे जाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "&Forward"
-msgstr "आगे (&F)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:77
-#, kde-format
-msgid "Go forward in document"
-msgstr "दस्तावेज़ में आगे जाएं"
-
-#: libs/widgetutils/config/kstandardaction_p.h:79
-#, kde-format
-msgid "&Add Bookmark"
-msgstr "पुस्तचिन्ह जोड़ें (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:80
-#, kde-format
-msgid "&Edit Bookmarks..."
-msgstr "पुस्तचिह्न संपादित करें... (&E)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "&Spelling..."
-msgstr "वर्तनी...(&S)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:82
-#, kde-format
-msgid "Check spelling in document"
-msgstr "दस्तावेज़ में वर्तनी जांचें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:84
-#, kde-format
-msgid "Show or hide menubar"
-msgstr "मेन्यू पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show &Toolbar"
-msgstr "औज़ार पट्टी दिखाएँ (&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:85
-#, kde-format
-msgid "Show or hide toolbar"
-msgstr "औज़ार पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:86
-#, kde-format
-msgid "Show or hide statusbar"
-msgstr "स्थिति पट्टी दिखाएँ या छुपाएँ"
-
-#: libs/widgetutils/config/kstandardaction_p.h:87
-#, kde-format
-msgid "F&ull Screen Mode"
-msgstr "पूर्ण स्क्रीन मोड (&u)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:88
-#, kde-format
-msgid "&Save Settings"
-msgstr "विन्यास सहेजें (&S)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:89
-#, kde-format
-msgid "Configure S&hortcuts..."
-msgstr "शार्टकटों को विन्यस्त करें... (&h)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:90
-#, kde-format
-msgid "&Configure %1..."
-msgstr "%1 विन्यस्त करें...(&C)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:91
-#, kde-format
-msgid "Configure Tool&bars..."
-msgstr "औज़ार पट्टी विन्यस्त करें... (&b)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:92
-#, kde-format
-msgid "Configure &Notifications..."
-msgstr "सूचनाएँ विन्यस्त करें.... (&N)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:93
-#, kde-format
-msgid "Reset Configurations"
-msgstr "विन्यास को रीसेट करें"
-
-#: libs/widgetutils/config/kstandardaction_p.h:99
-#, kde-format
-msgid "%1 &Handbook"
-msgstr "%1 हैंडबुक (&H)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:100
-#, kde-format
-msgid "What's &This?"
-msgstr "यह क्या है? (&T)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:101
-#, kde-format
-msgid "Tip of the &Day"
-msgstr "आज का नुस्ख़ा (&D)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:102
-#, kde-format
-msgid "&Report Bug..."
-msgstr "त्रुटि दर्ज करें... (&R)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:103
-#, kde-format
-msgid "Switch Application &Language..."
-msgstr "अनुप्रयोग की भाषा बदलें... (&l)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:104
-#, kde-format
-msgid "&About %1"
-msgstr "%1 के बारे में (&A)"
-
-#: libs/widgetutils/config/kstandardaction_p.h:105
-#, kde-format
-msgid "About &KDE"
-msgstr "केडीई के बारे में (&K)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
 #, fuzzy, kde-format
@@ -36247,13 +35857,13 @@ msgstr "केडीई में शामिल हों (&J)"
 msgid "&Support KDE"
 msgstr "केडीई का समर्थन करें (&S)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:84
-#: libs/widgetutils/xmlgui/kbugreport.cpp:101
+#: libs/widgetutils/xmlgui/kbugreport.cpp:85
+#: libs/widgetutils/xmlgui/kbugreport.cpp:102
 #, kde-format
 msgid "Submit Bug Report"
 msgstr "बग रपट जमा करें"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:117
+#: libs/widgetutils/xmlgui/kbugreport.cpp:118
 #, kde-format
 msgid ""
 "The application for which you wish to submit a bug report - if incorrect, "
@@ -36262,12 +35872,12 @@ msgstr ""
 "जिस अनुप्रयोग के लिए आप बग रिपोर्ट दर्ज करना चाहते हैं - यदि गलत है, तो कृपया सही "
 "अनुप्रयोग के रिपोर्ट बग मेनू का उपयोग करें"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:118
+#: libs/widgetutils/xmlgui/kbugreport.cpp:119
 #, kde-format
 msgid "Application: "
 msgstr "अनुप्रयोग : "
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:132
+#: libs/widgetutils/xmlgui/kbugreport.cpp:133
 #, kde-format
 msgid ""
 "The version of this application - please make sure that no newer version is "
@@ -36276,23 +35886,23 @@ msgstr ""
 "इस अनुप्रयोग का संस्करण. बग रिपोर्ट भेजने से पहले कृपया सुनिश्चित हों कि कोई नया वर्सन "
 "उपलब्ध तो नहीं है"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:133
+#: libs/widgetutils/xmlgui/kbugreport.cpp:134
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 #, kde-format
 msgid "Version:"
 msgstr "संस्करण :"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:138
+#: libs/widgetutils/xmlgui/kbugreport.cpp:139
 #, kde-format
 msgid "no version set (programmer error)"
 msgstr "कोई संस्करण नियत नहीं (प्रोग्रामर त्रुटि)"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:146
+#: libs/widgetutils/xmlgui/kbugreport.cpp:147
 #, kde-format
 msgid "OS:"
 msgstr "ओ एस :"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:157
+#: libs/widgetutils/xmlgui/kbugreport.cpp:158
 #, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
@@ -36309,76 +35919,71 @@ msgstr ""
 "जहां आपको भरने के लिए एक प्रपत्र मिलेगा।</p><p><b> कृपया निम्नलिखित जानकारी को बग "
 "रिपोर्ट में चिपकाएँ !</b></p></qt>"
 
-#: libs/widgetutils/xmlgui/kbugreport.cpp:207
+#: libs/widgetutils/xmlgui/kbugreport.cpp:208
 #, kde-format
 msgid "&Submit Bug Report"
 msgstr "बग रपट जमा करें (&S)"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:216
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:217
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
 msgstr "डा. क्लॉश का त्वरक निदान"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:224
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
 msgstr "स्वचलित जांच अक्षम करें"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:268
 #, kde-format
 msgid "<h2>Accelerators changed</h2>"
 msgstr "<h2>त्वरक बदले हैं</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:269
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:280
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:270
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:281
 #, kde-format
 msgid "Old Text"
 msgstr "पुराना पाठ"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:271
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:289
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:272
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:290
 #, kde-format
 msgid "New Text"
 msgstr "नया पाठ"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:278
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
 msgstr "<h2>त्वरक हटाए गए</h2>"
 
-#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:287
+#: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
 msgid "<h2>Accelerators added (just for your info)</h2>"
 msgstr "<h2>त्वरक जोड़ा (सिर्फ आपकी जानकारी के लिए)</h2>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:51
-#, kde-format
-msgid "--- separator ---"
-msgstr "--- विभाजक ---"
-
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:357
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:361
 #, kde-format
 msgid "Change Text"
 msgstr "पाठ बदलें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:367
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:371
 #, kde-format
 msgid "Icon te&xt:"
 msgstr "प्रतीक पाठ (&x):"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:372
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:376
 #, kde-format
 msgid "&Hide text when toolbar shows text alongside icons"
 msgstr "जब टूलबार प्रतीकों के बगल में पाठ दिखाता है तो पाठ छिपाएं (&H)"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:607
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:611
 #, kde-format
 msgid "Configure Toolbars"
 msgstr "औज़ार पट्टी विन्यस्त करें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid ""
 "Do you really want to reset all toolbars of this application to their "
@@ -36387,12 +35992,12 @@ msgstr ""
 "क्या आप सचमुच इस अनुप्रयोग के सभी औजारपट्टियों को उनके पूर्वन्यस्त अवस्था पर रीसेट करना "
 "चाहते हैं? परिवर्तनों को तत्काल लागू किया जाएगा ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:669
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:673
 #, kde-format
 msgid "Reset Toolbars"
 msgstr "औजार-पट्टी रीसेट करें"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:994
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:998
 #, kde-format
 msgid "&Toolbar:"
 msgstr "औज़ार पट्टी (&T) :"
@@ -36404,51 +36009,51 @@ msgstr "औज़ार पट्टी (&T) :"
 #. del_toolbar->setPixmap(BarIcon("edit-delete", KisIconUtils::SizeSmall));
 #. del_toolbar->setEnabled(false); // disabled until implemented
 #. our list of inactive actions
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1009
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1013
 #, kde-format
 msgid "A&vailable actions:"
 msgstr "उपलब्ध क्रियाएँ: (&v)"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1033
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1037
 #, kde-format
 msgctxt "Filter as in showing only matching items"
 msgid "Filter"
 msgstr "फ़िल्टर"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1036
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1040
 #, kde-format
 msgid "Curr&ent actions:"
 msgstr "वर्तमान क्रियाएं (&e) :"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1060
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1064
 #: plugins/paintops/libpaintop/KisFilterOptionWidget.cpp:58
 #, kde-format
 msgid "Filter"
 msgstr "फ़िल्टर"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1201
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1205
 #, kde-format
 msgctxt "@item:intable Action name in toolbar editor"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1221
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
 #, kde-format
 msgid ""
 "This element will be replaced with all the elements of an embedded component."
 msgstr "यह अवयव एक एम्बेडेड अवयव के सभी अवयव के साथ बदल जाएगा ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1223
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1227
 #, kde-format
 msgid "<Merge>"
 msgstr "<Merge>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1225
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1229
 #, kde-format
 msgid "<Merge %1>"
 msgstr "<Merge %1>"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1231
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1235
 #, kde-format
 msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
@@ -36457,13 +36062,13 @@ msgstr ""
 "यह क्रियाओं की गतिशील सूची है. आप इसे स्थानांतरित सकते हैं, पर यदि आपने इसे मिटा दिया तो "
 "आप इसे फिर से जोड़ नहीं सकते ।"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1232
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
 msgid "ActionList: %1"
 msgstr "कार्य सूची: %1"
 
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1331
-#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1352
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1335
+#: libs/widgetutils/xmlgui/kedittoolbar.cpp:1356
 #, kde-format
 msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
@@ -36554,6 +36159,7 @@ msgid "Alternate"
 msgstr "वैकल्पिक"
 
 #: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:43
+#: libs/widgetutils/xmlgui/KisShortcutsDialog_p.cpp:46
 #, kde-format
 msgid ""
 "The current shortcut scheme is modified. Save before switching to the new "
@@ -36736,41 +36342,42 @@ msgstr "इस नाम की योजना पहले से ही म�
 #, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
-"Note that this will not remove any system wide shortcut schemes."
+"                                             Note that this will not remove "
+"any system wide shortcut schemes."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:151
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
 msgid "Export Shortcuts"
 msgstr "शॉर्टकट्स निर्यात करें"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:167
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:172
 #, kde-format
 msgid "Save Shortcuts"
 msgstr "शॉर्टकट सहेजें"
 
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:185
-#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:206
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:190
+#: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:211
 #, kde-format
 msgid "Import Shortcuts"
 msgstr "शॉर्टकट्स आयात करें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:136
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:139
 #, kde-format
 msgid "Switch Application Language"
 msgstr "अनुप्रयोग की भाषा बदलें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:140
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:143
 #, kde-format
 msgid "Please choose the language which should be used for this application:"
 msgstr "कृपया वह भाषा चुनें जिसका उपयोग इस अनुप्रयोग के लिए किया जाना चाहिए:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:167
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:170
 #, kde-format
 msgid "Add Fallback Language"
 msgstr "निवर्तन भाषा जोड़ें"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:168
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:171
 #, kde-format
 msgid ""
 "Adds one more language which will be used if other translations do not "
@@ -36778,13 +36385,13 @@ msgid ""
 msgstr ""
 "एक और भाषा जोड़ता है जिसका उपयोग अन्य अनुवादों में उचित अनुवाद नहीं होने पर किया जाएगा।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:263
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:266
 #, kde-format
 msgctxt "@title:window:"
 msgid "Application Language Changed"
 msgstr "अनुप्रयोग भाषा परिवर्तित हुइ"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:264
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:267
 #, kde-format
 msgid ""
 "The language for this application has been changed. The change will take "
@@ -36793,24 +36400,24 @@ msgstr ""
 "इस अनुप्रयोग की भाषा बदल दी गई है। अगली बार अनुप्रयोग शुरू होने पर परिवर्तन प्रभावी "
 "होगा।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Fallback language:"
 msgstr "निवर्तन भाषा"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:383
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:386
 #, kde-format
 msgid "Primary language:"
 msgstr "प्राथमिक भाषा:"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:413
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:416
 #, kde-format
 msgid ""
 "This is the main application language which will be used first, before any "
 "other languages."
 msgstr "यह मुख्य अनुप्रयोग भाषा है जिसका पहले उपयोग होगा किसी भी अन्य भाषा से पहले।"
 
-#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:414
+#: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:417
 #, kde-format
 msgid ""
 "This is the language which will be used if any previous languages do not "
@@ -36818,109 +36425,109 @@ msgid ""
 msgstr ""
 "यह वह भाषा है जिसका उपयोग तब किया जाएगा जब किसी पिछली भाषा में उचित अनुवाद न हो।"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:312
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:313
 #, kde-format
 msgctxt "@title:menu"
 msgid "Show Text"
 msgstr "पाठ दिखाएँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:315
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:316
 #, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
 msgstr "औज़ार पट्टी सेटिंग"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:317
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:318
 #, kde-format
 msgctxt "Toolbar orientation"
 msgid "Orientation"
 msgstr "दिशा निर्धारण"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:319
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:320
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Top"
 msgstr "सिरा"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:321
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Left"
 msgstr "बायाँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:322
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Right"
 msgstr "दायाँ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:323
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:324
 #, kde-format
 msgctxt "toolbar position string"
 msgid "Bottom"
 msgstr "तल"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:331
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:332
 #, kde-format
 msgid "Text Position"
 msgstr "पाठ स्थिति"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:333
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
 #, kde-format
 msgid "Icons Only"
 msgstr "सिर्फ प्रतीक"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:334
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
 #, kde-format
 msgid "Text Only"
 msgstr "सिर्फ पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:335
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
 #, kde-format
 msgid "Text Alongside Icons"
 msgstr "प्रतीकों के बाज़ू में पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:336
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:337
 #, kde-format
 msgid "Text Under Icons"
 msgstr "प्रतीकों के नीचे पाठ"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:359
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:380
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:360
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:381
 #, kde-format
 msgid "Small (%1x%2)"
 msgstr "छोटा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:361
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:382
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:362
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:383
 #, kde-format
 msgid "Medium (%1x%2)"
 msgstr "मध्यम (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:363
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:384
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:364
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:385
 #, kde-format
 msgid "Large (%1x%2)"
 msgstr "बहुत बड़ा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:365
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:386
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:366
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:387
 #, kde-format
 msgid "Huge (%1x%2)"
 msgstr "बड़ा (%1x%2)"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:408
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:409
 #, kde-format
 msgid "Lock Toolbar Positions"
 msgstr "औज़ार-पट्टियों की स्थितियां तालाबंद"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1300
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
 #, kde-format
 msgctxt "@action:intoolbar Text label of toolbar button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/ktoolbar.cpp:1301
+#: libs/widgetutils/xmlgui/ktoolbar.cpp:1302
 #, kde-format
 msgctxt "@info:tooltip Tooltip of toolbar button"
 msgid "%1"
@@ -38322,49 +37929,49 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1508
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1523
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "परत का नाम :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1509
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1524
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "समूह नाम भरें :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1616
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1631
 #, kde-format
 msgid "Edit Frames:"
 msgstr "फ़्रेम संपादित करें :"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1658
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "की-फ़्रेम"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1651
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1666
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
 msgstr "फ़्रेमों को होल्ड करें"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:496
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:501
 #, kde-format
 msgid "Edit Columns:"
 msgstr "कॉलम संपादित करें:"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:506
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:511
 #, fuzzy, kde-format
 #| msgid "Remove Segment"
 msgctxt "@item:inmenu"
 msgid "Keyframe Columns"
 msgstr "खण्ड मिटाएँ"
 
-#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:514
+#: plugins/dockers/animation/KisAnimTimelineTimeHeader.cpp:519
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frame Columns"
@@ -39257,17 +38864,17 @@ msgstr "क्लिपबोर्ड से प्रथम परत"
 msgid "&Add"
 msgstr "जोड़ें (&A)"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1305
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:46
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "No"
 msgstr "नहीं"
 
-#: plugins/dockers/layerdocker/NodeToolTip.cpp:46
+#: plugins/dockers/layerdocker/NodeToolTip.cpp:47
 #, kde-format
 msgid "Yes"
 msgstr "हाँ"
@@ -39635,12 +39242,6 @@ msgstr "वर्तमान रंग पट्टिका हटाएँ"
 #| msgid "Remove current palette"
 msgid "Save current palette"
 msgstr "वर्तमान रंग पट्टिका हटाएँ"
-
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
-#, fuzzy, kde-format
-#| msgid "Add a new palette"
-msgid "Load a palette"
-msgstr "एक नई रंग पट्टिका जोड़ें"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, kde-format
@@ -41498,13 +41099,13 @@ msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
 msgstr "ब्रश के रंग को वामावर्त की ओर लें"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:49
 #, fuzzy, kde-format
 #| msgid "Wide Gamut Selector"
 msgid "Wide Gamut Color Selector"
 msgstr "विस्तृत वर्ण विस्तार चयनक"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:308
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:317
 #, fuzzy, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
@@ -41770,13 +41371,13 @@ msgstr "वर्तमान चयन से घटाएं (&m)"
 msgid "&Deselect"
 msgstr "अचयनित करें (&D)"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:64
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:67
 #, fuzzy, kde-format
 #| msgid "Convert All Layers From "
 msgid "Convert All Layers From %1"
 msgstr "से सभी परत परिवर्तित करें"
 
-#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:90
+#: plugins/extensions/colorspaceconversion/colorspaceconversion.cc:93
 #, fuzzy, kde-format
 #| msgid "Convert Current Layer From"
 msgid "Convert Current Layer From %1"
@@ -43268,6 +42869,12 @@ msgstr "अपवाद :"
 msgid "Script Editor"
 msgstr "स्क्रिप्ट संपादक"
 
+#. i18n: ectx: property (title), widget (QMenu, menu_New)
+#: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:36
+#, kde-format
+msgid "&New"
+msgstr "नया (&N)"
+
 #. i18n: ectx: property (title), widget (QMenu, menuRun)
 #. i18n: ectx: property (text), widget (QStatusBar, statusbar)
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:51
@@ -44698,6 +44305,20 @@ msgstr "चैनल अधिकतम करें"
 msgid "Minimize Channel"
 msgstr "चैनल न्यूनतम करें"
 
+#: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgid "Fast Color &Overlay..."
+msgstr "रंग ओवरले"
+
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: plugins/filters/colors/KisFilterFastColorOverlay.h:28
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgid "Fast Color Overlay"
+msgstr "रंग ओवरले"
+
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
@@ -44713,6 +44334,27 @@ msgstr "देहलीज :"
 #, kde-format
 msgid "Color Sampler:"
 msgstr "रंग चयनक:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_13)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
+#, fuzzy, kde-format
+#| msgid "&Blend Mode:"
+msgid "Blend Mode:"
+msgstr "सम्मिश्रण मोड : (&B)"
+
+#. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
+#, fuzzy, kde-format
+#| msgid "Set the master opacity for the layer"
+msgid "Set the master opacity for the overlay color"
+msgstr "परत के लिए मूल अपारदर्शिता निर्धारित करें"
+
+#. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
+#, fuzzy, kde-format
+#| msgid "Adjust the transparency of the layer"
+msgid "Adjust the transparency of the overlay color"
+msgstr "परत की पारदर्शिता समायोजित करें"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -44947,12 +44589,6 @@ msgstr "अधिकतम (&a)"
 #, kde-format
 msgid "&Type:"
 msgstr "क़िस्म (&T)"
-
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
-#: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:59
-#, kde-format
-msgid "Hue/Saturation/Value"
-msgstr "वर्ण/संतृप्ति/मूल्य"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:64
@@ -47698,21 +47334,21 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 HLG"
 msgstr "आरइसी. २१०० एचएलजी"
 
 #: plugins/impex/heif/HeifExport.cpp:544
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
 #, kde-format
 msgctxt "Color space name"
 msgid "Rec 2100 PQ"
 msgstr "आरइसी. २१०० पीक्यू"
 
 #: plugins/impex/heif/HeifExport.cpp:545
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:188
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47722,7 +47358,7 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:547
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:197
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47732,14 +47368,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:553
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:202
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:554
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:204
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:206
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47749,14 +47385,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:558
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:559
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:212
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:214
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -47765,14 +47401,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:563
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:217
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr ""
 
 #: plugins/impex/heif/HeifExport.cpp:564
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:219
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -48263,39 +47899,39 @@ msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (only for low quality)"
 msgstr ""
-
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:22
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:28
-#, fuzzy, kde-format
-#| msgid "No Scaling"
-msgctxt "JPEG-XL encoder options"
-msgid "No downsampling"
-msgstr "आकार नहीं बदलें"
-
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:23
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:29
-#, fuzzy, kde-format
-#| msgid "No Scaling"
-msgctxt "JPEG-XL encoder options"
-msgid "2x2 downsampling"
-msgstr "आकार नहीं बदलें"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:24
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:30
 #, fuzzy, kde-format
 #| msgid "No Scaling"
 msgctxt "JPEG-XL encoder options"
-msgid "4x4 downsampling"
+msgid "No downsampling"
 msgstr "आकार नहीं बदलें"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:25
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:31
+#, fuzzy, kde-format
+#| msgid "No Scaling"
+msgctxt "JPEG-XL encoder options"
+msgid "2x2 downsampling"
+msgstr "आकार नहीं बदलें"
+
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:32
+#, fuzzy, kde-format
+#| msgid "No Scaling"
+msgctxt "JPEG-XL encoder options"
+msgid "4x4 downsampling"
+msgstr "आकार नहीं बदलें"
+
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:33
 #, fuzzy, kde-format
 #| msgid "No Scaling"
 msgctxt "JPEG-XL encoder options"
@@ -48306,20 +47942,20 @@ msgstr "आकार नहीं बदलें"
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
 #. i18n: ectx: property (text), widget (QLabel, lblNone2)
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:47
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:59
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:71
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:77
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:83
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:102
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:43
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:49
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:55
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:61
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:67
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:73
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:79
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:85
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:91
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:98
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:132
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:708
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:760
@@ -48330,55 +47966,55 @@ msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
 msgstr "डिफ़ॉल्ट प्रिंटर रंग मॉडल:"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:36
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:42
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:48
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:60
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:72
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:78
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:84
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:97
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:131
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:38
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:44
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:50
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:62
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:74
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:80
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:86
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:92
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:99
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:133
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
 msgstr "दूरीः"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:37
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:43
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:49
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:61
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:73
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:79
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:85
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:98
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:132
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:39
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:45
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:51
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:63
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:75
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:81
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:87
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:100
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:134
 #, fuzzy, kde-format
 #| msgid "Enabled"
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "सक्षम"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:54
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:56
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:55
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:57
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:66
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:68
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Scanline order"
 msgstr "खड़ा लहर"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:67
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:69
 #, fuzzy, kde-format
 #| msgctxt "Action to center the selected stop in the segment gradient editor"
 #| msgid "Center stop"
@@ -48386,58 +48022,58 @@ msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
 msgstr "केन्द्र बिंदु"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:91
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:93
 #, fuzzy, kde-format
 #| msgid "X resolution:"
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
 msgstr "एक्स रिसॉल्यूशन :"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:92
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:94
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:103
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:105
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "128"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:104
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:106
 #, fuzzy, kde-format
 #| msgid "255"
 msgctxt "JPEG-XL encoder options"
 msgid "256"
 msgstr "२५५"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:105
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:107
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:106
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:108
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "1024"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Zero"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:112
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
 #, fuzzy, kde-format
 #| msgid "Left"
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "बायाँ"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "toolbar position string"
 #| msgid "Top"
@@ -48445,27 +48081,27 @@ msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "सिरा"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
 #, fuzzy, kde-format
 #| msgid "Select"
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "चुनें"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
 #, fuzzy, kde-format
 #| msgid "Gradient"
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "ग्रेडिएंट"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Brush Smoothing"
 #| msgid "Weighted"
@@ -48473,14 +48109,14 @@ msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "भारित"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, fuzzy, kde-format
 #| msgid "Right"
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
 msgstr "दायाँ"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Move left"
@@ -48488,57 +48124,57 @@ msgctxt "JPEG-XL encoder options"
 msgid "Top left"
 msgstr "बाएं ले जाएं"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
 #, fuzzy, kde-format
 #| msgid "Left indent"
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
 msgstr "बायाँ हाशिया"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:125
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
 msgstr ""
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:125
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:127
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient + Weighted"
 msgstr "अनुपात संपादन औज़ार"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:126
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:128
 #, fuzzy, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
 msgstr "सभी दिशा में एम्बोज़ करें"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:181
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgctxt "Color space option"
 msgid "Save as is"
 msgstr "ऐसे सहेजें %1"
 
-#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:183
+#: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:185
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -50925,80 +50561,80 @@ msgctxt "make a very small file, but take a long time saving"
 msgid "Small"
 msgstr "छोटी"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:33
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:35
 #, kde-format
 msgctxt "WebP presets"
 msgid "Default"
 msgstr "पूर्वन्यस्त"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:34
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:36
 #, kde-format
 msgctxt "WebP presets"
 msgid "Portrait"
 msgstr "खड़ा"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:35
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:37
 #, kde-format
 msgctxt "WebP presets"
 msgid "Outdoor photo"
 msgstr ""
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:36
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:38
 #, kde-format
 msgctxt "WebP presets"
 msgid "Line drawing"
 msgstr "रेखा चित्र"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:37
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:39
 #, kde-format
 msgctxt "WebP presets"
 msgid "Icon"
 msgstr "प्रतीक"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:38
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:40
 #, kde-format
 msgctxt "WebP presets"
 msgid "Text"
 msgstr "पाठ"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:40
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:42
 #, kde-format
 msgctxt "WebP filters"
 msgid "Simple"
 msgstr "साधारण"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:41
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:43
 #, kde-format
 msgctxt "WebP filters"
 msgid "Strong"
 msgstr "मज़बूत"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:43
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:45
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "None"
 msgstr "कोई नहीं"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:44
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:46
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "Lossless"
 msgstr "अविनाशी"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:47
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:49
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "None"
 msgstr "कोई नहीं"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:49
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:51
 #, fuzzy, kde-format
 #| msgid "Segment Color"
 msgctxt "WebP preprocessing filters"
 msgid "Segment-smooth"
 msgstr "खण्ड रंग"
 
-#: plugins/impex/webp/kis_wdg_options_webp.cpp:52
+#: plugins/impex/webp/kis_wdg_options_webp.cpp:54
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Pseudo-random dithering"
@@ -58880,8 +58516,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, kde-format
-msgid "Sorry, the name you entered is invalid."
+#, fuzzy, kde-format
+#| msgid "Sorry, the name you entered is invalid."
+msgid "The name you entered is invalid."
 msgstr "क्षमा करें, आपके द्वारा दर्ज किया गया नाम अमान्य है।"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
@@ -60807,10 +60444,9 @@ msgstr "धब्बे की त्रिज्या :"
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
-"Sorry, Krita was built without the support of GNU Scientific Library, so you "
-"cannot scale the selection with handles. Please compile Krita with GNU "
-"Scientific Library support, or use options widget for editing scale values "
-"manually."
+"Krita was built without the support of GNU Scientific Library, so you cannot "
+"scale the selection with handles. Please compile Krita with GNU Scientific "
+"Library support, or use options widget for editing scale values manually."
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
@@ -60927,41 +60563,41 @@ msgstr ""
 msgid "Transform a layer or a selection"
 msgstr "परत या चयन ट्रांसफ़ॉर्म करें"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
 #, kde-format
 msgid "Default (Affine)"
 msgstr "पूर्वन्यस्त (एफ़िन)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
 #, kde-format
 msgid "Strong (Rigid)"
 msgstr "मजबूत (कठोर)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:88
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:89
 #, kde-format
 msgid "Strongest (Similitude)"
 msgstr "सबसे मजबूत (समानता)"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:214
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:217
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Size of the deformation brush"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:221
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:224
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Amount of the deformation you get"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:228
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:231
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "When in non-buildup mode, shows how fast the deformation limit is reached."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:233
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:236
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -60970,79 +60606,79 @@ msgid ""
 "deforms the piece to the selected deformation level."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:241
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:244
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Space between two sequential applications of the deformation"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:246
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Size</b> value according to current stylus pressure"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:251
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Amount</b> value according to current stylus pressure"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:256
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:259
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Reverse direction of the current deformation tool"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:272
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:275
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Move: drag the image along the brush stroke"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:273
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
 msgstr "आकार बदलें : कर्सर के नीचे की छवि को बड़ाएं/घटाएं"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:274
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
 msgstr "घुमाएँ: कर्सर के नीचे छवि घुमाएँ"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:275
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:278
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Undo: erase actions of other tools"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:617
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:620
 #, kde-format
 msgid "Switch between editing and deforming cage"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, lockUnlockPointsButton)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:678
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:681
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1629
 #, kde-format
 msgid "Lock Points"
 msgstr "बिन्दुएँ लॉक करें"
 
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:680
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:683
 #, kde-format
 msgid "Unlock Points"
 msgstr "बिन्दुएँ अन-लॉक करें"
 
 #. i18n: ectx: property (text), widget (QLabel, cageTransformDirections)
-#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:757
+#: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:760
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1682
 #, kde-format
 msgid "Create 3 points on the canvas to begin"
@@ -61674,6 +61310,292 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#, fuzzy
+#~| msgctxt "action"
+#~| msgid "View"
+#~ msgid "Fit View"
+#~ msgstr "दृश्य"
+
+#, fuzzy
+#~| msgid "Fit Page Width"
+#~ msgid "Fit View Width"
+#~ msgstr "पृष्ठ चौड़ाई में फिट करें"
+
+#~ msgid "Actual Pixels"
+#~ msgstr "वास्तविक पिक्सल्स"
+
+#~ msgid "Fit Text Width"
+#~ msgstr "पाठ को चौड़ाई के अनुरूप बैठाएँ"
+
+#, fuzzy
+#~| msgid "Fit Page Height"
+#~ msgid "Fit View Height"
+#~ msgstr "पृष्ठ ऊँचाई के अनुरूप"
+
+#~ msgid "&Open..."
+#~ msgstr "खोलें... (&O)"
+
+#~ msgid "Open an existing document"
+#~ msgstr "मौजूदा दस्तावेज़ खोलें"
+
+#~ msgid "Open &Recent"
+#~ msgstr "हाल ही का खोलें  (&R)"
+
+#~ msgid "Open a document which was recently opened"
+#~ msgstr "हाल ही में खोला गया एक दस्तावेज़ खोलें"
+
+#~ msgid "Save document"
+#~ msgstr "दस्तावेज़ सहेजें"
+
+#~ msgid "Save &As..."
+#~ msgstr " ऐसे सहेजें... (&A)"
+
+#~ msgid "Save document under a new name"
+#~ msgstr "दस्तावेज़ को नए नाम से सहेजें"
+
+#~ msgid "Re&vert"
+#~ msgstr "पलटें (&v)"
+
+#~ msgid "Close document"
+#~ msgstr "दस्तावेज़ बन्द करें"
+
+#~ msgid "&Print..."
+#~ msgstr "छापें...(&P)"
+
+#~ msgid "Print document"
+#~ msgstr "दस्तावेज़ छापें"
+
+#~ msgid "Print Previe&w"
+#~ msgstr "छपाई का पूर्वावलोकन (&w)"
+
+#~ msgid "Show a print preview of document"
+#~ msgstr "दस्तावेज़ का छपाई का पूर्वावलोकन दिखाएँ"
+
+#~ msgid "&Mail..."
+#~ msgstr "डाक... (&M)"
+
+#~ msgid "Send document by mail"
+#~ msgstr "दस्तावेज़ डाक से भेजें"
+
+#~ msgid "&Quit"
+#~ msgstr "बाहर जाएँ (&Q)"
+
+#~ msgid "Quit application"
+#~ msgstr "अनुप्रयोग छोड़ें"
+
+#~ msgid "&Undo"
+#~ msgstr "पूर्ववत करें (&U)"
+
+#~ msgid "Undo last action"
+#~ msgstr "पिछली क्रिया पूर्ववत करें"
+
+#~ msgid "Re&do"
+#~ msgstr "फिर करें (&d)"
+
+#~ msgid "Redo last undone action"
+#~ msgstr "पिछली पूर्ववत की गई क्रिया फिर से करें"
+
+#~ msgid "Cu&t"
+#~ msgstr "काटें (&t)"
+
+#~ msgid "Cut selection to clipboard"
+#~ msgstr "चयन काट कर क्लिपबोर्ड पर रखें"
+
+#~ msgid "&Copy"
+#~ msgstr "नक़ल (&C)"
+
+#~ msgid "Copy selection to clipboard"
+#~ msgstr "चयन को क्लिपबोर्ड में नक़ल करें"
+
+#~ msgid "&Paste"
+#~ msgstr "चिपकाएँ"
+
+#~ msgid "Paste clipboard content"
+#~ msgstr "क्लिपबोर्ड से वस्तुएं चिपकाएँ"
+
+#~ msgid "C&lear"
+#~ msgstr "साफ करें (&l)"
+
+#~ msgid "Select &All"
+#~ msgstr "सभी का चयन करें (&A)"
+
+#~ msgid "Dese&lect"
+#~ msgstr "अचयनित (&l)"
+
+#~ msgid "&Find..."
+#~ msgstr "ढूंढें...(&F)"
+
+#~ msgid "Find &Next"
+#~ msgstr "अगला ढूंढें (&N)"
+
+#~ msgid "Find Pre&vious"
+#~ msgstr "पिछला ढूंढें (&v)"
+
+#~ msgid "&Replace..."
+#~ msgstr "प्रतिस्थापित... (&R)"
+
+#~ msgid "&Actual Size"
+#~ msgstr "वास्तविक आकार (&A)"
+
+#~ msgid "View document at its actual size"
+#~ msgstr "दस्तावेज़ को उसके मूल आकार में देखें"
+
+#~ msgid "&Fit to Page"
+#~ msgstr "पृष्ठ के अनुरूप (&F)"
+
+#~ msgid "Zoom to fit page in window"
+#~ msgstr "विंडो में पृष्ठ बिठाने के लिए ज़ूम करें"
+
+#~ msgid "Fit to Page &Width"
+#~ msgstr "पृष्ठ चौड़ाई के अनुरूप बैठाएँ (&W)"
+
+#~ msgid "Zoom to fit page width in window"
+#~ msgstr "विंडो में पृष्ठ चौड़ाई के अनुरूप बैठाने हेतु ज़ूम करें"
+
+#~ msgid "Fit to Page &Height"
+#~ msgstr "पृष्ठ ऊँचाई के अनुरूप (&H)"
+
+#~ msgid "Zoom to fit page height in window"
+#~ msgstr "विंडो में पृष्ठ ऊँचाई के अनुरूप बैठाने हेतु ज़ूम करें"
+
+#~ msgid "Zoom &In"
+#~ msgstr "ज़ूम इन (&I)"
+
+#~ msgid "Zoom &Out"
+#~ msgstr "ज़ूम आउट (&O)"
+
+#~ msgid "&Zoom..."
+#~ msgstr "ज़ूम... (&Z)"
+
+#~ msgid "Select zoom level"
+#~ msgstr "जूम स्तर चुनें"
+
+#~ msgid "&Redisplay"
+#~ msgstr "फिर से दिखाएँ (&R)"
+
+#~ msgid "Redisplay document"
+#~ msgstr "दस्तावेज़ फिर से दिखाएँ"
+
+#~ msgid "&Up"
+#~ msgstr "ऊपर (&U)"
+
+#~ msgid "Go up"
+#~ msgstr "ऊपर जाएं"
+
+#~ msgid "&Previous Page"
+#~ msgstr "पिछला पृष्ठ (&P)"
+
+#~ msgid "Go to previous page"
+#~ msgstr "पिछले पृष्ठ पर जाएँ"
+
+#~ msgid "&Next Page"
+#~ msgstr "अगला पृष्ठ (&N)"
+
+#~ msgid "Go to next page"
+#~ msgstr "अगले पृष्ठ पर जाएँ"
+
+#~ msgid "&Go To..."
+#~ msgstr "यहाँ जाएं... (&G)"
+
+#~ msgid "&Go to Page..."
+#~ msgstr "पृष्ठ पर जाएं... (&G)"
+
+#~ msgid "&Go to Line..."
+#~ msgstr "पंक्ति पर जाएँ... (&G)"
+
+#~ msgid "&First Page"
+#~ msgstr "प्रथम पृष्ठ (&F)"
+
+#~ msgid "Go to first page"
+#~ msgstr "प्रथम पृष्ठ पर जाएँ"
+
+#~ msgid "&Last Page"
+#~ msgstr "अंतिम पृष्ठ (&L)"
+
+#~ msgid "Go to last page"
+#~ msgstr "अन्तिम पृष्ठ पर जाएं"
+
+#~ msgid "&Back"
+#~ msgstr "पीछे जाएं (&B)"
+
+#~ msgid "Go back in document"
+#~ msgstr "दस्तावेज़ में पीछे जाएँ"
+
+#~ msgid "&Forward"
+#~ msgstr "आगे (&F)"
+
+#~ msgid "Go forward in document"
+#~ msgstr "दस्तावेज़ में आगे जाएं"
+
+#~ msgid "&Add Bookmark"
+#~ msgstr "पुस्तचिन्ह जोड़ें (&A)"
+
+#~ msgid "&Edit Bookmarks..."
+#~ msgstr "पुस्तचिह्न संपादित करें... (&E)"
+
+#~ msgid "&Spelling..."
+#~ msgstr "वर्तनी...(&S)"
+
+#~ msgid "Check spelling in document"
+#~ msgstr "दस्तावेज़ में वर्तनी जांचें"
+
+#~ msgid "Show or hide menubar"
+#~ msgstr "मेन्यू पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "Show &Toolbar"
+#~ msgstr "औज़ार पट्टी दिखाएँ (&T)"
+
+#~ msgid "Show or hide toolbar"
+#~ msgstr "औज़ार पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "Show or hide statusbar"
+#~ msgstr "स्थिति पट्टी दिखाएँ या छुपाएँ"
+
+#~ msgid "F&ull Screen Mode"
+#~ msgstr "पूर्ण स्क्रीन मोड (&u)"
+
+#~ msgid "&Save Settings"
+#~ msgstr "विन्यास सहेजें (&S)"
+
+#~ msgid "Configure S&hortcuts..."
+#~ msgstr "शार्टकटों को विन्यस्त करें... (&h)"
+
+#~ msgid "&Configure %1..."
+#~ msgstr "%1 विन्यस्त करें...(&C)"
+
+#~ msgid "Configure Tool&bars..."
+#~ msgstr "औज़ार पट्टी विन्यस्त करें... (&b)"
+
+#~ msgid "Configure &Notifications..."
+#~ msgstr "सूचनाएँ विन्यस्त करें.... (&N)"
+
+#~ msgid "Reset Configurations"
+#~ msgstr "विन्यास को रीसेट करें"
+
+#~ msgid "%1 &Handbook"
+#~ msgstr "%1 हैंडबुक (&H)"
+
+#~ msgid "What's &This?"
+#~ msgstr "यह क्या है? (&T)"
+
+#~ msgid "Tip of the &Day"
+#~ msgstr "आज का नुस्ख़ा (&D)"
+
+#~ msgid "&Report Bug..."
+#~ msgstr "त्रुटि दर्ज करें... (&R)"
+
+#~ msgid "Switch Application &Language..."
+#~ msgstr "अनुप्रयोग की भाषा बदलें... (&l)"
+
+#~ msgid "&About %1"
+#~ msgstr "%1 के बारे में (&A)"
+
+#~ msgid "About &KDE"
+#~ msgstr "केडीई के बारे में (&K)"
+
+#~ msgid "--- separator ---"
+#~ msgstr "--- विभाजक ---"
 
 #, fuzzy
 #~| msgid ""

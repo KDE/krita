@@ -40,7 +40,8 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
     const QString row = QString("<tr><td align=\"right\"><p style=\"white-space:pre\">%1:</p></td><td align=\"left\">%2</td></tr>");
     QString value;
     for(int i = 0, n = properties.count(); i < n; ++i) {
-        if (properties[i].id == KisLayerPropertiesIcons::layerError.id()) continue;
+        if (properties[i].id == KisLayerPropertiesIcons::layerError.id() ||
+                properties[i].id == KisLayerPropertiesIcons::layerColorSpaceMismatch.id()) continue;
 
         if (properties[i].isMutable)
             value = properties[i].state.toBool() ? i18n("Yes") : i18n("No");
@@ -58,14 +59,19 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
 
     QString errorMessage;
     {
-        auto it = std::find_if(properties.begin(), properties.end(),
-                               kismpl::mem_equal_to(&KisBaseNode::Property::id,
-                                                    KisLayerPropertiesIcons::layerError.id()));
+        auto addWarningProperty = [&] (const QString &propertyId) {
+            auto it = std::find_if(properties.begin(), properties.end(),
+                                   kismpl::mem_equal_to(&KisBaseNode::Property::id,
+                                                        propertyId));
 
-        if (it != properties.end()) {
-            doc->addResource(QTextDocument::ImageResource, QUrl("data:warn_symbol"), it->onIcon.pixmap(QSize(32,32)).toImage());
-            errorMessage = QString("<table align=\"center\" border=\"0\"><tr valign=\"middle\"><td align=\"right\"><img src=\"data:warn_symbol\"></td><td align=\"left\"><b>%1</b></td></tr></table>").arg(it->state.toString());
-        }
+            if (it != properties.end()) {
+                doc->addResource(QTextDocument::ImageResource, QUrl(QString("data:symbol_%1").arg(it->id)), it->onIcon.pixmap(QSize(32,32)).toImage());
+                errorMessage += QString("<table align=\"center\" border=\"0\"><tr valign=\"middle\"><td align=\"right\"><img src=\"data:symbol_%2\"></td><td align=\"left\"><b>%1</b></td></tr></table>").arg(it->state.toString(), it->id);
+            }
+        };
+
+        addWarningProperty(KisLayerPropertiesIcons::layerError.id());
+        addWarningProperty(KisLayerPropertiesIcons::layerColorSpaceMismatch.id());
     }
 
     rows = QString("<table>%1</table>").arg(rows);

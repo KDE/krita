@@ -409,7 +409,7 @@
       <text>Paste Shape Style</text>
       <whatsThis></whatsThis>
       <toolTip>Paste Shape Style</toolTip>
-      <iconText>Paste into New Image</iconText>
+      <iconText>Paste Shape Style</iconText>
       <activationFlags>1000000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>

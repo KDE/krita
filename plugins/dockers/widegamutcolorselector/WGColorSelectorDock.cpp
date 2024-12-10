@@ -26,6 +26,7 @@
 #include <kis_display_color_converter.h>
 #include <kis_signal_compressor.h>
 #include <KisUniqueColorSet.h>
+#include <KisGamutMaskToolbar.h>
 #include <KoCanvasResourceProvider.h>
 
 #include <QLabel>
@@ -66,8 +67,14 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_toggle = new KisColorSourceToggle(mainWidget);
     connect(m_toggle, SIGNAL(toggled(bool)), SLOT(slotColorSourceToggled(bool)));
     headerLayout->addWidget(m_toggle);
+    m_gamutToolbar = new KisGamutMaskToolbar(this);
+    m_gamutToolbar->setContentsMargins(0, 0, 0, 5);
+    m_gamutToolbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    headerLayout->addWidget(m_gamutToolbar);
     headerLayout->addStretch();
     headerLayout->setContentsMargins(0, 0, 0, 0);
+
+    connect(m_selector, SIGNAL(sigGamutMaskSupportChanged(bool)), SLOT(slotShowGamutMaskToolbar(bool)));
 
     m_configButton = new QToolButton(this);
     m_configButton->setIcon(KisIconUtils::loadIcon("view-choose"));
@@ -193,6 +200,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 
         connect(resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
                 m_selector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
+
+        m_gamutToolbar->connectMaskSignals(resourceProvider);
 
         // quirk note: displayConfigurationChanged signal gets sent *before* the new canvas gets
         // passed, through the display converter of the now inactive canvas! So we need to repeat...
@@ -471,6 +480,11 @@ void WGColorSelectorDock::slotOpenSettings()
     if (settings.exec() == QDialog::Accepted) {
         //WGConfig::notifier()->notifyConfigChanged();
     }
+}
+
+void WGColorSelectorDock::slotShowGamutMaskToolbar(bool show)
+{
+    m_gamutToolbar->setVisible(show);
 }
 
 namespace WGConfig {

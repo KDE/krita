@@ -200,6 +200,12 @@ KisBaseNode::PropertyList KisPaintLayer::sectionModelProperties() const
         l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::onionSkins, onionSkinEnabled());
     }
 
+    const KoColorSpace *cs = m_d->paintDevice->colorSpace();
+    KisImageSP image = this->image();
+    if (image && *image->colorSpace() != *cs) {
+        l << KisLayerPropertiesIcons::getColorSpaceMismatchProperty(cs);
+    }
+
     return l;
 }
 

@@ -277,7 +277,7 @@
               </sizepolicy>
             </property>
             <property name="text">
-              <string>Docker Tool Options</string>
+              <string>Control Widget Options</string>
             </property>
           </widget>
         </item>
@@ -289,19 +289,6 @@
           <bool>false</bool>
         </property>
       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-          <widget class="QLabel" name="editorWidgetText">
-            <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-              </sizepolicy>
-            </property>
-            <property name="text">
-              <string>Tool Options Visibility:</string>
-            </property>
-          </widget>
-        </item>
         <item>
           <widget class="QCheckBox" name="showMove">
             <property name="enabled">

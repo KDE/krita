@@ -13,7 +13,6 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceMaths.h>
-#include <KoCompositeOpFunctions.h>
 
 #include "compositeops/KoCompositeOpGeneric.h"
 #include "compositeops/KoCompositeOpOver.h"

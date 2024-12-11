@@ -99,7 +99,6 @@ public:
         alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
         alarm[1] = (cmsUInt16Number)gamutWarning[1]*256;
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
-        alarm[3] = (cmsUInt16Number)65535;
         cmsSetAlarmCodes(alarm);
         cmsSetAdaptationState(adaptationState);
 

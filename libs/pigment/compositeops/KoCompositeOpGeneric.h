@@ -7,7 +7,7 @@
 #ifndef _KOCOMPOSITEOP_GENERIC_H_
 #define _KOCOMPOSITEOP_GENERIC_H_
 
-//#include "KoCompositeOpFunctions.h"
+#include "KoCompositeOpFunctions.h"
 #include "KoCompositeOpBase.h"
 
 /**
@@ -74,12 +74,7 @@ public:
                             blend(srcInBlendSpace, srcAlpha,
                                   dstInBlendSpace, dstAlpha,
                                   compositeFunc(srcInBlendSpace, dstInBlendSpace));
-
-
-
                         dst[i] = BlendingPolicy::fromAdditiveSpace(div(result, newDstAlpha));
-
-                        //qDebug() << i << ppVar(result) << ppVar(compositeFunc(srcInBlendSpace, dstInBlendSpace)) << div(result, newDstAlpha);
                     }
                 }
             }

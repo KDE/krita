@@ -79,8 +79,8 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
                                              projection->colorSpace(),
                                              m_d->conversionOptions.m_destinationColorSpace,
                                              proofingSpace,
-                                             m_d->proofingConfig->intent,
                                              m_d->conversionOptions.m_renderingIntent,
+                                             m_d->proofingConfig->intent,
                                              m_d->proofingConfig->conversionFlags,
                                              m_d->proofingConfig->warningColor,
                                              m_d->proofingConfig->adaptationState));

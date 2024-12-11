@@ -273,23 +273,6 @@ public:
         return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 
-    inline static _T clampChannelToSDR(_T val) {
-        // integer version, float versions are specialized separately
-        return val;
-    }
-
-    inline static dst_compositetype clampToSDR(dst_compositetype val) {
-        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
-    }
-
-    inline static dst_compositetype clampToSDRTop(dst_compositetype val) {
-        return qMin<dst_compositetype>(val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
-    }
-
-    inline static dst_compositetype clampToSDRBottom(dst_compositetype val) {
-        return qMax<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val);
-    }
-
     /**
      * Clamps the composite type on higher border only. That is a fast path
      * for scale-only transformations
@@ -299,14 +282,6 @@ public:
     }
 
     inline static _T isUnsafeAsDivisor(_T value) {
-        return value == KoColorSpaceMathsTraits<_T>::zeroValue;
-    }
-
-    inline static bool isUnitValue(_T value) {
-        return value == KoColorSpaceMathsTraits<_T>::unitValue;
-    }
-
-    inline static bool isZeroValue(_T value) {
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
     }
 };
@@ -406,21 +381,6 @@ inline float KoColorSpaceMaths<float>::isUnsafeAsDivisor(float value) {
     return value < 1e-6; // negative values are also unsafe!
 }
 
-template<>
-inline bool KoColorSpaceMaths<float>::isUnitValue(float value) {
-    return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::unitValue);
-}
-
-template<>
-inline bool KoColorSpaceMaths<float>::isZeroValue(float value) {
-    return qFuzzyIsNull(value);
-}
-
-template<>
-inline float KoColorSpaceMaths<float>::clampChannelToSDR(float val) {
-    return qBound<float>(KoColorSpaceMathsTraits<float>::zeroValue, val, KoColorSpaceMathsTraits<float>::unitValue);
-}
-
 //------------------------------ half specialization ------------------------------//
 
 #ifdef HAVE_OPENEXR
@@ -496,12 +456,6 @@ template<>
 inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
     return value < 1e-6; // negative values are also unsafe!
 }
-
-template<>
-inline half KoColorSpaceMaths<half>::clampChannelToSDR(half val) {
-    return qBound<half>(KoColorSpaceMathsTraits<half>::zeroValue, val, KoColorSpaceMathsTraits<half>::unitValue);
-}
-
 
 #endif
 
@@ -649,26 +603,6 @@ namespace Arithmetic
     template<class T>
     inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
         return KoColorSpaceMaths<T>::clamp(a);
-    }
-
-    template<class T>
-    inline T clampToSDR(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-        return KoColorSpaceMaths<T>::clampToSDR(a);
-    }
-
-    template<class T>
-    inline T clampChannelToSDR(T a) {
-        return KoColorSpaceMaths<T>::clampChannelToSDR(a);
-    }
-
-    template<class T>
-    inline T clampToSDRTop(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-        return KoColorSpaceMaths<T>::clampToSDRTop(a);
-    }
-
-    template<class T>
-    inline T clampToSDRBottom(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-        return KoColorSpaceMaths<T>::clampToSDRBottom(a);
     }
     
     template<class T>

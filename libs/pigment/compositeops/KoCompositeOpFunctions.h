@@ -213,10 +213,9 @@ inline T colorBurnHelper(T src, T dst) {
     // Handle the case where the denominator is 0. See color dodge for a
     // detailed explanation
     if(src == zeroValue<T>()) {
-        return dst == unitValue<T>() ? inv(dst) : unitValue<T>();
+        return dst == unitValue<T>() ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::max;
     }
-
-    return clampToSDR<T>(div(inv(dst), src));
+    return clamp<T>(div(inv(dst), src));
 }
 
 // Integer version of color burn
@@ -235,14 +234,14 @@ cfColorBurn(T src, T dst) {
     const T result = colorBurnHelper(src, dst);
     // Constantly dividing by small numbers can quickly make the result
     // become infinity or NaN, so we check that and correct (kind of clamping)
-    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
+    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::max);
 }
 
 template<class T>
 inline T cfLinearBurn(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clampToSDR<T>(composite_type(src) + dst - unitValue<T>());
+    return clamp<T>(composite_type(src) + dst - unitValue<T>());
 }
 
 template<class T>
@@ -258,10 +257,10 @@ inline T colorDodgeHelper(T src, T dst) {
     // this case we also treat the denominator as an infinitely small number,
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
-    if (KoColorSpaceMaths<T>::isUnitValue(src)) {
-        return KoColorSpaceMaths<T>::isZeroValue(dst) ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::unitValue;
+    if (src == unitValue<T>()) {
+        return dst == zeroValue<T>() ? zeroValue<T>() : KoColorSpaceMathsTraits<T>::max;
     }
-    return Arithmetic::clampToSDR<T>(div(dst, inv(src)));
+    return Arithmetic::clamp<T>(div(dst, inv(src)));
 }
 
 // Integer version of color dodge
@@ -278,7 +277,7 @@ cfColorDodge(T src, T dst) {
     const T result = colorDodgeHelper(src, dst);
     // Constantly dividing by small numbers can quickly make the result
     // become infinity or NaN, so we check that and correct (kind of clamping)
-    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue;
+    return std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::max;
 }
 
 template<class T>

@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-10 01:54+0000\n"
-"PO-Revision-Date: 2024-11-28 10:58+0100\n"
+"POT-Creation-Date: 2024-12-11 01:48+0000\n"
+"PO-Revision-Date: 2024-12-08 07:45+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -36852,18 +36852,15 @@ msgid "A scheme with this name already exists."
 msgstr "Ja existix un esquema amb este nom."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
 "Esteu segur/a que voleu suprimir l'esquema %1?\n"
-"Cal tindre en compte que açò no eliminarà cap esquema de dreceres global del "
-"sistema."
+"                                             Cal tindre en compte que açò no "
+"eliminarà cap esquema de dreceres global del sistema."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -37557,7 +37554,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:141
 #, kde-format
 msgid "ICC Engine"
 msgstr "Motor ICC"
@@ -59162,10 +59159,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Inseriu el nom amb què voleu guardar este perfil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Ho sentim, el nom que heu introduït no és vàlid."
+msgstr "El nom que heu introduït no és vàlid."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -61045,12 +61041,7 @@ msgstr "Radi del patró:"
 
 # skip-rule: kct-library
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "
@@ -61934,285 +61925,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Fit View"
-#~ msgstr "Ajust de la vista"
-
-#~ msgid "Fit View Width"
-#~ msgstr "Ajusta l'amplària de la vista"
-
-#~ msgid "Actual Pixels"
-#~ msgstr "Píxels reals"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "Ajusta l'amplària del text"
-
-#~ msgid "Fit View Height"
-#~ msgstr "Ajusta l'alçària de la vista"
-
-#~ msgid "&Open..."
-#~ msgstr "O&bri…"
-
-#~ msgid "Open an existing document"
-#~ msgstr "Obri un document existent"
-
-#~ msgid "Open &Recent"
-#~ msgstr "Obri'n un de &recent"
-
-#~ msgid "Open a document which was recently opened"
-#~ msgstr "Obri un document que s'ha obert recentment"
-
-#~ msgid "Save document"
-#~ msgstr "Guarda el document"
-
-#~ msgid "Save &As..."
-#~ msgstr "Anomena i gu&arda…"
-
-#~ msgid "Save document under a new name"
-#~ msgstr "Guarda el document amb un nom nou"
-
-#~ msgid "Re&vert"
-#~ msgstr "Re&vertix"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "Revertix els canvis efectuats sense guardar en el document"
-
-#~ msgid "Close document"
-#~ msgstr "Tanca el document"
-
-#~ msgid "&Print..."
-#~ msgstr "Im&primix…"
-
-#~ msgid "Print document"
-#~ msgstr "Imprimix el document"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "&Vista prèvia d'impressió"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "Mostra una vista prèvia d'impressió del document"
-
-#~ msgid "&Mail..."
-#~ msgstr "&Correu…"
-
-#~ msgid "Send document by mail"
-#~ msgstr "Envia un document per correu"
-
-#~ msgid "&Quit"
-#~ msgstr "I&x"
-
-#~ msgid "Quit application"
-#~ msgstr "Ix de l'aplicació"
-
-#~ msgid "&Undo"
-#~ msgstr "&Desfés"
-
-#~ msgid "Undo last action"
-#~ msgstr "Desfà l'última acció"
-
-#~ msgid "Re&do"
-#~ msgstr "Re&fés"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "Refà l'última acció desfeta"
-
-#~ msgid "Cu&t"
-#~ msgstr "Re&talla"
-
-#~ msgid "Cut selection to clipboard"
-#~ msgstr "Retalla la selecció a dins del porta-retalls"
-
-#~ msgid "&Copy"
-#~ msgstr "&Copia"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Copia la selecció a dins del porta-retalls"
-
-#~ msgid "&Paste"
-#~ msgstr "A&pega"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "Apega el contingut del porta-retalls"
-
-#~ msgid "C&lear"
-#~ msgstr "&Neteja"
-
-#~ msgid "Select &All"
-#~ msgstr "Seleccion&a-ho tot"
-
-#~ msgid "Dese&lect"
-#~ msgstr "Desse&lecciona"
-
-#~ msgid "&Find..."
-#~ msgstr "Bu&sca…"
-
-#~ msgid "Find &Next"
-#~ msgstr "Busca la següe&nt"
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "Busca l'a&nterior"
-
-#~ msgid "&Replace..."
-#~ msgstr "Su&bstituïx…"
-
-#~ msgid "&Actual Size"
-#~ msgstr "Mida re&al"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "Visualitza el document en la seua mida real"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "&Ajusta a la pàgina"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "Zoom fins a ajustar la pàgina en la finestra"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "Ajusta a l'a&mplària de la pàgina"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "Zoom fins a ajustar l'amplària de la pàgina en la finestra"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "Ajusta a l'a&lçària de la pàgina"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "Zoom fins a ajustar l'alçària de la pàgina en la finestra"
-
-#~ msgid "Zoom &In"
-#~ msgstr "&Amplia"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "Red&uix"
-
-#~ msgid "&Zoom..."
-#~ msgstr "&Zoom…"
-
-#~ msgid "Select zoom level"
-#~ msgstr "Seleccioneu el nivell de zoom"
-
-#~ msgid "&Redisplay"
-#~ msgstr "&Redibuixa"
-
-#~ msgid "Redisplay document"
-#~ msgstr "Redibuixa el document"
-
-#~ msgid "&Up"
-#~ msgstr "&Amunt"
-
-#~ msgid "Go up"
-#~ msgstr "Puja"
-
-#~ msgid "&Previous Page"
-#~ msgstr "&Pàgina anterior"
-
-#~ msgid "Go to previous page"
-#~ msgstr "Va fins a la pàgina anterior"
-
-#~ msgid "&Next Page"
-#~ msgstr "Pàgina següe&nt"
-
-#~ msgid "Go to next page"
-#~ msgstr "Va fins a la pàgina següent"
-
-#~ msgid "&Go To..."
-#~ msgstr "&Ves fins a…"
-
-#~ msgid "&Go to Page..."
-#~ msgstr "&Ves fins a la pàgina…"
-
-#~ msgid "&Go to Line..."
-#~ msgstr "&Ves fins a la línia…"
-
-#~ msgid "&First Page"
-#~ msgstr "P&rimera pàgina"
-
-#~ msgid "Go to first page"
-#~ msgstr "Va fins a la primera pàgina"
-
-#~ msgid "&Last Page"
-#~ msgstr "Ú&ltima pàgina"
-
-#~ msgid "Go to last page"
-#~ msgstr "Va fins a l'última pàgina"
-
-#~ msgid "&Back"
-#~ msgstr "A&rrere"
-
-#~ msgid "Go back in document"
-#~ msgstr "Va arrere en el document"
-
-#~ msgid "&Forward"
-#~ msgstr "A&vant"
-
-#~ msgid "Go forward in document"
-#~ msgstr "Va avant en el document"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "Afi&g una adreça d'interés"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "&Edita les adreces d'interés…"
-
-#~ msgid "&Spelling..."
-#~ msgstr "&Ortografia…"
-
-#~ msgid "Check spelling in document"
-#~ msgstr "Verificació de l'ortografia en el document"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "Mostra o oculta la barra de menús"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "Mostra la barra d'&eines"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Mostra o oculta la barra d'eines"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Mostra o oculta la barra d'estat"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "&Mode de pantalla completa"
-
-#~ msgid "&Save Settings"
-#~ msgstr "Guar&da la configuració"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "Configura les &dreceres…"
-
-#~ msgid "&Configure %1..."
-#~ msgstr "&Configura %1…"
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "Configura les &barres d'eines…"
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "Configura les &notificacions…"
-
-#~ msgid "Reset Configurations"
-#~ msgstr "Reinicia les configuracions"
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "&Manual de %1"
-
-#~ msgid "What's &This?"
-#~ msgstr "Què és &açò?"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "Consell del &dia"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "&Informeu d'un error…"
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "Canvia l'i&dioma de l'aplicació…"
-
-#~ msgid "&About %1"
-#~ msgstr "&Quant a %1"
-
-#~ msgid "About &KDE"
-#~ msgstr "Quant a &KDE"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- separador ---"

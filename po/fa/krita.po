@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-10 01:54+0000\n"
+"POT-Creation-Date: 2024-12-11 01:48+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -37217,7 +37217,7 @@ msgstr ""
 msgid "Cr"
 msgstr "خط برش"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:141
 #, fuzzy, kde-format
 msgid "ICC Engine"
 msgstr "گستره رنگ"

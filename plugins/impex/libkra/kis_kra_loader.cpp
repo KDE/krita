@@ -284,7 +284,26 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             proofingConfig->proofingDepth = attr;
         }
         if (!(attr = imageElement.attribute(PROOFINGINTENT)).isNull()) {
+            proofingConfig->conversionIntent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+        }
+        if (!(attr = imageElement.attribute(PROOFINGDISPLAYINTENT)).isNull()) {
             proofingConfig->displayIntent = (KoColorConversionTransformation::Intent) KisDomUtils::toInt(attr);
+        }
+        if (!(attr = imageElement.attribute(PROOFINGDISPLAYMODE)).isNull()) {
+            if (attr == "monitor") {
+                proofingConfig->displayMode = KisProofingConfiguration::Monitor;
+            } else if (attr == "paper") {
+                proofingConfig->displayMode = KisProofingConfiguration::Paper;
+            } else {
+                proofingConfig->displayMode = KisProofingConfiguration::Custom;
+            }
+        }
+        if (!(attr = imageElement.attribute(PROOFINGBLACKPOINTCOMPENSATION)).isNull()) {
+            proofingConfig->useBlackPointCompensationFirstTransform = (attr == "true");
+        }
+
+        if (!(attr = imageElement.attribute(PROOFINGDISPLAYBLACKPOINTCOMPENSATION)).isNull()) {
+            proofingConfig->displayFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, attr == "true");
         }
 
         if (!(attr = imageElement.attribute(PROOFINGADAPTATIONSTATE)).isNull()) {

@@ -119,7 +119,19 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
             imageElement.setAttribute(PROOFINGPROFILENAME, KisDomUtils::toString(image->proofingConfiguration()->proofingProfile));
             imageElement.setAttribute(PROOFINGMODEL, KisDomUtils::toString(image->proofingConfiguration()->proofingModel));
             imageElement.setAttribute(PROOFINGDEPTH, KisDomUtils::toString(image->proofingConfiguration()->proofingDepth));
-            imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->displayIntent));
+            imageElement.setAttribute(PROOFINGINTENT, KisDomUtils::toString(image->proofingConfiguration()->conversionIntent));
+            imageElement.setAttribute(PROOFINGDISPLAYINTENT, KisDomUtils::toString(image->proofingConfiguration()->displayIntent));
+            bool bcp = image->proofingConfiguration()->useBlackPointCompensationFirstTransform;
+            imageElement.setAttribute(PROOFINGBLACKPOINTCOMPENSATION, bcp? "true": "false");
+            bcp = image->proofingConfiguration()->displayFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
+            imageElement.setAttribute(PROOFINGDISPLAYBLACKPOINTCOMPENSATION, bcp? "true": "false");
+            QString mode = "custom";
+            if (image->proofingConfiguration()->displayMode == KisProofingConfiguration::Monitor) {
+                mode = "monitor";
+            } else {
+                mode = "paper";
+            }
+            imageElement.setAttribute(PROOFINGDISPLAYMODE, mode);
             imageElement.setAttribute(PROOFINGADAPTATIONSTATE, KisDomUtils::toString(image->proofingConfiguration()->adaptationState));
         }
     }

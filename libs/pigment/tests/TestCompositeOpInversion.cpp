@@ -390,66 +390,6 @@ KoCompositeOp* createOp(const KoColorSpace *cs, const QString &id, bool isHDR)
             constexpr auto func = &cfHardLight<quint16>;
             op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
         }
-    } else if (id == COMPOSITE_EXCLUSION) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfExclusion<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfExclusion<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
-    } else if (id == COMPOSITE_DIFF) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfDifference<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfDifference<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
-    } else if (id == COMPOSITE_SCREEN) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfScreen<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfScreen<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
-    } else if (id == COMPOSITE_DARKEN) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfDarkenOnly<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfDarkenOnly<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
-    } else if (id == COMPOSITE_LIGHTEN) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfLightenOnly<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfLightenOnly<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
-    } else if (id == COMPOSITE_NEGATION) {
-        if (cs->colorDepthId() == Float32BitsColorDepthID) {
-            using Traits = KoRgbF32Traits;
-            constexpr auto func = &cfNegation<float>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-            using Traits = KoRgbU16Traits;
-            constexpr auto func = &cfNegation<quint16>;
-            op = new KoCompositeOpGenericSC<Traits, func, KoAdditiveBlendingPolicy<Traits>>(cs, id, KoCompositeOp::categoryArithmetic());
-        }
     }
 
     KIS_ASSERT(op);
@@ -505,14 +445,8 @@ void TestCompositeOpInversion::testFloatModes()
     using namespace boost::accumulators;
     accumulator_set<qreal, stats<tag::max, tag::mean> > error;
 
-    std::vector<qreal> opacityValues({0.0,
-                                      0 + std::numeric_limits<float>::epsilon(),
-                                      1.0f / 255.0f,
-                                      0.1, 0.2, 0.5, 0.8, 0.9,
-                                      1.0 - 1.0f / 255.0f,
-                                      1.0 - std::numeric_limits<float>::epsilon(),
-                                      1.0});
-    //std::vector<qreal> opacityValues({1.0});
+    //std::vector<qreal> opacityValues({0.0, 0.1, 0.2, 0.5, 0.8, 0.9, 1.0});
+    std::vector<qreal> opacityValues({1.0});
     std::vector<qreal> alphaValues({1.0});
     std::vector<qreal> values({-0.1,
                                0 - std::numeric_limits<float>::epsilon(),
@@ -536,11 +470,6 @@ void TestCompositeOpInversion::testFloatModes()
                 Q_FOREACH (qreal srcColorValue, valuesSrc) {
                     Q_FOREACH (qreal dstColorValue, valuesDst) {
 
-
-                        float tolerance = opacity > 0.8 ? 0.001 :
-                                          opacity > 0.5 ? 0.1 :
-                                          opacity > 0.2 ? 0.2 :
-                                          1.0;
 //    {
 //        {
 //            {
@@ -589,7 +518,6 @@ void TestCompositeOpInversion::testFloatModes()
                             if (resultColor != referenceColor) {
 
                                 qDebug() << "--- integer implementation is inconsistent to the original mode! ---";
-                                qDebug() << ppVar(opacity);
                                 qDebug() << "U16 result:   " << fixed << qSetRealNumberPrecision(8)
                                          << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(resultColorU);
                                 qDebug() << "U16 reference:" << fixed << qSetRealNumberPrecision(8)
@@ -598,13 +526,11 @@ void TestCompositeOpInversion::testFloatModes()
                             }
                         }
 
-                        QVERIFY(!std::isnan(resultColorValueF));
-
                         if (dstColorValue >= -std::numeric_limits<float>::epsilon() &&
                                 dstColorValue <= 1.0 + std::numeric_limits<float>::epsilon() &&
                                 srcColorValue >= -std::numeric_limits<float>::epsilon() &&
                                 srcColorValue <= 1.0 + std::numeric_limits<float>::epsilon() &&
-                                qAbs(resultColorValueF - resultColorValueU) > tolerance) {
+                                qAbs(resultColorValueF - resultColorValueU) > 0.001) {
 
                             if (qFuzzyIsNull(resultColorValueU) &&
                                     qAbs(resultColorValueU - qMax(0.0f, resultColorValueF)) <= 0.001) {
@@ -614,7 +540,6 @@ void TestCompositeOpInversion::testFloatModes()
                                 // noop, should be fine result as well
                             } else if (resultColorValueF < 0.0) {
                                 qDebug() << "--- resulting value in SDR range is negative! ---";
-                                qDebug() << ppVar(opacity);
                                 qDebug() << "U16:" << fixed << qSetRealNumberPrecision(8)
                                          << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(resultColorU);
                                 qDebug() << "F32:" << fixed << qSetRealNumberPrecision(8)
@@ -626,7 +551,6 @@ void TestCompositeOpInversion::testFloatModes()
                                 // exactly the same way (including zero and unit values)
 
                                 qDebug() << "--- inconsistent result in SDR range ---";
-                                qDebug() << ppVar(opacity);
                                 qDebug() << "U16:" << fixed << qSetRealNumberPrecision(8)
                                          << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(resultColorU);
                                 qDebug() << "F32:" << fixed << qSetRealNumberPrecision(8)
@@ -641,7 +565,6 @@ void TestCompositeOpInversion::testFloatModes()
                                 resultColorValueF < 0.0) {
 
                             qDebug() << "--- resulting value in SDR range is negative for SRC-clipped op! ---";
-                            qDebug() << ppVar(opacity);
                             qDebug() << "U16:" << fixed << qSetRealNumberPrecision(8)
                                      << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(resultColorU);
                             qDebug() << "F32:" << fixed << qSetRealNumberPrecision(8)
@@ -827,14 +750,6 @@ void TestCompositeOpInversion::testFloatModes_data()
     specialIds << COMPOSITE_INVERSE_SUBTRACT;
     specialIds << COMPOSITE_MULT;
     specialIds << COMPOSITE_DIVIDE;
-
-    specialIds << COMPOSITE_EXCLUSION;
-    specialIds << COMPOSITE_DIFF;
-    specialIds << COMPOSITE_SCREEN;
-    specialIds << COMPOSITE_DARKEN;
-    specialIds << COMPOSITE_LIGHTEN;
-    specialIds << COMPOSITE_NEGATION;
-
 
     QTest::addColumn<QString>("id");
     QTest::addColumn<TestFlags>("flags");

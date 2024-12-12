@@ -197,4 +197,17 @@ namespace KisCommandUtils
         KUndo2Command::undo();
     }
 
+    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, QScopedPointer<KUndo2Command> &accumulatingCommand)
+    {
+        cmd->redo();
+        if (accumulatingCommand) {
+            const bool isMerged = accumulatingCommand->mergeWith(cmd);
+            KIS_SAFE_ASSERT_RECOVER_NOOP(isMerged);
+            delete cmd;
+        } else {
+            accumulatingCommand.reset(cmd);
+        }
+    }
+
+
 }

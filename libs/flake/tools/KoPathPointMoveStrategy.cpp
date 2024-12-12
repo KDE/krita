@@ -44,14 +44,10 @@ void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     if (! selection)
         return;
 
-    KoPathPointMoveCommand *cmd = new KoPathPointMoveCommand(selection->selectedPointsData(), move - m_move);
+    KisCommandUtils::redoAndMergeIntoAccumulatingCommand(
+        new KoPathPointMoveCommand(selection->selectedPointsData(), move - m_move),
+        m_intermediateCommand);
 
-    cmd->redo();
-    if (m_intermediateCommand) {
-        m_intermediateCommand->mergeWith(cmd);
-    } else {
-        m_intermediateCommand.reset(cmd);
-    }
     m_move = move;
 }
 

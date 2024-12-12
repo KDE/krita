@@ -275,16 +275,18 @@ struct AddGeneralOps<Traits, true>
          add<CFAdditiveSubtractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBTRACTIVE, KoCompositeOp::categoryNegative());
          add<CFNegation<Arg>            >(cs, COMPOSITE_NEGATION            , KoCompositeOp::categoryNegative());
          
-         add<&cfXor<Arg>        >(cs, COMPOSITE_XOR            , KoCompositeOp::categoryBinary());
-         add<&cfOr<Arg>         >(cs, COMPOSITE_OR             , KoCompositeOp::categoryBinary());
-         add<&cfAnd<Arg>        >(cs, COMPOSITE_AND            , KoCompositeOp::categoryBinary());
-         add<&cfNand<Arg>       >(cs, COMPOSITE_NAND           , KoCompositeOp::categoryBinary());
-         add<&cfNor<Arg>        >(cs, COMPOSITE_NOR            , KoCompositeOp::categoryBinary());
-         add<&cfXnor<Arg>       >(cs, COMPOSITE_XNOR           , KoCompositeOp::categoryBinary());
-         add<&cfImplies<Arg>    >(cs, COMPOSITE_IMPLICATION    , KoCompositeOp::categoryBinary());
-         add<&cfNotImplies<Arg> >(cs, COMPOSITE_NOT_IMPLICATION, KoCompositeOp::categoryBinary());
-         add<&cfConverse<Arg>   >(cs, COMPOSITE_CONVERSE       , KoCompositeOp::categoryBinary());
-         add<&cfNotConverse<Arg>>(cs, COMPOSITE_NOT_CONVERSE   , KoCompositeOp::categoryBinary());
+         if constexpr (IsIntegerSpace) {
+             add<&cfXor<Arg>        >(cs, COMPOSITE_XOR            , KoCompositeOp::categoryBinary());
+             add<&cfOr<Arg>         >(cs, COMPOSITE_OR             , KoCompositeOp::categoryBinary());
+             add<&cfAnd<Arg>        >(cs, COMPOSITE_AND            , KoCompositeOp::categoryBinary());
+             add<&cfNand<Arg>       >(cs, COMPOSITE_NAND           , KoCompositeOp::categoryBinary());
+             add<&cfNor<Arg>        >(cs, COMPOSITE_NOR            , KoCompositeOp::categoryBinary());
+             add<&cfXnor<Arg>       >(cs, COMPOSITE_XNOR           , KoCompositeOp::categoryBinary());
+             add<&cfImplies<Arg>    >(cs, COMPOSITE_IMPLICATION    , KoCompositeOp::categoryBinary());
+             add<&cfNotImplies<Arg> >(cs, COMPOSITE_NOT_IMPLICATION, KoCompositeOp::categoryBinary());
+             add<&cfConverse<Arg>   >(cs, COMPOSITE_CONVERSE       , KoCompositeOp::categoryBinary());
+             add<&cfNotConverse<Arg>>(cs, COMPOSITE_NOT_CONVERSE   , KoCompositeOp::categoryBinary());
+         }
 
          add<&cfReflect<Arg>>(cs, COMPOSITE_REFLECT, KoCompositeOp::categoryQuadratic());
          add<&cfGlow<Arg>   >(cs, COMPOSITE_GLOW   , KoCompositeOp::categoryQuadratic());

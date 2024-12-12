@@ -427,6 +427,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers());
     chkRenamePastedLayers->setChecked(cfg.renamePastedLayers());
+    chkRenameDuplicatedLayers->setChecked(KisImageConfig(true).renameDuplicatedLayers());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
@@ -761,6 +762,7 @@ void GeneralTab::setDefault()
 
     chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers(true));
     chkRenamePastedLayers->setChecked(cfg.renamePastedLayers(true));
+    chkRenameDuplicatedLayers->setChecked(KisImageConfig(true).renameDuplicatedLayers(true));
 
     QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
     Q_ASSERT(button);
@@ -937,6 +939,11 @@ bool GeneralTab::renameMergedLayers()
 bool GeneralTab::renamePastedLayers()
 {
     return chkRenamePastedLayers->isChecked();
+}
+
+bool GeneralTab::renameDuplicatedLayers()
+{
+    return chkRenameDuplicatedLayers->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -2460,6 +2467,7 @@ bool KisDlgPreferences::editPreferences()
 
         KisImageConfig(true).setRenameMergedLayers(m_general->renameMergedLayers());
         cfg.setRenamePastedLayers(m_general->renamePastedLayers());
+        KisImageConfig(true).setRenameDuplicatedLayers(m_general->renameDuplicatedLayers());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

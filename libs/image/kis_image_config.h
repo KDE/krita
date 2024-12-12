@@ -145,6 +145,8 @@ public:
 
     bool renameMergedLayers(bool defaultValue = false) const;
     void setRenameMergedLayers(bool value);
+    bool renameDuplicatedLayers(bool defaultValue = false) const;
+    void setRenameDuplicatedLayers(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

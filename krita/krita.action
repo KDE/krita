@@ -2672,7 +2672,7 @@
       <statusTip/>
     </Action>
     <Action name="add_new_fast_color_overlay_mask">
-      <icon>filterMask</icon>
+      <icon>color-overlay</icon>
       <text>Add Color &amp;Overlay Mask</text>
       <whatsThis/>
       <toolTip>Add a new Fast Color Overlay Filter Mask</toolTip>

@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 01:48+0000\n"
+"POT-Creation-Date: 2024-12-12 01:49+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -37071,7 +37071,7 @@ msgstr ""
 msgid "Cr"
 msgstr "काटू"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:141
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, fuzzy, kde-format
 msgid "ICC Engine"
 msgstr "रंग चयनक"

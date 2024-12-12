@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-11 01:48+0000\n"
+"POT-Creation-Date: 2024-12-12 01:49+0000\n"
 "PO-Revision-Date: 2024-12-08 09:11+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -37972,7 +37972,7 @@ msgstr "Cb"
 msgid "Cr"
 msgstr "Cr"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:141
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
 #, kde-format
 msgid "ICC Engine"
 msgstr "Рушій ICC"

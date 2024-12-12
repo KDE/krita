@@ -130,6 +130,15 @@ namespace KisCommandUtils
     private:
         QVector<KUndo2Command*> m_commands;
     };
+
+    /**
+     * A simple function to merge down commands in iterative actions, like the
+     * ones we use in shape manipulations. The function takes ownership of \p cmd
+     * and either merges it into \p accumulatingCommand (if exists) or just
+     * sets the accumulating command to that command
+     */
+    KRITACOMMAND_EXPORT
+    void redoAndMergeIntoAccumulatingCommand(KUndo2Command *cmd, QScopedPointer<KUndo2Command> &accumulatingCommand);
 }
 
 #endif /* __KIS_COMMAND_UTILS_H */

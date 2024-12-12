@@ -39,14 +39,9 @@ void KoPathControlPointMoveStrategy::handleMouseMove(const QPointF &mouseLocatio
 
     m_move += move;
 
-    KoPathControlPointMoveCommand *cmd = new KoPathControlPointMoveCommand(m_pointData, move, m_pointType);
-
-    cmd->redo();
-    if (m_intermediateCommand) {
-        m_intermediateCommand->mergeWith(cmd);
-    } else {
-        m_intermediateCommand.reset(cmd);
-    }
+    KisCommandUtils::redoAndMergeIntoAccumulatingCommand(
+        new KoPathControlPointMoveCommand(m_pointData, move, m_pointType),
+        m_intermediateCommand);
 }
 
 void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

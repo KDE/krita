@@ -8,6 +8,8 @@
 
 #include <KoToolBase.h>
 #include <KoCanvasBase.h>
+#include <kundo2command.h>
+#include <kis_command_utils.h>
 
 struct ShapeMeshGradientEditStrategy::Private {
     Private(const QPointF& start, KoShape *shape, KoFlake::FillVariant fillVariant)
@@ -20,6 +22,7 @@ struct ShapeMeshGradientEditStrategy::Private {
     QPointF start;
     KoShapeMeshGradientHandles::Handle startHandle;
     KoShapeMeshGradientHandles handles;
+    QScopedPointer<KUndo2Command> intermediateCommand;
 };
 
 ShapeMeshGradientEditStrategy::ShapeMeshGradientEditStrategy(KoToolBase *tool,
@@ -41,12 +44,18 @@ void ShapeMeshGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation
                                                     Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED(modifiers);
-    tool()->canvas()->addCommand(m_d->handles.moveGradientHandle(m_d->startHandle, mouseLocation));
+
+
+    KisCommandUtils::redoAndMergeIntoAccumulatingCommand(
+        m_d->handles.moveGradientHandle(m_d->startHandle, mouseLocation),
+        m_d->intermediateCommand);
 }
 
 KUndo2Command* ShapeMeshGradientEditStrategy::createCommand()
 {
-    return nullptr;
+    return m_d->intermediateCommand ?
+        new KisCommandUtils::SkipFirstRedoWrapper(m_d->intermediateCommand.take()) :
+        nullptr;
 }
 
 void ShapeMeshGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

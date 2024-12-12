@@ -14,6 +14,7 @@
 #include "kis_assert.h"
 #include "SelectionDecorator.h"
 #include <kundo2command.h>
+#include <kis_command_utils.h>
 #include <KoSnapGuide.h>
 #include <KisSnapPointStrategy.h>
 
@@ -69,20 +70,17 @@ void ShapeGradientEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     const QPointF snappedPosition = tool()->canvas()->snapGuide()->snap(mouseLocation, m_d->initialOffset, modifiers);
     const QPointF diff = snappedPosition - m_d->previous;
     m_d->previous = snappedPosition;
-    KUndo2Command *cmd = m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff);
-    cmd->redo();
-    if (cmd) {
-        if (m_d->intermediateCommand) {
-            m_d->intermediateCommand->mergeWith(cmd);
-        } else {
-            m_d->intermediateCommand.reset(cmd);
-        }
-    }
+
+    KisCommandUtils::redoAndMergeIntoAccumulatingCommand(
+        m_d->gradientHandles.moveGradientHandle(m_d->handleType, diff),
+        m_d->intermediateCommand);
 }
 
 KUndo2Command *ShapeGradientEditStrategy::createCommand()
 {
-    return m_d->intermediateCommand.take();
+    return m_d->intermediateCommand ?
+        new KisCommandUtils::SkipFirstRedoWrapper(m_d->intermediateCommand.take()) :
+        nullptr;
 }
 
 void ShapeGradientEditStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)

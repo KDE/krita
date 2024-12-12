@@ -446,10 +446,12 @@ find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
 )
 
 if (ANDROID)
-    find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
-        REQUIRED COMPONENTS
-        AndroidExtras
-    )
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
+            REQUIRED COMPONENTS
+            AndroidExtras
+        )
+    endif()
 endif()
 
 if (QT_MAJOR_VERSION STREQUAL "6")

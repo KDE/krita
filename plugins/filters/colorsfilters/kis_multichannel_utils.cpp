@@ -41,6 +41,28 @@ QVector<VirtualChannelInfo> getVirtualChannels(const KoColorSpace *cs,
     QList<KoChannelInfo *> sortedChannels =
         KoChannelInfo::displayOrderSorted(cs->channels());
 
+    if (maxChannels >= 0 && maxChannels == sortedChannels.size()) {
+        /**
+         * This is the extremely old version of the filter (< Krita 3.0).
+         * It has the following curves layout: R, G, B, A.
+         */
+        supportsLightness = false;
+        supportsHue = false;
+        supportsSaturation = false;
+    } else if (maxChannels >= 0 && maxChannels == sortedChannels.size() + 2) {
+        /**
+         * This is the old version of the filter (Krita [3.0, 5.0]).
+         * It has the following channel layout: RGBA, R, G, B, A, Lightness.
+         */
+        supportsHue = false;
+        supportsSaturation = false;
+    } else {
+        /**
+         * Starting Krita 5.1.0 Krita started to use the latest layout:
+         * RGBA, R, G, B, A, Hue, Saturation, Lightness
+         */
+    }
+
     if (supportsLightness) {
         vchannels << VirtualChannelInfo(VirtualChannelInfo::ALL_COLORS, -1, 0, cs);
     }

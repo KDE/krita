@@ -168,6 +168,7 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
 {
     QList<KisCubicCurve> curves;
     quint16 numTransfers = 0;
+    quint16 numTransfersWithAlpha = 0;
     int version;
     version = root.attribute("version").toInt();
 
@@ -175,15 +176,17 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
     QString attributeName;
     KisCubicCurve curve;
     quint16 index;
+    QRegExp curveRegexp("curve(\\d+)");
+
     while (!e.isNull()) {
         if ((attributeName = e.attribute("name")) == "nTransfers") {
             numTransfers = e.text().toUShort();
+        } else if ((attributeName = e.attribute("name")) == "nTransfersWithAlpha") {
+            numTransfersWithAlpha = e.text().toUShort();
         } else {
-            QRegExp rx("curve(\\d+)");
+            if (curveRegexp.indexIn(attributeName, 0) != -1) {
 
-            if (rx.indexIn(attributeName, 0) != -1) {
-
-                index = rx.cap(1).toUShort();
+                index = curveRegexp.cap(1).toUShort();
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
@@ -193,6 +196,22 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
             }
         }
         e = e.nextSiblingElement();
+    }
+
+    /**
+     * In Krita 2.9 we stored alpha channel under a separate tag, so we
+     * should addend it separately if present
+     */
+    if (numTransfersWithAlpha > numTransfers) {
+        e = root.firstChild().toElement();
+        while (!e.isNull()) {
+            if ((attributeName = e.attribute("name")) == "alphaCurve") {
+                if (!e.text().isEmpty()) {
+                    curves.append(KisCubicCurve(e.text()));
+                }
+            }
+            e = e.nextSiblingElement();
+        }
     }
 
     //prepend empty curves for the brightness contrast filter.
@@ -451,15 +470,56 @@ void KisMultiChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
         warnKrita << "WARNING:        got:" << cfg->curves().size();
         return;
     } else {
-        if (cfg->curves().size() < m_virtualChannels.size()) {
+        if (cfg->curves().size() == m_virtualChannels.size()) {
+            for (int ch = 0; ch < cfg->curves().size(); ch++) {
+                m_curves[ch] = cfg->curves()[ch];
+            }
+        } else {
             // The configuration does not cover all our channels.
             // This happens when loading a document from an older version, which supported fewer channels.
             // Reset to make sure the unspecified channels have their default values.
             resetCurves();
-        }
 
-        for (int ch = 0; ch < cfg->curves().size(); ch++) {
-            m_curves[ch] = cfg->curves()[ch];
+            auto compareChannels =
+                [] (const VirtualChannelInfo &lhs, const VirtualChannelInfo &rhs) -> bool {
+                return lhs.type() == rhs.type() &&
+                    (lhs.type() != VirtualChannelInfo::REAL || lhs.pixelIndex() == rhs.pixelIndex());
+            };
+
+            const KoColorSpace *targetColorSpace = m_dev->compositionSourceColorSpace();
+
+
+            /**
+             * Adjust the layout of channels in the configuration to the layout of the
+             * current version of Krita. When we pass number of loaded channels
+             * to getVirtualChannels() it automatically detects the version of Krita
+             * the configuration was created in.
+             */
+            QVector<VirtualChannelInfo> detectedCurves = KisMultiChannelUtils::getVirtualChannels(targetColorSpace, cfg->curves().size());
+
+            for (auto detectedIt = detectedCurves.begin(); detectedIt != detectedCurves.end(); ++detectedIt) {
+                auto dstIt = std::find_if(m_virtualChannels.begin(), m_virtualChannels.end(),
+                                          [=] (const VirtualChannelInfo &info) {
+                                              return compareChannels(*detectedIt, info);
+                                          });
+                if (dstIt != m_virtualChannels.end()) {
+                    const int srcIndex = std::distance(detectedCurves.begin(), detectedIt);
+                    const int dstIndex = std::distance(m_virtualChannels.begin(), dstIt);
+                    m_curves[dstIndex] = cfg->curves()[srcIndex];
+                } else {
+                    warnKrita << "WARNING: failed to find mapping of the channel in the filter configuration:";
+                    warnKrita << "WARNING:   channel:" << ppVar(detectedIt->name()) << ppVar(detectedIt->type())<< ppVar(detectedIt->pixelIndex());
+                    warnKrita << "WARNING:";
+
+                    for (auto it = detectedCurves.begin(); it != detectedCurves.end(); ++it) {
+                        warnKrita << "WARNING:   detected channels" << std::distance(detectedCurves.begin(), it) << ":" << it->name();
+                    }
+
+                    for (auto it = m_virtualChannels.begin(); it != m_virtualChannels.end(); ++it) {
+                        warnKrita << "WARNING:   read channels" << std::distance(m_virtualChannels.begin(), it) << ":" << it->name();
+                    }
+                }
+            }
         }
     }
 

@@ -115,9 +115,8 @@ QVariant KisCompositeOpListModel::data(const QModelIndex& idx, int role) const
             QStyle *style = QApplication::style();
             QStyleOptionButton so;
             QSize size = style->sizeFromContents(QStyle::CT_CheckBox, &so, QSize(), 0);
-
-            const QIcon icon = KisIconUtils::loadIcon("warning").pixmap(size);
-            return icon;
+            const QPixmap pixmap = KisIconUtils::loadIcon("warning").pixmap(size);
+            return pixmap;
         }
     }
 

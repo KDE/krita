@@ -5,6 +5,7 @@
  */
 
 #include "kis_command_utils.h"
+#include "kis_assert.h"
 
 namespace KisCommandUtils
 {

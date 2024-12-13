@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-05 03:24+0000\n"
+"POT-Creation-Date: 2024-12-13 03:19+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16313,7 +16313,7 @@ msgstr "找不到 \"文字\" 节点！"
 msgid "Unknown error writing SVG text element"
 msgstr "写入 SVG 文字元素时发生未知错误"
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "更改线段"
@@ -19465,7 +19465,7 @@ msgstr "本地资源"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -19612,7 +19612,7 @@ msgstr "状态"
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:113
+#: libs/resourcewidgets/KisIconToolTip.cpp:109
 #, kde-format
 msgid "Location"
 msgstr "位置"
@@ -19642,7 +19642,7 @@ msgstr "md5 校验和"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -19907,7 +19907,7 @@ msgstr "资源名称"
 msgid "Tag File Name"
 msgstr "标签文件名"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:110
+#: libs/resourcewidgets/KisIconToolTip.cpp:106
 #, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -43920,7 +43920,7 @@ msgstr "&HSV 调整..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL 调整"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

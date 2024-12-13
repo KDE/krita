@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-05 03:24+0000\n"
+"POT-Creation-Date: 2024-12-13 03:19+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -16501,7 +16501,7 @@ msgstr ""
 msgid "Unknown error writing SVG text element"
 msgstr ""
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
@@ -19738,7 +19738,7 @@ msgstr "&Lemel ar renkell"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -19888,7 +19888,7 @@ msgstr "Treiñ"
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:113
+#: libs/resourcewidgets/KisIconToolTip.cpp:109
 #, fuzzy, kde-format
 #| msgid "Rotating"
 msgid "Location"
@@ -19920,7 +19920,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -20191,7 +20191,7 @@ msgstr "&Danvezioù"
 msgid "Tag File Name"
 msgstr "Anv ar restr"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:110
+#: libs/resourcewidgets/KisIconToolTip.cpp:106
 #, fuzzy, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -43898,7 +43898,7 @@ msgstr "Gwisk nevez"
 msgid "HSV/HSL Adjustment"
 msgstr "Gwisk nevez"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

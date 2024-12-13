@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-05 03:24+0000\n"
+"POT-Creation-Date: 2024-12-13 03:19+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17613,7 +17613,7 @@ msgstr ""
 msgid "Unknown error writing SVG text element"
 msgstr ""
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 #, fuzzy
 #| msgid "Change parameter"
 msgctxt "(qtundo-format)"
@@ -21126,7 +21126,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:374
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:381
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:413
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
@@ -21314,7 +21314,7 @@ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:113
+#: libs/resourcewidgets/KisIconToolTip.cpp:109
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Location"
@@ -21347,7 +21347,7 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:100
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -21643,7 +21643,7 @@ msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 msgid "Tag File Name"
 msgstr "ਸੰਭਾਲੋ"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:110
+#: libs/resourcewidgets/KisIconToolTip.cpp:106
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgctxt "a placeholder name for the default storage of resources"
@@ -47533,7 +47533,7 @@ msgstr "ਡੌਕੂਮੈਂਟ"
 msgid "HSV/HSL Adjustment"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

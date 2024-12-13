@@ -50,7 +50,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPaint
     , m_firstRun(true)
     , m_sizeOption(settings.data())
     , m_ratioOption(settings.data())
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_spacingOption(settings.data())
     , m_rateOption(settings.data())
     , m_rotationOption(settings.data())

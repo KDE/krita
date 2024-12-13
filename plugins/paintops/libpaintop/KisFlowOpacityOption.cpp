@@ -14,7 +14,7 @@
 
 
 KisFlowOpacityOption2::KisFlowOpacityOption2(const KisPropertiesConfiguration *setting, KisNodeSP currentNode)
-    : m_opacityOption(setting),
+    : m_opacityOption(setting, currentNode),
       m_flowOption(setting)
 {
     if (currentNode &&

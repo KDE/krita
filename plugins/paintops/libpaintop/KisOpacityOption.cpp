@@ -5,18 +5,26 @@
  */
 #include "KisOpacityOption.h"
 
+#include <kis_properties_configuration.h>
 #include <kis_painter.h>
+#include <kis_node.h>
+#include <kis_indirect_painting_support.h>
 
-qreal KisOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
+
+KisOpacityOption::KisOpacityOption(const KisPropertiesConfiguration *setting, KisNodeSP currentNode)
+    : BaseClass(setting)
 {
-    if (!isChecked()) {
-        return painter->opacityF();
+    if (currentNode &&
+        setting->getString(KisPropertiesConfiguration::extractedPrefixKey()).isEmpty()) {
+
+        KisIndirectPaintingSupport *indirect =
+            dynamic_cast<KisIndirectPaintingSupport*>(currentNode.data());
+        m_indirectPaintingActive = indirect && indirect->hasTemporaryTarget();
     }
-    qreal origOpacity = painter->opacityF();
+}
 
-    qreal opacity = origOpacity * computeSizeLikeValue(info);
-    qreal opacity2 = qBound<qreal>(OPACITY_TRANSPARENT_F, opacity, OPACITY_OPAQUE_F);
-
-    painter->setOpacityUpdateAverage(opacity2);
-    return origOpacity;
+void KisOpacityOption::apply(KisPainter* painter, const KisPaintInformation& info) const
+{
+    const qreal opacity = isChecked() ? computeSizeLikeValue(info, !m_indirectPaintingActive) : 1.0;
+    painter->setOpacityUpdateAverage(opacity);
 }

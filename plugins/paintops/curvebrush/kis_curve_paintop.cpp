@@ -24,7 +24,7 @@
 
 KisCurvePaintOp::KisCurvePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_lineWidthOption(settings.data())
     , m_curvesOpacityOption(settings.data())
     , m_painter(0)
@@ -68,10 +68,9 @@ void KisCurvePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
 
     QRect rc = m_dab->extent();
 
-    qreal origOpacity = m_opacityOption.apply(painter(), pi2);
+    m_opacityOption.apply(painter(), pi2);
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
     painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacityF(origOpacity);
 }
 
 void KisCurvePaintOp::paintLine(KisPaintDeviceSP dab, const KisPaintInformation &pi1, const KisPaintInformation &pi2)

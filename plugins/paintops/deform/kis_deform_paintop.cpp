@@ -40,7 +40,7 @@
 KisDeformPaintOp::KisDeformPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
     , m_sizeOption(settings.data())
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_rotationOption(settings.data())
     , m_rateOption(settings.data())
 {
@@ -120,10 +120,9 @@ KisSpacingInformation KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         return updateSpacingImpl(info);
     }
 
-    qreal origOpacity = m_opacityOption.apply(painter(), info);
+    m_opacityOption.apply(painter(), info);
     painter()->bltFixedWithFixedSelection(x, y, dab, mask, mask->bounds().width() , mask->bounds().height());
     painter()->renderMirrorMask(QRect(QPoint(x, y), QSize(mask->bounds().width() , mask->bounds().height())), dab, mask);
-    painter()->setOpacityF(origOpacity);
 
     return updateSpacingImpl(info);
 }

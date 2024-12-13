@@ -53,7 +53,7 @@
 
 KisSketchPaintOp::KisSketchPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_sizeOption(settings.data())
     , m_rotationOption(settings.data())
     , m_rateOption(settings.data())
@@ -299,11 +299,10 @@ void KisSketchPaintOp::doPaintLine(const KisPaintInformation &pi1, const KisPain
     m_count++;
 
     QRect rc = m_dab->extent();
-    qreal origOpacity = m_opacityOption.apply(painter(), pi2);
+    m_opacityOption.apply(painter(), pi2);
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
     painter()->renderMirrorMask(rc, m_dab);
-    painter()->setOpacityF(origOpacity);
 }
 
 

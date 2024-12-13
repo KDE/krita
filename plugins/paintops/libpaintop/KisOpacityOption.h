@@ -15,10 +15,14 @@ class PAINTOP_EXPORT KisOpacityOption : public KisStandardOption<KisOpacityOptio
 public:
     using BaseClass = KisStandardOption<KisOpacityOptionData>;
 
-    using BaseClass::BaseClass;
+    KisOpacityOption(const KisPropertiesConfiguration *setting, KisNodeSP currentNode);
+
     using BaseClass::apply;
 
-    qreal apply(KisPainter* painter, const KisPaintInformation& info) const;
+    void apply(KisPainter* painter, const KisPaintInformation& info) const;
+
+private:
+    bool m_indirectPaintingActive = false;
 };
 
 #endif // KISOPACITYOPTION_H

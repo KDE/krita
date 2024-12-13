@@ -56,7 +56,7 @@ KisDuplicateOp::KisDuplicateOp(const KisPaintOpSettingsSP settings, KisPainter *
     , m_node(node)
     , m_settings(static_cast<KisDuplicateOpSettings*>(const_cast<KisPaintOpSettings*>(settings.data())))
     , m_sizeOption(settings.data())
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_rotationOption(settings.data())
 {
     Q_ASSERT(settings);
@@ -109,7 +109,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     qreal rotation = m_rotationOption.apply(info);
 
-    qreal opacity = m_opacityOption.apply(painter(),info);
+    m_opacityOption.apply(painter(),info);
 
     qreal scale = m_sizeOption.apply(info);
 
@@ -268,8 +268,6 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     painter()->renderMirrorMaskSafe(dstRect, m_srcdev, 0, 0, dab,
                                     !m_dabCache->needSeparateOriginal());
-
-    painter()->setOpacityF(opacity);
 
     return effectiveSpacing(scale);
 }

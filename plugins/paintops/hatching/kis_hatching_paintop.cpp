@@ -38,7 +38,7 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisP
     , m_crosshatchingOption(settings.data())
     , m_separationOption(settings.data())
     , m_thicknessOption(settings.data())
-    , m_opacityOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_sizeOption(settings.data())
 {
     Q_UNUSED(node);
@@ -89,7 +89,7 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return KisSpacingInformation(1.0);
     KisDabShape shape(scale, 1.0, 0.0);
 
-    qreal origOpacity = m_opacityOption.apply(painter(), info);
+    m_opacityOption.apply(painter(), info);
 
     /*----Fetch the Dab----*/
     static const KoColorSpace *cs = KoColorSpaceRegistry::instance()->alpha8();
@@ -166,7 +166,6 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
     painter()->renderMirrorMaskSafe(QRect(QPoint(x, y), QSize(sw, sh)), m_hatchedDab, 0, 0, maskDab,
                                     !m_dabCache->needSeparateOriginal());
-    painter()->setOpacityF(origOpacity);
 
     return effectiveSpacing(scale);
 }

@@ -556,12 +556,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
                 KoShapeManager *shapeManager = canvas()->shapeManager();
                 KoSelection *selection = shapeManager->selection();
-
-                ENTER_FUNCTION() << ppVar(selection->selectedEditableShapes());
-
                 KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
-
-                ENTER_FUNCTION() << ppVar(shape) << (shape && !selection->isSelected(shape));
 
                 if (shape && !selection->isSelected(shape)) {
 

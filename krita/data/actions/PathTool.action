@@ -52,6 +52,16 @@
       <isCheckable>false</isCheckable>
       <text>Break at point</text>
     </Action>
+    <Action name="path-break-selection">
+      <iconText>Break at selection</iconText>
+      <shortcut>Ctrl+B</shortcut>
+      <toolTip>Break at selection</toolTip>
+      <icon>path-break-point</icon>
+      <whatsThis></whatsThis>
+      <statusTip></statusTip>
+      <isCheckable>false</isCheckable>
+      <text>Break at selection</text>
+    </Action>
     <Action name="pathpoint-line">
       <iconText>Make line point</iconText>
       <shortcut></shortcut>

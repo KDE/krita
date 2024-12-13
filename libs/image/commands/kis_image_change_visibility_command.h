@@ -24,6 +24,7 @@ public:
 
 private:
     bool m_visible;
+    bool m_oldVisible;
     KisNodeSP m_node;
 
 };

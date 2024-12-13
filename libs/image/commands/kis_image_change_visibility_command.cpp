@@ -17,6 +17,7 @@ KisImageChangeVisibilityCommand::KisImageChangeVisibilityCommand(bool visibility
 {
     m_node = node;
     m_visible = visibility;
+    m_oldVisible = node->visible();
 }
 
 void KisImageChangeVisibilityCommand::redo()
@@ -26,5 +27,5 @@ void KisImageChangeVisibilityCommand::redo()
 
 void KisImageChangeVisibilityCommand::undo()
 {
-    m_node->setVisible(!m_visible);
+    m_node->setVisible(m_oldVisible);
 }

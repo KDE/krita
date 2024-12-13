@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 03:19+0000\n"
+"POT-Creation-Date: 2024-12-13 12:22+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -17580,7 +17580,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "سۈرەت رازمېرىنى ئۆزگەرتىش"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2025
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2030
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17882,56 +17882,56 @@ msgstr "نۇقتىلارنى بىرىكتۈر"
 msgid "Copy of"
 msgstr "%1 نىڭ كۆپەيتىلمىسى"
 
-#: libs/image/kis_layer_utils.cpp:1764
+#: libs/image/kis_layer_utils.cpp:1769
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "ئېنىقلىق"
 
-#: libs/image/kis_layer_utils.cpp:1988
+#: libs/image/kis_layer_utils.cpp:1993
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "مۇندەرىجە تاللاش"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ئاتى:"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "كۆرۈنۈشچان"
 
-#: libs/image/kis_layer_utils.cpp:2074
+#: libs/image/kis_layer_utils.cpp:2079
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "تاللىغان شەكلى"
 
-#: libs/image/kis_layer_utils.cpp:2097
+#: libs/image/kis_layer_utils.cpp:2102
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/image/kis_layer_utils.cpp:2110
+#: libs/image/kis_layer_utils.cpp:2115
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2339
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ئالفا"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to Path"

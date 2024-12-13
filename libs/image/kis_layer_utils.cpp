@@ -1722,8 +1722,13 @@ namespace Private {
         int putAfterIndex = -1;
 
         Q_FOREACH(KisNodeSP node, nodes) {
-            if (node->visible() || node->userLocked()) {
+            if (node->visible()) {
                 visibleNodes << node;
+            } else if (node->userLocked()) {
+                /**
+                 * When a layer is invisible and user-locked we should just skip
+                 * it and do neither merge nor remove it.
+                 */
             } else {
                 *invisibleNodes << node;
 

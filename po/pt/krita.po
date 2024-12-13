@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-12 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 01:49+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -20116,12 +20116,12 @@ msgstr "Recursos Locais"
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:297
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:357
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:220
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:370
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:386
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:218
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:320
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
@@ -20270,7 +20270,7 @@ msgstr "Estado"
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:113
+#: libs/resourcewidgets/KisIconToolTip.cpp:108
 #, kde-format
 msgid "Location"
 msgstr "Localização"
@@ -20300,7 +20300,7 @@ msgstr "md5sum"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:99
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -20565,7 +20565,7 @@ msgstr "Nome do Recurso"
 msgid "Tag File Name"
 msgstr "Nome do Ficheiro da Marca"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:110
+#: libs/resourcewidgets/KisIconToolTip.cpp:105
 #, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -27210,7 +27210,7 @@ msgstr "Predefinição actual do pincel"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:78
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:76
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
@@ -29790,7 +29790,7 @@ msgstr "Área &Acoplável"
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
 #, kde-format
 msgid "Patterns"
@@ -29804,7 +29804,7 @@ msgstr "Padrão Personalizado"
 #: libs/ui/kis_control_frame.cpp:246 libs/ui/KisApplication.cpp:336
 #: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
 #, kde-format
 msgid "Gradients"
@@ -30759,7 +30759,7 @@ msgstr "Pontas dos pincéis"
 
 #: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Palettes"
@@ -30767,7 +30767,7 @@ msgstr "Paletas"
 
 #: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format
 msgid "Workspaces"
@@ -32276,36 +32276,36 @@ msgstr "Mas a Prova Suave continua desactivada."
 msgid "Gamut Warnings turned off."
 msgstr "Os Avisos de Gamute foram desactivados."
 
-#: libs/ui/KisViewManager.cpp:793
+#: libs/ui/KisViewManager.cpp:792
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil de Autor Activo"
 
-#: libs/ui/KisViewManager.cpp:923
+#: libs/ui/KisViewManager.cpp:922
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Cópia)"
 
-#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
+#: libs/ui/KisViewManager.cpp:1065 libs/ui/KisViewManager.cpp:1141
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Esgotaram-se os nomes alternativos; tente gravar manualmente com um número "
 "superior"
 
-#: libs/ui/KisViewManager.cpp:1066
+#: libs/ui/KisViewManager.cpp:1065
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Não foi possível gravar a versão incremental"
 
-#: libs/ui/KisViewManager.cpp:1142
+#: libs/ui/KisViewManager.cpp:1141
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Não foi possível gravar a cópia de segurança incremental"
 
-#: libs/ui/KisViewManager.cpp:1391
+#: libs/ui/KisViewManager.cpp:1390
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -32314,13 +32314,13 @@ msgstr ""
 "A ir para o modo 'Apenas de Tela'.\n"
 "Carregue em %1 para voltar atrás."
 
-#: libs/ui/KisViewManager.cpp:1450
+#: libs/ui/KisViewManager.cpp:1449
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Abrir a Pasta de Recursos"
 
-#: libs/ui/KisViewManager.cpp:1454
+#: libs/ui/KisViewManager.cpp:1453
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -32345,19 +32345,19 @@ msgstr ""
 "<p><b>Localização privada da aplicação</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1469
+#: libs/ui/KisViewManager.cpp:1468
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Abrir no AppData do &utilizador"
 
-#: libs/ui/KisViewManager.cpp:1470
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Abrir numa localização &privada da aplicação"
 
-#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
+#: libs/ui/KisViewManager.cpp:1582 libs/ui/KisViewManager.cpp:1600
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -39394,7 +39394,7 @@ msgstr "Editar a máscara do gamute"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
 #, kde-format
 msgid "Gamut Masks"
 msgstr "Máscaras do Gamute"
@@ -40120,7 +40120,7 @@ msgstr "Configurar os pontos preto e branco da janela"
 msgid "Overview"
 msgstr "Introdução"
 
-#: plugins/dockers/overview/overviewdocker_page.cpp:157
+#: plugins/dockers/overview/overviewdocker_page.cpp:160
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
@@ -44055,13 +44055,13 @@ msgctxt ""
 msgid "Activate"
 msgstr "Activar"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:127
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:125
 #, kde-format
 msgid "Create Resource Bundle"
 msgstr "Criar um Grupo de Recursos"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:128
 #: plugins/extensions/resourcemanager/wdgside.ui:137
 #, fuzzy, kde-format
 #| msgid "Storage Resources"
@@ -44069,7 +44069,7 @@ msgid "Choose Resources"
 msgstr "Recursos de Armazenamento"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:129
 #: plugins/extensions/resourcemanager/wdgside.ui:80
 #, fuzzy, kde-format
 #| msgid "Choose a color"
@@ -44077,7 +44077,7 @@ msgid "Choose Tags"
 msgstr "Escolher uma cor"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:99
 #, fuzzy, kde-format
 #| msgctxt ""
@@ -44087,30 +44087,30 @@ msgstr "Escolher uma cor"
 msgid "Enter Bundle Details"
 msgstr "Detalhes da Elevação"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #, fuzzy, kde-format
 #| msgid "Save Location:"
 msgid "Enter Save Location"
 msgstr "Localização da Gravação:"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:136
 #, kde-format
 msgid "Edit Resource Bundle"
 msgstr "Editar o Grupo de Recursos"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:139
 #, fuzzy, kde-format
 #| msgid "Resources"
 msgid "Edit Resources"
 msgstr "Recursos"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:140
 #, fuzzy, kde-format
 #| msgid "Edit Text"
 msgid "Edit Tags"
 msgstr "Editar o Texto"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
@@ -44119,13 +44119,13 @@ msgstr "Editar o Texto"
 msgid "Edit Bundle Details"
 msgstr "Detalhes da Elevação"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
 #, fuzzy, kde-format
 #| msgid "Save Location:"
 msgid "Edit Save Location"
 msgstr "Localização da Gravação:"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:219
 #, kde-format
 msgctxt "Warning message"
 msgid ""
@@ -44135,43 +44135,43 @@ msgstr ""
 "Mais que um recurso partilha o mesmo nome do ficheiro '%1'. Por favor, "
 "exporte-os em grupos separados."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:320
 #, kde-format
 msgid "The resource bundle name cannot be empty."
 msgstr "O nome do grupo de recursos não pode estar vazio."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #, kde-format
 msgid "The save location cannot be empty."
 msgstr "A localização de gravação não pode estar vazia."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:349
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
 #, kde-format
 msgctxt "In a dialog asking whether to overwrite a bundle (resource pack)"
 msgid "A bundle with this name already exists."
 msgstr "Já existe um grupo com esse nome."
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:350
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:339
 #, kde-format
 msgctxt "In a dialog regarding overwriting a bundle (resource pack)"
 msgid "Do you want to overwrite the existing bundle?"
 msgstr "Deseja realmente sobrepor o grupo existente?"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:371
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:387
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:360
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:376
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "Não foi possível abrir o '%1' para o gravar."
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:57
 #, kde-format
 msgid "Brushes"
 msgstr "Pincéis"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #, kde-format
 msgid "Brush Presets"
 msgstr "Predefinições do Pincel"
@@ -44245,7 +44245,7 @@ msgctxt ""
 msgid "What resource do you want to import these %1 files as?"
 msgstr "Com que recurso deseja importar estes ficheiros %1?"
 
-#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:93
+#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
 msgid "Select a directory to save the bundle"
 msgstr "Seleccione uma pasta onde gravar o grupo"
@@ -45324,7 +45324,7 @@ msgstr "Ajuste do &HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Ajuste do HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

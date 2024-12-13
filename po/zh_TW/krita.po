@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-12 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 01:49+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -19666,12 +19666,12 @@ msgstr "本機資源"
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:297
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:357
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:220
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:370
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:386
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:218
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:320
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
@@ -19817,7 +19817,7 @@ msgstr "狀態"
 #: libs/resources/KisResourceModel.cpp:138
 #: libs/resources/KisStorageModel.cpp:478
 #: libs/resources/KisTagResourceModel.cpp:640
-#: libs/resourcewidgets/KisIconToolTip.cpp:113
+#: libs/resourcewidgets/KisIconToolTip.cpp:108
 #, kde-format
 msgid "Location"
 msgstr "位置"
@@ -19847,7 +19847,7 @@ msgstr "MD5 雜湊值"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
 #: libs/resources/KisResourceModel.cpp:148
 #: libs/resources/KisTagResourceModel.cpp:650
-#: libs/resourcewidgets/KisIconToolTip.cpp:104
+#: libs/resourcewidgets/KisIconToolTip.cpp:99
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
@@ -20112,7 +20112,7 @@ msgstr "資源名稱"
 msgid "Tag File Name"
 msgstr "標籤檔案名稱"
 
-#: libs/resourcewidgets/KisIconToolTip.cpp:110
+#: libs/resourcewidgets/KisIconToolTip.cpp:105
 #, kde-format
 msgctxt "a placeholder name for the default storage of resources"
 msgid "resource folder"
@@ -26622,7 +26622,7 @@ msgstr "目前筆刷預設"
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:78
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:76
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
@@ -29141,7 +29141,7 @@ msgstr "工具面板(&D)"
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:64
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:260
 #, kde-format
 msgid "Patterns"
@@ -29155,7 +29155,7 @@ msgstr "自訂圖案"
 #: libs/ui/kis_control_frame.cpp:246 libs/ui/KisApplication.cpp:336
 #: libs/ui/KisApplication.cpp:337
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
 #, kde-format
 msgid "Gradients"
@@ -30079,7 +30079,7 @@ msgstr "筆尖"
 
 #: libs/ui/KisApplication.cpp:339
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:65
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
 #, kde-format
 msgid "Palettes"
@@ -30087,7 +30087,7 @@ msgstr "調色板"
 
 #: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:66
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
 #, kde-format
 msgid "Workspaces"
@@ -31558,34 +31558,34 @@ msgstr "但螢幕校樣仍然關閉。"
 msgid "Gamut Warnings turned off."
 msgstr "已關閉色域警告。"
 
-#: libs/ui/KisViewManager.cpp:793
+#: libs/ui/KisViewManager.cpp:792
 #, kde-format
 msgid "Active Author Profile"
 msgstr "目前作者檔案"
 
-#: libs/ui/KisViewManager.cpp:923
+#: libs/ui/KisViewManager.cpp:922
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (副本)"
 
-#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
+#: libs/ui/KisViewManager.cpp:1065 libs/ui/KisViewManager.cpp:1141
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "備用名稱數字已用盡，請手動輸入更大的數字儲存檔案"
 
-#: libs/ui/KisViewManager.cpp:1066
+#: libs/ui/KisViewManager.cpp:1065
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "無法儲存遞增版本"
 
-#: libs/ui/KisViewManager.cpp:1142
+#: libs/ui/KisViewManager.cpp:1141
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "無法儲存遞增備份"
 
-#: libs/ui/KisViewManager.cpp:1391
+#: libs/ui/KisViewManager.cpp:1390
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31594,13 +31594,13 @@ msgstr ""
 "即將切換為畫布獨佔模式。\n"
 "按下 %1 返回。"
 
-#: libs/ui/KisViewManager.cpp:1450
+#: libs/ui/KisViewManager.cpp:1449
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "開啟資源資料夾"
 
-#: libs/ui/KisViewManager.cpp:1454
+#: libs/ui/KisViewManager.cpp:1453
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31623,19 +31623,19 @@ msgstr ""
 "<p><b>應用程式內部資料夾</b>：<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1469
+#: libs/ui/KisViewManager.cpp:1468
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "開啟使用者 AppData (&U)"
 
-#: libs/ui/KisViewManager.cpp:1470
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "開啟應用程式內部資料夾(&P)"
 
-#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
+#: libs/ui/KisViewManager.cpp:1582 libs/ui/KisViewManager.cpp:1600
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38442,7 +38442,7 @@ msgstr "編輯該色域遮罩"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:57
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:64
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
 #, kde-format
 msgid "Gamut Masks"
 msgstr "色域遮罩"
@@ -39157,7 +39157,7 @@ msgstr "變更檢視所用的黑點及白點"
 msgid "Overview"
 msgstr "總覽圖"
 
-#: plugins/dockers/overview/overviewdocker_page.cpp:157
+#: plugins/dockers/overview/overviewdocker_page.cpp:160
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
@@ -43031,63 +43031,63 @@ msgctxt ""
 msgid "Activate"
 msgstr "啟用"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:127
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:125
 #, kde-format
 msgid "Create Resource Bundle"
 msgstr "建立資源包"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseRes)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:128
 #: plugins/extensions/resourcemanager/wdgside.ui:137
 #, kde-format
 msgid "Choose Resources"
 msgstr "選取資源"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnChooseTags)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:129
 #: plugins/extensions/resourcemanager/wdgside.ui:80
 #, kde-format
 msgid "Choose Tags"
 msgstr "選取標籤"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:130
 #: plugins/extensions/resourcemanager/wdgside.ui:99
 #, kde-format
 msgid "Enter Bundle Details"
 msgstr "輸入資源包詳細資料"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:131
 #, kde-format
 msgid "Enter Save Location"
 msgstr "輸入儲存位置"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:136
 #, kde-format
 msgid "Edit Resource Bundle"
 msgstr "編輯資源包"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:139
 #, kde-format
 msgid "Edit Resources"
 msgstr "編輯資源"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:140
 #, kde-format
 msgid "Edit Tags"
 msgstr "編輯標籤"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
 #, kde-format
 msgid "Edit Bundle Details"
 msgstr "編輯資源包詳細資料"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
 #, kde-format
 msgid "Edit Save Location"
 msgstr "編輯儲存位置"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:219
 #, kde-format
 msgctxt "Warning message"
 msgid ""
@@ -43096,43 +43096,43 @@ msgid ""
 msgstr ""
 "多於一項資源使用了相同的檔案名稱「%1」。請分別將它們匯出為獨立的資源包。"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:320
 #, kde-format
 msgid "The resource bundle name cannot be empty."
 msgstr "資源包的名稱不能為空。"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #, kde-format
 msgid "The save location cannot be empty."
 msgstr "儲存位置不能為空。"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:349
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:338
 #, kde-format
 msgctxt "In a dialog asking whether to overwrite a bundle (resource pack)"
 msgid "A bundle with this name already exists."
 msgstr "已經有同名的資源包。"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:350
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:339
 #, kde-format
 msgctxt "In a dialog regarding overwriting a bundle (resource pack)"
 msgid "Do you want to overwrite the existing bundle?"
 msgstr "您確定要覆寫現存的資源包嗎？"
 
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:371
-#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:387
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:360
+#: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:376
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "無法開啟「%1」以進行儲存。"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:57
 #, kde-format
 msgid "Brushes"
 msgstr "筆刷"
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
-#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
+#: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #, kde-format
 msgid "Brush Presets"
 msgstr "筆刷預設"
@@ -43206,7 +43206,7 @@ msgctxt ""
 msgid "What resource do you want to import these %1 files as?"
 msgstr "您希望要以甚麽類型的資源匯入這些 %1 檔案？"
 
-#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:93
+#: plugins/extensions/resourcemanager/page_bundle_saver.cpp:95
 #, kde-format
 msgid "Select a directory to save the bundle"
 msgstr "選擇儲存資源包的資料夾"
@@ -44269,7 +44269,7 @@ msgstr "&HSV 調整…"
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL 調整"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "

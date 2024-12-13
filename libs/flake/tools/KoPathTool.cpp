@@ -99,7 +99,6 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m_actionBreakPoint = action("path-break-point");
     m_actionBreakSegment = action("path-break-segment");
     m_actionBreakSelection = action("path-break-selection");
-    KIS_ASSERT(m_actionBreakSelection);
     m_actionJoinSegment = action("pathpoint-join");
     m_actionMergePoints = action("pathpoint-merge");
     m_actionConvertToPath = action("convert-to-path");
@@ -572,12 +571,7 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
                 KoShapeManager *shapeManager = canvas()->shapeManager();
                 KoSelection *selection = shapeManager->selection();
-
-                ENTER_FUNCTION() << ppVar(selection->selectedEditableShapes());
-
                 KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
-
-                ENTER_FUNCTION() << ppVar(shape) << (shape && !selection->isSelected(shape));
 
                 if (shape && !selection->isSelected(shape)) {
 

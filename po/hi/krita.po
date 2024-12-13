@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -17137,7 +17137,7 @@ msgid "Reselect"
 msgstr "फिर से चुनें"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17684,48 +17684,48 @@ msgstr "नीचे सम्मिलित करें"
 msgid "Copy of"
 msgstr "नकल"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "प्रक्षेपण रंग बदलें"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "चयनित नोड्स का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "दृश्यमान परतों से नई परत"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "दृश्यमान से"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "चयन मास्क का विलय करें"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "परत समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "चित्र समतल करें"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "अल्फा को मास्क में विभाजित करें"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "चित्रकारी परत में बदलें"

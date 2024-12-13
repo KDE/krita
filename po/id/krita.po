@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -16993,7 +16993,7 @@ msgid "Reselect"
 msgstr "Pilih Ulang"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17525,48 +17525,48 @@ msgstr ""
 msgid "Copy of"
 msgstr "Salinan"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Terlihat"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Ratakan Lapisan"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Ratakan Gambar"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Belah Alfa ke dalam sebuah Mask"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konversikan ke Lapisan Lukis"

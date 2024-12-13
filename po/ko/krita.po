@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17964,7 +17964,7 @@ msgid "Reselect"
 msgstr "다시 선택"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -18508,48 +18508,48 @@ msgstr "아래 병합"
 msgid "Copy of"
 msgstr "사본"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "투영 색상 변경"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "선택한 노드 병합"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "보이는 항목에서 새로 만들기"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "보이기"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "선택 마스크 병합"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "레이어 병합"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "이미지 병합"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "알파를 마스크로 분할"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "칠하기 레이어로 변환"

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2004-05-25 15:34+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandriva.com>\n"
 "Language-Team: Brezhoneg <Suav.Icb@wanadoo.fr>\n"
@@ -17179,7 +17179,7 @@ msgid "Reselect"
 msgstr "Addibabit"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17740,57 +17740,57 @@ msgstr "Dibarzhoù"
 msgid "Copy of"
 msgstr "Eilañ ar gwer"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Kemmañ an etrelinenn"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Lemel al liv dibabet"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Profil"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Hewel"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Diuzadenn"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Siloù"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "&Treiñ ar skeudenn"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dibarzhoù alfa"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

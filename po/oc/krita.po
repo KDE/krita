@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -17183,7 +17183,7 @@ msgid "Reselect"
 msgstr "Seleccionar"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17742,56 +17742,56 @@ msgstr "Opcions"
 msgid "Copy of"
 msgstr "Linha"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Filtre"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Seleccion"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nom :"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visible"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Seleccion"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Filtre"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Filtre"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Opcions"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"

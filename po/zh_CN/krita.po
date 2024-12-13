@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16974,7 +16974,7 @@ msgid "Reselect"
 msgstr "重新选择"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17504,48 +17504,48 @@ msgstr "向下合并图层"
 msgid "Copy of"
 msgstr "副本"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "更改视图色彩空间"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "合并选中的节点"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "用可见内容新建"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "可见"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "合并选区蒙版"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "合并图层效果"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "合并整个图像"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "拆分透明度到蒙版"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "转换为颜料图层"

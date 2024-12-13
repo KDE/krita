@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -17247,7 +17247,7 @@ msgstr ""
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17870,62 +17870,62 @@ msgstr ""
 msgid "Copy of"
 msgstr "Копия"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Изменение цвета проекции\n"
 "изменение цвета проекции"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Сведение выбранных узлов\n"
 "сведение выбранных узлов"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Создание слоя из видимого\n"
 "создание слоя из видимого"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видимый"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Объединение выбранных масок\n"
 "объединение выбранных масок"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Сведение слоя\n"
 "сведение слоя"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Сведение изображения\n"
 "сведение изображения"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Отделение альфа-канала в маску\n"
 "отделение альфа-канала в маску"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 01:49+0000\n"
+"POT-Creation-Date: 2024-12-13 10:55+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18332,7 +18332,7 @@ msgid "Reselect"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2045
+#: libs/image/kis_layer_utils.cpp:2050
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
@@ -18956,63 +18956,63 @@ msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 msgid "Copy of"
 msgstr "ਕਾਪੀ ਕਰੋ"
 
-#: libs/image/kis_layer_utils.cpp:1770
+#: libs/image/kis_layer_utils.cpp:1775
 #, fuzzy
 #| msgid "Change Connection"
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/image/kis_layer_utils.cpp:1996
+#: libs/image/kis_layer_utils.cpp:2001
 #, fuzzy
 #| msgid "Delete selected objects"
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "ਚੁਣੇ ਆਬਜੈਕਟ ਹਟਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2019
 #, fuzzy
 #| msgid "New Layer"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/image/kis_layer_utils.cpp:2015
+#: libs/image/kis_layer_utils.cpp:2020
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "ਲੇਅਰ ਹਟਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:2094
+#: libs/image/kis_layer_utils.cpp:2099
 #, fuzzy
 #| msgid "Collection"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/image/kis_layer_utils.cpp:2118
+#: libs/image/kis_layer_utils.cpp:2123
 #, fuzzy
 #| msgid "Create Layer"
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/image/kis_layer_utils.cpp:2134
+#: libs/image/kis_layer_utils.cpp:2139
 #, fuzzy
 #| msgid "Master Page"
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/image/kis_layer_utils.cpp:2360
+#: libs/image/kis_layer_utils.cpp:2365
 #, fuzzy
 #| msgid "Tool Options"
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/image/kis_layer_utils.cpp:2386
+#: libs/image/kis_layer_utils.cpp:2391
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"

@@ -451,7 +451,6 @@ void KisViewManager::setCurrentView(KisView *view)
         d->idleTasksManager.setImage(0);
     }
 
-
     QPointer<KisView> imageView = qobject_cast<KisView*>(view);
     d->currentImageView = imageView;
 

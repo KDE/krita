@@ -448,3 +448,5 @@ void KisZoomManager::updateZoomMarginSize()
     KisConfig cfg(true);
     m_zoomController->setZoomMarginSize(cfg.zoomMarginSize());
 }
+
+

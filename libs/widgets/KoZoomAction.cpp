@@ -274,8 +274,11 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     connect(zoomWidget, SIGNAL(canvasMappingModeChanged(bool)), this, SIGNAL(canvasMappingModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
+
     regenerateItems(d->effectiveZoom);
+
     syncSliderWithZoom();
+
     return zoomWidget;
 }
 

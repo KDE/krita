@@ -129,7 +129,6 @@ void KoCanvasControllerWidget::Private::activate()
             observer->setObservedCanvas(canvas);
         }
     }
-
 }
 
 void KoCanvasControllerWidget::Private::unsetCanvas()

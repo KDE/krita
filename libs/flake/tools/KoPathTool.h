@@ -96,6 +96,7 @@ private Q_SLOTS:
     void mergePoints();
     void breakAtPoint();
     void breakAtSegment();
+    void breakAtSelection();
     void pointSelectionChanged();
     void updateActions();
     void pointToLine();
@@ -133,6 +134,7 @@ private:
     QAction *m_actionRemovePoint;
     QAction *m_actionBreakPoint;
     QAction *m_actionBreakSegment;
+    QAction *m_actionBreakSelection;
     QAction *m_actionJoinSegment;
     QAction *m_actionMergePoints;
     QAction *m_actionConvertToPath;

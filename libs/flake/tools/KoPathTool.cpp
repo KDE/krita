@@ -98,6 +98,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     m_actionRemovePoint = action("pathpoint-remove");
     m_actionBreakPoint = action("path-break-point");
     m_actionBreakSegment = action("path-break-segment");
+    m_actionBreakSelection = action("path-break-selection");
+    KIS_ASSERT(m_actionBreakSelection);
     m_actionJoinSegment = action("pathpoint-join");
     m_actionMergePoints = action("pathpoint-merge");
     m_actionConvertToPath = action("convert-to-path");
@@ -412,6 +414,20 @@ void KoPathTool::breakAtPoint()
     }
 }
 
+void KoPathTool::breakAtSelection()
+{
+    Q_D(KoToolBase);
+
+    if (m_pointSelection.objectCount() == 1 && m_pointSelection.size() == 2) {
+        QList<KoPathPointData> segments(m_pointSelection.selectedSegmentsData());
+        if (segments.size() == 1) {
+            d->canvas->addCommand(new KoPathSegmentBreakCommand(segments.at(0)));
+        }
+    } else if (m_pointSelection.hasSelection()) {
+        d->canvas->addCommand(new KoPathBreakAtPointCommand(m_pointSelection.selectedPointsData()));
+    }
+}
+
 void KoPathTool::breakAtSegment()
 {
     Q_D(KoToolBase);
@@ -694,10 +710,16 @@ void KoPathTool::mouseMoveEvent(KoPointerEvent *event)
         uint selectedPointCount = m_pointSelection.size();
         if (selectedPointCount == 0)
             Q_EMIT statusTextChanged(QString());
-        else if (selectedPointCount == 1)
-            Q_EMIT statusTextChanged(i18n("Press B to break path at selected point."));
-        else
-            Q_EMIT statusTextChanged(i18n("Press B to break path at selected segments."));
+        else {
+            if (!m_actionBreakSelection->shortcut().isEmpty()) {
+                if (selectedPointCount == 1)
+                    Q_EMIT statusTextChanged(i18nc("%1 is a shortcut to be pressed", "Press %1 to break path at selected point.", m_actionBreakSelection->shortcut().toString()));
+                else
+                    Q_EMIT statusTextChanged(i18nc("%1 is a shortcut to be pressed", "Press %1 to break path at selected segments.", m_actionBreakSelection->shortcut().toString()));
+            } else {
+                Q_EMIT statusTextChanged(QString());
+            }
+        }
     }
 }
 
@@ -751,12 +773,6 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
 //            }
 //            break;
 #endif
-        case Qt::Key_B:
-            if (m_pointSelection.size() == 1)
-                breakAtPoint();
-            else if (m_pointSelection.size() >= 2)
-                breakAtSegment();
-            break;
         default:
             event->ignore();
             return;
@@ -884,6 +900,7 @@ void KoPathTool::activate(const QSet<KoShape*> &shapes)
     connect(m_actionRemovePoint, SIGNAL(triggered()), this, SLOT(removePoints()), Qt::UniqueConnection);
     connect(m_actionBreakPoint, SIGNAL(triggered()), this, SLOT(breakAtPoint()), Qt::UniqueConnection);
     connect(m_actionBreakSegment, SIGNAL(triggered()), this, SLOT(breakAtSegment()), Qt::UniqueConnection);
+    connect(m_actionBreakSelection, SIGNAL(triggered()), this, SLOT(breakAtSelection()), Qt::UniqueConnection);
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()), Qt::UniqueConnection);
     connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()), Qt::UniqueConnection);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()), Qt::UniqueConnection);
@@ -1043,6 +1060,7 @@ void KoPathTool::updateActions()
     m_actionCurveSegment->setEnabled(canConvertSegmentToCurve);
 
     m_actionBreakSegment->setEnabled(canSplitAtSegment);
+    m_actionBreakSelection->setEnabled(canSplitAtSegment | canBreakAtPoint);
 
     KoSelection *selection = canvas()->selectedShapesProxy()->selection();
     bool haveConvertibleShapes = false;
@@ -1080,6 +1098,7 @@ void KoPathTool::deactivate()
     disconnect(m_actionRemovePoint, 0, this, 0);
     disconnect(m_actionBreakPoint, 0, this, 0);
     disconnect(m_actionBreakSegment, 0, this, 0);
+    disconnect(m_actionBreakSelection, 0, this, 0);
     disconnect(m_actionJoinSegment, 0, this, 0);
     disconnect(m_actionMergePoints, 0, this, 0);
     disconnect(m_actionConvertToPath, 0, this, 0);

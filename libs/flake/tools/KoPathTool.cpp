@@ -535,10 +535,11 @@ void KoPathTool::repaintDecorations()
 void KoPathTool::mousePressEvent(KoPointerEvent *event)
 {
     // we are moving if we hit a point and use the left mouse button
-    event->ignore();
+
+    ENTER_FUNCTION() << ppVar(m_activeHandle);
+
     if (m_activeHandle) {
         m_currentStrategy.reset(m_activeHandle->handleMousePress(event));
-        event->accept();
     } else {
         if (event->button() & Qt::LeftButton) {
 
@@ -554,13 +555,16 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
 
                 KoPathPointData data(shape, index);
                 m_currentStrategy.reset(new KoPathSegmentChangeStrategy(this, event->point, data, m_activeSegment->positionOnSegment));
-                event->accept();
             } else {
 
                 KoShapeManager *shapeManager = canvas()->shapeManager();
                 KoSelection *selection = shapeManager->selection();
 
+                ENTER_FUNCTION() << ppVar(selection->selectedEditableShapes());
+
                 KoShape *shape = shapeManager->shapeAt(event->point, KoFlake::ShapeOnTop);
+
+                ENTER_FUNCTION() << ppVar(shape) << (shape && !selection->isSelected(shape));
 
                 if (shape && !selection->isSelected(shape)) {
 
@@ -572,7 +576,6 @@ void KoPathTool::mousePressEvent(KoPointerEvent *event)
                 } else {
                     KIS_ASSERT_RECOVER_RETURN(m_currentStrategy == 0);
                     m_currentStrategy.reset(new KoPathPointRubberSelectStrategy(this, event->point));
-                    event->accept();
                 }
             }
         }
@@ -784,8 +787,6 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event)
 void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
     Q_D(KoToolBase);
-    event->ignore();
-
     // check if we are doing something else at the moment
     if (m_currentStrategy) return;
 
@@ -803,10 +804,8 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
             m_pointSelection.add(p, false);
         }
         updateActions();
-        event->accept();
     } else if (!m_activeHandle && !m_activeSegment) {
         explicitUserStrokeEndRequest();
-        event->accept();
     }
 }
 

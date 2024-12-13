@@ -373,6 +373,11 @@ void KisZoomManager::slotScrollAreaSizeChanged()
     updateGuiAfterDocumentSize();
 }
 
+bool KisZoomManager::canvasMappingMode()
+{
+    return m_canvasMappingMode;
+}
+
 void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
 {
     KisImageSP image = m_view->image();

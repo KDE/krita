@@ -67,6 +67,8 @@ public:
 
     void updateZoomMarginSize();
 
+    bool canvasMappingMode();
+
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);

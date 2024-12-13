@@ -127,8 +127,11 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
 
     m_overviewWidget->setCanvas(m_canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
+        bool canvasMappingMode = m_canvas->imageView()->zoomManager()->canvasMappingMode();
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
-        static_cast<KoZoomWidget*>(m_zoomSlider)->setZoomInputFlat(false);
+        KoZoomWidget* zoomWidget = static_cast<KoZoomWidget*>(m_zoomSlider);
+        zoomWidget->setZoomInputFlat(false);
+        zoomWidget->setCanvasMappingMode(canvasMappingMode);
         m_controlsLayout->addWidget(m_zoomSlider);
 
         m_rotateAngleSelector = new KisAngleSelector();
@@ -169,7 +172,7 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
         m_controlsSecondRowLayout->addWidget(m_pinControlsButton);
         m_controlsLayout->addLayout(m_controlsSecondRowLayout);
 
-        m_zoomSlider->setVisible(true);
+        //m_zoomSlider->setVisible(true);
         m_rotateAngleSelector->setVisible(true);
 
         // Show/hide the controls

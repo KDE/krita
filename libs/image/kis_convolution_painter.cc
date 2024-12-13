@@ -134,7 +134,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
      * because the paint device has its own special
      * iterators, which do everything for us.
      */
-    if (src->defaultBounds()->wrapAroundMode()) {
+    if (src->defaultBounds()->wrapAroundMode() && src->supportsWraproundMode()) {
         borderOp = BORDER_IGNORE;
     }
 

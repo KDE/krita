@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 10:55+0000\n"
-"PO-Revision-Date: 2024-12-08 20:22+0100\n"
+"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"PO-Revision-Date: 2024-12-13 23:27+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1046,7 +1046,7 @@ msgstr "e) Marcador medio (mypaint)"
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Plain_(mypaint).myb"
 msgid "e) Marker Plain (mypaint)"
-msgstr "e) Marcados plano (mypaint)"
+msgstr "e) Marcador plano (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -7931,14 +7931,29 @@ msgctxt "action"
 msgid "Break at point"
 msgstr "Romper no punto"
 
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Break at segment"
+msgctxt "action"
+msgid "Break at selection"
+msgstr "Romper no segmento"
+
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
+#: krita/data/actions/PathTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Make line point"
@@ -7950,8 +7965,8 @@ msgstr "Facer punto lineal"
 #. i18n: context: iconText @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
-#: krita/data/actions/PathTool.action:73
+#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
+#: krita/data/actions/PathTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Symmetric Point"
@@ -7963,8 +7978,8 @@ msgstr "Punto simétrico"
 #. i18n: context: iconText @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
-#: krita/data/actions/PathTool.action:83
+#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
+#: krita/data/actions/PathTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
@@ -7976,8 +7991,8 @@ msgstr "Facer punto curvo"
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
-#: krita/data/actions/PathTool.action:93
+#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
+#: krita/data/actions/PathTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Segment to Curve"
@@ -7989,8 +8004,9 @@ msgstr "Segmento a curva"
 #. i18n: context: iconText @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
-#: krita/data/actions/PathTool.action:103
+#: krita/data/actions/PathTool.action:106
+#: krita/data/actions/PathTool.action:108
+#: krita/data/actions/PathTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Insert point"
@@ -8002,9 +8018,9 @@ msgstr "Inserir punto"
 #. i18n: context: iconText @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:106
-#: krita/data/actions/PathTool.action:108
-#: krita/data/actions/PathTool.action:113
+#: krita/data/actions/PathTool.action:116
+#: krita/data/actions/PathTool.action:118
+#: krita/data/actions/PathTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Corner point"
@@ -8016,9 +8032,9 @@ msgstr "Punto anguloso"
 #. i18n: context: iconText @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:116
-#: krita/data/actions/PathTool.action:118
-#: krita/data/actions/PathTool.action:123
+#: krita/data/actions/PathTool.action:126
+#: krita/data/actions/PathTool.action:128
+#: krita/data/actions/PathTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Merge points"
@@ -8030,9 +8046,9 @@ msgstr "Combinar os puntos"
 #. i18n: context: iconText @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:126
-#: krita/data/actions/PathTool.action:128
-#: krita/data/actions/PathTool.action:133
+#: krita/data/actions/PathTool.action:136
+#: krita/data/actions/PathTool.action:138
+#: krita/data/actions/PathTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Join with segment"
@@ -8044,9 +8060,9 @@ msgstr "Combinar co segmento"
 #. i18n: context: iconText @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:136
-#: krita/data/actions/PathTool.action:138
-#: krita/data/actions/PathTool.action:143
+#: krita/data/actions/PathTool.action:146
+#: krita/data/actions/PathTool.action:148
+#: krita/data/actions/PathTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Smooth point"
@@ -16215,7 +16231,7 @@ msgstr "Cambiar os parámetros"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:310
+#: libs/flake/tools/KoPathTool.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Converter en ruta"
@@ -16565,42 +16581,46 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Cambiar o segmento"
 
-#: libs/flake/tools/KoPathTool.cpp:126
+#: libs/flake/tools/KoPathTool.cpp:127
 #, kde-format
 msgid "Edit Shape"
 msgstr "Editar a figura"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:618
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastre para mover a asa."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:672
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastrar para mover o punto. Prema Maiús para cambiar o tipo de punto."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:674
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastre para mover o punto de control."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arrastra para cambiar a curva directamente. Cun dobre clic insírese un novo "
 "punto na ruta."
 
-#: libs/flake/tools/KoPathTool.cpp:695
-#, kde-format
-msgid "Press B to break path at selected point."
+#: libs/flake/tools/KoPathTool.cpp:707
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected point."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected point."
 msgstr "Prema B para romper a ruta nos puntos escollidos."
 
-#: libs/flake/tools/KoPathTool.cpp:697
-#, kde-format
-msgid "Press B to break path at selected segments."
+#: libs/flake/tools/KoPathTool.cpp:709
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected segments."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected segments."
 msgstr "Prema B para romper a ruta nos segmentos escollidos."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
@@ -23088,6 +23108,7 @@ msgstr "Tarxeta SD"
 msgid "Choose Manually"
 msgstr "Escoller manualmente"
 
+# skip-rule: trasno-locate
 #: libs/ui/dialogs/kis_dlg_preferences.cc:620
 #, kde-format
 msgctxt "@info resource folder"
@@ -25540,7 +25561,7 @@ msgstr "Fondo da xanela:"
 #: libs/ui/forms/wdggeneralsettings.ui:516
 #, kde-format
 msgid "Don't show contents when moving sub-windows"
-msgstr "Non amosar o contido ao mover subxanelas"
+msgstr "Non amosar o contido ao mover subxanelas."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:526
@@ -30411,6 +30432,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Estilos da capa"
 
+# skip-rule: trasno-close_reverse
 #: libs/ui/KisApplication.cpp:376
 #, kde-format
 msgid ""
@@ -30428,6 +30450,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: erro fatal"
 
+# skip-rule: trasno-close_reverse
 #: libs/ui/KisApplication.cpp:382
 #, kde-format
 msgid ""
@@ -31924,6 +31947,7 @@ msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Abrir o cartafol de recursos"
 
+# skip-rule: trasno-locate
 #: libs/ui/KisViewManager.cpp:1453
 #, kde-format
 msgctxt "@info resource folder"
@@ -40235,6 +40259,7 @@ msgstr ""
 "preservaranse).\n"
 "Quere continuar?"
 
+# skip-rule: trasno-clean
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
 #, kde-format
@@ -47727,6 +47752,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Manter os colorantes, codificar SMPTE ST 428"
 
+# skip-rule: trasno-change_reverse
 #: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:221
 #, kde-format
@@ -57817,6 +57843,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Esparexemento: {n}%"
 
+# skip-rule: trasno-close
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
@@ -57931,6 +57958,7 @@ msgstr ""
 "Definir o alcance da porción opaca do recheo. Reducir a dispersión reduce a "
 "opacidade para encher as zonas segundo a similitude da cor."
 
+# skip-rule: trasno-close
 #: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
 #, kde-format
@@ -59248,6 +59276,7 @@ msgstr ""
 "Definir se o contorno da selección activa debería tratarse como límite ao "
 "marcar unha nova selección"
 
+# skip-rule: trasno-close
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
@@ -60112,7 +60141,7 @@ msgid ""
 msgstr ""
 "Usar o modo obsoleto de axuste duro (igual que Krita 5.1 e anteriores). Cada "
 "liña colócase explicitamente, pero a altura da liña podería ser lixeiramente "
-"incorrecta."
+"inexacta."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60597,6 +60626,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Esparexemento: {n}%"
 
+# skip-rule: trasno-close
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"

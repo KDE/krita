@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16388,33 +16388,33 @@ msgstr "Ŝanĝi Segmenton"
 msgid "Edit Shape"
 msgstr "Redakti Formon"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trenu por movi tenilon."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Trenu por movi punkton. Shift klako por ŝanĝi punktotipo."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trenu por movi kontrolpunkton."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trenu por ŝanĝi kurbon rekte. Duoble alklaku por enmeti novan vojpunkton."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Premu B por rompi vojon ĉe elektita punkto."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Premu B por rompi vojon ĉe elektitaj segmentoj."

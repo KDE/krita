@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -16704,24 +16704,24 @@ msgstr "Candjî segmint"
 msgid "Edit Shape"
 msgstr "Radjouter fôme"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Bodjî eyet saetchî po displaecî l' pougneye."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Bodjî eyet saetchî po displaecî l' pont. Maj+clitch po candjî l' sôre di "
 "pont."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Bodjî eyet saetchî po displaecî l' pont d' controle."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, fuzzy, kde-format
 #| msgid "Drag to move gradient position. Double click to insert color stop."
 msgid "Drag to change curve directly. Double click to insert new path point."
@@ -16729,12 +16729,12 @@ msgstr ""
 "Bodjî eyet saetchî po candjî l' plaece do gradyint. Dobe clitchî po stitchî "
 "ene coleur di djocaedje."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Tchôkî B po djoker on tchmin å pont tchoezi."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Tchôkî B po djoker on tchmin ås segmints tchoezis."

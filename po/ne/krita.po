@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -16593,32 +16593,32 @@ msgstr "पङ्क्तिबद्धता परिवर्तन गर�
 msgid "Edit Shape"
 msgstr "आकार:"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, fuzzy, kde-format
 msgid "Drag to move handle."
 msgstr "नियन्त्रण बिन्दुलाई सार्नुहोस्।"
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, fuzzy, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "नियन्त्रण बिन्दुलाई सार्नुहोस्।"
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, fuzzy, kde-format
 msgid "Drag to move control point."
 msgstr "नियन्त्रण बिन्दुलाई सार्नुहोस्।"
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, fuzzy, kde-format
 msgid "Press B to break path at selected point."
 msgstr "सहायक मार्गलाई विन्दुमा विच्छेद गर्नुहोस्"
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, fuzzy, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "सहायक मार्गलाई विन्दुमा विच्छेद गर्नुहोस्"

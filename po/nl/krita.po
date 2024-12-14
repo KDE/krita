@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2024-11-23 12:10+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -16421,35 +16421,35 @@ msgstr "Segment wijzigen"
 msgid "Edit Shape"
 msgstr "Vorm bewerken"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trekken om handvat te verplaatsen."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Trekken om punt te verplaatsen. Shift en klik om het type punt te wijzigen."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trekken om controlepunt te verplaatsen."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Slepen om kromme direct te wijzigen. Dubbelklik om een nieuw punt in het pad "
 "in te voegen."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Druk op B om het pad te verbreken op het geselecteerde punt."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Druk op B om het pad te verbreken op geselecteerde segmenten."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17626,35 +17626,35 @@ msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 msgid "Edit Shape"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Drag to move handle."
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, fuzzy, kde-format
 #| msgid "Move points"
 msgid "Drag to move control point."
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, fuzzy, kde-format
 #| msgid "Break at point"
 msgid "Press B to break path at selected point."
 msgstr "ਬਿੰਦੂ ਉੱਤੇ ਰੋਕੋ"
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, fuzzy, kde-format
 #| msgid "Break at point"
 msgid "Press B to break path at selected segments."

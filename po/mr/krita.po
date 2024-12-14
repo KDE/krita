@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16798,36 +16798,36 @@ msgstr "प्रतिशत"
 msgid "Edit Shape"
 msgstr "आकार जोडा"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, fuzzy, kde-format
 #| msgid "Drag to move color stop."
 msgid "Drag to move handle."
 msgstr "रंग थांबणे हलविण्यासाठी ओढा."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, fuzzy, kde-format
 #| msgid "Drag to move gradient position. Double click to insert color stop."
 msgid "Drag to move point. Shift click to change point type."
 msgstr "उररणीचे स्थान हलविण्यासाठी ओढा. रंग थांबणे समाविष्ट करण्यासाठी दोनदा क्लिक करा."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, fuzzy, kde-format
 #| msgid "Drag to move color stop."
 msgid "Drag to move control point."
 msgstr "रंग थांबणे हलविण्यासाठी ओढा."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, fuzzy, kde-format
 #| msgid "Drag to move gradient position. Double click to insert color stop."
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "उररणीचे स्थान हलविण्यासाठी ओढा. रंग थांबणे समाविष्ट करण्यासाठी दोनदा क्लिक करा."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr ""

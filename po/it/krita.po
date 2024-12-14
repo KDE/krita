@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
-"PO-Revision-Date: 2024-11-28 17:16+0100\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
+"PO-Revision-Date: 2024-12-08 17:14+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -16412,36 +16412,36 @@ msgstr "Cambia segmento"
 msgid "Edit Shape"
 msgstr "Modifica la forma"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trascina per spostare la maniglia."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Trascina per spostare il punto. Fai clic con il tasto sinistro, tenendo "
 "premuto MAIUSC, per cambiare il tipo di punto."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trascina per spostare il punto di controllo."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trascina per modificare direttamente la curva. Doppio clic per inserire un "
 "nuovo punto del tracciato."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Premi B per spezzare il tracciato al punto selezionato."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Premi B per spezzare il tracciato ai segmenti selezionati."
@@ -58357,12 +58357,12 @@ msgstr "Nome profilo"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:210
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
-msgstr "Per favore inserisci il nome col quale vuoi salvare questo profilo:"
+msgstr "Inserisci il nome col quale vuoi salvare questo profilo:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format
 msgid "Sorry, the name you entered is invalid."
-msgstr "Spiacente, il nome che hai inserito non è valido."
+msgstr "Il nome che hai inserito non è valido."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -60116,10 +60116,10 @@ msgid ""
 "Scientific Library support, or use options widget for editing scale values "
 "manually."
 msgstr ""
-"Spiacenti, Krita è stato compilato senza il supporto della GNU Scientific "
-"Library, dunque non puoi ridimensionare la selezione con le maniglie. "
-"Compila Krita col supporto della GNU Scientific Library, o usa l'oggetto "
-"delle opzioni per modificare manualmente i valori di scala."
+"Krita è stato compilato senza il supporto della GNU Scientific Library, "
+"dunque non puoi ridimensionare la selezione con le maniglie. Compila Krita "
+"col supporto della GNU Scientific Library, o usa l'oggetto delle opzioni per "
+"modificare manualmente i valori di scala."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format

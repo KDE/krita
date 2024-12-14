@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
-"PO-Revision-Date: 2024-12-08 20:22+0100\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
+"PO-Revision-Date: 2024-12-13 23:27+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1046,7 +1046,7 @@ msgstr "e) Marcador medio (mypaint)"
 #, kde-format
 msgctxt "./plugins/paintops/mypaint/brushes/e)_Marker_Plain_(mypaint).myb"
 msgid "e) Marker Plain (mypaint)"
-msgstr "e) Marcados plano (mypaint)"
+msgstr "e) Marcador plano (mypaint)"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -16436,35 +16436,35 @@ msgstr "Cambiar o segmento"
 msgid "Edit Shape"
 msgstr "Editar a figura"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Arrastre para mover a asa."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Arrastrar para mover o punto. Prema Maiús para cambiar o tipo de punto."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Arrastre para mover o punto de control."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Arrastra para cambiar a curva directamente. Cun dobre clic insírese un novo "
 "punto na ruta."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Prema B para romper a ruta nos puntos escollidos."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Prema B para romper a ruta nos segmentos escollidos."
@@ -23002,6 +23002,7 @@ msgstr "Tarxeta SD"
 msgid "Choose Manually"
 msgstr "Escoller manualmente"
 
+# skip-rule: trasno-locate
 #: libs/ui/dialogs/kis_dlg_preferences.cc:575
 #, kde-format
 msgctxt "@info resource folder"
@@ -25389,7 +25390,7 @@ msgstr "Fondo da xanela:"
 #: libs/ui/forms/wdggeneralsettings.ui:516
 #, kde-format
 msgid "Don't show contents when moving sub-windows"
-msgstr "Non amosar o contido ao mover subxanelas"
+msgstr "Non amosar o contido ao mover subxanelas."
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkUseCustomFont)
 #: libs/ui/forms/wdggeneralsettings.ui:526
@@ -30047,6 +30048,7 @@ msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "Estilos da capa"
 
+# skip-rule: trasno-close_reverse
 #: libs/ui/KisApplication.cpp:375
 #, kde-format
 msgid ""
@@ -30064,6 +30066,7 @@ msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "Krita: erro fatal"
 
+# skip-rule: trasno-close_reverse
 #: libs/ui/KisApplication.cpp:381
 #, kde-format
 msgid ""
@@ -31561,6 +31564,7 @@ msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Abrir o cartafol de recursos"
 
+# skip-rule: trasno-locate
 #: libs/ui/KisViewManager.cpp:1362
 #, kde-format
 msgctxt "@info resource folder"
@@ -40167,6 +40171,7 @@ msgstr ""
 "preservaranse).\n"
 "Quere continuar?"
 
+# skip-rule: trasno-clean
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
 #, kde-format
@@ -47234,6 +47239,7 @@ msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
 msgstr "Manter os colorantes, codificar SMPTE ST 428"
 
+# skip-rule: trasno-change_reverse
 #: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
 #, kde-format

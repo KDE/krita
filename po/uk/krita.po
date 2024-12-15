@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 02:38+0000\n"
-"PO-Revision-Date: 2024-12-08 09:11+0200\n"
+"PO-Revision-Date: 2024-12-14 08:39+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7865,12 +7865,10 @@ msgstr "Розірвати у точці"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Розірвати на відрізку"
+msgstr "Розірвати на позначеному"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16646,18 +16644,16 @@ msgstr ""
 "кнопкою миші, щоб додати нову точку контуру."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Натисніть клавішу «B», щоб розбити контур у вибраній точці."
+msgstr "Натисніть клавішу %1, щоб розбити контур у вибраній точці."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Натисніть клавішу «B», щоб розбити контур на вибраних відрізках."
+msgstr "Натисніть клавішу %1, щоб розбити контур на вибраних відрізках."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

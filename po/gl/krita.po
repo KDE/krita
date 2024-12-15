@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 02:38+0000\n"
-"PO-Revision-Date: 2024-12-13 23:27+0100\n"
+"PO-Revision-Date: 2024-12-14 11:30+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -10760,7 +10760,7 @@ msgstr "Engadir un fotograma duplicado"
 #, kde-format
 msgctxt "action"
 msgid "Toggle onion skin"
-msgstr "Activar ou desactivar a pel de cebola"
+msgstr "Conmutar a pel de cebola"
 
 #. i18n: context: text @ Action (first_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2054
@@ -36298,10 +36298,10 @@ msgid ""
 "documentation, then a visit to <a href=\"%2\">%2</a> will provide you with "
 "what you need.</html>"
 msgstr ""
-"<html>Non hai que ser programador para ser membro do equipo de KDE. Pode "
-"unirse aos equipos nacionais para traducir as interfaces dos programas. Pode "
-"fornecer gráficos, temas, sons, e mellorar a documentación. Vostede decide!"
-"<br/><br/>Visite <a href=\"%1\">%1</a> para obter información sobre "
+"<html>Non hai que saber desenvolver programas para unirse ao equipo de KDE. "
+"Pode unirse aos equipos nacionais para traducir as interfaces dos programas. "
+"Pode fornecer gráficos, temas, sons, e mellorar a documentación. Vostede "
+"decide!<br/><br/>Visite <a href=\"%1\">%1</a> para obter información sobre "
 "proxectos nos que pode participar.<br/><br/>Se precisa máis información ou "
 "documentación, unha visita a <a href=\"%2\">%2</a> informarao do que "
 "necesita.</html>"
@@ -44161,7 +44161,7 @@ msgstr "Copiar a canle alfa para cada canle separado como un canle alfa"
 #: plugins/extensions/separate_channels/wdg_separations.ui:103
 #, kde-format
 msgid "Discard alpha channel"
-msgstr "Eliminar a canle alfa"
+msgstr "Desbotar a canle alfa"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSeparateAlpha)
 #: plugins/extensions/separate_channels/wdg_separations.ui:113
@@ -50351,7 +50351,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<p>Set here the green component to set magenta color cast removal level.</p>"
 msgstr ""
-"<p>Axuste aquí a compoñente verde para o nivel de eliminado da conversión da "
+"<p>Axuste aquí a compoñente verde para o nivel de redución da conversión da "
 "cor maxenta.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:495

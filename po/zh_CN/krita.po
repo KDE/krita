@@ -7860,12 +7860,10 @@ msgstr "断开此点"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "断开此线段"
+msgstr ""
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16486,18 +16484,16 @@ msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr "拖拽以直接更改曲线。双击以插入新锚点。"
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "按下 B 以在选中锚点断开路径。"
+msgstr ""
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "按下 B 以在选中线段断开路径。"
+msgstr ""
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

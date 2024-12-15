@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 02:38+0000\n"
-"PO-Revision-Date: 2024-12-08 19:30+0300\n"
+"PO-Revision-Date: 2024-12-14 18:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7868,12 +7868,10 @@ msgstr "Noktada kes"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Bölütte kes"
+msgstr "Seçimde Kes"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16533,18 +16531,16 @@ msgstr ""
 "çift tıklayın."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Seçili noktada yolu kesmek için B’ye basın."
+msgstr "Seçili noktada yolu kesmek için %1 kısayoluna basın."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Seçili bölütlerdeki yolu sonlandırmak için B’ye basın."
+msgstr "Seçili bölütlerde yolu kesmek için %1 kısayoluna basın."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

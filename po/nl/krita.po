@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 02:38+0000\n"
-"PO-Revision-Date: 2024-12-08 16:01+0100\n"
+"PO-Revision-Date: 2024-12-14 12:39+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -7949,12 +7949,10 @@ msgstr "Bij punt afbreken"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Bij segment afbreken"
+msgstr "Bij selectie afbreken"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16625,18 +16623,16 @@ msgstr ""
 "in te voegen."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Druk op B om het pad te verbreken op het geselecteerde punt."
+msgstr "Druk op %1 om het pad te verbreken op het geselecteerde punt."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Druk op B om het pad te verbreken op geselecteerde segmenten."
+msgstr "Druk op %1 om het pad te verbreken op geselecteerde segmenten."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

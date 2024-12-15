@@ -185,6 +185,7 @@ private Q_SLOTS:
     void proofingDisplayModeUpdated();
     void proofingConversionIntentUpdated();
     void proofingDisplayIntentUpdated();
+    void updateProofingDisplayInfo();
 
 public:
     void setDefault();

@@ -5,6 +5,9 @@
  */
 #include "KisProofingConfigModel.h"
 #include <KisLager.h>
+#include <KisZug.h>
+
+#include <kis_display_color_converter.h>
 
 const int ADAPTATION_MULTIPLIER = 20;
 
@@ -21,24 +24,37 @@ auto conversionFlag = [](KoColorConversionTransformation::ConversionFlag flag) {
     );
 };
 
-auto displayState = lager::lenses::getset(
-    [] (const KisProofingConfiguration &conf) -> KisProofingConfiguration::DisplayTransformState {
-        return conf.displayMode;
-    },
-    [] (KisProofingConfiguration conf, const KisProofingConfiguration::DisplayTransformState &state) -> KisProofingConfiguration {
-        conf.displayMode = state;
-
-        // TODO: Use kisconfig to get Monitor flags somehow?
-        conf.displayIntent = conf.determineDisplayIntent(KoColorConversionTransformation::IntentRelativeColorimetric);
-        conf.displayFlags = conf.determineDisplayFlags(KoColorConversionTransformation::BlackpointCompensation);
-        conf.adaptationState = conf.determineAdaptationState();
-
-        return conf;
-    }
-    );
+KoColorConversionTransformation::Intent calcEffectiveDisplayIntent(KisProofingConfiguration::DisplayTransformState displayMode,
+                               KoColorConversionTransformation::Intent localDisplayIntent,
+                               KoColorConversionTransformation::Intent globalDisplayIntent)
+{
+    return displayMode == KisProofingConfiguration::Monitor ? globalDisplayIntent:
+                                                              displayMode == KisProofingConfiguration::Paper ?
+                                                                  KoColorConversionTransformation::IntentAbsoluteColorimetric: localDisplayIntent;
 }
+
+bool calcEffectiveUseBPC(KisProofingConfiguration::DisplayTransformState displayMode,
+                        bool localUseBPC,
+                        bool globalUseBPC)
+{
+    return displayMode == KisProofingConfiguration::Monitor ? globalUseBPC:
+                                                              displayMode == KisProofingConfiguration::Paper ?
+                                                                  false: localUseBPC;
+}
+
+int calcEffectiveAdaptation(KisProofingConfiguration::DisplayTransformState displayMode,
+                        int localAdaptation)
+{
+    return displayMode == KisProofingConfiguration::Monitor ? ADAPTATION_MULTIPLIER:
+                                                              displayMode == KisProofingConfiguration::Paper ?
+                                                                  0: localAdaptation;
+}
+
+}
+
 KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfiguration> _data)
     : data(_data)
+    , displayConfigCursor(lager::make_sensor([&]{return m_displayConfig;}))
     , LAGER_QT(warningColor) {data[&KisProofingConfiguration::warningColor]}
     , LAGER_QT(proofingProfile) {data[&KisProofingConfiguration::proofingProfile]}
     , LAGER_QT(proofingModel) {data[&KisProofingConfiguration::proofingModel]}
@@ -46,12 +62,43 @@ KisProofingConfigModel::KisProofingConfigModel(lager::cursor<KisProofingConfigur
     , LAGER_QT(storeSoftproofingInsideImage) {data[&KisProofingConfiguration::storeSoftproofingInsideImage]}
     , LAGER_QT(conversionIntent) {data[&KisProofingConfiguration::conversionIntent]}
     , LAGER_QT(convBlackPointCompensation) {data[&KisProofingConfiguration::useBlackPointCompensationFirstTransform]}
-    , LAGER_QT(displayTransformState) {data.zoom(displayState)}
+    , LAGER_QT(displayTransformState) {data[&KisProofingConfiguration::displayMode]}
     , LAGER_QT(displayIntent) {data[&KisProofingConfiguration::displayIntent]}
     , LAGER_QT(dispBlackPointCompensation) {data[&KisProofingConfiguration::displayFlags].zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation))}
+
+    , LAGER_QT(effectiveDisplayIntent) {
+        lager::with(LAGER_QT(displayTransformState),
+                    LAGER_QT(displayIntent),
+                    displayConfigCursor[&KisDisplayConfig::intent])
+                .map(&calcEffectiveDisplayIntent)}
+
+    , LAGER_QT(effectiveDispBlackPointCompensation) {
+        lager::with(LAGER_QT(displayTransformState),
+                    LAGER_QT(dispBlackPointCompensation),
+                    displayConfigCursor[&KisDisplayConfig::conversionFlags]
+                        .zoom(conversionFlag(KoColorConversionTransformation::BlackpointCompensation)))
+                .map(&calcEffectiveUseBPC)}
     , LAGER_QT(adaptationState) {data[&KisProofingConfiguration::adaptationState].zoom(kislager::lenses::scale_real_to_int(ADAPTATION_MULTIPLIER))}
     , LAGER_QT(adaptationRangeMax) {ADAPTATION_MULTIPLIER}
-
+    , LAGER_QT(effectiveAdaptationState) {
+    lager::with(LAGER_QT(displayTransformState),
+                LAGER_QT(adaptationState))
+            .map(&calcEffectiveAdaptation)}
+    , LAGER_QT(enableDisplayToggles) {LAGER_QT(displayTransformState) .xform(kiszug::map_equal<int>(KisProofingConfiguration::Custom))}
+    , LAGER_QT(enableAdaptationSlider) {LAGER_QT(displayIntent).xform(kiszug::map_equal<int>(KoColorConversionTransformation::IntentAbsoluteColorimetric))}
+    , LAGER_QT(enableDisplayBlackPointCompensation) {LAGER_QT(displayIntent).xform(kiszug::map_not_equal<int>(KoColorConversionTransformation::IntentAbsoluteColorimetric))}
 {
     lager::watch(data, std::bind(&KisProofingConfigModel::modelChanged, this));
+    lager::watch(displayConfigCursor, std::bind(&KisProofingConfigModel::modelChanged, this));
+}
+
+KisProofingConfigModel::~KisProofingConfigModel()
+{
+}
+
+void KisProofingConfigModel::updateDisplayConfig(KisDisplayConfig config)
+{
+    if (m_displayConfig == config) return;
+    m_displayConfig = config;
+    lager::commit(displayConfigCursor);
 }

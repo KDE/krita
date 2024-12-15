@@ -19,8 +19,11 @@ class QButtonGroup;
 class QSpinBox;
 class QDoubleSpinBox;
 class QObject;
+class QSlider;
+class QCheckBox;
 class KisSpacingSelectionWidget;
 class KisAngleSelector;
+class KisColorButton;
 class QLineEdit;
 class KisMultipliersDoubleSliderSpinBox;
 class KisFileNameRequester;
@@ -88,7 +91,9 @@ using DoubleSpinBoxState = SpinBoxState<qreal>;
 
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QAction *button, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(QCheckBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSpinBox *spinBox, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(QSlider *slider, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControlState(QDoubleSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControlState(QSpinBox *spinBox, QObject *source, const char *readStateProperty, const char *writeProperty);
@@ -103,7 +108,9 @@ void KRITAWIDGETS_EXPORT connectControl(KisSpacingSelectionWidget *widget, QObje
 void KRITAWIDGETS_EXPORT connectControl(KisAngleSelector *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QLineEdit *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(KisFileNameRequester *widget, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(KisColorButton *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char* property);
+void KRITAWIDGETS_EXPORT connectWidgetEnabledToProperty(QWidget* widget, QObject* source, const char* property);
 
 
 } // namespace KisWidgetConnectionUtils

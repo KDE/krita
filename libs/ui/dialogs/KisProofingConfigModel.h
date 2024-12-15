@@ -11,8 +11,14 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 #include <lager/state.hpp>
+#include <lager/sensor.hpp>
 
 #include <KisProofingConfiguration.h>
+#include <KisDisplayConfig.h>
+#include <KisWidgetConnectionUtils.h>
+
+class KisDisplayColorConverter;
+class KisDisplayConfig;
 
 /**
  * @brief The KisProofingConfigModel class
@@ -29,7 +35,9 @@ class KisProofingConfigModel : public QObject
     Q_OBJECT
 public:
     KisProofingConfigModel(lager::cursor<KisProofingConfiguration> _data = lager::make_state(KisProofingConfiguration(), lager::automatic_tag{}));
+    ~KisProofingConfigModel();
     lager::cursor<KisProofingConfiguration> data;
+    lager::sensor<KisDisplayConfig> displayConfigCursor;
 
     LAGER_QT_CURSOR(KoColor, warningColor); ///< Warning color for out-of-gamut checks.
     LAGER_QT_CURSOR(QString, proofingProfile);
@@ -46,11 +54,25 @@ public:
     // Following are all part of the second transform if it is custom.
     LAGER_QT_CURSOR(KoColorConversionTransformation::Intent, displayIntent);
     LAGER_QT_CURSOR(bool, dispBlackPointCompensation);
+
+    LAGER_QT_READER(KoColorConversionTransformation::Intent, effectiveDisplayIntent);
+    LAGER_QT_READER(bool, effectiveDispBlackPointCompensation);
+
     LAGER_QT_CURSOR(int, adaptationState);
     /// this just returns the constant for the maximum adaptation range. Minimum is 0.
     LAGER_QT_CONST(int, adaptationRangeMax)
+    LAGER_QT_READER(int, effectiveAdaptationState);
+
+    void updateDisplayConfig(KisDisplayConfig config);
+
+    LAGER_QT_READER(bool, enableDisplayToggles);
+    LAGER_QT_READER(bool, enableAdaptationSlider);
+    LAGER_QT_READER(bool, enableDisplayBlackPointCompensation);
 Q_SIGNALS:
     void modelChanged();
+
+private:
+    KisDisplayConfig m_displayConfig;
 };
 
 #endif // KISPROOFINGCONFIGMODEL_H

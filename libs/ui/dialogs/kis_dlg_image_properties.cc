@@ -34,13 +34,16 @@
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>
 #include "kis_layer_utils.h"
+#include <kis_display_color_converter.h>
+#include <KisWidgetConnectionUtils.h>
 
 #include "KisProofingConfigModel.h"
 
 struct KisDlgImageProperties::Private {
-    Private()
+    Private(KisDisplayColorConverter *colorConverter)
         : proofingModel(new KisProofingConfigModel())
         , compressor(new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE))
+        , colorConverter(colorConverter)
     {
     }
     KisImageWSP image;
@@ -48,11 +51,12 @@ struct KisDlgImageProperties::Private {
     bool firstProofingConfigChange {true};
     QLabel *colorWarningLabel {0};
     KisSignalCompressor *compressor {0};
+    KisDisplayColorConverter *colorConverter;
 };
 
-KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent, const char *name)
+KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorConverter *colorConverter, QWidget *parent, const char *name)
     : KoDialog(parent)
-    , d(new Private())
+    , d(new Private(colorConverter))
 {
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
@@ -94,10 +98,14 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
         config = KisImageConfig(true).defaultProofingconfiguration();
     }
     d->proofingModel->data.set(*config.data());
+    connect(d->colorConverter, SIGNAL(displayConfigurationChanged()), this, SLOT(updateDisplayConfigInfo()));
+    updateDisplayConfigInfo();
 
     m_page->gamutAlarm->setToolTip(i18n("Set color used for warning"));
     m_page->sldAdaptationState->setMaximum(d->proofingModel->adaptationRangeMax());
     m_page->sldAdaptationState->setMinimum(0);
+
+    m_page->proofSpaceSelector->showDepth(false);
 
     m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Perceptual"), INTENT_PERCEPTUAL);
     m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Relative Colorimetric"), INTENT_RELATIVE_COLORIMETRIC);
@@ -122,17 +130,21 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
     KisSignalCompressor *softProofConfigCompressor = new KisSignalCompressor(500, KisSignalCompressor::POSTPONE,this);
 
-    connect(m_page->chkSaveProofing, SIGNAL(toggled(bool)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->cmbDisplayTransformState, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->chkDisplayBlackPointCompensation, SIGNAL(toggled(bool)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->gamutAlarm, SIGNAL(changed(KoColor)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->cmbDisplayIntent, SIGNAL(currentIndexChanged(int)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->ckbBlackPointComp, SIGNAL(stateChanged(int)), softProofConfigCompressor, SLOT(start()));
-    connect(m_page->sldAdaptationState, SIGNAL(valueChanged(int)), softProofConfigCompressor, SLOT(start()));
+    KisWidgetConnectionUtils::connectControl(m_page->ckbBlackPointComp, d->proofingModel, "convBlackPointCompensation");
+    KisWidgetConnectionUtils::connectControl(m_page->gamutAlarm, d->proofingModel, "warningColor");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->grbDisplayConversion, d->proofingModel, "enableDisplayToggles");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->sldAdaptationState, d->proofingModel, "enableAdaptationSlider");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->chkDisplayBlackPointCompensation, d->proofingModel, "enableDisplayBlackPointCompensation");
 
-    connect(d->proofingModel, SIGNAL(modelChanged()), this, SLOT(updateProofingWidgets()));
+    connect(m_page->chkSaveProofing, SIGNAL(toggled(bool)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->cmbDisplayTransformState, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayModeUpdated()));
+    connect(m_page->proofSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), softProofConfigCompressor, SLOT(start()));
+    connect(m_page->cmbIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingConversionIntentUpdated()));
+    connect(m_page->cmbDisplayIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayIntentUpdated()));
+    connect(m_page->chkDisplayBlackPointCompensation, &QCheckBox::toggled, d->proofingModel, &KisProofingConfigModel::setdispBlackPointCompensation);
+    connect(m_page->sldAdaptationState, &QSlider::valueChanged, d->proofingModel, &KisProofingConfigModel::setadaptationState);
+
+    connect(d->proofingModel, SIGNAL(modelChanged()), softProofConfigCompressor, SLOT(start()));
     connect(softProofConfigCompressor, SIGNAL(timeout()), this, SLOT(setProofingConfig()));
 
     //annotations
@@ -199,19 +211,10 @@ void KisDlgImageProperties::setProofingConfig()
         d->firstProofingConfigChange = false;
     }
     if (m_page->chkSaveProofing->isChecked()) {
-        d->proofingModel->setdisplayTransformState(KisProofingConfiguration::DisplayTransformState(m_page->cmbDisplayTransformState->currentData(Qt::UserRole).toInt()));
-        if (d->proofingModel->displayTransformState() == KisProofingConfiguration::Custom) {
-            d->proofingModel->setdisplayIntent(KoColorConversionTransformation::Intent(m_page->cmbDisplayIntent->currentData(Qt::UserRole).toInt()));
-            d->proofingModel->setadaptationState(m_page->sldAdaptationState->value());
-            d->proofingModel->setdispBlackPointCompensation(m_page->chkDisplayBlackPointCompensation->isChecked());
-        }
 
-        d->proofingModel->setconversionIntent(KoColorConversionTransformation::Intent(m_page->cmbIntent->currentData(Qt::UserRole).toInt()));
-        d->proofingModel->setconvBlackPointCompensation(m_page->ckbBlackPointComp->isChecked());
         d->proofingModel->setproofingProfile(m_page->proofSpaceSelector->currentColorSpace()->profile()->name());
         d->proofingModel->setproofingModel(m_page->proofSpaceSelector->currentColorSpace()->colorModelId().id());
         d->proofingModel->setproofingDepth("U8");//default to this
-        d->proofingModel->setwarningColor(m_page->gamutAlarm->color());
         d->proofingModel->setstoreSoftproofingInsideImage(true);
 
         KisProofingConfiguration conf = d->proofingModel->data.get();
@@ -232,20 +235,34 @@ void KisDlgImageProperties::updateProofingWidgets()
 
     m_page->proofSpaceSelector->setCurrentColorSpace(KoColorSpaceRegistry::instance()->colorSpace(d->proofingModel->proofingModel(), d->proofingModel->proofingDepth(), d->proofingModel->proofingProfile()));
 
-    m_page->ckbBlackPointComp->setChecked(d->proofingModel->convBlackPointCompensation());
-    m_page->chkDisplayBlackPointCompensation->setChecked(d->proofingModel->dispBlackPointCompensation());
-
-    m_page->sldAdaptationState->setValue(d->proofingModel->adaptationState());
-    m_page->gamutAlarm->setColor(d->proofingModel->warningColor());
-
     m_page->cmbDisplayTransformState->setCurrentIndex(m_page->cmbDisplayTransformState->findData(int(d->proofingModel->displayTransformState()), Qt::UserRole));
 
-    m_page->grbDisplayConversion->setEnabled(d->proofingModel->displayTransformState() == KisProofingConfiguration::Custom);
-    m_page->sldAdaptationState->setEnabled(d->proofingModel->displayIntent() == KoColorConversionTransformation::IntentAbsoluteColorimetric);
-    m_page->chkDisplayBlackPointCompensation->setEnabled(d->proofingModel->displayIntent() != KoColorConversionTransformation::IntentAbsoluteColorimetric);
-
     m_page->cmbIntent->setCurrentIndex(m_page->cmbIntent->findData(int(d->proofingModel->conversionIntent()), Qt::UserRole));
-    m_page->cmbDisplayIntent->setCurrentIndex(m_page->cmbDisplayIntent->findData(int(d->proofingModel->displayIntent()), Qt::UserRole));
+    m_page->cmbDisplayIntent->setCurrentIndex(m_page->cmbDisplayIntent->findData(int(d->proofingModel->effectiveDisplayIntent()), Qt::UserRole));
+    m_page->chkDisplayBlackPointCompensation->setChecked(d->proofingModel->effectiveDispBlackPointCompensation());
+    m_page->sldAdaptationState->setValue(d->proofingModel->effectiveAdaptationState());
+}
+
+void KisDlgImageProperties::updateDisplayConfigInfo()
+{
+    d->proofingModel->updateDisplayConfig(d->colorConverter->displayConfig());
+}
+
+void KisDlgImageProperties::proofingDisplayModeUpdated()
+{
+    d->proofingModel->setdisplayTransformState(KisProofingConfiguration::DisplayTransformState(m_page->cmbDisplayTransformState->currentData(Qt::UserRole).toInt()));
+}
+
+void KisDlgImageProperties::proofingConversionIntentUpdated()
+{
+    d->proofingModel->setconversionIntent(KoColorConversionTransformation::Intent(m_page->cmbIntent->currentData(Qt::UserRole).toInt()));
+}
+
+void KisDlgImageProperties::proofingDisplayIntentUpdated()
+{
+    if (d->proofingModel->displayTransformState() == KisProofingConfiguration::Custom) {
+        d->proofingModel->setdisplayIntent(KoColorConversionTransformation::Intent(m_page->cmbDisplayIntent->currentData(Qt::UserRole).toInt()));
+    }
 }
 
 void KisDlgImageProperties::slotSaveDialogState()

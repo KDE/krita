@@ -30,6 +30,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "kis_layer_utils.h"
+#include "kis_canvas2.h"
 
 #include "kis_signal_compressor_with_param.h"
 
@@ -164,7 +165,7 @@ void KisImageManager::slotImageProperties()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindowAsQWidget());
+    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->canvasBase()->displayColorConverter(), m_view->mainWindowAsQWidget());
     if (dlg->exec() == QDialog::Accepted) {
         if (dlg->convertLayerPixels()) {
             image->convertImageColorSpace(dlg->colorSpace(),

@@ -10,6 +10,7 @@
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
+class KisDisplayColorConverter;
 
 class KoColorSpace;
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
@@ -28,7 +29,7 @@ class KisDlgImageProperties : public KoDialog
     Q_OBJECT
 
 public:
-    KisDlgImageProperties(KisImageWSP image,
+    KisDlgImageProperties(KisImageWSP image, KisDisplayColorConverter *colorConverter,
                           QWidget *parent = 0,
                           const char *name = 0);
     ~KisDlgImageProperties() override;
@@ -42,6 +43,11 @@ private Q_SLOTS:
     void setCurrentColor();
     void setProofingConfig();
     void updateProofingWidgets();
+    void updateDisplayConfigInfo();
+
+    void proofingDisplayModeUpdated();
+    void proofingConversionIntentUpdated();
+    void proofingDisplayIntentUpdated();
 
     void slotSaveDialogState();
 

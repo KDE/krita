@@ -80,6 +80,13 @@ bool KisSynchronizedConnectionBase::isAutoModeForUnittestsEnabled()
 
 void KisSynchronizedConnectionBase::forceDeliverAllSynchronizedEvents()
 {
+    /**
+     * We need to first make sure that all the events are delivered
+     * to the applications object and then make sure they are processed
+     * whatever the state of the recursion is (this call is called from
+     * python filters only)
+     */
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     KIS_SAFE_ASSERT_RECOVER_RETURN(s_barrier->callback);
     s_barrier->callback();
 }

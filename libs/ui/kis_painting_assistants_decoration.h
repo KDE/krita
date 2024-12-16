@@ -56,7 +56,7 @@ struct AssistantEditorData {
     const QPixmap m_iconDuplicate = KisIconUtils::loadIcon("duplicateitem").pixmap(buttonSize, buttonSize);
     const QPixmap m_iconDelete = KisIconUtils::loadIcon("deletelayer").pixmap(buttonSize, buttonSize);
     //how many buttons fit horizontally before extending to the next row
-    const int horizontalButtonLimit = 4;
+    const int horizontalButtonLimit = 3;
 };
 
 /**

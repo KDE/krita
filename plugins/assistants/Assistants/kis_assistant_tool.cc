@@ -7,6 +7,7 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <cstdio>
 #include <kis_assistant_tool.h>
 
 #include <kis_debug.h>
@@ -46,6 +47,7 @@
 #include "VanishingPointAssistant.h"
 
 #include <math.h>
+#include <queue>
 
 KisAssistantTool::KisAssistantTool(KoCanvasBase * canvas)
     : KisTool(canvas, KisCursor::arrowCursor())
@@ -1035,7 +1037,7 @@ void KisAssistantTool::updateToolOptionsUI()
       bool showCustomColorSettings = m_options.useCustomAssistantColor->isChecked() && hasActiveAssistant;
       m_options.customColorOpacitySlider->setVisible(showCustomColorSettings);
       m_options.customAssistantColorButton->setVisible(showCustomColorSettings);
-
+      
       // disable global color settings if we are using the custom color
       m_options.assistantsGlobalOpacitySlider->setEnabled(!showCustomColorSettings);
       m_options.assistantsColor->setEnabled(!showCustomColorSettings);
@@ -1653,6 +1655,9 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.deleteAllAssistantsButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
         m_options.deleteAllAssistantsButton->setIconSize(QSize(16, 16));
 
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+        m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));
+
         QList<KoID> assistants;
         Q_FOREACH (const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
@@ -1764,6 +1769,8 @@ QWidget *KisAssistantTool::createOptionWidget()
 
         connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));
 
+        //Show panel for docker tool option visibility
+        connect(m_options.showDockerOptionsButton, SIGNAL(clicked()), this, SLOT(slotToggleDockToolOptionsVisible()));
         //set editor widget buttons on first startup.
         AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
 
@@ -1860,7 +1867,21 @@ void KisAssistantTool::slotSelectedAssistantTypeChanged()
 {
     updateToolOptionsUI();
 }
+void KisAssistantTool::slotToggleDockToolOptionsVisible(){
 
+    ToggleDockToolOptionsVisible = ToggleDockToolOptionsVisible ? false:true;
+    m_options.showDockerOptionsPanel->setVisible(ToggleDockToolOptionsVisible);
+
+    if (ToggleDockToolOptionsVisible){
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-down"));
+    }
+    else{
+        m_options.showDockerOptionsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+    }
+    
+    m_options.showDockerOptionsButton->setIconSize(QSize(16, 16));
+   
+}
 void KisAssistantTool::slotToggleMoveButton(int index)
 {
     AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;

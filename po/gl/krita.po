@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 02:38+0000\n"
-"PO-Revision-Date: 2024-12-14 11:30+0100\n"
+"PO-Revision-Date: 2024-12-16 01:16+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -804,7 +804,7 @@ msgstr "Tamaño de estrelas"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/a)_Eraser_Circle.kpp"
 msgid "a) Eraser Circle"
-msgstr "a) Círculo de borrar"
+msgstr "a) Círculo de borrador"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -7939,12 +7939,10 @@ msgstr "Romper no punto"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Romper no segmento"
+msgstr "Romper na selección"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16610,18 +16608,16 @@ msgstr ""
 "punto na ruta."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Prema B para romper a ruta nos puntos escollidos."
+msgstr "Prema %1 para romper a ruta no punto seleccionado."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Prema B para romper a ruta nos segmentos escollidos."
+msgstr "Prema %1 para romper a ruta nos segmentos seleccionados."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -25902,7 +25898,8 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:1097
 #, kde-format
 msgid "Prefer a local copy (if available; metadata may be lost)"
-msgstr "Preferir unha copia local (se se activa, poden perderse metadatos)"
+msgstr ""
+"Preferir unha copia local (se está dispoñíbel; poden perderse metadatos)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnBitmap)
 #: libs/ui/forms/wdggeneralsettings.ui:1104
@@ -27136,7 +27133,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:150
 #, kde-format
 msgid "Swap Undo After:"
-msgstr "Desfacer nun ficheiro tras:"
+msgstr "Intercambiar o desfacer tras:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgperformancesettings.ui:184
@@ -29867,7 +29864,7 @@ msgstr "Non foi posíbel gardar en SVG: %1"
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
-msgstr "A capa %1 non permite edicións"
+msgstr "A capa %1 non é editábel"
 
 #: libs/ui/kis_node_manager.cpp:1380
 #, kde-format
@@ -30324,8 +30321,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Aviso:\tEsgotouse a memoria! Comezáronse a usar ficheiros de memoria de "
-"intercambio.\n"
+"Aviso:\tEsgotouse a memoria! Comezouse a usar a de intercambio.\n"
 "\t\tConfigure máis memoria RAM para Krita no diálogo de configuración."
 
 #: libs/ui/kis_statusbar.cc:376
@@ -36458,7 +36454,7 @@ msgstr "Novo texto"
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:279
 #, kde-format
 msgid "<h2>Accelerators removed</h2>"
-msgstr "<h2>Borráronse aceleradores</h2>"
+msgstr "<h2>Retiráronse aceleradores</h2>"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:288
 #, kde-format
@@ -36564,8 +36560,8 @@ msgid ""
 "This is a dynamic list of actions. You can move it, but if you remove it you "
 "will not be able to re-add it."
 msgstr ""
-"Esta é unha lista dinámica de accións. Pode movela, pero se a borra non será "
-"quen de engadila de novo."
+"Esta é unha lista dinámica de accións. Pode movela, pero se a retira non "
+"poderá engadila de novo."
 
 #: libs/widgetutils/xmlgui/kedittoolbar.cpp:1236
 #, kde-format
@@ -43887,7 +43883,7 @@ msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The import of following files has been cancelled:"
-msgstr "Cancelouse a importación dos seguintes recursos:"
+msgstr "Cancelouse a importación dos seguintes ficheiros:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:63
 #, kde-format
@@ -45040,6 +45036,7 @@ msgctxt "Channel as in Color Channels"
 msgid "Channel:"
 msgstr "Canle:"
 
+# skip-rule: trasno-driver
 #. i18n: ectx: property (text), widget (QLabel, lblDriverChannel)
 #: plugins/filters/colorsfilters/wdg_perchannel.ui:385
 #, kde-format
@@ -49972,6 +49969,7 @@ msgstr "A peor calidade"
 msgid "Note:  100 uses lossless compression, everything below is lossy."
 msgstr "Nota: 100 usa compresión sen perdas, todo o inferior ten perdas."
 
+# skip-rule: trasno-enable_reverse
 #. i18n: ectx: property (whatsThis), widget (QLabel, textLabel1)
 #. i18n: ectx: property (whatsThis), widget (KisDoubleSliderSpinBox, imageQuality)
 #: plugins/impex/qimageio/kis_wdg_options_qimageio.ui:75
@@ -51863,7 +51861,7 @@ msgid ""
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
 "Pinta na capa actual\n"
-"pero usa calquera das capas visíbeis ao borrar\n"
+"pero usa calquera das capas visíbeis como entrada de borrancho.\n"
 "NOTA: Este modo é só axeitado para traballar cun fondo totalmente opaco."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
@@ -56574,7 +56572,7 @@ msgstr "Patrón"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Publishing director"
-msgstr "Director de edición"
+msgstr "Dirección de edición"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Printer"
@@ -60995,7 +60993,7 @@ msgstr ""
 "Krita construíuse sen compatibilidade coa biblioteca científica de GNU, así "
 "que non pode cambiar as dimensións da selección con manexadores. Constrúa "
 "Krita con compatibilidade coa biblioteca científica de GNU, ou use o "
-"trebello de opcións para cambiar manualmente os valores das dimensións."
+"trebello de opcións para editar manualmente os valores das dimensións."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format

@@ -7863,7 +7863,7 @@ msgstr "断开此点"
 #, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr ""
+msgstr "断开选中位置"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16487,13 +16487,13 @@ msgstr "拖拽以直接更改曲线。双击以插入新锚点。"
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr ""
+msgstr "按 %1 断开选中点处的路径。"
 
 #: libs/flake/tools/KoPathTool.cpp:709
 #, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr ""
+msgstr "按 %1 断开选中线段处的路径。"
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

@@ -80,6 +80,9 @@ private:
     // In here we handle the intricacies required to tie the state of selection and "current" index.
     void changeSelectionAndCurrentIndex(const QModelIndex &index);
 
+    // The area taken by the color preview rect for some types of filter masks.
+    QRect filterColorClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
 public Q_SLOTS:
     void slotConfigChanged();
 private Q_SLOTS:

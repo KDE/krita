@@ -616,6 +616,16 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         }
         return QVariant();
     }
+    case LayerColorOverlayColorRole: {
+        if (node->inherits("KisLayer")) {
+            KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
+            KisFilterMaskSP mask = layer->colorOverlayMask();
+            if (mask && mask->filter()->hasProperty("color")) {
+                return mask->filter()->getColor("color").toQColor();
+            }
+        }
+        return QVariant();
+    }
     default:
 
         /**
@@ -739,6 +749,12 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             m_d->selectionActionsAdapter->selectOpaqueOnNode(node, action);
         }
         shouldUpdate = false;
+        break;
+    case FilterMaskPropertiesRole:
+        m_d->nodeManager->nodePropertiesIgnoreSelection(node);
+        break;
+    case LayerColorOverlayPropertiesRole:
+        m_d->nodeManager->colorOverlayMaskProperties(node);
         break;
     default:
         result = false;

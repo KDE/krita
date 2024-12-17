@@ -71,6 +71,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_layer_utils.h"
+#include "kis_filter_mask.h"
 
 #include "processing/kis_mirror_processing_visitor.h"
 #include "KisView.h"
@@ -905,6 +906,24 @@ void KisNodeManager::nodeProperties(KisNodeSP node)
     }
 }
 
+void KisNodeManager::nodePropertiesIgnoreSelection(KisNodeSP node)
+{
+    Q_ASSERT(node);
+
+    // Change the current node temporarily
+    KisNodeSP originalNode = m_d->imageView->currentNode();
+    m_d->imageView->setCurrentNode(node);
+
+    if (node->inherits("KisLayer")) {
+        m_d->layerManager.layerProperties();
+    }
+    else if (node->inherits("KisMask")) {
+        m_d->maskManager.maskProperties();
+    }
+
+    m_d->imageView->setCurrentNode(originalNode);
+}
+
 void KisNodeManager::changeCloneSource()
 {
     m_d->layerManager.changeCloneSource();
@@ -1516,6 +1535,23 @@ void KisNodeManager::toggleInheritAlpha()
             KisLayerPropertiesIcons::setNodePropertyAutoUndo(node, KisLayerPropertiesIcons::inheritAlpha, !isAlphaDisabled, m_d->view->image());
         }
     }
+}
+
+void KisNodeManager::colorOverlayMaskProperties(KisNodeSP node)
+{
+    Q_ASSERT(node);
+    KisLayerSP layer = qobject_cast<KisLayer*>(node.data());
+    if (!layer) {
+        return;
+    }
+
+    KisFilterMaskSP mask = layer->colorOverlayMask();
+    if (!mask) {
+        // This layer does not use fast color overlay mask.
+        return;
+    }
+
+    nodePropertiesIgnoreSelection(mask);
 }
 
 void KisNodeManager::cutLayersToClipboard()

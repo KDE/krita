@@ -192,6 +192,7 @@ public Q_SLOTS:
     void createReferenceImageFromVisible();
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
+    void nodePropertiesIgnoreSelection(KisNodeSP node);
     /// pop up a window for changing the source of the selected Clone Layers
     void changeCloneSource();
     void nodeOpacityChanged(qreal opacity);
@@ -233,6 +234,9 @@ public Q_SLOTS:
     void toggleVisibility();
     void toggleAlphaLock();
     void toggleInheritAlpha();
+
+    /** Open a dialog to change layer's fast color overlay mask properties. */
+    void colorOverlayMaskProperties(KisNodeSP node);
 
     /**
      * @brief slotSetSelectedNodes set the list of nodes selected in the layerbox. Selected nodes are not necessarily active nodes.

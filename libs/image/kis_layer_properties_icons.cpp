@@ -29,6 +29,7 @@ const KoID KisLayerPropertiesIcons::onionSkins("onion-skins", ki18n("Onion Skins
 const KoID KisLayerPropertiesIcons::passThrough("pass-through", ki18n("Pass Through"));
 const KoID KisLayerPropertiesIcons::selectionActive("selection-active", ki18n("Active"));
 const KoID KisLayerPropertiesIcons::colorLabelIndex("color-label", ki18n("Color Label"));
+const KoID KisLayerPropertiesIcons::colorOverlay("color-overlay", ki18n("Color Overlay"));
 const KoID KisLayerPropertiesIcons::colorizeNeedsUpdate("colorize-needs-update", ki18n("Update Result"));
 const KoID KisLayerPropertiesIcons::colorizeEditKeyStrokes("colorize-show-key-strokes", ki18n("Edit Key Strokes"));
 const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
@@ -87,6 +88,7 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(layerError.id(), IconsPair(KisIconUtils::loadIcon("warning"), KisIconUtils::loadIcon("warning")));
     m_d->icons.insert(layerColorSpaceMismatch.id(), IconsPair(KisIconUtils::loadIcon("different-colorspace"), KisIconUtils::loadIcon("different-colorspace")));
     m_d->icons.insert(antialiased.id(), IconsPair(KisIconUtils::loadIcon("select-shape"), KisIconUtils::loadIcon("select-pixel")));
+    // No static icons for colorOverlay.
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)

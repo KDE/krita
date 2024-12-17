@@ -434,25 +434,34 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
     list << OptionalProperty(0);
     list << OptionalProperty(0);
     list << OptionalProperty(0);
+    list << OptionalProperty(0);
 
     KisBaseNode::PropertyList::const_iterator it = props.constBegin();
     KisBaseNode::PropertyList::const_iterator end = props.constEnd();
     for (; it != end; ++it) {
         if (!it->isMutable &&
                 it->id != KisLayerPropertiesIcons::layerError.id() &&
-                it->id != KisLayerPropertiesIcons::layerColorSpaceMismatch.id()) continue;
+                it->id != KisLayerPropertiesIcons::layerColorSpaceMismatch.id() &&
+                it->id != KisLayerPropertiesIcons::colorOverlay.id()) continue;
 
         if (it->id == KisLayerPropertiesIcons::visible.id()) {
             // noop...
-        } else if (it->id == KisLayerPropertiesIcons::locked.id()) {
+        } else if (it->id == KisLayerPropertiesIcons::colorOverlay.id()) {
             list[0] = OptionalProperty(&(*it));
-        } else if (it->id == KisLayerPropertiesIcons::inheritAlpha.id()) {
+        } else if (it->id == KisLayerPropertiesIcons::locked.id()) {
             list[1] = OptionalProperty(&(*it));
-        } else if (it->id == KisLayerPropertiesIcons::alphaLocked.id()) {
+        } else if (it->id == KisLayerPropertiesIcons::inheritAlpha.id()) {
             list[2] = OptionalProperty(&(*it));
+        } else if (it->id == KisLayerPropertiesIcons::alphaLocked.id()) {
+            list[3] = OptionalProperty(&(*it));
         } else {
             prependList.prepend(OptionalProperty(&(*it)));
         }
+    }
+
+    // If fast color overlay is not used, don't show its icon.
+    if (list[0] == nullptr) {
+        list.removeFirst();
     }
 
     {
@@ -509,7 +518,11 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, con
 {
     QModelIndex root(view->rootIndex());
 
-    if ((modifier & Qt::ShiftModifier) == Qt::ShiftModifier && clickedProperty->canHaveStasis) {
+    if (clickedProperty->id == KisLayerPropertiesIcons::colorOverlay.id()) {
+        // Open the properties dialog for the layer's fast color overlay mask.
+        view->model()->setData(index, QVariant() /* unused */, KisNodeModel::LayerColorOverlayPropertiesRole);
+
+    } else if ((modifier & Qt::ShiftModifier) == Qt::ShiftModifier && clickedProperty->canHaveStasis) {
         bool mode = true;
 
         OptionalProperty prop = findProperty(props, clickedProperty);
@@ -739,13 +752,20 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
 
             const qreal oldOpacity = p->opacity(); // remember previous opacity
             if (fullColor) {
-                 p->setOpacity(1.0);
-            }
-            else {
+                p->setOpacity(1.0);
+            } else {
                 p->setOpacity(0.35);
             }
 
-            p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), QIcon::Normal));
+            if (prop->id == KisLayerPropertiesIcons::colorOverlay.id()) {
+                // Parent layer can show its color overlay mask color here.
+                QRect colorRect(x, y, scm.iconSize(), scm.iconSize());
+                colorRect = colorRect.marginsRemoved(QMargins(2, 1, 2, 1));
+                p->fillRect(colorRect, index.data(KisNodeModel::LayerColorOverlayColorRole).value<QColor>());
+                p->drawRect(colorRect);
+            } else {
+                p->drawPixmap(x, y, icon.pixmap(scm.iconSize(), QIcon::Normal));
+            }
             p->setOpacity(oldOpacity); // restore old opacity
         }
         x += scm.iconSize() + scm.iconMargin();
@@ -762,20 +782,8 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
         } else {
             p->setOpacity(1.0);
         }
-        // Filter masks have two unused properties/icons,
-        // and we can use that space to draw the filter's selected color.
 
-        QRect colorRect;
-        const int dx = scm.iconSize() + scm.iconMargin();
-        if (option.direction == Qt::RightToLeft) {
-            // The free space is at the beginning on the left.
-            colorRect.setRect(0, 0, rc.width() - dx, rc.height());
-        } else {
-            // The free space is at the end on the right.
-            colorRect.setRect(dx, 0, rc.width() - dx, rc.height());
-        }
-        colorRect = colorRect.marginsRemoved(QMargins(8, 10, 8, 10));
-
+        const QRect colorRect = filterColorClickRect(option, index).translated(-rc.x(), -rc.y());
         p->fillRect(colorRect, index.data(KisNodeModel::FilterMaskColorRole).value<QColor>());
         p->drawRect(colorRect);
     }
@@ -1063,6 +1071,9 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         const bool decorationClicked = decorationRect.isValid() &&
             decorationRect.contains(mouseEvent->pos());
 
+        const QRect filterRect = filterColorClickRect(option, index);
+        const bool filterColorClicked = filterRect.isValid() &&
+            filterRect.contains(mouseEvent->pos());
 
         if (leftButton) {
             if (decorationClicked) {
@@ -1097,6 +1108,10 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                     d->view->setCurrentIndex(index);
                 }
                 return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
+
+            } else if (filterColorClicked) {
+                model->setData(index, QVariant() /* unused */, KisNodeModel::FilterMaskPropertiesRole);
+                return true;
 
             } else {
                 auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), option);
@@ -1394,3 +1409,26 @@ void NodeDelegate::slotResetState(){
     }
 }
 
+QRect NodeDelegate::filterColorClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    KisNodeViewColorScheme scm;
+    const QRect icons = iconsRect(option, index);
+
+    // Filter masks have two unused properties/icons,
+    // and we can use that space to draw the filter's selected color.
+
+    QRect rc;
+    const int dx = scm.iconSize() + scm.iconMargin();
+    if (option.direction == Qt::RightToLeft) {
+        // The free space is at the beginning on the left.
+        rc.setRect(0, 0, icons.width() - dx, icons.height());
+    } else {
+        // The free space is at the end on the right.
+        rc.setRect(dx, 0, icons.width() - dx, icons.height());
+    }
+    rc = rc.marginsRemoved(QMargins(8, 10, 8, 10));
+
+    rc.translate(icons.x(), icons.y());
+
+    return rc;
+}

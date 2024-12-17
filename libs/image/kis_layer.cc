@@ -31,6 +31,7 @@
 #include "kis_painter.h"
 #include "kis_mask.h"
 #include "kis_effect_mask.h"
+#include "kis_filter_mask.h"
 #include "kis_selection_mask.h"
 #include "kis_meta_data_store.h"
 #include "kis_selection.h"
@@ -286,6 +287,11 @@ KisBaseNode::PropertyList KisLayer::sectionModelProperties() const
     }
 
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::inheritAlpha, alphaChannelDisabled());
+
+    if (colorOverlayMask()) {
+        // Use an immutable property (with a string value), to hide it in the layer properties dialog.
+        l << KisBaseNode::Property(KisLayerPropertiesIcons::colorOverlay, "true");
+    }
 
     return l;
 }
@@ -558,6 +564,23 @@ QList<KisEffectMaskSP> KisLayer::searchEffectMasks(KisNodeSP lastNode) const
 bool KisLayer::hasEffectMasks() const
 {
     return  !m_d->masksCache.effectMasks().isEmpty();
+}
+
+KisFilterMaskSP KisLayer::colorOverlayMask() const
+{
+    if (hasEffectMasks()) {
+        // Iterate the masks in reverse, the last element is on top of the stack.
+        auto allMasks = effectMasks();
+        for (auto iter = allMasks.rbegin(); iter != allMasks.rend(); ++iter) {
+            if ((*iter)->inherits("KisFilterMask")) {
+                KisFilterMaskSP filterMask = qobject_cast<KisFilterMask*>((*iter).data());
+                if (filterMask->filter()->name() == "fastcoloroverlay") {
+                    return filterMask;
+                }
+            }
+        }
+    }
+    return nullptr;
 }
 
 QRect KisLayer::masksChangeRect(const QList<KisEffectMaskSP> &masks,

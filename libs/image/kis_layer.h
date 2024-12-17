@@ -277,6 +277,11 @@ public:
     QList<KisEffectMaskSP> effectMasks(KisNodeSP lastNode) const;
 
     /**
+     * @return the top fast color overlay mask, or nullptr if there's none.
+     */
+    KisFilterMaskSP colorOverlayMask() const;
+
+    /**
      * Get the group layer that contains this layer.
      */
     KisLayerSP parentLayer() const;

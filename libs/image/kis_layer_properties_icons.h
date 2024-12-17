@@ -28,6 +28,7 @@ public:
     static const KoID passThrough;
     static const KoID selectionActive;
     static const KoID colorLabelIndex;
+    static const KoID colorOverlay;
     static const KoID colorizeNeedsUpdate;
     static const KoID colorizeEditKeyStrokes;
     static const KoID colorizeShowColoring;

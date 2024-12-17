@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -19921,8 +19921,8 @@ msgstr "Sorga"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20318,14 +20318,14 @@ msgstr "Variable"
 msgid "Thumbnail"
 msgstr "Opcions"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -36533,52 +36533,53 @@ msgstr "Seleccion"
 msgid "Custom Color"
 msgstr "Personalizat"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, fuzzy, kde-format
-msgid "Editor Widget Control:"
-msgstr "Colors"
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "Opcions dels espleches"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, fuzzy, kde-format
 msgid "Show Move"
 msgstr "Estampatge"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, fuzzy, kde-format
 msgid "Show Snapping"
 msgstr "Seleccion"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, fuzzy, kde-format
 msgid "Show Lock"
 msgstr "Grasilha"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "Show Duplicate"
 msgstr "Duplicar"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Show Delete"
 msgstr "Suprimir"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, fuzzy, kde-format
 msgid "Load Assistant Set"
 msgstr "Ellipsa"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, fuzzy, kde-format
 msgid "Save Assistant Set"
 msgstr "Ellipsa"
@@ -36660,45 +36661,45 @@ msgstr "Ellipsa"
 msgid "Infinite Ruler"
 msgstr "Ellipsa"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, fuzzy, kde-format
 msgid "Select an Assistant"
 msgstr "Ellipsa"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, fuzzy, kde-format
 msgid "Save Assistant"
 msgstr "Ellipsa"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, fuzzy, kde-format
 #| msgid "Opacity:"
 msgid "Opacity: "
 msgstr "Opacitat :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 msgid "Density: "
 msgstr "Descripcion :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, fuzzy, kde-format
 msgid "Subdivisions: "
 msgstr "Posicion"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, fuzzy, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Posicion"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "Ellipsa"
@@ -61035,6 +61036,10 @@ msgstr "Reduire el zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Preferéncias"
+
+#, fuzzy
+#~ msgid "Editor Widget Control:"
+#~ msgstr "Colors"
 
 #, fuzzy
 #~ msgid "Fit View"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -19743,8 +19743,8 @@ msgstr "ローカルリソース"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20138,14 +20138,14 @@ msgstr "プリインストール済み"
 msgid "Thumbnail"
 msgstr "サムネイル"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -37011,52 +37011,53 @@ msgstr "グローバル色:"
 msgid "Custom Color"
 msgstr "カスタム色"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, kde-format
-msgid "Editor Widget Control:"
-msgstr "エディタウィジットのコントロール:"
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#, fuzzy, kde-format
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "ツールのオプション"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, kde-format
 msgid "Show Move"
 msgstr "動作を表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, kde-format
 msgid "Show Snapping"
 msgstr "スナップを表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, kde-format
 msgid "Show Lock"
 msgstr "ロックを表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, kde-format
 msgid "Show Duplicate"
 msgstr "複製"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, kde-format
 msgid "Show Delete"
 msgstr "削除を表示"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "補助セットを読み込み"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "補助セットを保存"
@@ -37142,47 +37143,47 @@ msgid "Infinite Ruler"
 msgstr "無限定規"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
 msgstr "補助線を選択"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "エラーが発生しました。一部の補助線の読み込みに失敗しました。"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, kde-format
 msgid "Save Assistant"
 msgstr "補助線を保存"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
 msgstr "不透明度:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Density: "
 msgstr "密度:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, kde-format
 msgid "Subdivisions: "
 msgstr "サブグリッド: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "細分サブグリッド: "
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, kde-format
 msgid "Assistant Tool"
 msgstr "補助線ツール"
@@ -61699,6 +61700,9 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgid "Editor Widget Control:"
+#~ msgstr "エディタウィジットのコントロール:"
 
 #~ msgid "Fit View"
 #~ msgstr "ビューに合わせる"

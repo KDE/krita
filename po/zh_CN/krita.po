@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -19635,8 +19635,8 @@ msgstr "本地资源"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20029,14 +20029,14 @@ msgstr "预装"
 msgid "Thumbnail"
 msgstr "缩略图"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -36617,50 +36617,51 @@ msgstr "全局颜色："
 msgid "Custom Color"
 msgstr "自定义颜色"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, kde-format
-msgid "Editor Widget Control:"
-msgstr "编辑器控件："
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#, fuzzy, kde-format
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "工具选项"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, kde-format
 msgid "Show Move"
 msgstr "显示移动"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, kde-format
 msgid "Show Snapping"
 msgstr "显示吸附"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, kde-format
 msgid "Show Lock"
 msgstr "显示锁定"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, kde-format
 msgid "Show Duplicate"
 msgstr "显示复制"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, kde-format
 msgid "Show Delete"
 msgstr "显示删除"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "加载辅助尺布局"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "保存辅助尺布局"
@@ -36737,44 +36738,44 @@ msgstr "无限直线辅助尺"
 msgid "Infinite Ruler"
 msgstr "无限直线"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
 msgstr "选择辅助尺"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "发生错误。未能成功加载全部辅助尺。"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, kde-format
 msgid "Save Assistant"
 msgstr "保存辅助尺"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
 msgstr "不透明度："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Density: "
 msgstr "密度： "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, kde-format
 msgid "Subdivisions: "
 msgstr "分段数："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "刻度细分："
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, kde-format
 msgid "Assistant Tool"
 msgstr "辅助尺工具：建立笔刷吸附所用的形状和透视等辅助尺"
@@ -60870,3 +60871,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Editor Widget Control:"
+#~ msgstr "编辑器控件："

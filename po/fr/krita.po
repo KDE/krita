@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2024-12-09 10:48+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -19845,8 +19845,8 @@ msgstr "Ressources locales"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20242,14 +20242,14 @@ msgstr "Pré installé"
 msgid "Thumbnail"
 msgstr "Vignette"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -37415,50 +37415,51 @@ msgstr "Couleur générale :"
 msgid "Custom Color"
 msgstr "Couleur personnalisée"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
-#, kde-format
-msgid "Editor Widget Control:"
-msgstr "Contrôle du composant graphique d'édition :"
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
+#, fuzzy, kde-format
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "Paramètres de l'outil"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, kde-format
 msgid "Show Move"
 msgstr "Afficher le déplacement"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, kde-format
 msgid "Show Snapping"
 msgstr "Afficher l'aimantation"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, kde-format
 msgid "Show Lock"
 msgstr "Afficher le verrouillage"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, kde-format
 msgid "Show Duplicate"
 msgstr "Afficher le duplicata"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, kde-format
 msgid "Show Delete"
 msgstr "Afficher la suppression"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "Charger un jeu d'assistants"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "Enregistrer un jeu d'assistants"
@@ -37535,48 +37536,48 @@ msgstr "Assistant règle infinie"
 msgid "Infinite Ruler"
 msgstr "Règle infinie"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Sélectionner un assistant"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 "Des erreurs ont été rencontrées. Tous les assistants n'ont pas été chargés "
 "avec succès."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, kde-format
 msgid "Save Assistant"
 msgstr "Assistant d'enregistrement"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
 msgstr "Opacité :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Density: "
 msgstr "Densité :"
 
 # configration grille, nombre de carreaux intermédiaires
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Subdivisions :"
 
 # configration grille, nombre de carreaux intermédiaires
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Subdivisions mineures :"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Assistant"
@@ -62305,6 +62306,9 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
+
+#~ msgid "Editor Widget Control:"
+#~ msgstr "Contrôle du composant graphique d'édition :"
 
 #~ msgid "Fit View"
 #~ msgstr "Ajuster la vue"

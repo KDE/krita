@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -20636,8 +20636,8 @@ msgstr "Ҳужжатни импорт қилиш"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -21056,14 +21056,14 @@ msgstr "Ўзгарувчи"
 msgid "Thumbnail"
 msgstr "Белги услубини ўзгартириш"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -38053,55 +38053,54 @@ msgstr "&Соянинг ранги:"
 msgid "Custom Color"
 msgstr "Бошқа"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, fuzzy, kde-format
-#| msgid "Text Color"
-msgid "Editor Widget Control:"
-msgstr "Матннинг ранги"
+msgid "Control Widget Options"
+msgstr "Тўлдириш мосламалари"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, fuzzy, kde-format
 #| msgid "Shadow:"
 msgid "Show Move"
 msgstr "Соя:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, fuzzy, kde-format
 msgid "Show Snapping"
 msgstr "Тўлдириш мосламалари"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, fuzzy, kde-format
 #| msgid "Guide Lines"
 msgid "Show Lock"
 msgstr "Ёрдамчи чизиқлар"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, fuzzy, kde-format
 #| msgid "Location:"
 msgid "Show Duplicate"
 msgstr "Манзили:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, fuzzy, kde-format
 msgid "Show Delete"
 msgstr "Матнни ўчириш"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgid "Load Assistant Set"
 msgstr "%1 сифатида сақлаш"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgid "Save Assistant Set"
@@ -38192,49 +38191,49 @@ msgstr "Ўзгарувчи"
 msgid "Infinite Ruler"
 msgstr "Ўзгарувчи"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, fuzzy, kde-format
 #| msgid "Template %1 failed to load."
 msgid "Select an Assistant"
 msgstr "%1 намунани юклаш муваффақиятсиз тугади."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgid "Save Assistant"
 msgstr "%1 сифатида сақлаш"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, fuzzy, kde-format
 msgid "Opacity: "
 msgstr "Шаҳар:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "City:"
 msgid "Density: "
 msgstr "Шаҳар:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Subdivisions: "
 msgstr "Жойлашиши"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Minor Subdivisions: "
 msgstr "Жойлашиши"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgid "Assistant Tool"
@@ -63777,6 +63776,11 @@ msgstr "Ранги:"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "&Алмаштириш:"
+
+#, fuzzy
+#~| msgid "Text Color"
+#~ msgid "Editor Widget Control:"
+#~ msgstr "Матннинг ранги"
 
 #, fuzzy
 #~| msgid "&Split View"

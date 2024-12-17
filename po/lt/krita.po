@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -20241,8 +20241,8 @@ msgstr "Valyti resursų failus"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20653,14 +20653,14 @@ msgstr "Lygiagrečiai"
 msgid "Thumbnail"
 msgstr "Miniatiūros"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -37235,53 +37235,52 @@ msgstr "Pažymėjimas"
 msgid "Custom Color"
 msgstr "Savitas teptukas"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set Text Color"
-msgid "Editor Widget Control:"
-msgstr "Nustatyti teksto spalvą"
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "Įrankio parinktys"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, fuzzy, kde-format
 msgid "Show Move"
 msgstr "Šešėliai"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, fuzzy, kde-format
 msgid "Show Snapping"
 msgstr "Pažymėjimas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, fuzzy, kde-format
 msgid "Show Lock"
 msgstr "Rodyti liniuotes"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, fuzzy, kde-format
 msgid "Show Duplicate"
 msgstr "Dubliuoti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Show Delete"
 msgstr "Trinti"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, fuzzy, kde-format
 msgid "Load Assistant Set"
 msgstr "Padėjėjas:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, fuzzy, kde-format
 msgid "Save Assistant Set"
 msgstr "Padėjėjas:"
@@ -37363,48 +37362,48 @@ msgstr "Padėjėjas:"
 msgid "Infinite Ruler"
 msgstr "Padėjėjas:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, fuzzy, kde-format
 msgid "Select an Assistant"
 msgstr "Padėjėjas:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, fuzzy, kde-format
 msgid "Save Assistant"
 msgstr "Padėjėjas:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, fuzzy, kde-format
 #| msgid "Opacity:"
 msgid "Opacity: "
 msgstr "Nepermatomumas:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "Density:"
 msgid "Density: "
 msgstr "Tankis:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "Poskyris:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "Poskyris:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, fuzzy, kde-format
 msgid "Assistant Tool"
 msgstr "Padėjėjas:"
@@ -62415,6 +62414,12 @@ msgstr "mastelis iki dydžio"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Pasirinkimai"
+
+#, fuzzy
+#~| msgctxt "(qtundo-format)"
+#~| msgid "Set Text Color"
+#~ msgid "Editor Widget Control:"
+#~ msgstr "Nustatyti teksto spalvą"
 
 #, fuzzy
 #~ msgid "Fit View"

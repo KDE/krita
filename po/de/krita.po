@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -20608,8 +20608,8 @@ msgstr "Lokale Ressourcen"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -21007,14 +21007,14 @@ msgstr "Vorinstalliert"
 msgid "Thumbnail"
 msgstr "Vorschaubild"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -37956,28 +37956,28 @@ msgstr "Globale Farbe:"
 msgid "Custom Color"
 msgstr "Benutzerdefinierte Farbe"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, fuzzy, kde-format
-#| msgid "Editor text color"
-msgid "Editor Widget Control:"
-msgstr "Editor-Textfarbe"
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "Werkzeugoptionen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, fuzzy, kde-format
 #| msgid "Sh&adow Mode:"
 msgid "Show Move"
 msgstr "Sch&attenmodus:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, fuzzy, kde-format
 msgid "Show Snapping"
 msgstr "Werkzeugoptionen anzeigen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Show Dockers"
@@ -37985,28 +37985,28 @@ msgid "Show Lock"
 msgstr "Andockbare Dialoge anzeigen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "Show Duplicate"
 msgstr "Duplizieren"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, fuzzy, kde-format
 #| msgid "Delete"
 msgid "Show Delete"
 msgstr "Löschen"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, fuzzy, kde-format
 #| msgid "Save Assistant"
 msgid "Load Assistant Set"
 msgstr "Speicher-Assistent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, fuzzy, kde-format
 #| msgid "Save Assistant"
 msgid "Save Assistant Set"
@@ -38086,46 +38086,46 @@ msgstr "Hilfslineal"
 msgid "Infinite Ruler"
 msgstr "Hilfslineal"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Wählen Sie einen Assistenten"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "Fehler entdeckt. Nicht alle Assistenten wurden erfolgreich geladen."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, kde-format
 msgid "Save Assistant"
 msgstr "Speicher-Assistent"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
 msgstr "Deckkraft: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Density: "
 msgstr "Dichte: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Subdivisions: "
 msgstr "Unterteilung:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, fuzzy, kde-format
 #| msgid "Subdivision:"
 msgid "Minor Subdivisions: "
 msgstr "Unterteilung:"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Assistenzwerkzeug"
@@ -63310,6 +63310,11 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenzbilder"
+
+#, fuzzy
+#~| msgid "Editor text color"
+#~ msgid "Editor Widget Control:"
+#~ msgstr "Editor-Textfarbe"
 
 #, fuzzy
 #~| msgid "PaintView"

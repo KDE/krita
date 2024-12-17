@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 02:38+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -21315,8 +21315,8 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -21775,14 +21775,14 @@ msgstr ""
 msgid "Thumbnail"
 msgstr "ਥੰਮਨੇਲ ਝਲਕ"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -39413,57 +39413,57 @@ msgstr "ਮਾਸਟਰ ਸ਼ਕਲਾਂ ਵੇਖੋ"
 msgid "Custom Color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, fuzzy, kde-format
-#| msgid "Line Color"
-msgid "Editor Widget Control:"
-msgstr "ਰੇਖਾ ਰੰਗ"
+#| msgid "Tool Options"
+msgid "Control Widget Options"
+msgstr "ਟੂਲ ਚੋਣਾਂ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, fuzzy, kde-format
 #| msgid "Add collection folder"
 msgid "Show Move"
 msgstr "ਭੰਡਾਰ ਫੋਲਡਰ ਸ਼ਾਮਲ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Show Snapping"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Show Lock"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, fuzzy, kde-format
 #| msgid "Collection"
 msgid "Show Duplicate"
 msgstr "ਭੰਡਾਰ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Show Delete"
 msgstr "ਹਟਾਓ(&e)"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Load Assistant Set"
 msgstr "ਸੰਭਾਲੋ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Save Assistant Set"
@@ -39557,50 +39557,50 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 msgid "Infinite Ruler"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Select an Assistant"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr ""
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, fuzzy, kde-format
 #| msgid "Save"
 msgid "Save Assistant"
 msgstr "ਸੰਭਾਲੋ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgid "Opacity: "
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, fuzzy, kde-format
 #| msgid "Line Weight"
 msgid "Density: "
 msgstr "ਰੇਖਾ ਭਾਰ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Subdivisions: "
 msgstr "ਸਥਿਤੀ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Minor Subdivisions: "
 msgstr "ਸਥਿਤੀ"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Assistant Tool"
@@ -66258,6 +66258,11 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Line Color"
+#~ msgid "Editor Widget Control:"
+#~ msgstr "ਰੇਖਾ ਰੰਗ"
 
 #, fuzzy
 #~| msgid "View mode"

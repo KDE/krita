@@ -36619,10 +36619,9 @@ msgstr "自定义颜色"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "工具选项"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -60871,6 +60870,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Editor Widget Control:"
-#~ msgstr "编辑器控件："

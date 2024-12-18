@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-17 02:05+0000\n"
-"PO-Revision-Date: 2024-12-14 18:01+0300\n"
+"PO-Revision-Date: 2024-12-17 21:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -37018,10 +37018,9 @@ msgstr "Özel Renk"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Araç Seçenekleri"
+msgstr "Araç takımı seçenekleri denetimi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304

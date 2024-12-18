@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 10:55+0000\n"
+"POT-Creation-Date: 2024-12-17 02:05+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -7877,14 +7877,27 @@ msgctxt "action"
 msgid "Break at point"
 msgstr "Bryt ved punkt"
 
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
+#, kde-format
+msgctxt "action"
+msgid "Break at selection"
+msgstr ""
+
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
+#: krita/data/actions/PathTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Make line point"
@@ -7896,8 +7909,8 @@ msgstr "Gjer om til linjepunkt"
 #. i18n: context: iconText @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
-#: krita/data/actions/PathTool.action:73
+#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
+#: krita/data/actions/PathTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Symmetric Point"
@@ -7909,8 +7922,8 @@ msgstr "Symmetrisk punkt"
 #. i18n: context: iconText @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
-#: krita/data/actions/PathTool.action:83
+#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
+#: krita/data/actions/PathTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
@@ -7922,8 +7935,8 @@ msgstr "Gjer om til kurvepunkt"
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
-#: krita/data/actions/PathTool.action:93
+#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
+#: krita/data/actions/PathTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Segment to Curve"
@@ -7935,8 +7948,9 @@ msgstr "Linjestykke til kurve"
 #. i18n: context: iconText @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
-#: krita/data/actions/PathTool.action:103
+#: krita/data/actions/PathTool.action:106
+#: krita/data/actions/PathTool.action:108
+#: krita/data/actions/PathTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Insert point"
@@ -7948,9 +7962,9 @@ msgstr "Set inn punkt"
 #. i18n: context: iconText @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:106
-#: krita/data/actions/PathTool.action:108
-#: krita/data/actions/PathTool.action:113
+#: krita/data/actions/PathTool.action:116
+#: krita/data/actions/PathTool.action:118
+#: krita/data/actions/PathTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Corner point"
@@ -7962,9 +7976,9 @@ msgstr "Hjørnepunkt"
 #. i18n: context: iconText @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:116
-#: krita/data/actions/PathTool.action:118
-#: krita/data/actions/PathTool.action:123
+#: krita/data/actions/PathTool.action:126
+#: krita/data/actions/PathTool.action:128
+#: krita/data/actions/PathTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Merge points"
@@ -7976,9 +7990,9 @@ msgstr "Slå saman punkt"
 #. i18n: context: iconText @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:126
-#: krita/data/actions/PathTool.action:128
-#: krita/data/actions/PathTool.action:133
+#: krita/data/actions/PathTool.action:136
+#: krita/data/actions/PathTool.action:138
+#: krita/data/actions/PathTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Join with segment"
@@ -7991,9 +8005,9 @@ msgstr "Bind saman med linjestykke"
 #. i18n: context: iconText @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:136
-#: krita/data/actions/PathTool.action:138
-#: krita/data/actions/PathTool.action:143
+#: krita/data/actions/PathTool.action:146
+#: krita/data/actions/PathTool.action:148
+#: krita/data/actions/PathTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Smooth point"
@@ -16167,7 +16181,7 @@ msgstr "Endra parameter"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:310
+#: libs/flake/tools/KoPathTool.cpp:311
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Gjer om til bane"
@@ -16518,41 +16532,43 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Endra linjestykke"
 
-#: libs/flake/tools/KoPathTool.cpp:126
+#: libs/flake/tools/KoPathTool.cpp:127
 #, kde-format
 msgid "Edit Shape"
 msgstr "Rediger figur"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:618
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Dra for å flytta handtak."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:672
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Dra for å flytta punkt. «Shift + klikk» for å byta punkttype."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:674
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Dra for å flytta kontrollpunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Dra for å endra kurva direkte. Dobbeltklikk for å setja inn nytt banepunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:707
 #, kde-format
-msgid "Press B to break path at selected point."
-msgstr "Trykk «B» for å bryta bana ved det valde punktet."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected point."
+msgstr ""
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:709
 #, kde-format
-msgid "Press B to break path at selected segments."
-msgstr "Trykk «B» for å bryta bana ved dei valde linjestykka."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected segments."
+msgstr ""
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -19734,8 +19750,8 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1533
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:294
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:175
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:178
@@ -20130,14 +20146,14 @@ msgstr "Førehandsinstallert"
 msgid "Thumbnail"
 msgstr "Miniatyrbilete"
 
-#. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
+#. i18n: ectx: property (text), widget (QToolButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:612
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
@@ -37017,50 +37033,50 @@ msgstr "Global farge:"
 msgid "Custom Color"
 msgstr "Tilpassa farge"
 
-#. i18n: ectx: property (text), widget (QLabel, editorWidgetText)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:229
+#. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, kde-format
-msgid "Editor Widget Control:"
+msgid "Control Widget Options"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
 #, kde-format
 msgid "Show Move"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:320
 #, kde-format
 msgid "Show Snapping"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showLock)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:277
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:336
 #, kde-format
 msgid "Show Lock"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDuplicate)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:293
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:352
 #, kde-format
 msgid "Show Duplicate"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showDelete)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:309
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:368
 #, kde-format
 msgid "Show Delete"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:374
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:403
 #, kde-format
 msgid "Load Assistant Set"
 msgstr "Opna assistentsett"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, saveAssistantButton)
-#: plugins/assistants/Assistants/AssistantsToolOptions.ui:393
+#: plugins/assistants/Assistants/AssistantsToolOptions.ui:422
 #, kde-format
 msgid "Save Assistant Set"
 msgstr "Lagra assistentsett"
@@ -37137,44 +37153,44 @@ msgstr "Uendeleg linjal-assistent"
 msgid "Infinite Ruler"
 msgstr "Uendeleg linjal"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1388
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
 msgstr "Vel assistent"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1536
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
 msgid "Errors were encountered. Not all assistants were successfully loaded."
 msgstr "Fann feil. Ikkje alle assistentane vart lasta inn."
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1626
 #, kde-format
 msgid "Save Assistant"
 msgstr "Lagra assistent"
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1721
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
 msgstr "Tettleik: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
 #, kde-format
 msgid "Density: "
 msgstr "Tettleik: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1743
 #, kde-format
 msgid "Subdivisions: "
 msgstr "Underinndelingar: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.cc:1742
+#: plugins/assistants/Assistants/kis_assistant_tool.cc:1747
 #, kde-format
 msgid "Minor Subdivisions: "
 msgstr "Mindre underinndeling: "
 
-#: plugins/assistants/Assistants/kis_assistant_tool.h:186
+#: plugins/assistants/Assistants/kis_assistant_tool.h:190
 #, kde-format
 msgid "Assistant Tool"
 msgstr "Assistent"

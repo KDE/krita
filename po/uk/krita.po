@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-17 02:05+0000\n"
-"PO-Revision-Date: 2024-12-14 08:39+0200\n"
+"PO-Revision-Date: 2024-12-17 17:15+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -37582,10 +37582,9 @@ msgstr "Нетиповий колір"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Параметри інструмента"
+msgstr "Параметри віджета керування"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304

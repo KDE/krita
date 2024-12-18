@@ -9,13 +9,12 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-17 02:05+0000\n"
-"PO-Revision-Date: 2024-12-14 09:04+0100\n"
+"PO-Revision-Date: 2024-12-17 13:30+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -37171,10 +37170,9 @@ msgstr "Color personalitzat"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Opcions de l'eina"
+msgstr "Opcions del giny de control"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -61943,6 +61941,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Editor Widget Control:"
-#~ msgstr "Control del giny editor:"

@@ -648,7 +648,11 @@ template<class T>
 inline T cfOver(T src, T dst) { Q_UNUSED(dst); return src; }
 
 template<class T>
-struct CFOverlay : CFHardLight<T> {};
+struct CFOverlay : CFHardLight<T> {
+    static inline T composeChannel(T src, T dst) {
+        return CFHardLight<T>::composeChannel(dst,src);
+    }
+};
 
 template<class T>
 inline T cfMultiply(T src, T dst) { return Arithmetic::mul(src, dst); }

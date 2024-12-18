@@ -1072,7 +1072,9 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             decorationRect.contains(mouseEvent->pos());
 
         const QRect filterRect = filterColorClickRect(option, index);
-        const bool filterColorClicked = filterRect.isValid() &&
+        const bool filterColorClicked =
+            (index.data(KisNodeModel::FilterMaskColorRole).isNull() == false) &&
+            filterRect.isValid() &&
             filterRect.contains(mouseEvent->pos());
 
         if (leftButton) {

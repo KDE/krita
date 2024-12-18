@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-13 12:22+0000\n"
+"POT-Creation-Date: 2024-12-14 04:13+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -16395,33 +16395,33 @@ msgstr "Endra linjestykke"
 msgid "Edit Shape"
 msgstr "Rediger figur"
 
-#: libs/flake/tools/KoPathTool.cpp:608
+#: libs/flake/tools/KoPathTool.cpp:603
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Dra for å flytta handtak."
 
-#: libs/flake/tools/KoPathTool.cpp:662
+#: libs/flake/tools/KoPathTool.cpp:657
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr "Dra for å flytta punkt. «Shift + klikk» for å byta punkttype."
 
-#: libs/flake/tools/KoPathTool.cpp:664
+#: libs/flake/tools/KoPathTool.cpp:659
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Dra for å flytta kontrollpunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:687
+#: libs/flake/tools/KoPathTool.cpp:682
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Dra for å endra kurva direkte. Dobbeltklikk for å setja inn nytt banepunkt."
 
-#: libs/flake/tools/KoPathTool.cpp:695
+#: libs/flake/tools/KoPathTool.cpp:690
 #, kde-format
 msgid "Press B to break path at selected point."
 msgstr "Trykk «B» for å bryta bana ved det valde punktet."
 
-#: libs/flake/tools/KoPathTool.cpp:697
+#: libs/flake/tools/KoPathTool.cpp:692
 #, kde-format
 msgid "Press B to break path at selected segments."
 msgstr "Trykk «B» for å bryta bana ved dei valde linjestykka."

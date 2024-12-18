@@ -434,7 +434,6 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
     list << OptionalProperty(0);
     list << OptionalProperty(0);
     list << OptionalProperty(0);
-    list << OptionalProperty(0);
 
     KisBaseNode::PropertyList::const_iterator it = props.constBegin();
     KisBaseNode::PropertyList::const_iterator end = props.constEnd();
@@ -446,22 +445,15 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
 
         if (it->id == KisLayerPropertiesIcons::visible.id()) {
             // noop...
-        } else if (it->id == KisLayerPropertiesIcons::colorOverlay.id()) {
-            list[0] = OptionalProperty(&(*it));
         } else if (it->id == KisLayerPropertiesIcons::locked.id()) {
-            list[1] = OptionalProperty(&(*it));
+            list[0] = OptionalProperty(&(*it));
         } else if (it->id == KisLayerPropertiesIcons::inheritAlpha.id()) {
-            list[2] = OptionalProperty(&(*it));
+            list[1] = OptionalProperty(&(*it));
         } else if (it->id == KisLayerPropertiesIcons::alphaLocked.id()) {
-            list[3] = OptionalProperty(&(*it));
+            list[2] = OptionalProperty(&(*it));
         } else {
             prependList.prepend(OptionalProperty(&(*it)));
         }
-    }
-
-    // If fast color overlay is not used, don't show its icon.
-    if (list[0] == nullptr) {
-        list.removeFirst();
     }
 
     {

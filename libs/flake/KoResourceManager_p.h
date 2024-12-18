@@ -18,7 +18,7 @@
 #include "KoDerivedResourceConverter.h"
 #include "KoResourceUpdateMediator.h"
 #include "KoActiveCanvasResourceDependency.h"
-#include "KoAbstractCanvasResource.h"
+#include "KoAbstractCanvasResourceInterface.h"
 
 class KoShape;
 class QVariant;
@@ -210,13 +210,24 @@ public:
     void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
 
     /**
-     * Check if there is a derived resource converter with the same key
-     * and sourceKey. Remove existing converter with this key and add new
-     * converter if not.
+     * @return true if abstract resource with \p key exists
+     *
+     * \see setAbstractResource
      */
-    bool updateConverter(KoDerivedResourceConverterSP converter);
-
     bool hasAbstractResource(int key);
+
+    /**
+     * Remove abstract resource with \p key
+     *
+     * \see setAbstractResource
+     */
+    void removeAbstractResource(int key);
+
+    /**
+     * Some resources are abstract and stored outside the resource manager.
+     * For example, opacity is sometimes stored inside an individual tool, so
+     * we load the resource from that tool when it is active.
+     */
     void setAbstractResource(KoAbstractCanvasResourceInterfaceSP resource);
 
 Q_SIGNALS:

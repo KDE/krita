@@ -201,7 +201,6 @@ public:
     void setQtMainWindow(QMainWindow* newMainWindow);
 
     static void initializeResourceManager(KoCanvasResourceProvider *resourceManager);
-    static void updateOpacityConverter(KoCanvasResourceProvider *resourceManager, bool isOpacityPresetMode);
 
 public Q_SLOTS:
 
@@ -261,7 +260,7 @@ private Q_SLOTS:
     void slotResetRotation();
     void slotResetDisplay();
     void slotToggleFullscreen();
-    void slotUpdateOpacityConverter(bool isOpacityPresetMode);
+    void slotCreateOpacityResource(bool isOpacityPresetMode, KoToolBase *tool);
 private:
     void createActions();
     void setupManagers();

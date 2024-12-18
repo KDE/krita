@@ -10,6 +10,8 @@
 
 #include "KoInputDevice.h"
 #include "kritaflake_export.h"
+#include "KoDerivedResourceConverter.h"
+#include "KoAbstractCanvasResourceInterface.h"
 
 #include <QObject>
 #include <QList>
@@ -200,6 +202,9 @@ public:
 
     void initializeCurrentToolForCanvas();
 
+    void setConverter(KoDerivedResourceConverterSP converter, KoToolBase *tool);
+    void setAbstractResource(KoAbstractCanvasResourceInterfaceSP abstractResource, KoToolBase *tool);
+
     class Private;
     /**
      * \internal return the private object for the toolmanager.
@@ -291,12 +296,10 @@ Q_SIGNALS:
     void textModeChanged(bool text);
 
     /**
-     * Emitted when the active tool is changed to switch the
-     * opacity resource.
-     * @param isOpacityPresetMode whether the preset opacity
-     * should be used for the current tool.
+     * Emitted to create and store the opacity resource in \p tool. The opacity
+     * is a derived or abstract resource depending on \p isOpacityPresetMode.
      */
-    void switchOpacityResource(bool isOpacityPresetMode);
+    void createOpacityResource(bool isOpacityPresetMode, KoToolBase *tool);
 
 private:
     KoToolManager(const KoToolManager&);

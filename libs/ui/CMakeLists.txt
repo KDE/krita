@@ -662,6 +662,12 @@ endif()
 
 
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
+
+target_sources(kritaui
+  PRIVATE
+    kis_abstract_resources.h
+    kis_abstract_resources.cpp
+)
 generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui

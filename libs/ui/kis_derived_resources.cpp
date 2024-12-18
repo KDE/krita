@@ -124,27 +124,6 @@ QVariant KisEffectiveCompositeOpResourceConverter::toSource(const QVariant &valu
 }
 
 /*********************************************************************/
-/*          KisOpacityToGlobalOpacityResourceConverter               */
-/*********************************************************************/
-
-KisOpacityToGlobalOpacityResourceConverter::KisOpacityToGlobalOpacityResourceConverter()
-    : KoDerivedResourceConverter(KoCanvasResource::Opacity,
-                                 KoCanvasResource::GlobalOpacity)
-{
-}
-
-QVariant KisOpacityToGlobalOpacityResourceConverter::fromSource(const QVariant &value)
-{
-    return value;
-}
-
-QVariant KisOpacityToGlobalOpacityResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
-{
-    Q_UNUSED(sourceValue);
-    return value;
-}
-
-/*********************************************************************/
 /*          KisOpacityToPresetOpacityResourceConverter               */
 /*********************************************************************/
 

@@ -115,6 +115,7 @@
 #include "kis_icon_utils.h"
 #include "kis_guides_manager.h"
 #include "kis_derived_resources.h"
+#include "kis_abstract_resources.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
@@ -332,7 +333,7 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotUpdateAuthorProfileActions()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotUpdatePixelGridAction()));
 
-    connect(KoToolManager::instance(), SIGNAL(switchOpacityResource(bool)), SLOT(slotUpdateOpacityConverter(bool)));
+    connect(KoToolManager::instance(), SIGNAL(createOpacityResource(bool, KoToolBase*)), SLOT(slotCreateOpacityResource(bool, KoToolBase*)));
 
     KisInputProfileManager::instance()->loadProfiles();
 
@@ -374,7 +375,6 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
 {
     resourceManager->addDerivedResourceConverter(toQShared(new KisCompositeOpResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
-    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityToPresetOpacityResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisFadeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisScatterResourceConverter));
@@ -387,8 +387,6 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisBrushNameResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
-
-    resourceManager->setResource(KoCanvasResource::GlobalOpacity, 1);
 
     resourceManager->addActiveCanvasResourceDependency(
         toQShared(new KoActiveCanvasResourceDependencyKoResource<KisPaintOpPreset>(
@@ -1748,15 +1746,12 @@ void KisViewManager::slotToggleFullscreen()
     cfg.fullscreenMode(main->isFullScreen());
 }
 
-void KisViewManager::slotUpdateOpacityConverter(bool isOpacityPresetMode)
+void KisViewManager::slotCreateOpacityResource(bool isOpacityPresetMode, KoToolBase *tool)
 {
-    updateOpacityConverter(&d->canvasResourceManager, isOpacityPresetMode);
-}
-
-void KisViewManager::updateOpacityConverter(KoCanvasResourceProvider *resourceManager, bool isOpacityPresetMode)
-{
-    if (isOpacityPresetMode)
-        resourceManager->updateConverter((toQShared(new KisOpacityToPresetOpacityResourceConverter)));
-    else
-        resourceManager->updateConverter(toQShared(new KisOpacityToGlobalOpacityResourceConverter));
+    if (isOpacityPresetMode) {
+        KoToolManager::instance()->setConverter(toQShared(new KisOpacityToPresetOpacityResourceConverter), tool);
+    }
+    else {
+        KoToolManager::instance()->setAbstractResource(toQShared(new ToolOpacityAbstractResource(KoCanvasResource::Opacity, 1.0)), tool);
+    }
 }

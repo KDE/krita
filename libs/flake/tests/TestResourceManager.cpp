@@ -511,6 +511,41 @@ void TestResourceManager::testAbstractResource()
     }
 }
 
+void TestResourceManager::testDerivedAbstractChange()
+{
+    const int key = 1;
+    const int derivedKey = 2;
+
+    KoCanvasResourceProvider m;
+    QSharedPointer<CanvasResource> abstractResource(new CanvasResource(derivedKey, 10));
+    QSharedPointer<DerivedResource> derivedResource(new DerivedResource(derivedKey, key));
+
+    m.setResource(key, 1);
+    m.addDerivedResourceConverter(derivedResource);
+
+    m.setResource(derivedKey, 15);
+
+    QCOMPARE(m.resource(key).toInt(), 5);
+    QCOMPARE(m.resource(derivedKey).toInt(), 15);
+
+    m.removeDerivedResourceConverter(derivedKey);
+    m.setAbstractResource(abstractResource);
+
+    QCOMPARE(m.resource(key).toInt(), 5);
+    QCOMPARE(m.resource(derivedKey).toInt(), 10);
+
+    m.setResource(derivedKey, 20);
+
+    QCOMPARE(m.resource(key).toInt(), 5);
+    QCOMPARE(m.resource(derivedKey).toInt(), 20);
+
+    m.removeAbstractResource(derivedKey);
+    m.addDerivedResourceConverter(derivedResource);
+
+    QCOMPARE(m.resource(derivedKey).toInt(), 15);
+    QCOMPARE(abstractResource->value().toInt(), 20);
+}
+
 
 
 SIMPLE_TEST_MAIN(TestResourceManager)

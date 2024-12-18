@@ -15,6 +15,7 @@
 #include "KoResourceUpdateMediator.h"
 #include "KoActiveCanvasResourceDependency.h"
 #include <KoCanvasResourcesIds.h>
+#include "KoAbstractCanvasResourceInterface.h"
 
 template<class T> class QSharedPointer;
 class KoCanvasResourcesInterface;
@@ -100,9 +101,12 @@ public Q_SLOTS:
     void setResource(int key, const KoUnit &unit);
 
     /**
-     * @see KoResourceManager::updateConverter
+     * Replace an existing existing derived or abstract resource with a new
+     * abstract resource.
+     *
+     * @see KoResourceManager::setAbstractResource
      */
-    void updateConverter(KoDerivedResourceConverterSP converter);
+    void setAbstractResource(KoAbstractCanvasResourceInterfaceSP abstractResource);
 
 public:
     /**
@@ -249,6 +253,16 @@ public:
     void removeDerivedResourceConverter(int key);
 
     /**
+     * @see KoResourceManager::hasAbstractResource()
+     */
+    bool hasAbstractResource(int key);
+
+    /**
+     * @see KoResourceManager::removeAbstractResource()
+     */
+    void removeAbstractResource(int key);
+
+    /**
      * @see KoResourceManager::addResourceUpdateMediator
      */
     void addResourceUpdateMediator(KoResourceUpdateMediatorSP mediator);
@@ -304,13 +318,6 @@ Q_SIGNALS:
      * @see KoCanvasResource::CanvasResourceId
      */
     void canvasResourceChangeAttempted(int key, const QVariant &value);
-
-    /**
-     * This signal is emitted after an existing converter is replaced.
-     * @param key the identifying key for the resource
-     * @param sourceKey the sourceKey for the new converter
-     */
-    void converterUpdated(int key, int sourceKey);
 
 private:
     KoCanvasResourceProvider(const KoCanvasResourceProvider&);

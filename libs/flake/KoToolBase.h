@@ -15,6 +15,8 @@
 
 #include <KisQStringListFwd.h>
 #include "kritaflake_export.h"
+#include "KoDerivedResourceConverter.h"
+#include "KoAbstractCanvasResourceInterface.h"
 
 class KoShape;
 class KoCanvasBase;
@@ -356,10 +358,6 @@ public:
      */
     int decorationThickness() const;
 
-    void postSwitchOpacityResource();
-
-    void preSwitchOpacityResource();
-
 public Q_SLOTS:
 
     /**
@@ -543,6 +541,13 @@ protected:
      * Sets the opacity mode to either preset (true) or tool (false).
      */
     void setIsOpacityPresetMode(bool value);
+
+    void setConverter(KoDerivedResourceConverterSP converter);
+
+    void setAbstractResource(KoAbstractCanvasResourceInterfaceSP abstractResource);
+
+    QHash<int, KoAbstractCanvasResourceInterfaceSP> toolAbstractResources();
+    QHash<int, KoDerivedResourceConverterSP> toolConverters();
 
     /**
      * Returns true if activate() has been called (more times than deactivate :) )

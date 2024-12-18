@@ -31,7 +31,7 @@
 
 void KisDerivedResourcesTest::test()
 {
-    QScopedPointer<KoCanvasResourceProvider> manager(new KoCanvasResourceProvider);
+    QScopedPointer<KoCanvasResourceProvider> manager(new KoCanvasResourceProvider());
     KisViewManager::initializeResourceManager(manager.data());
 
     QApplication::processEvents();
@@ -52,8 +52,7 @@ void KisDerivedResourcesTest::test()
 
     QVERIFY(i.isValid());
 
-    QSignalSpy spyResourceChanged(manager.data(), SIGNAL(canvasResourceChanged(int,QVariant)));
-    QSignalSpy spyConverterChanged(manager.data(), SIGNAL(converterUpdated(int, int)));
+    QSignalSpy spy(manager.data(), SIGNAL(canvasResourceChanged(int,QVariant)));
 
     manager->setResource(KoCanvasResource::CurrentPaintOpPreset, i);
 
@@ -78,8 +77,8 @@ void KisDerivedResourcesTest::test()
     // which are not available in the unittest
     // expectedSignals[KoCanvasResource::EffectiveLodAvailability] = true;
 
-    auto it = spyResourceChanged.begin();
-    for (; it != spyResourceChanged.end(); ++it) {
+    auto it = spy.begin();
+    for (; it != spy.end(); ++it) {
         const int id = (*it)[0].toInt();
         const QVariant value = (*it)[1];
 
@@ -94,65 +93,18 @@ void KisDerivedResourcesTest::test()
         }
     }
 
-    QCOMPARE(spyResourceChanged.size(), expectedSignals.size());
+    QCOMPARE(spy.size(), expectedSignals.size());
 
-    spyResourceChanged.clear();
-
-    QCOMPARE(spyConverterChanged.count(), 0);
-
-    spyConverterChanged.clear();
+    spy.clear();
 
     preset->settings()->setPaintOpOpacity(0.8);
 
     QTest::qWait(200);
 
-    QCOMPARE(spyResourceChanged.size(), 1);
-    QCOMPARE(spyResourceChanged[0][0].toInt(), (int)KoCanvasResource::Opacity);
-    QCOMPARE(spyResourceChanged[0][1].toDouble(), 0.8);
-
-
-    expectedSignals.clear();
-    expectedSignals[KoCanvasResource::Opacity] = 0.9;
-    expectedSignals[KoCanvasResource::GlobalOpacity] = 0.9;
-
-    KisViewManager::updateOpacityConverter(manager.data(), false);
-
-    QTest::qWait(200);
-
-    QCOMPARE(spyResourceChanged.size(), 1);
-    QCOMPARE(spyResourceChanged[0][0].toInt(), (int)KoCanvasResource::Opacity);
-
-    QCOMPARE(spyConverterChanged.size(), 1);
-    QCOMPARE(spyConverterChanged[0][0].toInt(), (int)KoCanvasResource::Opacity);
-    QCOMPARE(spyConverterChanged[0][1].toInt(), (int)KoCanvasResource::GlobalOpacity);
-
-    spyResourceChanged.clear();
-    manager->setResource((int)KoCanvasResource::Opacity, 0.9);
-
-    QTest::qWait(200);
-
-    QCOMPARE(spyResourceChanged.size(), expectedSignals.size());
-
-    it = spyResourceChanged.begin();
-    for (; it != spyResourceChanged.end(); ++it) {
-        const int id = (*it)[0].toInt();
-        const QVariant value = (*it)[1];
-
-        if (!expectedSignals.contains(id)) {
-            qDebug() << ppVar(id) << ppVar(value);
-            QFAIL("Unexpected signal!");
-        } else {
-            if (expectedSignals[id] != value) {
-                qDebug() << ppVar(id) << ppVar(value) << ppVar(expectedSignals[id]);
-                QFAIL("Unexpected value!");
-            }
-        }
-    }
-
-    QCOMPARE(preset->settings()->paintOpOpacity(), 0.8);
-
-    spyConverterChanged.clear();
-    spyResourceChanged.clear();
+    QCOMPARE(spy.size(), 1);
+    QCOMPARE(spy[0][0].toInt(), (int)KoCanvasResource::Opacity);
+    QCOMPARE(spy[0][1].toDouble(), 0.8);
+    spy.clear();
 }
 
 KISTEST_MAIN(KisDerivedResourcesTest)

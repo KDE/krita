@@ -1,0 +1,74 @@
+{
+  "version": "v1.0.0",
+  "entity": {
+    "type": "organisation",
+    "role": "maintainer",
+    "name": "Stichting Krita Foundation",
+    "email": "foundation@krita.org",
+    "phone": "",
+    "description": "Non-profit organization to support the development and use of the free graphics software Krita",
+    "webpageUrl": {
+      "url": "https://krita.org",
+      "wellKnown": "https://krita.org/.well-known/funding-manifest-urls"
+    }
+  },
+  "projects": [
+    {
+      "guid": "org-kde-krita",
+      "name": "Krita",
+      "description": "Digital painting and animation studio",
+      "webpageUrl": {
+        "url": "https://krita.org",
+        "wellKnown": "https://krita.org/.well-known/funding-manifest-urls"
+      },
+      "repositoryUrl": {
+        "url": "https://invent.kde.org/graphics/krita",
+        "wellKnown": ""
+      },
+      "licenses": [
+        "spdx:GPL-3.0"
+      ],
+      "tags": [
+        "art",
+        "creativity",
+        "animation",
+        "illustration",
+        "comics"
+      ]
+    }
+  ],
+  "funding": {
+    "channels": [
+      {
+        "guid": "mybank",
+        "type": "bank",
+        "address": "IBAN: NL72INGB0007216397 BIC: INGBNL2A",
+        "description": ""
+      }
+    ],
+    "plans": [
+      {
+        "guid": "android",
+        "status": "active",
+        "name": "Dedicated User Interface for Android devices",
+        "description": "We want to continue our work on a dedicated touch-optimized user interface for Krita on phones and tablets",
+        "amount": 50000,
+        "currency": "EUR",
+        "frequency": "one-time",
+        "channels": [
+          "mybank"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "year": 2024,
+        "income": 0,
+        "expenses": 0,
+        "taxes": 0,
+        "currency": "EUR",
+        "description": ""
+      }
+    ]
+  }
+}

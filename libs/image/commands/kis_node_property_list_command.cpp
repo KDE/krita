@@ -110,7 +110,13 @@ bool KisNodePropertyListCommand::mergeWith(const KUndo2Command *command)
          changedProperties(m_oldPropertyList, m_newPropertyList) ==
              changedProperties(other->m_oldPropertyList, other->m_newPropertyList))) {
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_newPropertyList == other->m_oldPropertyList);
+        const QSet<QString> changedInTheMeantime =
+            changedProperties(m_newPropertyList, other->m_oldPropertyList);
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(changedInTheMeantime.isEmpty() ||
+                                     (changedInTheMeantime.size() == 1 &&
+                                      *changedInTheMeantime.begin() == KisLayerPropertiesIcons::colorOverlay.id()));
+
         m_newPropertyList = other->m_newPropertyList;
         return true;
     }

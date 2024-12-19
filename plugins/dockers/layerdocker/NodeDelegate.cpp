@@ -456,6 +456,17 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
         }
     }
 
+    auto putToTheLeft = [] (QList<OptionalProperty> &list, const QString &id) {
+        auto it = std::find_if(list.begin(), list.end(), kismpl::mem_equal_to(&KisBaseNode::Property::id, id));
+        if (it != list.end()) {
+            std::rotate(list.begin(), it, std::next(it));
+        }
+    };
+
+    putToTheLeft(prependList, KisLayerPropertiesIcons::colorOverlay.id());
+    putToTheLeft(prependList, KisLayerPropertiesIcons::layerColorSpaceMismatch.id());
+    putToTheLeft(prependList, KisLayerPropertiesIcons::layerError.id());
+
     {
         QMutableListIterator<OptionalProperty> i(prependList);
         i.toBack();

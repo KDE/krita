@@ -37,7 +37,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigRequestNodeReselection(KisNodeSP, const KisNodeList&));
 
     CONNECT_TO_IMAGE(sigNodeChanged(KisNodeSP));
-    CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP));
+    CONNECT_TO_IMAGE(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags));
     CONNECT_TO_IMAGE(sigRemoveNodeAsync(KisNodeSP));
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
 
@@ -90,7 +90,7 @@ void KisImageSignalRouter::emitNodeChanged(KisNodeSP node)
     Q_EMIT sigNodeChanged(node);
 }
 
-void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
+void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags)
 {
     KisNodeSP newNode = parent->at(index);
 
@@ -102,7 +102,7 @@ void KisImageSignalRouter::emitNodeHasBeenAdded(KisNode *parent, int index)
         }
     }
 
-    Q_EMIT sigNodeAddedAsync(newNode);
+    Q_EMIT sigNodeAddedAsync(newNode, flags);
 }
 
 void KisImageSignalRouter::emitAboutToRemoveANode(KisNode *parent, int index)

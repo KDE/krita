@@ -123,6 +123,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisResetGroupLayerCacheCommand.cpp
    commands_new/KisLazyCreateTransformMaskKeyframesCommand.cpp
    commands_new/KisChangeCloneLayersCommand.cpp
+   commands_new/KisLayerCollapseCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp

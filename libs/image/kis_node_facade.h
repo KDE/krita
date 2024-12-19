@@ -11,6 +11,9 @@
 #include "kis_types.h"
 #include "kis_node.h"
 #include "kritaimage_export.h"
+
+#include "KisNodeAdditionFlags.h"
+
 /**
  * KisNodeFacade is the public interface to adding and removing nodes.
  */
@@ -62,7 +65,7 @@ public:
      * @param node the node to be added
      * @param parent the parent node
      */
-    bool addNode(KisNodeSP node, KisNodeSP parent = KisNodeSP());
+    bool addNode(KisNodeSP node, KisNodeSP parent = KisNodeSP(), KisNodeAdditionFlags flags = KisNodeAdditionFlag::None);
 
     /**
      * Add already existing node to the graph.
@@ -75,7 +78,7 @@ public:
      *                  its group.
      * returns false if adding the node didn't work, true if the node got added
      */
-    bool addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
+    bool addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, KisNodeAdditionFlags flags = KisNodeAdditionFlag::None);
 
     /**
      * Adds the node as a child of the given parent at the specified
@@ -85,7 +88,7 @@ public:
      * returns false if the node is already in this group or any
      * other (remove it first.)
      */
-    bool addNode(KisNodeSP node,  KisNodeSP parent, quint32 index);
+    bool addNode(KisNodeSP node,  KisNodeSP parent, quint32 index, KisNodeAdditionFlags flags = KisNodeAdditionFlag::None);
 
     /**
      * Remove the specified node.
@@ -93,34 +96,6 @@ public:
      * @return false if removing the node failed
      */
     bool removeNode(KisNodeSP node);
-
-    /**
-     * Move node up one slot, i.e., nextSibling becomes prevSibling
-     */
-    bool raiseNode(KisNodeSP node);
-
-    /**
-     * Move node down one slot -- i.e, prevSibling becomes
-     * nextSibling.
-     *
-     * @return false if moving the node failed
-     */
-    bool lowerNode(KisNodeSP node);
-
-    /**
-     * Move the given node to the top-most position among its
-     * siblings.
-     *
-     * @return false if moving the node failed.
-     */
-    bool toTop(KisNodeSP node);
-
-    /**
-     * Move the given node to bottom-most position among its siblings.
-     *
-     * @return false if moving the node failed.
-     */
-    bool toBottom(KisNodeSP node);
 
 private:
 

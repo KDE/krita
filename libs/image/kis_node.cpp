@@ -465,7 +465,7 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
     return nodes;
 }
 
-bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
+bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis, KisNodeAdditionFlags flags)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(newNode, false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!aboveThis || aboveThis->parent().data() == this, false);
@@ -498,7 +498,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
     newNode->setImage(image());
 
     if (m_d->graphListener) {
-        m_d->graphListener->nodeHasBeenAdded(this, idx);
+        m_d->graphListener->nodeHasBeenAdded(this, idx, flags);
     }
 
     childNodeChanged(newNode);

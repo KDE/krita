@@ -53,8 +53,8 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT(kisCanvas);
-    connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
-    connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
+    connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)), this, SLOT(slotNodeAdded(KisNodeSP, KisNodeAdditionFlags)));
+    connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, qOverload<KisNodeSP>(&ToolReferenceImages::slotNodeAdded));
 
     auto referenceImageLayer = document()->referenceImagesLayer();
     if (referenceImageLayer) {
@@ -69,6 +69,13 @@ void ToolReferenceImages::deactivate()
 
 void ToolReferenceImages::slotNodeAdded(KisNodeSP node)
 {
+    slotNodeAdded(node, KisNodeAdditionFlag::None);
+}
+
+void ToolReferenceImages::slotNodeAdded(KisNodeSP node, KisNodeAdditionFlags flags)
+{
+    Q_UNUSED(flags)
+
     auto *referenceImagesLayer = dynamic_cast<KisReferenceImagesLayer*>(node.data());
 
     if (referenceImagesLayer) {

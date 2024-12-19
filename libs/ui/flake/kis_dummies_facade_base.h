@@ -11,6 +11,7 @@
 
 #include "kis_types.h"
 #include "kritaui_export.h"
+#include <KisNodeAdditionFlags.h>
 
 class KisNodeDummy;
 
@@ -84,9 +85,9 @@ private Q_SLOTS:
     void slotLayersChanged();
     void slotNodeChanged(KisNodeSP node);
 
-    void slotNodeActivationRequested(KisNodeSP node);
+    void slotNodeActivationRequested(KisNodeSP node, KisNodeAdditionFlags flags);
 
-    void slotNodeAdded(KisNodeSP node);
+    void slotNodeAdded(KisNodeSP node, KisNodeAdditionFlags flags);
     void slotRemoveNode(KisNodeSP node);
 
     void slotContinueAddNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);

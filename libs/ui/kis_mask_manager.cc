@@ -38,6 +38,7 @@
 #include <KoColor.h>
 #include "kis_node_commands_adapter.h"
 #include "commands/kis_deselect_global_selection_command.h"
+#include "commands_new/KisLayerCollapseCommand.h"
 #include "kis_iterator_ng.h"
 #include <KisGlobalResourcesInterface.h>
 #include "kis_node_manager.h"
@@ -170,7 +171,12 @@ void KisMaskManager::createMaskCommon(KisMaskSP mask,
 
     mask->setName( createMaskNameCommon(parentLayer, nodeType, nodeName) );
 
-    m_commandsAdapter->addNode(mask, parentLayer, above, updateImage, updateImage);
+    KisImageLayerAddCommand::Flags flags =
+        updateImage ?
+            KisImageLayerAddCommand::DoUndoUpdates | KisImageLayerAddCommand::DoRedoUpdates :
+            KisImageLayerAddCommand::None;
+
+    m_commandsAdapter->addNode(mask, parentLayer, above, flags);
 
     if (shouldDeselectGlobalSelection) {
         m_commandsAdapter->addExtraCommand(new KisDeselectGlobalSelectionCommand(m_imageView->image()));
@@ -305,7 +311,20 @@ KisNodeSP KisMaskManager::createFastColorOverlayMask(KisNodeSP activeNode)
     mask->setName(createMaskNameCommon(activeLayer, "KisFilterMask", i18n("Color Overlay Mask")));
     mask->setFilter(filter->cloneWithResourcesSnapshot());
 
-    m_commandsAdapter->addNode(mask, activeLayer, activeLayer->lastChild());
+    KisImageLayerAddCommand::Flags flags =
+        KisImageLayerAddCommand::DoUndoUpdates |
+        KisImageLayerAddCommand::DoRedoUpdates;
+
+    if (activeLayer->childCount() == 0) {
+        m_commandsAdapter->addExtraCommand(
+                    new KisLayerCollapseCommand(
+                        activeNode, true));
+
+        flags |= KisImageLayerAddCommand::DontActivateOnAddition;
+    };
+
+    m_commandsAdapter->addNode(mask, activeLayer, activeLayer->lastChild(), flags);
+
     m_commandsAdapter->endMacro();
 
     return mask;

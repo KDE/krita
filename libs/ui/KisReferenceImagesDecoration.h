@@ -38,6 +38,7 @@ public:
 
 private Q_SLOTS:
     void slotNodeAdded(KisNodeSP);
+    void slotNodeAdded(KisNodeSP, KisNodeAdditionFlags);
     void slotNodeRemoved(KisNodeSP);
     void slotLayersChanged();
     void slotReferenceImagesChanged(const QRectF &dirtyRect);

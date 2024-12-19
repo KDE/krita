@@ -10,6 +10,7 @@
 
 #include <QScopedPointer>
 #include <KisProjectionUpdateFlags.h>
+#include <KisNodeAdditionFlags.h>
 
 class KisTimeSpan;
 class KisNode;
@@ -46,7 +47,7 @@ public:
     /**
      * Inform the model we're done adding a node.
      */
-    virtual void nodeHasBeenAdded(KisNode *parent, int index);
+    virtual void nodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags);
 
     /**
      * Inform the model we're going to remove a node.

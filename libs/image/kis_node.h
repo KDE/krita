@@ -9,6 +9,7 @@
 #include "kis_types.h"
 
 #include "kis_base_node.h"
+#include "KisNodeAdditionFlags.h"
 
 #include "kritaimage_export.h"
 
@@ -390,7 +391,7 @@ private:
      * Add the specified node above the specified node. If aboveThis
      * is 0, the node is added at the bottom.
      */
-    bool add(KisNodeSP newNode, KisNodeSP aboveThis);
+    bool add(KisNodeSP newNode, KisNodeSP aboveThis, KisNodeAdditionFlags flags = KisNodeAdditionFlag::None);
 
     /**
      * Removes the node at the specified index from the child nodes.

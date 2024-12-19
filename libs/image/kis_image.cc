@@ -576,9 +576,9 @@ void KisImage::aboutToAddANode(KisNode *parent, int index)
     SANITY_CHECK_LOCKED("aboutToAddANode");
 }
 
-void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
+void KisImage::nodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags)
 {
-    KisNodeGraphListener::nodeHasBeenAdded(parent, index);
+    KisNodeGraphListener::nodeHasBeenAdded(parent, index, flags);
 
     KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
        QMap<QString, KisKeyframeChannel*> chans = node->keyframeChannels();
@@ -589,7 +589,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
     });
 
     SANITY_CHECK_LOCKED("nodeHasBeenAdded");
-    m_d->signalRouter.emitNodeHasBeenAdded(parent, index);
+    m_d->signalRouter.emitNodeHasBeenAdded(parent, index, flags);
 }
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)

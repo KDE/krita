@@ -17,7 +17,7 @@ public:
     KisImageWSP image;
     KisNodeSP savedRootNode;
 
-    KisSynchronizedConnection<KisNodeSP> activateNodeConnection;
+    KisSynchronizedConnection<KisNodeSP, KisNodeAdditionFlags> activateNodeConnection;
     KisSynchronizedConnection<KisNodeSP> nodeChangedConnection;
     KisSynchronizedConnection<KisNodeSP,KisNodeSP,KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
@@ -88,10 +88,10 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
     m_d->image = image;
 
     if (image) {
-        slotNodeAdded(image->root());
+        slotNodeAdded(image->root(), KisNodeAdditionFlag::None);
 
-        connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP)),
-                SLOT(slotNodeAdded(KisNodeSP)), Qt::DirectConnection);
+        connect(image, SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)),
+                SLOT(slotNodeAdded(KisNodeSP, KisNodeAdditionFlags)), Qt::DirectConnection);
         connect(image, SIGNAL(sigRemoveNodeAsync(KisNodeSP)),
                 SLOT(slotRemoveNode(KisNodeSP)), Qt::DirectConnection);
         connect(image, SIGNAL(sigLayersChangedAsync()),
@@ -104,7 +104,7 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
             activeNode = findFirstLayer(image->root());
         }
 
-        m_d->activateNodeConnection.start(activeNode);
+        m_d->activateNodeConnection.start(activeNode, KisNodeAdditionFlag::None);
     }
 }
 
@@ -147,8 +147,10 @@ void KisDummiesFacadeBase::slotLayersChanged()
     setImage(m_d->image);
 }
 
-void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
+void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node, KisNodeAdditionFlags flags)
 {
+    if (flags.testFlag(KisNodeAdditionFlag::DontActivateNode)) return;
+
     if (!node || !node->graphListener()) return;
 
     if (!node->inherits("KisSelectionMask") &&
@@ -160,8 +162,10 @@ void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
     }
 }
 
-void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)
+void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node, KisNodeAdditionFlags flags)
 {
+    Q_UNUSED(flags)
+
     {
         QMutexLocker l(&m_d->pendingNodeSetLock);
         m_d->pendingNodeSet.append(node);
@@ -171,7 +175,7 @@ void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)
 
     KisNodeSP childNode = node->firstChild();
     while (childNode) {
-        slotNodeAdded(childNode);
+        slotNodeAdded(childNode, flags);
         childNode = childNode->nextSibling();
     }
 }

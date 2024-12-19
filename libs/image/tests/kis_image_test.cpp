@@ -576,7 +576,7 @@ struct FlattenTestImage
 template<class ContainerTest>
 KisLayerSP flattenLayerHelper(ContainerTest &p, KisLayerSP layer, bool nothingHappens = false)
 {
-    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)));
+    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)));
 
     //p.image->flattenLayer(layer);
     KisLayerUtils::flattenLayer(p.image, layer);
@@ -870,7 +870,7 @@ void KisImageTest::testMergeDownMultipleFrames()
 template<class ContainerTest>
 KisNodeSP mergeMultipleHelper(ContainerTest &p, QList<KisNodeSP> selectedNodes, KisNodeSP putAfter)
 {
-    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)));
+    QSignalSpy spy(p.image.data(), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)));
 
     p.image->mergeMultipleLayers(selectedNodes, putAfter);
     //KisLayerUtils::mergeMultipleLayers(p.image, selectedNodes, putAfter);

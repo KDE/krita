@@ -142,7 +142,7 @@ public:
     bool softProofing {false};
     bool gamutCheck {false};
 
-    KisSynchronizedConnection<KisNodeSP> addNodeConnection;
+    KisSynchronizedConnection<KisNodeSP, KisNodeAdditionFlags> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
 
     KisScreenMigrationTracker screenMigrationTracker;
@@ -381,8 +381,10 @@ KisViewManager* KisView::viewManager() const
     return d->viewManager;
 }
 
-void KisView::slotContinueAddNode(KisNodeSP newActiveNode)
+void KisView::slotContinueAddNode(KisNodeSP newActiveNode, KisNodeAdditionFlags flags)
 {
+    Q_UNUSED(flags)
+
     /**
      * When deleting the last layer, root node got selected. We should
      * fix it when the first layer is added back.

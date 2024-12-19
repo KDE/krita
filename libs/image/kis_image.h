@@ -76,7 +76,7 @@ public:
 public: // KisNodeGraphListener implementation
 
     void aboutToAddANode(KisNode *parent, int index) override;
-    void nodeHasBeenAdded(KisNode *parent, int index) override;
+    void nodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags) override;
     void aboutToRemoveANode(KisNode *parent, int index) override;
     void nodeChanged(KisNode * node) override;
     void nodeCollapsedChanged(KisNode *node) override;
@@ -875,7 +875,7 @@ Q_SIGNALS:
      * to your thread. See details of the implementation
      * in KisDummiesfacadeBase.
      */
-    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeAddedAsync(KisNodeSP node, KisNodeAdditionFlags flags);
 
     /**
      * This signal is emitted right before a node is going to removed

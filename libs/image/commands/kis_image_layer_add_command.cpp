@@ -20,7 +20,8 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
         : KisImageCommand(kundo2_i18n("Add Layer"), image),
           m_index(-1),
           m_doRedoUpdates(doRedoUpdates),
-          m_doUndoUpdates(doUndoUpdates)
+          m_doUndoUpdates(doUndoUpdates),
+          m_additionFlags(KisNodeAdditionFlag::None)
 {
     m_layer = layer;
     m_parent = parent;
@@ -36,11 +37,34 @@ KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
         : KisImageCommand(kundo2_i18n("Add Layer"), image),
           m_index(index),
           m_doRedoUpdates(doRedoUpdates),
-          m_doUndoUpdates(doUndoUpdates)
+          m_doUndoUpdates(doUndoUpdates),
+          m_additionFlags(KisNodeAdditionFlag::None)
 {
     m_layer = layer;
     m_parent = parent;
     m_aboveThis = 0;
+}
+
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image,
+                                                 KisNodeSP layer,
+                                                 KisNodeSP parent,
+                                                 KisNodeSP aboveThis,
+                                                 Flags flags)
+        : KisImageLayerAddCommand(image, layer, parent, aboveThis,
+                                  flags.testFlag(DoRedoUpdates),
+                                  flags.testFlag(DoUndoUpdates))
+{
+    m_additionFlags.setFlag(KisNodeAdditionFlag::DontActivateNode,
+                            flags.testFlag(DontActivateOnAddition));
+}
+
+KisImageLayerAddCommand::KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index, Flags flags)
+    : KisImageLayerAddCommand(image, layer, parent, index,
+                              flags.testFlag(DoRedoUpdates),
+                              flags.testFlag(DoUndoUpdates))
+{
+    m_additionFlags.setFlag(KisNodeAdditionFlag::DontActivateNode,
+                            flags.testFlag(DontActivateOnAddition));
 }
 
 void KisImageLayerAddCommand::redo()
@@ -50,9 +74,9 @@ void KisImageLayerAddCommand::redo()
         return;
     }
     if (m_aboveThis || m_index == quint32(-1)) {
-        image->addNode(m_layer, m_parent, m_aboveThis);
+        image->addNode(m_layer, m_parent, m_aboveThis, m_additionFlags);
     } else {
-        image->addNode(m_layer, m_parent, m_index);
+        image->addNode(m_layer, m_parent, m_index, m_additionFlags);
     }
 
     if (m_doRedoUpdates) {

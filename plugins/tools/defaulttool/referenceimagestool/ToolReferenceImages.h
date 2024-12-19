@@ -67,6 +67,7 @@ public Q_SLOTS:
     void loadReferenceImages();
 
     void slotNodeAdded(KisNodeSP node);
+    void slotNodeAdded(KisNodeSP node, KisNodeAdditionFlags flags);
     void slotSelectionChanged();
 
     void cut() override;

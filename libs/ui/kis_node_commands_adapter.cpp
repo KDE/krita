@@ -9,7 +9,6 @@
 #include <KoCompositeOp.h>
 #include "kis_undo_adapter.h"
 #include "kis_image.h"
-#include "commands/kis_image_layer_add_command.h"
 #include "commands/kis_image_layer_move_command.h"
 #include "commands/kis_image_layer_remove_command.h"
 #include "commands/KisNodeRenameCommand.h"
@@ -73,16 +72,16 @@ void KisNodeCommandsAdapter::endMacro()
     m_view->image()->undoAdapter()->endMacro();
 }
 
-void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates, bool doUndoUpdates)
+void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, KisImageLayerAddCommand::Flags flags)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, aboveThis, doRedoUpdates, doUndoUpdates));
+    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, aboveThis, flags));
 }
 
-void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, quint32 index, bool doRedoUpdates, bool doUndoUpdates)
+void KisNodeCommandsAdapter::addNode(KisNodeSP node, KisNodeSP parent, quint32 index, KisImageLayerAddCommand::Flags flags)
 {
     Q_ASSERT(m_view->image()->undoAdapter());
-    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, index, doRedoUpdates, doUndoUpdates));
+    m_view->image()->undoAdapter()->addCommand(new KisImageLayerAddCommand(m_view->image(), node, parent, index, flags));
 }
 
 void KisNodeCommandsAdapter::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)

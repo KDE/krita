@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include "KisImageSignals.h"
+#include "KisNodeAdditionFlags.h"
 
 class KoColorSpace;
 class KoColorProfile;
@@ -26,7 +27,7 @@ public:
     void emitNotifications(KisImageSignalVector notifications);
 
     void emitNodeChanged(KisNodeSP node);
-    void emitNodeHasBeenAdded(KisNode *parent, int index);
+    void emitNodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags);
     void emitAboutToRemoveANode(KisNode *parent, int index);
 
     void emitRequestLodPlanesSyncBlocked(bool value);
@@ -86,7 +87,7 @@ Q_SIGNALS:
 
     // Graph change signals
     void sigNodeChanged(KisNodeSP node);
-    void sigNodeAddedAsync(KisNodeSP node);
+    void sigNodeAddedAsync(KisNodeSP node, KisNodeAdditionFlags flags);
     void sigRemoveNodeAsync(KisNodeSP node);
     void sigLayersChangedAsync();
 

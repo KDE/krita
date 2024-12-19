@@ -12,11 +12,22 @@
 
 #include "kis_types.h"
 #include "kis_image_command.h"
+#include "KisNodeAdditionFlags.h"
 
 
 /// The command for adding a layer
 class KRITAIMAGE_EXPORT KisImageLayerAddCommand : public KisImageCommand
 {
+
+public:
+    enum Flag {
+        None = 0x0,
+        DoRedoUpdates = 0x1,
+        DoUndoUpdates = 0x2,
+        DontActivateOnAddition = 0x4,
+    };
+
+    Q_DECLARE_FLAGS(Flags, Flag)
 
 public:
     /**
@@ -31,6 +42,9 @@ public:
     KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates = true, bool doUndoUpdates = true);
     KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index, bool doRedoUpdates = true, bool doUndoUpdates = true);
 
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, KisNodeSP aboveThis, Flags flags);
+    KisImageLayerAddCommand(KisImageWSP image, KisNodeSP layer, KisNodeSP parent, quint32 index, Flags flags);
+
     void redo() override;
     void undo() override;
 
@@ -41,5 +55,9 @@ private:
     quint32 m_index;
     bool m_doRedoUpdates;
     bool m_doUndoUpdates;
+    KisNodeAdditionFlags m_additionFlags;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisImageLayerAddCommand::Flags)
+
 #endif

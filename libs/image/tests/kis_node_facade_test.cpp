@@ -253,68 +253,6 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY(node5->parent() == node3);
     QVERIFY(node5->prevSibling() == node1);
     QVERIFY(node5->nextSibling() == node2);
-
-    /*
-       node5
-         node4
-       node2
-       node1
-      node3
-     root
-    */
-
-    QVERIFY(facade.raiseNode(node5) == true);
-    QVERIFY(node5->parent() == node3);
-    QVERIFY(node5->nextSibling() == 0);
-    QVERIFY(node5->prevSibling() == node2);
-
-    // Try raising topnode to top
-    QVERIFY(facade.raiseNode(node5) == true);
-    QVERIFY(node5->parent() == node3);
-    QVERIFY(node5->nextSibling() == 0);
-    QVERIFY(node5->prevSibling() == node2);
-
-    /*
-       node5
-       node1
-         node4
-       node2
-      node3
-     root
-    */
-    QVERIFY(facade.lowerNode(node2) == true);
-    QVERIFY(node2->nextSibling() == node1);
-    QVERIFY(node2->prevSibling() == 0);
-
-    // Try lowering bottom node to bottom
-    QVERIFY(facade.lowerNode(node2) == true);
-    QVERIFY(node2->nextSibling() == node1);
-    QVERIFY(node2->prevSibling() == 0);
-
-    /**
-       node4
-     node2
-     node5
-     node1
-    node3
-    root
-    */
-    QVERIFY(facade.toTop(node2) == true);
-    QVERIFY(node2->nextSibling() == 0);
-    QVERIFY(node2->prevSibling() == node5);
-
-    /**
-     node5
-     node1
-       node4
-     node2
-    node3
-    root
-    */
-    QVERIFY(facade.toBottom(node2) == true);
-    QVERIFY(node2->nextSibling() == node1);
-    QVERIFY(node2->prevSibling() == 0);
-
 }
 
 

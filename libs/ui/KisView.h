@@ -15,6 +15,7 @@
 
 #include <kis_types.h>
 #include "kritaui_export.h"
+#include <KisNodeAdditionFlags.h>
 
 #include "widgets/kis_floating_message.h"
 
@@ -237,7 +238,7 @@ public Q_SLOTS:
     void slotUpdateDocumentTitle();
 
 private Q_SLOTS:
-    void slotContinueAddNode(KisNodeSP newActiveNode);
+    void slotContinueAddNode(KisNodeSP newActiveNode, KisNodeAdditionFlags flags);
 
     void slotImageNodeRemoved(KisNodeSP node);
     void slotContinueRemoveNode(KisNodeSP newActiveNode);

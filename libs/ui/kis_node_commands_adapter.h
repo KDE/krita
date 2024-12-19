@@ -15,6 +15,7 @@ class KisProcessingApplicator;
 
 #include <kis_types.h>
 #include <kritaui_export.h>
+#include <commands/kis_image_layer_add_command.h>
 
 #include <QObject>
 
@@ -47,8 +48,8 @@ public:
     void beginMacro(const KUndo2MagicString& macroName);
     void addExtraCommand(KUndo2Command *command);
     void endMacro();
-    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, bool doRedoUpdates = true, bool doUndoUpdates = true);
-    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index, bool doRedoUpdates = true, bool doUndoUpdates = true);
+    void addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, KisImageLayerAddCommand::Flags flags = KisImageLayerAddCommand::DoRedoUpdates | KisImageLayerAddCommand::DoUndoUpdates);
+    void addNode(KisNodeSP node, KisNodeSP parent, quint32 index, KisImageLayerAddCommand::Flags flags = KisImageLayerAddCommand::DoRedoUpdates | KisImageLayerAddCommand::DoUndoUpdates);
     void moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis);
     void moveNode(KisNodeSP node, KisNodeSP parent, quint32 indexaboveThis);
     void removeNode(KisNodeSP node);

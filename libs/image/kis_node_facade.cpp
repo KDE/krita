@@ -89,37 +89,37 @@ bool KisNodeFacade::moveNode(KisNodeSP node, KisNodeSP parent, quint32 newIndex)
 }
 
 
-bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent)
+bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeAdditionFlags flags)
 {
     dbgImage << "Add node " << node << " to " << parent;
     if (!node) return false;
     if (!parent && !m_d->root) return false;
 
     if (parent)
-        return parent->add(node, parent->lastChild());
+        return parent->add(node, parent->lastChild(), flags);
     else
-        return m_d->root->add(node, m_d->root->lastChild());
+        return m_d->root->add(node, m_d->root->lastChild(), flags);
 }
 
-bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis)
+bool KisNodeFacade::addNode(KisNodeSP node, KisNodeSP parent, KisNodeSP aboveThis, KisNodeAdditionFlags flags)
 {
     if (!node) return false;
     if (!parent) return false;
 
-    return parent->add(node, aboveThis);
+    return parent->add(node, aboveThis, flags);
 }
 
-bool KisNodeFacade::addNode(KisNodeSP node,  KisNodeSP parent, quint32 index)
+bool KisNodeFacade::addNode(KisNodeSP node,  KisNodeSP parent, quint32 index, KisNodeAdditionFlags flags)
 {
     if (!node) return false;
     if (!parent) return false;
 
     if (index == parent->childCount())
-        return parent->add(node, parent->lastChild());
+        return parent->add(node, parent->lastChild(), flags);
     else if (index != 0)
-        return parent->add(node, parent->at(index));
+        return parent->add(node, parent->at(index), flags);
     else
-        return parent->add(node, 0);
+        return parent->add(node, 0, flags);
 }
 
 bool KisNodeFacade::removeNode(KisNodeSP node)
@@ -131,58 +131,3 @@ bool KisNodeFacade::removeNode(KisNodeSP node)
 
 }
 
-bool KisNodeFacade::raiseNode(KisNodeSP node)
-{
-    if (!node) return false;
-    if (!node->parent()) return false;
-
-    if (node->nextSibling())
-        return moveNode(node, node->parent(), node->nextSibling());
-    else
-        return true; // we're already at the top, but there is no
-    // sense in complaining.
-
-}
-
-bool KisNodeFacade::lowerNode(KisNodeSP node)
-{
-    if (!node) return false;
-    if (!node->parent()) return false;
-
-    KisNodeSP parent = node->parent();
-    KisNodeSP prevSibling = node->prevSibling();
-
-    if (node->prevSibling()) {
-        int prevIndex = parent->index(prevSibling);
-        return moveNode(node, parent, prevIndex);
-    } else {
-        return true; // We're already at bottom, but there's no sense
-        // in complaining
-    }
-}
-
-bool KisNodeFacade::toTop(KisNodeSP node)
-{
-    if (!node) return false;
-    if (!node->parent()) return false;
-    if (node == node->parent()->lastChild()) return true;
-
-    return moveNode(node, node->parent(), node->parent()->lastChild());
-
-}
-
-bool KisNodeFacade::toBottom(KisNodeSP node)
-{
-    if (!node) return false;
-    if (!node->parent()) return false;
-
-    KisNodeSP parent = node->parent();
-
-    if (node == parent->firstChild()) return true;
-
-    // Sets the parent of this node to 0
-    if (!parent->remove(node)) return false;
-
-    return parent->add(node, 0);
-
-}

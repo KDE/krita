@@ -94,10 +94,10 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
     : KisCanvasDecoration("referenceImagesDecoration", parent)
     , d(new Private(this))
 {
-    connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
+    connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)), this, SLOT(slotNodeAdded(KisNodeSP, KisNodeAdditionFlags)));
     connect(document->image().data(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
     connect(document->image().data(), SIGNAL(sigLayersChangedAsync()), this, SLOT(slotLayersChanged()));
-    connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
+    connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, qOverload<KisNodeSP>(&KisReferenceImagesDecoration::slotNodeAdded));
 
     auto referenceImageLayer = document->referenceImagesLayer();
     if (referenceImageLayer) {
@@ -144,6 +144,13 @@ void KisReferenceImagesDecoration::drawDecoration(QPainter &gc, const QRectF &/*
 
 void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node)
 {
+    slotNodeAdded(node, KisNodeAdditionFlag::None);
+}
+
+void KisReferenceImagesDecoration::slotNodeAdded(KisNodeSP node, KisNodeAdditionFlags flags)
+{
+    Q_UNUSED(flags)
+
     KisReferenceImagesLayer *referenceImagesLayer =
         dynamic_cast<KisReferenceImagesLayer*>(node.data());
 

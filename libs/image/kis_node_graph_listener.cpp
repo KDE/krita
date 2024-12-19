@@ -32,7 +32,7 @@ void KisNodeGraphListener::aboutToAddANode(KisNode */*parent*/, int /*index*/)
     m_d->sequenceNumber++;
 }
 
-void KisNodeGraphListener::nodeHasBeenAdded(KisNode */*parent*/, int /*index*/)
+void KisNodeGraphListener::nodeHasBeenAdded(KisNode */*parent*/, int /*index*/, KisNodeAdditionFlags /*flags*/)
 {
     m_d->sequenceNumber++;
 }

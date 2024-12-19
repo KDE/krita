@@ -36621,7 +36621,7 @@ msgstr "自定义颜色"
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
 #, kde-format
 msgid "Control Widget Options"
-msgstr ""
+msgstr "辅助尺的控制按钮"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304

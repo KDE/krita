@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-17 02:05+0000\n"
-"PO-Revision-Date: 2024-12-08 22:38+0000\n"
+"PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -317,34 +317,34 @@ msgid "Generic Paper 3"
 msgstr "Venjulegur pappír 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid01.pat"
 msgid "Grid01"
-msgstr "Hnitanet"
+msgstr "Hnitanet01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid02.pat"
 msgid "Grid02"
-msgstr "Hnitanet"
+msgstr "Hnitanet02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid03.pat"
 msgid "Grid03"
-msgstr "Hnitanet"
+msgstr "Hnitanet03"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid04.pat"
 msgid "Grid04"
-msgstr "Hnitanet"
+msgstr "Hnitanet04"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/patterns/Grid05.pat"
 msgid "Grid05"
-msgstr "Hnitanet"
+msgstr "Hnitanet05"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -353,20 +353,16 @@ msgid "Hexacol BW By Tarkan"
 msgstr "Hexacol BW eftir Tarkan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paste Layer"
+#, kde-format
 msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "Líma lag"
+msgstr "HR pastelpappír 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Resize shapes"
+#, kde-format
 msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
-msgstr "Breyta stærð spjalds tilbaka"
+msgstr "HR veggfóður"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -853,10 +849,10 @@ msgid "j) WaterC Water-Pattern"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/workspaces/Animation.kws"
 msgid "Animation"
-msgstr "Teiknimyndir"
+msgstr "Hreyfimynd"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, fuzzy, kde-format
@@ -879,14 +875,13 @@ msgid "Big Vector"
 msgstr ""
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/workspaces/Default.kws"
 msgid "Default"
 msgstr "Sjálfgefið"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Minimal"
+#, kde-format
 msgctxt "./krita/data/workspaces/Minimal.kws"
 msgid "Minimal"
 msgstr "Lágmarks"
@@ -904,10 +899,10 @@ msgid "Storyboarding"
 msgstr "Valtól"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "./krita/data/workspaces/VFX_Paint.kws"
 msgid "VFX Paint"
-msgstr "MyPaint"
+msgstr "VFX Paint"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1011,7 +1006,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/symbols/BalloonSymbols.svg"
 msgid "Word Balloons"
-msgstr ""
+msgstr "Talblöðrur"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16144,10 +16139,10 @@ msgid "Workspaces"
 msgstr "Vinnusvæði"
 
 #: krita/main.cc:571
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
-msgstr "Gildi"
+msgstr "Alvarleg villa"
 
 #: krita/main.cc:572
 #, kde-format
@@ -16158,10 +16153,10 @@ msgstr ""
 
 #: krita/main.cc:693 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
-msgstr "Viðvörun!"
+msgstr "Krita: Aðvörun"
 
 #: krita/main.cc:694
 #, kde-format
@@ -16192,9 +16187,9 @@ msgid ""
 msgstr ""
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:552
-#, fuzzy, kde-format
+#, kde-format
 msgid "Path options"
-msgstr "PNG stillingar"
+msgstr "Valkostir ferils"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format

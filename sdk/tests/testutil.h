@@ -333,8 +333,8 @@ public:
         beforeInsertRow = true;
     }
 
-    void nodeHasBeenAdded(KisNode *parent, int index) override {
-        KisNodeGraphListener::nodeHasBeenAdded(parent, index);
+    void nodeHasBeenAdded(KisNode *parent, int index, KisNodeAdditionFlags flags) override {
+        KisNodeGraphListener::nodeHasBeenAdded(parent, index, flags);
         afterInsertRow = true;
     }
 

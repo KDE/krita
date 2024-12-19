@@ -31,6 +31,7 @@ void KisImageSignalRouterTest::init()
 {
     initBase();
     constructImage();
+    qRegisterMetaType<KisNodeAdditionFlags>("KisNodeAdditionFlags");
 }
 
 void KisImageSignalRouterTest::cleanup()
@@ -51,7 +52,7 @@ void KisImageSignalRouterTest::testSignalForwarding()
     checkNotification(ResolutionChangedSignal, SIGNAL(sigResolutionChanged(double,double)));
 
     checkComplexSignal(emitNodeChanged(m_layer1.data()), SIGNAL(sigNodeChanged(KisNodeSP)));
-    checkComplexSignal(emitNodeHasBeenAdded(m_layer3.data(),0), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)));
+    checkComplexSignal(emitNodeHasBeenAdded(m_layer3.data(),0,KisNodeAdditionFlags()), SIGNAL(sigNodeAddedAsync(KisNodeSP, KisNodeAdditionFlags)));
     checkComplexSignal(emitAboutToRemoveANode(m_layer3.data(),0), SIGNAL(sigRemoveNodeAsync(KisNodeSP)));
 }
 

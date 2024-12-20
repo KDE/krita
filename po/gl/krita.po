@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-17 02:05+0000\n"
-"PO-Revision-Date: 2024-12-17 22:36+0100\n"
+"PO-Revision-Date: 2024-12-19 23:03+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -9122,7 +9122,7 @@ msgstr "Modo de selección: Engadir"
 #, kde-format
 msgctxt "action"
 msgid "Selection Mode: Subtract"
-msgstr "Modo de selección: Retirar"
+msgstr "Modo de selección: Subtraer"
 
 #. i18n: context: text @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
@@ -18497,6 +18497,7 @@ msgstr "Krita %1"
 msgid "Drop"
 msgstr "Retirar"
 
+# skip-rule: trasno-remove_reverse
 #: libs/metadata/kis_meta_data_merge_strategy_p.cc:43
 #, kde-format
 msgid "Drop all meta data"
@@ -28405,7 +28406,7 @@ msgstr "Restabelecelos todos"
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:51
 #, kde-format
 msgid "Rename"
-msgstr "Cambiar o nome"
+msgstr "Renomear"
 
 #: libs/ui/input/config/kis_input_button.cpp:41
 #, kde-format
@@ -30966,7 +30967,7 @@ msgstr "Non foi posíbel eliminar o ficheiro."
 #: libs/ui/KisImportExportErrorCode.cpp:44
 #, kde-format
 msgid "The file could not be renamed."
-msgstr "Non foi posíbel cambiar o nome do ficheiro."
+msgstr "Non foi posíbel renomear o ficheiro."
 
 #: libs/ui/KisImportExportErrorCode.cpp:46
 #, kde-format
@@ -50365,6 +50366,7 @@ msgctxt "@item:inlistbox"
 msgid "Solid white"
 msgstr "Branco sólido"
 
+# skip-rule: trasno-remove_reverse
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:498
 #, kde-format
 msgctxt "@item:inlistbox"
@@ -50383,6 +50385,7 @@ msgctxt "@item:inlistbox"
 msgid "Rebuild"
 msgstr "Reconstruír"
 
+# skip-rule: trasno-remove_reverse
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
 msgctxt "@info:whatsthis"

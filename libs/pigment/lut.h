@@ -122,7 +122,7 @@ typedef uint32_t lut_uint32;
   template<>                                                                      \
   class LutKey<_INT_TYPE_> {                                               \
     public:                                                                       \
-      LutKey<_INT_TYPE_>(_INT_TYPE_ min, _INT_TYPE_ max) : m_min(min), m_max(max) \
+      LutKey(_INT_TYPE_ min, _INT_TYPE_ max) : m_min(min), m_max(max) \
       {                                                                           \
       }                                                                           \
     public:                                                                       \
@@ -162,7 +162,7 @@ PARTIAL_LUT_INT_SPECIALIZATION(lut_uint32)
   template<>                                                                      \
   class FullLutKey<_INT_TYPE_> {                                                  \
     public:                                                                       \
-      FullLutKey<_INT_TYPE_>()                                                    \
+      FullLutKey()                                                    \
       {                                                                           \
       }                                                                           \
     public:                                                                       \
@@ -212,7 +212,7 @@ class LutKey<float> {
       float f;
     };
   public:
-    LutKey<float>(float min, float max, float precision) : m_min(min), m_max(max), m_precision(precision)
+    LutKey(float min, float max, float precision) : m_min(min), m_max(max), m_precision(precision)
     {
       // Those values where computed using the test_linear and setting the shift and then using
       // the standard deviation.

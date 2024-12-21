@@ -87,7 +87,7 @@ public:
      * Copies a pointer.
      * @param o the pointer to copy
      */
-    inline KisSharedPtr<T>(const KisSharedPtr<T>& o)
+    inline KisSharedPtr(const KisSharedPtr<T>& o)
             : d(o.d) {
         ref();
     }
@@ -100,7 +100,7 @@ public:
         deref();
     }
 
-    inline KisSharedPtr<T>& operator= (const KisSharedPtr& o) {
+    inline KisSharedPtr& operator= (const KisSharedPtr& o) {
         attach(o.d);
         return *this;
     }
@@ -254,7 +254,7 @@ public:
         load(p);
     }
 
-    inline KisWeakSharedPtr<T>(const KisSharedPtr<T>& o) {
+    inline KisWeakSharedPtr(const KisSharedPtr<T>& o) {
         load(o.d);
     }
 
@@ -262,7 +262,7 @@ public:
      * Copies a pointer.
      * @param o the pointer to copy
      */
-    inline KisWeakSharedPtr<T>(const KisWeakSharedPtr<T>& o) {
+    inline KisWeakSharedPtr(const KisWeakSharedPtr<T>& o) {
         if (o.isConsistent()) {
             load(o.d);
         }
@@ -276,7 +276,7 @@ public:
         detach();
     }
 
-    inline KisWeakSharedPtr<T>& operator= (const KisWeakSharedPtr& o) {
+    inline KisWeakSharedPtr& operator= (const KisWeakSharedPtr& o) {
         attach(o);
         return *this;
     }

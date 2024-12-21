@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 04:13+0000\n"
-"PO-Revision-Date: 2024-12-08 07:45+0100\n"
+"PO-Revision-Date: 2024-12-20 11:14+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -55613,7 +55613,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 msgid "Scraping success"
-msgstr "Indagació exitosa"
+msgstr "Raspat d'informació exitós"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
 #, python-brace-format

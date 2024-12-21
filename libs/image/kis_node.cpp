@@ -48,6 +48,7 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KisNodeSP>("KisNodeSP");
     qRegisterMetaType<KisNodeList>("KisNodeList");
+    qRegisterMetaType<KisNodeAdditionFlags>("KisNodeAdditionFlags");
 }
 
 

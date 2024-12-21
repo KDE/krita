@@ -31,7 +31,6 @@ void KisImageSignalRouterTest::init()
 {
     initBase();
     constructImage();
-    qRegisterMetaType<KisNodeAdditionFlags>("KisNodeAdditionFlags");
 }
 
 void KisImageSignalRouterTest::cleanup()

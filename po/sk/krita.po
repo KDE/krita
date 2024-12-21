@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-17 02:05+0000\n"
+"POT-Creation-Date: 2024-12-21 02:14+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -11485,71 +11485,97 @@ msgctxt "action"
 msgid "Filter Mask"
 msgstr "Maska filtra"
 
-#. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Add Colorize Mask"
+msgctxt "action"
+msgid "Add Color &Overlay Mask"
+msgstr "Pridať zafarbenie masky"
+
+#. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2678
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Add a new Colorize Mask"
+msgctxt "action"
+msgid "Add a new Fast Color Overlay Filter Mask"
+msgstr "Pridať novú masku zafarbenia"
+
+#. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2679
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgctxt "action"
+msgid "Fast Color Overlay Mask"
+msgstr "Prekrytie farby"
+
+#. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2688
 #, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
 msgstr "Pridať masku zafarbenia"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2678
+#: krita/krita.action:2690
 #, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
 msgstr "Pridať novú masku zafarbenia"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2679
+#: krita/krita.action:2691
 #, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
 msgstr "Zafarbiť masku"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2688
+#: krita/krita.action:2700
 #, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
 msgstr "Pridať masku &transformácie"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2690
+#: krita/krita.action:2702
 #, kde-format
 msgctxt "action"
 msgid "Add a new Transform Mask"
 msgstr "Pridať novú masku transformácie"
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2691
+#: krita/krita.action:2703
 #, kde-format
 msgctxt "action"
 msgid "Transform Mask"
 msgstr "Maska transformácie"
 
 #. i18n: context: text @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2700
+#: krita/krita.action:2712
 #, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
 msgstr "Pridať &lokálny výber"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2702
+#: krita/krita.action:2714
 #, kde-format
 msgctxt "action"
 msgid "Add a new Local Selection"
 msgstr "Pridať nový lokálny výber"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2703
+#: krita/krita.action:2715
 #, kde-format
 msgctxt "action"
 msgid "Local Selection"
 msgstr "Lokálny výber"
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2712
+#: krita/krita.action:2724
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
@@ -11559,14 +11585,14 @@ msgstr "&Izolovať aktívnu vrstvu"
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2714 krita/krita.action:2715
+#: krita/krita.action:2726 krita/krita.action:2727
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
 msgstr "Izolovať aktívnu vrstvu"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2724
+#: krita/krita.action:2736
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
@@ -11576,14 +11602,14 @@ msgstr "&Izolovať aktívnu skupinu"
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2726 krita/krita.action:2727
+#: krita/krita.action:2738 krita/krita.action:2739
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
 msgstr "Izolovať aktívnu skupinu"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2736
+#: krita/krita.action:2748
 #, kde-format
 msgctxt "action"
 msgid "&Toggle layer lock"
@@ -11593,14 +11619,14 @@ msgstr "Prepnúť zámok vrstvy"
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2738 krita/krita.action:2739
+#: krita/krita.action:2750 krita/krita.action:2751
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer lock"
 msgstr "Prepnúť zámok vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2748
+#: krita/krita.action:2760
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &visibility"
@@ -11610,21 +11636,21 @@ msgstr "Prepnúť &viditeľnosť vrstvy"
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2750 krita/krita.action:2751
+#: krita/krita.action:2762 krita/krita.action:2763
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer visibility"
 msgstr "Prepnúť viditeľnosť vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2760
+#: krita/krita.action:2772
 #, kde-format
 msgctxt "action"
 msgid "Toggle Layer Soloing"
 msgstr "Prepnúť sólovanie vrstiev"
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2762
+#: krita/krita.action:2774
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -11635,14 +11661,14 @@ msgstr ""
 "podriadených vrstiev"
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2763
+#: krita/krita.action:2775
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer soloing"
 msgstr "Prepnúť sólovanie vrstiev"
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2772
+#: krita/krita.action:2784
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &alpha"
@@ -11652,14 +11678,14 @@ msgstr "Prepnúť &alfa vrstvy"
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2774 krita/krita.action:2775
+#: krita/krita.action:2786 krita/krita.action:2787
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha"
 msgstr "Prepnúť alfa vrstvy"
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2784
+#: krita/krita.action:2796
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
@@ -11669,35 +11695,35 @@ msgstr "Prepnúť dedičstvo alfa vrstvy"
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2786 krita/krita.action:2787
+#: krita/krita.action:2798 krita/krita.action:2799
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha inheritance"
 msgstr "Prepnúť dedičstvo alfa vrstvy"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2796
+#: krita/krita.action:2808
 #, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
 msgstr "&Pridať vrstvu maľovania"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2798
+#: krita/krita.action:2810
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
 msgstr "Pridať novú vrstvu maľovania"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2799
+#: krita/krita.action:2811
 #, kde-format
 msgctxt "action"
 msgid "Paint Layer"
 msgstr "Maľovať vrstvu"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2808
+#: krita/krita.action:2820
 #, kde-format
 msgctxt "action"
 msgid "&New Layer From Visible"
@@ -11707,14 +11733,14 @@ msgstr "&Nová vrstva z viditeľnej"
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2810 krita/krita.action:2811
+#: krita/krita.action:2822 krita/krita.action:2823
 #, kde-format
 msgctxt "action"
 msgid "New layer from visible"
 msgstr "Nová vrstva z viditeľnej"
 
 #. i18n: context: text @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2820
+#: krita/krita.action:2832
 #, kde-format
 msgctxt "action"
 msgid "&Duplicate Layer or Mask"
@@ -11724,14 +11750,14 @@ msgstr "Duplikovať vrstvu alebo masku"
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2822 krita/krita.action:2823
+#: krita/krita.action:2834 krita/krita.action:2835
 #, kde-format
 msgctxt "action"
 msgid "Duplicate Layer or Mask"
 msgstr "Duplikovať vrstvu alebo masku"
 
 #. i18n: context: text @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2832
+#: krita/krita.action:2844
 #, kde-format
 msgctxt "action"
 msgid "&Cut Selection to New Layer"
@@ -11741,14 +11767,14 @@ msgstr "Vystrihnúť výber do novej vrstvy"
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2834 krita/krita.action:2835
+#: krita/krita.action:2846 krita/krita.action:2847
 #, kde-format
 msgctxt "action"
 msgid "Cut Selection to New Layer"
 msgstr "Vystrihnúť výber do novej vrstvy"
 
 #. i18n: context: text @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2844
+#: krita/krita.action:2856
 #, kde-format
 msgctxt "action"
 msgid "Copy &Selection to New Layer"
@@ -11758,14 +11784,14 @@ msgstr "Kopírovať výber do novej vrstvy"
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2846 krita/krita.action:2847
+#: krita/krita.action:2858 krita/krita.action:2859
 #, kde-format
 msgctxt "action"
 msgid "Copy Selection to New Layer"
 msgstr "Kopírovať výber do novej vrstvy"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2856
+#: krita/krita.action:2868
 #, kde-format
 msgctxt "action"
 msgid "Copy Layer"
@@ -11775,14 +11801,14 @@ msgstr "Kopírovať vrstvu"
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2858 krita/krita.action:2859
+#: krita/krita.action:2870 krita/krita.action:2871
 #, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
 msgstr "Kopírovať vrstvu do schránky"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2868
+#: krita/krita.action:2880
 #, kde-format
 msgctxt "action"
 msgid "Cut Layer"
@@ -11792,14 +11818,14 @@ msgstr "Vystrihnúť vrstvu"
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2870 krita/krita.action:2871
+#: krita/krita.action:2882 krita/krita.action:2883
 #, kde-format
 msgctxt "action"
 msgid "Cut layer to clipboard"
 msgstr "Vystrihnúť vrstvu do schránky"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2880
+#: krita/krita.action:2892
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer"
@@ -11809,7 +11835,7 @@ msgstr "Vložiť vrstvu"
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2882 krita/krita.action:2883
+#: krita/krita.action:2894 krita/krita.action:2895
 #, kde-format
 msgctxt "action"
 msgid "Paste layer from clipboard"
@@ -11819,14 +11845,14 @@ msgstr "Vložiť vrstvu zo schránky"
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2892 krita/krita.action:2895
+#: krita/krita.action:2904 krita/krita.action:2907
 #, kde-format
 msgctxt "action"
 msgid "Quick Group"
 msgstr "Rýchle zoskupenie"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2894
+#: krita/krita.action:2906
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
@@ -11836,14 +11862,14 @@ msgstr "Vytvoriť skupinu vrstiev obsahujúcu vybrané vrstvy"
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2904 krita/krita.action:2907
+#: krita/krita.action:2916 krita/krita.action:2919
 #, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
 msgstr "Rýchle zrušenie zoskupenia"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2906
+#: krita/krita.action:2918
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
@@ -11853,21 +11879,21 @@ msgstr "Odstrániť zoskupenie vrstiev alebo jednu vrstvu zo skupiny"
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2916 krita/krita.action:2919
+#: krita/krita.action:2928 krita/krita.action:2931
 #, kde-format
 msgctxt "action"
 msgid "Quick Clipping Group"
 msgstr "Skupina rýchleho orezania"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2918
+#: krita/krita.action:2930
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
 msgstr "Zoskupiť vybrané vrstvy a pridať vrstvu s orezaným alfa kanálom"
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2928
+#: krita/krita.action:2940
 #, kde-format
 msgctxt "action"
 msgid "All Layers"
@@ -11877,14 +11903,14 @@ msgstr "Všetky vrstvy"
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2930 krita/krita.action:2931
+#: krita/krita.action:2942 krita/krita.action:2943
 #, kde-format
 msgctxt "action"
 msgid "Select all layers"
 msgstr "Vybrať všetky vrstvy"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2940
+#: krita/krita.action:2952
 #, kde-format
 msgctxt "action"
 msgid "Visible Layers"
@@ -11894,14 +11920,14 @@ msgstr "Viditeľné vrstvy"
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2942 krita/krita.action:2943
+#: krita/krita.action:2954 krita/krita.action:2955
 #, kde-format
 msgctxt "action"
 msgid "Select all visible layers"
 msgstr "Vybrať všetky viditeľné vrstvy"
 
 #. i18n: context: text @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2952
+#: krita/krita.action:2964
 #, kde-format
 msgctxt "action"
 msgid "Locked Layers"
@@ -11911,14 +11937,14 @@ msgstr "Zamknuté vrstvy"
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2954 krita/krita.action:2955
+#: krita/krita.action:2966 krita/krita.action:2967
 #, kde-format
 msgctxt "action"
 msgid "Select all locked layers"
 msgstr "Vybrať všetky zamknuté vrstvy"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2964
+#: krita/krita.action:2976
 #, kde-format
 msgctxt "action"
 msgid "Invisible Layers"
@@ -11928,14 +11954,14 @@ msgstr "Neviditeľné vrstvy"
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2966 krita/krita.action:2967
+#: krita/krita.action:2978 krita/krita.action:2979
 #, kde-format
 msgctxt "action"
 msgid "Select all invisible layers"
 msgstr "Vybrať všetky neviditeľné vrstvy"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2976
+#: krita/krita.action:2988
 #, kde-format
 msgctxt "action"
 msgid "Unlocked Layers"
@@ -11945,14 +11971,14 @@ msgstr "Odomknuté vrstvy"
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2978 krita/krita.action:2979
+#: krita/krita.action:2990 krita/krita.action:2991
 #, kde-format
 msgctxt "action"
 msgid "Select all unlocked layers"
 msgstr "Vybrať všetky odomknuté vrstvy"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2988
+#: krita/krita.action:3000
 #, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
@@ -11962,14 +11988,14 @@ msgstr "Uložiť vrstvu/masku..."
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2990 krita/krita.action:2991
+#: krita/krita.action:3002 krita/krita.action:3003
 #, kde-format
 msgctxt "action"
 msgid "Save Layer/Mask"
 msgstr "Uložiť vrstvu/masku"
 
 #. i18n: context: text @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3000
+#: krita/krita.action:3012
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
@@ -11979,14 +12005,14 @@ msgstr "Uložiť vektorovú vrstvu ako SVG..."
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3002 krita/krita.action:3003
+#: krita/krita.action:3014 krita/krita.action:3015
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
 msgstr "Uložiť vektorovú vrstvu ako SVG"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3012
+#: krita/krita.action:3024
 #, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
@@ -11996,14 +12022,14 @@ msgstr "Uložiť skupinové vrstvy..."
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3014 krita/krita.action:3015
+#: krita/krita.action:3026 krita/krita.action:3027
 #, kde-format
 msgctxt "action"
 msgid "Save Group Layers"
 msgstr "Uložiť skupinové vrstvy"
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3024
+#: krita/krita.action:3036
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Convert group to &animated layer"
@@ -12012,7 +12038,7 @@ msgid "Convert Group to &Animated Layer"
 msgstr "Previesť skupinu na &animovanú vrstvu"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3026
+#: krita/krita.action:3038
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -12021,14 +12047,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3027
+#: krita/krita.action:3039
 #, kde-format
 msgctxt "action"
 msgid "Convert child layers into animation frames"
 msgstr "Previesť podriadené vrstvy na snímky animácie"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3036
+#: krita/krita.action:3048
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Convert to &animated layer"
@@ -12040,14 +12066,14 @@ msgstr "Previesť na &animovanú vrstvu"
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3038 krita/krita.action:3039
+#: krita/krita.action:3050 krita/krita.action:3051
 #, kde-format
 msgctxt "action"
 msgid "Convert layer into animation frames"
 msgstr "Previesť vrstvu na snímky animácie"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3048
+#: krita/krita.action:3060
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Convert to File Layer"
@@ -12056,21 +12082,21 @@ msgid "Convert to &File Layer..."
 msgstr "Previesť na vrstvu súborov"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3050
+#: krita/krita.action:3062
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
 msgstr "Uloží vrstvy do nového obrázku  a potom na tento odkaz odkazuje."
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3051
+#: krita/krita.action:3063
 #, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
 msgstr "Previesť na vrstvu súborov"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3060
+#: krita/krita.action:3072
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
@@ -12080,14 +12106,14 @@ msgstr "I&mport vrstvy..."
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3062 krita/krita.action:3063
+#: krita/krita.action:3074 krita/krita.action:3075
 #, kde-format
 msgctxt "action"
 msgid "Import Layer"
 msgstr "Importovať vrstvu"
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3072
+#: krita/krita.action:3084
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
@@ -12097,14 +12123,14 @@ msgstr "&ako vrstva maľovania..."
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3074 krita/krita.action:3075
+#: krita/krita.action:3086 krita/krita.action:3087
 #, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
 msgstr "ako vrstva maľovania"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3084
+#: krita/krita.action:3096
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
@@ -12114,14 +12140,14 @@ msgstr "ako maska priehľadnosti..."
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3086 krita/krita.action:3087
+#: krita/krita.action:3098 krita/krita.action:3099
 #, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
 msgstr "ako maska priehľadnosti"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3096
+#: krita/krita.action:3108
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
@@ -12131,14 +12157,14 @@ msgstr "ako maska filtra..."
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3098 krita/krita.action:3099
+#: krita/krita.action:3110 krita/krita.action:3111
 #, kde-format
 msgctxt "action"
 msgid "as Filter Mask"
 msgstr "ako maska filtra"
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3108
+#: krita/krita.action:3120
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
@@ -12148,14 +12174,14 @@ msgstr "ako maska výberu..."
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3110 krita/krita.action:3111
+#: krita/krita.action:3122 krita/krita.action:3123
 #, kde-format
 msgctxt "action"
 msgid "as Selection Mask"
 msgstr "ako maska výberu"
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3120
+#: krita/krita.action:3132
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
@@ -12165,14 +12191,14 @@ msgstr "&Previesť na vrstvu maľovania"
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3122 krita/krita.action:3123
+#: krita/krita.action:3134 krita/krita.action:3135
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
 msgstr "na vrstvu maľovania"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3132
+#: krita/krita.action:3144
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Transparency Mask"
@@ -12182,14 +12208,14 @@ msgstr "Previesť na masku priehľadnos&ti"
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3134 krita/krita.action:3135
+#: krita/krita.action:3146 krita/krita.action:3147
 #, kde-format
 msgctxt "action"
 msgid "to Transparency Mask"
 msgstr "na Masku priehľadnosti"
 
 #. i18n: context: text @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3144
+#: krita/krita.action:3156
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
@@ -12199,14 +12225,14 @@ msgstr "Previesť na masku &filtra..."
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3146 krita/krita.action:3147
+#: krita/krita.action:3158 krita/krita.action:3159
 #, kde-format
 msgctxt "action"
 msgid "to Filter Mask"
 msgstr "na Masku filtra"
 
 #. i18n: context: text @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3156
+#: krita/krita.action:3168
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Selection Mask"
@@ -12216,14 +12242,14 @@ msgstr "Previesť na ma&sku výberu"
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3158 krita/krita.action:3159
+#: krita/krita.action:3170 krita/krita.action:3171
 #, kde-format
 msgctxt "action"
 msgid "to Selection Mask"
 msgstr "na Masku výberu"
 
 #. i18n: context: text @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3168
+#: krita/krita.action:3180
 #, kde-format
 msgctxt "action"
 msgid "&Alpha into Mask"
@@ -12233,14 +12259,14 @@ msgstr "Alfa do masky"
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3170 krita/krita.action:3171
+#: krita/krita.action:3182 krita/krita.action:3183
 #, kde-format
 msgctxt "action"
 msgid "Alpha into Mask"
 msgstr "Alfa do masky"
 
 #. i18n: context: text @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3180
+#: krita/krita.action:3192
 #, kde-format
 msgctxt "action"
 msgid "&Write as Alpha"
@@ -12250,14 +12276,14 @@ msgstr "Zapísať ako alfa"
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3182 krita/krita.action:3183
+#: krita/krita.action:3194 krita/krita.action:3195
 #, kde-format
 msgctxt "action"
 msgid "Write as Alpha"
 msgstr "Zapísať ako alfa"
 
 #. i18n: context: text @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3192
+#: krita/krita.action:3204
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
@@ -12267,14 +12293,14 @@ msgstr "Uložiť zlúčené..."
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3194 krita/krita.action:3195
+#: krita/krita.action:3206 krita/krita.action:3207
 #, kde-format
 msgctxt "action"
 msgid "Save Merged"
 msgstr "Uložiť zlúčené"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3204
+#: krita/krita.action:3216
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
@@ -12284,14 +12310,14 @@ msgstr "Rozdeliť vrstvu..."
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3206 krita/krita.action:3207
+#: krita/krita.action:3218 krita/krita.action:3219
 #, kde-format
 msgctxt "action"
 msgid "Split Layer"
 msgstr "Rozdeliť vrstvu"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3216
+#: krita/krita.action:3228
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
@@ -12301,14 +12327,14 @@ msgstr "Vlnkový rozklad ..."
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3218 krita/krita.action:3219
+#: krita/krita.action:3230 krita/krita.action:3231
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
 msgstr "Vlnkový rozklad"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3228
+#: krita/krita.action:3240
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Hori&zontally"
@@ -12320,7 +12346,7 @@ msgstr "Zrkadliť vrstvu horizontálne"
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3230 krita/krita.action:3231
+#: krita/krita.action:3242 krita/krita.action:3243
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -12329,7 +12355,7 @@ msgid "Mirror Layers Horizontally"
 msgstr "Zrkadliť vrstvu horizontálne"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3240
+#: krita/krita.action:3252
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer &Vertically"
@@ -12341,7 +12367,7 @@ msgstr "Zrkadliť vrstvu vertikálne"
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3242 krita/krita.action:3243
+#: krita/krita.action:3254 krita/krita.action:3255
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -12350,7 +12376,7 @@ msgid "Mirror Layers Vertically"
 msgstr "Zrkadliť vrstvu vertikálne"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3252
+#: krita/krita.action:3264
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Rotate Layer..."
@@ -12362,7 +12388,7 @@ msgstr "Otočiť vrstvu..."
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3254 krita/krita.action:3255
+#: krita/krita.action:3266 krita/krita.action:3267
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer"
@@ -12371,7 +12397,7 @@ msgid "Rotate Layers"
 msgstr "Otočiť vrstvu"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3264
+#: krita/krita.action:3276
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate &Layer 90° to the Right"
@@ -12383,7 +12409,7 @@ msgstr "Otočiť vrstvu o 90° vpravo"
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3266 krita/krita.action:3267
+#: krita/krita.action:3278 krita/krita.action:3279
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer 90° to the Right"
@@ -12392,7 +12418,7 @@ msgid "Rotate Layers 90° to the Right"
 msgstr "Otočiť vrstvu o 90° vpravo"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3276
+#: krita/krita.action:3288
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer &90° to the Left"
@@ -12404,7 +12430,7 @@ msgstr "Otočiť vrstvu o 90° vľavo"
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3278 krita/krita.action:3279
+#: krita/krita.action:3290 krita/krita.action:3291
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer 90° to the Left"
@@ -12413,7 +12439,7 @@ msgid "Rotate Layers 90° to the Left"
 msgstr "Otočiť vrstvu o 90° vľavo"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3288
+#: krita/krita.action:3300
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer &180°"
@@ -12425,7 +12451,7 @@ msgstr "Otočiť vrstvu 180°"
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3290 krita/krita.action:3291
+#: krita/krita.action:3302 krita/krita.action:3303
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Rotate Layer 180°"
@@ -12434,7 +12460,7 @@ msgid "Rotate Layers 180°"
 msgstr "Otočiť vrstvu o 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3300
+#: krita/krita.action:3312
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Scale &Layer to new Size..."
@@ -12446,7 +12472,7 @@ msgstr "Zmeniť vrstvu na novú veľkosť..."
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3302 krita/krita.action:3303
+#: krita/krita.action:3314 krita/krita.action:3315
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Scale Layer to new Size"
@@ -12455,7 +12481,7 @@ msgid "Scale Layers to new Size"
 msgstr "Zmeniť vrstvu na novú veľkosť"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3312
+#: krita/krita.action:3324
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Shear Layer..."
@@ -12467,7 +12493,7 @@ msgstr "&Skosiť vrstvu..."
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3314 krita/krita.action:3315
+#: krita/krita.action:3326 krita/krita.action:3327
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Shear Layer"
@@ -12476,7 +12502,7 @@ msgid "Shear Layers"
 msgstr "Skosiť vrstvu"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3324
+#: krita/krita.action:3336
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
@@ -12486,14 +12512,14 @@ msgstr "Zrkadliť všetky vrstvy hori&zontálne"
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3326 krita/krita.action:3327
+#: krita/krita.action:3338 krita/krita.action:3339
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrkadliť všetky vrstvy horizontálne"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3336
+#: krita/krita.action:3348
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
@@ -12503,14 +12529,14 @@ msgstr "Zrkadliť všetky vrstvy &vertikálne"
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3338 krita/krita.action:3339
+#: krita/krita.action:3350 krita/krita.action:3351
 #, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrkadliť všetky vrstvy vertikálne"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3348
+#: krita/krita.action:3360
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
@@ -12520,14 +12546,14 @@ msgstr "&Otočiť všetky vrstvy..."
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3350 krita/krita.action:3351
+#: krita/krita.action:3362 krita/krita.action:3363
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
 msgstr "Otočiť všetky vrstvy"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3360
+#: krita/krita.action:3372
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
@@ -12537,14 +12563,14 @@ msgstr "&Otočiť všetky vrstvy o 90° vpravo"
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3362 krita/krita.action:3363
+#: krita/krita.action:3374 krita/krita.action:3375
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
 msgstr "Otočiť všetky vrstvy o 90° vpravo"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3372
+#: krita/krita.action:3384
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
@@ -12554,14 +12580,14 @@ msgstr "&Otočiť všetky vrstvy o 90° vľavo"
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3374 krita/krita.action:3375
+#: krita/krita.action:3386 krita/krita.action:3387
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
 msgstr "Otočiť všetky vrstvy o 90° vľavo"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3384
+#: krita/krita.action:3396
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
@@ -12571,14 +12597,14 @@ msgstr "&Otočiť všetky vrstvy o 180°"
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3386 krita/krita.action:3387
+#: krita/krita.action:3398 krita/krita.action:3399
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
 msgstr "Otočiť všetky vrstvy o 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3396
+#: krita/krita.action:3408
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
@@ -12588,14 +12614,14 @@ msgstr "&Zmeniť všetky vrstvy na novú veľkosť..."
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3398 krita/krita.action:3399
+#: krita/krita.action:3410 krita/krita.action:3411
 #, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
 msgstr "Zmeniť všetky vrstvy na novú veľkosť"
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3408
+#: krita/krita.action:3420
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
@@ -12605,14 +12631,14 @@ msgstr "&Skosiť všetky vrstvy..."
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3410 krita/krita.action:3411
+#: krita/krita.action:3422 krita/krita.action:3423
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
 msgstr "Skosiť všetky vrstvy"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3420
+#: krita/krita.action:3432
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "&Offset Layer..."
@@ -12624,7 +12650,7 @@ msgstr "Posun vrstvy..."
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3422 krita/krita.action:3423
+#: krita/krita.action:3434 krita/krita.action:3435
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Offset Layer"
@@ -12633,7 +12659,7 @@ msgid "Offset Layers"
 msgstr "Posun vrstvy"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3432
+#: krita/krita.action:3444
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
@@ -12643,14 +12669,14 @@ msgstr "Klonuje pole..."
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3434 krita/krita.action:3435
+#: krita/krita.action:3446 krita/krita.action:3447
 #, kde-format
 msgctxt "action"
 msgid "Clones Array"
 msgstr "Klonuje pole"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3444
+#: krita/krita.action:3456
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
@@ -12660,14 +12686,14 @@ msgstr "Upraviť metadáta..."
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3446 krita/krita.action:3447
+#: krita/krita.action:3458 krita/krita.action:3459
 #, kde-format
 msgctxt "action"
 msgid "Edit metadata"
 msgstr "Upraviť metadáta"
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3456
+#: krita/krita.action:3468
 #, kde-format
 msgctxt "action"
 msgid "&Histogram..."
@@ -12677,14 +12703,14 @@ msgstr "&Histogram..."
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3458 krita/krita.action:3459
+#: krita/krita.action:3470 krita/krita.action:3471
 #, kde-format
 msgctxt "action"
 msgid "Histogram"
 msgstr "Histogram"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3468
+#: krita/krita.action:3480
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
@@ -12694,7 +12720,7 @@ msgstr "Previesť farebný priestor vrstvy..."
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3470 krita/krita.action:3471
+#: krita/krita.action:3482 krita/krita.action:3483
 #, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
@@ -12704,7 +12730,7 @@ msgstr "Previesť farebný priestor vrstvy"
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3480 krita/krita.action:3483
+#: krita/krita.action:3492 krita/krita.action:3495
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Convert Layer Color Space"
@@ -12713,7 +12739,7 @@ msgid "Unify Layers Color Space"
 msgstr "Previesť farebný priestor vrstvy"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3482
+#: krita/krita.action:3494
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -12722,7 +12748,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3492
+#: krita/krita.action:3504
 #, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -12732,14 +12758,14 @@ msgstr "Zlúčiť so spodnou vrstvou"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3494 krita/krita.action:3495
+#: krita/krita.action:3506 krita/krita.action:3507
 #, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Zlúčiť so spodnou vrstvou"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3504
+#: krita/krita.action:3516
 #, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -12749,14 +12775,14 @@ msgstr "Zarovnať vrstvu"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3506 krita/krita.action:3507
+#: krita/krita.action:3518 krita/krita.action:3519
 #, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Zarovnať vrstvu"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3516
+#: krita/krita.action:3528
 #, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -12766,14 +12792,14 @@ msgstr "Zarovnať obrázok"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3518 krita/krita.action:3519
+#: krita/krita.action:3530 krita/krita.action:3531
 #, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "Zarovnať obrázok"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3528
+#: krita/krita.action:3540
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -12783,7 +12809,7 @@ msgstr "Štýl vrstvy..."
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3531
+#: krita/krita.action:3542 krita/krita.action:3543
 #, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -12795,7 +12821,7 @@ msgstr "Štýl vrstvy"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
 #, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -12807,7 +12833,7 @@ msgstr "Presunúť do predchádzajúcej skupiny"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
+#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
 #, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -12819,14 +12845,14 @@ msgstr "Presunúť do nasledujúcej skupiny"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
+#: krita/krita.action:3576 krita/krita.action:3578 krita/krita.action:3579
 #, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "Premenovať aktuálnu vrstvu"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3576
+#: krita/krita.action:3588
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -12836,7 +12862,7 @@ msgstr "&Odstrániť vrstvu"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3578 krita/krita.action:3579
+#: krita/krita.action:3590 krita/krita.action:3591
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -12846,7 +12872,7 @@ msgstr "Vymazať vrstvu"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3588 krita/krita.action:3590
+#: krita/krita.action:3600 krita/krita.action:3602
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -12856,14 +12882,14 @@ msgstr "Posunúť vrstvu alebo masku nahor"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3598 krita/krita.action:3600
+#: krita/krita.action:3610 krita/krita.action:3612
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Posunúť vrstvu alebo masku nadol"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3608
+#: krita/krita.action:3620
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -12873,28 +12899,28 @@ msgstr "&Vlastnosti..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3610 krita/krita.action:3611
+#: krita/krita.action:3622 krita/krita.action:3623
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Vlastnosti"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3620
+#: krita/krita.action:3632
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
 msgstr "Nastaviť kopí&rovanie z..."
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3622
+#: krita/krita.action:3634
 #, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Nastaviť zdroj pre vybrané klonované vrstvu(y)"
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3623
+#: krita/krita.action:3635
 #, kde-format
 msgctxt "action"
 msgid "Set Copy From"
@@ -12904,7 +12930,7 @@ msgstr "Nastaviť kopírovanie z"
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3632 krita/krita.action:3634
+#: krita/krita.action:3644 krita/krita.action:3646
 #, fuzzy, kde-format
 #| msgid "Reference Images Tool"
 msgctxt "action"
@@ -12915,7 +12941,7 @@ msgstr "Nástroj referenčných obrázkov"
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3644 krita/krita.action:3646
+#: krita/krita.action:3656 krita/krita.action:3658
 #, fuzzy, kde-format
 #| msgid "Reference Images Tool"
 msgctxt "action"
@@ -16707,6 +16733,7 @@ msgstr "Oddialiť"
 #. i18n: ectx: property (text), widget (QToolButton, bnLower)
 #. i18n: ectx: property (text), widget (QToolButton, bnRaise)
 #. i18n: ectx: property (text), widget (QToolButton, bnProperties)
+#. i18n: ectx: property (text), widget (QToolButton, bnAddColorOverlayMask)
 #. i18n: ectx: property (text), widget (QToolButton, bnDelete)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectConfigurationFile)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectLut)
@@ -16781,7 +16808,8 @@ msgstr "Oddialiť"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:316
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:357
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -17046,7 +17074,7 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:277
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
@@ -17097,7 +17125,7 @@ msgid "Deselect"
 msgstr "Zrušiť výber"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
-#: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
 msgctxt "(qtundo-format)"
@@ -17180,6 +17208,20 @@ msgstr "Prepnúť aktuálny čas"
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Zmeniť klonované vrstvy"
+
+#: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "Collapse Docker"
+msgctxt "(qtundo-format)"
+msgid "Collapse node %1"
+msgstr "Zbaliť docker"
+
+#: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Expand node %1"
+msgstr ""
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17558,14 +17600,14 @@ msgstr "Otočenie (Y)"
 msgid "Rotation (Z)"
 msgstr "Otočenie (Z)"
 
-#: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:195
 #: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
-#: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:76
+#: libs/image/kis_layer.cc:282 libs/ui/widgets/kis_cmb_composite.cc:76
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:56
 #: plugins/paintops/libpaintop/KisCompositeOpOptionWidget.cpp:30
 #, kde-format
@@ -17620,33 +17662,42 @@ msgstr "Aktívne"
 msgid "Color Label"
 msgstr "Označenie farby"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/image/kis_layer_properties_icons.cpp:32
+#: libs/ui/layerstyles/WdgColorOverlay.ui:21
+#: libs/ui/layerstyles/wdglayerstyles.ui:114
+#, kde-format
+msgid "Color Overlay"
+msgstr "Prekrytie farby"
+
+#: libs/image/kis_layer_properties_icons.cpp:33
 #, kde-format
 msgid "Update Result"
 msgstr "Aktualizovať výsledok"
 
-#: libs/image/kis_layer_properties_icons.cpp:33
+#: libs/image/kis_layer_properties_icons.cpp:34
 #, kde-format
 msgid "Edit Key Strokes"
 msgstr "Upraviť kľúčové ťahy"
 
-#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/image/kis_layer_properties_icons.cpp:35
 #, kde-format
 msgid "Show Coloring"
 msgstr "Zobraziť zafarbenie"
 
-#: libs/image/kis_layer_properties_icons.cpp:35
+#: libs/image/kis_layer_properties_icons.cpp:36
 #, kde-format
 msgid "Open File"
 msgstr "Otvoriť súbor"
 
-#: libs/image/kis_layer_properties_icons.cpp:36
+#: libs/image/kis_layer_properties_icons.cpp:37
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 #, kde-format
 msgid "Error"
 msgstr "Chyba"
 
-#: libs/image/kis_layer_properties_icons.cpp:37
+#: libs/image/kis_layer_properties_icons.cpp:38
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Convert Layer Color Space"
@@ -17655,7 +17706,7 @@ msgstr "Previesť farebný priestor vrstvy"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
-#: libs/image/kis_layer_properties_icons.cpp:38
+#: libs/image/kis_layer_properties_icons.cpp:39
 #: libs/ui/flake/kis_shape_layer.cc:339
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
@@ -17663,7 +17714,7 @@ msgstr "Previesť farebný priestor vrstvy"
 msgid "Anti-aliasing"
 msgstr "Vyhladzovanie"
 
-#: libs/image/kis_layer_properties_icons.cpp:126
+#: libs/image/kis_layer_properties_icons.cpp:128
 #, kde-format
 msgctxt "a tooltip shown in when hovering layer's property"
 msgid ""
@@ -18153,7 +18204,7 @@ msgid "Clone Layer"
 msgstr "Klonovať vrstvu"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1587
+#: libs/ui/kis_node_manager.cpp:1627
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18180,24 +18231,24 @@ msgstr "Vrstva filtrov"
 msgid "Generator Layer"
 msgstr "Vrstva generátora"
 
-#: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:274
+#: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:280
 #, kde-format
 msgid "Colorize Mask"
 msgstr "Zafarbiť masku"
 
 #: libs/impex/KisExportCheckRegistry.cpp:122
-#: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:223
+#: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:229
 #, kde-format
 msgid "Filter Mask"
 msgstr "Maska filtra"
 
-#: libs/impex/KisExportCheckRegistry.cpp:124 libs/ui/kis_mask_manager.cc:286
+#: libs/impex/KisExportCheckRegistry.cpp:124 libs/ui/kis_mask_manager.cc:292
 #, kde-format
 msgid "Transform Mask"
 msgstr "Maska transformácie"
 
-#: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1366
+#: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_node_manager.cpp:1389
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19751,7 +19802,7 @@ msgstr "Von"
 #: libs/pigment/resources/KoColorSet.cpp:1480
 #: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1192
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19804,8 +19855,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
-#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1005
@@ -19821,8 +19872,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:701
+#: libs/ui/KisView.cpp:1195 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -19853,11 +19904,11 @@ msgstr "Lokálne zdroje"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:196
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:217
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:252
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:261
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -20675,7 +20726,7 @@ msgid "Select All"
 msgstr "Vybrať všetko"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:794
+#: libs/ui/KisView.cpp:796
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Vyplnenie vrstvy"
@@ -20737,7 +20788,7 @@ msgid "Paste shapes"
 msgstr "Vložiť tvary"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:608
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:610
 #, kde-format
 msgid "(pasted)"
 msgstr "(vložené)"
@@ -22901,7 +22952,7 @@ msgstr "Vlastnosti vrstvy"
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
-#: plugins/dockers/layerdocker/LayerBox.cpp:213
+#: plugins/dockers/layerdocker/LayerBox.cpp:214
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
@@ -29521,7 +29572,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Zmeniť vrstvu súborov"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:702
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -29810,42 +29861,55 @@ msgstr "Previesť neviditeľné skupiny"
 msgid "Export Only Toplevel Groups"
 msgstr "Exportovať iba skupiny najvyššej úrovne"
 
-#: libs/ui/kis_mask_manager.cc:197
+#: libs/ui/kis_mask_manager.cc:203
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Pridať masku výberu"
 
-#: libs/ui/kis_mask_manager.cc:197
+#: libs/ui/kis_mask_manager.cc:203
 #, kde-format
 msgid "Selection"
 msgstr "Výber"
 
-#: libs/ui/kis_mask_manager.cc:210
+#: libs/ui/kis_mask_manager.cc:216
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Pridať masku priehľadnosti"
 
-#: libs/ui/kis_mask_manager.cc:223
+#: libs/ui/kis_mask_manager.cc:229
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Pridať masku filtra"
 
-#: libs/ui/kis_mask_manager.cc:238
+#: libs/ui/kis_mask_manager.cc:244
 #, kde-format
 msgid "New Filter Mask"
 msgstr "Nová maska filtra"
 
-#: libs/ui/kis_mask_manager.cc:274
+#: libs/ui/kis_mask_manager.cc:280
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Pridať zafarbenie masky"
 
-#: libs/ui/kis_mask_manager.cc:286
+#: libs/ui/kis_mask_manager.cc:292
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Pridať masku transformácie"
 
-#: libs/ui/kis_mask_manager.cc:309
+#: libs/ui/kis_mask_manager.cc:307
+#, fuzzy
+#| msgid "Color Overlay"
+msgctxt "(qtundo-format)"
+msgid "Add Fast Color Overlay"
+msgstr "Prekrytie farby"
+
+#: libs/ui/kis_mask_manager.cc:311
+#, fuzzy, kde-format
+#| msgid "Color Overlay"
+msgid "Color Overlay Mask"
+msgstr "Prekrytie farby"
+
+#: libs/ui/kis_mask_manager.cc:352
 #, kde-format
 msgid "Filter Mask Properties"
 msgstr "Vlastnosti filtrovej vrstvy"
@@ -29865,76 +29929,76 @@ msgstr "Zrkadlové zobrazenie okolo kurzora"
 msgid "Mirror View Around Canvas"
 msgstr "Zrkadlové zobrazenie okolo plátna"
 
-#: libs/ui/kis_node_manager.cpp:481
+#: libs/ui/kis_node_manager.cpp:485
 #, kde-format
 msgid "Layer is locked"
 msgstr "Vrstva je zamknutá"
 
-#: libs/ui/kis_node_manager.cpp:483 libs/ui/kis_node_manager.cpp:508
+#: libs/ui/kis_node_manager.cpp:487 libs/ui/kis_node_manager.cpp:512
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Vrstva \"%1\" je zamknutá"
 
-#: libs/ui/kis_node_manager.cpp:536
+#: libs/ui/kis_node_manager.cpp:540
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Presunúť uzly"
 
-#: libs/ui/kis_node_manager.cpp:543
+#: libs/ui/kis_node_manager.cpp:547
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Kopírovať uzly"
 
-#: libs/ui/kis_node_manager.cpp:550
+#: libs/ui/kis_node_manager.cpp:554
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Pridať uzly"
 
-#: libs/ui/kis_node_manager.cpp:721
+#: libs/ui/kis_node_manager.cpp:726
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Previesť na masku výberu"
 
-#: libs/ui/kis_node_manager.cpp:767
+#: libs/ui/kis_node_manager.cpp:772
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Nebolo možné načítať referenčný obrázok zo schránky"
 
-#: libs/ui/kis_node_manager.cpp:768
+#: libs/ui/kis_node_manager.cpp:773
 #, fuzzy, kde-format
 #| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Nebolo možné načítať referenčný obrázok zo schránky"
 
-#: libs/ui/kis_node_manager.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1027
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Cibuľové šupky vyžadujú vrstvu s priehľadným pozadím."
 
-#: libs/ui/kis_node_manager.cpp:1031
+#: libs/ui/kis_node_manager.cpp:1054
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Duplikovať uzly"
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1079
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Presunúť uzly dopredu"
 
-#: libs/ui/kis_node_manager.cpp:1065
+#: libs/ui/kis_node_manager.cpp:1088
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Presunúť uzly dozadu"
 
-#: libs/ui/kis_node_manager.cpp:1085
+#: libs/ui/kis_node_manager.cpp:1108
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Odstrániť uzly"
 
-#: libs/ui/kis_node_manager.cpp:1101
+#: libs/ui/kis_node_manager.cpp:1124
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -29942,7 +30006,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Zrkadliť horizontálne"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1127
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Mirror Layer Horizontally"
@@ -29953,7 +30017,7 @@ msgstr[0] "Zrkadliť vrstvu horizontálne"
 msgstr[1] "Zrkadliť vrstvu horizontálne"
 msgstr[2] "Zrkadliť vrstvu horizontálne"
 
-#: libs/ui/kis_node_manager.cpp:1115
+#: libs/ui/kis_node_manager.cpp:1138
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -29961,7 +30025,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Zrkadliť vertikálne"
 
-#: libs/ui/kis_node_manager.cpp:1118
+#: libs/ui/kis_node_manager.cpp:1141
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format) action"
 #| msgid "Mirror Layer Vertically"
@@ -29972,7 +30036,7 @@ msgstr[0] "Zrkadliť vrstvu vertikálne"
 msgstr[1] "Zrkadliť vrstvu vertikálne"
 msgstr[2] "Zrkadliť vrstvu vertikálne"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1149
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -29980,7 +30044,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Zrkadliť všetky vrstvy horizontálne"
 
-#: libs/ui/kis_node_manager.cpp:1133
+#: libs/ui/kis_node_manager.cpp:1156
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -29988,40 +30052,40 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Zrkadliť všetky vrstvy vertikálne"
 
-#: libs/ui/kis_node_manager.cpp:1265
+#: libs/ui/kis_node_manager.cpp:1288
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exportovať \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1292
+#: libs/ui/kis_node_manager.cpp:1315
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Nebolo možné uložiť vrstvu. %1"
 
-#: libs/ui/kis_node_manager.cpp:1310
+#: libs/ui/kis_node_manager.cpp:1333
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Vrstva nemá žiadne pixelové dáta"
 
-#: libs/ui/kis_node_manager.cpp:1334
+#: libs/ui/kis_node_manager.cpp:1357
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Exportovať do SVG"
 
-#: libs/ui/kis_node_manager.cpp:1354
+#: libs/ui/kis_node_manager.cpp:1377
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Nebolo možné uložiť do svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1402
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Skupina %1 needitovateľná"
 
-#: libs/ui/kis_node_manager.cpp:1380
+#: libs/ui/kis_node_manager.cpp:1403
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30030,74 +30094,74 @@ msgstr ""
 "Nemôžem zapísať alfa kanál rodičovskej vrstvy \"%1\".\n"
 "Operácia bude zrušená."
 
-#: libs/ui/kis_node_manager.cpp:1411
+#: libs/ui/kis_node_manager.cpp:1434
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Zapísať alfu do vrstvy"
 
-#: libs/ui/kis_node_manager.cpp:1534
+#: libs/ui/kis_node_manager.cpp:1574
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Vystrihnúť uzly"
 
-#: libs/ui/kis_node_manager.cpp:1617
+#: libs/ui/kis_node_manager.cpp:1657
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Rýchle zoskupenie"
 
-#: libs/ui/kis_node_manager.cpp:1628
+#: libs/ui/kis_node_manager.cpp:1668
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Rýchla skupina orezania"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1675
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Skupina orezania"
 
-#: libs/ui/kis_node_manager.cpp:1636
+#: libs/ui/kis_node_manager.cpp:1676
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Vrstva masiek"
 
-#: libs/ui/kis_node_manager.cpp:1663
+#: libs/ui/kis_node_manager.cpp:1703
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1666
+#: libs/ui/kis_node_manager.cpp:1706
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Vložiť všetky vrstvy do vlastnej, samostatnej skupiny vrstiev"
 
-#: libs/ui/kis_node_manager.cpp:1674
+#: libs/ui/kis_node_manager.cpp:1714
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rýchle zrušenie zoskupenia"
 
-#: libs/ui/kis_node_model.cpp:558
+#: libs/ui/kis_node_model.cpp:559
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Zakázané: masky na prechodových skupinách nie sú podporované!"
 
-#: libs/ui/kis_node_model.cpp:560
+#: libs/ui/kis_node_model.cpp:561
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Zakázané: klonovanie prechodových skupín nie je podporované!"
 
-#: libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:602
 #, fuzzy, kde-format
 #| msgid "%1%"
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
 
-#: libs/ui/kis_node_model.cpp:604
+#: libs/ui/kis_node_model.cpp:605
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
@@ -30125,8 +30189,8 @@ msgstr "Vybrať predvoľbu štetca"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -32005,74 +32069,74 @@ msgstr "Nie je dostupný žiadny obrázok."
 msgid "Use This Template"
 msgstr "Použiť túto šablónu"
 
-#: libs/ui/KisView.cpp:769
+#: libs/ui/KisView.cpp:771
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Na vybraný typ vrstvy nemôžete pretiahnuť farby."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Vrstva je zamknutá a neviditeľná."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Vrstva je zamknutá."
 
-#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:783 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Vrstva je neviditeľná."
 
-#: libs/ui/KisView.cpp:1194
+#: libs/ui/KisView.cpp:1196
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokument <b>'%1'</b> bol zmenený.</p><p>Chcete ho uložiť?</p>"
 
-#: libs/ui/KisView.cpp:1268
+#: libs/ui/KisView.cpp:1270
 #, kde-format
 msgid "Write Protected"
 msgstr "Chránené proti zápisu"
 
-#: libs/ui/KisView.cpp:1272
+#: libs/ui/KisView.cpp:1274
 #, kde-format
 msgid "Recovered"
 msgstr "Obnovené"
 
-#: libs/ui/KisView.cpp:1426
+#: libs/ui/KisView.cpp:1428
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Mäkké overenie nefunguje s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1431
+#: libs/ui/KisView.cpp:1433
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Mäkké overenie je zapnuté"
 
-#: libs/ui/KisView.cpp:1433
+#: libs/ui/KisView.cpp:1435
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Mäkké overenie je vypnuté"
 
-#: libs/ui/KisView.cpp:1445
+#: libs/ui/KisView.cpp:1447
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Upozornenia škály nefungujú s reálnymi číslami."
 
-#: libs/ui/KisView.cpp:1451
+#: libs/ui/KisView.cpp:1453
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Upozornenia škály zapnuté."
 
-#: libs/ui/KisView.cpp:1453
+#: libs/ui/KisView.cpp:1455
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Mäkké overenie je stále vypnuté."
 
-#: libs/ui/KisView.cpp:1456
+#: libs/ui/KisView.cpp:1458
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Upozornenia škály vypnuté."
@@ -32703,14 +32767,6 @@ msgstr "Základná vrstva"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/WdgColorOverlay.ui:21
-#: libs/ui/layerstyles/wdglayerstyles.ui:114
-#, kde-format
-msgid "Color Overlay"
-msgstr "Prekrytie farby"
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdgContour.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:84
 #, kde-format
@@ -33257,7 +33313,7 @@ msgstr "Akcie výberu"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:339
 #, kde-format
 msgid "Transform"
 msgstr "Transformovať"
@@ -39438,12 +39494,12 @@ msgstr "História vrátení späť"
 msgid "Layers"
 msgstr "Vrstvy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:254
+#: plugins/dockers/layerdocker/LayerBox.cpp:255
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Zobraziť globálnu masku výberu"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:257
+#: plugins/dockers/layerdocker/LayerBox.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39451,25 +39507,25 @@ msgid ""
 msgstr ""
 "Zobrazí globálny výber ako zvyčajnú masku výberu v paneli <b>Vrstvy</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:325
+#: plugins/dockers/layerdocker/LayerBox.cpp:326
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Veľkosti náhľadov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:353
+#: plugins/dockers/layerdocker/LayerBox.cpp:354
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Stromové odsadenie"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:377
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Režim miešania"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39484,21 +39540,21 @@ msgstr ""
 "nich zmení.\n"
 "Podrobné: Zobrazenie nepriehľadnosti aj režimu miešania, aj keď sa nezmenia."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Žiadne"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 #| msgid "Simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Jednoduchý"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Balanced"
@@ -39506,7 +39562,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Vyvážený"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #, fuzzy, kde-format
 #| msgctxt "@item:inlistbox Layer Docker subtitle style"
 #| msgid "Detailed"
@@ -39514,7 +39570,7 @@ msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Podrobné"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:399
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid "Subtitle text opacity"
@@ -39522,13 +39578,13 @@ msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Nepriehľadnosť textu titulkov"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:418
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Vnorené"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:419
+#: plugins/dockers/layerdocker/LayerBox.cpp:420
 #, fuzzy, kde-format
 #| msgctxt "@item:tooltip"
 #| msgid ""
@@ -39542,13 +39598,13 @@ msgstr ""
 "Ak je povolené, zobrazia sa vedľa názvov vrstiev titulky..\n"
 "Ak je zakázané, zobrazia sa pod názvami vrstiev (ak je dostatok miesta)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Zlúčiť vybrané vrstvy"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:432
+#: plugins/dockers/layerdocker/LayerBox.cpp:433
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
@@ -39575,7 +39631,7 @@ msgstr "Prepnúť zámky a viditeľnosť"
 msgid "&Add"
 msgstr "&Pridať"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1305
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1352
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -39626,8 +39682,14 @@ msgstr "Posunúť vrstvu alebo masku nahor"
 msgid "View or change the layer properties"
 msgstr "Zobraziť alebo zmeniť vlastnosti vrstvy"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnAddColorOverlayMask)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:313
+#, kde-format
+msgid "Add a Color Overlay Mask for inking"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:354
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Vymazať vrstvu alebo masku"
@@ -44021,7 +44083,7 @@ msgstr "Chcete prepísať existujúci balík?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:360
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:376
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:252
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "Nepodarilo sa otvoriť '%1' na uloženie."
@@ -59245,47 +59307,47 @@ msgstr ""
 "Nasledovné referenčné obrázky sa nepodarilo načítať:\n"
 "%1"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:99
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:106
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Vybrať referenčný obrázok"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Nebolo možné načítať referenčný obrázok zo schránky"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:176
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:183
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Načítať referenčné obrázky"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:196
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "Nepodarilo sa otvoriť '%1'."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:217
 #, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Nebolo možné načítať referenčný obrázok z '%1'."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:228
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:235
 #, kde-format
 msgid "Save Reference Images"
 msgstr "Uložiť referenčné obrázky"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:261
 #, kde-format
 msgid "Failed to save reference images."
 msgstr "Zlyhalo uloženie referenčných obrázkov."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:329
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:336
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Akcie referenčných obrázkov"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:95
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
@@ -65134,10 +65196,6 @@ msgstr "Nástroj referenčných obrázkov"
 #~| msgid "Color Mode"
 #~ msgid "Color Mode:"
 #~ msgstr "Farebný režim"
-
-#~ msgctxt "@info:tooltip"
-#~ msgid "Collapse Docker"
-#~ msgstr "Zbaliť docker"
 
 #~ msgid "Zoom time"
 #~ msgstr "Priblížiť čas"

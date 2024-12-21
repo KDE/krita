@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-17 02:05+0000\n"
+"POT-Creation-Date: 2024-12-21 02:14+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -11883,71 +11883,92 @@ msgctxt "action"
 msgid "Filter Mask"
 msgstr "Μάσκα φίλτρου..."
 
-#. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Add Color &Overlay Mask"
+msgstr "Νέα μάσκα φίλτρου"
+
+#. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2678
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Add a new Fast Color Overlay Filter Mask"
+msgstr "Νέα μάσκα φίλτρου"
+
+#. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2679
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Fast Color Overlay Mask"
+msgstr "Επιλογή "
+
+#. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:2688
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add &Colorize Mask"
 msgstr "Νέα μάσκα φίλτρου"
 
 #. i18n: context: toolTip @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2678
+#: krita/krita.action:2690
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add a new Colorize Mask"
 msgstr "Νέα μάσκα φίλτρου"
 
 #. i18n: context: iconText @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2679
+#: krita/krita.action:2691
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Colorize Mask"
 msgstr "&Χρώμα"
 
 #. i18n: context: text @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2688
+#: krita/krita.action:2700
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
 msgstr "Μάσκα διαφάνειας"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2690
+#: krita/krita.action:2702
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add a new Transform Mask"
 msgstr "Μάσκα διαφάνειας"
 
 #. i18n: context: iconText @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2691
+#: krita/krita.action:2703
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Transform Mask"
 msgstr "Μετασχηματισμός"
 
 #. i18n: context: text @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2700
+#: krita/krita.action:2712
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
 msgstr "&Τοπική επιλογή"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2702
+#: krita/krita.action:2714
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add a new Local Selection"
 msgstr "&Τοπική επιλογή"
 
 #. i18n: context: iconText @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2703
+#: krita/krita.action:2715
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Local Selection"
 msgstr "&Τοπική επιλογή"
 
 #. i18n: context: text @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2712
+#: krita/krita.action:2724
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
@@ -11957,14 +11978,14 @@ msgstr "Στρώμα &φίλτρου"
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2714 krita/krita.action:2715
+#: krita/krita.action:2726 krita/krita.action:2727
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
 msgstr "Στρώμα &φίλτρου"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2724
+#: krita/krita.action:2736
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
@@ -11974,14 +11995,14 @@ msgstr "Στρώμα &φίλτρου"
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2726 krita/krita.action:2727
+#: krita/krita.action:2738 krita/krita.action:2739
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
 msgstr "Στρώμα &φίλτρου"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2736
+#: krita/krita.action:2748
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -11992,7 +12013,7 @@ msgstr "Το στρώμα είναι αόρατο."
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2738 krita/krita.action:2739
+#: krita/krita.action:2750 krita/krita.action:2751
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12000,7 +12021,7 @@ msgid "Toggle layer lock"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2748
+#: krita/krita.action:2760
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12011,7 +12032,7 @@ msgstr "Το στρώμα είναι αόρατο."
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2750 krita/krita.action:2751
+#: krita/krita.action:2762 krita/krita.action:2763
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12019,7 +12040,7 @@ msgid "Toggle layer visibility"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2760
+#: krita/krita.action:2772
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12027,7 +12048,7 @@ msgid "Toggle Layer Soloing"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: toolTip @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2762
+#: krita/krita.action:2774
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -12036,7 +12057,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2763
+#: krita/krita.action:2775
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12044,7 +12065,7 @@ msgid "Toggle layer soloing"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2772
+#: krita/krita.action:2784
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12055,7 +12076,7 @@ msgstr "Το στρώμα είναι αόρατο."
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2774 krita/krita.action:2775
+#: krita/krita.action:2786 krita/krita.action:2787
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12063,7 +12084,7 @@ msgid "Toggle layer alpha"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2784
+#: krita/krita.action:2796
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12074,7 +12095,7 @@ msgstr "Το στρώμα είναι αόρατο."
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2786 krita/krita.action:2787
+#: krita/krita.action:2798 krita/krita.action:2799
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12082,28 +12103,28 @@ msgid "Toggle layer alpha inheritance"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2796
+#: krita/krita.action:2808
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add &Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
 #. i18n: context: toolTip @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2798
+#: krita/krita.action:2810
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2799
+#: krita/krita.action:2811
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2808
+#: krita/krita.action:2820
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12114,7 +12135,7 @@ msgstr "Το στρώμα είναι αόρατο."
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2810 krita/krita.action:2811
+#: krita/krita.action:2822 krita/krita.action:2823
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgctxt "action"
@@ -12122,7 +12143,7 @@ msgid "New layer from visible"
 msgstr "Το στρώμα είναι αόρατο."
 
 #. i18n: context: text @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2820
+#: krita/krita.action:2832
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Duplicate Layer or Mask"
@@ -12132,14 +12153,14 @@ msgstr "&Αντίγραφο στρώματος ή μάσκας"
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (duplicatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2822 krita/krita.action:2823
+#: krita/krita.action:2834 krita/krita.action:2835
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Duplicate Layer or Mask"
 msgstr "&Αντίγραφο στρώματος ή μάσκας"
 
 #. i18n: context: text @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2832
+#: krita/krita.action:2844
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Cut Selection to New Layer"
@@ -12149,14 +12170,14 @@ msgstr "Αποκοπή επιλογής σε νέο στρώμα"
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2834 krita/krita.action:2835
+#: krita/krita.action:2846 krita/krita.action:2847
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Cut Selection to New Layer"
 msgstr "Αποκοπή επιλογής σε νέο στρώμα"
 
 #. i18n: context: text @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2844
+#: krita/krita.action:2856
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Copy &Selection to New Layer"
@@ -12166,14 +12187,14 @@ msgstr "Αντιγραφή επιλογής σε νέο στρώμα"
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_selection_to_new_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2846 krita/krita.action:2847
+#: krita/krita.action:2858 krita/krita.action:2859
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Copy Selection to New Layer"
 msgstr "Αντιγραφή επιλογής σε νέο στρώμα"
 
 #. i18n: context: text @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2856
+#: krita/krita.action:2868
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Copy Layer"
@@ -12183,14 +12204,14 @@ msgstr "Στρώμα &ομάδας"
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (copy_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2858 krita/krita.action:2859
+#: krita/krita.action:2870 krita/krita.action:2871
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
 msgstr "Αντιγραφή επιλογής σε νέο στρώμα"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2868
+#: krita/krita.action:2880
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Cut Layer"
@@ -12200,14 +12221,14 @@ msgstr "Τρέχον στρώμα"
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2870 krita/krita.action:2871
+#: krita/krita.action:2882 krita/krita.action:2883
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Cut layer to clipboard"
 msgstr "Αποκοπή επιλογής σε νέο στρώμα"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2880
+#: krita/krita.action:2892
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste Layer"
@@ -12217,7 +12238,7 @@ msgstr "Στρώμα &ζωγραφικής"
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2882 krita/krita.action:2883
+#: krita/krita.action:2894 krita/krita.action:2895
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Paste layer from clipboard"
@@ -12227,14 +12248,14 @@ msgstr "Πρώτο στρώμα από το πρόχειρο"
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2892 krita/krita.action:2895
+#: krita/krita.action:2904 krita/krita.action:2907
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Quick Group"
 msgstr "Αναίρεση ομαδοποίησης"
 
 #. i18n: context: toolTip @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2894
+#: krita/krita.action:2906
 #, kde-format
 msgctxt "action"
 msgid "Create a group layer containing selected layers"
@@ -12244,14 +12265,14 @@ msgstr ""
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2904 krita/krita.action:2907
+#: krita/krita.action:2916 krita/krita.action:2919
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Quick Ungroup"
 msgstr "Αναίρεση ομαδοποίησης"
 
 #. i18n: context: toolTip @ Action (quick_ungroup), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2906
+#: krita/krita.action:2918
 #, kde-format
 msgctxt "action"
 msgid "Remove grouping of the layers or remove one layer out of the group"
@@ -12261,21 +12282,21 @@ msgstr ""
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2916 krita/krita.action:2919
+#: krita/krita.action:2928 krita/krita.action:2931
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Quick Clipping Group"
 msgstr "Αναίρεση ομαδοποίησης"
 
 #. i18n: context: toolTip @ Action (create_quick_clipping_group), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2918
+#: krita/krita.action:2930
 #, kde-format
 msgctxt "action"
 msgid "Group selected layers and add a layer with clipped alpha channel"
 msgstr ""
 
 #. i18n: context: text @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2928
+#: krita/krita.action:2940
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "All Layers"
@@ -12285,14 +12306,14 @@ msgstr "Στρώμα &φίλτρου..."
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_all_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2930 krita/krita.action:2931
+#: krita/krita.action:2942 krita/krita.action:2943
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select all layers"
 msgstr "Κλιμάκωση στρώματος"
 
 #. i18n: context: text @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2940
+#: krita/krita.action:2952
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Visible Layers"
@@ -12302,14 +12323,14 @@ msgstr "Στρώμα &φίλτρου..."
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_visible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2942 krita/krita.action:2943
+#: krita/krita.action:2954 krita/krita.action:2955
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select all visible layers"
 msgstr "Δείγμα όλων των ορατών στρωμάτων"
 
 #. i18n: context: text @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2952
+#: krita/krita.action:2964
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Locked Layers"
@@ -12319,14 +12340,14 @@ msgstr "Κλειδωμένο μοτίβο"
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_locked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2954 krita/krita.action:2955
+#: krita/krita.action:2966 krita/krita.action:2967
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select all locked layers"
 msgstr "Κλιμάκωση στρώματος"
 
 #. i18n: context: text @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2964
+#: krita/krita.action:2976
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Invisible Layers"
@@ -12336,14 +12357,14 @@ msgstr "Στρώμα &φίλτρου..."
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_invisible_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2966 krita/krita.action:2967
+#: krita/krita.action:2978 krita/krita.action:2979
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select all invisible layers"
 msgstr "Δείγμα όλων των ορατών στρωμάτων"
 
 #. i18n: context: text @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2976
+#: krita/krita.action:2988
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Unlocked Layers"
@@ -12353,14 +12374,14 @@ msgstr "Στρώμα αντι&γράφου"
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (select_unlocked_layers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2978 krita/krita.action:2979
+#: krita/krita.action:2990 krita/krita.action:2991
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Select all unlocked layers"
 msgstr "Κλιμάκωση στρώματος"
 
 #. i18n: context: text @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2988
+#: krita/krita.action:3000
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
@@ -12370,14 +12391,14 @@ msgstr "Αποθήκευση στρώματος ως εικόνα..."
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:2990 krita/krita.action:2991
+#: krita/krita.action:3002 krita/krita.action:3003
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save Layer/Mask"
 msgstr "Αποθήκευση στρώματος ως εικόνα..."
 
 #. i18n: context: text @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3000
+#: krita/krita.action:3012
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
@@ -12387,14 +12408,14 @@ msgstr "Αποθήκευση στρωμάτων ομάδων..."
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3002 krita/krita.action:3003
+#: krita/krita.action:3014 krita/krita.action:3015
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG"
 msgstr "Στρώμα %1"
 
 #. i18n: context: text @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3012
+#: krita/krita.action:3024
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
@@ -12404,21 +12425,21 @@ msgstr "Αποθήκευση στρωμάτων ομάδων..."
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3014 krita/krita.action:3015
+#: krita/krita.action:3026 krita/krita.action:3027
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save Group Layers"
 msgstr "Αποθήκευση στρωμάτων ομάδων..."
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3024
+#: krita/krita.action:3036
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
 msgstr "Μετατροπή τρέχοντος στρώματος από"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3026
+#: krita/krita.action:3038
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -12427,14 +12448,14 @@ msgid ""
 msgstr ""
 
 #. i18n: context: iconText @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3027
+#: krita/krita.action:3039
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert child layers into animation frames"
 msgstr "Σύνθεση"
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3036
+#: krita/krita.action:3048
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
@@ -12444,35 +12465,35 @@ msgstr "Μετατροπή τρέχοντος στρώματος από"
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3038 krita/krita.action:3039
+#: krita/krita.action:3050 krita/krita.action:3051
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert layer into animation frames"
 msgstr "Σύνθεση"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3048
+#: krita/krita.action:3060
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
 msgstr "Μετατροπή τρέχοντος στρώματος από"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3050
+#: krita/krita.action:3062
 #, kde-format
 msgctxt "action"
 msgid "Saves out the layers into a new image and then references that image."
 msgstr ""
 
 #. i18n: context: iconText @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3051
+#: krita/krita.action:3063
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to File Layer"
 msgstr "Μετατροπή τρέχοντος στρώματος από"
 
 #. i18n: context: text @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3060
+#: krita/krita.action:3072
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
@@ -12482,14 +12503,14 @@ msgstr "Σύνθεση στρώματος..."
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3062 krita/krita.action:3063
+#: krita/krita.action:3074 krita/krita.action:3075
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Import Layer"
 msgstr "Σύνθεση στρώματος..."
 
 #. i18n: context: text @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3072
+#: krita/krita.action:3084
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
@@ -12499,14 +12520,14 @@ msgstr "Στρώμα &ζωγραφικής"
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3074 krita/krita.action:3075
+#: krita/krita.action:3086 krita/krita.action:3087
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
 #. i18n: context: text @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3084
+#: krita/krita.action:3096
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
@@ -12516,14 +12537,14 @@ msgstr "Μάσκα διαφάνειας"
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3086 krita/krita.action:3087
+#: krita/krita.action:3098 krita/krita.action:3099
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as Transparency Mask"
 msgstr "Μάσκα διαφάνειας"
 
 #. i18n: context: text @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3096
+#: krita/krita.action:3108
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
@@ -12533,14 +12554,14 @@ msgstr "Μάσκα &φίλτρου..."
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3098 krita/krita.action:3099
+#: krita/krita.action:3110 krita/krita.action:3111
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as Filter Mask"
 msgstr "Μάσκα &φίλτρου..."
 
 #. i18n: context: text @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3108
+#: krita/krita.action:3120
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
@@ -12550,14 +12571,14 @@ msgstr "Μάσκα επιλογής..."
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3110 krita/krita.action:3111
+#: krita/krita.action:3122 krita/krita.action:3123
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "as Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
 #. i18n: context: text @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3120
+#: krita/krita.action:3132
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &Paint Layer"
@@ -12567,14 +12588,14 @@ msgstr "Μετατροπή τρέχοντος στρώματος από"
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_paint_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3122 krita/krita.action:3123
+#: krita/krita.action:3134 krita/krita.action:3135
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3132
+#: krita/krita.action:3144
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &Transparency Mask"
@@ -12584,14 +12605,14 @@ msgstr "&Μάσκα διαφάνειας"
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3134 krita/krita.action:3135
+#: krita/krita.action:3146 krita/krita.action:3147
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "to Transparency Mask"
 msgstr "&Μάσκα διαφάνειας"
 
 #. i18n: context: text @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3144
+#: krita/krita.action:3156
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
@@ -12601,14 +12622,14 @@ msgstr "Μάσκα &φίλτρου..."
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3146 krita/krita.action:3147
+#: krita/krita.action:3158 krita/krita.action:3159
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "to Filter Mask"
 msgstr "Μάσκα &φίλτρου..."
 
 #. i18n: context: text @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3156
+#: krita/krita.action:3168
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert to &Selection Mask"
@@ -12618,14 +12639,14 @@ msgstr "Επιλογή &στρώματος"
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_selection_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3158 krita/krita.action:3159
+#: krita/krita.action:3170 krita/krita.action:3171
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "to Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
 #. i18n: context: text @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3168
+#: krita/krita.action:3180
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Alpha into Mask"
@@ -12635,14 +12656,14 @@ msgstr "Επιλογές άλφα"
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_into_mask), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3170 krita/krita.action:3171
+#: krita/krita.action:3182 krita/krita.action:3183
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Alpha into Mask"
 msgstr "Επιλογές άλφα"
 
 #. i18n: context: text @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3180
+#: krita/krita.action:3192
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Write as Alpha"
@@ -12652,14 +12673,14 @@ msgstr "παράβλεψη άλφα"
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_write), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3182 krita/krita.action:3183
+#: krita/krita.action:3194 krita/krita.action:3195
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Write as Alpha"
 msgstr "παράβλεψη άλφα"
 
 #. i18n: context: text @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3192
+#: krita/krita.action:3204
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
@@ -12669,14 +12690,14 @@ msgstr "Το δείγμα συγχωνεύτηκε"
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3194 krita/krita.action:3195
+#: krita/krita.action:3206 krita/krita.action:3207
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Save Merged"
 msgstr "Το δείγμα συγχωνεύτηκε"
 
 #. i18n: context: text @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3204
+#: krita/krita.action:3216
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Split Layer..."
@@ -12686,14 +12707,14 @@ msgstr "&Κλιμάκωση στρώματος..."
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3206 krita/krita.action:3207
+#: krita/krita.action:3218 krita/krita.action:3219
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Split Layer"
 msgstr "Κλιμάκωση στρώματος"
 
 #. i18n: context: text @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3216
+#: krita/krita.action:3228
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
@@ -12703,14 +12724,14 @@ msgstr "&Μείωση θορύβου μικροκυματομορφής..."
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3218 krita/krita.action:3219
+#: krita/krita.action:3230 krita/krita.action:3231
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
 msgstr "Μήκος κύματος:"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3228
+#: krita/krita.action:3240
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
@@ -12720,14 +12741,14 @@ msgstr "Καθρεπτισμός οριζόντια"
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3230 krita/krita.action:3231
+#: krita/krita.action:3242 krita/krita.action:3243
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3240
+#: krita/krita.action:3252
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
@@ -12737,14 +12758,14 @@ msgstr "Καθρεπτισμός κατακόρυφα"
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3242 krita/krita.action:3243
+#: krita/krita.action:3254 krita/krita.action:3255
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3252
+#: krita/krita.action:3264
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
@@ -12754,14 +12775,14 @@ msgstr "&Περιστροφή στρώματος..."
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3254 krita/krita.action:3255
+#: krita/krita.action:3266 krita/krita.action:3267
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
 msgstr "Περιστροφή στρώματος"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3264
+#: krita/krita.action:3276
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
@@ -12771,14 +12792,14 @@ msgstr "Περιστροφή στρώματος 90° προς τα δεξιά"
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3266 krita/krita.action:3267
+#: krita/krita.action:3278 krita/krita.action:3279
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
 msgstr "Περιστροφή στρώματος 90° προς τα δεξιά"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3276
+#: krita/krita.action:3288
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
@@ -12788,14 +12809,14 @@ msgstr "Περιστροφή στρώματος 90° προς τα αριστε�
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3278 krita/krita.action:3279
+#: krita/krita.action:3290 krita/krita.action:3291
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
 msgstr "Περιστροφή στρώματος 90° προς τα αριστερά"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3288
+#: krita/krita.action:3300
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
@@ -12805,14 +12826,14 @@ msgstr "Περιστροφή στρώματος 180°"
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3290 krita/krita.action:3291
+#: krita/krita.action:3302 krita/krita.action:3303
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
 msgstr "Περιστροφή στρώματος 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3300
+#: krita/krita.action:3312
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
@@ -12822,14 +12843,14 @@ msgstr "Κλιμάκωση σε νέο μέγεθος..."
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3302 krita/krita.action:3303
+#: krita/krita.action:3314 krita/krita.action:3315
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
 msgstr "Κλιμάκωση σε νέο μέγεθος..."
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3312
+#: krita/krita.action:3324
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
@@ -12839,14 +12860,14 @@ msgstr "&Διάτμηση στρώματος..."
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3314 krita/krita.action:3315
+#: krita/krita.action:3326 krita/krita.action:3327
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Shear Layers"
 msgstr "Διάτμηση στρώματος"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3324
+#: krita/krita.action:3336
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Hori&zontally"
@@ -12856,14 +12877,14 @@ msgstr "Καθρεπτισμός οριζόντια"
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3326 krita/krita.action:3327
+#: krita/krita.action:3338 krita/krita.action:3339
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
 #. i18n: context: text @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3336
+#: krita/krita.action:3348
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror All Layers &Vertically"
@@ -12873,14 +12894,14 @@ msgstr "Καθρεπτισμός κατακόρυφα"
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorAllNodesY), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3338 krita/krita.action:3339
+#: krita/krita.action:3350 krita/krita.action:3351
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Mirror All Layers Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
 #. i18n: context: text @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3348
+#: krita/krita.action:3360
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
@@ -12890,14 +12911,14 @@ msgstr "&Περιστροφή στρώματος..."
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3350 krita/krita.action:3351
+#: krita/krita.action:3362 krita/krita.action:3363
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers"
 msgstr "Περιστροφή στρώματος"
 
 #. i18n: context: text @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3360
+#: krita/krita.action:3372
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
@@ -12907,14 +12928,14 @@ msgstr "Περιστροφή στρώματος 90° προς τα δεξιά"
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3362 krita/krita.action:3363
+#: krita/krita.action:3374 krita/krita.action:3375
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
 msgstr "Περιστροφή στρώματος 90° προς τα δεξιά"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3372
+#: krita/krita.action:3384
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
@@ -12924,14 +12945,14 @@ msgstr "Περιστροφή στρώματος 90° προς τα αριστε�
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3374 krita/krita.action:3375
+#: krita/krita.action:3386 krita/krita.action:3387
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
 msgstr "Περιστροφή στρώματος 90° προς τα αριστερά"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3384
+#: krita/krita.action:3396
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
@@ -12941,14 +12962,14 @@ msgstr "Περιστροφή στρώματος 180°"
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3386 krita/krita.action:3387
+#: krita/krita.action:3398 krita/krita.action:3399
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
 msgstr "Περιστροφή στρώματος 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3396
+#: krita/krita.action:3408
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
@@ -12958,14 +12979,14 @@ msgstr "Κλιμάκωση σε νέο μέγεθος..."
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3398 krita/krita.action:3399
+#: krita/krita.action:3410 krita/krita.action:3411
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Scale All Layers to new Size"
 msgstr "Κλιμάκωση σε νέο μέγεθος..."
 
 #. i18n: context: text @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3408
+#: krita/krita.action:3420
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
@@ -12975,14 +12996,14 @@ msgstr "&Διάτμηση στρώματος..."
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3410 krita/krita.action:3411
+#: krita/krita.action:3422 krita/krita.action:3423
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
 msgstr "Διάτμηση στρώματος"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3420
+#: krita/krita.action:3432
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
@@ -12992,14 +13013,14 @@ msgstr "&Διάτμηση στρώματος..."
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3422 krita/krita.action:3423
+#: krita/krita.action:3434 krita/krita.action:3435
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Offset Layers"
 msgstr "Κλίμακα μετατόπισης"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3432
+#: krita/krita.action:3444
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
@@ -13009,14 +13030,14 @@ msgstr "Στρώμα αντι&γράφου"
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3434 krita/krita.action:3435
+#: krita/krita.action:3446 krita/krita.action:3447
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Clones Array"
 msgstr "Στρώμα αντι&γράφου"
 
 #. i18n: context: text @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3444
+#: krita/krita.action:3456
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
@@ -13026,14 +13047,14 @@ msgstr "&Επεξεργασία μεταδεδομένων..."
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3446 krita/krita.action:3447
+#: krita/krita.action:3458 krita/krita.action:3459
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Edit metadata"
 msgstr "&Επεξεργασία μεταδεδομένων..."
 
 #. i18n: context: text @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3456
+#: krita/krita.action:3468
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Histogram..."
@@ -13043,14 +13064,14 @@ msgstr "&Ιστόγραμμα..."
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3458 krita/krita.action:3459
+#: krita/krita.action:3470 krita/krita.action:3471
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Histogram"
 msgstr "Ιστόγραμμα"
 
 #. i18n: context: text @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3468
+#: krita/krita.action:3480
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
@@ -13060,7 +13081,7 @@ msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3470 krita/krita.action:3471
+#: krita/krita.action:3482 krita/krita.action:3483
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Convert Layer Color Space"
@@ -13070,14 +13091,14 @@ msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3480 krita/krita.action:3483
+#: krita/krita.action:3492 krita/krita.action:3495
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3482
+#: krita/krita.action:3494
 #, kde-format
 msgctxt "action"
 msgid ""
@@ -13086,7 +13107,7 @@ msgid ""
 msgstr ""
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3492
+#: krita/krita.action:3504
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Merge with Layer Below"
@@ -13096,14 +13117,14 @@ msgstr "&Συγχώνευση με κάτω στρώμα"
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3494 krita/krita.action:3495
+#: krita/krita.action:3506 krita/krita.action:3507
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Merge with Layer Below"
 msgstr "Συγχώνευση με κάτω στρώμα"
 
 #. i18n: context: text @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3504
+#: krita/krita.action:3516
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Flatten Layer"
@@ -13113,14 +13134,14 @@ msgstr "Στρώμα &φίλτρου"
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3506 krita/krita.action:3507
+#: krita/krita.action:3518 krita/krita.action:3519
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Flatten Layer"
 msgstr "Ισοπέδωση στρώματος"
 
 #. i18n: context: text @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3516
+#: krita/krita.action:3528
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Flatten ima&ge"
@@ -13130,14 +13151,14 @@ msgstr "&Ισοπέδωση εικόνας"
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (flatten_image), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3518 krita/krita.action:3519
+#: krita/krita.action:3530 krita/krita.action:3531
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Flatten image"
 msgstr "&Ισοπέδωση εικόνας"
 
 #. i18n: context: text @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3528
+#: krita/krita.action:3540
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
@@ -13147,7 +13168,7 @@ msgstr "Μέγεθος στρώματος"
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3530 krita/krita.action:3531
+#: krita/krita.action:3542 krita/krita.action:3543
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Layer Style"
@@ -13159,7 +13180,7 @@ msgstr "Μέγεθος στρώματος"
 #. i18n: context: text @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/previous), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3540 krita/krita.action:3542 krita/krita.action:3543
+#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move into previous group"
@@ -13171,7 +13192,7 @@ msgstr "Μετακίνηση στρώματος εντός ομάδας"
 #. i18n: context: text @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (LayerGroupSwitcher/next), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3552 krita/krita.action:3554 krita/krita.action:3555
+#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move into next group"
@@ -13183,14 +13204,14 @@ msgstr "Μετακίνηση στρώματος εντός ομάδας"
 #. i18n: context: text @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (RenameCurrentLayer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3564 krita/krita.action:3566 krita/krita.action:3567
+#: krita/krita.action:3576 krita/krita.action:3578 krita/krita.action:3579
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Rename current layer"
 msgstr "Διαγραφή τρέχοντος στρώματος"
 
 #. i18n: context: text @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3576
+#: krita/krita.action:3588
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
@@ -13200,7 +13221,7 @@ msgstr "Α&φαίρεση στρώματος"
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3578 krita/krita.action:3579
+#: krita/krita.action:3590 krita/krita.action:3591
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Remove Layer"
@@ -13210,7 +13231,7 @@ msgstr "Αφαίρεση στρώματος"
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3588 krita/krita.action:3590
+#: krita/krita.action:3600 krita/krita.action:3602
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
@@ -13220,14 +13241,14 @@ msgstr "Μετακίνηση στρώματος ή μάσκας πάνω"
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3598 krita/krita.action:3600
+#: krita/krita.action:3610 krita/krita.action:3612
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
 msgstr "Μετακίνηση στρώματος ή μάσκας κάτω"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3608
+#: krita/krita.action:3620
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "&Properties..."
@@ -13237,14 +13258,14 @@ msgstr "&Ιδιότητες..."
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3610 krita/krita.action:3611
+#: krita/krita.action:3622 krita/krita.action:3623
 #, fuzzy, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
 msgstr "Ιδιότητες:"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3620
+#: krita/krita.action:3632
 #, fuzzy, kde-format
 #| msgid "Copy From"
 msgctxt "action"
@@ -13252,14 +13273,14 @@ msgid "Set Copy F&rom..."
 msgstr "Αντιγραφή από"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3622
+#: krita/krita.action:3634
 #, fuzzy, kde-format
 msgctxt "action"
 msgid "Set the source for the selected clone layer(s)."
 msgstr "Επιλέξτε τη λειτουργία ανάμειξης για το στρώμα."
 
 #. i18n: context: iconText @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3623
+#: krita/krita.action:3635
 #, fuzzy, kde-format
 #| msgid "Copy From"
 msgctxt "action"
@@ -13270,7 +13291,7 @@ msgstr "Αντιγραφή από"
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3632 krita/krita.action:3634
+#: krita/krita.action:3644 krita/krita.action:3646
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgctxt "action"
@@ -13281,7 +13302,7 @@ msgstr "Εικόνες αναφοράς"
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
-#: krita/krita.action:3644 krita/krita.action:3646
+#: krita/krita.action:3656 krita/krita.action:3658
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgctxt "action"
@@ -17100,6 +17121,7 @@ msgstr "Σμίκρυνση"
 #. i18n: ectx: property (text), widget (QToolButton, bnLower)
 #. i18n: ectx: property (text), widget (QToolButton, bnRaise)
 #. i18n: ectx: property (text), widget (QToolButton, bnProperties)
+#. i18n: ectx: property (text), widget (QToolButton, bnAddColorOverlayMask)
 #. i18n: ectx: property (text), widget (QToolButton, bnDelete)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectConfigurationFile)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectLut)
@@ -17174,7 +17196,8 @@ msgstr "Σμίκρυνση"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:316
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:357
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -17439,7 +17462,7 @@ msgstr " px"
 
 #. i18n: ectx: property (text), widget (QCheckBox, opacityCBox)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:19
-#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:276
+#: libs/image/kis_keyframe_channel.cpp:27 libs/image/kis_layer.cc:277
 #: libs/widgets/KoColorPopupAction.cpp:85
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
@@ -17490,7 +17513,7 @@ msgid "Deselect"
 msgstr "Αποεπιλογή"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
-#: libs/image/commands/kis_image_layer_add_command.cpp:36
+#: libs/image/commands/kis_image_layer_add_command.cpp:37
 #: libs/ui/actions/KisPasteActionFactories.cpp:267
 #: libs/ui/kis_layer_manager.cc:718 libs/ui/kis_layer_manager.cc:770
 msgctxt "(qtundo-format)"
@@ -17581,6 +17604,18 @@ msgstr "Διαγραφή της τρέχουσας ενέργειας"
 msgctxt "(qtundo-format)"
 msgid "Change Clone Layers"
 msgstr "Τροποποίηση φίλτρου"
+
+#: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
+#, fuzzy, kde-format
+msgctxt "(qtundo-format)"
+msgid "Collapse node %1"
+msgstr "Προσάρτηση εργαλειογραμμών"
+
+#: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
+#, kde-format
+msgctxt "(qtundo-format)"
+msgid "Expand node %1"
+msgstr ""
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, fuzzy, kde-format
@@ -17978,14 +18013,14 @@ msgstr "Περιστροφή"
 msgid "Rotation (Z)"
 msgstr "Περιστροφή"
 
-#: libs/image/kis_layer.cc:276 libs/widgets/KoZoomAction.cpp:195
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:195
 #: libs/widgets/KoZoomAction.cpp:206
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
-#: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:76
+#: libs/image/kis_layer.cc:282 libs/ui/widgets/kis_cmb_composite.cc:76
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:56
 #: plugins/paintops/libpaintop/KisCompositeOpOptionWidget.cpp:30
 #, kde-format
@@ -18040,45 +18075,54 @@ msgstr "Ενεργό"
 msgid "Color Label"
 msgstr "Ρυθμός χρώματος"
 
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/image/kis_layer_properties_icons.cpp:32
+#: libs/ui/layerstyles/WdgColorOverlay.ui:21
+#: libs/ui/layerstyles/wdglayerstyles.ui:114
+#, fuzzy, kde-format
+msgid "Color Overlay"
+msgstr "Επιλογή "
+
+#: libs/image/kis_layer_properties_icons.cpp:33
 #, fuzzy, kde-format
 #| msgid "Update"
 msgid "Update Result"
 msgstr "Ενημέρωση"
 
-#: libs/image/kis_layer_properties_icons.cpp:33
+#: libs/image/kis_layer_properties_icons.cpp:34
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Set stroke"
 msgid "Edit Key Strokes"
 msgstr "Ορισμός πινελιάς"
 
-#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/image/kis_layer_properties_icons.cpp:35
 #, fuzzy, kde-format
 msgid "Show Coloring"
 msgstr "Ιστορικό χρωμάτων"
 
-#: libs/image/kis_layer_properties_icons.cpp:35
+#: libs/image/kis_layer_properties_icons.cpp:36
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Open File"
 msgstr "Άνοιγμα παλέτας"
 
-#: libs/image/kis_layer_properties_icons.cpp:36
+#: libs/image/kis_layer_properties_icons.cpp:37
 #: plugins/python/plugin_importer/plugin_importer_extension.py:79
 #, fuzzy, kde-format
 #| msgid "Mirror"
 msgid "Error"
 msgstr "Κάτοπτρο"
 
-#: libs/image/kis_layer_properties_icons.cpp:37
+#: libs/image/kis_layer_properties_icons.cpp:38
 #, fuzzy, kde-format
 msgid "Layer Color Space Mismatch"
 msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
-#: libs/image/kis_layer_properties_icons.cpp:38
+#: libs/image/kis_layer_properties_icons.cpp:39
 #: libs/ui/flake/kis_shape_layer.cc:339
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:127
 #: plugins/paintops/sketch/wdgsketchoptions.ui:179
@@ -18086,7 +18130,7 @@ msgstr "Μετατροπή χρωματικού χώρου εικόνας"
 msgid "Anti-aliasing"
 msgstr "Εξομάλυνση"
 
-#: libs/image/kis_layer_properties_icons.cpp:126
+#: libs/image/kis_layer_properties_icons.cpp:128
 #, kde-format
 msgctxt "a tooltip shown in when hovering layer's property"
 msgid ""
@@ -18608,7 +18652,7 @@ msgid "Clone Layer"
 msgstr "Στρώμα αντι&γράφου"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:674
-#: libs/ui/kis_node_manager.cpp:1587
+#: libs/ui/kis_node_manager.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -18637,24 +18681,24 @@ msgstr "Στρώμα &φίλτρου..."
 msgid "Generator Layer"
 msgstr "Παρα&γόμενο στρώμα..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:274
+#: libs/impex/KisExportCheckRegistry.cpp:120 libs/ui/kis_mask_manager.cc:280
 #, fuzzy, kde-format
 msgid "Colorize Mask"
 msgstr "&Χρώμα"
 
 #: libs/impex/KisExportCheckRegistry.cpp:122
-#: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:223
+#: libs/ui/dialogs/kis_dlg_filter.cpp:218 libs/ui/kis_mask_manager.cc:229
 #, fuzzy, kde-format
 msgid "Filter Mask"
 msgstr "Μάσκα φίλτρου..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:124 libs/ui/kis_mask_manager.cc:286
+#: libs/impex/KisExportCheckRegistry.cpp:124 libs/ui/kis_mask_manager.cc:292
 #, fuzzy, kde-format
 msgid "Transform Mask"
 msgstr "Μετασχηματισμός"
 
-#: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1366
+#: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:216
+#: libs/ui/kis_node_manager.cpp:1389
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20317,7 +20361,7 @@ msgstr "Προσαρμοσμένο"
 #: libs/pigment/resources/KoColorSet.cpp:1480
 #: libs/pigment/resources/KoColorSet.cpp:1889
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1190
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:535 libs/ui/KisView.cpp:1192
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -20370,8 +20414,8 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1291
-#: libs/ui/kis_node_manager.cpp:1354 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1005
@@ -20387,8 +20431,8 @@ msgstr "Αρχεία πηγής:"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:739
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:701
+#: libs/ui/KisView.cpp:1195 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -20419,11 +20463,11 @@ msgstr "Αρχεία πηγής:"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:196
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:217
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:252
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:261
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1207
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, fuzzy, kde-format
@@ -21267,7 +21311,7 @@ msgid "Select All"
 msgstr "Επιλογή όλων"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:243
-#: libs/ui/KisView.cpp:794
+#: libs/ui/KisView.cpp:796
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
@@ -21340,7 +21384,7 @@ msgid "Paste shapes"
 msgstr "Επικόλληση σχημάτων"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:298
-#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:608
+#: libs/ui/actions/KisPasteActionFactories.cpp:399 libs/ui/KisView.cpp:610
 #, kde-format
 msgid "(pasted)"
 msgstr "(επικολλήθηκε)"
@@ -23454,7 +23498,7 @@ msgstr "Ιδιότητες στρώματος"
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
-#: plugins/dockers/layerdocker/LayerBox.cpp:213
+#: plugins/dockers/layerdocker/LayerBox.cpp:214
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
@@ -30054,7 +30098,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Τροποποίηση φίλτρου"
 
-#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:700
+#: libs/ui/kis_clipboard.cc:729 libs/ui/KisView.cpp:702
 #, fuzzy, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -30350,47 +30394,58 @@ msgstr "Μετατροπή αόρατων ομάδων"
 msgid "Export Only Toplevel Groups"
 msgstr "Εξαγωγή μόνο ομάδων κορυφαίου επιπέδου"
 
-#: libs/ui/kis_mask_manager.cc:197
+#: libs/ui/kis_mask_manager.cc:203
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: libs/ui/kis_mask_manager.cc:197
+#: libs/ui/kis_mask_manager.cc:203
 #, kde-format
 msgid "Selection"
 msgstr "Επιλογή"
 
-#: libs/ui/kis_mask_manager.cc:210
+#: libs/ui/kis_mask_manager.cc:216
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
 msgstr "Μάσκα διαφάνειας"
 
-#: libs/ui/kis_mask_manager.cc:223
+#: libs/ui/kis_mask_manager.cc:229
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
 msgstr "Νέα μάσκα φίλτρου"
 
-#: libs/ui/kis_mask_manager.cc:238
+#: libs/ui/kis_mask_manager.cc:244
 #, kde-format
 msgid "New Filter Mask"
 msgstr "Νέα μάσκα φίλτρου"
 
-#: libs/ui/kis_mask_manager.cc:274
+#: libs/ui/kis_mask_manager.cc:280
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Colorize Mask"
 msgstr "Νέα μάσκα φίλτρου"
 
-#: libs/ui/kis_mask_manager.cc:286
+#: libs/ui/kis_mask_manager.cc:292
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
 msgstr "Μάσκα διαφάνειας"
 
-#: libs/ui/kis_mask_manager.cc:309
+#: libs/ui/kis_mask_manager.cc:307
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Fast Color Overlay"
+msgstr "Επιλογή "
+
+#: libs/ui/kis_mask_manager.cc:311
+#, fuzzy, kde-format
+msgid "Color Overlay Mask"
+msgstr "Επιλογή "
+
+#: libs/ui/kis_mask_manager.cc:352
 #, fuzzy, kde-format
 msgid "Filter Mask Properties"
 msgstr "Ιδιότητες στρώματος φίλτρου"
@@ -30410,90 +30465,90 @@ msgstr "Κατοπτρισμός"
 msgid "Mirror View Around Canvas"
 msgstr "Κατοπτρισμός"
 
-#: libs/ui/kis_node_manager.cpp:481
+#: libs/ui/kis_node_manager.cpp:485
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer is locked"
 msgstr "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/kis_node_manager.cpp:483 libs/ui/kis_node_manager.cpp:508
+#: libs/ui/kis_node_manager.cpp:487 libs/ui/kis_node_manager.cpp:512
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgid "Layer \"%1\" is locked"
 msgstr "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/kis_node_manager.cpp:536
+#: libs/ui/kis_node_manager.cpp:540
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Εργαλεία &ζωγραφικής"
 
-#: libs/ui/kis_node_manager.cpp:543
+#: libs/ui/kis_node_manager.cpp:547
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Αντιγραφή από"
 
-#: libs/ui/kis_node_manager.cpp:550
+#: libs/ui/kis_node_manager.cpp:554
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "&Πόροι"
 
-#: libs/ui/kis_node_manager.cpp:721
+#: libs/ui/kis_node_manager.cpp:726
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Επιλογή &στρώματος"
 
-#: libs/ui/kis_node_manager.cpp:767
+#: libs/ui/kis_node_manager.cpp:772
 #, fuzzy, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/kis_node_manager.cpp:768
+#: libs/ui/kis_node_manager.cpp:773
 #, fuzzy, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/kis_node_manager.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1027
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1031
+#: libs/ui/kis_node_manager.cpp:1054
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Αντιγραφή"
 
-#: libs/ui/kis_node_manager.cpp:1056
+#: libs/ui/kis_node_manager.cpp:1079
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Εργαλεία &ζωγραφικής"
 
-#: libs/ui/kis_node_manager.cpp:1065
+#: libs/ui/kis_node_manager.cpp:1088
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Εργαλεία &ζωγραφικής"
 
-#: libs/ui/kis_node_manager.cpp:1085
+#: libs/ui/kis_node_manager.cpp:1108
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Εργαλεία &ζωγραφικής"
 
-#: libs/ui/kis_node_manager.cpp:1101
+#: libs/ui/kis_node_manager.cpp:1124
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
-#: libs/ui/kis_node_manager.cpp:1104
+#: libs/ui/kis_node_manager.cpp:1127
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -30501,13 +30556,13 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Καθρεπτισμός οριζόντια"
 msgstr[1] "Καθρεπτισμός οριζόντια"
 
-#: libs/ui/kis_node_manager.cpp:1115
+#: libs/ui/kis_node_manager.cpp:1138
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
-#: libs/ui/kis_node_manager.cpp:1118
+#: libs/ui/kis_node_manager.cpp:1141
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -30515,130 +30570,130 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Καθρεπτισμός κατακόρυφα"
 msgstr[1] "Καθρεπτισμός κατακόρυφα"
 
-#: libs/ui/kis_node_manager.cpp:1126
+#: libs/ui/kis_node_manager.cpp:1149
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Καθρεπτισμός οριζόντια"
 
-#: libs/ui/kis_node_manager.cpp:1133
+#: libs/ui/kis_node_manager.cpp:1156
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Καθρεπτισμός κατακόρυφα"
 
-#: libs/ui/kis_node_manager.cpp:1265
+#: libs/ui/kis_node_manager.cpp:1288
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Εξαγωγή"
 
-#: libs/ui/kis_node_manager.cpp:1292
+#: libs/ui/kis_node_manager.cpp:1315
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/kis_node_manager.cpp:1310
+#: libs/ui/kis_node_manager.cpp:1333
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Η ομάδα δεν είναι επεξεργάσιμη."
 
-#: libs/ui/kis_node_manager.cpp:1334
+#: libs/ui/kis_node_manager.cpp:1357
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Εξαγωγή"
 
-#: libs/ui/kis_node_manager.cpp:1354
+#: libs/ui/kis_node_manager.cpp:1377
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: libs/ui/kis_node_manager.cpp:1379
+#: libs/ui/kis_node_manager.cpp:1402
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Η ομάδα δεν είναι επεξεργάσιμη."
 
-#: libs/ui/kis_node_manager.cpp:1380
+#: libs/ui/kis_node_manager.cpp:1403
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1411
+#: libs/ui/kis_node_manager.cpp:1434
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Δημιουργία ενός νέου στρώματος ή μάσκας"
 
-#: libs/ui/kis_node_manager.cpp:1534
+#: libs/ui/kis_node_manager.cpp:1574
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Αντιγραφή"
 
-#: libs/ui/kis_node_manager.cpp:1617
+#: libs/ui/kis_node_manager.cpp:1657
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Αναίρεση ομαδοποίησης"
 
-#: libs/ui/kis_node_manager.cpp:1628
+#: libs/ui/kis_node_manager.cpp:1668
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Αναίρεση ομαδοποίησης"
 
-#: libs/ui/kis_node_manager.cpp:1635
+#: libs/ui/kis_node_manager.cpp:1675
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Αναίρεση ομαδοποίησης"
 
-#: libs/ui/kis_node_manager.cpp:1636
+#: libs/ui/kis_node_manager.cpp:1676
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Στρώμα &ζωγραφικής"
 
-#: libs/ui/kis_node_manager.cpp:1663
+#: libs/ui/kis_node_manager.cpp:1703
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1666
+#: libs/ui/kis_node_manager.cpp:1706
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1674
+#: libs/ui/kis_node_manager.cpp:1714
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Αναίρεση ομαδοποίησης"
 
-#: libs/ui/kis_node_model.cpp:558
+#: libs/ui/kis_node_model.cpp:559
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:560
+#: libs/ui/kis_node_model.cpp:561
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:602
 #, fuzzy, kde-format
 #| msgid "%1%"
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
 
-#: libs/ui/kis_node_model.cpp:604
+#: libs/ui/kis_node_model.cpp:605
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
@@ -30666,8 +30721,8 @@ msgstr "Επιλογή προρύθμισης πινέλου"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:211
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -32488,27 +32543,27 @@ msgstr "Καμία διαθέσιμη εικόνα."
 msgid "Use This Template"
 msgstr "Χρήση αυτού του προτύπου"
 
-#: libs/ui/KisView.cpp:769
+#: libs/ui/KisView.cpp:771
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr ""
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:681
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Το στρώμα είναι κλειδωμένο και αόρατο."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:683
+#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Το στρώμα είναι κλειδωμένο."
 
-#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:685
+#: libs/ui/KisView.cpp:783 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Το στρώμα είναι αόρατο."
 
-#: libs/ui/KisView.cpp:1194
+#: libs/ui/KisView.cpp:1196
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -32517,52 +32572,52 @@ msgstr ""
 "<p>Το έγγραφο <b>'%1'</b> έχει τροποποιηθεί.</p><p>Θέλετε να το αποθηκεύσετε;"
 "</p>"
 
-#: libs/ui/KisView.cpp:1268
+#: libs/ui/KisView.cpp:1270
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(προστασία εγγραφής)"
 
-#: libs/ui/KisView.cpp:1272
+#: libs/ui/KisView.cpp:1274
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Recover Files"
 msgid "Recovered"
 msgstr "Επαναφορά αρχείων"
 
-#: libs/ui/KisView.cpp:1426
+#: libs/ui/KisView.cpp:1428
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Επιλογές"
 
-#: libs/ui/KisView.cpp:1431
+#: libs/ui/KisView.cpp:1433
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Επιλογές"
 
-#: libs/ui/KisView.cpp:1433
+#: libs/ui/KisView.cpp:1435
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Επιλογές"
 
-#: libs/ui/KisView.cpp:1445
+#: libs/ui/KisView.cpp:1447
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Προειδοποίηση"
 
-#: libs/ui/KisView.cpp:1451
+#: libs/ui/KisView.cpp:1453
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Προειδοποίηση"
 
-#: libs/ui/KisView.cpp:1453
+#: libs/ui/KisView.cpp:1455
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Επιλογές"
 
-#: libs/ui/KisView.cpp:1456
+#: libs/ui/KisView.cpp:1458
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."
@@ -33175,14 +33230,6 @@ msgstr "Υπογράμμιση"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
-#: libs/ui/layerstyles/WdgColorOverlay.ui:21
-#: libs/ui/layerstyles/wdglayerstyles.ui:114
-#, fuzzy, kde-format
-msgid "Color Overlay"
-msgstr "Επιλογή "
-
-#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
-#. i18n: ectx: property (text), item, widget (QListWidget, lstStyleSelector)
 #: libs/ui/layerstyles/wdgContour.ui:21
 #: libs/ui/layerstyles/wdglayerstyles.ui:84
 #, fuzzy, kde-format
@@ -33726,7 +33773,7 @@ msgstr "Διακόσμηση επιλογής"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:386
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:339
 #, fuzzy, kde-format
 msgid "Transform"
 msgstr "Μετασχηματισμός"
@@ -39758,39 +39805,39 @@ msgstr "Αναίρεση ιστορικού"
 msgid "Layers"
 msgstr "Στρώματα"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:254
+#: plugins/dockers/layerdocker/LayerBox.cpp:255
 #, fuzzy, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Μάσκα επιλογής..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:257
+#: plugins/dockers/layerdocker/LayerBox.cpp:258
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:325
+#: plugins/dockers/layerdocker/LayerBox.cpp:326
 #, fuzzy, kde-format
 #| msgid "Thumbnail View"
 msgid "Thumbnail Size"
 msgstr "Προβολή εικόνων επισκόπησης"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:353
+#: plugins/dockers/layerdocker/LayerBox.cpp:354
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Προσανατολισμός"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:376
+#: plugins/dockers/layerdocker/LayerBox.cpp:377
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Λειτουργία ανάμειξης"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:378
+#: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39800,48 +39847,48 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Κανένα"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 #| msgid "simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "απλό"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Εύρος χρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:387
 #, fuzzy, kde-format
 #| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Λεπτομέρειες"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:399
+#: plugins/dockers/layerdocker/LayerBox.cpp:400
 #, fuzzy, kde-format
 #| msgid "Layer Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Αδιαφάνεια στρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:417
+#: plugins/dockers/layerdocker/LayerBox.cpp:418
 #, fuzzy, kde-format
 #| msgid "Spline"
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Spline"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:419
+#: plugins/dockers/layerdocker/LayerBox.cpp:420
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39849,13 +39896,13 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Κλιμάκωση στρώματος"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:432
+#: plugins/dockers/layerdocker/LayerBox.cpp:433
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
@@ -39885,7 +39932,7 @@ msgstr "Το στρώμα είναι αόρατο."
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1305
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1352
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -39936,8 +39983,14 @@ msgstr "Μετακίνηση στρώματος ή μάσκας πάνω"
 msgid "View or change the layer properties"
 msgstr "Προβολή ή τροποποίηση των ιδιοτήτων του στρώματος"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, bnAddColorOverlayMask)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:313
+#, kde-format
+msgid "Add a Color Overlay Mask for inking"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:354
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Διαγραφή στρώματος ή μάσκας"
@@ -44418,7 +44471,7 @@ msgstr "Επιθυμείτε πραγματικά την αντικατάστα�
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:360
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:376
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:252
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not open '%1' for saving."
@@ -59971,51 +60024,51 @@ msgid ""
 "%1"
 msgstr "Τα ακόλουθα αυτόματα αποθηκευμένα αρχεία μπορούν να ανακτηθούν:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:99
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:106
 #, fuzzy, kde-format
 msgid "Select a Reference Image"
 msgstr "Διανυσματική εικόνα"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
 #, fuzzy, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:176
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:183
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Load Reference Images"
 msgstr "Εικόνες αναφοράς"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:196
 #, fuzzy, kde-format
 msgid "Could not open '%1'."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:217
 #, fuzzy, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Αδυναμία προσθήκης του στρώματος στην εικόνα."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:228
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:235
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Save Reference Images"
 msgstr "Εικόνες αναφοράς"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:261
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Failed to save reference images."
 msgstr "Εικόνα αναφοράς:"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:329
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:336
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Reference Image Actions"
 msgstr "Εικόνες αναφοράς"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:95
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:96
 #, fuzzy, kde-format
 #| msgid "Reference Images"
 msgid "Reference Images Tool"
@@ -65680,11 +65733,6 @@ msgstr "Εικόνες αναφοράς"
 #~| msgid "Color Dodge"
 #~ msgid "Color Mode:"
 #~ msgstr "Ελιγμός χρώματος"
-
-#, fuzzy
-#~ msgctxt "@info:tooltip"
-#~ msgid "Collapse Docker"
-#~ msgstr "Προσάρτηση εργαλειογραμμών"
 
 #, fuzzy
 #~| msgid "Zoom Out"

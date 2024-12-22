@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 04:13+0000\n"
-"PO-Revision-Date: 2024-12-19 23:03+0100\n"
+"PO-Revision-Date: 2024-12-21 13:21+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -39288,37 +39288,37 @@ msgstr "Seleccionar o método de fusión para a capa."
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:120
 #, kde-format
 msgid "Layer Opacity"
-msgstr "Opacidade da capa"
+msgstr "Opacidade da capa."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:213
 #, kde-format
 msgid "Duplicate layer or mask"
-msgstr "Duplicar capa ou máscara"
+msgstr "Duplicar capa ou máscara."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:238
 #, kde-format
 msgid "Move layer or mask down"
-msgstr "Baixar a capa ou máscara"
+msgstr "Baixar a capa ou máscara."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:263
 #, kde-format
 msgid "Move layer or mask up"
-msgstr "Subir a capa ou máscara"
+msgstr "Subir a capa ou máscara."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:288
 #, kde-format
 msgid "View or change the layer properties"
-msgstr "Ver ou cambiar as propiedades da capa"
+msgstr "Ver ou cambiar as propiedades da capa."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:329
 #, kde-format
 msgid "Delete the layer or mask"
-msgstr "Eliminar a capa ou máscara"
+msgstr "Eliminar a capa ou máscara."
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format

@@ -1,7 +1,6 @@
 # Translation of krita.po to Catalan
 # Copyright (C) 2000-2024 This_file_is_part_of_KDE
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 # Sebastià Pla <sastia@retemail.es>, 2000.
 # Albert Astals Cid <aacid@kde.org>, 2002, 2003, 2004, 2005, 2006.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2003, 2006, 2013, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
@@ -9,12 +8,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
+# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-20 11:14+0100\n"
+"PO-Revision-Date: 2024-12-21 10:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -11476,29 +11476,24 @@ msgstr "Màscara de filtratge"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Afegeix una màscara d'acoloriment"
+msgstr "Afegeix una màscara de superp&osició de color"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Afegeix una màscara d'acoloriment nova"
+msgstr "Afegeix una màscara de filtre de superposició ràpida de color nova"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Superposició ràpida de color"
+msgstr "Màscara de superposició ràpida de color"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17150,13 +17145,13 @@ msgstr "Canvia les capes clonades"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr ""
+msgstr "Redueix el node %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Expandeix el node %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29755,17 +29750,14 @@ msgid "Add Transform Mask"
 msgstr "Afegeix una màscara de transformació"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Superposició ràpida de color"
+msgstr "Afegeix una superposició ràpida de color"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Superposició del color"
+msgstr "Màscara de superposició de color"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -39459,7 +39451,7 @@ msgstr "Veu o canvia les propietats de la capa"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "Afegeix una màscara de superposició de color per a la tinta"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

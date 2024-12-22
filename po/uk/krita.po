@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-17 17:15+0200\n"
+"PO-Revision-Date: 2024-12-21 09:58+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -11455,31 +11455,24 @@ msgstr "Маска фільтрування"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr ""
-"Додати маску розфарбовування\n"
-"додавання маски розфарбовування"
+msgstr "Додати маску накладання кольору"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Додати нову маску розфарбовування"
+msgstr "Додати нову маску фільтрування накладанням швидких кольорів"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Накладка швидких кольорів"
+msgstr "Маска накладання швидких кольорів"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17257,18 +17250,18 @@ msgstr ""
 "зміну клонованих шарів"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Згорнути бічну панель"
+msgstr ""
+"Згорнути вузол %1\n"
+"згортання вузла %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Розгорнути вузол %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -30061,17 +30054,16 @@ msgstr ""
 "додавання маски перетворення"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Накладка швидких кольорів"
+msgstr ""
+"Додати накладку швидких кольорів\n"
+"додавання накладки швидких кольорів"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Накладання кольору"
+msgstr "Маска накладання кольору"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -39979,7 +39971,7 @@ msgstr "Переглянути або змінити властивості ша
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "Додати маску накладання кольору для промальовування"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

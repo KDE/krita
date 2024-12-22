@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-18 00:01+0100\n"
+"PO-Revision-Date: 2024-12-21 17:39+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -11517,29 +11517,24 @@ msgstr "Máscara de filtro"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Añadir máscara de coloración"
+msgstr "Añadir máscara de superp&osición de color"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Añadir una nueva máscara de coloración"
+msgstr "Añadir una nueva máscara de de filtro de superposición de color rápida"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Superposición de color rápida"
+msgstr "Máscara de superposición de color rápida"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17175,18 +17170,16 @@ msgid "Change Clone Layers"
 msgstr "Cambiar capas de clonación"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Contraer panel"
+msgstr "Contraer nodo %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Expandir nodo %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29793,17 +29786,14 @@ msgid "Add Transform Mask"
 msgstr "Añadir máscara de transformación"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Superposición de color rápida"
+msgstr "Añadir superposición de color rápida"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Superposición de color"
+msgstr "Máscara de superposición de color"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -39520,7 +39510,7 @@ msgstr "Ver o cambiar las propiedades de la capa"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "Añadir una máscara de superposición de color para entintado"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

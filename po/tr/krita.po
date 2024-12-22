@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-17 21:00+0300\n"
+"PO-Revision-Date: 2024-12-21 14:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -11451,29 +11451,24 @@ msgstr "Süzgeç Maskesi"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Renklendirme Maskesi Ekle"
+msgstr "Renk &Kaplama Maskesi Ekle"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Yeni Bir Renklendirme Maskesi Ekle"
+msgstr "Yeni bir hızlı renk kaplama süzgeci maskesi ekle"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Hızlı Renk Kaplama"
+msgstr "Hızlı Renk Kaplama Maskesi"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17113,13 +17108,13 @@ msgstr "Klon Katmanları Değiştir"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr ""
+msgstr "%1 Düğümünü Daralt"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "%1 Düğümünü Genişlet"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29662,17 +29657,14 @@ msgid "Add Transform Mask"
 msgstr "Dönüşüm Maskesi Ekle"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Hızlı Renk Kaplama"
+msgstr "Hızlı Renk Kaplaması Ekle"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Renk Kaplama"
+msgstr "Renk Kaplama Maskesi"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -39303,7 +39295,7 @@ msgstr "Katman özelliklerini görüntüle veya değiştir"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "Mürekkepleme için bir renk kaplama maskesi ekle"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

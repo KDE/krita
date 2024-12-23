@@ -11434,21 +11434,21 @@ msgstr "滤镜蒙版"
 #, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr ""
+msgstr "添加颜色叠加蒙版(&O)"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
 #, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr ""
+msgstr "添加新的快速颜色叠加滤镜蒙版"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
 #, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr ""
+msgstr "快速颜色叠加蒙版"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17061,13 +17061,13 @@ msgstr "更改克隆图层"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr ""
+msgstr "折叠节点 %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "展开节点 %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29432,12 +29432,12 @@ msgstr "添加变形蒙版"
 #: libs/ui/kis_mask_manager.cc:307
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr ""
+msgstr "添加快速颜色叠加"
 
 #: libs/ui/kis_mask_manager.cc:311
 #, kde-format
 msgid "Color Overlay Mask"
-msgstr ""
+msgstr "颜色叠加蒙板"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -38894,7 +38894,7 @@ msgstr "查看或更改图层属性"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "添加颜色叠加蒙板以便描线"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

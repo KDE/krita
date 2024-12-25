@@ -47,10 +47,10 @@ public:
                                                      const QBitArray& channelFlags                    )  {
         using namespace Arithmetic;
                 
-        if (isUnitValue(dstAlpha)) return dstAlpha;
+        if (isUnitValueFuzzy(dstAlpha)) return dstAlpha;
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
         
-        if (isZeroValue(appliedAlpha)) return dstAlpha;
+        if (isZeroValueFuzzy(appliedAlpha)) return dstAlpha;
         channels_type newDstAlpha;
         
         float dA = scale<float>(dstAlpha);
@@ -71,9 +71,9 @@ public:
 		float fakeOpacity = 1.0f - (1.0f - a)/(1.0f - dA + 1e-16f);
         newDstAlpha=scale<channels_type>(a);
 
-        if (isZeroValue(newDstAlpha)) {
+        if (isZeroValueFuzzy(newDstAlpha)) {
           // just do nothing with color channels and return null opacity
-        } else if (!isZeroValue(dstAlpha)) {
+        } else if (!isZeroValueFuzzy(dstAlpha)) {
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
                 {

@@ -44,6 +44,14 @@ private Q_SLOTS:
 
     void dumpOpCategories();
 
+    void generateSampleSheets();
+    void generateSampleSheets_data();
+
+    void generateSampleSheetsLong_data();
+    void generateSampleSheetsLong();
+
+    void testColor();
+
 private:
     // TODO: disabled for now
     void testF16Modes();

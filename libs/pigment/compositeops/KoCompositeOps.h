@@ -259,7 +259,7 @@ struct AddGeneralOps<Traits, true>
          add<&cfSubtract<Arg>        >(cs, COMPOSITE_SUBTRACT        , KoCompositeOp::categoryArithmetic());
          add<CFInverseSubtract<Arg>  >(cs, COMPOSITE_INVERSE_SUBTRACT, KoCompositeOp::categoryArithmetic());
          add<&cfMultiply<Arg>        >(cs, COMPOSITE_MULT            , KoCompositeOp::categoryArithmetic());
-         add<&cfDivide<Arg>          >(cs, COMPOSITE_DIVIDE          , KoCompositeOp::categoryArithmetic());
+         add<CFDivide<Arg>           >(cs, COMPOSITE_DIVIDE          , KoCompositeOp::categoryArithmetic());
 
          add<&cfModulo<Arg>               >(cs, COMPOSITE_MOD                , KoCompositeOp::categoryModulo());
          add<&cfModuloContinuous<Arg>     >(cs, COMPOSITE_MOD_CON            , KoCompositeOp::categoryModulo());

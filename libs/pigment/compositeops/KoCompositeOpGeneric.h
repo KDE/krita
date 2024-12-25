@@ -62,12 +62,12 @@ public:
         
         srcAlpha = mul(srcAlpha, maskAlpha, opacity);
 
-        if (isZeroValue(srcAlpha)) {
+        if (isZeroValueFuzzy(srcAlpha)) {
             return dstAlpha;
         }
 
         if(alphaLocked) {
-            if(!isZeroValue(dstAlpha)) {
+            if(!isZeroValueFuzzy(dstAlpha)) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                         const channels_type srcInBlendSpace =
@@ -88,7 +88,7 @@ public:
             }
             
             return dstAlpha;
-        } else if (isZeroValue(dstAlpha)) {
+        } else if (isZeroValueFuzzy(dstAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     dst[i] = BlendingPolicy::fromAdditiveSpace(
@@ -97,7 +97,7 @@ public:
                 }
             }
             return srcAlpha;
-        } else if (isUnitValue(dstAlpha)) {
+        } else if (isUnitValueFuzzy(dstAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     const channels_type srcInBlendSpace =
@@ -116,7 +116,7 @@ public:
                 }
             }
             return unitValue<channels_type>();
-        }  else if (isUnitValue(srcAlpha)) {
+        }  else if (isUnitValueFuzzy(srcAlpha)) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                     const channels_type srcInBlendSpace =
@@ -138,7 +138,7 @@ public:
         } else {
             channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
 
-            if (!isZeroValue(newDstAlpha)) {
+            if (!isZeroValueFuzzy(newDstAlpha)) {
 
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {

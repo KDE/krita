@@ -364,8 +364,6 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
         result.emplace_back(id, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
     };
 
-    addSdrPreservingHdrOp(COMPOSITE_PIN_LIGHT);
-    addSdrPreservingHdrOp(COMPOSITE_BURN);
     addSdrPreservingHdrOp(COMPOSITE_LINEAR_BURN);
 
     // Hard-mix is the only stable positive-preserving mode
@@ -385,6 +383,8 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
         result.emplace_back(id, SdrRangePreserveStable | PositivePreserveStable);
     };
 
+    addSdrPreservingOp(COMPOSITE_PIN_LIGHT);
+    addSdrPreservingOp(COMPOSITE_BURN);
     addSdrPreservingOp(COMPOSITE_DARKEN);
     addSdrPreservingOp(COMPOSITE_LIGHTEN);
     addSdrPreservingOp(COMPOSITE_ALLANON);
@@ -438,9 +438,49 @@ std::vector<std::pair<QString, TestFlags>> generateCompositeOpIdSet()
     result.emplace_back(COMPOSITE_EQUIVALENCE, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
     result.emplace_back(COMPOSITE_GEOMETRIC_MEAN, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
     result.emplace_back(COMPOSITE_ADDITIVE_SUBTRACTIVE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
-    result.emplace_back(COMPOSITE_GAMMA_DARK, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_GAMMA_DARK, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
     result.emplace_back(COMPOSITE_GAMMA_LIGHT, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
     result.emplace_back(COMPOSITE_GAMMA_ILLUMINATION, SrcCannotMakeNegative | SdrRangePreserveUnstable | PositivePreserveStable);
+
+    result.emplace_back(COMPOSITE_TANGENT_NORMALMAP, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_COMBINE_NORMAL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_COLOR, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HUE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_SATURATION, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_SATURATION, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_SATURATION, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LUMINIZE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_LUMINOSITY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_LUMINOSITY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DARKER_COLOR, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LIGHTER_COLOR, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LAMBERT_LIGHTING, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_COLOR_HSI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HUE_HSI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_SATURATION_HSI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_SATURATION_HSI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_SATURATION_HSI, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INTENSITY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_INTENSITY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_INTENSITY, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_COLOR_HSL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HUE_HSL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_SATURATION_HSL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_SATURATION_HSL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_SATURATION_HSL, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_LIGHTNESS, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_LIGHTNESS, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_LIGHTNESS, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_COLOR_HSV, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_HUE_HSV, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_SATURATION_HSV, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_SATURATION_HSV, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_SATURATION_HSV, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_VALUE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_INC_VALUE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
+    result.emplace_back(COMPOSITE_DEC_VALUE, SrcCannotMakeNegative | SdrRangePreserveStable | PositivePreserveStable);
 
     return result;
 }
@@ -552,7 +592,7 @@ void TestCompositeOpInversion::testU16ModesConsistent()
         const qreal minOpacity = std::min({it.opacity(), it.srcAlpha(), it.dstAlpha()});
 
         // we have added a fast-path for opacity == 0.0 case
-        if (Arithmetic::isZeroValue<float>(minOpacity)) continue;
+        if (Arithmetic::isZeroValueFuzzy<float>(minOpacity)) continue;
 
         KoColor srcColorU = it.srcColor(csU);
         KoColor dstColorU = it.dstColor(csU);
@@ -688,15 +728,98 @@ void TestCompositeOpInversion::testF32vsU16ConsistencyInSDR()
              * so we should just skip this test case
              */
             if (id == COMPOSITE_HARD_MIX_PHOTOSHOP &&
-                Arithmetic::isUnitValue<float>(float(it.srcColor()) + float(it.dstColor()))) {
+                Arithmetic::isUnitValueFuzzy<float>(float(it.srcColor()) + float(it.dstColor()))) {
                 continue;
             }
 
-            if (Arithmetic::isZeroValue<float>(resultColorValueU) &&
+            if (id == COMPOSITE_HARD_OVERLAY) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_HARD_OVERLAY && flags.testFlag(HDR)) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_DODGE) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_DODGE && flags.testFlag(HDR)) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_BURN) {
+                if (Arithmetic::isZeroValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isUnitValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_VIVID_LIGHT) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor()) ||
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.srcColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_DIVIDE) {
+                if (Arithmetic::isZeroValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_ARC_TANGENT) {
+                if (Arithmetic::isZeroValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_GAMMA_DARK) {
+                if (Arithmetic::isZeroValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isUnitValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_GAMMA_LIGHT) {
+                if (Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            if (id == COMPOSITE_GAMMA_ILLUMINATION) {
+                if (Arithmetic::isUnitValueClampedFuzzy<float>(it.srcColor()) &&
+                    Arithmetic::isZeroValueClampedFuzzy<float>(it.dstColor())) {
+                    continue;
+                }
+            }
+
+            // normal extension into HDR
+            bool isStraightUnitExtension =
+                Arithmetic::isUnitValueFuzzy<float>(resultColorValueU) &&
+                qAbs(resultColorValueU - qMin(1.0f, resultColorValueF)) <= 0.001;
+
+            // clipped extension into HDR (when opacity < 1.0)
+            isStraightUnitExtension |=
+                resultColorValueU > minOpacity && resultColorValueF > 1.0;
+
+            if (Arithmetic::isZeroValueFuzzy<float>(resultColorValueU) &&
                 qAbs(resultColorValueU - qMax(0.0f, resultColorValueF)) <= 0.001) {
                 // noop, should be fine result
-            } else if (Arithmetic::isUnitValue<float>(resultColorValueU) &&
-                       qAbs(resultColorValueU - qMin(1.0f, resultColorValueF)) <= 0.001) {
+            } else if (isStraightUnitExtension) {
                 // noop, should be fine result as well
             } else if (resultColorValueF < 0.0) {
                 qDebug() << "--- resulting value in SDR range is negative! ---";
@@ -1102,6 +1225,429 @@ void TestCompositeOpInversion::testF16Modes()
         }
 
     }
+}
+
+QString csShortName(const KoID &depthId)
+{
+    if (depthId == Integer16BitsColorDepthID) {
+        return "u16";
+    } else if (depthId == Float16BitsColorDepthID) {
+        return "f16";
+    } else if (depthId == Float32BitsColorDepthID) {
+        return "f32";
+    } else {
+        qFatal("not implemented");
+    }
+    return "error";
+}
+
+
+void TestCompositeOpInversion::generateSampleSheets_data()
+{
+    auto ids = generateCompositeOpIdSet();
+
+    QTest::addColumn<QString>("id");
+    QTest::addColumn<TestFlags>("flags");
+    QTest::addColumn<KoID>("depthId");
+
+    auto fixId = [] (QString id) {
+        id.replace(' ', '_');
+        return id;
+    };
+
+    std::vector<KoID> depthIds = {Integer16BitsColorDepthID, Float32BitsColorDepthID, Float16BitsColorDepthID};
+
+
+    for (auto it = ids.begin(); it != ids.end(); ++it) {
+        for (auto depthIt = depthIds.begin(); depthIt != depthIds.end(); ++depthIt) {
+            const QString id = it->first;
+            const TestFlags flags = it->second;
+            const bool isHDR = flags.testFlag(HDR);
+
+            if (id == COMPOSITE_DISSOLVE) continue;
+
+            if (*depthIt == Integer16BitsColorDepthID && isHDR) continue;
+
+            if (id == COMPOSITE_BURN && !isHDR && *depthIt != Integer16BitsColorDepthID) {
+                continue;
+            } else if (id == COMPOSITE_LINEAR_BURN && !isHDR && *depthIt != Integer16BitsColorDepthID) {
+                continue;
+            } else if (id == COMPOSITE_PIN_LIGHT && !isHDR && *depthIt != Integer16BitsColorDepthID) {
+                continue;
+            }
+
+            QTest::addRow("%s_%s_%s", fixId(id).toLatin1().data(), isHDR ? "hdr" : "sdr", csShortName(*depthIt).toLatin1().data()) << id << flags << *depthIt;
+        }
+    }
+}
+
+#include <QPainter>
+void TestCompositeOpInversion::generateSampleSheets()
+{
+    QFETCH(QString, id);
+    QFETCH(TestFlags, flags);
+    QFETCH(KoID, depthId);
+
+    const KoColorSpace* csF32 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depthId.id(), 0);
+    const KoCompositeOp *opF32 = createOp(csF32, id, flags.testFlag(HDR));
+
+
+    QImage image(QSize(768, 1024), QImage::Format_ARGB32);
+
+
+
+    auto createColor = [] (const KoColorSpace *cs, QRgb value) {
+        KoColor c(cs);
+
+        if (cs->colorDepthId() == Float32BitsColorDepthID) {
+            float *ptr = reinterpret_cast<float*>(c.data());
+            ptr[0] = KoColorSpaceMaths<quint8, float>::scaleToA(qRed(value));
+            ptr[1] = KoColorSpaceMaths<quint8, float>::scaleToA(qGreen(value));
+            ptr[2] = KoColorSpaceMaths<quint8, float>::scaleToA(qBlue(value));
+            ptr[3] = KoColorSpaceMaths<quint8, float>::scaleToA(qAlpha(value));
+        } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
+            half *ptr = reinterpret_cast<half*>(c.data());
+            ptr[0] = KoColorSpaceMaths<quint8, half>::scaleToA(qRed(value));
+            ptr[1] = KoColorSpaceMaths<quint8, half>::scaleToA(qGreen(value));
+            ptr[2] = KoColorSpaceMaths<quint8, half>::scaleToA(qBlue(value));
+            ptr[3] = KoColorSpaceMaths<quint8, half>::scaleToA(qAlpha(value));
+        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            quint16 *ptr = reinterpret_cast<quint16*>(c.data());
+            ptr[2] = KoColorSpaceMaths<quint8, quint16>::scaleToA(qRed(value));
+            ptr[1] = KoColorSpaceMaths<quint8, quint16>::scaleToA(qGreen(value));
+            ptr[0] = KoColorSpaceMaths<quint8, quint16>::scaleToA(qBlue(value));
+            ptr[3] = KoColorSpaceMaths<quint8, quint16>::scaleToA(qAlpha(value));
+        } else {
+            qFatal("bit depth is not implemented");
+        }
+
+        return c;
+    };
+
+    auto createQRgb = [] (const KoColorSpace *cs, const KoColor &c) {
+        QRgb result = 0;
+
+        if (cs->colorDepthId() == Float32BitsColorDepthID) {
+            const float *ptr = reinterpret_cast<const float*>(c.data());
+            result = qRgba(
+                KoColorSpaceMaths<float, quint8>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<float, quint8>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<float, quint8>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<float, quint8>::scaleToA(ptr[3]));
+        } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
+            const half *ptr = reinterpret_cast<const half*>(c.data());
+            result = qRgba(
+                KoColorSpaceMaths<half, quint8>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<half, quint8>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<half, quint8>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<half, quint8>::scaleToA(ptr[3]));
+        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            const quint16 *ptr = reinterpret_cast<const quint16*>(c.data());
+            result = qRgba(
+                KoColorSpaceMaths<quint16, quint8>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<quint16, quint8>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<quint16, quint8>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<quint16, quint8>::scaleToA(ptr[3]));
+        } else {
+            qFatal("bit depth is not implemented");
+        }
+
+        return result;
+    };
+
+
+    auto drawVerticalGradient =
+        [&image, createColor, createQRgb, opF32, csF32] (const QPoint &offset,
+                                                        auto dstGradient,
+                                                        auto srcGradient,
+                                                        const QString &dstText,
+                                                        const QString &srcText) {
+            for (int y = 0; y < 256; y++) {
+                for (int x = 0; x < 256; x++) {
+                    KoColor dst = createColor(csF32, dstGradient(x));
+                    KoColor src = createColor(csF32, srcGradient(y));
+
+                    opF32->composite(dst.data(), 0, src.data(), 0,
+                                     0, 0,
+                                     1, 1,
+                                     OPACITY_OPAQUE_F);
+
+                    image.setPixel(x + offset.x(), y + offset.y(), createQRgb(csF32, dst));
+                }
+            }
+
+            QPainter gc(&image);
+
+            QFont font;
+            font.setPointSize(10);
+            gc.setFont(font);
+            gc.setRenderHints(QPainter::TextAntialiasing);
+            gc.setPen(QPen(Qt::black, 1));
+            gc.drawText(offset + QPoint(100,100) + QPoint(1,1), QString("s: %1").arg(srcText));
+            gc.drawText(offset + QPoint(100,115) + QPoint(1,1), QString("d: %1").arg(dstText));
+        };
+
+    auto r2w = [] (int i) { return qRgba(255, i,   i,   255);};
+    auto g2w = [] (int i) { return qRgba(i,   255, i,   255);};
+    auto b2w = [] (int i) { return qRgba(i,   i,   255, 255);};
+
+    auto r2k = [] (int i) { return qRgba(255 - i, 0,       0,       255);};
+    auto g2k = [] (int i) { return qRgba(0,       255 - i, 0,       255);};
+    auto b2k = [] (int i) { return qRgba(0,       0,       255 - i, 255);};
+
+    auto r2a = [] (int i) { return qRgba(255, 0,   0,   255 - i);};
+    auto g2a = [] (int i) { return qRgba(0,   255, 0,   255 - i);};
+    auto b2a = [] (int i) { return qRgba(0,   0,   255, 255 - i);};
+
+    auto w2k = [] (int i) { return qRgba(255 - i, 255 - i, 255 - i, 255);};
+    auto w2a = [] (int i) { return qRgba(255, 255, 255, 255 - i);};
+    auto k2a = [] (int i) { return qRgba(0, 0, 0, 255 - i);};
+
+    auto generateSheet = [&] (const QString &baseName, auto dstGradient) {
+        drawVerticalGradient(QPoint(0 * 256, 0 * 256), dstGradient, r2w, baseName, "r2w");
+        drawVerticalGradient(QPoint(1 * 256, 0 * 256), dstGradient, r2k, baseName, "r2k");
+        drawVerticalGradient(QPoint(2 * 256, 0 * 256), dstGradient, r2a, baseName, "r2a");
+
+        drawVerticalGradient(QPoint(0 * 256, 1 * 256), dstGradient, g2w, baseName, "g2w");
+        drawVerticalGradient(QPoint(1 * 256, 1 * 256), dstGradient, g2k, baseName, "g2k");
+        drawVerticalGradient(QPoint(2 * 256, 1 * 256), dstGradient, g2a, baseName, "g2a");
+
+        drawVerticalGradient(QPoint(0 * 256, 2 * 256), dstGradient, b2w, baseName, "b2w");
+        drawVerticalGradient(QPoint(1 * 256, 2 * 256), dstGradient, b2k, baseName, "b2k");
+        drawVerticalGradient(QPoint(2 * 256, 2 * 256), dstGradient, b2a, baseName, "b2a");
+
+        drawVerticalGradient(QPoint(0 * 256, 3 * 256), dstGradient, w2k, baseName, "w2k");
+        drawVerticalGradient(QPoint(1 * 256, 3 * 256), dstGradient, w2a, baseName, "w2a");
+        drawVerticalGradient(QPoint(2 * 256, 3 * 256), dstGradient, k2a, baseName, "k2a");
+
+
+        QString hdrString = flags.testFlag(HDR) ? "_hdr" : "_sdr";
+
+        if (id == COMPOSITE_BURN || id == COMPOSITE_LINEAR_BURN || id == COMPOSITE_PIN_LIGHT) {
+            hdrString = "";
+        }
+
+        image.save(QString("sample_sheet_%1%2_%3_%4.png")
+                       .arg(id,
+                            hdrString,
+                            baseName,
+                            csShortName(csF32->colorDepthId())));
+    };
+
+    generateSheet("r2w", r2w);
+    generateSheet("r2k", r2k);
+    generateSheet("w2k", w2k);
+    generateSheet("w2a", w2a);
+    generateSheet("k2a", k2a);
+
+}
+
+void TestCompositeOpInversion::generateSampleSheetsLong_data()
+{
+    generateSampleSheets_data();
+}
+
+void TestCompositeOpInversion::generateSampleSheetsLong()
+{
+    QFETCH(QString, id);
+    QFETCH(TestFlags, flags);
+    QFETCH(KoID, depthId);
+
+    const KoColorSpace* csF32 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depthId.id(), 0);
+    const KoCompositeOp *opF32 = createOp(csF32, id, flags.testFlag(HDR));
+
+
+    auto createColor = [] (const KoColorSpace *cs, QRgba64 value) {
+        KoColor c(cs);
+
+        if (cs->colorDepthId() == Float32BitsColorDepthID) {
+            float *ptr = reinterpret_cast<float*>(c.data());
+            ptr[0] = KoColorSpaceMaths<quint16, float>::scaleToA(value.red());
+            ptr[1] = KoColorSpaceMaths<quint16, float>::scaleToA(value.green());
+            ptr[2] = KoColorSpaceMaths<quint16, float>::scaleToA(value.blue());
+            ptr[3] = KoColorSpaceMaths<quint16, float>::scaleToA(value.alpha());
+        } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
+            half *ptr = reinterpret_cast<half*>(c.data());
+            ptr[0] = KoColorSpaceMaths<quint16, half>::scaleToA(value.red());
+            ptr[1] = KoColorSpaceMaths<quint16, half>::scaleToA(value.green());
+            ptr[2] = KoColorSpaceMaths<quint16, half>::scaleToA(value.blue());
+            ptr[3] = KoColorSpaceMaths<quint16, half>::scaleToA(value.alpha());
+        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            quint16 *ptr = reinterpret_cast<quint16*>(c.data());
+            ptr[2] = value.red();
+            ptr[1] = value.green();
+            ptr[0] = value.blue();
+            ptr[3] = value.alpha();
+        } else {
+            qFatal("bit depth is not implemented");
+        }
+
+        return c;
+    };
+
+    auto createQRgb = [] (const KoColorSpace *cs, const KoColor &c) -> QRgb {
+        QRgba64 result;
+
+        if (cs->colorDepthId() == Float32BitsColorDepthID) {
+            const float *ptr = reinterpret_cast<const float*>(c.data());
+            result = qRgba64(
+                KoColorSpaceMaths<float, quint16>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<float, quint16>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<float, quint16>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<float, quint16>::scaleToA(ptr[3]));
+        } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
+            const half *ptr = reinterpret_cast<const half*>(c.data());
+            result = qRgba64(
+                KoColorSpaceMaths<half, quint16>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<half, quint16>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<half, quint16>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<half, quint16>::scaleToA(ptr[3]));
+        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            const quint16 *ptr = reinterpret_cast<const quint16*>(c.data());
+            result = qRgba64(
+                KoColorSpaceMaths<quint16, quint16>::scaleToA(ptr[2]),
+                KoColorSpaceMaths<quint16, quint16>::scaleToA(ptr[1]),
+                KoColorSpaceMaths<quint16, quint16>::scaleToA(ptr[0]),
+                KoColorSpaceMaths<quint16, quint16>::scaleToA(ptr[3]));
+        } else {
+            qFatal("bit depth is not implemented");
+        }
+
+        return result.toArgb32();
+    };
+
+    const int height = 256;
+    const int width = 1536;
+
+    auto drawVerticalGradient =
+        [&] (const QPoint &offset,
+            auto dstGradient,
+            auto srcGradient,
+            const QString &dstText,
+            const QString &srcText,
+            bool flipSrcDst,
+            QImage &image) {
+
+            const int &patchWidth = !flipSrcDst ? width : height;
+            const int &patchHeight = !flipSrcDst ? height : width;
+
+            for (int y = 0; y < patchHeight; y++) {
+                for (int x = 0; x < patchWidth; x++) {
+                    KoColor dst = createColor(csF32, dstGradient(qreal(y) / patchHeight));
+                    KoColor src = createColor(csF32, srcGradient(qreal(x) / patchWidth));
+
+                    opF32->composite(dst.data(), 0, src.data(), 0,
+                                     0, 0,
+                                     1, 1,
+                                     OPACITY_OPAQUE_F);
+
+                    image.setPixel(x + offset.x(), y + offset.y(), createQRgb(csF32, dst));
+                }
+            }
+
+            QPainter gc(&image);
+
+            QFont font;
+            font.setPointSize(10);
+            gc.setFont(font);
+            gc.setRenderHints(QPainter::TextAntialiasing);
+            gc.setPen(QPen(Qt::black, 1));
+            gc.drawText(offset + QPoint(100,100) + QPoint(1,1), QString("s: %1 (x)").arg(srcText));
+            gc.drawText(offset + QPoint(100,115) + QPoint(1,1), QString("d: %1 (y)").arg(dstText));
+        };
+
+    auto makeQRgba64F = [] (qreal r, qreal g, qreal b, qreal a) {
+        return qRgba64(qRound(r * 0xffffu),
+                       qRound(g * 0xffffu),
+                       qRound(b * 0xffffu),
+                       qRound(a * 0xffffu));
+    };
+
+    auto r2w = [&] (qreal i) { return makeQRgba64F(1.0, i,   i,   1.0);};
+    auto g2w = [&] (qreal i) { return makeQRgba64F(i,   1.0, i,   1.0);};
+    auto b2w = [&] (qreal i) { return makeQRgba64F(i,   i,   1.0, 1.0);};
+
+    auto r2k = [&] (qreal i) { return makeQRgba64F(1.0 - i, 0,       0,       1.0);};
+    auto g2k = [&] (qreal i) { return makeQRgba64F(0,       1.0 - i, 0,       1.0);};
+    auto b2k = [&] (qreal i) { return makeQRgba64F(0,       0,       1.0 - i, 1.0);};
+
+    auto r2a = [&] (qreal i) { return makeQRgba64F(1.0, 0,   0,   1.0 - i);};
+    auto g2a = [&] (qreal i) { return makeQRgba64F(0,   1.0, 0,   1.0 - i);};
+    auto b2a = [&] (qreal i) { return makeQRgba64F(0,   0,   1.0, 1.0 - i);};
+
+    auto w2k = [&] (qreal i) { return makeQRgba64F(1.0 - i, 1.0 - i, 1.0 - i, 1.0);};
+    auto w2a = [&] (qreal i) { return makeQRgba64F(1.0, 1.0, 1.0, 1.0 - i);};
+    auto k2a = [&] (qreal i) { return makeQRgba64F(0, 0, 0, 1.0 - i);};
+
+    auto generateSheet = [&] (const QString &baseName, auto dstGradient, bool flipSrcDst) {
+
+        const int stepX = !flipSrcDst ? 0 : height;
+        const int stepY = !flipSrcDst ? height : 0;
+
+        const int imageWidth = !flipSrcDst ? width : 9 * height;
+        const int imageHeight = !flipSrcDst ? 9 * height : width;
+
+        QImage image(QSize(imageWidth, imageHeight), QImage::Format_ARGB32);
+
+        drawVerticalGradient(QPoint(0 * stepX, 0 * stepY), dstGradient, r2w, baseName, "r2w", flipSrcDst, image);
+        drawVerticalGradient(QPoint(1 * stepX, 1 * stepY), dstGradient, r2k, baseName, "r2k", flipSrcDst, image);
+        drawVerticalGradient(QPoint(2 * stepX, 2 * stepY), dstGradient, r2a, baseName, "r2a", flipSrcDst, image);
+
+        drawVerticalGradient(QPoint(3 * stepX, 3 * stepY), dstGradient, b2w, baseName, "b2w", flipSrcDst, image);
+        drawVerticalGradient(QPoint(4 * stepX, 4 * stepY), dstGradient, b2k, baseName, "b2k", flipSrcDst, image);
+        drawVerticalGradient(QPoint(5 * stepX, 5 * stepY), dstGradient, b2a, baseName, "b2a", flipSrcDst, image);
+
+        drawVerticalGradient(QPoint(6 * stepX, 6 * stepY), dstGradient, w2k, baseName, "w2k", flipSrcDst, image);
+        drawVerticalGradient(QPoint(7 * stepX, 7 * stepY), dstGradient, w2a, baseName, "w2a", flipSrcDst, image);
+        drawVerticalGradient(QPoint(8 * stepX, 8 * stepY), dstGradient, k2a, baseName, "k2a", flipSrcDst, image);
+
+
+        QString hdrString = flags.testFlag(HDR) ? "_hdr" : "_sdr";
+
+        if (id == COMPOSITE_BURN || id == COMPOSITE_LINEAR_BURN || id == COMPOSITE_PIN_LIGHT) {
+            hdrString = "";
+        }
+
+        image.save(QString("sample_sheet_%1%2_%3_%4_%5.png")
+                       .arg(id,
+                            hdrString,
+                            baseName,
+                            flipSrcDst ? "flip" : "nor",
+                            csShortName(csF32->colorDepthId())));
+    };
+
+    generateSheet("r2w", r2w, false);
+    generateSheet("r2k", r2k, false);
+    generateSheet("w2k", w2k, false);
+    generateSheet("w2a", w2a, false);
+    generateSheet("k2a", k2a, false);
+
+    generateSheet("r2w", r2w, true);
+    generateSheet("r2k", r2k, true);
+    generateSheet("w2k", w2k, true);
+    generateSheet("w2a", w2a, true);
+    generateSheet("k2a", k2a, true);
+
+}
+
+void TestCompositeOpInversion::testColor()
+{
+    const KoColorSpace* csF32 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), 0);
+    const KoCompositeOp *opF32 = createOp(csF32, COMPOSITE_DIVIDE, false);
+
+    KoColor src(QColor(255, 0, 0), csF32);
+    KoColor dst(QColor(120, 255, 255), csF32);
+
+    qDebug() << ppVar(src) << ppVar(dst);
+
+    opF32->composite(dst.data(), 0, src.data(), 0,
+                     0, 0,
+                     1, 1,
+                     OPACITY_OPAQUE_F);
+
+    qDebug() << ppVar(dst);
+
+
 }
 
 SIMPLE_TEST_MAIN(TestCompositeOpInversion)

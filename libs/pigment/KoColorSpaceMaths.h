@@ -331,27 +331,27 @@ public:
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
     }
 
-    inline static bool isUnitValue(_T value) {
+    inline static bool isUnitValueFuzzy(_T value) {
         static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::unitValue;
     }
 
-    inline static bool isZeroValue(_T value) {
+    inline static bool isZeroValueFuzzy(_T value) {
         static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
     }
 
-    inline static bool isZeroValueClamped(_T v) {
+    inline static bool isZeroValueClampedFuzzy(_T v) {
         static_assert(std::numeric_limits<_Tdst>::is_integer);
         return v <= 0;
     }
 
-    static inline bool isUnitValueClamped(_T v) {
+    static inline bool isUnitValueClampedFuzzy(_T v) {
         static_assert(std::numeric_limits<_Tdst>::is_integer);
         return v >= KoColorSpaceMathsTraits<_T>::unitValue;
     }
 
-    static inline bool isHalfValue(_T v)
+    static inline bool isHalfValueFuzzy(_T v)
     {
         static_assert(std::numeric_limits<_Tdst>::is_integer);
         return v == KoColorSpaceMathsTraits<_T>::halfValue;
@@ -397,31 +397,31 @@ inline double KoColorSpaceMaths<double>::isUnsafeAsDivisor(double value) {
 }
 
 template<>
-inline bool KoColorSpaceMaths<double>::isUnitValue(double value) {
+inline bool KoColorSpaceMaths<double>::isUnitValueFuzzy(double value) {
     return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::unitValue);
 }
 
 template<>
-inline bool KoColorSpaceMaths<double>::isZeroValue(double value) {
+inline bool KoColorSpaceMaths<double>::isZeroValueFuzzy(double value) {
     return qFuzzyIsNull(value);
 }
 
 template<>
-inline bool KoColorSpaceMaths<double>::isZeroValueClamped(double d)
+inline bool KoColorSpaceMaths<double>::isZeroValueClampedFuzzy(double d)
 {
     // constant is from qFuzzyIsNull()
     return d <= 0.000000000001;
 }
 
 template<>
-inline bool KoColorSpaceMaths<double>::isUnitValueClamped(double d)
+inline bool KoColorSpaceMaths<double>::isUnitValueClampedFuzzy(double d)
 {
     // constant is from qFuzzyIsNull()
     return d > 1.0 - 0.000000000001;
 }
 
 template<>
-inline bool KoColorSpaceMaths<double>::isHalfValue(double value) {
+inline bool KoColorSpaceMaths<double>::isHalfValueFuzzy(double value) {
     return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::halfValue);
 }
 
@@ -483,31 +483,31 @@ inline float KoColorSpaceMaths<float>::isUnsafeAsDivisor(float value) {
 }
 
 template<>
-inline bool KoColorSpaceMaths<float>::isUnitValue(float value) {
+inline bool KoColorSpaceMaths<float>::isUnitValueFuzzy(float value) {
     return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::unitValue);
 }
 
 template<>
-inline bool KoColorSpaceMaths<float>::isZeroValue(float value) {
+inline bool KoColorSpaceMaths<float>::isZeroValueFuzzy(float value) {
     return qFuzzyIsNull(value);
 }
 
 template<>
-inline bool KoColorSpaceMaths<float>::isZeroValueClamped(float f)
+inline bool KoColorSpaceMaths<float>::isZeroValueClampedFuzzy(float f)
 {
     // constant is from qFuzzyIsNull()
     return f <= 0.00001f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<float>::isUnitValueClamped(float f)
+inline bool KoColorSpaceMaths<float>::isUnitValueClampedFuzzy(float f)
 {
     // constant is from qFuzzyIsNull()
     return f > 1.0 - 0.00001f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<float>::isHalfValue(float value) {
+inline bool KoColorSpaceMaths<float>::isHalfValueFuzzy(float value) {
     return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::halfValue);
 }
 
@@ -588,33 +588,33 @@ inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
 }
 
 template<>
-inline bool KoColorSpaceMaths<half>::isUnitValue(half value) {
+inline bool KoColorSpaceMaths<half>::isUnitValueFuzzy(half value) {
     // ~ 2 * HALF_ESPILON
     return qAbs(value - KoColorSpaceMathsTraits<half>::unitValue) < 0.002f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<half>::isZeroValue(half value) {
+inline bool KoColorSpaceMaths<half>::isZeroValueFuzzy(half value) {
     // ~ 2 * HALF_ESPILON
     return qAbs(value) < 0.002f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<half>::isZeroValueClamped(half f)
+inline bool KoColorSpaceMaths<half>::isZeroValueClampedFuzzy(half f)
 {
     // ~ 2 * HALF_ESPILON
     return f <= 0.002f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<half>::isUnitValueClamped(half f)
+inline bool KoColorSpaceMaths<half>::isUnitValueClampedFuzzy(half f)
 {
     // ~ 2 * HALF_ESPILON
     return f > 1.0 - 0.002f;
 }
 
 template<>
-inline bool KoColorSpaceMaths<half>::isHalfValue(half value) {
+inline bool KoColorSpaceMaths<half>::isHalfValueFuzzy(half value) {
     // TODO: check actual constant
     return qAbs(value - 0.5f) < 0.001f;
 }
@@ -803,34 +803,61 @@ namespace Arithmetic
     }
     
     template <typename T>
-    static inline bool isZeroValue(T v)
+    static inline bool isZeroValueFuzzy(T v)
     {
-        return KoColorSpaceMaths<T>::isZeroValue(v);
+        return KoColorSpaceMaths<T>::isZeroValueFuzzy(v);
     }
 
     template <typename T>
-    static inline bool isUnitValue(T v)
+    static inline bool isUnitValueFuzzy(T v)
     {
-        return KoColorSpaceMaths<T>::isUnitValue(v);
+        return KoColorSpaceMaths<T>::isUnitValueFuzzy(v);
     }
 
     template <typename T>
-    static inline bool isZeroValueClamped(T v)
+    static inline bool isZeroValueClampedFuzzy(T v)
     {
-        return KoColorSpaceMaths<T>::isZeroValueClamped(v);
+        return KoColorSpaceMaths<T>::isZeroValueClampedFuzzy(v);
     }
 
     template <typename T>
-    static inline bool isUnitValueClamped(T v)
+    static inline bool isUnitValueClampedFuzzy(T v)
     {
-        return KoColorSpaceMaths<T>::isUnitValueClamped(v);
+        return KoColorSpaceMaths<T>::isUnitValueClampedFuzzy(v);
     }
 
     template <typename T>
-    static inline bool isHalfValue(T v)
+    static inline bool isHalfValueFuzzy(T v)
     {
-        return KoColorSpaceMaths<T>::isHalfValue(v);
+        return KoColorSpaceMaths<T>::isHalfValueFuzzy(v);
     }
+
+    template <typename T>
+    inline bool isUnitValueStrict(T value) {
+        return value == KoColorSpaceMathsTraits<T>::unitValue;
+    }
+    template <typename T>
+    inline bool isZeroValueStrict(T value) {
+        return value == KoColorSpaceMathsTraits<T>::zeroValue;
+    }
+
+    template <typename T>
+    inline bool isUnitValueClampedStrict(T value) {
+        if constexpr (std::numeric_limits<T>::is_integer) {
+            return value == KoColorSpaceMathsTraits<T>::unitValue;
+        } else {
+            return value >= KoColorSpaceMathsTraits<T>::unitValue;
+        }
+    }
+    template <typename T>
+    inline bool isZeroValueClampedStrict(T value) {
+        if constexpr (std::numeric_limits<T>::is_integer) {
+            return value == KoColorSpaceMathsTraits<T>::zeroValue;
+        } else {
+            return value <= KoColorSpaceMathsTraits<T>::zeroValue;
+        }
+    }
+
 
     template<class T>
     inline T min(T a, T b, T c) {

@@ -80,4 +80,20 @@ struct KoClampedSourceAndDestinationCompositeOpGenericFunctorBase
     }
 };
 
+// clamp source on the both sides and clamp destination on
+// the negative side only
+template <typename T>
+struct KoClampedSourceFullAndDestinationBottomCompositeOpGenericFunctorBase
+{
+    static inline T clampSourceChannelValue(T value) {
+        using namespace Arithmetic;
+        return clampChannelToSDR(value);
+    }
+
+    static inline T clampDestinationChannelValue(T value) {
+        using namespace Arithmetic;
+        return clampChannelToSDRBottom(value);
+    }
+};
+
 #endif // KOCOMPOSITEOPGENERICFUNCTORBASE_H

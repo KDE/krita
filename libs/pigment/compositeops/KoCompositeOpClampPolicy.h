@@ -33,6 +33,11 @@ struct ClampAsInteger {
     static inline compositetype fixInfiniteAfterDivision(compositetype value) {
         return value;
     }
+
+    static inline T clippedMaxValue() {
+        using namespace Arithmetic;
+        return unitValue<T>();
+    }
 };
 
 template <typename T>
@@ -60,6 +65,11 @@ struct ClampAsFloatSDR {
         // become infinity or NaN, so we check that and correct (kind of clamping)
         return std::isfinite(value) ? value : compositetype(KoColorSpaceMathsTraits<T>::unitValue);
     }
+
+    static inline T clippedMaxValue() {
+        using namespace Arithmetic;
+        return unitValue<T>();
+    }
 };
 
 template <typename T>
@@ -85,6 +95,10 @@ struct ClampAsFloatHDR {
         // Constantly dividing by small numbers can quickly make the result
         // become infinity or NaN, so we check that and correct (kind of clamping)
         return std::isfinite(value) ? value : compositetype(KoColorSpaceMathsTraits<T>::max);
+    }
+
+    static inline T clippedMaxValue() {
+        return KoColorSpaceMathsTraits<T>::max;
     }
 };
 

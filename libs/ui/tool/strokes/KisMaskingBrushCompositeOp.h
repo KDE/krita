@@ -193,8 +193,8 @@ inline T colorDodgeAlphaHelper(T src, T dst)
     // this case we also treat the denominator as an infinitely small number,
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
-    if (isUnitValue<T>(src)) {
-        return isZeroValue<T>(dst) ? zeroValue<T>() : unitValue<T>();
+    if (isUnitValueFuzzy<T>(src)) {
+        return isZeroValueFuzzy<T>(dst) ? zeroValue<T>() : unitValue<T>();
     }
     return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
                   div(dst, inv(src)),
@@ -260,8 +260,8 @@ inline T colorBurnAlphaHelper(T src, T dst)
     using namespace Arithmetic;
     // Handle the case where the denominator is 0. See color dodge for a
     // detailed explanation
-    if(isZeroValue<T>(src)) {
-        return isUnitValue<T>(dst) ? zeroValue<T>() : unitValue<T>();
+    if(isZeroValueFuzzy<T>(src)) {
+        return isUnitValueFuzzy<T>(dst) ? zeroValue<T>() : unitValue<T>();
     }
     return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
                   div(inv(dst), src),
@@ -328,7 +328,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE
     {
         using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
         using namespace Arithmetic;
-        if (isZeroValue<channels_type>(dst)) {
+        if (isZeroValueFuzzy<channels_type>(dst)) {
             return zeroValue<channels_type>();
         }
         return qMin(composite_type(src) + dst, composite_type(unitValue<channels_type>()));
@@ -345,7 +345,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE
     {
         using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
         using namespace Arithmetic;
-        if (isZeroValue<channels_type>(dst)) {
+        if (isZeroValueFuzzy<channels_type>(dst)) {
             return zeroValue<channels_type>();
         }
         if constexpr (use_soft_texturing) {

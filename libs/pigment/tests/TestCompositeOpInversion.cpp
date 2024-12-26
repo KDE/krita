@@ -1533,8 +1533,8 @@ void TestCompositeOpInversion::generateSampleSheetsLong()
 
             for (int y = 0; y < patchHeight; y++) {
                 for (int x = 0; x < patchWidth; x++) {
-                    KoColor dst = createColor(csF32, dstGradient(qreal(y) / patchHeight));
-                    KoColor src = createColor(csF32, srcGradient(qreal(x) / patchWidth));
+                    KoColor dst = createColor(csF32, dstGradient(qreal(y) / (patchHeight - 1)));
+                    KoColor src = createColor(csF32, srcGradient(qreal(x) / (patchWidth - 1)));
 
                     opF32->composite(dst.data(), 0, src.data(), 0,
                                      0, 0,

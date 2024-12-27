@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-14 18:55+0100\n"
+"PO-Revision-Date: 2024-12-21 11:18+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11504,29 +11504,25 @@ msgstr "Maschera di filtro"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Aggiungi maschera Colorizza"
+msgstr "Aggiungi Maschera sovrapposizione colore"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Aggiungi una nuova maschera Colorizza"
+msgstr ""
+"Aggiungi una nuova maschera per il filtro Sovrapposizione rapida del colore"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Sovrapposizione rapida del colore"
+msgstr "Maschera Sovrapposizione rapida del colore"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17164,18 +17160,16 @@ msgid "Change Clone Layers"
 msgstr "Cambia livelli dei cloni"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Contrai area di aggancio"
+msgstr "Contrai nodo %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Espandi nodo %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29783,17 +29777,14 @@ msgid "Add Transform Mask"
 msgstr "Aggiungi maschera di trasformazione"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Sovrapposizione rapida del colore"
+msgstr "Aggiungi Sovrapposizione rapida del colore"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Sovrapposizione colore"
+msgstr "Maschera sovrapposizione colore"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -33952,9 +33943,9 @@ msgstr ""
 "grigi (o Livello di grigio)</a></b> permette solo valori di grigi e "
 "trasparenza. Rispetto a un'immagine RGB della stessa profondità di bit, le "
 "immagini in scala di grigi utilizzano metà della memoria e di spazio su "
-"disco.<br/>La scala di grigi è utile per i lavori basati su china e le "
-"immagini in tonalità di grigio. In Krita puoi miscelare i livelli di scala "
-"di grigi e RGB nella stessa immagine."
+"disco.<br/>La scala di grigi è utile per i lavori basati su inchiostrazione "
+"e le immagini in tonalità di grigio. In Krita puoi miscelare i livelli di "
+"scala di grigi e RGB nella stessa immagine."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, kde-format
@@ -37264,10 +37255,9 @@ msgstr "Colore personalizzato"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Opzioni dello strumento"
+msgstr "Opzioni per l'oggetto di controllo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -39508,6 +39498,7 @@ msgstr "Mostra o cambia le proprietà del livello"
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
 msgstr ""
+"Aggiungi una maschera di sovrapposizione del colore per l'inchiostrazione"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 04:13+0000\n"
-"PO-Revision-Date: 2024-12-08 17:14+0100\n"
+"PO-Revision-Date: 2024-12-21 11:18+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -33530,9 +33530,9 @@ msgstr ""
 "grigi (o Livello di grigio)</a></b> permette solo valori di grigi e "
 "trasparenza. Rispetto a un'immagine RGB della stessa profondità di bit, le "
 "immagini in scala di grigi utilizzano metà della memoria e di spazio su "
-"disco.<br/>La scala di grigi è utile per i lavori basati su china e le "
-"immagini in tonalità di grigio. In Krita puoi miscelare i livelli di scala "
-"di grigi e RGB nella stessa immagine."
+"disco.<br/>La scala di grigi è utile per i lavori basati su inchiostrazione "
+"e le immagini in tonalità di grigio. In Krita puoi miscelare i livelli di "
+"scala di grigi e RGB nella stessa immagine."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
 #, kde-format

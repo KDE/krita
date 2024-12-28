@@ -234,6 +234,8 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
+set_target_properties(libraqm PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
 target_link_libraries(kritaflake
     PUBLIC
         kritapigment

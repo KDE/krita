@@ -640,7 +640,7 @@ void KisCompositionBenchmark::detectBuildArchitecture()
     qDebug() << ppVar(supported_architectures().contains<avx512bw>());
     qDebug() << ppVar(supported_architectures().contains<avx512dq>());
     qDebug() << ppVar(supported_architectures().contains<avx512cd>());
-    qDebug().nospace() << "running on " << Qt::hex << "0x" << xsimd::available_architectures().best;
+    //    qDebug().nospace() << "running on " << Qt::hex << "0x" << xsimd::available_architectures().best;
 #endif
 }
 

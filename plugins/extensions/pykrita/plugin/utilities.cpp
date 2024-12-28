@@ -412,20 +412,8 @@ bool Python::setPath(const QStringList& scriptPaths)
         joinedPaths = joinedPaths + pathSeparator + originalPath;
     }
     dbgScript << "Setting python paths:" << joinedPaths;
-#ifdef Q_OS_WIN
-    QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
-    joinedPaths.toWCharArray(joinedPathsWChars.data());
-    Py_SetPath(joinedPathsWChars.data());
-#else
-    if (runningInBundle) {
-        QVector<wchar_t> joinedPathsWChars(joinedPaths.size() + 1, 0);
-        joinedPaths.toWCharArray(joinedPathsWChars.data());
-        Py_SetPath(joinedPathsWChars.data());
-    }
-    else {
-        qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
-    }
-#endif
+    qputenv("PYTHONPATH", joinedPaths.toLocal8Bit());
+
     isPythonPathSet = true;
     return true;
 }

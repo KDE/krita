@@ -199,7 +199,6 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
     m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
-    m_wdgLayerBox->bnAddColorOverlayMask->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnRaise->setEnabled(false);
@@ -497,7 +496,6 @@ void LayerBox::setViewManager(KisViewManager* kisview)
     connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), this, SLOT(slotAddLayerBnClicked()));
 
     connectActionToButton(kisview, m_wdgLayerBox->bnDuplicate, "duplicatelayer");
-    connectActionToButton(kisview, m_wdgLayerBox->bnAddColorOverlayMask, "add_new_fast_color_overlay_mask");
 
     KisActionManager *actionManager = kisview->actionManager();
 
@@ -627,6 +625,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
         m_newLayerMenu->addSeparator();
         addActionToMenu(m_newLayerMenu, "add_new_transparency_mask");
         addActionToMenu(m_newLayerMenu, "add_new_filter_mask");
+        addActionToMenu(m_newLayerMenu, "add_new_fast_color_overlay_mask");
         addActionToMenu(m_newLayerMenu, "add_new_colorize_mask");
         addActionToMenu(m_newLayerMenu, "add_new_transform_mask");
         addActionToMenu(m_newLayerMenu, "add_new_selection_mask");
@@ -1250,6 +1249,7 @@ void LayerBox::updateLayerOpMenu(const QModelIndex &index, QMenu &menu) {
             QMenu *addLayerMenu = menu.addMenu(i18n("&Add"));
             addActionToMenu(addLayerMenu, "add_new_transparency_mask");
             addActionToMenu(addLayerMenu, "add_new_filter_mask");
+            addActionToMenu(addLayerMenu, "add_new_fast_color_overlay_mask");
             addActionToMenu(addLayerMenu, "add_new_colorize_mask");
             addActionToMenu(addLayerMenu, "add_new_transform_mask");
             addActionToMenu(addLayerMenu, "add_new_selection_mask");
@@ -1304,7 +1304,6 @@ void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
-    m_wdgLayerBox->bnAddColorOverlayMask->setIcon(KisIconUtils::loadIcon("color-overlay"));
     m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // call child function about needing to update icons

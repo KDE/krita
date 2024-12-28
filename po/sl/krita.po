@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-21 02:14+0000\n"
-"PO-Revision-Date: 2024-12-17 22:32+0100\n"
+"PO-Revision-Date: 2024-12-27 19:55+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -11459,29 +11459,24 @@ msgstr "Maska filtrov"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Dodaj masko &barvanja"
+msgstr "Dodaj masko barvnega pre&krivanja"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Dodajte novo masko barvanja"
+msgstr "Dodajte novo hitro masko filtra barvnega prekrivanja"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Hitro barvno prekrivanje"
+msgstr "Maska hitrega barvnega prekrivanja"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -17119,13 +17114,13 @@ msgstr "Spremeni klonirane plasti"
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr ""
+msgstr "Strni vozlišče %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Razširi vozlišče %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29678,17 +29673,14 @@ msgid "Add Transform Mask"
 msgstr "Dodaj masko za preoblikovanje"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Hitro barvno prekrivanje"
+msgstr "Dodaj hitro barvno prekrivanje"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Barvno prekrivanje"
+msgstr "Maska barvnega prekrivanja"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -39372,7 +39364,7 @@ msgstr "Poglej ali spremeni lastnosti plasti"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:313
 #, kde-format
 msgid "Add a Color Overlay Mask for inking"
-msgstr ""
+msgstr "Dodaj masko barvnega prekrivanja za slikanje s črnilom"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:354

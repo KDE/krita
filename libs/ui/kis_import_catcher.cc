@@ -45,7 +45,11 @@ QString KisImportCatcher::Private::prettyLayerName(QString layerName) const
 {
     QString name = QFileInfo(path).fileName();
     QString fileName = !name.isEmpty() ? name : path;
-    return (layerName.isEmpty() || layerName == "Background") ? fileName : layerName;
+    // The "Background" name here being matched on is dependent on the current language and so needs to be passed
+    // through i18n.
+    return (layerName.isEmpty() || layerName == i18nc("Name for the bottom-most layer in the layerstack", "Background"))
+        ? fileName
+        : layerName;
 }
 
 void KisImportCatcher::Private::importAsPaintLayer(KisPaintDeviceSP device, QString layerName)

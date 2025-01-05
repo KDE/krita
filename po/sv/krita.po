@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-21 02:14+0000\n"
+"POT-Creation-Date: 2025-01-05 01:54+0000\n"
 "PO-Revision-Date: 2024-12-03 21:44+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -17361,8 +17361,9 @@ msgstr "Skicka igenom"
 msgid "Imported Image"
 msgstr "Importerad bild"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2663
-#: plugins/impex/psd/psd_loader.cpp:193
+#. i18n.
+#: libs/image/kis_image.cc:727 libs/ui/kis_import_catcher.cc:50
+#: libs/ui/KisDocument.cpp:2663 plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"

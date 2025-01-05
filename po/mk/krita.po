@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-21 02:14+0000\n"
+"POT-Creation-Date: 2025-01-05 01:54+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -17526,8 +17526,9 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Наслов :"
 
-#: libs/image/kis_image.cc:727 libs/ui/KisDocument.cpp:2663
-#: plugins/impex/psd/psd_loader.cpp:193
+#. i18n.
+#: libs/image/kis_image.cc:727 libs/ui/kis_import_catcher.cc:50
+#: libs/ui/KisDocument.cpp:2663 plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"

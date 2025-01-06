@@ -92,7 +92,7 @@ set(krita_QRCS
 
 qt_add_resources(krita_SRCS ${krita_QRCS})
 
-if (ANDROID)
+if (ANDROID AND QT_MAJOR_VERSION STREQUAL "5")
     kis_add_library(krita SHARED ${krita_SRCS})
     target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
 elseif (WIN32)

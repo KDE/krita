@@ -31,7 +31,9 @@
 #endif
 
 #ifdef Q_OS_ANDROID
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
 #include <QtAndroidExtras/QtAndroid>
+#endif
 #endif
 
 #ifdef Q_OS_MACOS

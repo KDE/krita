@@ -8,7 +8,9 @@ if (ANDROID)
     # See also: https://bugreports.qt.io/browse/QTBUG-64703
     # This is not needed for ARM GNU/Linux environments.
     add_definitions(-DQT_OPENGL_ES_3)
-    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+    endif()
 endif()
 
 add_subdirectory( tests )

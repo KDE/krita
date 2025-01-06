@@ -61,7 +61,7 @@ class ExceptHookDialog(QDialog):
             self.setWindowTitle(self.windowTitle() + ": " + title)
         msg = "%s: %s" % (exc_type.__name__, exc_obj)
         self.ui.exceptionLabel.setText(msg)
-        html = traceback.format_exception(exc_type, exc_obj, exc_tb).splitlines()
+        html = "\n".join(traceback.format_exception(exc_type, exc_obj, exc_tb))
         self.ui.tracebackBrowser.setText(html)
         self.resize(650, 350)  # give enough space to see the backtrace better
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # Some tests:
     app = QApplication(sys.argv)
     install()
-    print("Triggering error 1")f
+    print("Triggering error 1")
     try:
         fail = 1 / 0
     except:

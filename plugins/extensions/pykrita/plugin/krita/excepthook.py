@@ -11,7 +11,7 @@ Things to extend: Clicking on the filename should open an editor.
 Things to consider: Mail exceptions, copy to clipboard or send to bug tracker.
 """
 import sys
-import cgitb
+import traceback
 import atexit
 
 from PyQt5.QtCore import pyqtSlot, Qt
@@ -61,7 +61,7 @@ class ExceptHookDialog(QDialog):
             self.setWindowTitle(self.windowTitle() + ": " + title)
         msg = "%s: %s" % (exc_type.__name__, exc_obj)
         self.ui.exceptionLabel.setText(msg)
-        html = cgitb.text((exc_type, exc_obj, exc_tb))
+        html = traceback.format_exception(exc_type, exc_obj, exc_tb).splitlines()
         self.ui.tracebackBrowser.setText(html)
         self.resize(650, 350)  # give enough space to see the backtrace better
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     # Some tests:
     app = QApplication(sys.argv)
     install()
-    print("Triggering error 1")
+    print("Triggering error 1")f
     try:
         fail = 1 / 0
     except:

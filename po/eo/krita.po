@@ -1,7 +1,7 @@
 # translation of krita.po to Esperanto
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Wolfram Diestel <wolfram@steloj.de>, 2002.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 # --- kritalibs
 # translation of koffice.po to Esperanto
@@ -43,8 +43,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 04:13+0000\n"
-"PO-Revision-Date: 2024-04-27 22:28+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"PO-Revision-Date: 2025-01-03 21:16+0100\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -5784,7 +5784,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Weird_Rectangle_Pattern.kse"
 msgid "Wolthera's Weird Rectangle Pattern"
-msgstr "La Stranga Rektangulo-Patrono de Wolthera"
+msgstr "La Stranga Ortangul-Ŝablono de Wolthera"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9456,7 +9456,7 @@ msgstr "Meza Forigo"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "Gaŭsa malklariĝo..."
+msgstr "&Gaŭsa Malklariĝo..."
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9558,7 +9558,7 @@ msgstr "Ondo"
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "Movmalklaro..."
+msgstr "&Movmalklaro..."
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
@@ -12566,12 +12566,10 @@ msgstr "Konverti Tavolan Kolorspacon"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Konverti Tavolan Kolorspacon"
+msgstr "Unuigi Kolorspacon de Tavoloj"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -12907,7 +12905,7 @@ msgstr "Skriptoj"
 #: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, kde-format
 msgid "Setti&ngs"
-msgstr "Agordoj"
+msgstr "A&gordoj"
 
 #: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
@@ -12965,7 +12963,7 @@ msgstr "Nova"
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "&Malfermi..."
+msgstr "Malferm&o..."
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
@@ -12993,7 +12991,7 @@ msgstr "Malfe&rmi Lastatempajn"
 #, kde-format
 msgctxt "action"
 msgid "Open a document which was recently opened"
-msgstr "Malfermi dokumenton kiu estis lastatempe malfermita"
+msgstr "Malfermu dokumenton kiu estis lastatempe malfermita"
 
 #. i18n: context: iconText @ Action (file_open_recent), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:34
@@ -13024,7 +13022,7 @@ msgstr "Konservi"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "Konservi &Kiel..."
+msgstr "Konserv&ado kiel..."
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -13308,7 +13306,7 @@ msgstr "Fermi"
 #, kde-format
 msgctxt "action"
 msgid "&Quit"
-msgstr "&Eliri"
+msgstr "&Forlasi"
 
 #. i18n: context: toolTip @ Action (file_quit), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:251
@@ -13346,7 +13344,7 @@ msgstr "Malfari"
 #, kde-format
 msgctxt "action"
 msgid "Undo last action"
-msgstr "Malfari lastan agon"
+msgstr "Malfaru lastan agon"
 
 #. i18n: context: text @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (edit_redo), Actions (Edit), ActionCollection (Menu)
@@ -13595,7 +13593,7 @@ msgstr "Alglui Tavolstilon en la Nunan Nodon"
 #, kde-format
 msgctxt "action"
 msgid "C&lear"
-msgstr "&Viŝi"
+msgstr "Malp&lenigi"
 
 #. i18n: context: toolTip @ Action (clear), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (clear), Actions (Edit), ActionCollection (Menu)
@@ -14010,7 +14008,7 @@ msgstr "Zomi al 100%"
 #, kde-format
 msgctxt "action"
 msgid "Zoom &In"
-msgstr "Zoom &Enen"
+msgstr "Zom&i"
 
 #. i18n: context: toolTip @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:776
@@ -14470,7 +14468,7 @@ msgstr "Snap Bildo-Centro"
 #, kde-format
 msgctxt "action"
 msgid "S&how Painting Assistants"
-msgstr "Montri Pentrajn Asistantojn"
+msgstr "Montri Pentra&jn Asistantojn"
 
 #. i18n: context: toolTip @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
@@ -14845,7 +14843,7 @@ msgstr "Elekti"
 #, kde-format
 msgctxt "action"
 msgid "Select &All"
-msgstr "Elekti ĉi&an"
+msgstr "Elekti Ĉi&ajn"
 
 #. i18n: context: toolTip @ Action (select_all), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (select_all), Actions (Select), ActionCollection (Menu)
@@ -15446,7 +15444,7 @@ msgstr "Montri Docker-ojn"
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Montri Docker-Titolbretojn"
+msgstr "Montri Docker-Titol&bretojn"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15561,7 +15559,7 @@ msgstr "Restarigi Agordojn"
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
-msgstr "Agordi Ŝ&parvojojn..."
+msgstr "Agordi Ŝpar&vojojn..."
 
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
@@ -15609,7 +15607,7 @@ msgstr "Krita Manlibro"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Raporti eraron..."
+msgstr "&Raporti Eraron..."
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -15885,7 +15883,7 @@ msgid ""
 "installed."
 msgstr ""
 "Ne povas ŝargi WinTab-pelilon kaj neniuj aparatoj de Windows Ink plumo estas "
-"trovitaj. Se vi havas desegnan tablojdon, bonvolu certigi, ke la tablojda "
+"trovitaj. Se vi havas desegnan tabuleton, bonvolu certigi, ke la tabuleta "
 "pelilo estas ĝuste instalita."
 
 #: krita/main.cc:724
@@ -15894,8 +15892,8 @@ msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
 "the tablet driver is properly installed."
 msgstr ""
-"Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tablojdon, bonvolu "
-"certigi, ke la tablojda pelilo estas ĝuste instalita."
+"Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tabuleton, bonvolu "
+"certigi, ke la tabuleta pelilo estas ĝuste instalita."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:547
 #, kde-format
@@ -17235,12 +17233,9 @@ msgid "Convert Projection Color Space"
 msgstr "Konverti Projekcian Koloraspacon"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Konverti Tavolan Kolorspacon"
+msgstr "Unuigi Kolorspacon de Tavoloj"
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
@@ -21406,7 +21401,7 @@ msgstr "neniu"
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "rektangulo"
+msgstr "ortangulo"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -22269,8 +22264,7 @@ msgstr "Wolfram Diestel,Axel Rousseau,Oliver Kellogg"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
-"wolfram@steloj.de,axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
+msgstr "wolfram@steloj.de,axel@esperanto-jeunes.org,olivermkellogg@gmail.com"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
@@ -23018,7 +23012,7 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
-"Uzu tabulmarkojn por tablojda rapido (povas kaŭzi severajn artefaktojn kiam "
+"Uzu tabulmarkojn por tabuleta rapido (povas kaŭzi severajn artefaktojn kiam "
 "vi uzas WinTab-tabulo-API)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1308
@@ -23200,7 +23194,7 @@ msgstr "Rendimento"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2124
 #, kde-format
 msgid "Tablet settings"
-msgstr "Agordoj de la tablojdo"
+msgstr "Agordoj de la tabuleto"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2126
 #, kde-format
@@ -23439,7 +23433,7 @@ msgstr "Elekti areon al kiu via tabuleto estas mapita:"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:30
 #, kde-format
 msgid "Use information provided by tablet"
-msgstr "Uzi informojn provizitajn de tablojdo"
+msgstr "Uzi informojn provizitajn de tabuleto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCustomMapping)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:46
@@ -23947,7 +23941,7 @@ msgstr "Kreita:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:138
 #, kde-format
 msgid "Total editing ti&me:"
-msgstr "Tuta redakta tempo:"
+msgstr "Su&ma daŭro de redaktado:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
@@ -23988,7 +23982,7 @@ msgstr "Titolo:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:241
 #, kde-format
 msgid "Sub&ject:"
-msgstr "Subjekto:"
+msgstr "Sub&jekto:"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:21
@@ -27784,11 +27778,11 @@ msgid ""
 "tablet driver implementation).</p><p><br/></p><p>After changing this option "
 "Krita should be restarted.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Kelkaj tablojdaj aparatoj ne pasas barelbutonajn "
+"<html><head/><body><p>Kelkaj tabuletaj aparatoj ne pasas barelbutonajn "
 "klakojn per tableta API. Se vi havas tian aparaton, vi povas provi aktivigi "
 "ĉi tiun solvon. Krita provos legi dekstren kaj mezbutonajn klakojn de la "
 "musa eventofluo. Ĝi eble aŭ ne funkcias ĉe via aparato (dependas de la "
-"efektivigo de la tablojda pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
+"efektivigo de la tabuleta pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
 "opcion Krita devus esti rekomencita.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
@@ -28715,12 +28709,12 @@ msgstr "Neniu Gesto"
 #: libs/ui/input/kis_tablet_debugger.cpp:97
 #, kde-format
 msgid "Tablet Event Logging Enabled"
-msgstr "Tablojda Eventa Registrado Ebligita"
+msgstr "Tabuleta Eventa Registrado Ebligita"
 
 #: libs/ui/input/kis_tablet_debugger.cpp:98
 #, kde-format
 msgid "Tablet Event Logging Disabled"
-msgstr "Tablojda Eventa Registrado Malŝaltita"
+msgstr "Tabuleta Eventa Registrado Malŝaltita"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:37
 #, kde-format
@@ -28949,8 +28943,8 @@ msgid ""
 "agree on the size of the screen your tablet is connected to. Please select "
 "the right option.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>La pelilo por via desegna tablojdo kaj Vindozo ne "
-"konsentas pri la grandeco de la ekrano al kiu via tablojdo estas konektita. "
+"<html><head/><body><p>La pelilo por via desegna tabuleto kaj Vindozo ne "
+"konsentas pri la grandeco de la ekrano al kiu via tabuleto estas konektita. "
 "Bonvolu elekti la ĝustan opcion.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioManual)
@@ -28971,13 +28965,12 @@ msgid "Import animation"
 msgstr "Importi animacion"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Atendante ke la bilda operacio finiĝos..."
+msgstr "Atendante ke la ago finiĝos..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -29731,14 +29724,9 @@ msgstr ""
 "span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:222
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Lastatempaj Dosieroj</"
-"span></b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Uzante Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:226
 #, kde-format
@@ -29770,14 +29758,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:233
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">Lastatempaj Dosieroj</"
-"span></b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Kodigo Krita</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
@@ -29801,20 +29784,13 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:237
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
-#| "check out the <a href=\"https://scripting.krita.org/lessons/introduction"
-#| "\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-#| "Scripting School</span></a>!</p></body></html>"
+#, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
 "\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
 msgstr ""
-"<html><head/><body><p>Se vi volas lerni kiel skribi Krita-skriptojn, "
-"kontrolu la <a href=\"https://scripting.krita.org/lessons/introduction"
-"\"><span style=\" text-decoration: underline; color:#2980b9;\">Krita "
-"Scripting School</span></a>!</p></body></html>"
+"<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
+"\" text-decoration: underline; color:%1;\">Scripting School</span ></a></p>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -30334,19 +30310,14 @@ msgstr ""
 "Ne eblis komenci konservi %1. Atendu ĝis la nuna konserva operacio finiĝos."
 
 #: libs/ui/KisDocument.cpp:844
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Ne eblis konservi al svg: %1"
+msgstr "Ne eblis komenci konservi %1. Bildo estas okupata"
 
 #: libs/ui/KisDocument.cpp:849
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Ne eblis komenci konservi %1. Atendu ĝis la nuna konserva operacio finiĝos."
+msgstr "Ne eblis komenci konservi %1. Nekonata fiasko okazis"
 
 #: libs/ui/KisDocument.cpp:989
 #, kde-format
@@ -32262,7 +32233,7 @@ msgstr "Reflektita"
 #, kde-format
 msgctxt "Gradient type - Diamond"
 msgid "Diamond"
-msgstr "Diamanto"
+msgstr "Lozanĝo"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAlignWithLayer)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:166
@@ -34967,18 +34938,16 @@ msgid "Color name:"
 msgstr "Kolora nomo:"
 
 #: libs/widgets/kis_color_input.cpp:419
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
-msgstr "Nuanco:"
+msgstr "H:"
 
 #: libs/widgets/kis_color_input.cpp:420
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "OS:"
+msgstr "S:"
 
 #: libs/widgets/kis_color_input.cpp:499
 #, kde-format
@@ -34987,26 +34956,22 @@ msgid "L:"
 msgstr ""
 
 #: libs/widgets/kis_color_input.cpp:502
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:505
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "mi:"
 
 #: libs/widgets/kis_color_input.cpp:509
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
-msgstr "Val:"
+msgstr "V:"
 
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
@@ -35600,7 +35565,7 @@ msgstr "&Nova"
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
 msgid "&Open..."
-msgstr "&Malfermi..."
+msgstr "Malferm&o..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
@@ -35615,7 +35580,7 @@ msgstr "Malfe&rmi Lastatempajn"
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
 msgid "Open a document which was recently opened"
-msgstr "Malfermi dokumenton kiu estis lastatempe malfermita"
+msgstr "Malfermu dokumenton kiu estis lastatempe malfermita"
 
 #: libs/widgetutils/config/kstandardaction_p.h:32
 #, kde-format
@@ -35625,7 +35590,7 @@ msgstr "Konservi dokumenton"
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
 msgid "Save &As..."
-msgstr "Konservi &Kiel..."
+msgstr "Konserv&ado kiel..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
@@ -35680,7 +35645,7 @@ msgstr "Sendi dokumenton per poŝto"
 #: libs/widgetutils/config/kstandardaction_p.h:39
 #, kde-format
 msgid "&Quit"
-msgstr "&Eliri"
+msgstr "&Forlasi"
 
 #: libs/widgetutils/config/kstandardaction_p.h:39
 #, kde-format
@@ -35695,7 +35660,7 @@ msgstr "&Malfari"
 #: libs/widgetutils/config/kstandardaction_p.h:41
 #, kde-format
 msgid "Undo last action"
-msgstr "Malfari lastan agon"
+msgstr "Malfaru lastan agon"
 
 #: libs/widgetutils/config/kstandardaction_p.h:42
 #, kde-format
@@ -35742,12 +35707,12 @@ msgstr "Alglui enhavon de la tondujo"
 #: libs/widgetutils/config/kstandardaction_p.h:47
 #, kde-format
 msgid "C&lear"
-msgstr "&Viŝi"
+msgstr "Malp&lenigi"
 
 #: libs/widgetutils/config/kstandardaction_p.h:48
 #, kde-format
 msgid "Select &All"
-msgstr "Elekti ĉi&an"
+msgstr "Elekti Ĉi&ajn"
 
 #: libs/widgetutils/config/kstandardaction_p.h:49
 #, kde-format
@@ -35817,7 +35782,7 @@ msgstr "Zomi por alĝustigi paĝan altecon en fenestro"
 #: libs/widgetutils/config/kstandardaction_p.h:59
 #, kde-format
 msgid "Zoom &In"
-msgstr "Zoom &Enen"
+msgstr "Zom&i"
 
 #: libs/widgetutils/config/kstandardaction_p.h:60
 #, kde-format
@@ -35982,7 +35947,7 @@ msgstr "Kon&servi agordojn"
 #: libs/widgetutils/config/kstandardaction_p.h:89
 #, kde-format
 msgid "Configure S&hortcuts..."
-msgstr "Agordi Ŝ&parvojojn..."
+msgstr "Agordi Ŝpar&vojojn..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:90
 #, kde-format
@@ -36022,7 +35987,7 @@ msgstr "Konsileto de la &Tago"
 #: libs/widgetutils/config/kstandardaction_p.h:102
 #, kde-format
 msgid "&Report Bug..."
-msgstr "&Raporti eraron..."
+msgstr "&Raporti Eraron..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:103
 #, kde-format
@@ -36040,10 +36005,9 @@ msgid "About &KDE"
 msgstr "Pri &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Unuo:"
+msgstr "Unuo"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -38855,7 +38819,7 @@ msgstr "Ĉu vi certas, ke vi volas forigi maskon <b>'%1'</b>?"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:505
 #, kde-format
 msgid "Rectangle"
-msgstr "Rektangulo"
+msgstr "Ortangulo"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:53
 #: plugins/dockers/griddocker/grid_config_widget.cpp:346
@@ -39276,7 +39240,7 @@ msgstr "Agoj"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #, kde-format
 msgid "Tablet Handling"
-msgstr "Manipulado de Tablojdoj"
+msgstr "Manipulado de Tabuletoj"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
@@ -39993,10 +39957,9 @@ msgid "File extension:"
 msgstr "Dosiera etendo:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
-#| msgid "Pan Up"
+#, kde-format
 msgid "Clean Up"
-msgstr "Pajno Supren"
+msgstr "Purigi"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format
@@ -43942,7 +43905,7 @@ msgstr "Ŝovumi Maldekstren"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:120
 #, kde-format
 msgid "Circle Clockwise"
-msgstr "Cirklo dekstrume"
+msgstr "Cirklo Dekstrume"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:127
@@ -44039,7 +44002,7 @@ msgstr "Nebuligo"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Gaŭsa malklariĝo..."
+msgstr "&Gaŭsa Malklariĝo..."
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
@@ -44059,7 +44022,7 @@ msgstr "Lenso Blur"
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Movmalklaro..."
+msgstr "&Movmalklaro..."
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
@@ -44283,7 +44246,7 @@ msgstr "Aŭtokontrasto"
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
 msgid "&Color Balance..."
-msgstr "Kolora Ekvilibro..."
+msgstr "&Kolora Ekvilibro..."
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:40
 #, kde-format
@@ -45894,13 +45857,13 @@ msgstr "Gearkapo"
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigCommand.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Change rectangle"
-msgstr "Ŝanĝi rektangulon"
+msgstr "Ŝanĝi ortangulon"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RectangleShapeConfigWidget)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:18
 #, kde-format
 msgid "Rectangle Shape"
-msgstr "Rektangulo Formo"
+msgstr "Ortangula Formo"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/flake/pathshapes/rectangle/RectangleShapeConfigWidget.ui:42
@@ -45917,7 +45880,7 @@ msgstr "Angula radiuso y:"
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:25
 #, kde-format
 msgid "A rectangle"
-msgstr "Rektangulo"
+msgstr "Ortangulo"
 
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigCommand.cpp:19
 msgctxt "(qtundo-format)"
@@ -46616,7 +46579,7 @@ msgstr "Elipso"
 #, kde-format
 msgctxt "Screentone Pattern - Diamond Dots"
 msgid "Diamond"
-msgstr "Diamanto"
+msgstr "Lozanĝo"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:33
 #, kde-format
@@ -47317,7 +47280,7 @@ msgid ""
 "pixels to form a rectangle."
 msgstr ""
 "Ne eblas kalkuli taŭgan altecon. Dosiero ne enhavas sufiĉe da rastrumeroj "
-"por formi rektangulon."
+"por formi ortangulon."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:207
 #, kde-format
@@ -47331,7 +47294,7 @@ msgid ""
 "pixels to form a rectangle."
 msgstr ""
 "Ne eblas kalkuli taŭgan larĝon. Dosiero ne enhavas sufiĉe da rastrumeroj por "
-"formi rektangulon."
+"formi ortangulon."
 
 #. i18n: ectx: property (text), widget (QLabel, fileSizeDescLabel)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:33
@@ -52139,7 +52102,7 @@ msgid ""
 "by default it is transparent."
 msgstr ""
 "Se markita, krada peniko plenigas la fonon de ĉiu partiklo per fonkoloro. La "
-"fono de partiklo estas rektangulo de kradolarĝo kaj alto kaj defaŭlte ĝi "
+"fono de partiklo estas ortangulo de kradolarĝo kaj alto kaj defaŭlte ĝi "
 "estas travidebla."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fillBackgroundCHBox)
@@ -53180,10 +53143,9 @@ msgstr "CW nuanco"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:116
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:127
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
-#, fuzzy, no-c-format, kde-format
-#| msgid "(50% is active color)"
+#, no-c-format, kde-format
 msgid "(0% is active color)"
-msgstr "(50% estas aktiva koloro)"
+msgstr "(0% estas aktiva koloro)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -54264,7 +54226,7 @@ msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Uzu la kliniĝon de la tablojdo por determini la "
+"<html><head/><body><p>Uzu la kliniĝon de la tabuleto por determini la "
 "normalojn.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
@@ -57301,12 +57263,12 @@ msgstr "Libermana Voja Ilo"
 #: plugins/tools/basictools/kis_tool_rectangle.cc:65
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
-msgstr "Desegni Rektangulon"
+msgstr "Desegni Ortangulon"
 
 #: plugins/tools/basictools/kis_tool_rectangle.h:48
 #, kde-format
 msgid "Rectangle Tool"
-msgstr "Rektangulo Ilo"
+msgstr "Ortangul-Ilo"
 
 #. i18n: context: text @ Action (KisToolPath), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/basictools/KisToolPath.action:7
@@ -57988,7 +57950,7 @@ msgstr "&Sekvi elektitan vojon"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:77
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr "Uzi tablojdon kaj premon"
+msgstr "Uzi tabuletan &premon"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
 #, kde-format
@@ -57998,7 +57960,7 @@ msgstr "Maldikiĝo:"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
 msgid "Use tablet &angle"
-msgstr "Uzi tablojdon &angulon"
+msgstr "Uzi tabuletan &angulon"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:111
 #, kde-format
@@ -60424,7 +60386,7 @@ msgstr "Dinamika Peniko-Ilo"
 #, kde-format
 msgctxt "action"
 msgid "Rectangle Tool"
-msgstr "Rektangulo Ilo"
+msgstr "Ortangul-Ilo"
 
 #. i18n: context: text @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolMultiBrush), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -60656,54 +60618,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Uzante Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Subtenu la Disvolviĝon de Krita!</"
-#~ "span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
-#~ "getting_started.html\"><span style=\" text-decoration: underline; color:"
-#~ "%1;\">Ekkomencante</span></a></p><p><a href=\" https://docs.krita.org/"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Manlibro</"
-#~ "span></a></p><p><p><p> a href=\"https://krita.org/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Krita-retejo</span></a></p></"
-#~ "td><td><p><span style=\" color:%1;\"><b>Kodigo Krita</b></span></p><p><a "
-#~ "href=\" https://krita-artists.org\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Uzantkomunumo</span></a></p><p><a href=\"https://"
-#~ "invent.kde.org/graphics/krita\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Fontokodo</span></a></p><p><a href= \"https://api."
-#~ "kde.org//krita/html/classKrita.html\"><span style=\" text-decoration: "
-#~ "underline; color:%1;\">Skriptado-API</span></a></p><p><a href=\"https://"
-#~ "scripting.krita.org/lessons/introduction\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Skriptado-Lernejo</span></a></p></td></"
-#~ "table></body></html>"
-
-#, fuzzy
-#~| msgid "Brush Smoothing:"
-#~ msgctxt "action"
-#~ msgid "Brush Smoothing: Pixel"
-#~ msgstr "Peniko Glatigado:"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "CPU-Akcelilo"

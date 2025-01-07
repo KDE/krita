@@ -190,9 +190,11 @@ public:
     bool isTabletEvent();
 
 public:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     static void copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst);
     static void copyQtPointerEvent(const QTabletEvent *event, QScopedPointer<QEvent> &dst);
     static void copyQtPointerEvent(const QTouchEvent *event, QScopedPointer<QEvent> &dst);
+#endif
 
 protected:
     friend class KoToolProxy;

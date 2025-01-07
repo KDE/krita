@@ -170,9 +170,10 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
                                                         KoSvgTextProperties::PaintOrder,
                                                         KoSvgTextProperties::Opacity,
                                                         KoSvgTextProperties::Visiblity};
-    for (auto it = generic.begin(); it != generic.end(); it++) {
-        if (properties.hasProperty(*it.i)) {
-            props.setProperty(*it.i, properties.property(*it.i));
+    for (int i = 0; i < generic.size(); i++) {
+        auto id = generic[i];
+        if (properties.hasProperty(id)) {
+            props.setProperty(id, properties.property(id));
         }
     }
     properties = props;

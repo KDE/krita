@@ -8,6 +8,7 @@
 #include <QGridLayout>
 #include <QPainter>
 #include <QApplication>
+#include <QMouseEvent>
 
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"

@@ -32,6 +32,10 @@
 #include <QDomElement>
 #include <QApplication>
 
+#include <QKeyEvent>
+#include <QInputMethodEvent>
+#include <QFocusEvent>
+
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
 {

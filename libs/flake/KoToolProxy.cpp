@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QTouchEvent>
 #include <QClipboard>
+#include <QEvent>
 
 #include <kundo2command.h>
 #include <KoProperties.h>

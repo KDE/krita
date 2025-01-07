@@ -7,10 +7,10 @@
 */
 
 #include <QMultiMap>
+#include <QVariant>
 
 #include "KoShapeLoadingContext.h"
 #include "KoShape.h"
-#include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"
 #include "KoShapeControllerBase.h"
 #include "KoMarkerCollection.h"

@@ -10,6 +10,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QPointF>
+#include <QEvent>
 #include <KoPointerEvent.h>
 #include <boost/optional.hpp>
 

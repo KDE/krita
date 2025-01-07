@@ -7,6 +7,8 @@
 #include "kis_alternate_invocation_action.h"
 
 #include <QApplication>
+#include <QMouseEvent>
+
 #include <klocalizedstring.h>
 
 #include <kis_tool_proxy.h>

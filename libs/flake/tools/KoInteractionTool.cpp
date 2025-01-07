@@ -5,6 +5,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include <QKeyEvent>
+
 #include "KoInteractionTool.h"
 #include "KoInteractionTool_p.h"
 #include "KoToolBase_p.h"

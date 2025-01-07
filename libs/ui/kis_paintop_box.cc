@@ -916,9 +916,9 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
     //qDebug() << "slotInputDeviceChanged()" << inputDevice.device() << inputDevice.uniqueTabletId();
 
-    m_eraserTogglePresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
-    m_eraserSelectPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Eraser);
-    m_brushSelectPresetAction->setChecked(inputDevice.pointer() == QTabletEvent::Pen);
+    m_eraserTogglePresetAction->setChecked(inputDevice.pointer() == KoInputDevice::Pointer::Eraser);
+    m_eraserSelectPresetAction->setChecked(inputDevice.pointer() == KoInputDevice::Pointer::Eraser);
+    m_brushSelectPresetAction->setChecked(inputDevice.pointer() == KoInputDevice::Pointer::Pen);
 
     m_currTabletToolID = TabletToolID(inputDevice);
 
@@ -929,7 +929,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
         findDefaultPresets();
 
-        if (inputDevice.pointer() == QTabletEvent::Eraser) {
+        if (inputDevice.pointer() == KoInputDevice::Pointer::Eraser) {
             preset = rserver->resource("", "", cfg.readEntry<QString>(QString("LastEraser_%1").arg(inputDevice.uniqueTabletId()), m_eraserName));
         }
         else {
@@ -961,8 +961,8 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 
 void KisPaintopBox::slotToggleEraserPreset(bool usingEraser)
 {
-    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
-    QTabletEvent::PointerType ptr = usingEraser ? QTabletEvent::Eraser : QTabletEvent::Pen;
+    KoInputDevice::InputDevice dev = KoInputDevice::InputDevice::Unknown;
+    KoInputDevice::Pointer ptr = usingEraser ? KoInputDevice::Pointer::Eraser : KoInputDevice::Pointer::Pen;
     qint64 id = -1;
     const KoInputDevice inputDevice(dev, ptr, id);
     slotInputDeviceChanged(inputDevice);
@@ -973,8 +973,8 @@ void KisPaintopBox::slotSelectEraserPreset()
     // automatically select freehand brush tool for these select actions
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
-    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
-    QTabletEvent::PointerType ptr = QTabletEvent::Eraser;
+    KoInputDevice::InputDevice dev = KoInputDevice::InputDevice::Unknown;
+    KoInputDevice::Pointer ptr = KoInputDevice::Pointer::Eraser;
     qint64 id = -1;
     const KoInputDevice inputDevice(dev, ptr, id);
     slotInputDeviceChanged(inputDevice);
@@ -986,8 +986,8 @@ void KisPaintopBox::slotSelectBrushPreset()
     // automatically select freehand brush tool for these select actions
     KoToolManager::instance()->switchToolRequested("KritaShape/KisToolBrush");
 
-    QTabletEvent::TabletDevice dev = QTabletEvent::NoDevice;
-    QTabletEvent::PointerType ptr = QTabletEvent::Pen;
+    KoInputDevice::InputDevice dev = KoInputDevice::InputDevice::Unknown;
+    KoInputDevice::Pointer ptr = KoInputDevice::Pointer::Pen;
     qint64 id = -1;
     const KoInputDevice inputDevice(dev, ptr, id);
     slotInputDeviceChanged(inputDevice);
@@ -1578,7 +1578,7 @@ void KisPaintopBox::updatePresetConfig()
     QMapIterator<TabletToolID, TabletToolData> iter(m_tabletToolMap);
     while (iter.hasNext()) {
         iter.next();
-        if ((iter.key().pointer) == QTabletEvent::Eraser) {
+        if ((iter.key().pointer) == KoInputDevice::Pointer::Eraser) {
             cfg.writeEntry(QString("LastEraser_%1").arg(iter.key().uniqueTabletId),
                            iter.value().preset->name());
         }

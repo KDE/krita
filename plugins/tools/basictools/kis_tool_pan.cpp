@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QKeyEvent>
+
 #include "kis_tool_pan.h"
 #include "kis_cursor.h"
 #include "kis_canvas2.h"

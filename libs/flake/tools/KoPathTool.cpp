@@ -791,7 +791,7 @@ void KoPathTool::keyReleaseEvent(QKeyEvent *event)
     event->accept();
 }
 
-void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
+void KoPathTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
 {
     Q_D(KoToolBase);
     // check if we are doing something else at the moment

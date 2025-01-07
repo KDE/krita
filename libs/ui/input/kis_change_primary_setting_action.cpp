@@ -13,6 +13,9 @@
 #include "kis_tool_proxy.h"
 
 #include <QApplication>
+#include <QEvent>
+#include <QMouseEvent>
+
 #include "kis_cursor.h"
 
 

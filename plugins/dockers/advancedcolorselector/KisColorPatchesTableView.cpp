@@ -11,6 +11,7 @@
 #include <QScrollBar>
 #include <QStandardItemModel>
 #include <QStyledItemDelegate>
+#include <QMouseEvent>
 
 #include <utility>
 

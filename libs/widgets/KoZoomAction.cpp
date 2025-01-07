@@ -26,7 +26,6 @@
 #include <QButtonGroup>
 #include <QComboBox>
 
-
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
 #include <kis_signal_compressor.h>

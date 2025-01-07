@@ -8,6 +8,8 @@
 
 #include "KoZoomTool.h"
 
+#include <QKeyEvent>
+
 #include "KoZoomStrategy.h"
 #include "KoZoomToolWidget.h"
 #include "KoPointerEvent.h"

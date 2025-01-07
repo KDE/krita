@@ -11,12 +11,14 @@
 #ifndef KOPOINTEREVENT_H
 #define KOPOINTEREVENT_H
 
-#include <QTouchEvent>
 #include <QSharedPointer>
+#include <QPointF>
 
+class QEvent;
 class QTabletEvent;
 class QMouseEvent;
 class QWheelEvent;
+class QTouchEvent;
 
 #include "kritaflake_export.h"
 

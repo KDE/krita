@@ -6,9 +6,12 @@
 
 #include "kis_scratch_pad_event_filter.h"
 #include "kis_scratch_pad.h"
+
 #include <QWidget>
 #include <QDebug>
-
+#include <QEvent>
+#include <QMouseEvent>
+#include <QTabletEvent>
 
 KisScratchPadEventFilter::KisScratchPadEventFilter(QWidget *parent)
     : QObject(parent),

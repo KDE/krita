@@ -33,6 +33,7 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QLabel>
+#include <QKeyEvent>
 
 #include <math.h>
 

@@ -9,6 +9,8 @@
 #include <QFontMetrics>
 #include <QGlobalStatic>
 #include <QMap>
+#include <QRegExp>
+
 #include <fontconfig/fontconfig.h>
 
 #include <SvgGraphicContext.h>
@@ -254,12 +256,15 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
     } else if (command == "vertical-align") {
         QRegExp digits = QRegExp("\\d");
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+            bool paramContains = param.contains(digits);
 #else
-        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+            bool paramContains = (digits.indexIn(param) > 0);
 #endif
-            if (param == "sub" || param == "super" || param.contains(digits)) {
+
+
+            if (param == "sub" || param == "super" || paramContains) {
                 parseSvgTextAttribute(context, "baseline-shift", param);
             } else {
                 parseSvgTextAttribute(context, "alignment-baseline", param);

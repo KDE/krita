@@ -42,7 +42,7 @@ private Q_SLOTS:
 
 Q_GLOBAL_STATIC(KisTouchPressureSensitivityOptionContainer, s_optionContainer)
 
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 namespace detail {
 
 // Qt's events do not have copy-ctors yet, so we should emulate them
@@ -86,6 +86,7 @@ template<> void copyEventHack(const QTouchEvent *src, QScopedPointer<QEvent> &ds
 }
 
 }
+#endif
 
 class Q_DECL_HIDDEN KoPointerEvent::Private
 {
@@ -150,6 +151,8 @@ KoPointerEventWrapper::KoPointerEventWrapper(Event *_event, const QPointF &point
 {
 }
 
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 struct DeepCopyVisitor
 {
     QPointF point;
@@ -161,10 +164,31 @@ struct DeepCopyVisitor
         return {static_cast<T*>(baseEvent.take()), point};
     }
 };
+#endif
 
 KoPointerEventWrapper KoPointerEvent::deepCopyEvent() const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     return visit(DeepCopyVisitor{point}, d->eventPtr);
+#else
+    struct Visitor {
+
+        QPointF point;
+
+        KoPointerEventWrapper operator() (const QMouseEvent *event) {
+            return KoPointerEventWrapper(event->clone(), point);
+        }
+        KoPointerEventWrapper operator() (const QTabletEvent *event) {
+            return KoPointerEventWrapper(event->clone(), point);
+        }
+        KoPointerEventWrapper operator() (const QTouchEvent *event) {
+            return KoPointerEventWrapper(event->clone(), point);
+        }
+    };
+    return visit(Visitor{point}, d->eventPtr);
+
+
+#endif
 }
 
 Qt::MouseButton KoPointerEvent::button() const
@@ -203,6 +227,7 @@ Qt::MouseButtons KoPointerEvent::buttons() const
 
 QPoint KoPointerEvent::globalPos() const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     struct Visitor {
         QPoint operator() (const QMouseEvent *event) {
             return event->globalPos();
@@ -213,6 +238,19 @@ QPoint KoPointerEvent::globalPos() const
         QPoint operator() (const QTouchEvent *) {
             return QPoint();
         }
+#else
+    struct Visitor {
+        QPoint operator() (const QMouseEvent *event) {
+            return event->globalPosition().toPoint();
+        }
+        QPoint operator() (const QTabletEvent *event) {
+            return event->globalPosition().toPoint();
+        }
+        QPoint operator() (const QTouchEvent *) {
+            return QPoint();
+        }
+#endif
+
     };
 
     return visit(Visitor(), d->eventPtr);
@@ -220,6 +258,7 @@ QPoint KoPointerEvent::globalPos() const
 
 QPoint KoPointerEvent::pos() const
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     struct Visitor {
         QPoint operator() (const QMouseEvent *event) {
             return event->pos();
@@ -231,7 +270,19 @@ QPoint KoPointerEvent::pos() const
             return event->touchPoints().at(0).pos().toPoint();
         }
     };
-
+#else
+    struct Visitor {
+        QPoint operator() (const QMouseEvent *event) {
+            return event->position().toPoint();
+        }
+        QPoint operator() (const QTabletEvent *event) {
+            return event->position().toPoint();
+        }
+        QPoint operator() (const QTouchEvent *event) {
+            return event->points().at(0).position().toPoint();
+        }
+    };
+#endif
     return visit(Visitor(), d->eventPtr);
 }
 
@@ -252,7 +303,11 @@ qreal KoPointerEvent::pressure() const
             return event->pressure();
         }
         qreal operator() (const QTouchEvent *event) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             return s_optionContainer->useTouchPressure ? event->touchPoints().at(0).pressure() : 1.0;
+#else
+            return s_optionContainer->useTouchPressure ? event->points().at(0).pressure() : 1.0;
+#endif
         }
         qreal operator() (...) {
             return 1.0;
@@ -269,7 +324,11 @@ qreal KoPointerEvent::rotation() const
             return event->rotation();
         }
         qreal operator() (const QTouchEvent *event) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             return event->touchPoints().at(0).rotation();
+#else
+            return event->points().at(0).rotation();
+#endif
         }
         qreal operator() (...) {
             return 0.0;
@@ -407,6 +466,7 @@ bool KoPointerEvent::spontaneous() const
     return visit(Visitor(), d->eventPtr);
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KoPointerEvent::copyQtPointerEvent(const QMouseEvent *event, QScopedPointer<QEvent> &dst)
 {
     detail::copyEventHack(event, dst);
@@ -421,5 +481,6 @@ void KoPointerEvent::copyQtPointerEvent(const QTouchEvent *event, QScopedPointer
 {
     detail::copyEventHack(event, dst);
 }
+#endif
 
 #include <KoPointerEvent.moc>

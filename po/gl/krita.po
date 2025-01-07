@@ -28,7 +28,7 @@
 # Marce Villarino <mvillarino@kde-espana.es>, 2013.
 # Miguel Branco <mgl.branco@gmail.com>, 2012.
 # Adrian Chaves Fernandez <adriyetichaves@gmail.com>, 2012, 2015, 2017.
-# SPDX-FileCopyrightText: 2023, 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2023, 2024, 2025 Adrián Chaves (Gallaecio)
 #
 # --- kritalibs
 # translation of koffice.po to galician
@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-12-14 04:13+0000\n"
-"PO-Revision-Date: 2024-12-21 13:21+0100\n"
+"PO-Revision-Date: 2025-01-06 12:42+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -12298,14 +12298,14 @@ msgstr "&Rotar a capa…"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer"
-msgstr "Rodar a capa"
+msgstr "Rotar a capa"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3208
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layer 90° to the Right"
-msgstr "Xirar a &capa 90° á dereita"
+msgstr "Rotar a &capa 90° á dereita"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12315,14 +12315,14 @@ msgstr "Xirar a &capa 90° á dereita"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Right"
-msgstr "Xirar a capa 90° á dereita"
+msgstr "Rotar a capa 90° á dereita"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &90° to the Left"
-msgstr "Xirar a capa &90° á esquerda"
+msgstr "Rotar a capa &90° á esquerda"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12332,14 +12332,14 @@ msgstr "Xirar a capa &90° á esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 90° to the Left"
-msgstr "Xirar a capa 90° á esquerda"
+msgstr "Rotar a capa 90° á esquerda"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer &180°"
-msgstr "Xirar a capa &180°"
+msgstr "Rotar a capa &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
@@ -12349,7 +12349,7 @@ msgstr "Xirar a capa &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layer 180°"
-msgstr "Xirar a capa 180°"
+msgstr "Rotar a capa 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244
@@ -12441,7 +12441,7 @@ msgstr "Rotar todas as capas…"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All &Layers 90° to the Right"
-msgstr "Xirar todas as &capas 90° á dereita"
+msgstr "Rotar todas as &capas 90° á dereita"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCW90), Actions (Layers), ActionCollection (Krita)
@@ -12451,14 +12451,14 @@ msgstr "Xirar todas as &capas 90° á dereita"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Right"
-msgstr "Xirar todas as capas 90° á dereita"
+msgstr "Rotar todas as capas 90° á dereita"
 
 #. i18n: context: text @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3316
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &90° to the Left"
-msgstr "Xirar todas as capas &90° á esquerda"
+msgstr "Rotar todas as capas &90° á esquerda"
 
 #. i18n: context: toolTip @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayersCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12468,14 +12468,14 @@ msgstr "Xirar todas as capas &90° á esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 90° to the Left"
-msgstr "Xirar todas as capas 90° á esquerda"
+msgstr "Rotar todas as capas 90° á esquerda"
 
 #. i18n: context: text @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3328
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers &180°"
-msgstr "Xirar todas as capas &180°"
+msgstr "Rotar todas as capas &180°"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers180), Actions (Layers), ActionCollection (Krita)
@@ -12485,7 +12485,7 @@ msgstr "Xirar todas as capas &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate All Layers 180°"
-msgstr "Xirar todas as capas 180°"
+msgstr "Rotar todas as capas 180°"
 
 #. i18n: context: text @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3340
@@ -12861,7 +12861,7 @@ msgstr "&Imaxe"
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
 msgid "&Rotate"
-msgstr "&Xirar"
+msgstr "&Rotar"
 
 #: krita/krita5.xmlgui:191 plugins/extensions/layersplit/layersplit.xmlgui:4
 #: plugins/extensions/waveletdecompose/waveletdecompose.xmlgui:4
@@ -14146,7 +14146,7 @@ msgstr "Conmutar o axuste á vista"
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Canvas Right"
-msgstr "Xirar o &lenzo á dereita"
+msgstr "Rotar o &lenzo á dereita"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
@@ -14156,14 +14156,14 @@ msgstr "Xirar o &lenzo á dereita"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Right"
-msgstr "Xirar o lenzo á dereita"
+msgstr "Rotar o lenzo á dereita"
 
 #. i18n: context: text @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:850
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas &Left"
-msgstr "Xirar o lenzo á &esquerda"
+msgstr "Rotar o lenzo á &esquerda"
 
 #. i18n: context: toolTip @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotate_canvas_left), Actions (View), ActionCollection (Menu)
@@ -14173,7 +14173,7 @@ msgstr "Xirar o lenzo á &esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Canvas Left"
-msgstr "Xirar o lenzo á esquerda"
+msgstr "Rotar o lenzo á esquerda"
 
 #. i18n: context: text @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
@@ -14691,14 +14691,14 @@ msgstr "&Rotar a imaxe…"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image"
-msgstr "Xirar a imaxe"
+msgstr "Rotar a imaxe"
 
 #. i18n: context: text @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1233
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Image 90° to the Right"
-msgstr "Xirar a &imaxe 90° á dereita"
+msgstr "Rotar a &imaxe 90° á dereita"
 
 #. i18n: context: toolTip @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCW90), Actions (Image), ActionCollection (Menu)
@@ -14708,14 +14708,14 @@ msgstr "Xirar a &imaxe 90° á dereita"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Right"
-msgstr "Xirar a imaxe 90° á dereita"
+msgstr "Rotar a imaxe 90° á dereita"
 
 #. i18n: context: text @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1245
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &90° to the Left"
-msgstr "Xirar a imaxe &90º á esquerda"
+msgstr "Rotar a imaxe &90º á esquerda"
 
 #. i18n: context: toolTip @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImageCCW90), Actions (Image), ActionCollection (Menu)
@@ -14725,14 +14725,14 @@ msgstr "Xirar a imaxe &90º á esquerda"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 90° to the Left"
-msgstr "Xirar a imaxe 90º á esquerda"
+msgstr "Rotar a imaxe 90º á esquerda"
 
 #. i18n: context: text @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1257
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image &180°"
-msgstr "Xirar a imaxe &180°"
+msgstr "Rotar a imaxe &180°"
 
 #. i18n: context: toolTip @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateImage180), Actions (Image), ActionCollection (Menu)
@@ -14742,7 +14742,7 @@ msgstr "Xirar a imaxe &180°"
 #, kde-format
 msgctxt "action"
 msgid "Rotate Image 180°"
-msgstr "Xirar a imaxe 180°"
+msgstr "Rotar a imaxe 180°"
 
 #. i18n: context: text @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1269
@@ -17243,7 +17243,7 @@ msgstr "Cambiar as dimensións da capa"
 #: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
-msgstr "Xirar a imaxe"
+msgstr "Rotar a imaxe"
 
 #: libs/image/kis_image.cc:1169
 msgctxt "(qtundo-format)"
@@ -28490,34 +28490,34 @@ msgstr "Desviar a abaixo"
 #: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
 msgid "Rotate Canvas"
-msgstr "Xirar o lenzo"
+msgstr "Rotar o lenzo"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:42
 #, kde-format
 msgid "The <i>Rotate Canvas</i> action rotates the canvas."
-msgstr "A acción de <i>xirar o lenzo</i> xira o lenzo."
+msgstr "A acción de <i>rotar o lenzo</i> rota o lenzo."
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:45
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:39
 #, kde-format
 msgid "Rotate Mode"
-msgstr "Modo de xiro"
+msgstr "Modo de rotación"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:46
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:40
 #, kde-format
 msgid "Discrete Rotate Mode"
-msgstr "Modo de xiro discreto"
+msgstr "Modo de rotación discreto"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:47
 #, kde-format
 msgid "Rotate Left"
-msgstr "Xirar á esquerda"
+msgstr "Rotar á esquerda"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:48
 #, kde-format
 msgid "Rotate Right"
-msgstr "Xirar á dereita"
+msgstr "Rotar á dereita"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:49
 #, kde-format
@@ -28935,7 +28935,7 @@ msgstr "Axustar á altura da vista"
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
 msgid "Zoom and Rotate Canvas"
-msgstr "Ampliar e xirar o lenzo"
+msgstr "Ampliar e rotar o lenzo"
 
 #: libs/ui/input/KisCanvasOnlyAction.cpp:17
 #, kde-format
@@ -41431,7 +41431,7 @@ msgstr "Clonar %1, %2"
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:18
 #, kde-format
 msgid "Rotate Image"
-msgstr "Xirar a imaxe"
+msgstr "Rotar a imaxe"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:32
@@ -49481,7 +49481,7 @@ msgstr "Visitar o sitio web do proxecto LibRaw."
 #, kde-format
 msgctxt "@option:check"
 msgid "Do not stretch or rotate pixels"
-msgstr "Non estirar nin xirar os píxeles."
+msgstr "Non estirar nin rotar os píxeles."
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:311
 #, kde-format
@@ -56077,7 +56077,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1861
 #, kde-format
 msgid "Rotate"
-msgstr "Xirar"
+msgstr "Rotar"
 
 #: plugins/python/documenttools/tools/rotatetool/rotatetool.py:24
 msgid "Negative degrees will rotate the image to the left"
@@ -60207,7 +60207,7 @@ msgstr "Cambiar as dimensións: ampliar ou encoller a imaxe baixo o cursor."
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate: twirl image under cursor"
-msgstr "Xirar: virar a imaxe baixo o cursor."
+msgstr "Rotar: xirar a imaxe baixo o cursor."
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:275
 #, kde-format
@@ -60379,7 +60379,7 @@ msgstr "fóra do lenzo"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
 #, kde-format
 msgid "Rotate around X-Axis"
-msgstr "Rodar en torno ao eixo X"
+msgstr "Rotar en torno ao eixo X"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
@@ -60387,7 +60387,7 @@ msgstr "Rodar en torno ao eixo X"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
 #, kde-format
 msgid "Rotate around Y-Axis"
-msgstr "Rodar en torno ao eixo Y"
+msgstr "Rotar en torno ao eixo Y"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
@@ -60395,7 +60395,7 @@ msgstr "Rodar en torno ao eixo Y"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
 #, kde-format
 msgid "Rotate around Z-Axis"
-msgstr "Rodar en torno ao eixo Z"
+msgstr "Rotar en torno ao eixo Z"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:842

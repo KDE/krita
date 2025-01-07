@@ -28,6 +28,12 @@
 
 #include <QStack>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <QStringRef>
+#else
+#include <QStringView>
+#endif
+
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
 #include <KoDocumentResourceManager.h>
@@ -198,8 +204,11 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     QXmlStreamWriter svgWriter(&svgBuffer);
 
     svgWriter.setAutoFormatting(false);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStringRef elementName;
+#else
+    QStringView elementName;
+#endif
 
     bool newLine = false;
     int lineCount = 0;
@@ -221,7 +230,11 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             if (htmlReader.name() == "br") {
                 debugFlake << "\tdoing br";
                 svgWriter.writeEndElement();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
                 elementName = QStringRef(&p);
+#else
+                elementName = QStringView(p);
+#endif
                 em = bodyEm;
                 appendStyle = previousStyleString;
             }
@@ -1621,7 +1634,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                     // Note: Percentage line-height behaves differently than
                     // unitless number in case of nested descendant elements,
                     // but here we pretend they are the same.
-                    lineHeightPercent = value.leftRef(value.length() - 1).toDouble(&ok);
+                    lineHeightPercent = value.left(value.length() - 1).toDouble(&ok);
                     if (!ok) {
                         lineHeightPercent = -1.0;
                     }

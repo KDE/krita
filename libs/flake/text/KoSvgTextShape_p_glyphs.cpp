@@ -42,10 +42,10 @@ static QString glyphFormatToStr(const FT_Glyph_Format _v)
 {
     const unsigned int v = _v;
     QString s;
-    s += (v >> 24) & 0xFF;
-    s += (v >> 16) & 0xFF;
-    s += (v >> 8) & 0xFF;
-    s += (v >> 0) & 0xFF;
+    s += QChar((v >> 24) & 0xFF);
+    s += QChar((v >> 16) & 0xFF);
+    s += QChar((v >> 8) & 0xFF);
+    s += QChar((v >> 0) & 0xFF);
     return s;
 }
 

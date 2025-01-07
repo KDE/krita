@@ -231,9 +231,9 @@ private:
     struct TabletToolID {
         TabletToolID(const KoInputDevice& dev) {
             // Only the eraser is special, and we don't look at Cursor
-            pointer = QTabletEvent::Pen;
-            if (dev.pointer() == QTabletEvent::Eraser) {
-                pointer = QTabletEvent::Eraser;
+            pointer = KoInputDevice::Pointer::Pen;
+            if (dev.pointer() == KoInputDevice::Pointer::Eraser) {
+                pointer = KoInputDevice::Pointer::Eraser;
             }
             uniqueTabletId = dev.uniqueTabletId();
         }
@@ -246,7 +246,7 @@ private:
             return pointer < id.pointer;
         }
 
-        QTabletEvent::PointerType  pointer;
+        KoInputDevice::Pointer pointer;
         qint64 uniqueTabletId;
     };
 

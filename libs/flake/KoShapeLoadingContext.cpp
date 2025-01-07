@@ -95,7 +95,7 @@ void KoShapeLoadingContext::clearLayers()
 void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
 {
     d->drawIds.insert(id, shape);
-    QMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
+    auto it(d->updaterById.find(id));
     while (it != d->updaterById.end() && it.key() == id) {
         d->updaterByShape.insert(shape, it.value());
         it = d->updaterById.erase(it);
@@ -126,7 +126,7 @@ void KoShapeLoadingContext::updateShape(const QString & id, KoLoadingShapeUpdate
 
 void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
 {
-    QMap<KoShape*, KoLoadingShapeUpdater*>::iterator it(d->updaterByShape.find(shape));
+    auto it(d->updaterByShape.find(shape));
     while (it != d->updaterByShape.end() && it.key() == shape) {
         it.value()->update(shape);
         delete it.value();
@@ -147,7 +147,7 @@ void KoShapeLoadingContext::setZIndex(int index)
 
 void KoShapeLoadingContext::addSharedData(const QString & id, KoSharedLoadingData * data)
 {
-    QMap<QString, KoSharedLoadingData*>::iterator it(d->sharedData.find(id));
+    auto it(d->sharedData.find(id));
     // data will not be overwritten
     if (it == d->sharedData.end()) {
         d->sharedData.insert(id, data);

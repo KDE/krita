@@ -7,6 +7,7 @@
 #include "SvgCssHelper.h"
 #include <FlakeDebug.h>
 #include <QPair>
+#include <QRegExp>
 
 /// Token types used for tokenizing complex selectors
 enum CssTokenType {
@@ -633,7 +634,11 @@ void SvgCssHelper::parseStylesheet(const QDomElement &e)
     // remove comments
     QRegExp commentExp("\\/\\*.*\\*\\/");
     commentExp.setMinimal(true); // do not match greedy
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     data.remove(commentExp);
+#else
+    commentExp.removeIn(data);
+#endif
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList defs = data.split('}', Qt::SkipEmptyParts);

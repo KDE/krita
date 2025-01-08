@@ -1889,9 +1889,15 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-        QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
+#else
+        // FIXME: find a way to get the namedcolorspace field out of QColorSpace.
+        QColorSpace colorspace = currentFormat.colorSpace();
+        lblCurrentRootSurfaceFormat->setText(colorspace.description());
+#endif
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
         slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());

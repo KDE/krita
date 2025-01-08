@@ -22,6 +22,8 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 #include <klocalizedstring.h>
 
@@ -394,7 +396,7 @@ QWidget* KisHexColorInput::createInput()
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
     QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);
-    m_hexInput->setValidator(new QRegExpValidator(QRegExp(pattern), this));
+    m_hexInput->setValidator(new QRegularExpressionValidator(QRegularExpression(pattern), this));
     connect(m_hexInput, SIGNAL(editingFinished()), this, SLOT(setValue()));
     return m_hexInput;
 }

@@ -30,8 +30,8 @@ public:
     QString eventToString(const QTabletEvent &ev, const QString &prefix);
     QString eventToString(const QEvent &ev, const QString &prefix);
 
-    static QString tabletDeviceToString(QTabletEvent::TabletDevice device);
-    static QString pointerTypeToString(QTabletEvent::PointerType pointer);
+    static QString tabletDeviceToString(const QTabletEvent &event);
+    static QString pointerTypeToString(const QTabletEvent &event);
     static QString exTypeToString(QEvent::Type type);
 
 

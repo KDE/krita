@@ -711,6 +711,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
 target_link_libraries(kritaui
     PRIVATE
         Qt6::OpenGLWidgets
+        Qt6::SvgWidgets
 )
 endif()
 

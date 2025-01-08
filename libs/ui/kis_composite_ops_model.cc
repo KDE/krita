@@ -25,8 +25,13 @@ KoID KisCompositeOpListModel::favoriteCategory() {
 
 void KisCompositeOpListModel::initialize()
 {
-    QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getCompositeOps();
+    auto ops = KoCompositeOpRegistry::instance().getCompositeOps();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMapIterator<KoID, KoID> it(ops);
+#else
+    QMultiMapIterator<KoID, KoID> it(ops);
+#endif
+
 
     while (it.hasNext()) {
         KoID op = *it.next();
@@ -43,8 +48,13 @@ void KisCompositeOpListModel::initialize()
 
 void KisCompositeOpListModel::initializeForLayerStyles()
 {
-    QMap<KoID, KoID> ops = KoCompositeOpRegistry::instance().getLayerStylesCompositeOps();
+    auto ops = KoCompositeOpRegistry::instance().getLayerStylesCompositeOps();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMapIterator<KoID, KoID> it(ops);
+#else
+    QMultiMapIterator<KoID, KoID> it(ops);
+#endif
+
 
     while (it.hasNext()) {
         KoID op = *it.next();

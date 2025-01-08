@@ -10,6 +10,8 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
+#include <QObject>
+
 class KRITAIMAGE_EXPORT KisOnionSkinCompositor : public QObject
 {
     Q_OBJECT

@@ -24,6 +24,7 @@ class KisAngleSelector;
 class QLineEdit;
 class KisMultipliersDoubleSliderSpinBox;
 class KisFileNameRequester;
+class QWidget;
 
 namespace KisWidgetConnectionUtils {
 

@@ -381,7 +381,7 @@ void KisFilterManager::cancelDialog()
 
 bool KisFilterManager::isStrokeRunning() const
 {
-    return d->currentStrokeId;
+    return !d->currentStrokeId.isNull();
 }
 
 bool KisFilterManager::isIdle() const

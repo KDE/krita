@@ -22,7 +22,10 @@ KisSerializableConfiguration::KisSerializableConfiguration(const KisSerializable
 bool KisSerializableConfiguration::fromXML(const QString &s, bool)
 {
     QDomDocument doc;
-    bool rv = doc.setContent(s);
+    bool rv = false;
+    if (doc.setContent(s)) {
+        rv = true;
+    }
     if (rv) {
         QDomElement e = doc.documentElement();
         fromXML(e);

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 04:13+0000\n"
+"POT-Creation-Date: 2025-01-08 03:22+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -7889,14 +7889,29 @@ msgctxt "action"
 msgid "Break at point"
 msgstr "アンカーポイントで分割"
 
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Break at segment"
+msgctxt "action"
+msgid "Break at selection"
+msgstr "セグメントで分割"
+
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
+#: krita/data/actions/PathTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Make line point"
@@ -7908,8 +7923,8 @@ msgstr "直線アンカーポイントを作成"
 #. i18n: context: iconText @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
-#: krita/data/actions/PathTool.action:73
+#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
+#: krita/data/actions/PathTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Symmetric Point"
@@ -7921,8 +7936,8 @@ msgstr "対称アンカーポイント"
 #. i18n: context: iconText @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
-#: krita/data/actions/PathTool.action:83
+#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
+#: krita/data/actions/PathTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
@@ -7934,8 +7949,8 @@ msgstr "曲線アンカーポイントを作成"
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
-#: krita/data/actions/PathTool.action:93
+#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
+#: krita/data/actions/PathTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Segment to Curve"
@@ -7947,8 +7962,9 @@ msgstr "セグメントを曲線に"
 #. i18n: context: iconText @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
-#: krita/data/actions/PathTool.action:103
+#: krita/data/actions/PathTool.action:106
+#: krita/data/actions/PathTool.action:108
+#: krita/data/actions/PathTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Insert point"
@@ -7960,9 +7976,9 @@ msgstr "アンカーポイントを挿入"
 #. i18n: context: iconText @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:106
-#: krita/data/actions/PathTool.action:108
-#: krita/data/actions/PathTool.action:113
+#: krita/data/actions/PathTool.action:116
+#: krita/data/actions/PathTool.action:118
+#: krita/data/actions/PathTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Corner point"
@@ -7974,9 +7990,9 @@ msgstr "角アンカーポイント"
 #. i18n: context: iconText @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:116
-#: krita/data/actions/PathTool.action:118
-#: krita/data/actions/PathTool.action:123
+#: krita/data/actions/PathTool.action:126
+#: krita/data/actions/PathTool.action:128
+#: krita/data/actions/PathTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Merge points"
@@ -7988,9 +8004,9 @@ msgstr "アンカーポイントを結合"
 #. i18n: context: iconText @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:126
-#: krita/data/actions/PathTool.action:128
-#: krita/data/actions/PathTool.action:133
+#: krita/data/actions/PathTool.action:136
+#: krita/data/actions/PathTool.action:138
+#: krita/data/actions/PathTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Join with segment"
@@ -8002,9 +8018,9 @@ msgstr "セグメントに連結"
 #. i18n: context: iconText @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:136
-#: krita/data/actions/PathTool.action:138
-#: krita/data/actions/PathTool.action:143
+#: krita/data/actions/PathTool.action:146
+#: krita/data/actions/PathTool.action:148
+#: krita/data/actions/PathTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Smooth point"
@@ -16055,7 +16071,7 @@ msgstr "パラメータを変更"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:310
+#: libs/flake/tools/KoPathTool.cpp:312
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "パスに変換"
@@ -16387,43 +16403,47 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "セグメントを変更"
 
-#: libs/flake/tools/KoPathTool.cpp:126
+#: libs/flake/tools/KoPathTool.cpp:128
 #, kde-format
 msgid "Edit Shape"
 msgstr "形状編集"
 
-#: libs/flake/tools/KoPathTool.cpp:603
+#: libs/flake/tools/KoPathTool.cpp:619
 #, kde-format
 msgid "Drag to move handle."
 msgstr "ハンドルを移動するにはドラッグしてください。"
 
-#: libs/flake/tools/KoPathTool.cpp:657
+#: libs/flake/tools/KoPathTool.cpp:673
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "ポイントを移動するにはドラッグしてください。Shift+クリックでポイントのタイプ"
 "を変更します。"
 
-#: libs/flake/tools/KoPathTool.cpp:659
+#: libs/flake/tools/KoPathTool.cpp:675
 #, kde-format
 msgid "Drag to move control point."
 msgstr "コントロールポイントをドラッグして移動。"
 
-#: libs/flake/tools/KoPathTool.cpp:682
+#: libs/flake/tools/KoPathTool.cpp:698
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "カーブを直接変更するにはドラッグしてください。ダブルクリックで新しいパスポイ"
 "ントを挿入します。"
 
-#: libs/flake/tools/KoPathTool.cpp:690
-#, kde-format
-msgid "Press B to break path at selected point."
+#: libs/flake/tools/KoPathTool.cpp:708
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected point."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected point."
 msgstr "選択したポイントでパスを分割するには B を押してください。"
 
-#: libs/flake/tools/KoPathTool.cpp:692
-#, kde-format
-msgid "Press B to break path at selected segments."
+#: libs/flake/tools/KoPathTool.cpp:710
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected segments."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected segments."
 msgstr "選択したセグメントでパスを分割するには B を押してください。"
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18

@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-12-14 04:13+0000\n"
+"POT-Creation-Date: 2025-01-08 03:22+0000\n"
 "PO-Revision-Date: 2024-12-21 11:18+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -7891,14 +7891,29 @@ msgctxt "action"
 msgid "Break at point"
 msgstr "Interrompi al punto"
 
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
-#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Break at segment"
+msgctxt "action"
+msgid "Break at selection"
+msgstr "Interrompi al segmento"
+
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#. i18n: context: text @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
+#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
+#: krita/data/actions/PathTool.action:73
 #, kde-format
 msgctxt "action"
 msgid "Make line point"
@@ -7910,8 +7925,8 @@ msgstr "Trasforma in punto linea"
 #. i18n: context: iconText @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-symmetric), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:66 krita/data/actions/PathTool.action:68
-#: krita/data/actions/PathTool.action:73
+#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
+#: krita/data/actions/PathTool.action:83
 #, kde-format
 msgctxt "action"
 msgid "Symmetric Point"
@@ -7923,8 +7938,8 @@ msgstr "Punto simmetrico"
 #. i18n: context: iconText @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:76 krita/data/actions/PathTool.action:78
-#: krita/data/actions/PathTool.action:83
+#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
+#: krita/data/actions/PathTool.action:93
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
@@ -7936,8 +7951,8 @@ msgstr "Trasforma in punto curva"
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:86 krita/data/actions/PathTool.action:88
-#: krita/data/actions/PathTool.action:93
+#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
+#: krita/data/actions/PathTool.action:103
 #, kde-format
 msgctxt "action"
 msgid "Segment to Curve"
@@ -7949,8 +7964,9 @@ msgstr "Segmento in curva"
 #. i18n: context: iconText @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-insert), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:96 krita/data/actions/PathTool.action:98
-#: krita/data/actions/PathTool.action:103
+#: krita/data/actions/PathTool.action:106
+#: krita/data/actions/PathTool.action:108
+#: krita/data/actions/PathTool.action:113
 #, kde-format
 msgctxt "action"
 msgid "Insert point"
@@ -7962,9 +7978,9 @@ msgstr "Inserisci punto"
 #. i18n: context: iconText @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-corner), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:106
-#: krita/data/actions/PathTool.action:108
-#: krita/data/actions/PathTool.action:113
+#: krita/data/actions/PathTool.action:116
+#: krita/data/actions/PathTool.action:118
+#: krita/data/actions/PathTool.action:123
 #, kde-format
 msgctxt "action"
 msgid "Corner point"
@@ -7976,9 +7992,9 @@ msgstr "Punto angolo"
 #. i18n: context: iconText @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:116
-#: krita/data/actions/PathTool.action:118
-#: krita/data/actions/PathTool.action:123
+#: krita/data/actions/PathTool.action:126
+#: krita/data/actions/PathTool.action:128
+#: krita/data/actions/PathTool.action:133
 #, kde-format
 msgctxt "action"
 msgid "Merge points"
@@ -7990,9 +8006,9 @@ msgstr "Unisci punti"
 #. i18n: context: iconText @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-join), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:126
-#: krita/data/actions/PathTool.action:128
-#: krita/data/actions/PathTool.action:133
+#: krita/data/actions/PathTool.action:136
+#: krita/data/actions/PathTool.action:138
+#: krita/data/actions/PathTool.action:143
 #, kde-format
 msgctxt "action"
 msgid "Join with segment"
@@ -8004,9 +8020,9 @@ msgstr "Unisci con segmento"
 #. i18n: context: iconText @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: text @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
-#: krita/data/actions/PathTool.action:136
-#: krita/data/actions/PathTool.action:138
-#: krita/data/actions/PathTool.action:143
+#: krita/data/actions/PathTool.action:146
+#: krita/data/actions/PathTool.action:148
+#: krita/data/actions/PathTool.action:153
 #, kde-format
 msgctxt "action"
 msgid "Smooth point"
@@ -16073,7 +16089,7 @@ msgstr "Modifica il parametro"
 
 #: libs/flake/commands/KoParameterToPathCommand.cpp:31
 #: libs/flake/commands/KoParameterToPathCommand.cpp:40
-#: libs/flake/tools/KoPathTool.cpp:310
+#: libs/flake/tools/KoPathTool.cpp:312
 msgctxt "(qtundo-format)"
 msgid "Convert to Path"
 msgstr "Converti in tracciato"
@@ -16407,43 +16423,47 @@ msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Cambia segmento"
 
-#: libs/flake/tools/KoPathTool.cpp:126
+#: libs/flake/tools/KoPathTool.cpp:128
 #, kde-format
 msgid "Edit Shape"
 msgstr "Modifica la forma"
 
-#: libs/flake/tools/KoPathTool.cpp:603
+#: libs/flake/tools/KoPathTool.cpp:619
 #, kde-format
 msgid "Drag to move handle."
 msgstr "Trascina per spostare la maniglia."
 
-#: libs/flake/tools/KoPathTool.cpp:657
+#: libs/flake/tools/KoPathTool.cpp:673
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
 msgstr ""
 "Trascina per spostare il punto. Fai clic con il tasto sinistro, tenendo "
 "premuto MAIUSC, per cambiare il tipo di punto."
 
-#: libs/flake/tools/KoPathTool.cpp:659
+#: libs/flake/tools/KoPathTool.cpp:675
 #, kde-format
 msgid "Drag to move control point."
 msgstr "Trascina per spostare il punto di controllo."
 
-#: libs/flake/tools/KoPathTool.cpp:682
+#: libs/flake/tools/KoPathTool.cpp:698
 #, kde-format
 msgid "Drag to change curve directly. Double click to insert new path point."
 msgstr ""
 "Trascina per modificare direttamente la curva. Doppio clic per inserire un "
 "nuovo punto del tracciato."
 
-#: libs/flake/tools/KoPathTool.cpp:690
-#, kde-format
-msgid "Press B to break path at selected point."
+#: libs/flake/tools/KoPathTool.cpp:708
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected point."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected point."
 msgstr "Premi B per spezzare il tracciato al punto selezionato."
 
-#: libs/flake/tools/KoPathTool.cpp:692
-#, kde-format
-msgid "Press B to break path at selected segments."
+#: libs/flake/tools/KoPathTool.cpp:710
+#, fuzzy, kde-format
+#| msgid "Press B to break path at selected segments."
+msgctxt "%1 is a shortcut to be pressed"
+msgid "Press %1 to break path at selected segments."
 msgstr "Premi B per spezzare il tracciato ai segmenti selezionati."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18

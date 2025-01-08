@@ -7,6 +7,8 @@
 #ifndef __KIS_GRID_CONFIG_H
 #define __KIS_GRID_CONFIG_H
 
+#include <QMetaType>
+
 #include <QPoint>
 #include <QColor>
 #include <QPen>

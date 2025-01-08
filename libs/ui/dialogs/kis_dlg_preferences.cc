@@ -38,6 +38,8 @@
 #include <QScreen>
 #include <QFontComboBox>
 #include <QFont>
+#include <QSurfaceFormat>
+#include <QColorSpace>
 
 #include <KisApplication.h>
 #include <KisDocument.h>
@@ -1887,11 +1889,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         KisSurfaceColorSpace colorSpace = currentFormat.colorSpace();
-#else
-        KisSurfaceColorSpace colorSpace = KisSurfaceColorSpace::DefaultColorSpace;
-#endif
+
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));

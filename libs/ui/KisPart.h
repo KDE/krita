@@ -19,7 +19,7 @@
 #include <KisSessionResource.h>
 
 #include "kritaui_export.h"
-#include <KConfigCore/kconfiggroup.h>
+#include <kconfiggroup.h>
 #include <KoConfig.h>
 #include <kis_types.h>
 

@@ -397,7 +397,7 @@ bool KisStrokesQueue::cancelStroke(KisStrokeId id)
             buddy->cancelStroke();
         }
     }
-    return stroke;
+    return !stroke.isNull();
 }
 
 bool KisStrokesQueue::Private::hasUnfinishedStrokes() const

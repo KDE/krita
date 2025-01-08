@@ -707,6 +707,13 @@ target_link_libraries(kritaui
         kritaresources
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+target_link_libraries(kritaui
+    PRIVATE
+        Qt6::OpenGLWidgets
+)
+endif()
+
 if (Mlt7_FOUND)
     target_link_libraries(kritaui PRIVATE SDL2::SDL2 Mlt7::mlt Mlt7::mlt++)
 endif()

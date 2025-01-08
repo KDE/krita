@@ -861,7 +861,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
             return false;
         }
         KisPNGConverter pngconv(0);
-        vKisAnnotationSP_it annotIt = 0;
+        vKisAnnotationSP_it annotIt;
         KisMetaData::Store* metaDataStore = 0;
         if (metaData) {
             metaDataStore = new KisMetaData::Store(*metaData);

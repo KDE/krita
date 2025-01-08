@@ -10,6 +10,8 @@
 
 #include <KoUnit.h>
 
+#include <QRegExp>
+
 #include <WidgetsDebug.h>
 
 #include <klocalizedstring.h>
@@ -61,7 +63,7 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 #endif
 
     QRegExp regexp ("([ a-zA-Z]+)$"); // Letters or spaces at end
-    const int res = input.indexOf( regexp );
+    const int res =  regexp.indexIn(input);
 
     if ( res == -1 )
     {

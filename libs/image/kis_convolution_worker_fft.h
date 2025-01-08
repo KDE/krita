@@ -21,6 +21,8 @@
 #include <QFile>
 #include <QDir>
 
+#include <KisPortingUtils.h>
+
 #include <fftw3.h>
 
 template<class _IteratorFactory_> class KisConvolutionWorkerFFT;
@@ -494,7 +496,7 @@ private:
         }
 
         QTextStream in(&file);
-        in.setCodec("UTF-8");
+        KisPortingUtils::setUtf8OnStream(in);
         for (quint32 y = 0; y < m_fftHeight; y++)
         {
             for (quint32 x = 0; x < m_fftWidth; x++)

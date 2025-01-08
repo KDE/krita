@@ -13,7 +13,6 @@
 #include <QBrush>
 #include <QColor>
 #include <QPen>
-#include <QMatrix>
 #include <QImage>
 #include <QMap>
 #include <QPainter>

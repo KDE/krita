@@ -8,8 +8,6 @@
 
 #include <QString>
 
-#include "KoGenericRegistry.h"
-
 #include <kis_types.h>
 
 #include "kritaimpex_export.h"

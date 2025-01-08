@@ -100,8 +100,11 @@ public:
                                  KisProcessingApplicator *applicator = nullptr);
 
 protected:
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QVariant retrieveData(const QString &mimetype, QVariant::Type preferredType) const override;
+#else
+    QVariant retrieveData(const QString &mimetype, QMetaType preferredType) const override;
+#endif
 
 private:
     static void initializeExternalNode(KisNodeSP *nodes,

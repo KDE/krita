@@ -164,8 +164,11 @@ QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage, con
 
     return result;
 }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type preferredType) const
+#else
+QVariant KisMimeData::retrieveData(const QString &mimetype, QMetaType preferredType) const
+#endif
 {
     /**
      * HACK ALERT:

@@ -460,6 +460,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         Core5Compat
         OpenGL
         OpenGLWidgets
+        SvgWidgets
     )
 endif()
 

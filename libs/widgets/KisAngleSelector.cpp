@@ -85,8 +85,11 @@ void KisAngleSelectorSpinBox::setFlat(bool newFlat)
     m_d->isFlat = newFlat;
     m_d->updateStyleSheet();
 }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KisAngleSelectorSpinBox::enterEvent(QEvent *e)
+#else
+void KisAngleSelectorSpinBox::enterEvent(QEnterEvent *e)
+#endif
 {
     m_d->isHovered = true;
     m_d->updateStyleSheet();

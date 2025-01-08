@@ -38,7 +38,11 @@ public:
     QSize sizeHint() const override;
     void refreshStyle();
 protected:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void enterEvent(QEvent *e) override;
+#else
+    void enterEvent(QEnterEvent *e) override;
+#endif
     void leaveEvent(QEvent *e) override;
     void focusInEvent(QFocusEvent *e) override;
     void focusOutEvent(QFocusEvent *e) override;

@@ -115,9 +115,12 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void enterEvent(QEvent *e) override;
+#else
+    void enterEvent(QEnterEvent *e) override;
+#endif
     void leaveEvent(QEvent *e) override;
-
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

@@ -69,8 +69,11 @@ KoZoomInput::~KoZoomInput()
 {
     delete d;
 }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KoZoomInput::enterEvent(QEvent* event)
+#else
+void KoZoomInput::enterEvent(QEnterEvent* event)
+#endif
 {
     Q_UNUSED(event);
 

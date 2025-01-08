@@ -60,7 +60,11 @@ QSize KoDockWidgetTitleBarButton::minimumSizeHint() const
 }
 
 // redraw the button when the mouse enters or leaves it
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KoDockWidgetTitleBarButton::enterEvent(QEvent *event)
+#else
+void KoDockWidgetTitleBarButton::enterEvent(QEnterEvent *event)
+#endif
 {
     if (isEnabled())
         update();

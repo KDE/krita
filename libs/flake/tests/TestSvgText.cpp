@@ -1058,8 +1058,8 @@ void TestSvgText::testTrailingWhitespace()
     for (auto itL = linkChunk.constBegin(); itL != linkChunk.constEnd(); ++itL) {
         for (auto itA = chunkA.constBegin(); itA != chunkA.constEnd(); ++itA) {
             for (auto itB = chunkB.constBegin(); itB != chunkB.constEnd(); ++itB) {
-                if (itA->rightRef(1) != " " &&
-                    itB->leftRef(1) != " " &&
+                if (itA->right(1) != " " &&
+                    itB->left(1) != " " &&
                     *itL != " " &&
                     *itL != linkChunk.last()) continue;
 

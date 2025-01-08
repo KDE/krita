@@ -181,6 +181,7 @@ KisCubicCurve::KisCubicCurve(const QList<KisCubicCurvePoint> &points)
     d->data->keepSorted();
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 KisCubicCurve::KisCubicCurve(const QVector<QPointF> &points)
     : KisCubicCurve(points.toList())
 {}
@@ -188,6 +189,7 @@ KisCubicCurve::KisCubicCurve(const QVector<QPointF> &points)
 KisCubicCurve::KisCubicCurve(const QVector<KisCubicCurvePoint> &points)
     : KisCubicCurve(points.toList())
 {}
+#endif
 
 KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve)
     : d(new Private(*curve.d))

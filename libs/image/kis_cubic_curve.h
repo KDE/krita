@@ -55,8 +55,10 @@ class KRITAIMAGE_EXPORT KisCubicCurve : public boost::equality_comparable<KisCub
 {
 public:
     KisCubicCurve();
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KisCubicCurve(const QList<QPointF>& points);
     KisCubicCurve(const QList<KisCubicCurvePoint>& points);
+#endif
     KisCubicCurve(const QVector<QPointF>& points);
     KisCubicCurve(const QVector<KisCubicCurvePoint>& points);
     KisCubicCurve(const QString &curveString);

@@ -15,15 +15,13 @@
 #include <QOpenGLBuffer>
 #include <QTransform>
 #include <KisGLImageF16.h>
-#include <opengl/KisSurfaceColorSpace.h>
-
 
 class KisGLImageWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
 public:
     KisGLImageWidget(QWidget *parent = nullptr);
-    KisGLImageWidget(KisSurfaceColorSpace colorSpace,
+    KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
                      QWidget *parent = nullptr);
 
     ~KisGLImageWidget();

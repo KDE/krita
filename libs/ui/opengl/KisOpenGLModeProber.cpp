@@ -50,13 +50,13 @@ const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
 
-    const KisSurfaceColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
-    if (surfaceColorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+    const QSurfaceFormat::ColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
+    if (surfaceColorSpace == QSurfaceFormat::ColorSpace::sRGBColorSpace) {
         // use the default one!
 #ifdef HAVE_HDR
-    } else if (surfaceColorSpace == KisSurfaceColorSpace::scRGBColorSpace) {
+    } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p709G10Profile();
-    } else if (surfaceColorSpace == KisSurfaceColorSpace::bt2020PQColorSpace) {
+    } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::bt2020PQColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
 #endif
     }
@@ -224,13 +224,13 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     return result;
 }
 
-bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs, const KisSurfaceColorSpace &rhs)
+bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs)
 {
     return lhs == rhs ||
-        ((lhs == KisSurfaceColorSpace::DefaultColorSpace ||
-          lhs == KisSurfaceColorSpace::sRGBColorSpace) &&
-         (rhs == KisSurfaceColorSpace::DefaultColorSpace ||
-          rhs == KisSurfaceColorSpace::sRGBColorSpace));
+        ((lhs == QSurfaceFormat::ColorSpace::DefaultColorSpace ||
+          lhs == QSurfaceFormat::ColorSpace::sRGBColorSpace) &&
+         (rhs == QSurfaceFormat::ColorSpace::DefaultColorSpace ||
+          rhs == QSurfaceFormat::ColorSpace::sRGBColorSpace));
 }
 
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
@@ -243,13 +243,13 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
         format->setAlphaBufferSize(2);
-        format->setColorSpace(KisSurfaceColorSpace::bt2020PQColorSpace);
+        format->setColorSpace(QSurfaceFormat::ColorSpace::bt2020PQColorSpace);
     } else if (config == KisConfig::BT709_G10) {
         format->setRedBufferSize(16);
         format->setGreenBufferSize(16);
         format->setBlueBufferSize(16);
         format->setAlphaBufferSize(16);
-        format->setColorSpace(KisSurfaceColorSpace::scRGBColorSpace);
+        format->setColorSpace(QSurfaceFormat::ColorSpace::scRGBColorSpace);
     } else
 #else
     if (config == KisConfig::BT2020_PQ) {
@@ -271,7 +271,7 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here
-        format->setColorSpace(KisSurfaceColorSpace::DefaultColorSpace);
+        format->setColorSpace(QSurfaceFormat::ColorSpace::DefaultColorSpace);
 #endif
     }
 }
@@ -281,14 +281,14 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 #ifdef HAVE_HDR
 
     bool isBt2020PQ =
-        format.colorSpace() == KisSurfaceColorSpace::bt2020PQColorSpace &&
+        format.colorSpace() == QSurfaceFormat::ColorSpace::bt2020PQColorSpace &&
         format.redBufferSize() == 10 &&
         format.greenBufferSize() == 10 &&
         format.blueBufferSize() == 10 &&
         format.alphaBufferSize() == 2;
 
     bool isBt709G10 =
-        format.colorSpace() == KisSurfaceColorSpace::scRGBColorSpace &&
+        format.colorSpace() == QSurfaceFormat::ColorSpace::scRGBColorSpace &&
         format.redBufferSize() == 16 &&
         format.greenBufferSize() == 16 &&
         format.blueBufferSize() == 16 &&

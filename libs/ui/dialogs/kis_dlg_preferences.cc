@@ -1704,15 +1704,15 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 
 namespace {
 
-QString colorSpaceString(KisSurfaceColorSpace cs, int depth)
+QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
 {
     const QString csString =
 #ifdef HAVE_HDR
-        cs == KisSurfaceColorSpace::bt2020PQColorSpace ? "Rec. 2020 PQ" :
-        cs == KisSurfaceColorSpace::scRGBColorSpace ? "Rec. 709 Linear" :
+        cs == QSurfaceFormat::ColorSpace::bt2020PQColorSpace ? "Rec. 2020 PQ" :
+        cs == QSurfaceFormat::ColorSpace::scRGBColorSpace ? "Rec. 709 Linear" :
 #endif
-        cs == KisSurfaceColorSpace::sRGBColorSpace ? "sRGB" :
-        cs == KisSurfaceColorSpace::DefaultColorSpace ? "sRGB" :
+        cs == QSurfaceFormat::ColorSpace::sRGBColorSpace ? "sRGB" :
+        cs == QSurfaceFormat::ColorSpace::DefaultColorSpace ? "sRGB" :
         "Unknown Color Space";
 
     return QString("%1 (%2 bit)").arg(csString).arg(depth);
@@ -1840,10 +1840,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
     grpHDRWarning->setVisible(false);
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::scRGBColorSpace, 16));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::bt2020PQColorSpace, 10));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::scRGBColorSpace, 16));
 #endif
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
@@ -1889,7 +1889,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-        KisSurfaceColorSpace colorSpace = currentFormat.colorSpace();
+        QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
 
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
@@ -2043,7 +2043,7 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
-                    info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+                    info.colorSpace == QSurfaceFormat::ColorSpace::sRGBColorSpace) {
                     grpHDRWarning->setVisible(true);
                     grpHDRWarning->setPixmap(
                         grpHDRWarning->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));

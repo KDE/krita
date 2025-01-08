@@ -12,7 +12,6 @@
 #include "kritaui_export.h"
 #include "kis_config.h"
 #include <QSurfaceFormat>
-#include "KisSurfaceColorSpace.h"
 #include <boost/optional.hpp>
 #include "kis_opengl.h"
 
@@ -37,8 +36,8 @@ public:
     boost::optional<Result> probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
                                         bool adjustGlobalState = true);
 
-    static bool fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs,
-                                        const KisSurfaceColorSpace &rhs);
+    static bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs,
+                                        const QSurfaceFormat::ColorSpace &rhs);
     static QString angleRendererToString(KisOpenGL::AngleRenderer renderer);
 
 public:

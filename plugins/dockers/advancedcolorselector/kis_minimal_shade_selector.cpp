@@ -70,11 +70,7 @@ void KisMinimalShadeSelector::updateSettings()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
 
     QString stri = cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0");
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QStringList strili = stri.split(';', Qt::SkipEmptyParts);
-#else
-    QStringList strili = stri.split(';', QString::SkipEmptyParts);
-#endif
 
     int lineCount = strili.size();
     while(lineCount-m_shadingLines.size() > 0) {

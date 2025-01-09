@@ -54,11 +54,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
     if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
         QTextStream developersText(&fileDevelopers);
         KisPortingUtils::setUtf8OnStream(developersText);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         authors.append(developersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
-#else
-        authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
-#endif
     }
     authors.append(".</p></body></html>");
     wdgTab->lblAuthors->setText(authors);
@@ -117,11 +113,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
         QTextStream creditsText(&fileCredits);
         KisPortingUtils::setUtf8OnStream(creditsText);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', Qt::SkipEmptyParts)) {
-#else
-        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', QString::SkipEmptyParts)) {
-#endif
 
             if (credit.contains(":")) {
                 QList<QString> creditSplit = credit.split(':');
@@ -177,11 +169,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                                       "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
                                       "<p>Krita is built on the following free software libraries:</p><p><ul>");
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', Qt::SkipEmptyParts)) {
-#else
-        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', QString::SkipEmptyParts)) {
-#endif
 
             if (!lib.startsWith("#")) {
                 QStringList parts = lib.split(',');

@@ -49,9 +49,7 @@ KisGLImageWidget::KisGLImageWidget(KisSurfaceColorSpace colorSpace,
 {
     Q_UNUSED(colorSpace);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     setTextureFormat(GL_RGBA16F);
-#endif
 
 #ifdef HAVE_HDR
     setTextureColorSpace(colorSpace);

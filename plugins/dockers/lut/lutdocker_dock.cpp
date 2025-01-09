@@ -229,11 +229,7 @@ bool LutDockerDock::canChangeExposureAndGamma() const
 
 
 #ifdef HAVE_HDR
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     KisSurfaceColorSpace currentColorSpace = KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace();
-#else
-    KisSurfaceColorSpace currentColorSpace = KisSurfaceColorSpace::DefaultColorSpace;
-#endif
 #endif
 
     const bool exposureManagementEnabled =

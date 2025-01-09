@@ -49,11 +49,7 @@ WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
 
     m_shadeLineGroup->setExclusive(false);
     slotSetShadeLineCount(m_ui->sbShadeLineCount->value());
-#if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
     connect(m_shadeLineGroup, SIGNAL(idClicked(int)), SLOT(slotShowLineEditor(int)));
-#else
-    connect(m_shadeLineGroup, SIGNAL(buttonClicked(int)), SLOT(slotShowLineEditor(int)));
-#endif
 }
 
 WGColorSelectorSettings::~WGColorSelectorSettings()

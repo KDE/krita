@@ -46,12 +46,7 @@ getShapes(QList<KoShape *> shapesInside, QList<KoShape *> shapesSubtract, const 
                     subpathPolygons.append(precisionTF.map(subPath).toPolygon());
                 }
                 subpathPolygons = KoPolygonUtils::offsetPolygons(subpathPolygons, shapeMargin);
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                 p.clear();
-#else
-                p = QPainterPath();
-#endif
-
                 Q_FOREACH (const QPolygon poly, subpathPolygons) {
                     p.addPolygon(poly);
                 }
@@ -165,11 +160,7 @@ static bool getFirstPosition(QPointF &firstPoint,
             for (int j=i; j< offsetPoly.size(); j++){
                 QLineF line2 = offsetPoly.at(j);
                 QPointF intersectPoint;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                 QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
-#else
-                QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
-#endif
                 if (intersect != QLineF::NoIntersection) {
                     // should proly handle 'reflex' vertices better.
                     if (!p.contains(intersectPoint)) {

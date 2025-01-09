@@ -380,11 +380,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
     } else if (pixelDepth1 == 8) {
         format = QImage::Format_ARGB32;
     } else {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
         format = QImage::Format_RGBA64;
-#else
-        throw ASLParseException("Qt does not support RGBA64!");
-#endif
     }
 
     QImage image(arrayRect.size(), format);

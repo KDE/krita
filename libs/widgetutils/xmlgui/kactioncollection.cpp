@@ -236,11 +236,7 @@ const QList< QActionGroup * > KisKActionCollection::actionGroups() const
         if (action->actionGroup()) {
             set.insert(action->actionGroup());
         }
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     return QList<QActionGroup*>(set.begin(), set.end());
-#else
-    return QList<QActionGroup*>::fromSet(set);
-#endif
 }
 
 QAction *KisKActionCollection::addCategorizedAction(const QString &name, QAction *action, const QString &categoryName)

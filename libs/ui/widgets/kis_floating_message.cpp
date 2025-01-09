@@ -110,12 +110,7 @@ void KisFloatingMessage::showMessage()
     m_messageLabel->setWordWrap(m_alignment & Qt::TextWordWrap);
     m_messageLabel->adjustSize();
 
-    QRect geom;
-#if QT_VERSION >= QT_VERSION_CHECK(5,13,0)
-    geom = determineMetrics(fontMetrics().horizontalAdvance('x'));
-#else
-    geom = determineMetrics(fontMetrics().width('x'));
-#endif
+    QRect geom = determineMetrics(fontMetrics().horizontalAdvance('x'));
     setGeometry(geom);
     setWindowOpacity(OSD_WINDOW_OPACITY);
 
@@ -162,7 +157,6 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     // determine a sensible maximum size, don't cover the whole desktop or cross the screen
     const QSize margin( (M + MARGIN) * 2, (M + MARGIN) * 2); //margins
     const QSize image = m_icon.isNull() ? QSize(0, 0) : minImageSize;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QRect geom = parentWidget()->geometry();
     QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
     QScreen *s = qApp->screenAt(p);
@@ -173,10 +167,6 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     else {
         max = QSize(1024, 768);
     }
-#else
-    const QSize max = QApplication::desktop()->availableGeometry(parentWidget()).size() - margin;
-#endif
-
 
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
     m_message.replace(QRegExp( " +\n"), "\n");
@@ -207,7 +197,6 @@ QRect KisFloatingMessage::determineMetrics( const int M )
 
 
     const QSize newSize = rect.size();
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QRect screen;
     if (s) {
         screen = s->availableGeometry();
@@ -215,10 +204,6 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     else {
         screen = QRect(0, 0, 1024, 768);
     }
-#else
-    QRect screen = QApplication::desktop()->screenGeometry(parentWidget());
-#endif
-
 
     QPoint newPos(MARGIN, MARGIN);
 

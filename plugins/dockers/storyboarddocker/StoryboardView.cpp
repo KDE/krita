@@ -154,12 +154,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
         parentRect.setTopLeft(parentRect.topLeft() + QPoint(5, 5));
         parentRect.setBottomRight(parentRect.bottomRight() - QPoint(5, 5));
         int fontHeight = fontMetrics().height() + 3;
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
         int numericFontWidth = fontMetrics().horizontalAdvance("0");
-#else
-    int numericFontWidth = fontMetrics().width("0");
-#endif
-
 
         int parentWidth = parentRect.width();
         int childRow = index.row();

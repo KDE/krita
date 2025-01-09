@@ -884,11 +884,7 @@ void KisView::dropEvent(QDropEvent *event)
             }
             QList<int> colorLabels;
             {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
                 const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
-#else
-                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
-#endif
 
                 for (const QString &colorLabelStr : colorLabelsStr) {
                     bool ok;

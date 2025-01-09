@@ -167,11 +167,20 @@ QRect KisFloatingMessage::determineMetrics( const int M )
     else {
         max = QSize(1024, 768);
     }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
     m_message.replace(QRegExp( " +\n"), "\n");
     // remove consecutive line breaks
     m_message.replace(QRegExp( "\n+"), "\n");
+#else
+    // If we don't do that, the boundingRect() might not be suitable for drawText() (Qt issue N67674)
+    QRegExp r(" +\n");
+    r.replaceIn(m_message, "\n");
+
+     // remove consecutive line breaks
+    QRegExp r2(( "\n+"));
+    r2.replaceIn(m_message, "\n");
+#endif
 
     // The osd cannot be larger than the screen
     QRect rect = fontMetrics().boundingRect(0, 0, max.width() - image.width(), max.height(),

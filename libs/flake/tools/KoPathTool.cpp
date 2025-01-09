@@ -878,11 +878,7 @@ void KoPathTool::activate(const QSet<KoShape*> &shapes)
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
     m_canvasConnections.addConnection(d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     m_shapeFillResourceConnector.connectToCanvas(d->canvas);
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     initializeWithShapes(QList<KoShape*>(shapes.begin(), shapes.end()));
-#else
-    initializeWithShapes(QList<KoShape*>::fromSet(shapes));
-#endif
     connect(m_actionCurvePoint, SIGNAL(triggered()), this, SLOT(pointToCurve()), Qt::UniqueConnection);
     connect(m_actionLinePoint, SIGNAL(triggered()), this, SLOT(pointToLine()), Qt::UniqueConnection);
     connect(m_actionLineSegment, SIGNAL(triggered()), this, SLOT(segmentToLine()), Qt::UniqueConnection);
@@ -1112,11 +1108,7 @@ void KoPathTool::pointSelectionChanged()
 {
     Q_D(KoToolBase);
     updateActions();
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>(m_pointSelection.selectedPoints().begin(), m_pointSelection.selectedPoints().end()));
-#else
-    d->canvas->snapGuide()->setIgnoredPathPoints(QList<KoPathPoint*>::fromSet(m_pointSelection.selectedPoints()));
-#endif
     Q_EMIT selectionChanged(m_pointSelection.hasSelection());
 }
 

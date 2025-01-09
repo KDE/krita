@@ -102,9 +102,7 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     m_page->cmbRenderType->setPlaceholderText(i18nc("Not applicable. No render types without valid ffmpeg path.", "N/A"));
-#endif
 
     {   // Establish connections...
         connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));

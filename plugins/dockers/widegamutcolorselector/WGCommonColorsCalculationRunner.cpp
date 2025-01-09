@@ -232,9 +232,5 @@ QList<QRgb> WGCommonColorsCalculationRunner::getColors()
             colorList.insert(tmpImage.pixel(i, j)|qRgba(0,0,0,255));
         }
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     return QList<QRgb>(colorList.begin(), colorList.end());
-#else
-    return QList<QRgb>::fromSet(colorList);
-#endif
 }

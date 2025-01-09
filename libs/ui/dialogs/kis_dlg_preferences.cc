@@ -1855,11 +1855,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
     if (context) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
-#else
-        QScreen *screen = 0;
-#endif
         KisScreenInformationAdapter adapter(context);
         if (screen && adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
@@ -1889,7 +1885,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
@@ -2039,11 +2034,7 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
 
     QOpenGLContext *context = QOpenGLContext::currentContext();
     if (context) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         QScreen *screen = QGuiApplication::screenAt(rect().center());
-#else
-        QScreen *screen = 0;
-#endif
         KisScreenInformationAdapter adapter(context);
         if (adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);

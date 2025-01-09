@@ -1463,11 +1463,7 @@ void KisAnimTimelineFramesView::insertKeyframes(int count, int timing, TimelineD
     }
 
     if (!rows.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
         m_d->model->insertFrames(insertionColumn, QList<int>(rows.begin(), rows.end()), count, timing);
-#else
-        m_d->model->insertFrames(insertionColumn, QList<int>::fromSet(rows), count, timing);
-#endif
     }
 }
 

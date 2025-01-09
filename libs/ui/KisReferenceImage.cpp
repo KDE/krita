@@ -17,9 +17,7 @@
 #include <QImageReader>
 #include <QUrl>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
 #include <QColorSpace>
-#endif
 
 #include <kundo2command.h>
 #include <KoStore.h>
@@ -84,9 +82,7 @@ struct KisReferenceImage::Private : public QSharedData
         // See https://bugs.kde.org/show_bug.cgi?id=416515 -- a jpeg image
         // loaded into a qimage cannot be saved to png unless we explicitly
         // convert the colorspace of the QImage
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         image.convertToColorSpace(QColorSpace(QColorSpace::SRgb));
-#endif
 
         return (!image.isNull());
     }

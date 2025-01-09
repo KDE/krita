@@ -714,10 +714,8 @@ public:
             ORDER_BY(!isFallbackOnly(lhs.rendererId()), !isFallbackOnly(rhs.rendererId()));
         }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         ORDER_BY(isPreferredColorSpace(lhs.format.colorSpace()),
                  isPreferredColorSpace(rhs.format.colorSpace()));
-#endif
 
         if (doPreferHDR()) {
             ORDER_BY(isHDRFormat(lhs.format), isHDRFormat(rhs.format));
@@ -1009,11 +1007,7 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
     if (preferredRenderer != RendererNone) {
         Q_FOREACH (const KisOpenGL::RendererConfig &config, preferredConfigs) {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
             dbgDetection() <<"Probing format..." << config.format.colorSpace() << config.rendererId();
-#else
-            dbgDetection() <<"Probing format..." << config.rendererId();
-#endif
             Info info = KisOpenGLModeProber::instance()->probeFormat(config);
 
             if (info && info->isSupportedVersion()) {
@@ -1042,12 +1036,8 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
 
         {
             const bool colorSpaceIsCorrect =
-        #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
                     KisOpenGLModeProber::fuzzyCompareColorSpaces(compareOp.preferredColorSpace(),
                                                                  resultConfig.format.colorSpace());
-#else
-                    true;
-#endif
 
             const bool rendererIsCorrect =
                     compareOp.preferredRendererByUser() == KisOpenGL::RendererAuto ||

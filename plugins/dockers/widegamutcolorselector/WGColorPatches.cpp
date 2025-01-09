@@ -20,11 +20,7 @@
 
 namespace {
     inline QPoint transposed(QPoint point) {
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
         return point.transposed();
-#else
-        return QPoint(point.y(), point.x());
-#endif
     }
 }
 WGColorPatches::WGColorPatches(WGSelectorDisplayConfigSP displayConfig, KisUniqueColorSet *history, QWidget *parent)

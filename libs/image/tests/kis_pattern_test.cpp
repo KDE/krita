@@ -53,18 +53,10 @@ void KoPatternTest::testRoundTripMd5()
     QImage im2 = patPattern.pattern().convertToFormat(QImage::Format_ARGB32);
 
     QCryptographicHash h1(QCryptographicHash::Md5);
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     h1.addData(QByteArray::fromRawData((const char*)im1.constBits(), im1.sizeInBytes()));
-#else
-    h1.addData(QByteArray::fromRawData((const char*)im1.constBits(), im1.byteCount()));
-#endif
 
     QCryptographicHash h2(QCryptographicHash::Md5);
-#if QT_VERSION >= QT_VERSION_CHECK(5,10,0)
     h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.sizeInBytes()));
-#else
-    h2.addData(QByteArray::fromRawData((const char*)im2.constBits(), im2.byteCount()));
-#endif
 
     // Compares the images: they should be the same
     QCOMPARE(h1.result(), h2.result());

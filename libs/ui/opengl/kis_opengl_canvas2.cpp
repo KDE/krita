@@ -99,7 +99,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
     setUpdateBehavior(PartialUpdate);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     // we should make sure the texture doesn't have alpha channel,
     // otherwise blending will not work correctly.
     if (KisOpenGLModeProber::instance()->useHDRMode()) {
@@ -118,7 +117,6 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
             setTextureFormat(GL_RGB8);
         }
     }
-#endif
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));

@@ -22,25 +22,6 @@
 
 namespace
 {
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-// FIXME This is to support Ubuntu 16.04. Remove this after dropping support of Qt < 5.10.
-QString qlocale_formattedDataSize(qint64 bytes)
-{
-    static QStringList suffixes = {"B", "KiB", "MiB", "GiB", "TiB"};
-    constexpr const qreal divider = 1024;
-
-    int index = 0;
-    qreal size = bytes;
-
-    while (size > divider && index < suffixes.length()) {
-        size /= divider;
-        ++index;
-    }
-
-    return QString("%1 %2").arg(size, 0, 'f', 1).arg(suffixes[index]);
-}
-#endif
-
 
 constexpr int valueRole = Qt::UserRole + 1;
 constexpr int defaultColumnMargin = 16;
@@ -148,11 +129,7 @@ void RecorderSnapshotsManager::onScanningFinished(SnapshotDirInfoList snapshots)
         model->appendRow({
             new CheckedIconItem(info.thumbnail, ui->treeDirectories->iconSize()),
             nameCol,
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
             new DataSortedItem(locale.formattedDataSize(info.size), info.size),
-#else
-            new DataSortedItem(qlocale_formattedDataSize(info.size), info.size),
-#endif
             new DataSortedItem(info.dateTime.toString(dateFormat), info.dateTime.toMSecsSinceEpoch())
         });
     }
@@ -214,12 +191,7 @@ void RecorderSnapshotsManager::updateSpaceToBeFreed()
     QAbstractItemModel *model = ui->treeDirectories->model();
     for (const QModelIndex &index : indexes)
         totalSize += model->data(index, valueRole).toULongLong();
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     ui->labelSpace->setText(locale().formattedDataSize(totalSize));
-#else
-    ui->labelSpace->setText(qlocale_formattedDataSize(totalSize));
-#endif
     ui->buttonSelectAll->setText(indexes.size() != model->rowCount() ? i18n("Select All") : i18n("Select None"));
 }
 

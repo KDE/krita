@@ -497,11 +497,7 @@ void KoShapeManager::preparePaintJobs(PaintJobsOrder &jobsOrder,
             rootShapesSet.insert(shape);
         }
     }
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     const QList<KoShape*> rootShapes(rootShapesSet.begin(), rootShapesSet.end());
-#else
-    const QList<KoShape*> rootShapes = QList<KoShape*>::fromSet(rootShapesSet);
-#endif
     QList<KoShape*> newRootShapes;
 
     Q_FOREACH (KoShape *srcShape, rootShapes) {

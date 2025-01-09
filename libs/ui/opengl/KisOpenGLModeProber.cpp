@@ -48,8 +48,6 @@ const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
 {
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
-
     const QSurfaceFormat::ColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
     if (surfaceColorSpace == QSurfaceFormat::ColorSpace::sRGBColorSpace) {
         // use the default one!
@@ -60,9 +58,6 @@ const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
 #endif
     }
-
-#endif
-
     return profile;
 }
 
@@ -101,12 +96,6 @@ private:
     QSurfaceFormat m_oldFormat;
 };
 
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 10, 0))
-QString qEnvironmentVariable(const char *varName) {
-    return qgetenv(varName);
-}
-#endif
 
 struct EnvironmentSetter
 {
@@ -210,12 +199,10 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         return boost::none;
     }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
     if (!fuzzyCompareColorSpaces(context.format().colorSpace(), format.colorSpace())) {
         dbgOpenGL << "Failed to create an OpenGL context with requested color space. Requested:" << format.colorSpace() << "Actual:" << context.format().colorSpace();
         return boost::none;
     }
-#endif
 
     Result result(context);
 
@@ -263,16 +250,9 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setRedBufferSize(8);
         format->setGreenBufferSize(8);
         format->setBlueBufferSize(8);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         format->setAlphaBufferSize(8);
-#else
-        format->setAlphaBufferSize(0);
-#endif
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
         // TODO: check if we can use real sRGB space here
         format->setColorSpace(QSurfaceFormat::ColorSpace::DefaultColorSpace);
-#endif
     }
 }
 

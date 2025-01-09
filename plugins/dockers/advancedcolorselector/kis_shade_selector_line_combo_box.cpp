@@ -63,7 +63,6 @@ void KisShadeSelectorLineComboBox::showPopup()
     m_popup->show();
 
     const int widgetMargin = 20;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
     QScreen *screen = qApp->screenAt(QCursor::pos());
     QRect fitRect;
     if (screen) {
@@ -72,9 +71,6 @@ void KisShadeSelectorLineComboBox::showPopup()
     else {
         fitRect = kisGrowRect(QRect(0, 0, 1024, 768), -widgetMargin);
     }
-#else
-    QRect fitRect = kisGrowRect(QApplication::desktop()->screenGeometry(), -widgetMargin);
-#endif
     QRect popupRect = m_popup->rect();
     popupRect.moveTo(mapToGlobal(QPoint()));
     popupRect = kisEnsureInRect(popupRect, fitRect);

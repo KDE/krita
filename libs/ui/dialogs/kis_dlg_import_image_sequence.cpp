@@ -16,7 +16,6 @@
 #include <QRegExp>
 #include <QListWidgetItem>
 
-
 class KisDlgImportImageSequence::ListItem : QListWidgetItem {
 
 public:
@@ -29,9 +28,13 @@ public:
     {
         if (collator->numericMode()) {
             const QRegExp rx(QLatin1String("[^0-9]+"));
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             QStringList ours = text().split(rx, Qt::SkipEmptyParts);
             QStringList theirs = other.text().split(rx, Qt::SkipEmptyParts);
+#else
+            QStringList ours = rx.splitString(this->text(), Qt::SkipEmptyParts);
+            QStringList theirs = rx.splitString(other.text(), Qt::SkipEmptyParts);
+#endif
 
             // Let's compare the last numbers -- they are most likely to be the serial numbers
             if (ours.size() > 0 && theirs.size() > 0) {

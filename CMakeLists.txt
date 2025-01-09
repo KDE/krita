@@ -898,7 +898,11 @@ set_package_properties(WebP PROPERTIES
 ##
 ## Test for KSeExpr
 ##
-find_package(KSeExpr 4.0.0.0)
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(KSeExpr 4.0.0.0)
+else()
+    find_package(KSeExpr 5.0.0.0)
+endif() 
 set_package_properties(KSeExpr PROPERTIES
     URL "https://invent.kde.org/graphics/kseexpr"
     TYPE OPTIONAL

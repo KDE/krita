@@ -259,7 +259,7 @@ void KisToolFreehandHelper::initPaint(KoPointerEvent *event,
 
 bool KisToolFreehandHelper::isRunning() const
 {
-    return m_d->strokeId;
+    return !m_d->strokeId.isNull();
 }
 
 void KisToolFreehandHelper::initPaintImpl(qreal startAngle,

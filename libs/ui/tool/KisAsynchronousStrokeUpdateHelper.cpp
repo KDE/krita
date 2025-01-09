@@ -59,7 +59,7 @@ void KisAsynchronousStrokeUpdateHelper::cancelUpdateStream()
 
 bool KisAsynchronousStrokeUpdateHelper::isActive() const
 {
-    return m_strokeId;
+    return !m_strokeId.isNull();
 }
 
 void KisAsynchronousStrokeUpdateHelper::setCustomUpdateDataFactory(KisAsynchronousStrokeUpdateHelper::UpdateDataFactory factory)

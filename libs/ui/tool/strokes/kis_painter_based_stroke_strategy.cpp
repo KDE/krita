@@ -124,7 +124,7 @@ int KisPainterBasedStrokeStrategy::numMaskedPainters() const
 
 bool KisPainterBasedStrokeStrategy::needsMaskingUpdates() const
 {
-    return m_maskingBrushRenderer;
+    return !m_maskingBrushRenderer.isNull();
 }
 
 QVector<KisRunnableStrokeJobData *> KisPainterBasedStrokeStrategy::doMaskingBrushUpdates(const QVector<QRect> &rects)

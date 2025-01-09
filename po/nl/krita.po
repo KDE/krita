@@ -50,7 +50,7 @@
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Sander Koning <sanderkoning@kde.nl>, 2006.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016.
@@ -62,14 +62,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-08 03:22+0000\n"
-"PO-Revision-Date: 2024-11-23 12:10+0100\n"
+"PO-Revision-Date: 2025-01-09 00:02+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7919,12 +7919,10 @@ msgstr "Bij punt afbreken"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Bij segment afbreken"
+msgstr "Bij selectie afbreken"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16461,18 +16459,16 @@ msgstr ""
 "in te voegen."
 
 #: libs/flake/tools/KoPathTool.cpp:708
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Druk op B om het pad te verbreken op het geselecteerde punt."
+msgstr "Druk op %1 om het pad te verbreken op het geselecteerde punt."
 
 #: libs/flake/tools/KoPathTool.cpp:710
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Druk op B om het pad te verbreken op geselecteerde segmenten."
+msgstr "Druk op %1 om het pad te verbreken op geselecteerde segmenten."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

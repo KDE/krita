@@ -159,7 +159,7 @@ private:
     int scrollButtonWidth() const
     {
         QStyleOption opt;
-        opt.init(this);
+        opt.initFrom(this);
         return style()->pixelMetric(QStyle::PM_TabBarScrollButtonWidth, &opt, this);
     }
 

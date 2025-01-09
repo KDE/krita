@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-05 01:54+0000\n"
+"POT-Creation-Date: 2025-01-09 01:54+0000\n"
 "PO-Revision-Date: 2024-12-21 10:56+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12982,14 +12982,14 @@ msgstr "Con&vertix"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
+#: plugins/dockers/layerdocker/LayerBox.cpp:1232
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecciona"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -16071,49 +16071,49 @@ msgid "Activate angle snap"
 msgstr "Activa l'ajust de l'angle"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
-#: libs/basicflakes/tools/KoPencilTool.cpp:297
+#: libs/basicflakes/tools/KoPencilTool.cpp:298
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "Precisió:"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:299
+#: libs/basicflakes/tools/KoPencilTool.cpp:300
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "En brut"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:300
+#: libs/basicflakes/tools/KoPencilTool.cpp:301
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
 msgstr "Corba"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:301
+#: libs/basicflakes/tools/KoPencilTool.cpp:302
 #, kde-format
 msgid "Straight"
 msgstr "Recta"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:310
-#: libs/basicflakes/tools/KoPencilTool.cpp:316
+#: libs/basicflakes/tools/KoPencilTool.cpp:311
+#: libs/basicflakes/tools/KoPencilTool.cpp:317
 #, kde-format
 msgid "Optimize"
 msgstr "Optimitza"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:322
+#: libs/basicflakes/tools/KoPencilTool.cpp:323
 #, kde-format
 msgid "Exactness:"
 msgstr "Exactitud:"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:355
 #: libs/basicflakes/tools/KoPencilTool.cpp:356
+#: libs/basicflakes/tools/KoPencilTool.cpp:357
 #, kde-format
 msgid "Pencil"
 msgstr "Llapis"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
-#: libs/basicflakes/tools/KoPencilTool.cpp:361
+#: libs/basicflakes/tools/KoPencilTool.cpp:362
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
 #, kde-format
@@ -16532,23 +16532,23 @@ msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>Text variable</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "S'ha trobat més d'un node «text»!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:151
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "S'ha trobat un node de tipus «%1» desconegut!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:163
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "No s'ha trobat cap node «text»!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:844
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:402
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:857
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "S'ha produït un error desconegut en escriure l'element de text SVG"
@@ -16663,7 +16663,6 @@ msgstr "Red&uix"
 #. i18n: ectx: property (text), widget (QToolButton, bnLower)
 #. i18n: ectx: property (text), widget (QToolButton, bnRaise)
 #. i18n: ectx: property (text), widget (QToolButton, bnProperties)
-#. i18n: ectx: property (text), widget (QToolButton, bnAddColorOverlayMask)
 #. i18n: ectx: property (text), widget (QToolButton, bnDelete)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectConfigurationFile)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectLut)
@@ -16738,8 +16737,7 @@ msgstr "Red&uix"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:316
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:357
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -17518,8 +17516,8 @@ msgstr "Gir (Y)"
 msgid "Rotation (Z)"
 msgstr "Gir (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
+#: libs/widgets/KoZoomAction.cpp:205
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -22832,7 +22830,7 @@ msgstr "Propietats de la capa"
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
-#: plugins/dockers/layerdocker/LayerBox.cpp:214
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
@@ -28570,12 +28568,12 @@ msgstr "Editeu l'entrada de la roda del ratolí"
 msgid "Activate"
 msgstr "Activa"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:27
+#: libs/ui/input/kis_alternate_invocation_action.cpp:29
 #, kde-format
 msgid "Alternate Invocation"
 msgstr "Invocació alternativa"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:28
+#: libs/ui/input/kis_alternate_invocation_action.cpp:30
 #, kde-format
 msgid ""
 "The <i>Alternate Invocation</i> action performs an alternate action with the "
@@ -28586,37 +28584,37 @@ msgstr ""
 "l'eina actual. Per exemple, utilitzant l'eina de pinzell, se selecciona un "
 "color des del llenç."
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:30
+#: libs/ui/input/kis_alternate_invocation_action.cpp:32
 #, kde-format
 msgid "Primary Mode"
 msgstr "Mode primari"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:31
+#: libs/ui/input/kis_alternate_invocation_action.cpp:33
 #, kde-format
 msgid "Secondary Mode"
 msgstr "Mode secundari"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:32
+#: libs/ui/input/kis_alternate_invocation_action.cpp:34
 #, kde-format
 msgid "Tertiary Mode"
 msgstr "Mode terciari"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:35
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
 msgstr "Mostra el color de primer pla des de la capa actual"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:36
+#: libs/ui/input/kis_alternate_invocation_action.cpp:38
 #, kde-format
 msgid "Sample Background Color from Current Layer"
 msgstr "Mostra el color de fons des de la capa actual"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
 msgstr "Mostra de color de primer pla des de la imatge fusionada"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:39
+#: libs/ui/input/kis_alternate_invocation_action.cpp:41
 #, kde-format
 msgid "Sample Background Color from Merged Image"
 msgstr "Mostra el color de fons des de la imatge fusionada"
@@ -28642,12 +28640,12 @@ msgstr "Fotograma següent"
 msgid "Previous Frame"
 msgstr "Fotograma anterior"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:22
+#: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, kde-format
 msgid "Change Primary Setting"
 msgstr "Canvia la configuració primària"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:23
+#: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
 msgid ""
 "The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
@@ -28657,12 +28655,12 @@ msgstr ""
 "primària d'una eina. Per exemple, la mida del pinzell per a l'eina de "
 "pinzell."
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:25
+#: libs/ui/input/kis_change_primary_setting_action.cpp:28
 #, kde-format
 msgid "Normal"
 msgstr "Normal"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:26
+#: libs/ui/input/kis_change_primary_setting_action.cpp:29
 #, kde-format
 msgid "Snap"
 msgstr "Ajusta"
@@ -30019,8 +30017,8 @@ msgstr "Trieu el pinzell predefinit"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:399
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -39272,12 +39270,12 @@ msgstr "Historial de desfer"
 msgid "Layers"
 msgstr "Capes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "Mostra la màscara de &selecció global"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:258
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -39286,24 +39284,24 @@ msgstr ""
 "Mostra la selecció global com a una màscara de selecció normal en "
 "l'acoblador de <b>Capes</b>"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:326
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Mida de les miniatures"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:354
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Sagnat de l'arbre"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Estil d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:379
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39317,43 +39315,43 @@ msgstr ""
 "Equilibrat: Mostra l'opacitat i el mode de barreja si canvien.\n"
 "Detallat: Mostra l'opacitat i el mode de barreja encara que no canvien."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Cap"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Senzill"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Equilibrat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Detallat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Opacitat del text d'informació de la barreja"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Inclosa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:420
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39365,34 +39363,34 @@ msgstr ""
 "Si no està marcada, mostra davall els noms de les capes (si hi ha prou "
 "espai)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:432
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Casella de selecció per a seleccionar capes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:433
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Mostra una casella de selecció per a seleccionar/desseleccionar capes."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:1010
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1033
+#: plugins/dockers/layerdocker/LayerBox.cpp:1032
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancel·la la màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Can&via els bloquejos i la visibilitat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
@@ -39449,14 +39447,8 @@ msgstr "Mou cap amunt la capa o màscara"
 msgid "View or change the layer properties"
 msgstr "Veu o canvia les propietats de la capa"
 
-#. i18n: ectx: property (toolTip), widget (QToolButton, bnAddColorOverlayMask)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:313
-#, kde-format
-msgid "Add a Color Overlay Mask for inking"
-msgstr "Afig una màscara de superposició de color per a la tinta"
-
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:354
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Suprimix la capa o màscara"
@@ -58360,7 +58352,7 @@ msgstr ""
 msgid "Multibrush Tool"
 msgstr "Eina de pinzell múltiple"
 
-#: plugins/tools/basictools/kis_tool_pan.cpp:79
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
 msgid "Pan Tool"
 msgstr "Eina de desplaçament"
@@ -61994,3 +61986,6 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgid "Add a Color Overlay Mask for inking"
+#~ msgstr "Afig una màscara de superposició de color per a la tinta"

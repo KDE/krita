@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-05 01:54+0000\n"
+"POT-Creation-Date: 2025-01-09 01:54+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12929,14 +12929,14 @@ msgstr "转换(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
+#: plugins/dockers/layerdocker/LayerBox.cpp:1232
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "选择(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -15996,49 +15996,49 @@ msgid "Activate angle snap"
 msgstr "启用角度吸附"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrecision)
-#: libs/basicflakes/tools/KoPencilTool.cpp:297
+#: libs/basicflakes/tools/KoPencilTool.cpp:298
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
 msgstr "精度："
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:299
+#: libs/basicflakes/tools/KoPencilTool.cpp:300
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
 msgstr "原始"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:300
+#: libs/basicflakes/tools/KoPencilTool.cpp:301
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
 msgstr "曲线"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:301
+#: libs/basicflakes/tools/KoPencilTool.cpp:302
 #, kde-format
 msgid "Straight"
 msgstr "直线"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:310
-#: libs/basicflakes/tools/KoPencilTool.cpp:316
+#: libs/basicflakes/tools/KoPencilTool.cpp:311
+#: libs/basicflakes/tools/KoPencilTool.cpp:317
 #, kde-format
 msgid "Optimize"
 msgstr "算法优化"
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:322
+#: libs/basicflakes/tools/KoPencilTool.cpp:323
 #, kde-format
 msgid "Exactness:"
 msgstr "精度："
 
-#: libs/basicflakes/tools/KoPencilTool.cpp:355
 #: libs/basicflakes/tools/KoPencilTool.cpp:356
+#: libs/basicflakes/tools/KoPencilTool.cpp:357
 #, kde-format
 msgid "Pencil"
 msgstr "手绘路径"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
-#: libs/basicflakes/tools/KoPencilTool.cpp:361
+#: libs/basicflakes/tools/KoPencilTool.cpp:362
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:17
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:51
 #, kde-format
@@ -16453,23 +16453,23 @@ msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>请替换此段文字为你的文字。</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:148
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "找到多个 \"文字\" 节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:151
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "找到类型为“%1”的未知节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:163
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "找不到 \"文字\" 节点！"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:844
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:402
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:857
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "写入 SVG 文字元素时发生未知错误"
@@ -16581,7 +16581,6 @@ msgstr "缩小(&M)"
 #. i18n: ectx: property (text), widget (QToolButton, bnLower)
 #. i18n: ectx: property (text), widget (QToolButton, bnRaise)
 #. i18n: ectx: property (text), widget (QToolButton, bnProperties)
-#. i18n: ectx: property (text), widget (QToolButton, bnAddColorOverlayMask)
 #. i18n: ectx: property (text), widget (QToolButton, bnDelete)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectConfigurationFile)
 #. i18n: ectx: property (text), widget (QToolButton, m_bnSelectLut)
@@ -16656,8 +16655,7 @@ msgstr "缩小(&M)"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:316
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:357
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -17426,8 +17424,8 @@ msgstr "旋转 (Y)"
 msgid "Rotation (Z)"
 msgstr "旋转 (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:195
-#: libs/widgets/KoZoomAction.cpp:206
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
+#: libs/widgets/KoZoomAction.cpp:205
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -22670,7 +22668,7 @@ msgstr "图层属性"
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
-#: plugins/dockers/layerdocker/LayerBox.cpp:214
+#: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
@@ -28265,12 +28263,12 @@ msgstr "编辑鼠标滚轮输入"
 msgid "Activate"
 msgstr "激活"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:27
+#: libs/ui/input/kis_alternate_invocation_action.cpp:29
 #, kde-format
 msgid "Alternate Invocation"
 msgstr "临时切换工具模式"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:28
+#: libs/ui/input/kis_alternate_invocation_action.cpp:30
 #, kde-format
 msgid ""
 "The <i>Alternate Invocation</i> action performs an alternate action with the "
@@ -28280,37 +28278,37 @@ msgstr ""
 "按住这些快捷键将切换到当前工具的备选功能，松开后返回原功能。例如使用手绘笔刷"
 "时左键的正常功能是绘画，而按住 Ctrl 点击左键可临时拾取画布颜色。"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:30
+#: libs/ui/input/kis_alternate_invocation_action.cpp:32
 #, kde-format
 msgid "Primary Mode"
 msgstr "第一模式"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:31
+#: libs/ui/input/kis_alternate_invocation_action.cpp:33
 #, kde-format
 msgid "Secondary Mode"
 msgstr "第二模式"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:32
+#: libs/ui/input/kis_alternate_invocation_action.cpp:34
 #, kde-format
 msgid "Tertiary Mode"
 msgstr "第三模式"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:35
+#: libs/ui/input/kis_alternate_invocation_action.cpp:37
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
 msgstr "拾取当前图层颜色为前景色"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:36
+#: libs/ui/input/kis_alternate_invocation_action.cpp:38
 #, kde-format
 msgid "Sample Background Color from Current Layer"
 msgstr "拾取当前图层颜色为背景色"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:38
+#: libs/ui/input/kis_alternate_invocation_action.cpp:40
 #, kde-format
 msgid "Sample Foreground Color from Merged Image"
 msgstr "拾取合并图像颜色为前景色"
 
-#: libs/ui/input/kis_alternate_invocation_action.cpp:39
+#: libs/ui/input/kis_alternate_invocation_action.cpp:41
 #, kde-format
 msgid "Sample Background Color from Merged Image"
 msgstr "拾取合并图像颜色为背景色"
@@ -28336,12 +28334,12 @@ msgstr "下一帧"
 msgid "Previous Frame"
 msgstr "上一帧"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:22
+#: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, kde-format
 msgid "Change Primary Setting"
 msgstr "增减工具首要参数的数值"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:23
+#: libs/ui/input/kis_change_primary_setting_action.cpp:26
 #, kde-format
 msgid ""
 "The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
@@ -28350,12 +28348,12 @@ msgstr ""
 "按住这些快捷键后拖动光标，即可在原地调整当前工具的首要参数数值。例如按住 "
 "Shift 左右拖动可以调整笔刷大小。"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:25
+#: libs/ui/input/kis_change_primary_setting_action.cpp:28
 #, kde-format
 msgid "Normal"
 msgstr "正常"
 
-#: libs/ui/input/kis_change_primary_setting_action.cpp:26
+#: libs/ui/input/kis_change_primary_setting_action.cpp:29
 #, kde-format
 msgid "Snap"
 msgstr "吸附"
@@ -29696,8 +29694,8 @@ msgstr "笔刷预设列表"
 
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
-#: plugins/dockers/layerdocker/LayerBox.cpp:211
-#: plugins/dockers/layerdocker/LayerBox.cpp:399
+#: plugins/dockers/layerdocker/LayerBox.cpp:210
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -38718,36 +38716,36 @@ msgstr "撤销历史"
 msgid "Layers"
 msgstr "图层"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:255
+#: plugins/dockers/layerdocker/LayerBox.cpp:254
 #, kde-format
 msgid "&Show Global Selection Mask"
 msgstr "显示全局选区蒙版(&S)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:258
+#: plugins/dockers/layerdocker/LayerBox.cpp:257
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr "把全局选区作为一个选区蒙版显示在<b>图层</b>面板"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:326
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "缩略图大小"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:354
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "树状缩进"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "图层名称栏混合信息"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:379
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38761,43 +38759,43 @@ msgstr ""
 "平衡：不透明度、混合模式其中之一被更改后，同时显示两者。\n"
 "完整：不透明度、混合模式无论是否更改，始终显示。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "无"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "简洁"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:386
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "平衡"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:387
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "详细"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:400
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "图层混合信息文字不透明度"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "显示为一行"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:420
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38807,34 +38805,34 @@ msgstr ""
 "勾选此项，图层混合信息将显示在图层名称右侧。\n"
 "不勾选时，图层混合信息将显示在图层名称下方 (当空间足够时)。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:432
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "显示图层选择框"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:433
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "显示用于选择/取消选择图层的复选框。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1011
+#: plugins/dockers/layerdocker/LayerBox.cpp:1010
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1033
+#: plugins/dockers/layerdocker/LayerBox.cpp:1032
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "取消快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1243
+#: plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "隐藏/锁定/透明度(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1249
 #: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
@@ -38891,14 +38889,8 @@ msgstr "上移图层/蒙版"
 msgid "View or change the layer properties"
 msgstr "查看或更改图层属性"
 
-#. i18n: ectx: property (toolTip), widget (QToolButton, bnAddColorOverlayMask)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:313
-#, kde-format
-msgid "Add a Color Overlay Mask for inking"
-msgstr "添加颜色叠加蒙板以便描线"
-
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:354
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "删除图层/蒙版"
@@ -57347,7 +57339,7 @@ msgstr "多路笔刷工具不支持超过 %1 路笔画。请使用更大的笔�
 msgid "Multibrush Tool"
 msgstr "多路笔刷工具"
 
-#: plugins/tools/basictools/kis_tool_pan.cpp:79
+#: plugins/tools/basictools/kis_tool_pan.cpp:81
 #, kde-format
 msgid "Pan Tool"
 msgstr "视图平移工具/抓手"
@@ -60923,3 +60915,6 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
+
+#~ msgid "Add a Color Overlay Mask for inking"
+#~ msgstr "添加颜色叠加蒙板以便描线"

@@ -12,6 +12,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QSlider>
+#include <QActionGroup>
 
 #include <KoResource.h>
 #include <KisResourceItemChooser.h>

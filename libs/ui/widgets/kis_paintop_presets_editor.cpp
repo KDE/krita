@@ -21,6 +21,7 @@
 #include <QWidgetAction>
 #include <QScreen>
 #include <QSplitter>
+#include <QActionGroup>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>

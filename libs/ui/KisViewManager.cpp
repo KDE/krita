@@ -42,6 +42,7 @@
 #include <QUrl>
 #include <QWidget>
 #include <QActionGroup>
+#include <QRegExp>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>
@@ -1011,7 +1012,12 @@ void KisViewManager::slotSaveIncremental()
     // If the filename has a version, prepare it for incrementation
     if (foundVersion) {
         version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         if (version.contains(QRegExp("[a-z]"))) {
+#else
+        if (QRegExp("[a-z]").containedIn(version)) {
+#endif
+
             version.chop(1);             //  Trim "."
             letter = version.right(1);   //  Save letter
             version.chop(1);             //  Trim letter
@@ -1028,7 +1034,11 @@ void KisViewManager::slotSaveIncremental()
         QString extensionPlusVersion = matches2.at(0);
         extensionPlusVersion.prepend(version);
         extensionPlusVersion.prepend("_");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         fileName.replace(regex2, extensionPlusVersion);
+#else
+        regex2.replaceIn(fileName, extensionPlusVersion);
+#endif
     }
 
     // Prepare the base for new version filename
@@ -1049,7 +1059,11 @@ void KisViewManager::slotSaveIncremental()
         } else {
             newVersion.append(".");
         }
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         fileName.replace(regex, newVersion);
+#else
+        regex.replaceIn(fileName, newVersion);
+#endif
         fileAlreadyExists = QFileInfo(path + '/' + fileName).exists();
         if (fileAlreadyExists) {
             if (!letter.isNull()) {
@@ -1101,7 +1115,11 @@ void KisViewManager::slotSaveIncrementalBackup()
     if (workingOnBackup) {
         // Try to save incremental version (of backup), use letter for alt versions
         version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         if (version.contains(QRegExp("[a-z]"))) {
+#else
+        if (QRegExp("[a-z]").containedIn(version)) {
+#endif
             version.chop(1);             //  Trim "."
             letter = version.right(1);   //  Save letter
             version.chop(1);             //  Trim letter
@@ -1125,7 +1143,11 @@ void KisViewManager::slotSaveIncrementalBackup()
             newVersion.prepend("~");
             if (!letter.isNull()) newVersion.append(letter);
             newVersion.append(".");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             backupFileName.replace(regex, newVersion);
+#else
+            regex.replaceIn(backupFileName, newVersion);
+#endif
             fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 if (!letter.isNull()) {
@@ -1156,14 +1178,22 @@ void KisViewManager::slotSaveIncrementalBackup()
         QString extensionPlusVersion = matches2.at(0);
         extensionPlusVersion.prepend(baseNewVersion);
         extensionPlusVersion.prepend("~");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         backupFileName.replace(regex2, extensionPlusVersion);
+#else
+        regex2.replaceIn(backupFileName, extensionPlusVersion);
+#endif
 
         // Save version with 1 number higher than the highest version found ignoring letters
         do {
             newVersion = baseNewVersion;
             newVersion.prepend("~");
             newVersion.append(".");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             backupFileName.replace(regex, newVersion);
+#else
+            regex.replaceIn(backupFileName, newVersion);
+#endif
             fileAlreadyExists = QFile(path + '/' + backupFileName).exists();
             if (fileAlreadyExists) {
                 // Prepare the base for new version filename, increment by 1

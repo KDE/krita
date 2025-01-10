@@ -14,6 +14,7 @@
 #include <QWidgetAction>
 #include <QSet>
 #include <QBuffer>
+#include <QActionGroup>
 
 #include <klocalizedstring.h>
 #include <resources/KoAbstractGradient.h>

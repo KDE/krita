@@ -38,10 +38,10 @@ void KisDitherUtil::setPattern(const QString &md5sum, const QString &patternName
         for (int y = 0; y < image.height(); ++y) {
             for (int x = 0; x < image.width(); ++x) {
                 const QColor pixel = image.pixelColor(x, y);
-                lightnessMin = std::min(lightnessMin, pixel.lightnessF());
-                lightnessMax = std::max(lightnessMax, pixel.lightnessF());
-                alphaMin = std::min(alphaMin, pixel.alphaF());
-                alphaMax = std::max(alphaMax, pixel.alphaF());
+                lightnessMin = std::min(lightnessMin, (qreal)pixel.lightnessF());
+                lightnessMax = std::max(lightnessMax, (qreal)pixel.lightnessF());
+                alphaMin = std::min(alphaMin, (qreal)pixel.alphaF());
+                alphaMax = std::max(alphaMax, (qreal)pixel.alphaF());
             }
         }
         m_patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);

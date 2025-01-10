@@ -41,6 +41,7 @@
 #include <QToolBar>
 #include <QUrl>
 #include <QWidget>
+#include <QActionGroup>
 
 #include <kactioncollection.h>
 #include <klocalizedstring.h>

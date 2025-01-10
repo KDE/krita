@@ -464,7 +464,7 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
     proposedPaths << "/usr/local/bin/" + processName;
 #endif
     dbgFile << proposedPaths;
-    for (auto end = proposedPaths.size(), i = 0; i != end; ++i) {
+    for (int i = 0; i != proposedPaths.size(); ++i) {
         if (proposedPaths[i].isEmpty()) continue;
 
 #ifdef Q_OS_WIN

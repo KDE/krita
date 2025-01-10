@@ -16,6 +16,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QPixmapCache>
+#include <QColorSpace>
 
 #include <QDir>
 #include <QFile>
@@ -708,14 +709,17 @@ public:
     }
 
     bool operator()(const KisOpenGL::RendererConfig &lhs, const KisOpenGL::RendererConfig &rhs) const {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredColorSpace != QSurfaceFormat::ColorSpace::DefaultColorSpace);
-
+#else
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_preferredColorSpace != QColorSpace());
+#endif
         if (m_preferredRendererByUser != KisOpenGL::RendererSoftware) {
             ORDER_BY(!isFallbackOnly(lhs.rendererId()), !isFallbackOnly(rhs.rendererId()));
         }
 
-        ORDER_BY(isPreferredColorSpace(lhs.format.colorSpace()),
-                 isPreferredColorSpace(rhs.format.colorSpace()));
+        ORDER_BY(isPreferredColorSpace(lhs.format),
+                 isPreferredColorSpace(rhs.format));
 
         if (doPreferHDR()) {
             ORDER_BY(isHDRFormat(lhs.format), isHDRFormat(rhs.format));
@@ -748,9 +752,16 @@ public:
 
 
 public:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void setPreferredColorSpace(const QSurfaceFormat::ColorSpace &preferredColorSpace) {
         m_preferredColorSpace = preferredColorSpace;
     }
+#else
+    void setPreferredColorSpace(const QColorSpace &preferredColorSpace) {
+        m_preferredColorSpace = preferredColorSpace;
+    }
+
+#endif
 
     void setPreferredRendererByQt(const KisOpenGL::OpenGLRenderer &preferredRendererByQt) {
         m_preferredRendererByQt = preferredRendererByQt;
@@ -780,7 +791,11 @@ public:
         return m_openGLESBlacklisted;
     }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QSurfaceFormat::ColorSpace preferredColorSpace() const {
+#else
+    const QColorSpace &preferredColorSpace() const {
+#endif
         return m_preferredColorSpace;
     }
 
@@ -817,20 +832,28 @@ private:
 
     bool doPreferHDR() const {
 #ifdef HAVE_HDR
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         return m_preferredColorSpace == QSurfaceFormat::ColorSpace::bt2020PQColorSpace ||
             m_preferredColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace;
+#else
+        return m_preferredColorSpace == QColorSpace(QColorSpace::NamedColorSpace::Bt2100Pq);
+#endif
 #else
         return false;
 #endif
     }
 
-    bool isPreferredColorSpace(const QSurfaceFormat::ColorSpace cs) const {
-        return KisOpenGLModeProber::fuzzyCompareColorSpaces(m_preferredColorSpace, cs);
+    bool isPreferredColorSpace(const QSurfaceFormat & surfaceFormat) const {
+        return KisOpenGLModeProber::fuzzyCompareColorSpaces(m_preferredColorSpace, surfaceFormat.colorSpace());
         return false;
     }
 
 private:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QSurfaceFormat::ColorSpace m_preferredColorSpace = QSurfaceFormat::ColorSpace::DefaultColorSpace;
+#else
+    QColorSpace m_preferredColorSpace;
+#endif
     KisOpenGL::OpenGLRenderer m_preferredRendererByQt = KisOpenGL::RendererDesktopGL;
     KisOpenGL::OpenGLRenderer m_preferredRendererByUser = KisOpenGL::RendererAuto;
     KisOpenGL::OpenGLRenderer m_preferredRendererByHDR = KisOpenGL::RendererAuto;
@@ -921,7 +944,11 @@ KisOpenGL::RendererConfig KisOpenGL::selectSurfaceConfig(KisOpenGL::OpenGLRender
         QSurfaceFormat::ColorSpace::bt2020PQColorSpace);
 #else
     Q_UNUSED(preferredRootSurfaceFormat);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     compareOp.setPreferredColorSpace(QSurfaceFormat::ColorSpace::sRGBColorSpace);
+#else
+    compareOp.setPreferredColorSpace(QColorSpace(QColorSpace::NamedColorSpace::SRgb));
+#endif
 #endif
 
 #ifdef Q_OS_WIN

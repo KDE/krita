@@ -186,8 +186,17 @@ QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &p
     KisPortingUtils::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     s << (ev.device()->type() ? "TouchPad" : "TouchScreen") << " ";
+#else
+    if (ev.deviceType() == QInputDevice::DeviceType::TouchPad) {
+        s << "Touchpad";
+    }
+    else if (ev.deviceType() == QInputDevice::DeviceType::TouchScreen) {
+        s << "TouchScreen";
+    }
+    s << " ";
+#endif
     for (const auto& touchpoint: ev.touchPoints()) {
         s << "id: " << touchpoint.id() << " ";
         s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";

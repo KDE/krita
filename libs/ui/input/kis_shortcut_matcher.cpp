@@ -391,7 +391,11 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->maxTouchPoints = event->touchPoints().size();
     m_d->matchingIteration = 1;
     m_d->isTouchDragDetected = false;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+#else
+    m_d->bestCandidateTouchEvent.reset(event->clone());
+#endif
 
     return !notifier.isInRecursion();
 }
@@ -505,11 +509,23 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &loc
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
         m_d->touchShortcut = 0;
         QScopedPointer<QEvent> dstEvent;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         KoPointerEvent::copyQtPointerEvent(event, dstEvent);
+#else
+        dstEvent.reset(event->clone());
+#endif
+
         // HACK: Because TouchEvents in KoPointerEvent need to contain at least one touchpoint
         QTouchEvent* touchEvent = dynamic_cast<QTouchEvent *>(dstEvent.data());
         KIS_ASSERT(touchEvent);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         touchEvent->setTouchPoints(m_d->lastTouchPoints);
+#else
+        dstEvent.reset(new QTouchEvent(event->type(),
+                                       event->pointingDevice(),
+                                       event->modifiers(),
+                                       m_d->lastTouchPoints));
+#endif
         touchShortcut->action()->end(dstEvent.data());
         touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }
@@ -957,7 +973,12 @@ void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
     int touchPointCount = event->touchPoints().size();
     if (touchPointCount > m_d->maxTouchPoints) {
         m_d->maxTouchPoints = touchPointCount;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+#else
+        m_d->bestCandidateTouchEvent.reset(event->clone());
+#endif
+
     }
 }
 

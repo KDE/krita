@@ -35219,10 +35219,9 @@ msgid "About &KDE"
 msgstr "O prostředí &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Jednotka:"
+msgstr "Jednotka"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -39122,10 +39121,9 @@ msgid "File extension:"
 msgstr "Přípona souboru:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:101
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgid "Clean Up"
-msgstr "Vyčistit: "
+msgstr "Vyčistit"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:161
 #, kde-format

@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-08 03:22+0000\n"
-"PO-Revision-Date: 2024-11-23 14:24+0100\n"
+"PO-Revision-Date: 2025-01-08 23:26+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -7877,12 +7877,10 @@ msgstr "Prelomi v točki"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Razdeli pri odseku"
+msgstr "Prelomi pri izboru"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16409,18 +16407,16 @@ msgstr ""
 "točko poti."
 
 #: libs/flake/tools/KoPathTool.cpp:708
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Pritisnite B, da prelomite pot v izbranih točkah."
+msgstr "Pritisnite %1, da prelomite pot v izbrani točki."
 
 #: libs/flake/tools/KoPathTool.cpp:710
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Pritisnite B, da prelomite pot na izbranih odsekih."
+msgstr "Pritisnite %1, da prelomite pot na izbranih odsekih."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

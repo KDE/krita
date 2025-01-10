@@ -13,7 +13,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <stdio.h>
 
 #include "KisViewManager.h"
 #include <QPrinter>
@@ -81,7 +80,6 @@
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_control_frame.h"
-#include "kis_coordinates_converter.h"
 #include "KisDocument.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_filter_manager.h"
@@ -91,7 +89,6 @@
 #include <kis_layer.h>
 #include "kis_mainwindow_observer.h"
 #include "kis_mask_manager.h"
-#include "kis_mimedata.h"
 #include "kis_mirror_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node.h"
@@ -102,7 +99,6 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include <KoUpdater.h>
-#include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
@@ -127,8 +123,7 @@
 #include <KisIdleTasksManager.h>
 #include <KisImageBarrierLock.h>
 #include <KisTextPropertiesManager.h>
-
-#include "kis_filter_configuration.h"
+#include <kis_selection.h>
 
 #ifdef Q_OS_WIN
 #include "KisWindowsPackageUtils.h"

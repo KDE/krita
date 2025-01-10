@@ -190,9 +190,9 @@ void KisSegmentGradientEditor::setCompactMode(bool value)
 void KisSegmentGradientEditor::setGradient(KoSegmentGradientSP gradient)
 {
     m_gradient = gradient;
-    setEnabled(m_gradient);
+    setEnabled(!m_gradient.isNull());
 
-    if (m_gradient) {
+    if (!m_gradient.isNull()) {
         nameedit->setText(m_gradient->name());
         gradientSlider->setGradientResource(m_gradient);
     }

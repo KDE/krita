@@ -41,7 +41,7 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024, 2025 Freek de Kruijf <freekdekruijf@kde.nl>
 # Alexander S. Koning, 2006.
 # Niels Reedijk <n.reedijk@planet.nl>, 2000.
 # Rinse de Vries <rinse@kde.nl>, 2003, 2004.
@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-10 01:18+0000\n"
-"PO-Revision-Date: 2024-12-21 11:20+0100\n"
+"PO-Revision-Date: 2025-01-11 13:29+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -24599,7 +24599,7 @@ msgstr "Het ICM-profiel voor uw gekalibreerde monitor"
 #: libs/ui/forms/wdgcolorsettings.ui:191
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "&Rendermethode:"
+msgstr "&Render-intentie:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -24768,7 +24768,7 @@ msgstr "Kleurruimteconversie"
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "&Rendermodus"
+msgstr "&Rendering-intentie"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgconvertcolorspace.ui:46

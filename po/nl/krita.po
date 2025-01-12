@@ -62,9 +62,9 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-08 03:22+0000\n"
-"PO-Revision-Date: 2025-01-09 00:02+0100\n"
+"PO-Revision-Date: 2025-01-11 13:30+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24436,7 +24436,7 @@ msgstr "Het ICM-profiel voor uw gekalibreerde monitor"
 #: libs/ui/forms/wdgcolorsettings.ui:166
 #, kde-format
 msgid "&Rendering intent:"
-msgstr "&Rendermethode:"
+msgstr "&Rendering-intentie:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -24605,7 +24605,7 @@ msgstr "Kleurruimteconversie"
 #: libs/ui/forms/wdgconvertcolorspace.ui:40
 #, kde-format
 msgid "&Rendering Intent"
-msgstr "&Rendermodus"
+msgstr "&Rendering-intentie"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioPerceptual)
 #: libs/ui/forms/wdgconvertcolorspace.ui:46

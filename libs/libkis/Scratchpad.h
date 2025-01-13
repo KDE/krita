@@ -8,10 +8,15 @@
 
 #include <QObject>
 #include <QColor>
+#include <QWidget>
+
 #include <kis_types.h>
-#include "kritalibkis_export.h"
+
 #include "libkis.h"
 #include "View.h"
+
+#include "kritalibkis_export.h"
+
 
 class KoCanvasBase;
 class Canvas; // This comes from Python. This would be maybe better

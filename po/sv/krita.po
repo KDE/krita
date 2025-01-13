@@ -42,7 +42,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
-# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023, 2024, 2025 Stefan Asserhäll <stefan.asserhall@gmail.com>
 # Stefan Asserhall <stefan.asserhall@gmail.com>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Arve Eriksson <031299870@telia.com>, 2011.
 # Arve Eriksson <031299870@telia.com>, 2010.
@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-10 01:18+0000\n"
-"PO-Revision-Date: 2024-12-03 21:44+0100\n"
+"PO-Revision-Date: 2025-01-12 09:31+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -7906,12 +7906,10 @@ msgstr "Dela vid punkt"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Dela vid segment"
+msgstr "Dela vid markering"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -11495,29 +11493,24 @@ msgstr "Filtermask"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Lägg till färgläggningsmask"
+msgstr "Lägg till &färgöverlagringsmask"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Lägg till en ny färgläggningsmask"
+msgstr "Lägg till en ny snabb färgöverlagringsfiltermask"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Fast Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Snabb färgöverlagring"
+msgstr "Snabb färgöverlagringsmask"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -16595,18 +16588,16 @@ msgstr ""
 "konturpunkt."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Tryck på B för att dela upp kontur vid markerad punkt."
+msgstr "Tryck på %1 för att dela upp kontur vid markerad punkt."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Tryck på B för att dela upp kontur vid markerade segment."
+msgstr "Tryck på %1 för att dela upp kontur vid markerade segment."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -17148,18 +17139,16 @@ msgid "Change Clone Layers"
 msgstr "Ändra dupliceringslager"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Dra ihop panel"
+msgstr "Dra ihop nod %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Expandera nod %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -29694,17 +29683,14 @@ msgid "Add Transform Mask"
 msgstr "Lägg till transformeringsmask"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Fast Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Snabb färgöverlagring"
+msgstr "Lägg till snabb färgöverlagring"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Färgöverlagring"
+msgstr "Färgöverlagringsmask"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -36811,10 +36797,7 @@ msgid "A scheme with this name already exists."
 msgstr "Ett system med det här namnet finns redan."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
@@ -37114,10 +37097,9 @@ msgstr "Egen färg"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Verktygsalternativ"
+msgstr "Styrkomponentalternativ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -58990,10 +58972,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Ange namnet som du vill använda för att spara profilen:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Tyvärr är angivet namn ogiltigt."
+msgstr "Angivet namn är ogiltigt."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -60865,19 +60846,14 @@ msgid "Patch Radius:"
 msgstr "Fläckradie:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
-"Tyvärr byggdes Krita utan stöd för GNU:s vetenskapliga bibliotek, så det går "
-"inte att skala markeringen med grepp. Kompilera Krita med stöd för GNU:s "
+"Krita byggdes utan stöd för GNU:s vetenskapliga bibliotek, så det går inte "
+"att skala markeringen med grepp. Kompilera Krita med stöd för GNU:s "
 "vetenskapliga bibliotek, eller använd den grafiska alternativkomponenten för "
 "att redigera skalningsvärden för hand."
 

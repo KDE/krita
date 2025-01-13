@@ -14,7 +14,7 @@
 
 void KisCategorizedListModelTest::test()
 {
-    KisCategorizedListModel<QString, QStringConverter> model;
+    KisCategorizedListModel<QString, StringConverter> model;
     ModelTest modelTest(&model);
 }
 

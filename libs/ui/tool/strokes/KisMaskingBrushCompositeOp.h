@@ -273,7 +273,7 @@ inline T colorBurnAlpha(T src, T dst)
 {
     using namespace Arithmetic;
     using namespace KoCompositeOpClampPolicy;
-    return FunctorWithSDRClampPolicy<CFColorBurn, T>::composeChannel(src, dst);
+    return CFColorBurn<T>::composeChannel(src, dst);
 }
 
 template <typename channels_type>

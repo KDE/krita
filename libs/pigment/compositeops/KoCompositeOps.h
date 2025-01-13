@@ -238,7 +238,7 @@ struct AddGeneralOps<Traits, true>
              add<CFVividLight<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_VIVID_LIGHT_HDR, KoCompositeOp::categoryLight());
          }
          add<CFFlatLight<Arg>    >(cs, COMPOSITE_FLAT_LIGHT  , KoCompositeOp::categoryLight());
-         add<CFPinLight<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_PIN_LIGHT, KoCompositeOp::categoryLight()); // using HDR mode as default
+         add<CFPinLight<Arg>>(cs, COMPOSITE_PIN_LIGHT, KoCompositeOp::categoryLight()); // using HDR mode as default
          add<&cfLinearLight<Arg> >(cs, COMPOSITE_LINEAR_LIGHT, KoCompositeOp::categoryLight());
          add<&cfPNormA<Arg>      >(cs, COMPOSITE_PNORM_A     , KoCompositeOp::categoryLight());
          add<&cfPNormB<Arg>      >(cs, COMPOSITE_PNORM_B     , KoCompositeOp::categoryLight());
@@ -247,7 +247,7 @@ struct AddGeneralOps<Traits, true>
          add<&cfFogLightenIFSIllusions<Arg>>(cs, COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS, KoCompositeOp::categoryLight());
          add<&cfEasyDodge<Arg>   >(cs, COMPOSITE_EASY_DODGE  , KoCompositeOp::categoryLight());
 
-         add<CFColorBurn<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_BURN, KoCompositeOp::categoryDark()); // using HDR mode as default
+         add<CFColorBurn<Arg>>(cs, COMPOSITE_BURN, KoCompositeOp::categoryDark()); // using HDR mode as default
          add<CFLinearBurn<Arg, ClampAsFloatHDR>>(cs, COMPOSITE_LINEAR_BURN , KoCompositeOp::categoryDark()); // using HDR mode as default
          add<&cfDarkenOnly<Arg> >(cs, COMPOSITE_DARKEN      , KoCompositeOp::categoryDark());
          add<CFGammaDark<Arg>   >(cs, COMPOSITE_GAMMA_DARK  , KoCompositeOp::categoryDark());

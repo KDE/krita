@@ -49,7 +49,7 @@ public:
         Q_ASSERT(newPattern->valid());
 
         QVariant v;
-        v.setValue<KoPatternSP>(newPattern);
+        v.setValue(newPattern);
         manager->setResource(KoCanvasResource::CurrentPattern, v);
 
         KisResourcesSnapshotSP resources =

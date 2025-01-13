@@ -9,6 +9,7 @@
 
 #include <QByteArray>
 #include <QDataStream>
+#include <QIODevice>
 
 #include <KoColorModelStandardIds.h>
 #include <KoConfig.h>

@@ -62,7 +62,12 @@ public Q_SLOTS:
     virtual void showPopup(Move move=MoveToMousePosition);
 
 public:
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void enterEvent(QEvent *e) override;
+#else
+    void enterEvent(QEnterEvent *e) override;
+#endif
+
     void leaveEvent(QEvent *e) override;
 
     void mousePressEvent(QMouseEvent *) override;

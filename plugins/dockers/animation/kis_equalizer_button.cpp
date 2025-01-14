@@ -131,7 +131,11 @@ QSize KisEqualizerButton::minimumSizeHint() const
     return QSize(10, sh.height());
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KisEqualizerButton::enterEvent(QEvent *event)
+#else
+void KisEqualizerButton::enterEvent(QEnterEvent *event)
+#endif
 {
     Q_UNUSED(event);
 

@@ -50,7 +50,7 @@ inline void possiblyClampValuesToSDR(float& dstR, float& dstG, float& dstB)
 }
 }
 
-template<class HSXType, typename channels_type>
+template<typename channels_type>
 struct CFReorientedNormalMapCombine : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
 {
     static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
@@ -268,7 +268,7 @@ struct CFHue : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channe
     }
 };
 
-template<class HSXType, typename channels_type>
+template<typename channels_type>
 struct CFTangentNormalmap : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
 {
     static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {

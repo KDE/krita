@@ -328,8 +328,8 @@ struct AddRGBOps<Traits, true>
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,green_pos>(cs, COMPOSITE_COPY_GREEN, KoCompositeOp::categoryMisc()));
         cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,blue_pos >(cs, COMPOSITE_COPY_BLUE , KoCompositeOp::categoryMisc()));
 
-        add<CFTangentNormalmap<HSYType,channels_type> >(cs, COMPOSITE_TANGENT_NORMALMAP  , KoCompositeOp::categoryMisc());
-        add<CFReorientedNormalMapCombine<HSYType, channels_type>>(cs, COMPOSITE_COMBINE_NORMAL, KoCompositeOp::categoryMisc());
+        add<CFTangentNormalmap<channels_type> >(cs, COMPOSITE_TANGENT_NORMALMAP  , KoCompositeOp::categoryMisc());
+        add<CFReorientedNormalMapCombine<channels_type>>(cs, COMPOSITE_COMBINE_NORMAL, KoCompositeOp::categoryMisc());
         add<CFColor<HSYType, channels_type>>(cs, COMPOSITE_COLOR, KoCompositeOp::categoryHSY());
         add<CFHue<HSYType, channels_type>>(cs, COMPOSITE_HUE, KoCompositeOp::categoryHSY());
         add<CFSaturation<HSYType, channels_type>>(cs, COMPOSITE_SATURATION, KoCompositeOp::categoryHSY());

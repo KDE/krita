@@ -292,14 +292,6 @@ KisHistogramPainter::KisHistogramPainter()
     m_d->defaultColor = Qt::gray;
 }
 
-KisHistogramPainter::KisHistogramPainter(const KisHistogramPainter &other)
-    : m_d(new Private(*other.m_d))
-{}
-
-KisHistogramPainter::KisHistogramPainter(KisHistogramPainter && other)
-    : m_d(other.m_d.take())
-{}
-
 KisHistogramPainter::~KisHistogramPainter()
 {}
 

@@ -473,7 +473,7 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
         while (i.hasPrevious()) {
             OptionalProperty val = i.previous();
 
-            int emptyIndex = list.lastIndexOf(0);
+            int emptyIndex = list.lastIndexOf(nullptr);
             if (emptyIndex < 0) break;
 
             list[emptyIndex] = val;

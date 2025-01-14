@@ -6,6 +6,7 @@
 #ifndef KISTEXTUREOPTIONMODEL_H
 #define KISTEXTUREOPTIONMODEL_H
 
+#include <QObject>
 
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>

@@ -28,8 +28,6 @@
 #include <QWidget>
 #include <QMenu>
 #include <QButtonGroup>
-#include <QRegExpValidator>
-#include <QRegExp>
 #include <QFileInfo>
 
 #include "artisticcolorselector_dock.h"

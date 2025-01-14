@@ -9,7 +9,6 @@
 
 #include <QDockWidget>
 #include <QPointer>
-#include <QRegExpValidator>
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerProvider.h>

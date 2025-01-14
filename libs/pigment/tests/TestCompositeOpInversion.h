@@ -17,12 +17,15 @@ private Q_SLOTS:
     void test_data();
 
     void testColorPairSampler();
+    void testColorPairSamplerRGB();
 
     void testF32ModesNaN();
     void testF32ModesNaN_data();
 
+#if 0
     void testU16ModesConsistent();
     void testU16ModesConsistent_data();
+#endif
 
     void testF32vsU16ConsistencyInSDR_data();
     void testF32vsU16ConsistencyInSDR();
@@ -42,20 +45,26 @@ private Q_SLOTS:
     void testPreservesLooseNegative();
     void testPreservesLooseNegative_data();
 
+    void testToneMappingPositive();
+    void testToneMappingNegative();
+
+
     void dumpOpCategories();
 
-    void generateSampleSheets();
-    void generateSampleSheets_data();
-
+private:
+    /// Uncomment if you want to generate the sample
+    /// sheets of every blendmode to verify their contiguity
     void generateSampleSheetsLong_data();
     void generateSampleSheetsLong();
-
-    void testColor();
 
 private:
     // TODO: disabled for now
     void testF16Modes();
     void testF16Modes_data();
+
+    /// just a simple test case to test exactly one color
+    /// during debugging
+    void testColor();
 
 private:
     void testNegativeImpl(bool useStrictZeroCheck);

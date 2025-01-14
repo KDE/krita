@@ -18,196 +18,296 @@
 #include "half.h"
 #endif
 
-template<class HSXType, class TReal>
-inline void cfReorientedNormalMapCombine(TReal srcR, TReal srcG, TReal srcB, TReal& dstR, TReal& dstG, TReal& dstB)
+namespace {
+template<typename channels_type>
+inline void possiblyFixNegativeValuesNearZeroPoint(float& dstR, float& dstG, float& dstB)
 {
-    // see https://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
-    TReal tx = 2*srcR-1;
-    TReal ty = 2*srcG-1;
-    TReal tz = 2*srcB;
-    TReal ux = -2*dstR+1;
-    TReal uy = -2*dstG+1;
-    TReal uz = 2*dstB-1;
-    TReal k = (tx*ux+ty*uy+tz*uz)/tz; // dot(t,u)/t.z
-    TReal rx = tx*k-ux;
-    TReal ry = ty*k-uy;
-    TReal rz = tz*k-uz;
-    k = 1/sqrt(rx*rx+ry*ry+rz*rz); // normalize result
-    rx *= k;
-    ry *= k;
-    rz *= k;
-    dstR = rx*0.5+0.5;
-    dstG = ry*0.5+0.5;
-    dstB = rz*0.5+0.5;
+    /**
+     * Some RGB-based blendmodes may generate slightly negative values after
+     * applying setLightness(), so we should clamp them if the destination
+     * channel is not of an integer type
+     */
+    if constexpr (!std::numeric_limits<channels_type>::is_integer) {
+        dstR = qMax(dstR, 0.0f);
+        dstG = qMax(dstG, 0.0f);
+        dstB = qMax(dstB, 0.0f);
+    }
 }
 
-template<class HSXType, class TReal>
-inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal lum = getLightness<HSXType>(dr, dg, db);
-    dr = sr;
-    dg = sg;
-    db = sb;
-    setLightness<HSXType>(dr, dg, db, lum);
-}
-
-template<class HSXType, class TReal>
-inline void cfLambertLighting(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
+template<typename channels_type>
+inline void possiblyClampValuesToSDR(float& dstR, float& dstG, float& dstB)
 {
-	TReal tr = sr * dr * (1.0 / 0.215686);
-	TReal tg = sg * dg * (1.0 / 0.215686);
-	TReal tb = sb * db * (1.0 / 0.215686);
-
-	if (tr > 1.0) {
-		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.01925;
-	}
-	else {
-		dr = tr;
-	}
-
-	if (tg > 1.0) {
-		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.01925;
-	}
-	else {
-		dg = tg;
-	}
-
-	if (tb > 1.0) {
-		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.01925;
-	}
-	else {
-		db = tb;
-	}
-
-
-	ToneMapping<HSXType, TReal>(dr, dg, db);
-}
-
-template<class HSXType, class TReal>
-inline void cfLambertLightingGamma2_2(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-	TReal tr = sr * dr * 2.0;
-	TReal tg = sg * dg * 2.0;
-	TReal tb = sb * db * 2.0;
-
-	if (tr > 1.0) {
-		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.4;
-	}
-	else {
-		dr = tr;
-	}
-
-	if (tg > 1.0) {
-		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.4;
-	}
-	else {
-		dg = tg;
-	}
-
-	if (tb > 1.0) {
-		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.4;
-	}
-	else {
-		db = tb;
-	}
-
-	ToneMapping<HSXType, TReal>(dr, dg, db);
-}
-
-template<class HSXType, class TReal>
-inline void cfLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    setLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
-}
-
-template<class HSXType, class TReal>
-inline void cfIncreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    addLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
-}
-
-template<class HSXType, class TReal>
-inline void cfDecreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    addLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb) - TReal(1.0));
-}
-
-template<class HSXType, class TReal>
-inline void cfSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal sat   = getSaturation<HSXType>(sr, sg, sb);
-    TReal light = getLightness<HSXType>(dr, dg, db);
-    setSaturation<HSXType>(dr, dg, db, sat);
-    setLightness<HSXType>(dr, dg, db, light);
-}
-
-template<class HSXType, class TReal>
-inline void cfIncreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    using namespace Arithmetic;
-    TReal sat   = lerp(getSaturation<HSXType>(dr,dg,db), unitValue<TReal>(), getSaturation<HSXType>(sr,sg,sb));
-    TReal light = getLightness<HSXType>(dr, dg, db);
-    setSaturation<HSXType>(dr, dg, db, sat);
-    setLightness<HSXType>(dr, dg, db, light);
-}
-
-template<class HSXType, class TReal>
-inline void cfDecreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    using namespace Arithmetic;
-    TReal sat   = lerp(zeroValue<TReal>(), getSaturation<HSXType>(dr,dg,db), getSaturation<HSXType>(sr,sg,sb));
-    TReal light = getLightness<HSXType>(dr, dg, db);
-    setSaturation<HSXType>(dr, dg, db, sat);
-    setLightness<HSXType>(dr, dg, db, light);
-}
-
-template<class HSXType, class TReal>
-inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal sat = getSaturation<HSXType>(dr, dg, db);
-    TReal lum = getLightness<HSXType>(dr, dg, db);
-    dr = sr;
-    dg = sg;
-    db = sb;
-    setSaturation<HSXType>(dr, dg, db, sat);
-    setLightness<HSXType>(dr, dg, db, lum);
-}
-
-template<class HSXType, class TReal>
-inline void cfTangentNormalmap(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    using namespace Arithmetic;
-    TReal half=halfValue<TReal>();
-    
-    dr = sr+(dr-half);
-    dg = sg+(dg-half);
-    db = sb+(db-unitValue<TReal>());
-} 
-    
-template<class HSXType, class TReal>
-inline void cfDarkerColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    
-    TReal lum = getLightness<HSXType>(dr, dg, db);
-    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
-    if (lum<lum2) {
-        sr = dr;
-        sg = dg;
-        sb = db;
-    }
-    else {
-        dr = sr;
-        dg = sg;
-        db = sb;
-    }
-
-}
-
-template<class HSXType, class TReal>
-inline void cfLighterColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    
-    TReal lum = getLightness<HSXType>(dr, dg, db);
-    TReal lum2 = getLightness<HSXType>(sr, sg, sb);
-    if (lum>lum2) {
-        sr = dr;
-        sg = dg;
-        sb = db;
-    }
-    else {
-        dr = sr;
-        dg = sg;
-        db = sb;
+    /**
+     * Some RGB-based modes may go out of the SDR-range, e.g. tangent-normal,
+     * so we should clamp them in case the target colorspace is not an integer
+     * and is not going to be clamped later.
+     */
+    if constexpr (!std::numeric_limits<channels_type>::is_integer) {
+        dstR = qBound(0.0f, dstR, 1.0f);
+        dstG = qBound(0.0f, dstG, 1.0f);
+        dstB = qBound(0.0f, dstB, 1.0f);
     }
 }
+}
+
+template<class HSXType, typename channels_type>
+struct CFReorientedNormalMapCombine : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        // see https://blog.selfshadow.com/publications/blending-in-detail/ by Barre-Brisebois and Hill
+
+        using namespace Arithmetic;
+
+        /**
+         * If the source vector has zero height, then we should just
+         * skip all the changes (with seems to be the bahavior of the
+         * formula around the null point)
+         */
+        if (isZeroValueFuzzy(srcB)) {
+            return;
+        }
+
+        /**
+         * If the destination vector has zero height, then we should skip its
+         * modification (since we cannot rotate it in any way
+         */
+
+        float tx = 2*srcR-1;
+        float ty = 2*srcG-1;
+        float tz = 2*srcB;
+        float ux = -2*dstR+1;
+        float uy = -2*dstG+1;
+        float uz = 2*dstB-1;
+        float k = (tx*ux+ty*uy+tz*uz)/tz; // dot(t,u)/t.z
+        float rx = tx*k-ux;
+        float ry = ty*k-uy;
+        float rz = tz*k-uz;
+
+        float finalLength = rx*rx+ry*ry+rz*rz;
+
+
+        /**
+         * If the resulting length of the vector is zero, then just keep the
+         * destination unchanged. Usually it means that the destination vector
+         * is null (i.e. dstR == dstG == dstB == 0.5)
+         */
+        if (isZeroValueStrict(finalLength)) {
+            return;
+        }
+
+        k = 1 / sqrt(finalLength); // normalize result
+        rx *= k;
+        ry *= k;
+        rz *= k;
+        dstR = rx*0.5+0.5;
+        dstG = ry*0.5+0.5;
+        dstB = rz*0.5+0.5;
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFColor : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        using namespace Arithmetic;
+        float lum = getLightness<HSXType>(dstR, dstG, dstB);
+        dstR = srcR;
+        dstG = srcG;
+        dstB = srcB;
+        setLightness<HSXType>(dstR, dstG, dstB, lum);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFLambertLighting : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        float tr = srcR * dstR * (1.0 / 0.215686);
+        float tg = srcG * dstG * (1.0 / 0.215686);
+        float tb = srcB * dstB * (1.0 / 0.215686);
+
+        if (tr > 1.0) {
+            dstR = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.01925;
+        }
+        else {
+            dstR = tr;
+        }
+
+        if (tg > 1.0) {
+            dstG = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.01925;
+        }
+        else {
+            dstG = tg;
+        }
+
+        if (tb > 1.0) {
+            dstB = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.01925;
+        }
+        else {
+            dstB = tb;
+        }
+
+        ToneMapping<HSXType, float>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFLambertLightingGamma2_2 : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        float tr = srcR * dstR * 2.0;
+        float tg = srcG * dstG * 2.0;
+        float tb = srcB * dstB * 2.0;
+
+        if (tr > 1.0) {
+            dstR = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.4;
+        }
+        else {
+            dstR = tr;
+        }
+
+        if (tg > 1.0) {
+            dstG = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.4;
+        }
+        else {
+            dstG = tg;
+        }
+
+        if (tb > 1.0) {
+            dstB = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.4;
+        }
+        else {
+            dstB = tb;
+        }
+
+        ToneMapping<HSXType, float>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFLightness : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        setLightness<HSXType>(dstR, dstG, dstB, getLightness<HSXType>(srcR, srcG, srcB));
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+
+template<class HSXType, typename channels_type>
+struct CFIncreaseLightness : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        addLightness<HSXType>(dstR, dstG, dstB, getLightness<HSXType>(srcR, srcG, srcB));
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFDecreaseLightness : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        addLightness<HSXType>(dstR, dstG, dstB, getLightness<HSXType>(srcR, srcG, srcB) - 1.0f);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFSaturation : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        float sat   = getSaturation<HSXType>(srcR, srcG, srcB);
+        float light = getLightness<HSXType>(dstR, dstG, dstB);
+        setSaturation<HSXType>(dstR, dstG, dstB, sat);
+        setLightness<HSXType>(dstR, dstG, dstB, light);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFIncreaseSaturation : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        using namespace Arithmetic;
+        float sat   = lerp(getSaturation<HSXType>(dstR, dstG, dstB), unitValue<float>(), getSaturation<HSXType>(srcR, srcG, srcB));
+        float light = getLightness<HSXType>(dstR, dstG, dstB);
+        setSaturation<HSXType>(dstR, dstG, dstB, sat);
+        setLightness<HSXType>(dstR, dstG, dstB, light);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFDecreaseSaturation : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        using namespace Arithmetic;
+        float sat   = lerp(zeroValue<float>(), getSaturation<HSXType>(dstR, dstG, dstB), getSaturation<HSXType>(srcR, srcG, srcB));
+        float light = getLightness<HSXType>(dstR, dstG, dstB);
+        setSaturation<HSXType>(dstR, dstG, dstB, sat);
+        setLightness<HSXType>(dstR, dstG, dstB, light);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFHue : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        float sat = getSaturation<HSXType>(dstR, dstG, dstB);
+        float lum = getLightness<HSXType>(dstR, dstG, dstB);
+
+        dstR = srcR;
+        dstG = srcG;
+        dstB = srcB;
+
+        setSaturation<HSXType>(dstR, dstG, dstB, sat);
+        setLightness<HSXType>(dstR, dstG, dstB, lum);
+        possiblyFixNegativeValuesNearZeroPoint<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFTangentNormalmap : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        using namespace Arithmetic;
+        const float half = halfValue<float>();
+        dstR = srcR + (dstR - half);
+        dstG = srcG + (dstG - half);
+        dstB = srcB + (dstB - unitValue<float>());
+        possiblyClampValuesToSDR<channels_type>(dstR, dstG, dstB);
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFDarkerColor : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        const float lum = getLightness<HSXType>(dstR, dstG, dstB);
+        const float lum2 = getLightness<HSXType>(srcR, srcG, srcB);
+        if (lum > lum2) {
+            dstR = srcR;
+            dstG = srcG;
+            dstB = srcB;
+        }
+    }
+};
+
+template<class HSXType, typename channels_type>
+struct CFLighterColor : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        const float lum = getLightness<HSXType>(dstR, dstG, dstB);
+        const float lum2 = getLightness<HSXType>(srcR, srcG, srcB);
+        if (lum < lum2) {
+            dstR = srcR;
+            dstG = srcG;
+            dstB = srcB;
+        }
+    }
+};
 
 template<class T>
 struct CFColorBurn : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<T>

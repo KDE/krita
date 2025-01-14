@@ -204,64 +204,72 @@ private:
 
 template<class Traits>
 struct RgbOpsStorage {
-    typedef float Arg;
+    typedef typename Traits::channels_type channels_type;
 
     static const qint32 red_pos   = Traits::red_pos;
     static const qint32 green_pos = Traits::green_pos;
     static const qint32 blue_pos  = Traits::blue_pos;
 
-    template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
-
+    template<void compositeFunc(float, float, float, float&, float&, float&)>
     void add(const KoColorSpace* cs, const QString& id, const QString& category) {
         m_ops.insert(id, new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, category));
     }
 
+    template<typename Functor>
+    void add(const KoColorSpace* cs, const QString& id, const QString& category) {
+        m_ops.insert(id, new KoCompositeOpGenericHSLFunctor<Traits, Functor>(cs, id, category));
+    }
+
+
     void add(const KoColorSpace* cs) {
 
-        add<&cfTangentNormalmap  <HSYType,Arg> >(cs, COMPOSITE_TANGENT_NORMALMAP  , KoCompositeOp::categoryMisc());
-        add<&cfReorientedNormalMapCombine <HSYType, Arg> >(cs, COMPOSITE_COMBINE_NORMAL, KoCompositeOp::categoryMisc());
+        add<CFTangentNormalmap  <HSYType,channels_type> >(cs, COMPOSITE_TANGENT_NORMALMAP  , KoCompositeOp::categoryMisc());
+        add<CFReorientedNormalMapCombine<HSYType, channels_type>>(cs, COMPOSITE_COMBINE_NORMAL, KoCompositeOp::categoryMisc());
+        add<CFColor<HSYType, channels_type>>(cs, COMPOSITE_COLOR, KoCompositeOp::categoryHSY());
+        add<CFHue<HSYType, channels_type>>(cs, COMPOSITE_HUE, KoCompositeOp::categoryHSY());
+        add<CFSaturation<HSYType, channels_type>>(cs, COMPOSITE_SATURATION, KoCompositeOp::categoryHSY());
+        add<CFIncreaseSaturation<HSYType, channels_type>>(cs, COMPOSITE_INC_SATURATION, KoCompositeOp::categoryHSY());
+        add<CFDecreaseSaturation<HSYType, channels_type>>(cs, COMPOSITE_DEC_SATURATION, KoCompositeOp::categoryHSY());
 
-        add<&cfColor             <HSYType,Arg> >(cs, COMPOSITE_COLOR         , KoCompositeOp::categoryHSY());
-        add<&cfHue               <HSYType,Arg> >(cs, COMPOSITE_HUE           , KoCompositeOp::categoryHSY());
-        add<&cfSaturation        <HSYType,Arg> >(cs, COMPOSITE_SATURATION    , KoCompositeOp::categoryHSY());
-        add<&cfIncreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_INC_SATURATION, KoCompositeOp::categoryHSY());
-        add<&cfDecreaseSaturation<HSYType,Arg> >(cs, COMPOSITE_DEC_SATURATION, KoCompositeOp::categoryHSY());
-        add<&cfLightness         <HSYType,Arg> >(cs, COMPOSITE_LUMINIZE      , KoCompositeOp::categoryHSY());
-        add<&cfIncreaseLightness <HSYType,Arg> >(cs, COMPOSITE_INC_LUMINOSITY, KoCompositeOp::categoryHSY());
-        add<&cfDecreaseLightness <HSYType,Arg> >(cs, COMPOSITE_DEC_LUMINOSITY, KoCompositeOp::categoryHSY());
-        add<&cfDarkerColor <HSYType,Arg> >(cs, COMPOSITE_DARKER_COLOR        , KoCompositeOp::categoryDark());//darker color as PSD does it//
-        add<&cfLighterColor <HSYType,Arg> >(cs, COMPOSITE_LIGHTER_COLOR      , KoCompositeOp::categoryLight());//lighter color as PSD does it//
+        add<CFLightness<HSYType,channels_type>>(cs, COMPOSITE_LUMINIZE, KoCompositeOp::categoryHSY());
+        add<CFIncreaseLightness<HSYType,channels_type>>(cs, COMPOSITE_INC_LUMINOSITY, KoCompositeOp::categoryHSY());
+        add<CFDecreaseLightness<HSYType,channels_type>>(cs, COMPOSITE_DEC_LUMINOSITY, KoCompositeOp::categoryHSY());
 
-        add<&cfLambertLighting         <HSIType,Arg>   >(cs, COMPOSITE_LAMBERT_LIGHTING, KoCompositeOp::categoryMix());
-        add<&cfLambertLightingGamma2_2 <HSIType, Arg>   >(cs, COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, KoCompositeOp::categoryMix());
 
-        add<&cfColor             <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI         , KoCompositeOp::categoryHSI());
-        add<&cfHue               <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI           , KoCompositeOp::categoryHSI());
-        add<&cfSaturation        <HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI    , KoCompositeOp::categoryHSI());
-        add<&cfIncreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSI, KoCompositeOp::categoryHSI());
-        add<&cfDecreaseSaturation<HSIType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSI, KoCompositeOp::categoryHSI());
-        add<&cfLightness         <HSIType,Arg> >(cs, COMPOSITE_INTENSITY         , KoCompositeOp::categoryHSI());
-        add<&cfIncreaseLightness <HSIType,Arg> >(cs, COMPOSITE_INC_INTENSITY     , KoCompositeOp::categoryHSI());
-        add<&cfDecreaseLightness <HSIType,Arg> >(cs, COMPOSITE_DEC_INTENSITY     , KoCompositeOp::categoryHSI());
+        add<CFDarkerColor<HSYType, channels_type>>(cs, COMPOSITE_DARKER_COLOR, KoCompositeOp::categoryDark()); //darker color as PSD does it//
+        add<CFLighterColor<HSYType, channels_type>>(cs, COMPOSITE_LIGHTER_COLOR, KoCompositeOp::categoryLight()); //lighter color as PSD does it//
 
-        add<&cfColor             <HSLType,Arg> >(cs, COMPOSITE_COLOR_HSL         , KoCompositeOp::categoryHSL());
-        add<&cfHue               <HSLType,Arg> >(cs, COMPOSITE_HUE_HSL           , KoCompositeOp::categoryHSL());
-        add<&cfSaturation        <HSLType,Arg> >(cs, COMPOSITE_SATURATION_HSL    , KoCompositeOp::categoryHSL());
-        add<&cfIncreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSL, KoCompositeOp::categoryHSL());
-        add<&cfDecreaseSaturation<HSLType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSL, KoCompositeOp::categoryHSL());
-        add<&cfLightness         <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS         , KoCompositeOp::categoryHSL());
-        add<&cfIncreaseLightness <HSLType,Arg> >(cs, COMPOSITE_INC_LIGHTNESS     , KoCompositeOp::categoryHSL());
-        add<&cfDecreaseLightness <HSLType,Arg> >(cs, COMPOSITE_DEC_LIGHTNESS     , KoCompositeOp::categoryHSL());
+        add<CFLambertLighting<HSIType,channels_type>>(cs, COMPOSITE_LAMBERT_LIGHTING, KoCompositeOp::categoryMix());
+        add<CFLambertLightingGamma2_2<HSIType, channels_type>>(cs, COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, KoCompositeOp::categoryMix());
 
-        add<&cfColor             <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV         , KoCompositeOp::categoryHSV());
-        add<&cfHue               <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV           , KoCompositeOp::categoryHSV());
-        add<&cfSaturation        <HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV    , KoCompositeOp::categoryHSV());
-        add<&cfIncreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_INC_SATURATION_HSV, KoCompositeOp::categoryHSV());
-        add<&cfDecreaseSaturation<HSVType,Arg> >(cs, COMPOSITE_DEC_SATURATION_HSV, KoCompositeOp::categoryHSV());
-        add<&cfLightness         <HSVType,Arg> >(cs, COMPOSITE_VALUE             , KoCompositeOp::categoryHSV());
-        add<&cfIncreaseLightness <HSVType,Arg> >(cs, COMPOSITE_INC_VALUE         , KoCompositeOp::categoryHSV());
-        add<&cfDecreaseLightness <HSVType,Arg> >(cs, COMPOSITE_DEC_VALUE         , KoCompositeOp::categoryHSV());
-    }
+        add<CFColor             <HSIType, channels_type> >(cs, COMPOSITE_COLOR_HSI         , KoCompositeOp::categoryHSI());
+        add<CFHue               <HSIType, channels_type> >(cs, COMPOSITE_HUE_HSI           , KoCompositeOp::categoryHSI());
+        add<CFSaturation        <HSIType, channels_type> >(cs, COMPOSITE_SATURATION_HSI    , KoCompositeOp::categoryHSI());
+        add<CFIncreaseSaturation<HSIType, channels_type> >(cs, COMPOSITE_INC_SATURATION_HSI, KoCompositeOp::categoryHSI());
+        add<CFDecreaseSaturation<HSIType, channels_type> >(cs, COMPOSITE_DEC_SATURATION_HSI, KoCompositeOp::categoryHSI());
+        add<CFLightness         <HSIType, channels_type> >(cs, COMPOSITE_INTENSITY         , KoCompositeOp::categoryHSI());
+        add<CFIncreaseLightness <HSIType, channels_type> >(cs, COMPOSITE_INC_INTENSITY     , KoCompositeOp::categoryHSI());
+        add<CFDecreaseLightness <HSIType, channels_type> >(cs, COMPOSITE_DEC_INTENSITY     , KoCompositeOp::categoryHSI());
+
+        add<CFColor             <HSLType, channels_type> >(cs, COMPOSITE_COLOR_HSL         , KoCompositeOp::categoryHSL());
+        add<CFHue               <HSLType, channels_type> >(cs, COMPOSITE_HUE_HSL           , KoCompositeOp::categoryHSL());
+        add<CFSaturation        <HSLType, channels_type> >(cs, COMPOSITE_SATURATION_HSL    , KoCompositeOp::categoryHSL());
+        add<CFIncreaseSaturation<HSLType, channels_type> >(cs, COMPOSITE_INC_SATURATION_HSL, KoCompositeOp::categoryHSL());
+        add<CFDecreaseSaturation<HSLType, channels_type> >(cs, COMPOSITE_DEC_SATURATION_HSL, KoCompositeOp::categoryHSL());
+        add<CFLightness         <HSLType, channels_type> >(cs, COMPOSITE_LIGHTNESS         , KoCompositeOp::categoryHSL());
+        add<CFIncreaseLightness <HSLType, channels_type> >(cs, COMPOSITE_INC_LIGHTNESS     , KoCompositeOp::categoryHSL());
+        add<CFDecreaseLightness <HSLType, channels_type> >(cs, COMPOSITE_DEC_LIGHTNESS     , KoCompositeOp::categoryHSL());
+
+        add<CFColor             <HSVType, channels_type> >(cs, COMPOSITE_COLOR_HSV         , KoCompositeOp::categoryHSV());
+        add<CFHue               <HSVType, channels_type> >(cs, COMPOSITE_HUE_HSV           , KoCompositeOp::categoryHSV());
+        add<CFSaturation        <HSVType, channels_type> >(cs, COMPOSITE_SATURATION_HSV    , KoCompositeOp::categoryHSV());
+        add<CFIncreaseSaturation<HSVType, channels_type> >(cs, COMPOSITE_INC_SATURATION_HSV, KoCompositeOp::categoryHSV());
+        add<CFDecreaseSaturation<HSVType, channels_type> >(cs, COMPOSITE_DEC_SATURATION_HSV, KoCompositeOp::categoryHSV());
+        add<CFLightness         <HSVType, channels_type> >(cs, COMPOSITE_VALUE             , KoCompositeOp::categoryHSV());
+        add<CFIncreaseLightness <HSVType, channels_type> >(cs, COMPOSITE_INC_VALUE         , KoCompositeOp::categoryHSV());
+        add<CFDecreaseLightness <HSVType, channels_type> >(cs, COMPOSITE_DEC_VALUE         , KoCompositeOp::categoryHSV());
+
+}
 
     bool isInitialized() const {
         return !m_ops.isEmpty();
@@ -276,11 +284,11 @@ private:
     QMap<QString, KoCompositeOp*> m_ops;
 };
 
-OpsStorage<KoRgbU16Traits> sU16Ops;
+OpsStorage<KoBgrU16Traits> sU16Ops;
 OpsStorage<KoRgbF16Traits> sF16Ops;
 OpsStorage<KoRgbF32Traits> sF32Ops;
 
-RgbOpsStorage<KoRgbU16Traits> sU16RgbOps;
+RgbOpsStorage<KoBgrU16Traits> sU16RgbOps;
 RgbOpsStorage<KoRgbF16Traits> sF16RgbOps;
 RgbOpsStorage<KoRgbF32Traits> sF32RgbOps;
 

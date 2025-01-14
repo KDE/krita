@@ -13,16 +13,22 @@
 
 struct KisColorPairSampler
 {
-    std::vector<qreal> colorValues;
-    std::vector<qreal> alphaValues;
+    std::vector<qreal> redColorValues = {0.0};
+    std::vector<qreal> greenColorValues = {0.0};
+    std::vector<qreal> blueColorValues = {0.0};
+    std::vector<qreal> alphaValues = {1.0};
 
     size_t numSamples() const {
         return
             alphaValues.size() *
             alphaValues.size() *
             alphaValues.size() *
-            colorValues.size() *
-            colorValues.size();
+            redColorValues.size() *
+            redColorValues.size() *
+            greenColorValues.size() *
+            greenColorValues.size() *
+            blueColorValues.size() *
+            blueColorValues.size();
     }
 
     struct SampleIndex {
@@ -33,11 +39,23 @@ struct KisColorPairSampler
 
             size_t rest = index;
 
-            dstColorIndex = rest % sampler.colorValues.size();
-            rest /= sampler.colorValues.size();
+            dstBlueColorIndex = rest % sampler.blueColorValues.size();
+            rest /= sampler.blueColorValues.size();
 
-            srcColorIndex = rest % sampler.colorValues.size();
-            rest /= sampler.colorValues.size();
+            dstGreenColorIndex = rest % sampler.greenColorValues.size();
+            rest /= sampler.greenColorValues.size();
+
+            dstRedColorIndex = rest % sampler.redColorValues.size();
+            rest /= sampler.redColorValues.size();
+
+            srcBlueColorIndex = rest % sampler.blueColorValues.size();
+            rest /= sampler.blueColorValues.size();
+
+            srcGreenColorIndex = rest % sampler.greenColorValues.size();
+            rest /= sampler.greenColorValues.size();
+
+            srcRedColorIndex = rest % sampler.redColorValues.size();
+            rest /= sampler.redColorValues.size();
 
             dstAlphaIndex = rest % sampler.alphaValues.size();
             rest /= sampler.alphaValues.size();
@@ -57,8 +75,12 @@ struct KisColorPairSampler
         size_t opacityIndex = 0;
         size_t srcAlphaIndex = 0;
         size_t dstAlphaIndex = 0;
-        size_t srcColorIndex = 0;
-        size_t dstColorIndex = 0;
+        size_t srcRedColorIndex = 0;
+        size_t srcGreenColorIndex = 0;
+        size_t srcBlueColorIndex = 0;
+        size_t dstRedColorIndex = 0;
+        size_t dstGreenColorIndex = 0;
+        size_t dstBlueColorIndex = 0;
     };
 
     class const_iterator
@@ -82,14 +104,18 @@ struct KisColorPairSampler
         {}
 
         KoColor srcColor(const KoColorSpace *colorSpace) const {
-            return createColor(m_sampler->colorValues[m_sampleIndex.srcColorIndex],
+            return createColor(m_sampler->redColorValues[m_sampleIndex.srcRedColorIndex],
+                               m_sampler->greenColorValues[m_sampleIndex.srcGreenColorIndex],
+                               m_sampler->blueColorValues[m_sampleIndex.srcBlueColorIndex],
                                m_sampler->alphaValues[m_sampleIndex.srcAlphaIndex],
                                colorSpace);
 
         }
 
         KoColor dstColor(const KoColorSpace *colorSpace) const {
-            return createColor(m_sampler->colorValues[m_sampleIndex.dstColorIndex],
+            return createColor(m_sampler->redColorValues[m_sampleIndex.dstRedColorIndex],
+                               m_sampler->greenColorValues[m_sampleIndex.dstGreenColorIndex],
+                               m_sampler->blueColorValues[m_sampleIndex.dstBlueColorIndex],
                                m_sampler->alphaValues[m_sampleIndex.dstAlphaIndex],
                                colorSpace);
         }
@@ -107,63 +133,62 @@ struct KisColorPairSampler
         }
 
         qreal srcColor() const {
-            return m_sampler->colorValues[m_sampleIndex.srcColorIndex];
+            return m_sampler->redColorValues[m_sampleIndex.srcRedColorIndex];
         }
 
         qreal dstColor() const {
-            return m_sampler->colorValues[m_sampleIndex.dstColorIndex];
+            return m_sampler->redColorValues[m_sampleIndex.dstRedColorIndex];
         }
 
     private:
-        static KoColor createColorU (qreal colorF, qreal alphaF, const KoColorSpace *colorSpace) {
+        static KoColor createColorU (qreal redF, qreal greenF, qreal blueF, qreal alphaF, const KoColorSpace *colorSpace) {
             using namespace Arithmetic;
+
+            auto scaleChannel = [] (qreal value) -> quint16 {
+                return qFuzzyCompare(value, 0.5) ?
+                    KoColorSpaceMathsTraits<quint16>::halfValue :
+                    qRound(qBound(0.0, value, 1.0) * unitValue<quint16>());
+            };
 
             /**
              * Some composite ops reply on the halfValue to decide about the
              * processing they do, so we should make sure that float and uint16
              * modes use the same half-point in the test
              */
-            const quint16 color = qFuzzyCompare(colorF, 0.5) ?
-                KoColorSpaceMathsTraits<quint16>::halfValue :
-                qRound(qBound(0.0, colorF, 1.0) * unitValue<quint16>());
+            const quint16 red = scaleChannel(redF);
+            const quint16 green = scaleChannel(greenF);
+            const quint16 blue = scaleChannel(blueF);
             const quint16 alpha = qRound(qBound(0.0, alphaF, 1.0) * unitValue<quint16>());
 
             KoColor c(colorSpace);
             quint16 *ptr = reinterpret_cast<quint16*>(c.data());
-            ptr[2] = color;
+            ptr[0] = blue;
+            ptr[1] = green;
+            ptr[2] = red;
             ptr[3] = alpha;
             return c;
         };
 
-        static KoColor createColorF32(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
-            KoColor c(colorSpace);
-            float *ptr = reinterpret_cast<float*>(c.data());
-            ptr[0] = color;
-            ptr[3] = alpha;
-            return c;
-        };
+        static inline KoColor createColor(qreal red, qreal green, qreal blue, qreal alpha, const KoColorSpace *colorSpace) {
 
-        static KoColor createColorF16(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
-            KoColor c(colorSpace);
-            half *ptr = reinterpret_cast<half*>(c.data());
-            ptr[0] = color;
-            ptr[3] = alpha;
-            return c;
-        };
 
-        static KoColor createColor(qreal color, qreal alpha, const KoColorSpace *colorSpace) {
-            KoColor result;
+            if (colorSpace->hasHighDynamicRange()) {
+                KoColor result(colorSpace);
 
-            if (colorSpace->colorDepthId() == Float32BitsColorDepthID) {
-                result = createColorF32(color, alpha, colorSpace);
-            } else if (colorSpace->colorDepthId() == Float16BitsColorDepthID) {
-                result = createColorF16(color, alpha, colorSpace);
-            } else if (colorSpace->colorDepthId() == Integer16BitsColorDepthID) {
-                result = createColorU(color, alpha, colorSpace);
+                QVector<float> colors;
+                colors.resize(4);
+                colors[0] = red;
+                colors[1] = green;
+                colors[2] = blue;
+                colors[3] = alpha;
+
+                colorSpace->fromNormalisedChannelsValue(result.data(), colors);
+
+                return result;
+
             } else {
-                qFatal("bit depth is not implemented");
+                return createColorU(red, green, blue, alpha, colorSpace);
             }
-            return result;
         };
 
     private:

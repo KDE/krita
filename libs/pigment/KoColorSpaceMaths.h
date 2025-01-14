@@ -915,6 +915,8 @@ struct HSYType
     inline static TReal getSaturation(TReal r, TReal g, TReal b) {
         return Arithmetic::max(r,g,b) - Arithmetic::min(r,g,b);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSIType
@@ -933,6 +935,8 @@ struct HSIType
         return (chroma > std::numeric_limits<TReal>::epsilon()) ?
             (TReal(1.0) - min / getLightness(r, g, b)) : TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSLType
@@ -957,6 +961,8 @@ struct HSLType
         
         return TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSVType
@@ -970,8 +976,10 @@ struct HSVType
     inline static TReal getSaturation(TReal r, TReal g, TReal b) {
         TReal max = Arithmetic::max(r, g, b);
         TReal min = Arithmetic::min(r, g, b);
-        return (max == TReal(0.0)) ? TReal(0.0) : (max - min) / max;
+        return (max > std::numeric_limits<TReal>::epsilon()) ? (max - min) / max : TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = false;
 };
 
 template<class TReal>
@@ -1039,32 +1047,86 @@ inline static TReal getLightness(TReal r, TReal g, TReal b) {
 }
 
 template<class HSXType, class TReal>
-inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+inline void ToneMapping(TReal& r, TReal& g, TReal& b)
 {
     using namespace Arithmetic;
-    
-    r += light;
-    g += light;
-    b += light;
-    
+
+
     TReal l = HSXType::getLightness(r, g, b);
     TReal n = min(r, g, b);
     TReal x = max(r, g, b);
-    
+
     if(n < TReal(0.0)) {
-        TReal iln = TReal(1.0) / (l-n);
-        r = l + ((r-l) * l) * iln;
-        g = l + ((g-l) * l) * iln;
-        b = l + ((b-l) * l) * iln;
+        if (isZeroValueClampedFuzzy<float>(l)) {
+            /**
+             * The tonemapping method we use does **not** support lightness
+             * values below 0.0, so we just clamp the value.
+             *
+             * TODO: use proper HSV/HSI shape-tracking clamping methods we use
+             * in kis_hsv_adjustment.cpp
+             */
+            r = g = b = TReal(0.0);
+        } else {
+            const TReal stretch = l - n;
+
+            if (stretch < std::numeric_limits<TReal>::epsilon()) {
+                r = g = b = TReal(0.0);
+            } else {
+                TReal iln = TReal(1.0) / stretch;
+                r = l + ((r-l) * l) * iln;
+                g = l + ((g-l) * l) * iln;
+                b = l + ((b-l) * l) * iln;
+            }
+        }
     }
-    
-    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon()) {
-        TReal il  = TReal(1.0) - l;
-        TReal ixl = TReal(1.0) / (x - l);
-        r = l + ((r-l) * il) * ixl;
-        g = l + ((g-l) * il) * ixl;
-        b = l + ((b-l) * il) * ixl;
+
+    if(x > TReal(1.0)) {
+        auto setFallbackValues = [&] () {
+            if constexpr (HSXType::lightnessIsAverage) {
+                r = g = b = TReal(1.0);
+            } else {
+                r = qMin(r, TReal(1.0));
+                g = qMin(g, TReal(1.0));
+                b = qMin(b, TReal(1.0));
+            }
+        };
+
+        if (l > TReal(1.0)) {
+            /**
+             * The tonemapping method we use does **not** support lightness
+             * values above 1.0, so we just clamp the value.
+             *
+             * TODO: use proper HSV/HSI shape-tracking clamping methods we use
+             * in kis_hsv_adjustment.cpp
+             */
+            setFallbackValues();
+        } else {
+            const TReal stretch = x - l;
+
+            if (stretch < std::numeric_limits<TReal>::epsilon()) {
+                setFallbackValues();
+            } else {
+                TReal il  = TReal(1.0) - l;
+                TReal ixl = TReal(1.0) / stretch;
+
+                r = l + ((r-l) * il) * ixl;
+                g = l + ((g-l) * il) * ixl;
+                b = l + ((b-l) * il) * ixl;
+            }
+        }
     }
+}
+
+template<class HSXType, class TReal>
+inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    using namespace Arithmetic;
+
+    r += light;
+    g += light;
+    b += light;
+
+    ToneMapping<HSXType, TReal>(r, g, b);
 }
 
 template<class HSXType, class TReal>
@@ -1104,7 +1166,7 @@ inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
         mid = tmp;
     }
     
-    if((rgb[max] - rgb[min]) > TReal(0.0)) {
+    if((rgb[max] - rgb[min]) > std::numeric_limits<TReal>::epsilon()) {
         rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
         rgb[max] = sat;
         rgb[min] = TReal(0.0);
@@ -1116,65 +1178,4 @@ inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
     else r = g = b = TReal(0.0);
 }
 
-template<class HSXType, class TReal>
-inline void ToneMapping(TReal& r, TReal& g, TReal& b)
-{
-    using namespace Arithmetic;
-    
-    
-    TReal l = HSXType::getLightness(r, g, b);
-    TReal n = min(r, g, b);
-    TReal x = max(r, g, b);
-	
-	TReal _r,_g,_b;
-    
-    if(n < TReal(0.0)) {
-        TReal iln = TReal(1.0) / (l-n);
-        r = l + ((r-l) * l) * iln;
-        g = l + ((g-l) * l) * iln;
-        b = l + ((b-l) * l) * iln;
-    }
-    
-    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon())
-	{
-        TReal il  = TReal(1.0) - l;
-        TReal ixl = TReal(1.0) / (x - l);
-        _r = l + ((r-l) * il) * ixl;
-        _g = l + ((g-l) * il) * ixl;
-        _b = l + ((b-l) * il) * ixl;
-		
-		if(r >= _r)
-		{
-			if(r > 1.0){
-				r = 1.0;
-			}
-		}
-		else
-		{
-			r = _r;
-		}
-		
-		if(g >= _g)
-		{
-			if(g > 1.0){
-				g = 1.0;
-			}
-		}
-		else
-		{
-			g = _g;
-		}
-		
-		if(b >= _b)
-		{
-			if(b > 1.0){
-				b = 1.0;
-			}
-		}
-		else
-		{
-			b = _b;
-		}
-    }
-}
 #endif

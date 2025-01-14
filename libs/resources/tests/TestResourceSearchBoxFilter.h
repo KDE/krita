@@ -21,7 +21,7 @@ struct MockResource {
 
     ~MockResource(){}
 
-    bool operator==(const MockResource& rhs){
+    bool operator==(const MockResource& rhs) const {
         return (m_name == rhs.m_name) && (m_tags == rhs.m_tags);
     }
 

@@ -955,7 +955,7 @@ struct HSLType
         if(div > std::numeric_limits<TReal>::epsilon())
             return chroma / div;
         
-        return TReal(1.0);
+        return TReal(0.0);
     }
 };
 

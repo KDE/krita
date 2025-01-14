@@ -404,7 +404,7 @@ public:
      * @param renderingIntent -- rendering intent for the first transform.
      * @param proofingIntent -- rendering intent for the second transform.
      * @param bcpFirstTransform -- whether the first transform should use blackpoint compensation. All other flags are handled by displayFlags.
-     * @param gamutWarning -- The color of the gamut warning. Gamut warnings require Gamut warning flag being set on display flags.
+     * @param gamutWarning -- The color of the gamut warning in dstColorSpace. Gamut warnings require Gamut warning flag being set on display flags.
      * @param adaptationState -- Whether the white point is being adapted in Absolute colorimetric. [0.0 1.0] with 0 no adaptation, 1 full adaptation.
      * @param displayConversionFlags -- the rest of the conversion flags. This includes blackpoint compensation for the second transform, as well as gamut warnings.
      * @return a KoColorConversionTransform that can softproof.
@@ -413,7 +413,7 @@ public:
                                                              const KoColorSpace * proofingSpace,
                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                              KoColorConversionTransformation::Intent proofingIntent,
-                                                             bool bcpFirstTransform,
+                                                             bool bpcFirstTransform,
                                                              quint8 *gamutWarning, double adaptationState,
                                                              KoColorConversionTransformation::ConversionFlags displayConversionFlags) const;
     /**

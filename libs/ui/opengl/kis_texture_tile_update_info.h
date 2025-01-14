@@ -221,12 +221,13 @@ public:
                                                                       const KoColorSpace* dstCS, const KoColorSpace* proofingSpace,
                                                                       KoColorConversionTransformation::Intent renderingIntent,
                                                                       KoColorConversionTransformation::Intent proofingIntent,
-                                                                      bool bcpFirstTransform,
+                                                                      bool bpcFirstTransform,
                                                                       KoColor gamutWarning,
                                                                       double adaptationState,
                                                                       KoColorConversionTransformation::ConversionFlags displayConversionFlags)
     {
-        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, bcpFirstTransform, gamutWarning.data(), adaptationState, displayConversionFlags);
+        KoColor properGamutWarning = gamutWarning.convertedTo(dstCS);
+        return srcCS->createProofingTransform(dstCS, proofingSpace, renderingIntent, proofingIntent, bpcFirstTransform, properGamutWarning.data(), adaptationState, displayConversionFlags);
     }
 
     inline quint8* data() const {

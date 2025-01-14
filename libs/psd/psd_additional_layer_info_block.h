@@ -357,8 +357,9 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
         bool res = false;
 
-        res = gradient.setContent(cfg->getString("gradient", ""));
-
+        if (gradient.setContent(cfg->getString("gradient", ""))) {
+            res = true;
+        }
         dithered = cfg->getBool("dither");
         reverse = cfg->getBool("reverse");
         align_with_layer = false; // not supported.

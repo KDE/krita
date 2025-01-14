@@ -8,10 +8,10 @@
 #ifndef PSD_UTILS_H
 #define PSD_UTILS_H
 
-#include "kritapsdutils_export.h"
 
 #include <QtEndian>
 #include <QtGlobal>
+#include <QIODevice>
 #include <array>
 #include <psd.h>
 #include <resources/KoPattern.h>

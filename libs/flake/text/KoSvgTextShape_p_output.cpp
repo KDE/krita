@@ -167,7 +167,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                             } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
                                 chunk.addPath(tf.map(outlineGlyph->path));
                             } else if (const auto *bitmapGlyph = std::get_if<Glyph::Bitmap>(&result.at(i).glyph)) {
-                                if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
+                                if (bitmapGlyph->image.format() == QImage::Format_Grayscale8 || bitmapGlyph->image.format() == QImage::Format_Mono) {
                                     fillPainter.maskPainter()->save();
                                     fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                                     fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
@@ -418,7 +418,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                             params.setProperty(imageProp, bitmapGlyph->image);
                             params.setProperty(imageViewTransformProp, viewBox);
                             KoShape *shape = imageFactory->createShape(&params);
-                            if (bitmapGlyph->image.isGrayscale() || bitmapGlyph->image.format() == QImage::Format_Mono) {
+                            if (bitmapGlyph->image.format() == QImage::Format_Grayscale8 || bitmapGlyph->image.format() == QImage::Format_Mono) {
                                 KoShape *rect = rectangleFactory->createDefaultShape();
                                 shape->setSize(drawRect.size());
                                 rect->setSize(drawRect.size());

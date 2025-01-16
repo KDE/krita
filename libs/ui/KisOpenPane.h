@@ -10,6 +10,7 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QList>
+#include <KisQStringListFwd.h>
 
 class KisDetailsPane;
 class KisDocument;
@@ -17,7 +18,6 @@ class KisOpenPanePrivate;
 class KisTemplatesPane;
 class QPixmap;
 class QString;
-#include <QStringList>
 class QTreeWidgetItem;
 class QUrl;
 

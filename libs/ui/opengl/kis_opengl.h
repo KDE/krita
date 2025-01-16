@@ -13,12 +13,12 @@
 
 #include <QSurfaceFormat>
 #include "kis_config.h"
+#include <KisQStringListFwd.h>
 
 #include "kritaui_export.h"
 
 class QOpenGLContext;
 class QString;
-#include <QStringList>
 class QSurfaceFormat;
 
 /**

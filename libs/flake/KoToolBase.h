@@ -13,6 +13,7 @@
 #include <QList>
 #include <QHash>
 
+#include <KisQStringListFwd.h>
 #include "kritaflake_export.h"
 
 class KoShape;
@@ -31,7 +32,6 @@ class QWidget;
 class QCursor;
 class QPainter;
 class QString;
-#include <QStringList>
 class QRectF;
 class QPointF;
 class QInputMethodEvent;

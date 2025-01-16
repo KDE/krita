@@ -10,10 +10,10 @@
 #include "kritaflake_export.h"
 #include <QRectF>
 #include <KoSvgText.h>
+#include <KisQStringListFwd.h>
 
 class QString;
 class QTransform;
-#include <QStringList>
 class KoXmlWriter;
 class KoSvgTextProperties;
 

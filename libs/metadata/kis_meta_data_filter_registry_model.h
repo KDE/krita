@@ -11,7 +11,7 @@
 
 #include <KoGenericRegistryModel.h>
 
-#include <QStringList>
+#include <KisQStringListFwd.h>
 
 namespace KisMetaData
 {

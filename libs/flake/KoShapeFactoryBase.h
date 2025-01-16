@@ -15,13 +15,14 @@
 #include <QDomDocument>
 
 #include "kritaflake_export.h"
+#include <KisQStringListFwd.h>
 
 class KoShape;
 class KoProperties;
 class KoShapeConfigWidgetBase;
 class KoShapeLoadingContext;
 class KoDocumentResourceManager;
-#include <QStringList>
+
 
 #define SHAPETEMPLATE_MIMETYPE "application/x-flake-shapetemplate"
 #define SHAPEID_MIMETYPE "application/x-flake-shapeId"

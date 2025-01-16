@@ -8,9 +8,10 @@
 
 #include <QScopedPointer>
 
+#include <KisQStringListFwd.h>
+
 class QApplication;
 class QByteArray;
-#include <QStringList>
 class KisDocument;
 
 #include "kritaui_export.h"

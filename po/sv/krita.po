@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 01:52+0000\n"
-"PO-Revision-Date: 2025-01-12 09:31+0100\n"
+"PO-Revision-Date: 2025-01-15 20:39+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -26077,31 +26077,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
-#, fuzzy, kde-format
-#| msgid "Automatic hyphenation"
+#, kde-format
 msgid "Automatic layer naming"
-msgstr "Automatiska bindestreck"
+msgstr "Automatisk namngivning av lager"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1479
-#, fuzzy, kde-format
-#| msgid "Add \"Merged\" to merged group layers"
+#, kde-format
 msgid "Append \"Merged\" to merged group layers"
-msgstr "Lägg till \"Sammanfogade\" för sammanfogade grupplager"
+msgstr "Lägg till \"Sammanfogade\" sist i sammanfogade grupplager"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1486
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
-msgstr "Lägg till \"(inklistrade)\" för inklistrade lager"
+msgstr "Lägg till \"(inklistrade)\" sist i inklistrade lager"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1493
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Lägg till \"(inklistrade)\" för inklistrade lager"
+msgstr "Lägg till \"Kopia av\" först i duplicerade lager"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518

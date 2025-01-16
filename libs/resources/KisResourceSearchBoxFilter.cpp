@@ -80,7 +80,7 @@ void KisResourceSearchBoxFilter::setFilter(const QString& filter)
 }
 
 
-bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, const QStringList &tagList)
+bool KisResourceSearchBoxFilter::matchesResource(const QString &_resourceName, const QStringList &tagList) const
 {
     // exact matches
     QString resourceName = _resourceName.toLower();

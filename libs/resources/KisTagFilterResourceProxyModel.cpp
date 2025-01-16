@@ -203,6 +203,13 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
     return false;
 }
 
+bool KisTagFilterResourceProxyModel::additionalResourceNameChecks(const QModelIndex &index, const KisResourceSearchBoxFilter *filter) const
+{
+    Q_UNUSED(index)
+    Q_UNUSED(filter)
+    return false;
+}
+
 void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
 {
     Q_EMIT beforeFilterChanges();
@@ -376,6 +383,9 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
     QStringList resourceTags = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
     bool resourceNameMatches = d->filter->matchesResource(resourceName, resourceTags);
+    if (!resourceNameMatches) {
+        resourceNameMatches = additionalResourceNameChecks(idx, d->filter.data());
+    }
 
 
     return (resourceNameMatches && metaDataMatches);

@@ -24,7 +24,7 @@ public:
     KisResourceSearchBoxFilter();
     ~KisResourceSearchBoxFilter();
     void setFilter(const QString& filter);
-    bool matchesResource(const QString& resourceName, const QStringList &tagList);
+    bool matchesResource(const QString& resourceName, const QStringList &tagList) const;
     bool isEmpty();
 
 private:

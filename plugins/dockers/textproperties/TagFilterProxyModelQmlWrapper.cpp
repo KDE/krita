@@ -11,12 +11,13 @@
 #include <KisTagModel.h>
 #include <KisTagResourceModel.h>
 #include <kis_signal_compressor.h>
+#include <KisResourceSearchBoxFilter.h>
 
 #include <resources/KoFontFamily.h>
 
 struct TagFilterProxyModelQmlWrapper::Private {
     Private()
-        : tagFilterProxyModel(new KisTagFilterResourceProxyModel(ResourceType::FontFamilies))
+        : tagFilterProxyModel(new FontFamilyTagFilterModel())
         , tagModel(new KisTagModel(ResourceType::FontFamilies))
         , compressor(KisSignalCompressor(100, KisSignalCompressor::POSTPONE))
     {
@@ -24,7 +25,7 @@ struct TagFilterProxyModelQmlWrapper::Private {
         tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
         tagFilterProxyModel->setTagFilter(tagModel->tagForIndex(tagModel->index(0, 0)));
     }
-    KisTagFilterResourceProxyModel *tagFilterProxyModel {nullptr};
+    FontFamilyTagFilterModel *tagFilterProxyModel {nullptr};
     KisAllResourcesModel *allResourceModel {nullptr};
     KisTagModel *tagModel {nullptr};
     KisSignalCompressor compressor;
@@ -271,4 +272,26 @@ void TagFilterProxyModelQmlWrapper::setSearchTextOnModel()
 {
     d->tagFilterProxyModel->setSearchText(d->currentSearchText);
     emit modelSortUpdated();
+}
+
+FontFamilyTagFilterModel::FontFamilyTagFilterModel(QObject *parent)
+    : KisTagFilterResourceProxyModel(ResourceType::FontFamilies, parent)
+{
+}
+
+bool FontFamilyTagFilterModel::additionalResourceNameChecks(const QModelIndex &index, const KisResourceSearchBoxFilter *filter) const
+{
+    bool match = false;
+    if (index.isValid()) {
+        const QStringList resourceTags = sourceModel()->data(index, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
+        const QMap<QString, QVariant> metadata = sourceModel()->data(index, Qt::UserRole + KisResourceModel::MetaData).toMap();
+        const QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
+        Q_FOREACH(const QVariant localizedName, localizedNames.values()) {
+            match = filter->matchesResource(localizedName.toString(), resourceTags);
+            if (match) {
+                break;
+            }
+        }
+    }
+    return match;
 }

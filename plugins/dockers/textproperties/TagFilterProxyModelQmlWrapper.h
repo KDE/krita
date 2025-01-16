@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <QAbstractItemModel>
+#include <KisTagFilterResourceProxyModel.h>
 
 /**
  * @brief The TagFilterProxyModelQmlWrapper class
@@ -102,6 +103,13 @@ private:
 
     struct Private;
     const QScopedPointer<Private> d;
+};
+
+class FontFamilyTagFilterModel: public KisTagFilterResourceProxyModel {
+public:
+    FontFamilyTagFilterModel(QObject *parent = nullptr);
+
+    bool additionalResourceNameChecks(const QModelIndex &index, const KisResourceSearchBoxFilter *filter) const override;
 };
 
 #endif // TAGFILTERPROXYMODELQMLWRAPPER_H

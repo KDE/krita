@@ -67,15 +67,6 @@
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
 
-.android-x86-mixin:
-  variables:
-    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-x86-qt5.15
-    KDECI_ANDROID_ABI: x86
-    KDECI_CC_CACHE: /mnt/caches/krita-android/x86/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/x86/
-    KRITACI_ARCHIVE_ARTIFACTS: True
-    KRITACI_SKIP_COMMON_ARTIFACTS: True
-
 .android-x86_64-mixin:
   variables:
     KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-android-x86_64
@@ -119,7 +110,6 @@ android-build-appbundle:
       artifacts: true
     - job: android-build-x86_64
       artifacts: true
-    # x86 job is intentionally not included!
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: debug
   script:
@@ -132,11 +122,6 @@ android-build-appbundle:
     paths:
       - "_packaging/*.aab"
       - "*.log"
-
-android-build-x86:
-  extends:
-  - .android-build-base
-  - .android-x86-mixin
 
 android-build-x86_64:
   extends:
@@ -153,13 +138,6 @@ android-build-armeabi-v7a:
   - .android-build-base
   - .android-armeabi-v7a-mixin
 
-# FIXME: the task is hidden until we get a report from users that
-# they do actually need x86 builds
-.android-build-x86-nightly:
-  extends:
-  - .android-nightly-base
-  - .android-x86-mixin
-
 android-build-x86_64-nightly:
   extends:
   - .android-nightly-base
@@ -174,13 +152,6 @@ android-build-armeabi-v7a-nightly:
   extends:
   - .android-nightly-base
   - .android-armeabi-v7a-mixin
-
-# FIXME: the task is hidden until we get a report from users that
-# they do actually need x86 builds
-.android-build-x86-release:
-  extends:
-  - .android-release-base
-  - .android-x86-mixin
 
 android-build-x86_64-release:
   extends:
@@ -209,6 +180,5 @@ android-build-appbundle-release:
       artifacts: true
     - job: android-build-x86_64-release
       artifacts: true
-    # x86 job is intentionally not included!
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: release

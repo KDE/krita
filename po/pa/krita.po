@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-15 01:52+0000\n"
+"POT-Creation-Date: 2025-01-17 01:52+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18177,7 +18177,7 @@ msgstr "ਸਾਈਜ਼"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1538
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1589
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -18533,7 +18533,7 @@ msgid "<%1> (embedded)"
 msgstr ""
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:513
+#: libs/ui/dialogs/kis_dlg_preferences.cc:516
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, fuzzy, kde-format
 #| msgid "Remove points"
@@ -21337,7 +21337,7 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:967
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
@@ -21643,8 +21643,8 @@ msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1884
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1888
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1939
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -22517,7 +22517,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1908
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
 #, fuzzy, kde-format
 #| msgid "Page"
 msgid "Warning(s):"
@@ -23511,8 +23511,8 @@ msgstr "ਤਬਦੀਲ"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2194
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2196
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2245
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, fuzzy, kde-format
@@ -23619,8 +23619,8 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2164
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2166
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -24461,15 +24461,92 @@ msgstr ""
 msgid "cd/m²"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_image_properties.cc:45
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:64
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Image Properties"
 msgstr "ਸਥਿਤੀ"
 
-#: libs/ui/dialogs/kis_dlg_image_properties.cc:91
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:104
 #, kde-format
 msgid "Set color used for warning"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:110
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1153
+#, fuzzy, kde-format
+#| msgid "Line Weight"
+msgctxt "Color conversion intent"
+msgid "Perceptual"
+msgstr "ਰੇਖਾ ਭਾਰ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1154
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgctxt "Color conversion intent"
+msgid "Relative Colorimetric"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:112
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "Color conversion intent"
+msgid "Saturation"
+msgstr "ਸਥਿਤੀ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:113
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#, fuzzy, kde-format
+#| msgid "Zoom"
+msgctxt "Color conversion intent"
+msgid "Absolute Colorimetric"
+msgstr "ਜ਼ੂਮ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:117
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
+#, fuzzy, kde-format
+#| msgid "Display slide background"
+msgctxt "Display Mode"
+msgid "Use global display settings"
+msgstr "ਸਲਾਈਡ ਬੈਕਗਰਾਊਂਡ ਵੇਖਾਓ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:119
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1160
+#, kde-format
+msgctxt "Display Mode"
+msgid "Simulate paper white and black"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:120
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
+#, fuzzy, kde-format
+#| msgid "Line Color"
+msgctxt "Display Mode"
+msgid "Custom"
+msgstr "ਰੇਖਾ ਰੰਗ"
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:123
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
+"color management configuration."
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:125
+#, kde-format
+msgctxt "@info:tooltip"
+msgid ""
+"Simulate paper by using absolute colorimetric and disabling white point "
+"adaptation and blackpoint compensation."
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_image_properties.cc:127
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Select custom settings for the second transform."
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
@@ -24539,12 +24616,12 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1453
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1457
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1544
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1959
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2017 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1504
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1508
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1512
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1595
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2010
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2068 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
@@ -24714,19 +24791,19 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "ਮੌਜੂਦਾ ਸਫ਼ਾ ਹਟਾਓ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "No Cursor"
 msgstr "ਸ਼ਕਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:212
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Tool Icon"
 msgstr "ਟੂਲ ਚੋਣਾਂ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:210
+#: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -24735,63 +24812,63 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Arrow"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, fuzzy, kde-format
 #| msgid "Size"
 msgid "Small Circle"
 msgstr "ਸਾਈਜ਼"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:212
+#: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgid "Crosshair"
 msgstr "ਰੇਖਾ ਸਟਾਈਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, fuzzy, kde-format
 #| msgid "Script File"
 msgid "Triangle Righthanded"
 msgstr "ਸਕ੍ਰਿਪਟ ਫਾਇਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Black Pixel"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "White Pixel"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, fuzzy, kde-format
 #| msgid "Grid"
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "ਗਰਿੱਡ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgid "Circle Outline"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgid "Preview Outline"
 msgstr "ਵੇਖਣ ਮੋਡ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:225
 #, fuzzy, kde-format
 #| msgid "Tool Options"
 msgid "Tilt Outline"
@@ -24799,82 +24876,82 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:249
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:329
+#: libs/ui/dialogs/kis_dlg_preferences.cc:332
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "On Touch Drag"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:330
+#: libs/ui/dialogs/kis_dlg_preferences.cc:333
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "On Click Drag"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:331
+#: libs/ui/dialogs/kis_dlg_preferences.cc:334
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "On Middle-Click Drag"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:379
+#: libs/ui/dialogs/kis_dlg_preferences.cc:382
 #, kde-format
 msgid "All Supported Files"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:407
+#: libs/ui/dialogs/kis_dlg_preferences.cc:410
 #, kde-format
 msgid "Open default window"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:408
+#: libs/ui/dialogs/kis_dlg_preferences.cc:411
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgid "Load previous session"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:409
+#: libs/ui/dialogs/kis_dlg_preferences.cc:412
 #, fuzzy, kde-format
 #| msgid "Grid"
 msgid "Show session manager"
 msgstr "ਗਰਿੱਡ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:478
+#: libs/ui/dialogs/kis_dlg_preferences.cc:481
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:484
+#: libs/ui/dialogs/kis_dlg_preferences.cc:487
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:516
+#: libs/ui/dialogs/kis_dlg_preferences.cc:519
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Internal Storage"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:521
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:556
+#: libs/ui/dialogs/kis_dlg_preferences.cc:559
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Choose Manually"
 msgstr "ਹਟਾਓ(&e)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:621
+#: libs/ui/dialogs/kis_dlg_preferences.cc:624
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -24889,27 +24966,27 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:952
+#: libs/ui/dialogs/kis_dlg_preferences.cc:955
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgid "Select a Background Image"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:964
+#: libs/ui/dialogs/kis_dlg_preferences.cc:967
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:984
+#: libs/ui/dialogs/kis_dlg_preferences.cc:987
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1107
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1216
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1301
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1320
 #, fuzzy, kde-format
 #| msgid "Copy Page"
 msgctxt ""
@@ -24918,22 +24995,22 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "ਸਫ਼ਾ ਕਾਪੀ ਕਰੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1176
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1199
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
-#: libs/ui/widgets/kis_color_space_selector.cc:191
+#: libs/ui/widgets/kis_color_space_selector.cc:197
 #, fuzzy, kde-format
 #| msgid "Active tool: %1"
 msgid "Install Color Profiles"
 msgstr "ਐਕਟਿਵ ਟੂਲ: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1389
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1440
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1391
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1442
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -24941,7 +25018,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1401
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1452
 #, fuzzy, kde-format
 #| msgid "Shape"
 msgid "Maximum brush speed: {n} px/ms"
@@ -24952,7 +25029,7 @@ msgstr[1] "ਸ਼ਕਲ"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1461
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Brush speed smoothing: {n} sample"
@@ -24961,13 +25038,13 @@ msgstr[0] "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 msgstr[1] "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1507
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1558
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1528
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -24976,193 +25053,193 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1532
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1583
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1761
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1812
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1762
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1813
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1764
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1815
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1766
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1773
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1824
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1793
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1844
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1870
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgid "Display Id: %1"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1871
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1872
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1923
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgid "Min Luminance: %1"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1873
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgid "Max Luminance: %1"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1874
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1875
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1926
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1876
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1877
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1878
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2046
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2097
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2208
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgid "Configure Krita"
 msgstr "ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2174
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2225
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgid "Keyboard Shortcuts"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2176
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 #| msgid "Configure..."
 msgid "Shortcuts"
 msgstr "...ਸੰਰਚਨਾ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2186
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas Input Settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2187
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas Input"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2204
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2255
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Color Management"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2206
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2214
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2265
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2267
 #, kde-format
 msgid "Performance"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2275
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Tablet settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
 #, fuzzy, kde-format
 #| msgid "Insert Page"
 msgid "Tablet"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2285
 #, fuzzy, kde-format
 #| msgid "Document Settings"
 msgid "Canvas-only settings"
 msgstr "ਡੌਕੂਮੈਂਟ ਸੈਟਿੰਗ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2287
 #, fuzzy, kde-format
 #| msgid "Show Master Pages"
 msgid "Canvas-only"
 msgstr "ਮਾਸਟਰ ਸਫ਼ੇ ਵੇਖੋ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2295
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2297
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Pop-up Palette"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2254
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2305
 #, fuzzy, kde-format
 #| msgid "Object Name"
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2307
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, fuzzy, kde-format
@@ -25170,7 +25247,7 @@ msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 msgid "Author"
 msgstr "ਆਬਜੈਕਟ ਨਾਂ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2314
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgctxt "@action:button"
@@ -25838,7 +25915,7 @@ msgstr "ਰੇਖਾ ਭਾਰ"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:82
-#: libs/ui/forms/wdgimageproperties.ui:401
+#: libs/ui/forms/wdgimageproperties.ui:427
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:40
 #: libs/ui/widgets/KoFillConfigWidget.ui:222
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:357
@@ -26114,13 +26191,9 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPerceptual)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:208
-#: libs/ui/forms/wdgcolorsettings.ui:299
 #: libs/ui/forms/wdgconvertcolorspace.ui:55
-#: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #, fuzzy, kde-format
 #| msgid "Line Weight"
@@ -26153,13 +26226,9 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
 #: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:218
-#: libs/ui/forms/wdgcolorsettings.ui:309
 #: libs/ui/forms/wdgconvertcolorspace.ui:99
-#: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
 #, fuzzy, kde-format
 #| msgid "Position"
@@ -26318,22 +26387,16 @@ msgstr ""
 msgid "&Rendering intent:"
 msgstr "ਸਥਿਤੀ"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:213 libs/ui/forms/wdgcolorsettings.ui:304
-#: libs/ui/forms/wdgimageproperties.ui:303
+#: libs/ui/forms/wdgcolorsettings.ui:213
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, fuzzy, kde-format
 #| msgid "Zoom"
 msgid "Relative Colorimetric"
 msgstr "ਜ਼ੂਮ"
 
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
-#. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:223 libs/ui/forms/wdgcolorsettings.ui:314
-#: libs/ui/forms/wdgimageproperties.ui:313
+#: libs/ui/forms/wdgcolorsettings.ui:223
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, fuzzy, kde-format
 #| msgid "Zoom"
@@ -26362,38 +26425,60 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Note: these are the default proofing settings for new images."
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:291
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Proofing Rendering Intent:"
-msgstr "ਸਥਿਤੀ"
-
-#. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
-#: libs/ui/forms/wdgcolorsettings.ui:322
-#: libs/ui/forms/wdgimageproperties.ui:326
-#, fuzzy, kde-format
-#| msgid "Position"
-msgid "Adaptation State:"
-msgstr "ਸਥਿਤੀ"
-
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
-#: libs/ui/forms/wdgcolorsettings.ui:336
-#: libs/ui/forms/wdgimageproperties.ui:350
+#: libs/ui/forms/wdgcolorsettings.ui:291
+#: libs/ui/forms/wdgimageproperties.ui:386
 #, fuzzy, kde-format
 #| msgid "Page"
 msgid "Gamut Warning:"
 msgstr "ਸਫ਼ਾ"
 
+#. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
+#: libs/ui/forms/wdgcolorsettings.ui:318
+#, fuzzy, kde-format
+#| msgid "Line Color"
+msgid "Proofing transform"
+msgstr "ਰੇਖਾ ਰੰਗ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
+#. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
+#: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
+#: libs/ui/forms/wdgimageproperties.ui:354
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Rendering Intent:"
+msgstr "ਸਥਿਤੀ"
+
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
+#. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
 #. i18n: ectx: property (text), widget (QCheckBox, ckbProofBlackPoint)
-#: libs/ui/forms/wdgcolorsettings.ui:350
-#: libs/ui/forms/wdgimageproperties.ui:367
+#. i18n: ectx: property (text), widget (QCheckBox, chkDispBlackPoint)
+#: libs/ui/forms/wdgcolorsettings.ui:334 libs/ui/forms/wdgcolorsettings.ui:367
+#: libs/ui/forms/wdgimageproperties.ui:304
+#: libs/ui/forms/wdgimageproperties.ui:347
 #, kde-format
 msgid "Black Point Compensation"
 msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lblColorSpaces)
+#. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
+#: libs/ui/forms/wdgcolorsettings.ui:350
+#: libs/ui/forms/wdgimageproperties.ui:371
+#, fuzzy, kde-format
+#| msgid "Position"
+msgid "Adaptation State:"
+msgstr "ਸਥਿਤੀ"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: libs/ui/forms/wdgcolorsettings.ui:387
+#: libs/ui/forms/wdgimageproperties.ui:322
+#, fuzzy, kde-format
+#| msgid "Replace"
+msgid "Display Mode:"
+msgstr "ਤਬਦੀਲ"
+
+#. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
 #, fuzzy, kde-format
 #| msgid "Zoom"
@@ -26401,7 +26486,7 @@ msgctxt "Color model"
 msgid "Model:"
 msgstr "ਜ਼ੂਮ"
 
-#. i18n: ectx: property (text), widget (QLabel, lblColorModels)
+#. i18n: ectx: property (text), widget (QLabel, lblColorDepths)
 #: libs/ui/forms/wdgcolorspaceselector.ui:56
 #, kde-format
 msgctxt "Label of Color Depth in Color Space Selector dialogue"
@@ -28171,8 +28256,19 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgid "Store Softproofing configuration in the image"
 msgstr ""
 
+#. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
+#: libs/ui/forms/wdgimageproperties.ui:301
+#, kde-format
+msgid ""
+"<html><head/><body><p>Black Point compensation matches the darkest color of "
+"the source device to the darkest color of the destination device. Relative "
+"Colorimetric without Black Point Compensation will show the difference "
+"between the darkest values. With blackpoint compensation, black is black.</"
+"p></body></html>"
+msgstr ""
+
 #. i18n: ectx: property (toolTip), widget (QSlider, sldAdaptationState)
-#: libs/ui/forms/wdgimageproperties.ui:336
+#: libs/ui/forms/wdgimageproperties.ui:361
 #, kde-format
 msgid ""
 "<html><head/><body><p>Set how much you wish to correct the adaptation state. "
@@ -28183,19 +28279,8 @@ msgid ""
 "Colorimetric</span>?</p></body></html>"
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
-#: libs/ui/forms/wdgimageproperties.ui:364
-#, kde-format
-msgid ""
-"<html><head/><body><p>Black Point compensation matches the darkest color of "
-"the source device to the darkest color of the destination device. Relative "
-"Colorimetric without Black Point Compensation will show the difference "
-"between the darkest values. With blackpoint compensation, black is black.</"
-"p></body></html>"
-msgstr ""
-
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
-#: libs/ui/forms/wdgimageproperties.ui:390
+#: libs/ui/forms/wdgimageproperties.ui:416
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Annotations"
@@ -28206,7 +28291,7 @@ msgstr "ਸਥਿਤੀ"
 #. i18n: ectx: property (text), widget (QLabel, lblDatabaseVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblKritaVersion)
 #. i18n: ectx: property (text), widget (QLabel, lblCreationDate)
-#: libs/ui/forms/wdgimageproperties.ui:414 plugins/dockers/lut/wdglut.ui:364
+#: libs/ui/forms/wdgimageproperties.ui:440 plugins/dockers/lut/wdglut.ui:364
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:179
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:193
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:207
@@ -31586,13 +31671,13 @@ msgstr ""
 msgid "Apply Filter Again: %1"
 msgstr "ਭੰਡਾਰ"
 
-#: libs/ui/kis_image_manager.cc:106
+#: libs/ui/kis_image_manager.cc:107
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Import Image"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
 
-#: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
+#: libs/ui/kis_image_manager.cc:198 libs/ui/widgets/KoDualColorButton.cpp:92
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Select a Color"
@@ -36676,7 +36761,7 @@ msgctxt "combo box: select all layers without a label"
 msgid "No Label"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: libs/ui/widgets/kis_color_space_selector.cc:217
+#: libs/ui/widgets/kis_color_space_selector.cc:223
 #, fuzzy, kde-format
 #| msgid "D&elete"
 msgid "Select a Color Space"
@@ -39917,7 +40002,7 @@ msgstr ""
 msgid "Cr"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
 
-#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:140
+#: plugins/color/lcms2engine/IccColorSpaceEngine.cpp:142
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "ICC Engine"
@@ -52494,8 +52579,8 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:674
-#: plugins/impex/libkra/kis_kra_loader.cpp:1124
+#: plugins/impex/libkra/kis_kra_loader.cpp:693
+#: plugins/impex/libkra/kis_kra_loader.cpp:1143
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -52684,26 +52769,26 @@ msgstr ""
 msgid "Image specifies an unsupported color model: %1."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:565
+#: plugins/impex/libkra/kis_kra_loader.cpp:584
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:576
+#: plugins/impex/libkra/kis_kra_loader.cpp:595
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:585
+#: plugins/impex/libkra/kis_kra_loader.cpp:604
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:669
+#: plugins/impex/libkra/kis_kra_loader.cpp:688
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -52715,34 +52800,34 @@ msgid ""
 "Do you want to locate it manually?"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:844
+#: plugins/impex/libkra/kis_kra_loader.cpp:863
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:904
+#: plugins/impex/libkra/kis_kra_loader.cpp:923
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:932
+#: plugins/impex/libkra/kis_kra_loader.cpp:951
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:967
+#: plugins/impex/libkra/kis_kra_loader.cpp:986
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:974
+#: plugins/impex/libkra/kis_kra_loader.cpp:993
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:998
+#: plugins/impex/libkra/kis_kra_loader.cpp:1017
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -52751,7 +52836,7 @@ msgid ""
 "blending mode"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1119
+#: plugins/impex/libkra/kis_kra_loader.cpp:1138
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -52923,7 +53008,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:196
+#: plugins/impex/libkra/kis_kra_saver.cpp:208
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -52934,7 +53019,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:211
+#: plugins/impex/libkra/kis_kra_saver.cpp:223
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -52945,20 +53030,20 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:223
+#: plugins/impex/libkra/kis_kra_saver.cpp:235
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:229
+#: plugins/impex/libkra/kis_kra_saver.cpp:241
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:246
-#: plugins/impex/libkra/kis_kra_saver.cpp:268
+#: plugins/impex/libkra/kis_kra_saver.cpp:258
+#: plugins/impex/libkra/kis_kra_saver.cpp:280
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -52969,8 +53054,8 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:280
-#: plugins/impex/libkra/kis_kra_saver.cpp:304
+#: plugins/impex/libkra/kis_kra_saver.cpp:292
+#: plugins/impex/libkra/kis_kra_saver.cpp:316
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -52981,8 +53066,8 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:317
-#: plugins/impex/libkra/kis_kra_saver.cpp:340
+#: plugins/impex/libkra/kis_kra_saver.cpp:329
+#: plugins/impex/libkra/kis_kra_saver.cpp:352
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -52993,7 +53078,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:453
+#: plugins/impex/libkra/kis_kra_saver.cpp:465
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53004,7 +53089,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:497
+#: plugins/impex/libkra/kis_kra_saver.cpp:509
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53015,7 +53100,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:531
+#: plugins/impex/libkra/kis_kra_saver.cpp:543
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53026,7 +53111,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:561
+#: plugins/impex/libkra/kis_kra_saver.cpp:573
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53037,7 +53122,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:596
+#: plugins/impex/libkra/kis_kra_saver.cpp:608
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53048,7 +53133,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:629
+#: plugins/impex/libkra/kis_kra_saver.cpp:641
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53059,7 +53144,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:644
+#: plugins/impex/libkra/kis_kra_saver.cpp:656
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -53070,7 +53155,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:747
+#: plugins/impex/libkra/kis_kra_saver.cpp:759
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -66314,6 +66399,11 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Position"
+#~ msgid "Proofing Rendering Intent:"
+#~ msgstr "ਸਥਿਤੀ"
 
 #, fuzzy
 #~| msgid "Document"

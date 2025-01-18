@@ -1,17 +1,52 @@
 # translation of krita.po to
 # Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
-#
-# --- kritalibs
-# translation of koffice.po to
+# This file is distributed under the same license as the PACKAGE package.
 # Translated by Arkadiusz Danilecki <szopen@aurora.put.poznan.pl>
-# with corrections, suggestions and updates by:
 # Waldemar Kochaniec <walkoch@polbox.pl>
 # Jacek Stolarczyk <jacek@mer.chemia.polsl.gliwice.pl>
 # Krzysztof Jasiutowicz <kpjas@box43.gnet.pl>
+# Piotr Szymanski <djurban@pld-linux.org>, 2003.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006.
+# Adrian Brosz <adriian@wp.pl>, 2005.
+# Michal Rudolf <mrudolf@kdewebdev.org>, 2005.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2006.
+# Robert Gomulka <rgom@o2.pl>, 2006, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009, 2013.
+# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2023, 2024, 2025 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+# Daniel Wit Preuss <danpre@tlen.pl>, 2004.
+# Robert Gomulka <carramba@epf.pl>, 2005, 2008, 2009.
+# Robert Gomulka <rgom@o2.pl>, 2006.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2013.
+# Michał Lachowski <michal@lachowski.info>, 2010.
+# Jarosław Staniek <staniek@kde.org>, 2014, 2015.
+# tazdzioch <tazdzioch@o2.pl>, 2007.
+# Tadeusz Hessel <tazdzioch@o2.pl>, 2007.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2013.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2015.
+# Maciej Wikło <maciej.wiklo@wp.pl>, 2008.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2010.
+# Mirek Sabiniewicz <m.sabiniewicz@gmail.com>, 2010.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2016.
+# Piotr Szymanski <djurban@linuxpl.org>, 2002.
+# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005, 2006.
+# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2006.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015.
+# Maciej Wikło <maciej.wiklo@wp.pl>, 2009.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2009.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014.
+# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011.
+# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+#
+# --- kritalibs
+# translation of koffice.po to
+# with corrections, suggestions and updates by:
 # --- krita_shape_text
 # translation of TextShape.po to
 # Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
 #
 # --- kritacolorspaces
 # Copyright (C) YEAR This_file_is_part_of_KDE
@@ -52,47 +87,12 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Piotr Szymanski <djurban@pld-linux.org>, 2003.
-# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2005, 2006.
-# Adrian Brosz <adriian@wp.pl>, 2005.
-# Michal Rudolf <mrudolf@kdewebdev.org>, 2005.
-# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2006.
-# Robert Gomulka <rgom@o2.pl>, 2006, 2007.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009, 2013.
-# SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015, 2016, 2023, 2024 Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
-# Daniel Wit Preuss <danpre@tlen.pl>, 2004.
-# Robert Gomulka <carramba@epf.pl>, 2005, 2008, 2009.
-# Robert Gomulka <rgom@o2.pl>, 2006.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2013.
-# Michał Lachowski <michal@lachowski.info>, 2010.
-# Jarosław Staniek <staniek@kde.org>, 2014, 2015.
-# tazdzioch <tazdzioch@o2.pl>, 2007.
-# Tadeusz Hessel <tazdzioch@o2.pl>, 2007.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2007, 2013.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2010.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2015.
-# Maciej Wikło <maciej.wiklo@wp.pl>, 2008.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2010.
-# Mirek Sabiniewicz <m.sabiniewicz@gmail.com>, 2010.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2016.
-# Piotr Szymanski <djurban@linuxpl.org>, 2002.
-# Marta Rybczynska <mrybczynska@poczta.onet.pl>, 2004, 2005, 2006.
-# Krzysztof Lichota <lichota@mimuw.edu.pl>, 2006.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008, 2009.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014, 2015.
-# Maciej Wikło <maciej.wiklo@wp.pl>, 2009.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2013, 2014.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2009.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2014.
-# Marta Rybczyńska <kde-i18n@rybczynska.net>, 2008.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011.
-# Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>, 2011, 2012, 2014, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2024-10-26 11:58+0200\n"
+"PO-Revision-Date: 2025-01-18 12:02+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7947,12 +7947,10 @@ msgstr "Przerwij w punkcie"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Przerwij w odcinku"
+msgstr "Przerwij na zaznaczeniu"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -11539,29 +11537,24 @@ msgstr "Maska filtru"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Dodaj maskę barwiącą"
+msgstr "Dodaj maskę nakładki barwiącej"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Dodaj nową maskę barwiącą"
+msgstr "Dodaj nową maskę filtra szybkiej nakładki barwiącej"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Nakładka barwna"
+msgstr "Maska szybkiej nakładki barwiącej"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -12744,12 +12737,10 @@ msgstr "Przekształć przestrzeń barw warstwy"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492 krita/krita.action:3495
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Przekształć przestrzeń barw warstwy"
+msgstr "Ujednolić przestrzeń barw warstwy"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3494
@@ -12759,6 +12750,8 @@ msgid ""
 "Convert all the layers into the image color space (if they happen to have a "
 "different color space)"
 msgstr ""
+"Przekształć wszystkie warstwy na przestrzeń barw obrazu (jeśli zdarzy się, "
+"że będą miały inną przestrzeń barw)"
 
 #. i18n: context: text @ Action (merge_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3504
@@ -16645,18 +16638,16 @@ msgstr ""
 "nowy punkt ścieżki."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Naciśnij B, aby przerwać ścieżkę w wybranym punkcie."
+msgstr "Naciśnij %1, aby przerwać ścieżkę w zaznaczonym punkcie."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Naciśnij B, aby przerwać ścieżkę na wybranych odcinkach."
+msgstr "Naciśnij %1, aby przerwać ścieżkę na zaznaczonych odcinkach."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -17198,18 +17189,16 @@ msgid "Change Clone Layers"
 msgstr "Zmień powielone warstwy"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Collapse Docker"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Collapse node %1"
-msgstr "Zwiń dok"
+msgstr "Zwiń węzeł %1"
 
 #: libs/image/commands_new/KisLayerCollapseCommand.cpp:13
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Expand node %1"
-msgstr ""
+msgstr "Rozwiń węzeł %1"
 
 #: libs/image/filter/kis_filter_category_ids.cpp:11
 #, kde-format
@@ -17510,12 +17499,9 @@ msgid "Convert Projection Color Space"
 msgstr "Przekształć przestrzeń barw projekcji"
 
 #: libs/image/kis_image.cc:1397
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Przekształć przestrzeń barw warstwy"
+msgstr "Ujednolić przestrzeń barw warstwy"
 
 #: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
@@ -17652,7 +17638,7 @@ msgstr "Etykieta barwy"
 #: libs/ui/layerstyles/wdglayerstyles.ui:114
 #, kde-format
 msgid "Color Overlay"
-msgstr "Nakładka barwna"
+msgstr "Nakładka barwiąca"
 
 #: libs/image/kis_layer_properties_icons.cpp:33
 #, kde-format
@@ -17681,11 +17667,9 @@ msgid "Error"
 msgstr "Błąd"
 
 #: libs/image/kis_layer_properties_icons.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Przekształć przestrzeń barw warstwy"
+msgstr "Niezgodność przestrzeń barw warstwy"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -17705,6 +17689,9 @@ msgid ""
 "%1 [%2],\n"
 "operations may be slow"
 msgstr ""
+"Przestrzeń barw warstwy jest różna od przestrzeni barw obrazu:\n"
+"%1 [%2],\n"
+"więc działania będą powolne"
 
 #: libs/image/kis_layer_utils.cpp:626
 #, kde-format
@@ -22817,55 +22804,49 @@ msgstr "Ustaw barwę używaną dla ostrzeżeń"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Postrzeganie"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Kolorymetria względna"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Nasycenie"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Kolorymetria bezwzględna"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Ustawienia wyświetlania"
+msgstr "Użyj globalnych ustawień wyświetlania"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Zasymuluj biel i czerń papieru"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Własny"
@@ -22877,6 +22858,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Użyj celu odwzorowania, kompensacji punktu czerni i zestawu dostosowującego "
+"w ustawieniach zarządzania barwami."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22885,12 +22868,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Zasymuluj papier, używając kolorymetrii bezwzględnej, wyłączając przy tym "
+"dostosowanie punktu bieli i kompensację punktu czerni."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "Nadaj własne ustawienia dla drugiego przekształcenia."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24709,20 +24694,18 @@ msgstr "Ostrzeżenie bycia poza gamutem:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Przekształcenie wzorca"
+msgstr "Przekształcenia do sprawdzania barw"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Cel odwzorowania"
+msgstr "Cel odwzorowania:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24746,10 +24729,9 @@ msgstr "Stan adaptacji:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Wyświetlacz:"
+msgstr "Tryb wyświetlania:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -26257,31 +26239,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
-#, fuzzy, kde-format
-#| msgid "Automatic hyphenation"
+#, kde-format
 msgid "Automatic layer naming"
-msgstr "Samoczynny podział wyrazów"
+msgstr "Samonadawane nazwy warstw"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1479
-#, fuzzy, kde-format
-#| msgid "Add \"Merged\" to merged group layers"
+#, kde-format
 msgid "Append \"Merged\" to merged group layers"
-msgstr "Dodaj \"Scalona\" do scalonych grup warstw"
+msgstr "Dopisz \"Scalona\" do scalonych grup warstw"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1486
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
-msgstr "Dodaj \"(wklejona)\" do warstw wklejonych"
+msgstr "Dopisz \"(wklejona)\" do warstw wklejonych"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1493
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Dodaj \"(wklejona)\" do warstw wklejonych"
+msgstr "Poprzedź \"(Kopia)\" w powielonych warstwach"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518
@@ -27800,10 +27778,9 @@ msgstr "Odcień(H)/Nasycenie(S)/Wartość(V)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color History Ring"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Pokaż pierścień historii barw"
+msgstr "Uszereguj pierścień historii barw po:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -29886,17 +29863,14 @@ msgid "Add Transform Mask"
 msgstr "Dodaj maskę przekształcenia"
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "Nakładka barwna"
+msgstr "Dodaj szybką nakładkę barwiącą"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Nakładka barwna"
+msgstr "Maska nakładki barwiącej"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -30978,20 +30952,14 @@ msgstr ""
 "zapisywania ukończy."
 
 #: libs/ui/KisDocument.cpp:853
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Nie można zapisać do svg: %1"
+msgstr "Nie udało się rozpocząć zapisywania %1. Obraz jest zajęty"
 
 #: libs/ui/KisDocument.cpp:858
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not start saving %1. Wait until the current save operation has "
-#| "finished."
+#, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
-msgstr ""
-"Nie można rozpocząć zapisywania %1. Zaczekaj, aż bieżące działanie "
-"zapisywania ukończy."
+msgstr "Nie można rozpocząć zapisywania %1. Nastąpił nieoczekiwany błąd"
 
 #: libs/ui/KisDocument.cpp:998
 #, kde-format
@@ -37044,17 +37012,15 @@ msgid "A scheme with this name already exists."
 msgstr "Zestaw o tej nazwie już istnieje."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
 "Czy na pewno chcesz usunąć zestaw %1?\n"
-"Zauważ, że nie nie usunie to żadnego z zestawów systemowych."
+"                                             Zauważ, że nie nie usunie to "
+"żadnego z zestawów systemowych."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -37345,10 +37311,9 @@ msgstr "Własna barwa"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Ustawienia narzędzia"
+msgstr "Ustawienia elementów interfejsu"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -40392,8 +40357,7 @@ msgid "File extension:"
 msgstr "Rozszerzenie pliku:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:82
-#, fuzzy, kde-format
-#| msgid "Clean Up"
+#, kde-format
 msgid "Clean Up"
 msgstr "Uprzątnij"
 
@@ -41484,10 +41448,9 @@ msgstr "Interakcja kończy się"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Minimalny wybierak cienia"
+msgstr "Pokaż minimalny wybierak cienia"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -44873,18 +44836,16 @@ msgid "Minimize Channel"
 msgstr "Zmniejszenie wartość kanału"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Nakładka barwna"
+msgstr "&Szybka nakładka barwiąca…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "Nakładka barwna"
+msgstr "Szybka nakładka barwiąca"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -44904,24 +44865,21 @@ msgstr "Próbnik barw:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "Try&b mieszania:"
+msgstr "Tryb mieszania:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Wybierz główną nieprzezroczystość dla warstwy."
+msgstr "Ustaw główną nieprzezroczystość barwy nakładki."
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
-#, fuzzy, kde-format
-#| msgid "Adjust the transparency of the layer"
+#, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Dostosuj przezroczystość warstwy"
+msgstr "Dostosuj przezroczystość barwy nakładki"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -53443,7 +53401,7 @@ msgstr "Odwrócony wzorzec"
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:314
 #, kde-format
 msgid "Auto Invert For Eraser"
-msgstr ""
+msgstr "Samoodwrócenie dla gumki"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -56890,7 +56848,7 @@ msgstr "Dostosuj rozmiar eksportu do zawartości warstwy"
 
 #: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Add incrementing prefix"
-msgstr ""
+msgstr "Dodaj przedrostek przyrostowy"
 
 #: plugins/python/exportlayers/uiexportlayers.py:74
 msgid "JPEG"
@@ -59278,10 +59236,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Wpisz nazwę, pod którą ma być zapisany ten profil:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Przepraszamy, podana przez ciebie nazwa jest nieprawidłowa!"
+msgstr "Wpisana nazwa jest nieprawidłowa."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -61158,21 +61115,16 @@ msgid "Patch Radius:"
 msgstr "Promień łatki:"
 
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
-#, fuzzy, kde-format
-#| msgid ""
-#| "Sorry, Krita was built without the support of GNU Scientific Library, so "
-#| "you cannot scale the selection with handles. Please compile Krita with "
-#| "GNU Scientific Library support, or use options widget for editing scale "
-#| "values manually."
+#, kde-format
 msgid ""
 "Krita was built without the support of GNU Scientific Library, so you cannot "
 "scale the selection with handles. Please compile Krita with GNU Scientific "
 "Library support, or use options widget for editing scale values manually."
 msgstr ""
-"Wybacz, Krita została zbudowana bez obsługi Biblioteki Naukowej GNU, więc "
-"nie można przeskalować zaznaczanie poprzez uchwyty. Skompiluj Kritę z "
-"obsługą Biblioteki Naukowej GNU lub użyj elementu interfejsu opcji do "
-"ręcznego edytowania wartości skali."
+"Krita została zbudowana bez obsługi Biblioteki Naukowej GNU, więc nie można "
+"przeskalować zaznaczanie poprzez uchwyty. Skompiluj Kritę z obsługą "
+"Biblioteki Naukowej GNU lub użyj elementu interfejsu opcji do ręcznego "
+"edytowania wartości skali."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format

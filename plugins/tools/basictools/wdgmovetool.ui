@@ -71,7 +71,7 @@
       <item row="2" column="0">
        <widget class="QRadioButton" name="radioGroup">
         <property name="toolTip">
-         <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-shift-click.</string>
+         <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-click.</string>
         </property>
         <property name="text">
          <string>Move &amp;the whole group</string>

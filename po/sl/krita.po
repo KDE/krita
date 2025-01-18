@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2024-12-27 19:55+0100\n"
+"PO-Revision-Date: 2025-01-17 12:02+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -22709,55 +22709,49 @@ msgstr "Določi barvo, uporabljeno za opozorila"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Zaznavno"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Nasičenost"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absolutne barvne vrednosti (kolorimetrično)"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Nastavitve prikaza"
+msgstr "Uporabi globalne nastavitve zaslona"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simuliraj beli in črni papir"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Po meri"
@@ -22769,6 +22763,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Uporabite nastavitve Namen izrisovanja, Kompenzacija črne točke in "
+"Prilagoditev v prilagoditvah upravljanja barv."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22777,12 +22773,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Simulirajte papir z uporabo absolutne kolorimetrije in onemogočite "
+"prilagoditev bele točke in kompenzacijo črne točke."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "Izberite nastavitve po meri za drugo preoblikovanje."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24596,20 +24594,18 @@ msgstr "Opozorilo o gamutu:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Preoblikovanje vzorca"
+msgstr "Preoblikovanje preverjanja videza"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Namen upodobitve"
+msgstr "Namen izrisovanja:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24633,10 +24629,9 @@ msgstr "Stanje prilagajanja:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Prikaži:"
+msgstr "Način prikaza:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -26138,31 +26133,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
-#, fuzzy, kde-format
-#| msgid "Automatic layer suffixes"
+#, kde-format
 msgid "Automatic layer naming"
-msgstr "Samodejne pripone plasti"
+msgstr "Samodejno poimenovanje plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1479
-#, fuzzy, kde-format
-#| msgid "Add \"Merged\" to merged group layers"
+#, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Dodaj »Spojeno« k imenu spojenih skupin plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1486
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1493
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Dodaj »(prilepljeno)« k imenu prilepljenih plasti"
+msgstr "Dodaj »Kopija« k imenu podvojenih plasti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518
@@ -61861,9 +61852,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Proofing Rendering Intent:"
-#~ msgstr "Namen upodobitve preverjanja videza:"
-
-#~ msgid "Add a Color Overlay Mask for inking"
-#~ msgstr "Dodaj masko barvnega prekrivanja za slikanje s črnilom"

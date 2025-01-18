@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2025-01-15 20:39+0100\n"
+"PO-Revision-Date: 2025-01-17 08:34+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -22736,58 +22736,52 @@ msgstr "Ange färg använd för varning"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Perceptuell"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativt färgläge"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Färgmättnad"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absolut färgläge"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Visningsinställningar"
+msgstr "Använd globala visningsinställningar"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simulera pappersvitt och svart"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
-msgstr "Egen"
+msgstr "Eget"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:123
 #, kde-format
@@ -22796,6 +22790,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Använd återgivningsalternativ. Svartpunktskompensering och anpassning "
+"inställd i färghanteringsinställningen."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22804,12 +22800,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Simulera papper genom att använda absolut färgläge och inaktivera "
+"vitpunktsanpassning och svartpunktskompensering."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "Välj egna inställningar för den andra transformeringen."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24625,20 +24623,18 @@ msgstr "Färgomfångsvarning:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Mönstertransformering"
+msgstr "Korrekturtransformering"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Återgivningsalternativ"
+msgstr "Återgivningsalternativ:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24662,10 +24658,9 @@ msgstr "Anpassningstillstånd:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Visa:"
+msgstr "Visningsläge:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39

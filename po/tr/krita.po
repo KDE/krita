@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2025-01-14 16:08+0300\n"
+"PO-Revision-Date: 2025-01-17 14:22+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22705,55 +22705,49 @@ msgstr "Uyarı için kullanılan rengi ayarla"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Algısal"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "Göreli Renkölçer"
+msgstr "Göreceli renkölçer"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Doygunluk"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "Mutlak Renkölçer"
+msgstr "Mutlak renkölçer"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Görüntü ayarları"
+msgstr "Global görüntü ayarlarını kullan"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Kâğıt siyah–beyazına benzet"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Özel"
@@ -22765,6 +22759,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Renk yönetimi yapılandırmasında ayarlanmış sunum amacını, siyah nokta "
+"telafisini ve uyumunu kullanın."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22773,12 +22769,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Siyah nokta telafisi ve beyaz nokta uyumunu devre dışı bırakıp mutlak "
+"renkölçer kullanarak kâğıda benzetin."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "İkinci dönüşüm için özel ayarlar seçin."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24593,20 +24591,18 @@ msgstr "Gam uyarısı:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Desen Dönüşümü"
+msgstr "Prova Dönüşümü"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Sunum Amacı"
+msgstr "Sunum amacı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24630,10 +24626,9 @@ msgstr "Uyum durumu:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Görüntü:"
+msgstr "Görüntü kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39

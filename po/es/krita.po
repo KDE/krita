@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2025-01-14 11:55+0100\n"
+"PO-Revision-Date: 2025-01-18 18:31+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -22785,55 +22785,49 @@ msgstr "Fijar el color a usar para la advertencias"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
-msgstr "Percepción"
+msgstr "Perceptiva"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Colorimetría relativa"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Saturación"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Colorimetría absoluta"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Preferencias de visualización"
+msgstr "Usar las preferencias de visualización globales"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simular papel blanco y negro"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Personalizado"
@@ -22845,6 +22839,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Usar el propósito de renderización, la compensación de punto negro y la "
+"adaptación definidos en la configuración de la gestión de color."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22853,12 +22849,15 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Simular el papel usando colorimetría absoluta y desactivando la adaptación "
+"del punto blanco y la compensación del punto negro."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
 msgstr ""
+"Seleccionar preferencias personalizadas para la segunda transformación."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24448,7 +24447,7 @@ msgstr ""
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
 #, kde-format
 msgid "Perceptual"
-msgstr "Percepción"
+msgstr "Perceptiva"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:107
@@ -24690,20 +24689,18 @@ msgstr "Advertencia de gama:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Transformación de patrón"
+msgstr "Transformación de pruebas en pantalla"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Propósito de la renderización"
+msgstr "Propósito de la renderización:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24727,10 +24724,9 @@ msgstr "Estado de la adaptación:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Mostrar:"
+msgstr "Modo de visualización:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -34452,11 +34448,11 @@ msgstr ""
 "fácilmente la gama de color sRGB en cianes, verdes y amarillos verdosos. Los "
 "colores de los archivos raw interpolados de las cámaras también exceden a "
 "menudo la gama de colores sRGB.</p><p>Como apunte relevante, el uso de "
-"propósito perceptual al convertir a sRGB no hace que lo que queda fuera de "
+"propósito perceptivo al convertir a sRGB no hace que lo que queda fuera de "
 "la gama de colores encaje por arte de magia en la gama de color sRGB. El "
 "espacio de color sRGB estándar (junto con el resto de perfiles RGB previstos "
 "en el paquete de mi perfil) es un perfil matricial, y los perfiles "
-"matriciales no tienen tablas de propósito perceptual.</p>"
+"matriciales no tienen tablas de propósito perceptivo.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:629
 #, kde-format
@@ -34524,9 +34520,9 @@ msgid ""
 "few editing operations really should be done on perceptually uniform RGB. "
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
-"<p>Los perfiles que terminan en «-labl.icc» tienen TRC perceptualmente "
+"<p>Los perfiles que terminan en «-labl.icc» tienen TRC perceptivamente "
 "uniformes. Algunas operaciones de edición deben hacerse en RGB "
-"perceptualmente uniforme. Asegúrese de usar las versiones V4 para editar "
+"perceptivamente uniforme. Asegúrese de usar las versiones V4 para editar "
 "imágenes de bits de alta profundidad.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
@@ -34538,8 +34534,8 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 "<p>Los perfiles que terminan en «-srgbtrc.icc», «-g22.icc» y «-rec709.icc» "
-"tienen aproximada, pero no exactamente, TRC perceptualmente uniformes. La "
-"TRC de gamma=1,8 de ProPhotoRGB no está tan cerca de ser perceptualmente "
+"tienen aproximada, pero no exactamente, TRC perceptivamente uniformes. La "
+"TRC de gamma=1,8 de ProPhotoRGB no está tan cerca de ser perceptivamente "
 "uniforme.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
@@ -34555,7 +34551,7 @@ msgid ""
 "8-bit editing.</p>"
 msgstr ""
 "<p>Durante la edición de imágenes de 8 bits, debe usar un perfil con una "
-"gama de colores pequeña y una TRC perceptualmente uniforme (aproximada o "
+"gama de colores pequeña y una TRC perceptivamente uniforme (aproximada o "
 "exactamente). De los perfiles que proporciona mi paquete de perfiles, solo "
 "los espacios de color sRGB y AdobeRGB1998 (ClayRGB) son lo suficientemente "
 "pequeños para la edición en 8 bits. Incluso con un espacio de color "
@@ -47917,7 +47913,7 @@ msgid ""
 "for HDR images where the absolute brightness is important."
 msgstr ""
 "La imagen se convertirá primero a Rec 2020 lineal y luego se codificará con "
-"una curva de cuantización perceptual (conocida también como curva SMPTE "
+"una curva de cuantización perceptiva (conocida también como curva SMPTE "
 "2048). Recomendado para imágenes HDR en las que el brillo absoluto es "
 "importante. "
 
@@ -47951,7 +47947,7 @@ msgid ""
 "where the absolute brightness is important."
 msgstr ""
 "La imagen se linearizará primero y luego se codificará con una curva de "
-"cuantización perceptual (conocida también como curva SMPTE 2048). "
+"cuantización perceptiva (conocida también como curva SMPTE 2048). "
 "Recomendado para imágenes en las que el brillo absoluto es importante. "
 
 #: plugins/impex/heif/HeifExport.cpp:558

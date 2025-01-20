@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-17 01:52+0000\n"
-"PO-Revision-Date: 2025-01-15 00:08+0100\n"
+"PO-Revision-Date: 2025-01-19 13:48+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -3551,7 +3551,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "abominable_snowman.png"
 msgid "abominable snowman"
-msgstr "abominable besta das neves"
+msgstr "abominábel besta das neves"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16258,7 +16258,7 @@ msgstr "Converter en ruta"
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "Desfacer o subcamiño en puntos"
+msgstr "Romper o subcamiño en puntos"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
 msgctxt "(qtundo-format)"
@@ -22395,7 +22395,7 @@ msgid ""
 " in Trilinear or High Quality filtering modes.\n"
 "Current mode is %1"
 msgstr ""
-"A vista previa pode usarse nos\n"
+"Permítese a vista previa nos\n"
 "modos de filtro de tres liñas ou de alta calidade.\n"
 "O modo actual é %1."
 
@@ -22784,55 +22784,49 @@ msgstr "Definir a cor que se usa para os avisos"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
-msgstr "Percepción"
+msgstr "Perceptiva"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Colorimétrica relativa"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Saturación"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Colorimétrica absoluta"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Configuración da visualización"
+msgstr "Usar as opcións globais de visualización"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simular branco e negro de papel"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "Personalizado"
@@ -22844,6 +22838,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Usar a intención de renderización, a compensación de punto negro e a "
+"adaptación definidas na configuración de xestión de cores."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22852,12 +22848,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Simular papel usando colorimetría absoluta e desactivando a adaptación de "
+"punto branco e a compensación de punto negro."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "Seleccionar opcións personalizadas para a segunda transformación."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -24680,20 +24678,18 @@ msgstr "Aviso de gama:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Transformación de padrón"
+msgstr "Transformación de probas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Propósito de renderización"
+msgstr "Propósito de renderización:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24717,10 +24713,9 @@ msgstr "Estado de adaptación:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Ver:"
+msgstr "Modo de visualización:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -40365,7 +40360,7 @@ msgstr "Última modificación"
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
-msgstr "Actualizando…"
+msgstr "Analizando…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
@@ -40736,7 +40731,7 @@ msgstr ""
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
-"Krita probablemente non puido deter a  gravadora. Probe a reiniciar Krita."
+"Krita probabelmente non puido deter a  gravadora. Probe a reiniciar Krita."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:718
 #, kde-format
@@ -43866,6 +43861,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(non se seleccionou ningún)"
 
+# skip-rule: trasno-undo_reverse
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
 #, kde-format
 msgid "Undelete Resources"
@@ -44472,8 +44468,8 @@ msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
-"Os seguintes botóns funcionan nos dispositivos Note 9, Note 10, Tab S6 e Tab "
-"S9."
+"Permítense os seguintes botóns nos dispositivos Note 9, Note 10, Tab S6 e "
+"Tab S 9."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -44524,7 +44520,7 @@ msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
 msgstr ""
-"Os seguintes acenos funcionan nos dispositivos Note 10, Tab S6 e Tab S9."
+"Permítense os seguintes acenos nos dispositivos Note 10, Tab S6 e Tab S9."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -49991,7 +49987,7 @@ msgstr ""
 "Desactivar para obter ficheiros máis pequenos se a imaxe non ten "
 "transparencia"
 
-# skip-rule: normalization-ble
+# skip-rule: trasno-gl_bel
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:131
@@ -51834,7 +51830,7 @@ msgid ""
 "This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
 "or newer."
 msgstr ""
-"O ficheiro XCF é novo de máis; Krita non pode traballar con ficheiros XCF "
+"O ficheiro XCF é novo de máis; Krita non pode permitir ficheiros XCF "
 "escritos pola versión 2.9 de GIMP ou unha versión posterior."
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
@@ -52007,8 +52003,8 @@ msgstr ""
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
-"Desactivado: o modo de revestimento non funciona no modo de claridade do "
-"pincel"
+"Desactivado: o modo de revestimento non se permite no modo de claridade do "
+"pincel."
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format

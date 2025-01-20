@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-01-15 00:08+0100\n"
+"PO-Revision-Date: 2025-01-19 13:48+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -3551,7 +3551,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "abominable_snowman.png"
 msgid "abominable snowman"
-msgstr "abominable besta das neves"
+msgstr "abominábel besta das neves"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16119,7 +16119,7 @@ msgstr "Converter en ruta"
 #: libs/flake/commands/KoPathBreakAtPointCommand.cpp:27
 msgctxt "(qtundo-format)"
 msgid "Break subpath at points"
-msgstr "Desfacer o subcamiño en puntos"
+msgstr "Romper o subcamiño en puntos"
 
 #: libs/flake/commands/KoPathCombineCommand.cpp:54
 msgctxt "(qtundo-format)"
@@ -22203,7 +22203,7 @@ msgid ""
 " in Trilinear or High Quality filtering modes.\n"
 "Current mode is %1"
 msgstr ""
-"A vista previa pode usarse nos\n"
+"Permítese a vista previa nos\n"
 "modos de filtro de tres liñas ou de alta calidade.\n"
 "O modo actual é %1."
 
@@ -40162,7 +40162,7 @@ msgstr "Última modificación"
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
-msgstr "Actualizando…"
+msgstr "Analizando…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:223
@@ -43485,6 +43485,7 @@ msgctxt ""
 msgid "(None selected)"
 msgstr "(non se seleccionou ningún)"
 
+# skip-rule: trasno-undo_reverse
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, kde-format
 msgid "Undelete Resources"
@@ -44045,7 +44046,7 @@ msgid ""
 "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
 "devices."
 msgstr ""
-"As seguintes accións de botón funcionan nos dispositivos Note 9, Note 10 e "
+"Permítense as seguintes accións de botón nos dispositivos Note 9, Note 10 e "
 "Tab S6."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
@@ -44094,7 +44095,7 @@ msgstr "Circulo antihorario"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:154
 #, kde-format
 msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-msgstr "Os seguintes acenos funcionan nos dispositivos Note 10 e Tab S6."
+msgstr "Permítense os seguintes acenos nos dispositivos Note 10 e Tab S6."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -49307,7 +49308,7 @@ msgstr ""
 "Desactivar para obter ficheiros máis pequenos se a imaxe non ten "
 "transparencia"
 
-# skip-rule: normalization-ble
+# skip-rule: trasno-gl_bel
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, alpha)
 #: plugins/impex/png/kis_wdg_options_png.ui:181
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:131
@@ -51150,7 +51151,7 @@ msgid ""
 "This XCF file is too new; Krita cannot support XCF files written by GIMP 2.9 "
 "or newer."
 msgstr ""
-"O ficheiro XCF é novo de máis; Krita non pode traballar con ficheiros XCF "
+"O ficheiro XCF é novo de máis; Krita non pode permitir ficheiros XCF "
 "escritos pola versión 2.9 de GIMP ou unha versión posterior."
 
 #: plugins/metadata/iptc/kis_iptc_io.h:26
@@ -51323,8 +51324,8 @@ msgstr ""
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
 msgstr ""
-"Desactivado: o modo de revestimento non funciona no modo de claridade do "
-"pincel"
+"Desactivado: o modo de revestimento non se permite no modo de claridade do "
+"pincel."
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format

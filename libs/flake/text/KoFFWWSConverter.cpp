@@ -16,9 +16,21 @@
 #include <QFontDatabase>
 
 
-
+/**
+ * @brief The FontFamilySizeInfo class
+ * Some font-families have different designs for different sizes. These are largely
+ * differences in weight, spacing and small glyph changes.
+ * There's four places opentype stores the design size information:
+ * 1. Different bitmap strikes in the font file. Bitmap fonts do the same.
+ * 2. The OS2 table entry.
+ * 3. The 'size' opentype feature.
+ * 4. The 'opsz' axes in either variable fonts or the stat table.
+ *
+ * Of these, 1 and 4 are supported properly, but we need to keep track of 2 and 3 as well,
+ * to ensure that these fonts are still selectable in the font picker.
+ */
 struct FontFamilySizeInfo {
-    bool isSet = false;
+    bool isSet = false; /// Whether the size info is set.
     bool os2table = false; /// Whether this is using the OS2 table or the GPOS Size feature.
     int subFamilyID = 0;
 
@@ -39,12 +51,17 @@ struct FontFamilySizeInfo {
         if (os2table != other.os2table) {
             return false;
         } else if (os2table) {
-            return low == other.low && high == other.high;
+            return qFuzzyCompare(low, other.low) && qFuzzyCompare(high, other.high);
         } else {
-            return designSize == other.designSize;
+            return qFuzzyCompare(designSize, other.designSize);
         }
     }
 };
+
+QDebug operator<<(QDebug dbg, const FontFamilySizeInfo &info) {
+    dbg.nospace() << info.debugInfo();
+    return dbg.space();
+}
 
 struct FontFamilyNode {
 
@@ -53,26 +70,63 @@ struct FontFamilyNode {
     QString fontFamily;
     QString fontStyle;
     QString fileName;
-    int fileIndex = 0;
+    int fileIndex = 0; /// Truetype collections have indices that need to be checked against.
 
     QHash<QString, QString> sampleStrings; /// sample string used to generate the preview;
-    QList<QLocale> supportedLanguages;
+    QList<QLocale> supportedLanguages; /// Languages supported, according to fontconfig.
 
-    QStringList otherFiles;
-    QDateTime lastModified;
+    QStringList otherFiles; /// Other files that seem related. These might be duplicate font files, or fonts where only the tech differs.
+    QDateTime lastModified; /// Last time the file was modified.
 
+    // The localized font-families. This should be the name associated with the current node,
+    // and thus is the typographic, wws or ribbi name depending on the depth.
     QHash<QLocale, QString> localizedFontFamilies;
+
+    // Style name can depend on depth, and when returning the representation, we need to select the correct name.
     QHash<QLocale, QString> localizedFontStyle;
     QHash<QLocale, QString> localizedTypographicStyle;
     QHash<QLocale, QString> localizedWWSStyle;
+
+    // The full proper name as used by Windows to identify unique names.
     QHash<QLocale, QString> localizedFullName;
 
+    /**
+     * @brief axes
+     * While typical font-files within the same family are defined by having a single weight or width,
+     * variable fonts are defined by a range. The axis info abstracts both into a structure of a range
+     * between two values, which in turn means that if we take a family as a whole, we can combine
+     * all axes to find the total range of variations.
+     */
     QHash<QString, KoSvgText::FontFamilyAxis> axes;
+
+    /**
+     * @brief styleInfo
+     * This abstracts both font families that consist of many separate font-files and variable fonts
+     * with many separate instances, and the hybrid of the two (commonly, if there's an italic type,
+     * it is put into a separate variable font file from the regular type).
+     */
     QList<KoSvgText::FontFamilyStyleInfo> styleInfo;
 
+    /**
+     * @brief pixelSizes
+     * This is only used for bitmap fonts, when searching we try to return the files associated with the
+     * appropriate pixelsize first, so that usage wise it'll feel identical to using an opentype font
+     * with multiple bitmap strikes.
+     *
+     * int: the pixel size.
+     * QStringList: list of files associated with that pixel-size.
+     */
     QHash<int, QStringList> pixelSizes;
+
+    /**
+     * @brief sizeInfo
+     * This is only really used to ensure that sizes get sorted into different WWS families, as otherwise they're unselectable.
+     * We could take them into account when searching, but the CSS-WG hasn't explicitely requested or provided any guidance therein.
+     */
     FontFamilySizeInfo sizeInfo;
 
+    // Data from the osTable fsSelection flags. Older fonts use these to identify italic/oblique in ways that are hard
+    // to coalesce with the axes information, though it'd be good if we could figure out how.
     bool isItalic = false;
     bool isOblique = false;
 
@@ -83,14 +137,14 @@ struct FontFamilyNode {
         for (int k = 0; k < axes.keys().size(); k++) {
             KoSvgText::FontFamilyAxis a = axes.value(axes.keys().at(k));
             KoSvgText::FontFamilyAxis b = otherAxes.value(axes.keys().at(k));
-            if (a.value != b.value) {
+            if (!qFuzzyCompare(a.value, b.value)) {
                 return false;
             }
         }
         return true;
     }
 
-    static FontFamilyNode createWWSFam(const FontFamilyNode &child, QStringList existingWWSNames) {
+    static FontFamilyNode createWWSFamilyNode(const FontFamilyNode &child, const FontFamilyNode &typographic, QStringList existingWWSNames) {
         FontFamilyNode wwsFamily;
         if (child.type != KoSvgText::OpenTypeFontType) {
             if (child.fontStyle.toLower() == "regular") {
@@ -100,9 +154,12 @@ struct FontFamilyNode {
             }
             wwsFamily.fontStyle = child.fontStyle;
         } else {
-            wwsFamily.fontFamily = child.fontFamily;
-            if (existingWWSNames.contains(child.fontFamily)) {
-                wwsFamily.fontFamily = child.fontFamily + " " + child.fontStyle;
+            wwsFamily.fontFamily = typographic.fontFamily;
+            if (existingWWSNames.contains(typographic.fontFamily)) {
+                wwsFamily.fontFamily = child.fontFamily;
+                if (existingWWSNames.contains(child.fontFamily)) {
+                    wwsFamily.fontFamily = child.fontFamily + " " + child.fontStyle;
+                }
             }
         }
         wwsFamily.localizedTypographicStyle = child.localizedTypographicStyle;
@@ -123,10 +180,14 @@ struct FontFamilyNode {
     bool colorSVG = false;
     bool colorBitMap = false;
 
-    QStringList debugInfo();
+    bool hasAnyColor() const {
+        return (colorClrV0 || colorClrV1 || colorSVG || colorBitMap);
+    }
+
+    QStringList debugInfo() const;
 };
 
-QStringList FontFamilyNode::debugInfo()
+QStringList FontFamilyNode::debugInfo() const
 {
     QString style = isItalic? isOblique? "Oblique": "Italic": "Roman";
     QStringList debug = {QString("\'%1\' \'%2\', style: %3, type:%4").arg(fontFamily, fontStyle, style).arg(type)};
@@ -153,9 +214,45 @@ QStringList FontFamilyNode::debugInfo()
     return debug;
 }
 
+QDebug operator<<(QDebug dbg, const FontFamilyNode &node) {
+    dbg.nospace() << node.debugInfo();
+    return dbg.space();
+}
+
 struct KoFFWWSConverter::Private {
     Private() {}
 
+    /**
+     * @brief fontFamilyCollection
+     *
+     * The main reason this WWS converter class exists, is because there's 3 major ways that font-families get sorted:
+     * 1. RIBBI style, this means a single family can have a regular, a bold, an italic and a bold-italic.
+     * 2. WWS style, which means that a single family can have variations in width, weight(bold), and slant (italic).
+     * 3. Typographic style, which means a single family can have all sorts of variations,
+     * limited only by the designer's imagination.
+     *
+     * In practice, this means that a single font file can have unique names for each of these three families, as different
+     * systems may only support a certain type. Because CSS only really has controls for WWS and RIBBI style, we need to
+     * untangle the font-families so we can identify the correct name for a given font within these restrictions.
+     *
+     * For this purpose, we create a font-family collection tree that is sorted as such:
+     *
+     * 1. Typographic
+     *  2. WWS/RIBBI family
+     *   3. Font file and identical alternates, the latter of which count when:
+     *      - The file has the same family and sub family name (and same css values),
+     *        which can happen when there's both type1 and opentype versions of a font.
+     *        We prioritize opentype files here, but returning all these filenames means that the type1 files
+     *        can be used during glyph-fallback.
+     *      - The file is a bitmap font with different sizes. This in particular is so that usage
+     *        will behave the exact same as an opentype file with multiple bitmap strikes.
+     *
+     * This tree then allows us to search on all 3 entries, in particular their family names (and their localized variants),
+     * and will be able to fall-back on the other names if the name that the user selected is not the WWS/RIBBI name.
+     * (For example, an artist sets the name of the font family to "Amstelvar", which is the typographic name, but the WWS
+     * name is "Amstelvar Roman". This class will prioritize WWS values when searching, but still select the typographic name
+     * if it cannot match the wws name. Similarly, if a full font name (yes, that exists too) has been used, this will be prioritized).
+     */
     KisForest<FontFamilyNode> fontFamilyCollection;
 };
 
@@ -169,11 +266,12 @@ KoFFWWSConverter::~KoFFWWSConverter()
 {
 }
 
-constexpr unsigned OS2_ITALIC = 1u << 0;
-constexpr unsigned OS2_BOLD = 1u << 5;
-constexpr unsigned OS2_REGULAR = 1u << 6;
-constexpr unsigned OS2_WWS = 1u << 8;
-constexpr unsigned OS2_OBLIQUE = 1u << 9;
+// OS2 fsSelection bitflags. See https://learn.microsoft.com/en-us/typography/opentype/spec/os2#fsselection
+constexpr unsigned OS2_ITALIC = 1u << 0; /// Is italic
+constexpr unsigned OS2_BOLD = 1u << 5; /// Is bold.
+constexpr unsigned OS2_REGULAR = 1u << 6; /// Is truly regular (instead of italic or oblique)
+constexpr unsigned OS2_WWS = 1u << 8; /// Indicates that the given font is primarily a WWS family and requires no further processing.
+constexpr unsigned OS2_OBLIQUE = 1u << 9; // Is an oblique instead of an italic.
 constexpr unsigned OS2_USE_TYPO_METRICS = 1u << 7;
 
 const QString WEIGHT_TAG = "wght";
@@ -245,7 +343,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
     FontFamilyNode fontFamily;
     fontFamily.fileName = filename;
     fontFamily.fileIndex = index;
-    for (auto it = d->fontFamilyCollection.compositionBegin(); it != d->fontFamilyCollection.compositionEnd(); it++) {
+    for (auto it = d->fontFamilyCollection.begin(); it != d->fontFamilyCollection.end(); it++) {
         if (it->fileName == fontFamily.fileName && it->fileIndex == fontFamily.fileIndex) {
             return true;
         }
@@ -308,7 +406,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
 
             if (os2Table->version >= 5) {
                 FontFamilySizeInfo sizeInfo;
-                qreal twip = 0.05; ///< twip is 'Twenty-in-point';
+                const qreal twip = 0.05; ///< twip is 'Twenty-in-point';
                 sizeInfo.high = os2Table->usUpperOpticalPointSize * twip;
                 sizeInfo.low = os2Table->usLowerOpticalPointSize * twip;
                 sizeInfo.os2table = true;
@@ -458,6 +556,8 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         typographicFamily.fontFamily = fontFamily.fontFamily;
     }
     wwsFamily.isVariable = fontFamily.isVariable;
+    wwsFamily.type = fontFamily.type;
+    typographicFamily.type = typographicFamily.type;
 
     //qDebug() << "adding..." << fontFamily.fontFamily << fontFamily.fileName;
 
@@ -562,6 +662,9 @@ void KoFFWWSConverter::addSupportedLanguagesByFile(const QString &filename, cons
 void KoFFWWSConverter::sortIntoWWSFamilies()
 {
     QStringList wwsNames;
+    // Some font families have predefined wws families, others don't. This function sorts out everything so that each font file has
+    // a wws family in between the typographic and font-file nodes, this is important, because the wws family will be the one presented
+    // as the font-family resource.
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         KisForest<FontFamilyNode> tempList;
 
@@ -569,6 +672,8 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
         QVector<qreal> widths;
         QVector<KoSvgText::FontFormatType> types;
 
+        // This takes all of the current children that aren't inside a wws-node already and puts them into a temp list,
+        // as well as tallying the current widths and weights. We need these to find the most regular value.
         for (auto child = childBegin(typographic); child != childEnd(typographic); child++) {
             if (childBegin(child) != childEnd(child)) {
                 wwsNames.append(child->fontFamily);
@@ -582,8 +687,8 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             types.append(child->type);
             d->fontFamilyCollection.erase(child);
         }
-        //Do most regular first...
         if (KisForestDetail::size(tempList) > 0) {
+            //Do most regular first...
             KoSvgText::FontFormatType testType = types.contains(KoSvgText::OpenTypeFontType)? KoSvgText::OpenTypeFontType: types.first();
             QVector<QPair<QString, QString>> existing;
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
@@ -591,15 +696,15 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                 qreal testWidth = widths.contains(100)? 100: widths.first();
 
                 bool widthTested = !font->axes.keys().contains(WIDTH_TAG);
-                widthTested = widthTested? true: font->axes.value(WIDTH_TAG).value == testWidth;
+                widthTested = widthTested? true: qFuzzyCompare(font->axes.value(WIDTH_TAG).value, testWidth);
 
                 QPair<QString, QString> fontStyle(font->fontFamily, font->fontStyle);
-                if (font->axes.value(WEIGHT_TAG).value == testWeight && widthTested
+                if (qFuzzyCompare(font->axes.value(WEIGHT_TAG).value, testWeight) && widthTested
                         && !font->isItalic
                         && !font->isOblique
                         && font->type == testType
                         && !existing.contains(fontStyle)) {
-                    FontFamilyNode wwsFamily = FontFamilyNode::createWWSFam(*font, wwsNames);
+                    FontFamilyNode wwsFamily = FontFamilyNode::createWWSFamilyNode(*font, *typographic, wwsNames);
                     wwsNames.append(wwsFamily.fontFamily);
                     existing.append(fontStyle);
 
@@ -608,6 +713,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     tempList.erase(font);
                 }
             }
+            // Then sort the rest of the family nodes into wws families.
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
                 auto wws = childBegin(typographic);
                 for (; wws != childEnd(typographic); wws++) {
@@ -624,10 +730,9 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                                 && !font->fontStyle.contains(wws->fontStyle)) {
                             continue;
                         }
-                    } else if (font->isVariable != wwsChild->isVariable) {
-                        // try not to mix variable and non-variable fonts into the same family.
-                        continue;
                     }
+                    // In a previous version of the code, variable and non-variable were not mixed, but after reconsidering,
+                    // they probably should be sorted together. The code will prioritize variable fonts in any case.
 
                     if (!wwsChild->sizeInfo.compare(font->sizeInfo)) {
                         // Skip sorting if the WWS family has size info that is incompatible with the sorted font.
@@ -636,8 +741,8 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     for (; wwsChild != childEnd(wws); wwsChild++) {
                         if (wwsChild->isItalic == font->isItalic
                                 && wwsChild->isOblique == font->isOblique
-                                && wwsChild->compareAxes(font->axes)) {
-                            // TODO: test color.
+                                && wwsChild->compareAxes(font->axes)
+                                && wwsChild->hasAnyColor() == font->hasAnyColor()) {
                             break;
                         }
                     }
@@ -668,14 +773,23 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     }
                 }
                 if (wws == childEnd(typographic)) {
-                    FontFamilyNode wwsFamily = FontFamilyNode::createWWSFam(*font, wwsNames);
+                    FontFamilyNode wwsFamily = FontFamilyNode::createWWSFamilyNode(*font, *typographic, wwsNames);
                     wwsNames.append(wwsFamily.fontFamily);
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
                 }
             }
+            // This only triggers when the first wws family was created with the typographic name,
+            // yet more wws families have followed after sorting was finished, and this name might be not the most precise.
+            if (wwsNames.contains(typographic->fontFamily)  && std::distance(childBegin(typographic), childEnd(typographic)) > 1) {
+                for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
+                    if (wws->fontFamily == typographic->fontFamily) {
+                        wws->fontFamily = childBegin(wws)->fontFamily;
+                        break;
+                    }
+                }
+            }
         }
-
     }
 }
 
@@ -684,6 +798,7 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
     representation.fontFamilyName = wws->fontFamily;
     representation.localizedFontFamilyNames = wws->localizedFontFamilies;
     if (!singleFamily)  {
+        // This funnels the typographic family to the resource, so that resources may potentially be sorted by their typographic family.
         representation.typographicFamilyName = typographic->fontFamily;
         representation.localizedTypographicFamily = typographic->localizedFontFamilies;
         representation.localizedTypographicStyles = wws->localizedTypographicStyle;

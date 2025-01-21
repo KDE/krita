@@ -764,10 +764,10 @@ struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
 
     bool operator==(const FontFamilyAxis & other) const {
         return (other.tag != tag)
-                && (other.min != min)
-                && (other.max != max)
-                && (other.defaultValue != defaultValue)
-                && (other.value != value);
+                && (!qFuzzyCompare(other.min, min))
+                && (!qFuzzyCompare(other.max, max))
+                && (!qFuzzyCompare(other.defaultValue, defaultValue))
+                && (!qFuzzyCompare(other.value, value));
     }
 };
 

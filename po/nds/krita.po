@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -59278,10 +59278,13 @@ msgstr "Laag mit Inholt verschuven"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Move the group containing the first layer that contains visible content. "
+#| "Shortcut: ctrl-shift-click."
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
+"Shortcut: ctrl-click."
 msgstr ""
 "Koppel mit eerst Laag verschuven, de sichtbor Inholt bargt. "
 "Tastkombinatschoon: Strg + Ümschalt + Klick"

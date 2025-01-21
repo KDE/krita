@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -57837,10 +57837,13 @@ msgstr "移動有內容的圖層(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Move the group containing the first layer that contains visible content. "
+#| "Shortcut: ctrl-shift-click."
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
+"Shortcut: ctrl-click."
 msgstr ""
 "移動在點擊位置下第一個有可見內容的圖層所在的群組圖層。快捷鍵：Ctrl + Shift + "
 "點擊。"

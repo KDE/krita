@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -57955,7 +57955,7 @@ msgstr "Bỏ chọn"
 #, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
+"Shortcut: ctrl-click."
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)

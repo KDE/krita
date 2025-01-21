@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2025-01-19 14:39+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -58299,10 +58299,13 @@ msgstr "Mu&gitu geruza eduki eta guzti"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Move the group containing the first layer that contains visible content. "
+#| "Shortcut: ctrl-shift-click."
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
+"Shortcut: ctrl-click."
 msgstr ""
 "Lekuz aldatu edukia ikusgai duen lehenengo geruza daukan taldea. "
 "Lasterbidea: ktrl+maius+klik."

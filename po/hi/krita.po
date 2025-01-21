@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -58041,11 +58041,11 @@ msgstr "सामग्री के साथ परत खिस्काए�
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
-msgstr ""
+"Shortcut: ctrl-click."
+msgstr "वर्तमान चयनित परत या मास्क को दोहरता बनाता है"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -59470,10 +59470,13 @@ msgstr "आशयासह स्तर हलवा"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Move the group containing the first layer that contains visible content. "
+#| "Shortcut: ctrl-shift-click."
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
+"Shortcut: ctrl-click."
 msgstr "दृश्य आशयासह असलेला पहिला स्तर असलेला समूह हलवा. Shortcut: ctrl-shift-click."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)

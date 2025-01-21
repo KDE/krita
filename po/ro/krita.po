@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -58135,11 +58135,11 @@ msgstr "Mută stratul sau masca în jos"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
-msgstr ""
+"Shortcut: ctrl-click."
+msgstr "Duplică stratul sau masca aleasă momentan"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

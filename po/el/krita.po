@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-17 01:52+0000\n"
+"POT-Creation-Date: 2025-01-21 01:52+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -59685,11 +59685,11 @@ msgstr "Μετακίνηση στρώματος με περιεχόμενο"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
-"Shortcut: ctrl-shift-click."
-msgstr ""
+"Shortcut: ctrl-click."
+msgstr "Αντίγραφο του επιλεγμένου στρώματος ή μάσκας"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

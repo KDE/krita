@@ -6,7 +6,6 @@ variables:
   DEBIAN_FRONTEND: "noninteractive"
   release_branch_pattern: '/^release\/.*/'
 
-variables:
   DEPS_BRANCH_NAME_WINDOWS: 'master'
   DEPS_BRANCH_NAME_LINUX: 'master'
   DEPS_BRANCH_NAME_MACOS: 'master'

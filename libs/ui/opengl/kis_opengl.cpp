@@ -325,8 +325,8 @@ QString KisOpenGL::currentDriver()
     return QString();
 }
 
-// XXX Temporary function to allow LoD on OpenGL3 without triggering
-// all of the other 3.2 functionality, can be removed once we move to Qt5.7
+// Check whether we can allow LoD on OpenGL3 without triggering
+// all of the other 3.2 functionality.
 bool KisOpenGL::supportsLoD()
 {
     initialize();

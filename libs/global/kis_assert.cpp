@@ -14,7 +14,6 @@
 #include <QApplication>
 
 #include <klocalizedstring.h>
-#include <kis_assert_exception.h>
 #include <KisUsageLogger.h>
 #include <string>
 #include "config-safe-asserts.h"

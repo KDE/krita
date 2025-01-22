@@ -8,6 +8,7 @@
 #include "KoFontRegistry.h"
 #include "KisStaticInitializer.h"
 #include <KoMD5Generator.h>
+#include <optional>
 
 KIS_DECLARE_STATIC_INITIALIZER {
     KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::FontStorage, new KisStoragePluginFactory<KoFontStorage>());
@@ -115,19 +116,13 @@ KoResourceSP KoFontStorage::resource(const QString &url)
         familyName.remove(0, prefix.size());
     }
 
-    bool found = false;
-    KoFontFamilyWWSRepresentation rep = KoFontRegistry::instance()->representationByFamilyName(familyName, &found);
-    if (found) {
-        fam.reset(new KoFontFamily(rep));
+    std::optional<KoFontFamilyWWSRepresentation> rep = KoFontRegistry::instance()->representationByFamilyName(familyName);
+    if (rep) {
+        fam.reset(new KoFontFamily(rep.value()));
         fam->updateThumbnail();
     }
 
     return fam;
-}
-
-QString KoFontStorage::resourceMd5(const QString &url)
-{
-    return KoMD5Generator::generateHash(QString("fontregistery:"+url).toUtf8());
 }
 
 bool KoFontStorage::supportsVersioning() const

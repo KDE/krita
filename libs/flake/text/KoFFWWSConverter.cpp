@@ -919,12 +919,8 @@ KisForest<FontFamilyNode>::composition_iterator searchNodes (KisForest<FontFamil
     return it;
 }
 
-KoFontFamilyWWSRepresentation KoFFWWSConverter::representationByFamilyName(const QString &familyName, bool *found) const
+std::optional<KoFontFamilyWWSRepresentation> KoFFWWSConverter::representationByFamilyName(const QString &familyName) const
 {
-    KoFontFamilyWWSRepresentation representation;
-    if (found) {
-        *found = false;
-    }
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         auto counter = childBegin(typographic);
         counter++;
@@ -932,15 +928,11 @@ KoFontFamilyWWSRepresentation KoFFWWSConverter::representationByFamilyName(const
 
         for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
             if (wws->fontFamily == familyName) {
-                representation = createRepresentation(wws, typographic, singleFamily);
-                if (found) {
-                    *found = true;
-                }
-                return representation;
+                return std::make_optional(createRepresentation(wws, typographic, singleFamily));
             }
         }
     }
-    return representation;
+    return std::nullopt;
 }
 
 QString KoFFWWSConverter::wwsNameByFamilyName(const QString familyName, bool *found) const

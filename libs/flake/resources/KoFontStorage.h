@@ -18,7 +18,6 @@ public:
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;
     KoResourceSP resource(const QString &url) override;
-    QString resourceMd5(const QString &url) override;
 
     bool supportsVersioning() const override;
     QSharedPointer<KisResourceStorage::ResourceIterator> resources(const QString &resourceType) override;

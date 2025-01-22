@@ -87,7 +87,7 @@ public:
      * @param found - bool to check for success.
      * @return the font family.
      */
-    KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
+    std::optional<KoFontFamilyWWSRepresentation> representationByFamilyName(const QString &familyName) const;
 
     // Get the closest font family resource name for a given font family name, used by the selectors.
     QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;

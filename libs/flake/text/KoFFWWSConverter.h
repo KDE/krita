@@ -14,6 +14,8 @@
 #include <QLocale>
 #include <QDateTime>
 
+#include <optional>
+
 /// This struct represents a CSS-compatible font family, containing all
 /// sorts of info useful for the GUI.
 struct KoFontFamilyWWSRepresentation {
@@ -72,7 +74,7 @@ public:
     QList<KoFontFamilyWWSRepresentation> collectFamilies() const;
 
     /// Gets a single WWSFamily representation for a given CSS Family Name, used by KoFontStorage.
-    KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
+    std::optional<KoFontFamilyWWSRepresentation> representationByFamilyName(const QString &familyName) const;
 
     /// Used to find the closest corresponding resource when the family name doesn't match.
     QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;

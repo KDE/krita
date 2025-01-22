@@ -643,9 +643,9 @@ QList<KoFontFamilyWWSRepresentation> KoFontRegistry::collectRepresentations() co
     return d->converter()->collectFamilies();
 }
 
-KoFontFamilyWWSRepresentation KoFontRegistry::representationByFamilyName(const QString &familyName, bool *found) const
+std::optional<KoFontFamilyWWSRepresentation> KoFontRegistry::representationByFamilyName(const QString &familyName) const
 {
-    return d->converter()->representationByFamilyName(familyName, found);
+    return d->converter()->representationByFamilyName(familyName);
 }
 
 QString KoFontRegistry::wwsNameByFamilyName(const QString familyName, bool *found) const

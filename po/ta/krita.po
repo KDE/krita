@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
+"POT-Creation-Date: 2025-01-22 01:51+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16829,7 +16829,7 @@ msgstr "ஏற்று..."
 msgid "Convert to Path"
 msgstr "&தலைக்கீழாக்கு"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"

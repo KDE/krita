@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
+"POT-Creation-Date: 2025-01-22 01:51+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -17206,7 +17206,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "उलट (&I)"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"

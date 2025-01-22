@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
+"POT-Creation-Date: 2025-01-22 01:51+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16715,7 +16715,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "转换为路径"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -57635,16 +57635,11 @@ msgstr "移动点击内容所在图层(&V)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
-"移动在点击处有可见内容的第一个图层组。未分组图层在“顶级图层组”内，点击它们的"
-"内容时将移动所有图层！选中其他模式时，可按 Ctrl 键临时切换成此模式。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

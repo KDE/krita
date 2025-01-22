@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
-"PO-Revision-Date: 2025-01-19 14:39+0100\n"
+"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"PO-Revision-Date: 2025-01-21 22:03+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -8302,7 +8302,7 @@ msgstr "Erakutsi pintzel-editorea"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Presets"
-msgstr "Erakutsi pintzel-aurrehautaketak"
+msgstr "Erakutsi pintzel-aurrezarpenak"
 
 #. i18n: context: text @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
@@ -13293,7 +13293,7 @@ msgstr "Saioak"
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Ireki &dagoen dokumentu bat «Izengabea» dokumentua gisa..."
+msgstr "Ireki &dagoen dokumentua dokumentu Izengabea gisa..."
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -13303,7 +13303,7 @@ msgstr "Ireki &dagoen dokumentu bat «Izengabea» dokumentua gisa..."
 #, kde-format
 msgctxt "action"
 msgid "Open existing Document as Untitled Document"
-msgstr "Ireki dagoen dokumentu bat «Izengabea» dokumentua gisa"
+msgstr "Ireki dagoen dokumentua dokumentu Izengabea gisa"
 
 #. i18n: context: text @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:92
@@ -16909,7 +16909,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "Bihurtu bide"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -27127,7 +27127,7 @@ msgstr "Gainidatzi pintzel-aurrehautaketa"
 #: libs/ui/forms/wdgpaintopsettings.ui:427
 #, kde-format
 msgid "Presets"
-msgstr "Aurrehautaketak"
+msgstr "Aurrezarpenak"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:444
@@ -30606,7 +30606,7 @@ msgstr "Zooma: %%1"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, kde-format
 msgid "Brush presets"
-msgstr "Pintzelen aurrehautaketak"
+msgstr "Pintzelen aurrezarpenak"
 
 #: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
 #: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
@@ -31634,7 +31634,7 @@ msgstr "Sortu dokumentu berria"
 #: libs/ui/KisMainWindow.cpp:1763
 #, kde-format
 msgid "Custom Document"
-msgstr "Norberak finkatutako dokumentua"
+msgstr "Neurriko dokumentua"
 
 #: libs/ui/KisMainWindow.cpp:1775
 #, kde-format
@@ -39859,7 +39859,7 @@ msgstr "Giltzatu uneko paleta."
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "Pintzelaren aurrehautaketak"
+msgstr "Pintzelaren aurrezarpenak"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
 #, kde-format
@@ -43811,7 +43811,7 @@ msgstr "Pintzelak"
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:58
 #, kde-format
 msgid "Brush Presets"
-msgstr "Pintzelen aurrehautaketak"
+msgstr "Pintzelen aurrezarpenak"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:37
 #, kde-format
@@ -53955,7 +53955,7 @@ msgstr "Oinarrizko balioa:"
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "MyPaint pintzelaren aurrehautaketak"
+msgstr "MyPaint pintzelaren aurrezarpenak"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
 #, kde-format
@@ -57475,7 +57475,7 @@ msgstr "Ireki lan-fluxu botoien ezarpen elkarrizketa-koadroa"
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
-msgstr "Esku hutsezko pintzel trazua"
+msgstr "Pintzelaren esku hutsezko trazua"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:146
 #, kde-format

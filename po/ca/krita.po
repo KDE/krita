@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
-"PO-Revision-Date: 2025-01-17 11:15+0100\n"
+"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"PO-Revision-Date: 2025-01-21 10:22+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16799,7 +16799,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "Converteix a camí"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -58658,16 +58658,13 @@ msgstr "Mo&u la capa amb contingut"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Mou el grup que conté la primera capa que conté contingut visible. Drecera: "
-"«Ctrl+Majús+clic»."
+"«Ctrl+clic»."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

@@ -120,6 +120,7 @@ void KisMultiChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
     m_curves.clear();
     m_curves = curves;
     m_channelCount = curves.size();
+    m_activeCurve = qMin(m_activeCurve, m_channelCount - 1);
 
     updateTransfers();
 
@@ -131,6 +132,12 @@ void KisMultiChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
         const QString value = m_curves[i].toString();
         KisColorTransformationConfiguration::setProperty(name, value);
     }
+}
+
+void KisMultiChannelFilterConfiguration::setActiveCurve(int value)
+{
+    m_activeCurve = value;
+    KisColorTransformationConfiguration::setProperty("activeCurve", value);
 }
 
 void KisMultiChannelFilterConfiguration::updateTransfer(int index)
@@ -169,6 +176,7 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
     QList<KisCubicCurve> curves;
     quint16 numTransfers = 0;
     quint16 numTransfersWithAlpha = 0;
+    int activeCurve = -1;
     int version;
     version = root.attribute("version").toInt();
 
@@ -179,7 +187,9 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
     QRegExp curveRegexp("curve(\\d+)");
 
     while (!e.isNull()) {
-        if ((attributeName = e.attribute("name")) == "nTransfers") {
+        if ((attributeName = e.attribute("name")) == "activeCurve") {
+            activeCurve = e.text().toInt();
+        } else if ((attributeName = e.attribute("name")) == "nTransfers") {
             numTransfers = e.text().toUShort();
         } else if ((attributeName = e.attribute("name")) == "nTransfersWithAlpha") {
             numTransfersWithAlpha = e.text().toUShort();
@@ -237,6 +247,7 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
 
     setVersion(version);
     setCurves(curves);
+    setActiveCurve(activeCurve);
 }
 
 /**
@@ -276,6 +287,11 @@ void KisMultiChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& r
 
     addParamNode(doc, root, "nTransfers", QString::number(m_channelCount));
 
+    if (m_activeCurve >= 0) {
+        // save active curve if only it has non-default value
+        addParamNode(doc, root, "activeCurve", QString::number(m_activeCurve));
+    }
+
     KisCubicCurve curve;
     QString paramName;
 
@@ -295,7 +311,8 @@ bool KisMultiChannelFilterConfiguration::compareTo(const KisPropertiesConfigurat
         && KisFilterConfiguration::compareTo(rhs)
         && m_channelCount == otherConfig->m_channelCount
         && m_curves == otherConfig->m_curves
-        && m_transfers == otherConfig->m_transfers;
+        && m_transfers == otherConfig->m_transfers
+        && m_activeCurve == otherConfig->m_activeCurve;
 }
 
 void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const QVariant& value)
@@ -335,6 +352,10 @@ void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const 
 
 
         return;
+    }
+
+    if (name == "activeCurve") {
+        setActiveCurve(qBound(0, value.toInt(), m_channelCount));
     }
 
     int curveIndex;
@@ -412,11 +433,11 @@ void KisMultiChannelConfigWidget::init() {
         m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
     }
 
-    connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
+    m_page->curveWidget->setCurve(m_curves[0]);
+    connect(m_page->curveWidget, SIGNAL(modified()), this, SLOT(slotCurveModified()));
 
     {
         KisSignalsBlocker b(m_page->curveWidget);
-        m_page->curveWidget->setCurve(m_curves[0]);
         setActiveChannel(0);
     }
 }
@@ -523,10 +544,21 @@ void KisMultiChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
         }
     }
 
-    // HACK: we save the previous curve in setActiveChannel, so just copy it
-    m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
+    const int activeChannel =
+        config->hasProperty("activeCurve") ?
+        qBound(0, config->getInt("activeCurve"), m_curves.size()) :
+        findDefaultVirtualChannelSelection();
 
-    setActiveChannel(0);
+    if (activeChannel == m_activeVChannel) {
+        m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);
+    } else {
+        setActiveChannel(activeChannel);
+    }
+}
+
+int KisMultiChannelConfigWidget::findDefaultVirtualChannelSelection()
+{
+    return 0;
 }
 
 inline QPixmap KisMultiChannelConfigWidget::createGradient(Qt::Orientation orient /*, int invert (not used yet) */)
@@ -613,9 +645,20 @@ void KisMultiChannelConfigWidget::slotChannelSelected(int index)
     setActiveChannel(virtualChannel);
 }
 
+void KisMultiChannelConfigWidget::slotCurveModified()
+{
+    if (m_activeVChannel >= 0) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_activeVChannel < m_curves.size());
+        m_curves[m_activeVChannel] = m_page->curveWidget->curve();
+    }
+    Q_EMIT sigConfigurationItemChanged();
+}
+
 void KisMultiChannelConfigWidget::setActiveChannel(int ch)
 {
-    m_curves[m_activeVChannel] = m_page->curveWidget->curve();
+    if (ch == m_activeVChannel) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(ch >= 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(ch < m_curves.size());
 
     m_activeVChannel = ch;
     m_page->curveWidget->setCurve(m_curves[m_activeVChannel]);

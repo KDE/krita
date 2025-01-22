@@ -98,6 +98,7 @@ public:
 
 protected:
     void updateChannelControls() override;
+    int findDefaultVirtualChannelSelection() override;
 
     virtual KisPropertiesConfigurationSP getDefaultConfiguration() override;
 

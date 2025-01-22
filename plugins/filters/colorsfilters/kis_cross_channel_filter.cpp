@@ -196,6 +196,10 @@ void KisCrossChannelFilterConfiguration::setProperty(const QString& name, const 
         return;
     }
 
+    if (name == "activeCurve") {
+        setActiveCurve(qBound(0, value.toInt(), m_channelCount));
+    }
+
     int channelIndex;
     if (!channelIndexFromDriverPropertyName(name, channelIndex)) {
         KisMultiChannelFilterConfiguration::setProperty(name, value);
@@ -255,9 +259,12 @@ void KisCrossChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
     KIS_ASSERT(cfg);
 
     m_driverChannels = cfg->driverChannels();
-
     KisMultiChannelConfigWidget::setConfiguration(config);
+    updateChannelControls();
+}
 
+int KisCrossChannelConfigWidget::findDefaultVirtualChannelSelection()
+{
     // Show the first channel with a curve, or saturation by default
 
     int initialChannel = -1;
@@ -272,8 +279,9 @@ void KisCrossChannelConfigWidget::setConfiguration(const KisPropertiesConfigurat
         initialChannel = qMax(0, KisMultiChannelFilter::findChannel(m_virtualChannels, VirtualChannelInfo::SATURATION));
     }
 
-    setActiveChannel(initialChannel);
+    return initialChannel;
 }
+
 
 KisPropertiesConfigurationSP KisCrossChannelConfigWidget::configuration() const
 {
@@ -282,6 +290,7 @@ KisPropertiesConfigurationSP KisCrossChannelConfigWidget::configuration() const
 
     m_curves[m_activeVChannel] = m_page->curveWidget->curve();
     cfg->setCurves(m_curves);
+    cfg->setActiveCurve(m_activeVChannel);
     cfg->setDriverChannels(m_driverChannels);
 
     return cfgSP;

@@ -10,6 +10,7 @@
 #include <SvgWriter.h>
 #include <QPainter>
 #include <QBuffer>
+#include <KoShapePainter.h>
 
 const QString TYPOGRAPHIC_NAME = "typographic_name";
 const QString LOCALIZED_TYPOGRAPHIC_NAME = "localized_typographic_name";
@@ -32,39 +33,30 @@ const QString SUPPORTED_LANGUAGES = "supported_languages";
 struct KoFontFamily::Private {
 };
 
-QImage generateImage(QString sample, QString fontFamily, bool isColor) {
+QImage generateImage(const QString &sample, const QString &fontFamily, bool isColor) {
     QSharedPointer<KoSvgTextShape> shape(new KoSvgTextShape);
     shape->setResolution(300, 300);
     shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::black)));
     KoSvgTextProperties props = shape->textProperties();
+    KoSvgText::CssLengthPercentage fontSize(12.0);
+    props.setProperty(KoSvgTextProperties::FontSizeId, QVariant::fromValue(fontSize));
     props.setProperty(KoSvgTextProperties::FontFamiliesId, {fontFamily});
     shape->setPropertiesAtPos(-1, props);
     shape->insertText(0, sample);
 
-    QRectF bbox = shape->boundingRect();
-    qreal boxHeight = bbox.width();
-    qreal scale = (256 * 0.95) / boxHeight;
-    QRectF boundingRect(0, 0, 256, 256);
-    QImage img(boundingRect.width(),
-               boundingRect.height(),
+    QImage img(256,
+               256,
                isColor? QImage::Format_ARGB32: QImage::Format_Grayscale8);
-    QPainter gc(&img);
-    gc.setRenderHint(QPainter::Antialiasing, true);
-    gc.fillRect(0, 0, boundingRect.width(), boundingRect.height(), Qt::white);
-    gc.setPen(QPen(Qt::transparent));
+    img.fill(Qt::white);
 
-    gc.translate(boundingRect.center());
-    gc.scale(scale, scale);
-    gc.translate(-bbox.center());
+    KoShapePainter painter;
+    painter.setShapes({shape.data()});
+    painter.paint(img);
 
-    gc.setClipRect(gc.transform().inverted().mapRect(boundingRect));
-
-    shape->paint(gc);
-    gc.end();
     return img;
 }
 
-QString generateSVG(QString sample, QString fontFamily, QRectF &layoutBox, const QString &lang) {
+QString generateSVG(const QString &sample, const QString &fontFamily, QRectF &layoutBox, const QString &lang) {
     QSharedPointer<KoSvgTextShape> shape(new KoSvgTextShape);
     shape->setResolution(300, 300);
     shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::black)));

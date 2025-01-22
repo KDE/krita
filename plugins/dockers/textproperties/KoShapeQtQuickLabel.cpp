@@ -10,9 +10,10 @@
 #include <KoDocumentResourceManager.h>
 #include <QQuickWindow>
 #include <KoShapeGroupCommand.h>
+#include <KoShapePainter.h>
 
 struct KoShapeQtQuickLabel::Private {
-    KoShapeGroup *shape = nullptr;
+    QScopedPointer<KoShapeGroup> shape;
     QString svgData;
     int imagePadding = 5;
     qreal imageScale = 1;
@@ -93,11 +94,9 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 
     QList<KoShape*> shapes = p.parseSvg(doc.documentElement(), &sz);
     if (shapes.isEmpty()) return;
-    d->shape = new KoShapeGroup();
-    KoShapeGroupCommand cmd(d->shape, shapes, false);
+    d->shape.reset(new KoShapeGroup());
+    KoShapeGroupCommand cmd(d->shape.data(), shapes, false);
     cmd.redo();
-
-
 
     emit svgDataChanged();
 }

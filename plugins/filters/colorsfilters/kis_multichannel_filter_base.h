@@ -60,11 +60,11 @@ public:
     void fromXML(const QDomElement& e) override;
     void toXML(QDomDocument& doc, QDomElement& root) const override;
 
-    void setCurves(QList<KisCubicCurve> &curves) override;
+    void setCurves(QList<KisCubicCurve> &curves);
     bool isCompatible(const KisPaintDeviceSP) const override;
 
     const QVector<QVector<quint16> >& transfers() const;
-    const QList<KisCubicCurve>& curves() const override;
+    const QList<KisCubicCurve>& curves() const;
 
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 

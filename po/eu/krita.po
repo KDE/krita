@@ -24,7 +24,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-01-19 14:39+0100\n"
+"PO-Revision-Date: 2025-01-22 12:45+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -8289,7 +8289,7 @@ msgstr "Erakutsi pintzel-editorea"
 #, kde-format
 msgctxt "action"
 msgid "Show Brush Presets"
-msgstr "Erakutsi pintzel-aurrehautaketak"
+msgstr "Erakutsi pintzel-aurrezarpenak"
 
 #. i18n: context: text @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (tablet_debugger), Actions (General), ActionCollection (Krita)
@@ -13154,7 +13154,7 @@ msgstr "Saioak"
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Ireki &dagoen dokumentu bat «Izengabea» dokumentua gisa..."
+msgstr "Ireki &dagoen dokumentua dokumentu Izengabea gisa..."
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -13164,7 +13164,7 @@ msgstr "Ireki &dagoen dokumentu bat «Izengabea» dokumentua gisa..."
 #, kde-format
 msgctxt "action"
 msgid "Open existing Document as Untitled Document"
-msgstr "Ireki dagoen dokumentu bat «Izengabea» dokumentua gisa"
+msgstr "Ireki dagoen dokumentua dokumentu Izengabea gisa"
 
 #. i18n: context: text @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:92
@@ -26795,7 +26795,7 @@ msgstr "Gainidatzi pintzel-aurrehautaketa"
 #: libs/ui/forms/wdgpaintopsettings.ui:427
 #, kde-format
 msgid "Presets"
-msgstr "Aurrehautaketak"
+msgstr "Aurrezarpenak"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:444
@@ -30046,7 +30046,7 @@ msgstr "Zooma: %%1"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:239
 #, kde-format
 msgid "Brush presets"
-msgstr "Pintzelen aurrehautaketak"
+msgstr "Pintzelen aurrezarpenak"
 
 #: libs/ui/KisApplication.cpp:330 libs/ui/KisApplication.cpp:331
 #: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
@@ -31077,7 +31077,7 @@ msgstr "Sortu dokumentu berria"
 #: libs/ui/KisMainWindow.cpp:1748
 #, kde-format
 msgid "Custom Document"
-msgstr "Norberak finkatutako dokumentua"
+msgstr "Neurriko dokumentua"
 
 #: libs/ui/KisMainWindow.cpp:1760
 #, kde-format
@@ -32016,7 +32016,7 @@ msgstr "Konbinatze orokorra"
 #: libs/ui/layerstyles/WdgSatin.ui:33
 #, kde-format
 msgid "Ble&nd Mode:"
-msgstr "Ko&nbinatzeko modua:"
+msgstr "&Nahaste-modua:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAdvancedBlending)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:91
@@ -32298,7 +32298,7 @@ msgstr "&Zarata:"
 #: libs/ui/layerstyles/wdgdropshadow.ui:119 libs/ui/layerstyles/WdgStroke.ui:88
 #, kde-format
 msgid "&Blend Mode:"
-msgstr "Kon&binatzeko modua:"
+msgstr "Na&haste-modua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/layerstyles/wdgdropshadow.ui:149 libs/ui/layerstyles/WdgSatin.ui:67
@@ -34564,11 +34564,10 @@ msgstr "Tonu argiak:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Midtones"
+#, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr "Tarteko tonuak"
+msgstr "Tonu ertainak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
@@ -34579,24 +34578,24 @@ msgstr "Metodoa:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Ezin izan da %1 raster hautapena zamatu."
+msgstr "Ez doitu tonu ertainak"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
 #, kde-format
 msgctxt "Use the median point of the histogram as midtone point in auto levels"
 msgid "Use the median to adjust the midtones"
-msgstr ""
+msgstr "Mediana erabili tonu ertainak doitzeko"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:181
 #, kde-format
 msgctxt "Use the mean value of the histogram as midtone point in auto levels"
 msgid "Use the mean value to adjust the midtones"
-msgstr ""
+msgstr "Batezbesteko balioa erabili tonu ertainak doitzeko"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:189
@@ -39583,7 +39582,7 @@ msgstr "Giltzatu uneko paleta."
 #, kde-format
 msgctxt "@title:window Brush presets chooser docker"
 msgid "Brush Presets"
-msgstr "Pintzelaren aurrehautaketak"
+msgstr "Pintzelaren aurrezarpenak"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:49
 #, kde-format
@@ -40833,25 +40832,21 @@ msgstr "Geruza/maskara"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Bihurtu proiekzioko kolore-eremua"
+msgstr "Probako koloreak margotzeko kolore-eremura"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Gainerakorrak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Talde-neurria"
+msgstr "Gainerakorraren neurria:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
@@ -40946,30 +40941,27 @@ msgstr "Adabakiak gehienez: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "Hautatzailea noiz eguneratu:"
+msgstr "Eguneratu oinarri-kolorea kasu hauetan:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Kolorearen kolore-kanalak"
+msgstr "Kolorea kanpotik aldatzen da"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "itzal-hautatzailean eskuin botoiaz klik egindakoan"
+msgstr "Itzal-hautatzailean eskuin klik egitea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iterazioak"
+msgstr "Elkarreragina bukatzen da"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
@@ -41445,7 +41437,7 @@ msgstr "Tonu argiak"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:37
 #, kde-format
 msgid "Midtones"
-msgstr "Tarteko tonuak"
+msgstr "Tonu ertainak"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonShadows)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -43356,7 +43348,7 @@ msgstr "Pintzelak"
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:62
 #, kde-format
 msgid "Brush Presets"
-msgstr "Pintzelen aurrehautaketak"
+msgstr "Pintzelen aurrezarpenak"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:36
 #, kde-format
@@ -44460,10 +44452,9 @@ msgstr "Urdina  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetMidtones)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
-#, fuzzy, kde-format
-#| msgid "Midtones"
+#, kde-format
 msgid "Reset Midtones  "
-msgstr "Tarteko tonuak"
+msgstr "Berrezarri tonu ertainak "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
@@ -45477,20 +45468,19 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:112
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:213
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:286
-#, fuzzy, kde-format
-#| msgid "Reflect"
+#, kde-format
 msgid "Reflectivity:"
-msgstr "Isla"
+msgstr "Erreflektantzia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularShinyExp)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
 #, kde-format
 msgid "Shinyness exponent:"
-msgstr ""
+msgstr "Distira berretzailea:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, diffuseReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:186
-#, kde-format
+#, fuzzy, kde-format
 msgid "Di&ffuse"
 msgstr "&Lausoa"
 
@@ -53162,7 +53152,7 @@ msgstr "Oinarrizko balioa:"
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
 #, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "MyPaint pintzelaren aurrehautaketak"
+msgstr "MyPaint pintzelaren aurrezarpenak"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
 #, kde-format
@@ -56531,7 +56521,7 @@ msgstr "Python fitxategiak (*.py)"
 #: plugins/tools/basictools/kis_tool_brush.cc:57
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
-msgstr "Esku hutsezko pintzel trazua"
+msgstr "Pintzelaren esku hutsezko trazua"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:177
 #, kde-format

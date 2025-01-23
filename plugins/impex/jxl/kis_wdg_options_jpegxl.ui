@@ -520,8 +520,14 @@ The default value is 0.</string>
                <property name="toolTip">
                 <string>Edge preserving filter level, -1 to 3. Use -1 for the default (encoder chooses), 0 to 3 to set a strength.</string>
                </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
                <property name="maximum">
                 <number>3</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
                </property>
                <property name="pageStep" stdset="0">
                 <number>1</number>

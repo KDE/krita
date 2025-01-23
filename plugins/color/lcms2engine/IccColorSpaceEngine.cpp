@@ -73,45 +73,47 @@ public:
                                                 const KoColorSpace *proofingSpace,
                                                 Intent renderingIntent,
                                                 Intent proofingIntent,
-                                                ConversionFlags conversionFlags,
+                                                bool bpcFirstTransform,
                                                 quint8 *gamutWarning,
-                                                double adaptationState
+                                                double adaptationState,
+                                                ConversionFlags displayConversionFlags
                                                 )
-        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning, adaptationState)
+        : KoColorProofingConversionTransformation(srcCs, dstCs, proofingSpace, renderingIntent, proofingIntent, bpcFirstTransform, gamutWarning, adaptationState, displayConversionFlags)
         , m_transform(0)
     {
         Q_ASSERT(srcCs);
         Q_ASSERT(dstCs);
         Q_ASSERT(renderingIntent < 4);
 
-        if (srcCs->colorDepthId() == Integer8BitsColorDepthID
-                || srcCs->colorDepthId() == Integer16BitsColorDepthID) {
+        bool doBPC1 = bpcFirstTransform;
+        bool doBPC2 = displayConversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation);
 
-            if ((srcProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive) ||
-                 dstProfile->name().contains(QLatin1String("linear"), Qt::CaseInsensitive)) &&
-                    !conversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
-                conversionFlags |= KoColorConversionTransformation::NoOptimization;
-            }
+        if ((srcProfile->isLinear() || dstProfile->isLinear()) &&
+            !displayConversionFlags.testFlag(KoColorConversionTransformation::NoOptimization)) {
+            displayConversionFlags |= KoColorConversionTransformation::NoOptimization;
         }
-        conversionFlags |= KoColorConversionTransformation::CopyAlpha;
+        displayConversionFlags |= KoColorConversionTransformation::CopyAlpha;
 
         quint16 alarm[cmsMAXCHANNELS];//this seems to be bgr???
         alarm[0] = (cmsUInt16Number)gamutWarning[2]*256;
         alarm[1] = (cmsUInt16Number)gamutWarning[1]*256;
         alarm[2] = (cmsUInt16Number)gamutWarning[0]*256;
         cmsSetAlarmCodes(alarm);
-        cmsSetAdaptationState(adaptationState);
 
         KIS_ASSERT(dynamic_cast<const IccColorProfile *>(proofingSpace->profile()));
-        m_transform = cmsCreateProofingTransform(srcProfile->lcmsProfile(),
-                                                 srcColorSpaceType,
-                                                 dstProfile->lcmsProfile(),
-                                                 dstColorSpaceType,
-                                                 dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile(),
-                                                 renderingIntent,
-                                                 proofingIntent,
-                                                 conversionFlags);
-        cmsSetAdaptationState(1);
+
+        // This more or less does the same thing as cmsCreateProofingTransform in LCMS' cmsxform.c file,
+        // except we try to allow enabling blackpoint compentation on the second bpc too.
+        cmsHPROFILE proof = dynamic_cast<const IccColorProfile *>(proofingSpace->profile())->asLcms()->lcmsProfile();
+        cmsHPROFILE profiles[] = {srcProfile->lcmsProfile(),
+                                  proof,
+                                  proof,
+                                  dstProfile->lcmsProfile()};
+        cmsBool bpc[] = {doBPC1, doBPC1, doBPC2, doBPC2};
+        // Note that of the two transforms that create the proofing transform, the proofing intent is the second intent, not the first!
+        cmsUInt32Number intents[] = {renderingIntent, renderingIntent, INTENT_RELATIVE_COLORIMETRIC, proofingIntent};
+        cmsFloat64Number adaptation[] = {adaptationState, adaptationState, adaptationState, adaptationState};
+        m_transform = cmsCreateExtendedTransform(cmsGetProfileContextID(srcProfile->lcmsProfile()), 4, profiles, bpc, intents, adaptation, proof, 1, srcColorSpaceType, dstColorSpaceType, displayConversionFlags);
 
         Q_ASSERT(m_transform);
     }
@@ -264,9 +266,10 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
                                                                                                 const KoColorSpace *proofingSpace,
                                                                                                 KoColorConversionTransformation::Intent renderingIntent,
                                                                                                 KoColorConversionTransformation::Intent proofingIntent,
-                                                                                                KoColorConversionTransformation::ConversionFlags conversionFlags,
+                                                                                                bool firstTransformBPC,
                                                                                                 quint8 *gamutWarning,
-                                                                                                double adaptationState) const
+                                                                                                double adaptationState,
+                                                                                                KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
 {
     KIS_ASSERT(srcColorSpace);
     KIS_ASSERT(dstColorSpace);
@@ -276,8 +279,8 @@ KoColorProofingConversionTransformation *IccColorSpaceEngine::createColorProofin
     return new KoLcmsColorProofingConversionTransformation(
                 srcColorSpace, computeColorSpaceType(srcColorSpace),
                 dynamic_cast<const IccColorProfile *>(srcColorSpace->profile())->asLcms(), dstColorSpace, computeColorSpaceType(dstColorSpace),
-                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, conversionFlags, gamutWarning,
-                adaptationState
+                dynamic_cast<const IccColorProfile *>(dstColorSpace->profile())->asLcms(), proofingSpace, renderingIntent, proofingIntent, firstTransformBPC, gamutWarning,
+                adaptationState, displayConversionFlags
                 );
 }
 

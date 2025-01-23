@@ -7,11 +7,10 @@
 #define KIS_DLG_IMAGE_PROPERTIES_H_
 
 #include <KoDialog.h>
-#include "KisProofingConfiguration.h"
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
-class KisSignalCompressor;
+class KisDisplayColorConverter;
 
 class KoColorSpace;
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
@@ -30,7 +29,7 @@ class KisDlgImageProperties : public KoDialog
     Q_OBJECT
 
 public:
-    KisDlgImageProperties(KisImageWSP image,
+    KisDlgImageProperties(KisImageWSP image, KisDisplayColorConverter *colorConverter,
                           QWidget *parent = 0,
                           const char *name = 0);
     ~KisDlgImageProperties() override;
@@ -43,18 +42,21 @@ private Q_SLOTS:
     void setAnnotation(const QString& type);
     void setCurrentColor();
     void setProofingConfig();
+    void updateProofingWidgets();
+    void updateDisplayConfigInfo();
+
+    void proofingDisplayModeUpdated();
+    void proofingConversionIntentUpdated();
+    void proofingDisplayIntentUpdated();
 
     void slotSaveDialogState();
 
     void slotColorSpaceChanged(const KoColorSpace*);
 private:
 
+    struct Private;
+    QScopedPointer<Private> d;
     WdgImageProperties *m_page;
-    KisImageWSP m_image;
-    KisProofingConfigurationSP m_proofingConfig;
-    bool m_firstProofingConfigChange {true};
-    QLabel *m_colorWarningLabel {0};
-    KisSignalCompressor *m_compressor {0};
 };
 
 

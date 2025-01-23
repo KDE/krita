@@ -36,6 +36,9 @@ template <typename T>
 constexpr auto map_equal = [] (T value) { return zug::map([value](auto&& x) { return x == value; }); };
 
 template <typename T>
+constexpr auto map_not_equal = [] (T value) { return zug::map([value](auto&& x) { return x != value; }); };
+
+template <typename T>
 constexpr auto map_greater = [] (T value) { return zug::map([value](auto&& x) { return x > value; }); };
 template <typename T>
 constexpr auto map_greater_equal = [] (T value) { return zug::map([value](auto&& x) { return x >= value; }); };
@@ -48,6 +51,9 @@ constexpr auto map_less_equal = [] (T value) { return zug::map([value](auto&& x)
 
 template <>
 inline constexpr auto map_equal<qreal> =  [] (qreal value) { return zug::map([value](auto&& x) { return qFuzzyCompare(x, value); }); };
+
+template <>
+inline constexpr auto map_not_equal<qreal> =  [] (qreal value) { return zug::map([value](auto&& x) { return !qFuzzyCompare(x, value); }); };
 
 template <>
 inline constexpr auto map_greater_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x >= value || qFuzzyCompare(x, value); }); };

@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>106</height>
+    <width>408</width>
+    <height>108</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,7 +34,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="QLabel" name="lblColorSpaces">
+    <widget class="QLabel" name="lblColorModels">
      <property name="text">
       <string comment="Color model">Model:</string>
      </property>
@@ -51,7 +51,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="lblColorModels">
+    <widget class="QLabel" name="lblColorDepths">
      <property name="text">
       <string comment="Label of Color Depth in Color Space Selector dialogue">Depth:</string>
      </property>

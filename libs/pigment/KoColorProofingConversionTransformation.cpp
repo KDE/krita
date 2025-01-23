@@ -14,9 +14,10 @@ KoColorProofingConversionTransformation::KoColorProofingConversionTransformation
                                                                  const KoColorSpace* proofingSpace,
                                                                  Intent renderingIntent,
                                                                  Intent proofingIntent,
-                                                                 ConversionFlags conversionFlags,
+                                                                 bool bcpFirstTransform,
                                                                  quint8 *gamutWarning,
-                                                                 double adaptationState)
+                                                                 double adaptationState,
+                                                                 ConversionFlags conversionFlags)
     : KoColorConversionTransformation(srcCs, dstCs, renderingIntent, conversionFlags)
 {
     Q_ASSERT(proofingSpace);
@@ -24,6 +25,7 @@ KoColorProofingConversionTransformation::KoColorProofingConversionTransformation
     m_gamutWarning = gamutWarning;
     m_adaptationState = adaptationState;
     m_proofingSpace = proofingSpace;
+    m_firstTransformBCP = bcpFirstTransform;
 }
 
 KoColorProofingConversionTransformation::~KoColorProofingConversionTransformation()

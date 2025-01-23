@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>449</width>
-    <height>322</height>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -162,7 +162,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="KisDoubleSliderSpinBox" name="sldBackgroundColor" native="true">
+          <widget class="KisDoubleSliderSpinBox" name="sldBackgroundColor">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -291,56 +291,92 @@
           <item row="0" column="0" colspan="2">
            <widget class="QComboBox" name="cmbIntent">
             <property name="currentIndex">
-             <number>0</number>
+             <number>-1</number>
             </property>
-            <item>
-             <property name="text">
-              <string>Perceptual</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Relative Colorimetric</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string comment="ICC profile rendering intent">Saturation</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Absolute Colorimetric</string>
-             </property>
-            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="ckbBlackPointComp">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Black Point compensation matches the darkest color of the source device to the darkest color of the destination device. Relative Colorimetric without Black Point Compensation will show the difference between the darkest values. With blackpoint compensation, black is black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Black Point Compensation</string>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLabel" name="lblAdaptationState">
-           <property name="text">
-            <string>Adaptation State:</string>
+          <widget class="QLabel" name="label_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           <property name="text">
+            <string>Display Mode:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="sldAdaptationState">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set how much you wish to correct the adaptation state. This will affect how &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt; changes the whites of your image. In Layman's terms: how much do you wish to have the color management correct the paper-color to screen white while using &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
+          <widget class="QComboBox" name="cmbDisplayTransformState">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="grbDisplayConversion">
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="2" column="1">
+           <widget class="QComboBox" name="cmbDisplayIntent"/>
+          </item>
+          <item row="4" column="1">
+           <widget class="QCheckBox" name="chkDisplayBlackPointCompensation">
+            <property name="text">
+             <string>Black Point Compensation</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Rendering Intent:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSlider" name="sldAdaptationState">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Set how much you wish to correct the adaptation state. This will affect how &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt; changes the whites of your image. In Layman's terms: how much do you wish to have the color management correct the paper-color to screen white while using &lt;span style=&quot; font-style:italic;&quot;&gt;Absolute Colorimetric&lt;/span&gt;?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lblAdaptationState">
+            <property name="text">
+             <string>Adaptation State:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -355,16 +391,6 @@
           <widget class="KisColorButton" name="gamutAlarm">
            <property name="text">
             <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="ckbBlackPointComp">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Black Point compensation matches the darkest color of the source device to the darkest color of the destination device. Relative Colorimetric without Black Point Compensation will show the difference between the darkest values. With blackpoint compensation, black is black.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Black Point Compensation</string>
            </property>
           </widget>
          </item>

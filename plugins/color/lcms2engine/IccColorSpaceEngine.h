@@ -25,8 +25,11 @@ public:
     KoColorProofingConversionTransformation *createColorProofingTransformation(const KoColorSpace *srcColorSpace,
             const KoColorSpace *dstColorSpace,
             const KoColorSpace *proofingSpace,
-            KoColorConversionTransformation::Intent renderingIntent, KoColorConversionTransformation::Intent proofingIntent,
-            KoColorConversionTransformation::ConversionFlags conversionFlags, quint8 *gamutWarning, double adaptationState) const override;
+            KoColorConversionTransformation::Intent renderingIntent,
+            KoColorConversionTransformation::Intent proofingIntent,
+            bool firstTransformBPC,
+            quint8 *gamutWarning, double adaptationState,
+            KoColorConversionTransformation::ConversionFlags displayConversionFlags) const override;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;
 
     bool supportsColorSpace(const QString& colorModelId, const QString& colorDepthId, const KoColorProfile *profile) const override;

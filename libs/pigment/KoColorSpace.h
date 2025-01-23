@@ -394,12 +394,28 @@ public:
                                  KoColorConversionTransformation::Intent renderingIntent,
                                  KoColorConversionTransformation::ConversionFlags conversionFlags) const;
 
+    /**
+     * @brief createProofingTransform
+     * Create a proofing transform. This is a two part transform that can also do gamut checks.
+     * The first transform is from source -> proofing space. Here the gamut checks are performed.
+     * The second is the proofing to destination space.
+     * @param dstColorSpace -- destination space, typically the display profile.
+     * @param proofingSpace -- space to proof to.
+     * @param renderingIntent -- rendering intent for the first transform.
+     * @param proofingIntent -- rendering intent for the second transform.
+     * @param bcpFirstTransform -- whether the first transform should use blackpoint compensation. All other flags are handled by displayFlags.
+     * @param gamutWarning -- The color of the gamut warning in dstColorSpace. Gamut warnings require Gamut warning flag being set on display flags.
+     * @param adaptationState -- Whether the white point is being adapted in Absolute colorimetric. [0.0 1.0] with 0 no adaptation, 1 full adaptation.
+     * @param displayConversionFlags -- the rest of the conversion flags. This includes blackpoint compensation for the second transform, as well as gamut warnings.
+     * @return a KoColorConversionTransform that can softproof.
+     */
     virtual KoColorConversionTransformation *createProofingTransform(const KoColorSpace * dstColorSpace,
                                                              const KoColorSpace * proofingSpace,
                                                              KoColorConversionTransformation::Intent renderingIntent,
                                                              KoColorConversionTransformation::Intent proofingIntent,
-                                                             KoColorConversionTransformation::ConversionFlags conversionFlags,
-                                                             quint8 *gamutWarning, double adaptationState) const;
+                                                             bool bpcFirstTransform,
+                                                             quint8 *gamutWarning, double adaptationState,
+                                                             KoColorConversionTransformation::ConversionFlags displayConversionFlags) const;
     /**
      * @brief proofPixelsTo
      * @param src source

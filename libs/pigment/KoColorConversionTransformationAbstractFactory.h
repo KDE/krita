@@ -37,18 +37,20 @@ public:
                                                                        const KoColorSpace* proofingSpace,
                                                                        KoColorProofingConversionTransformation::Intent renderingIntent,
                                                                        KoColorProofingConversionTransformation::Intent proofingIntent,
-                                                                       KoColorProofingConversionTransformation::ConversionFlags conversionFlags,
+                                                                       bool bpcFirstTransform,
                                                                        quint8 *gamutWarning,
-                                                                       double adaptationState) const
+                                                                       double adaptationState,
+                                                                       KoColorConversionTransformation::ConversionFlags displayConversionFlags) const
     {
         Q_UNUSED(srcColorSpace);
         Q_UNUSED(dstColorSpace);
         Q_UNUSED(proofingSpace);
         Q_UNUSED(renderingIntent);
         Q_UNUSED(proofingIntent);
-        Q_UNUSED(conversionFlags);
+        Q_UNUSED(bpcFirstTransform);
         Q_UNUSED(gamutWarning);
         Q_UNUSED(adaptationState);
+        Q_UNUSED(displayConversionFlags);
         qFatal("createColorProofingTransform undefined.");
         return 0;
     }

@@ -59,11 +59,6 @@ public:
     KoColor color() const;
 
     /**
-     * Sets the current color to @p c.
-     */
-    void setColor(const KoColor &c);
-
-    /**
      * When set to true, allow the user to change the alpha component
      * of the color. The default value is false.
      */
@@ -98,6 +93,11 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+public Q_SLOTS:
+    /**
+     * Sets the current color to @p c.
+     */
+    void setColor(const KoColor &c);
 Q_SIGNALS:
     /**
      * Emitted when the color of the widget

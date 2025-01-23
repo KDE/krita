@@ -335,7 +335,6 @@ bool OcioDisplayFilter::updateShader()
 #endif
     }
 
-    // XXX This option can be removed once we move to Qt 5.7+
     if (KisOpenGL::supportsLoD()) {
 #if defined(QT_OPENGL_3)
 #if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)

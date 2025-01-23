@@ -34,6 +34,7 @@
 class KoID;
 class KisInputConfigurationPage;
 class KoConfigAuthorPage;
+class KisProofingConfigModel;
 
 /**
  *  "General"-tab for preferences dialog
@@ -94,6 +95,7 @@ public:
     bool adaptivePlaybackRange();
     bool renameMergedLayers();
     bool renamePastedLayers();
+    bool renameDuplicatedLayers();
     QString exportMimeType();
     int forcedFontDpi();
 
@@ -179,12 +181,19 @@ private Q_SLOTS:
     void toggleAllowMonitorProfileSelection(bool useSystemProfile);
     void toggleUseDefaultColorSpace(bool useDefColorSpace);
 
+    void updateProofingWidgets();
+    void proofingDisplayModeUpdated();
+    void proofingConversionIntentUpdated();
+    void proofingDisplayIntentUpdated();
+    void updateProofingDisplayInfo();
+
 public:
     void setDefault();
     WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
     QList<QLabel*> m_monitorProfileLabels;
     QList<KisSqueezedComboBox*> m_monitorProfileWidgets;
+    QScopedPointer<KisProofingConfigModel> m_proofModel;
 };
 
 //=======================

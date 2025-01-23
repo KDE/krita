@@ -1686,6 +1686,8 @@ namespace Private {
 
     void addCopyOfNameTag(KisNodeSP node)
     {
+        if (!KisImageConfig(true).renameDuplicatedLayers()) { return; }
+
         const QString prefix = i18n("Copy of");
         QString newName = node->name();
         if (!newName.startsWith(prefix)) {

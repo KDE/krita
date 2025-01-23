@@ -173,6 +173,12 @@ void KisColorSpaceSelector::showColorBrowserButton(bool showButton) {
     d->colorSpaceSelector->bnAdvanced->setVisible(showButton);
 }
 
+void KisColorSpaceSelector::showDepth(bool showDepth)
+{
+    d->colorSpaceSelector->cmbColorDepth->setVisible(showDepth);
+    d->colorSpaceSelector->lblColorDepths->setVisible(showDepth);
+}
+
 void KisColorSpaceSelector::colorSpaceChanged()
 {
     bool valid = d->colorSpaceSelector->cmbProfile->count() != 0;

@@ -1470,20 +1470,27 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
            <item row="11" column="0" colspan="2">
             <widget class="QGroupBox" name="groupBox_51">
              <property name="title">
-              <string>Automatic layer suffixes</string>
+              <string>Automatic layer naming</string>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
                <widget class="QCheckBox" name="chkRenameMergedLayers">
                 <property name="text">
-                 <string>Add &quot;Merged&quot; to merged group layers</string>
+                 <string>Append &quot;Merged&quot; to merged group layers</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QCheckBox" name="chkRenamePastedLayers">
                 <property name="text">
-                 <string>Add &quot;(pasted)&quot; to pasted layers</string>
+                 <string>Append &quot;(pasted)&quot; to pasted layers</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="chkRenameDuplicatedLayers">
+                <property name="text">
+                 <string>Prepend &quot;Copy of&quot; to duplicated layers</string>
                 </property>
                </widget>
               </item>

@@ -51,6 +51,7 @@
 #include <KoColorSpaceEngine.h>
 #include <KoConfigAuthorPage.h>
 #include <KoConfig.h>
+
 #include <KoFileDialog.h>
 #include "KoID.h"
 #include <KoVBox.h>
@@ -66,6 +67,7 @@
 #include <KisResourceLocator.h>
 
 #include "KisProofingConfiguration.h"
+#include "KisProofingConfigModel.h"
 #include "KoColorConversionTransformation.h"
 #include "kis_action_registry.h"
 #include <kis_image.h>
@@ -83,6 +85,7 @@
 #include "KisMainWindow.h"
 #include "KisMimeDatabase.h"
 #include "kis_file_name_requester.h"
+#include <KisWidgetConnectionUtils.h>
 
 #include "slider_and_spin_box_sync.h"
 
@@ -429,6 +432,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers());
     chkRenamePastedLayers->setChecked(cfg.renamePastedLayers());
+    chkRenameDuplicatedLayers->setChecked(KisImageConfig(true).renameDuplicatedLayers());
 
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
@@ -763,6 +767,7 @@ void GeneralTab::setDefault()
 
     chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers(true));
     chkRenamePastedLayers->setChecked(cfg.renamePastedLayers(true));
+    chkRenameDuplicatedLayers->setChecked(KisImageConfig(true).renameDuplicatedLayers(true));
 
     QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
     Q_ASSERT(button);
@@ -941,6 +946,11 @@ bool GeneralTab::renamePastedLayers()
     return chkRenamePastedLayers->isChecked();
 }
 
+bool GeneralTab::renameDuplicatedLayers()
+{
+    return chkRenameDuplicatedLayers->isChecked();
+}
+
 void GeneralTab::getBackgroundImage()
 {
     KoFileDialog dialog(this, KoFileDialog::OpenFile, "BackgroundImages");
@@ -1042,6 +1052,7 @@ void ShortcutSettingsTab::cancelChanges()
 
 ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     : QWidget(parent)
+    , m_proofModel(new KisProofingConfigModel())
 {
     setObjectName(name);
 
@@ -1129,24 +1140,45 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     KisImageConfig cfgImage(true);
 
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
-    m_page->sldAdaptationState->setMaximum(20);
+    m_proofModel->data.set(*proofingConfig.data());
+
+    connect(m_page->chkBlackpoint, SIGNAL(toggled(bool)), this, SLOT(updateProofingDisplayInfo()));
+    connect(m_page->cmbMonitorIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(updateProofingDisplayInfo()));
+    m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent());
+    updateProofingDisplayInfo();
+
+    m_page->sldAdaptationState->setMaximum(m_proofModel->adaptationRangeMax());
     m_page->sldAdaptationState->setMinimum(0);
-    m_page->sldAdaptationState->setValue((int)proofingConfig->adaptationState*20);
 
-    //probably this should become the screenprofile?
-    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
-    ga.fromKoColor(proofingConfig->warningColor);
-    m_page->gamutAlarm->setColor(ga);
+    m_page->proofingSpaceSelector->showDepth(false);
 
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,
-                                                                                      proofingConfig->proofingDepth,
-                                                                                      proofingConfig->proofingProfile);
+    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Perceptual"), INTENT_PERCEPTUAL);
+    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Relative Colorimetric"), INTENT_RELATIVE_COLORIMETRIC);
+    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Saturation"), INTENT_SATURATION);
+    m_page->cmbDisplayIntent->addItem(i18nc("Color conversion intent", "Absolute Colorimetric"), INTENT_ABSOLUTE_COLORIMETRIC);
+    m_page->cmbProofingIntent->setModel(m_page->cmbDisplayIntent->model());
+
+    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Use global display settings"), int(KisProofingConfiguration::Monitor));
+    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Simulate paper white and black"), int(KisProofingConfiguration::Paper));
+    m_page->cmbDisplayMode->addItem(i18nc("Display Mode", "Custom"), int(KisProofingConfiguration::Custom));
+
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(m_proofModel->proofingModel(),
+                                                                                      m_proofModel->proofingDepth(),
+                                                                                      m_proofModel->proofingProfile());
     if (proofingSpace) {
         m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     }
-
-    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
-    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
+    updateProofingWidgets();
+    connect(m_page->cmbDisplayMode, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayModeUpdated()));
+    connect(m_page->cmbDisplayIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingDisplayIntentUpdated()));
+    connect(m_page->cmbProofingIntent, SIGNAL(currentIndexChanged(int)), this, SLOT(proofingConversionIntentUpdated()));
+    connect(m_page->chkDispBlackPoint, &QCheckBox::toggled, m_proofModel.data(), &KisProofingConfigModel::dispBlackPointCompensation);
+    connect(m_page->sldAdaptationState, &QSlider::valueChanged, m_proofModel.data(), &KisProofingConfigModel::setadaptationState);
+    KisWidgetConnectionUtils::connectControl(m_page->ckbProofBlackPoint, m_proofModel.data(), "convBlackPointCompensation");
+    KisWidgetConnectionUtils::connectControl(m_page->gamutAlarm, m_proofModel.data(), "warningColor");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->gbxDisplayTransform, m_proofModel.data(), "enableDisplayToggles");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->sldAdaptationState, m_proofModel.data(), "enableAdaptationSlider");
+    KisWidgetConnectionUtils::connectWidgetEnabledToProperty(m_page->chkDispBlackPoint, m_proofModel.data(), "enableDisplayBlackPointCompensation");
 
     m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
     m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
@@ -1158,8 +1190,6 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     if (button) {
         button->setChecked(true);
     }
-
-    m_page->cmbMonitorIntent->setCurrentIndex(cfg.monitorRenderIntent());
 
     toggleAllowMonitorProfileSelection(cfg.useSystemMonitorProfile());
 
@@ -1245,19 +1275,15 @@ void ColorSettingsTab::setDefault()
 
     KisConfig cfg(true);
     KisImageConfig cfgImage(true);
-    KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration();
-    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(proofingConfig->proofingModel,proofingConfig->proofingDepth,proofingConfig->proofingProfile);
+    KisProofingConfigurationSP proofingConfig =  cfgImage.defaultProofingconfiguration(true);
+    m_proofModel->data.set(*proofingConfig.data());
+    const KoColorSpace *proofingSpace =  KoColorSpaceRegistry::instance()->colorSpace(m_proofModel->proofingModel(),
+                                                                                      m_proofModel->proofingDepth(),
+                                                                                      m_proofModel->proofingProfile());
     if (proofingSpace) {
         m_page->proofingSpaceSelector->setCurrentColorSpace(proofingSpace);
     }
-    m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
-    m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
-    m_page->sldAdaptationState->setValue(0);
-
-    //probably this should become the screenprofile?
-    KoColor ga(KoColorSpaceRegistry::instance()->rgb8());
-    ga.fromKoColor(proofingConfig->warningColor);
-    m_page->gamutAlarm->setColor(ga);
+    updateProofingWidgets();
 
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation(true));
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization(true));
@@ -1296,6 +1322,38 @@ void ColorSettingsTab::refillMonitorProfiles(const KoID & colorSpaceId)
         m_monitorProfileLabels[i]->setText(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(i)));
         m_monitorProfileWidgets[i]->setCurrent(KoColorSpaceRegistry::instance()->defaultProfileForColorSpace(colorSpaceId.id()));
     }
+}
+
+void ColorSettingsTab::updateProofingWidgets() {
+    m_page->cmbDisplayIntent->setCurrentIndex(m_page->cmbDisplayIntent->findData((int)m_proofModel->effectiveDisplayIntent(), Qt::UserRole));
+    m_page->cmbProofingIntent->setCurrentIndex(m_page->cmbProofingIntent->findData((int)m_proofModel->conversionIntent(), Qt::UserRole));
+
+    m_page->cmbDisplayMode->setCurrentIndex(m_page->cmbDisplayMode->findData(int(m_proofModel->displayTransformState()), Qt::UserRole));
+    m_page->chkDispBlackPoint->setChecked(m_proofModel->effectiveDispBlackPointCompensation());
+    m_page->sldAdaptationState->setValue(m_proofModel->effectiveAdaptationState());
+}
+
+void ColorSettingsTab::proofingDisplayModeUpdated() {
+    m_proofModel->setdisplayTransformState(KisProofingConfiguration::DisplayTransformState(m_page->cmbDisplayMode->currentData(Qt::UserRole).toInt()));
+    updateProofingWidgets();
+}
+
+void ColorSettingsTab::proofingConversionIntentUpdated() {
+    m_proofModel->setconversionIntent(KoColorConversionTransformation::Intent(m_page->cmbProofingIntent->currentData(Qt::UserRole).toInt()));
+    updateProofingWidgets();
+}
+void ColorSettingsTab::proofingDisplayIntentUpdated() {
+    if (m_proofModel->displayTransformState() == KisProofingConfiguration::Custom) {
+        m_proofModel->setdisplayIntent(KoColorConversionTransformation::Intent(m_page->cmbDisplayIntent->currentData(Qt::UserRole).toInt()));
+        updateProofingWidgets();
+    }
+}
+
+void ColorSettingsTab::updateProofingDisplayInfo() {
+    KisDisplayConfig displayInfo;
+    displayInfo.intent = KoColorConversionTransformation::Intent(m_page->cmbMonitorIntent->currentIndex());
+    displayInfo.conversionFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_page->chkBlackpoint->isChecked());
+    m_proofModel->updateDisplayConfig(displayInfo);
 }
 
 //---------------------------------------------------------------------------------------------------
@@ -2468,6 +2526,7 @@ bool KisDlgPreferences::editPreferences()
 
         KisImageConfig(true).setRenameMergedLayers(m_general->renameMergedLayers());
         cfg.setRenamePastedLayers(m_general->renamePastedLayers());
+        KisImageConfig(true).setRenameDuplicatedLayers(m_general->renameDuplicatedLayers());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());
@@ -2495,10 +2554,13 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry("ExrDefaultColorProfile", m_colorSettings->m_page->cmbColorProfileForEXR->currentText());
 
         cfgImage.setDefaultProofingConfig(m_colorSettings->m_page->proofingSpaceSelector->currentColorSpace(),
-                                          m_colorSettings->m_page->cmbProofingIntent->currentIndex(),
-                                          m_colorSettings->m_page->ckbProofBlackPoint->isChecked(),
-                                          m_colorSettings->m_page->gamutAlarm->color(),
-                                          (double)m_colorSettings->m_page->sldAdaptationState->value()/20);
+                                          int(m_colorSettings->m_proofModel->conversionIntent()),
+                                          m_colorSettings->m_proofModel->convBlackPointCompensation(),
+                                          m_colorSettings->m_proofModel->warningColor(),
+                                          m_colorSettings->m_proofModel->adaptationState()*0.05,
+                                          m_colorSettings->m_proofModel->dispBlackPointCompensation(),
+                                          int(m_colorSettings->m_proofModel->displayIntent()),
+                                          m_colorSettings->m_proofModel->displayTransformState());
         cfg.setUseBlackPointCompensation(m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setForcePaletteColors(m_colorSettings->m_page->chkForcePaletteColor->isChecked());

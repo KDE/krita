@@ -511,43 +511,55 @@ void KisImageConfig::setDefaultFrameColorLabel(int label)
     m_config.writeEntry("defaultFrameColorLabel", label);
 }
 
-KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
+KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration(bool requestDefault)
 {
     KisProofingConfiguration *proofingConfig= new KisProofingConfiguration();
-    proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
-    proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
-    proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
-    proofingConfig->intent = (KoColorConversionTransformation::Intent)m_config.readEntry("defaultProofingProfileIntent", 3);
-    if (m_config.readEntry("defaultProofingBlackpointCompensation", true)) {
-        proofingConfig->conversionFlags  |= KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
-    } else {
-        proofingConfig->conversionFlags  = proofingConfig->conversionFlags & ~KoColorConversionTransformation::ConversionFlag::BlackpointCompensation;
+    if (!requestDefault) {
+        proofingConfig->proofingProfile = m_config.readEntry("defaultProofingProfileName", "Chemical proof");
+        proofingConfig->proofingModel = m_config.readEntry("defaultProofingProfileModel", "CMYKA");
+        proofingConfig->proofingDepth = m_config.readEntry("defaultProofingProfileDepth", "U8");
+        proofingConfig->displayIntent = KoColorConversionTransformation::Intent(m_config.readEntry("defaultProofingProfileIntent", int(INTENT_ABSOLUTE_COLORIMETRIC)));
+        proofingConfig->conversionIntent = KoColorConversionTransformation::Intent(m_config.readEntry("defaultProofingConversionIntent", int(INTENT_RELATIVE_COLORIMETRIC)));
+        proofingConfig->useBlackPointCompensationFirstTransform = m_config.readEntry("defaultProofingBlackpointCompensation", true);
+
+        proofingConfig->displayFlags.setFlag(KoColorConversionTransformation::BlackpointCompensation, m_config.readEntry("defaultProofingDisplayBlackpointCompensation", true));
+        proofingConfig->displayMode = KisProofingConfiguration::DisplayTransformState(m_config.readEntry("defaultProofingDisplayMode", int(KisProofingConfiguration::Paper)));
+        QColor def(Qt::green);
+        def = m_config.readEntry("defaultProofingGamutwarning", def);
+        KoColor col(KoColorSpaceRegistry::instance()->rgb8());
+        col.fromQColor(def);
+        col.setOpacity(1.0);
+        proofingConfig->warningColor = col;
+        proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
     }
-    QColor def(Qt::green);
-    m_config.readEntry("defaultProofingGamutwarning", def);
-    KoColor col(KoColorSpaceRegistry::instance()->rgb8());
-    col.fromQColor(def);
-    col.setOpacity(1.0);
-    proofingConfig->warningColor = col;
-    proofingConfig->adaptationState = (double)m_config.readEntry("defaultProofingAdaptationState", 1.0);
     return toQShared(proofingConfig);
 }
 
-void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
+void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace,
+                                              int renderingIntent,
+                                              bool blackPointCompensation,
+                                              KoColor warningColor,
+                                              double adaptationState,
+                                              bool displayBlackPointCompensation,
+                                              int proofingIntent,
+                                              KisProofingConfiguration::DisplayTransformState proofingDisplayMode)
 {
     if (!proofingSpace || !proofingSpace->profile()) {
         return;
     }
-
     m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
     m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
     m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());
-    m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
+    m_config.writeEntry("defaultProofingConversionIntent", renderingIntent);
     m_config.writeEntry("defaultProofingBlackpointCompensation", blackPointCompensation);
     QColor c;
     c = warningColor.toQColor();
     m_config.writeEntry("defaultProofingGamutwarning", c);
     m_config.writeEntry("defaultProofingAdaptationState",adaptationState);
+
+    m_config.writeEntry("defaultProofingDisplayBlackpointCompensation", displayBlackPointCompensation);
+    m_config.writeEntry("defaultProofingProfileIntent", proofingIntent);
+    m_config.writeEntry("defaultProofingDisplayMode", int(proofingDisplayMode));
 }
 
 bool KisImageConfig::useLodForColorizeMask(bool requestDefault) const
@@ -712,6 +724,16 @@ bool KisImageConfig::renameMergedLayers(bool defaultValue) const
 void KisImageConfig::setRenameMergedLayers(bool value)
 {
     m_config.writeEntry("renameMergedLayers", value);
+}
+
+bool KisImageConfig::renameDuplicatedLayers(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("renameDuplicatedLayers", true);
+}
+
+void KisImageConfig::setRenameDuplicatedLayers(bool value)
+{
+    m_config.writeEntry("renameDuplicatedLayers", value);
 }
 
 QString KisImageConfig::exportConfigurationXML(const QString &exportConfigId, bool defaultValue) const

@@ -15,10 +15,13 @@
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QLineEdit>
+#include <QSlider>
+#include <QCheckBox>
 #include "kis_debug.h"
 #include "kis_spacing_selection_widget.h"
 #include "kis_multipliers_double_slider_spinbox.h"
 #include "KisAngleSelector.h"
+#include "kis_color_button.h"
 #include "kis_file_name_requester.h"
 
 class ConnectButtonStateHelper : public QObject
@@ -113,6 +116,11 @@ void connectControl(QAction *button, QObject *source, const char *property)
     connectButtonLikeControl(button, source, property);
 }
 
+void connectControl(QCheckBox *button, QObject *source, const char *property)
+{
+    connectButtonLikeControl(button, source, property);
+}
+
 void connectControl(QSpinBox *spinBox, QObject *source, const char *property)
 {
     const QMetaObject* meta = source->metaObject();
@@ -135,6 +143,32 @@ void connectControl(QSpinBox *spinBox, QObject *source, const char *property)
 
     if (prop.isWritable()) {
         QObject::connect(spinBox, qOverload<int>(&QSpinBox::valueChanged),
+                         source, [prop, source] (int value) { prop.write(source, value); });
+    }
+}
+
+void connectControl(QSlider *slider, QObject *source, const char *property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
+    QMetaMethod signal = prop.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("int"));
+
+    const QMetaObject* dstMeta = slider->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("setValue(int)"));
+    QObject::connect(source, signal, slider, updateSlot);
+
+    slider->setValue(prop.read(source).toInt());
+
+    if (prop.isWritable()) {
+        QObject::connect(slider, qOverload<int>(&QSlider::valueChanged),
                          source, [prop, source] (int value) { prop.write(source, value); });
     }
 }
@@ -621,6 +655,33 @@ void connectControl(KisFileNameRequester *widget, QObject *source, const char *p
     }
 }
 
+void connectControl(KisColorButton *widget, QObject *source, const char *property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
+    QMetaMethod signal = prop.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("KoColor"));
+
+    const QMetaObject* dstMeta = widget->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("setColor(KoColor)"));
+    QObject::connect(source, signal, widget, updateSlot);
+
+    widget->setColor(prop.read(source).value<KoColor>());
+
+    if (prop.isWritable()) {
+        QObject::connect(widget, &KisColorButton::changed,
+                         source, [prop, source] (const KoColor &value) {
+                             prop.write(source, QVariant::fromValue(value)); });
+    }
+}
+
 void connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char* property)
 {
 	const QMetaObject* meta = source->metaObject();
@@ -634,6 +695,21 @@ void connectWidgetVisibleToProperty(QWidget* widget, QObject* source, const char
 	
     QObject::connect(source, signal, widget, updateSlot);
     widget->setVisible(prop.read(source).toBool());
+}
+
+void connectWidgetEnabledToProperty(QWidget* widget, QObject* source, const char* property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+    QMetaMethod signal = prop.notifySignal();
+
+    const QMetaObject* dstMeta = widget->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+        dstMeta->indexOfSlot("setEnabled(bool)"));
+
+    QObject::connect(source, signal, widget, updateSlot);
+    widget->setEnabled(prop.read(source).toBool());
 }
 
 }

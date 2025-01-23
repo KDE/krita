@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"POT-Creation-Date: 2025-01-23 01:50+0000\n"
 "PO-Revision-Date: 2025-01-21 10:22+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19815,7 +19815,7 @@ msgstr "Recursos locals"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -44924,7 +44924,7 @@ msgstr "Equilibri de &color..."
 msgid "Color Balance"
 msgstr "Equilibri de color"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Corbes d'ajust entre &canals..."
@@ -45006,7 +45006,7 @@ msgstr "Ajust &HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Ajust HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -45015,7 +45015,7 @@ msgstr ""
 "La configuració actual fou creada per a un espai de color diferent i no es "
 "pot usar. Es reiniciaran totes les corbes."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Corbes d'ajust del &color..."

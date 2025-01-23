@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"POT-Creation-Date: 2025-01-23 01:50+0000\n"
 "PO-Revision-Date: 2025-01-21 12:44+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19782,7 +19782,7 @@ msgstr "Krajevni viri"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -44815,7 +44815,7 @@ msgstr "Barvna &uravnoteženost ..."
 msgid "Color Balance"
 msgstr "Barvna uravnoteženost"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Krivulje prilagoditev med kanali …"
@@ -44897,7 +44897,7 @@ msgstr "Prilagoditev &HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Prilagoditev HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -44906,7 +44906,7 @@ msgstr ""
 "Trenutna prilagoditev je bila ustvarjena za drug barvni prostor in je ni "
 "mogoče uporabiti. Vse krivulje bodo ponastavljene."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Krivulje prilagoditev &barv ..."

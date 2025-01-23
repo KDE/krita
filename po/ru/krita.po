@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"POT-Creation-Date: 2025-01-23 01:50+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -20155,7 +20155,7 @@ msgstr "Локальные источники"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -45554,7 +45554,7 @@ msgstr "&Цветовой баланс..."
 msgid "Color Balance"
 msgstr "Цветовой баланс"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Кривые многоканальной регулировки цвета..."
@@ -45636,7 +45636,7 @@ msgstr "Корр&екция HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Коррекция HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -45645,7 +45645,7 @@ msgstr ""
 "Текущие параметры были установлены для другого цветового пространства и не "
 "могут быть использованы. Все кривые будут сброшены."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "&Коррекция цвета кривыми..."

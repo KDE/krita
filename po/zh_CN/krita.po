@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-22 01:51+0000\n"
+"POT-Creation-Date: 2025-01-23 01:50+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -19700,7 +19700,7 @@ msgstr "本地资源"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -44265,7 +44265,7 @@ msgstr "色彩平衡(&C)..."
 msgid "Color Balance"
 msgstr "色彩平衡"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "曲线 - 跨通道颜色调整(&C)..."
@@ -44347,14 +44347,14 @@ msgstr "&HSV 调整..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL 调整"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used. All curves will be reset."
 msgstr "不能使用当前配置，因为它是为其他色彩空间准备的。所有曲线将被重置。"
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "曲线 - 颜色调整(&C)..."
@@ -57640,6 +57640,8 @@ msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
+"移动在点击处有可见内容的第一个图层组。未分组图层在“顶级图层组”内，点击它们的"
+"内容时将移动所有图层！选中其他模式时，可按 Ctrl + Shift 键临时切换成此模式。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

@@ -23,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-22 01:51+0000\n"
-"PO-Revision-Date: 2025-01-21 22:03+0100\n"
+"POT-Creation-Date: 2025-01-23 01:50+0000\n"
+"PO-Revision-Date: 2025-01-22 12:45+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
@@ -19930,7 +19930,7 @@ msgstr "Baliabide lokalak"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -32574,7 +32574,7 @@ msgstr "Konbinatze orokorra"
 #: libs/ui/layerstyles/WdgSatin.ui:33
 #, kde-format
 msgid "Ble&nd Mode:"
-msgstr "Ko&nbinatzeko modua:"
+msgstr "&Nahaste-modua:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpAdvancedBlending)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:91
@@ -32848,7 +32848,7 @@ msgstr "&Zarata:"
 #: libs/ui/layerstyles/wdgdropshadow.ui:119 libs/ui/layerstyles/WdgStroke.ui:88
 #, kde-format
 msgid "&Blend Mode:"
-msgstr "Kon&binatzeko modua:"
+msgstr "Na&haste-modua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/layerstyles/wdgdropshadow.ui:149 libs/ui/layerstyles/WdgSatin.ui:67
@@ -35113,11 +35113,10 @@ msgstr "Tonu argiak:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
-#, fuzzy, kde-format
-#| msgid "Midtones"
+#, kde-format
 msgctxt "Midtones enhancement section in auto levels"
 msgid "Midtones"
-msgstr "Tarteko tonuak"
+msgstr "Tonu ertainak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:163
@@ -35128,25 +35127,24 @@ msgstr "Metodoa:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:171
-#, fuzzy, kde-format
-#| msgid "Could not load raster selection %1."
+#, kde-format
 msgctxt "Do not perform midtones enhancement in auto levels"
 msgid "Don't adjust the midtones"
-msgstr "Ezin izan da %1 raster hautapena zamatu."
+msgstr "Ez doitu tonu ertainak"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:176
 #, kde-format
 msgctxt "Use the median point of the histogram as midtone point in auto levels"
 msgid "Use the median to adjust the midtones"
-msgstr ""
+msgstr "Mediana erabili tonu ertainak doitzeko"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:181
 #, kde-format
 msgctxt "Use the mean value of the histogram as midtone point in auto levels"
 msgid "Use the mean value to adjust the midtones"
-msgstr ""
+msgstr "Batezbesteko balioa erabili tonu ertainak doitzeko"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:189
@@ -41228,25 +41226,21 @@ msgstr "Geruza/maskara"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "Bihurtu proiekzioko kolore-eremua"
+msgstr "Probako koloreak margotzeko kolore-eremura"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "Gainerakorrak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgctxt "JPEG-XL encoder options"
-#| msgid "Group size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "Talde-neurria"
+msgstr "Gainerakorraren neurria:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
@@ -41341,37 +41335,33 @@ msgstr "Adabakiak gehienez: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "Hautatzailea noiz eguneratu:"
+msgstr "Eguneratu oinarri-kolorea kasu hauetan:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "Kolorearen kolore-kanalak"
+msgstr "Kolorea kanpotik aldatzen da"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
+#, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "itzal-hautatzailean eskuin botoiaz klik egindakoan"
+msgstr "Itzal-hautatzailean eskuin klik egitea"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "Iterazioak"
+msgstr "Elkarreragina bukatzen da"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Itzal-hautatzaile minimoa"
+msgstr "Erakutsi itzal-hautatzaile minimoa"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -41845,7 +41835,7 @@ msgstr "Tonu argiak"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:37
 #, kde-format
 msgid "Midtones"
-msgstr "Tarteko tonuak"
+msgstr "Tonu ertainak"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonShadows)
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -44783,18 +44773,16 @@ msgid "Minimize Channel"
 msgstr "Minimizatu kanala"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Kolore gainjartzea"
+msgstr "Kolore es&taldura azkarra..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "Kolore gainjartzea"
+msgstr "Kolore estaldura azkarra"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -44814,24 +44802,21 @@ msgstr "Kolore lagingailua:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "Kon&binatzeko modua:"
+msgstr "Nahaste-modua:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Ezarri geruzaren opakutasun eredu nagusia"
+msgstr "Ezarri estaldura kolorerako opakutasun maisua"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
-#, fuzzy, kde-format
-#| msgid "Adjust the transparency of the layer"
+#, kde-format
 msgid "Adjust the transparency of the overlay color"
-msgstr "Doitu geruzaren gardentasuna"
+msgstr "Doitu estaldura kolorearen gardentasuna"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -44867,7 +44852,7 @@ msgstr "&Kolore orekatzea..."
 msgid "Color Balance"
 msgstr "Kolore oreka"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Kanal arteko doikuntza kurbak..."
@@ -44949,7 +44934,7 @@ msgstr "&ÑSBren doiketa..."
 msgid "HSV/HSL Adjustment"
 msgstr "HSV/HSL doikuntza"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -44958,7 +44943,7 @@ msgstr ""
 "Uneko konfigurazioa beste kolore-eremu baterako sortu zen eta ezin da "
 "erabili. Kurba guztiak berrezarriko dira."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "&Kolorea doitzeko kurbak..."
@@ -45000,10 +44985,9 @@ msgstr "Urdina  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetMidtones)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
-#, fuzzy, kde-format
-#| msgid "Midtones"
+#, kde-format
 msgid "Reset Midtones  "
-msgstr "Tarteko tonuak"
+msgstr "Berrezarri tonu ertainak "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
@@ -46011,20 +45995,19 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:112
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:213
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:286
-#, fuzzy, kde-format
-#| msgid "Reflect"
+#, kde-format
 msgid "Reflectivity:"
-msgstr "Isla"
+msgstr "Erreflektantzia:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpecularShinyExp)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:138
 #, kde-format
 msgid "Shinyness exponent:"
-msgstr ""
+msgstr "Distira berretzailea:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, diffuseReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:186
-#, kde-format
+#, fuzzy, kde-format
 msgid "Di&ffuse"
 msgstr "&Lausoa"
 
@@ -46188,24 +46171,21 @@ msgstr "Oktagonoa "
 #, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Unrestricted"
-msgstr ""
+msgstr "Murriztu gabe"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "Button to restart the timelapse video configuring"
-#| msgid "Restart"
+#, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Restricted"
-msgstr "Berrabiarazi"
+msgstr "Murriztua"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
-#, fuzzy, kde-format
-#| msgid "Maximum brush size:"
+#, kde-format
 msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr "Pintzelaren neurri maximoa:"
+msgstr "Gehienezko distantzia: {n}px"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
 #, kde-format
@@ -46214,42 +46194,43 @@ msgid "Expand"
 msgstr "Zabaldu"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Preserve"
-msgstr "Presioa"
+msgstr "Babestu"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "Zabaldu koloreak laukizuzen baten moduan"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "Zabaldu koloreak diamante baten moduan"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "Zabaldu koloreak modu oktogonal batean"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
-msgstr ""
+msgstr "Zabaldu koloreak eskualde garden guztiak bete arte"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "Zabaldu koloreak distantzia jakin batera arte bakarrik"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
 msgstr ""
+"Zehaztu modu murriztua aktibatuta dagoenean zabaldu beharreko gehienezko "
+"distantzia"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format

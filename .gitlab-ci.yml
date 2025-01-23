@@ -34,6 +34,16 @@ variables:
       when: never
     - when: manual
 
+.ci-manual-and-weekly-job-mixin:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $KRITACI_SCHEDULED_JOB_NAME == "weekly"
+      when: always
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
+      when: never
+    - when: manual
+
 .ci-always-job-mixin:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"

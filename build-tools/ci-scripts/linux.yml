@@ -69,7 +69,7 @@ linux-debug-weekly:
 linux-asan-weekly:
   extends:
   - linux-build
-  - .weekly-job-mixin
+  - .ci-manual-and-weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:

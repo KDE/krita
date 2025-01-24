@@ -28,6 +28,7 @@ kis_add_tests(
     TestKoMarkerCollection.cpp
     TestSvgSavingContext.cpp
     TestXsimdPainting.cpp
+    TestFontLibraryResourceUtils.cpp
 
     LINK_LIBRARIES kritaflake kritatestsdk
     NAME_PREFIX "libs-flake-"

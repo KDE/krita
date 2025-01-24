@@ -18,13 +18,22 @@
 
 #include <QSharedPointer>
 
-// Helper to clean up only if the pointer is non-null.
-template<typename T, void (*d)(T *)>
-inline void deleter(T *ptr)
+#include <kis_debug.h>
+
+namespace detail {
+
+template <typename T, int (*P)(T *)>
+void checkCStyleResultWrapper(T *ptr)
 {
-    if (ptr) {
-        d(ptr);
+    const int result = P(ptr);
+    if (result != 0) {
+        qWarning() << "WARNING: failed to release a library resource";
+#ifdef __GNUC__
+        qWarning() << "    source:" << __PRETTY_FUNCTION__;
+#endif
     }
+}
+
 }
 
 /**
@@ -37,57 +46,56 @@ template<typename T, void (*P)(T *)>
 struct KisLibraryResourcePointer : private QSharedPointer<T> {
 public:
     KisLibraryResourcePointer()
-        : QSharedPointer<T>(nullptr, deleter<T, P>)
+        : QSharedPointer<T>(nullptr)
     {
     }
 
     KisLibraryResourcePointer(T *ptr)
-        : QSharedPointer<T>(ptr, deleter<T, P>)
+        : QSharedPointer<T>(ptr, ptr ? P : &KisLibraryResourcePointer::noDestroy)
     {
     }
 
     using QSharedPointer<T>::operator->;
-    using QSharedPointer<T>::reset;
+
+    void reset(T *ptr) {
+        QSharedPointer<T>::reset(ptr, ptr ? P : &KisLibraryResourcePointer::noDestroy);
+    }
+
+    void reset() {
+        QSharedPointer<T>::reset();
+    }
 
     auto data() const
     {
         return this->get();
+    }
+
+private:
+    static void noDestroy(T *ptr) {
+        Q_UNUSED(ptr);
     }
 };
 
 /**
- * Shared pointer that holds a standard allocated resource.
- * The only difference is that the deleter supports being called
- * for null pointer, so we can call it directly without any wrapper.
+ * A special version of a class for resource types whose destructor
+ * returns integer value reporting if destruction was successful or
+ * now. We wrap this destructor to spit a warning in case of a trouble
+ * to release the type.
  */
 template<typename T, int (*P)(T *)>
-struct KisLibraryResourcePointerAllowsNull : private QSharedPointer<T> {
-public:
-    KisLibraryResourcePointerAllowsNull()
-        : QSharedPointer<T>(nullptr, P)
-    {
-    }
+using KisLibraryResourcePointerWithSanityCheck = KisLibraryResourcePointer<T, detail::checkCStyleResultWrapper<T, P>>;
 
-    KisLibraryResourcePointerAllowsNull(T *ptr)
-        : QSharedPointer<T>(ptr, P)
-    {
-    }
-
-    using QSharedPointer<T>::operator->;
-    using QSharedPointer<T>::reset;
-
-    auto data() const
-    {
-        return this->get();
-    }
-};
 
 using FcConfigSP = KisLibraryResourcePointer<FcConfig, FcConfigDestroy>;
 using FcCharSetSP = KisLibraryResourcePointer<FcCharSet, FcCharSetDestroy>;
 using FcPatternSP = KisLibraryResourcePointer<FcPattern, FcPatternDestroy>;
 using FcFontSetSP = KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy>;
-using FT_LibrarySP = KisLibraryResourcePointerAllowsNull<std::remove_pointer_t<FT_Library>, FT_Done_FreeType>;
-using FT_FaceSP = KisLibraryResourcePointerAllowsNull<std::remove_pointer_t<FT_Face>, FT_Done_Face>;
+
+using FT_LibrarySP =
+    KisLibraryResourcePointerWithSanityCheck<std::remove_pointer_t<FT_Library>,
+                                             FT_Done_FreeType>;
+using FT_FaceSP = KisLibraryResourcePointerWithSanityCheck<std::remove_pointer_t<FT_Face>,
+                                                           FT_Done_Face>;
 
 using hb_font_t_sp = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
 

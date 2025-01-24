@@ -30,6 +30,7 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     setupPatternComboBox();
     setupShapeComboBox();
     setupInterpolationComboBox();
+
     m_ui.buttonEqualizationNone->setGroupPosition(KoGroupButton::GroupLeft);
     m_ui.buttonEqualizationFunctionBased->setGroupPosition(KoGroupButton::GroupCenter);
     m_ui.buttonEqualizationTemplateBased->setGroupPosition(KoGroupButton::GroupRight);
@@ -37,105 +38,135 @@ KisScreentoneConfigWidget::KisScreentoneConfigWidget(QWidget* parent, const KoCo
     m_ui.sliderForegroundOpacity->setRange(0, 100);
     KisSpinBoxI18nHelper::setText(m_ui.sliderForegroundOpacity,
                                   i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+
     m_ui.sliderBackgroundOpacity->setRange(0, 100);
     KisSpinBoxI18nHelper::setText(m_ui.sliderBackgroundOpacity,
                                   i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+
     m_ui.sliderBrightness->setRange(0.0, 100.0, 2);
     m_ui.sliderBrightness->setSingleStep(1.0);
     KisSpinBoxI18nHelper::setText(m_ui.sliderBrightness,
                                   i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+
     m_ui.sliderContrast->setRange(0.0, 100.0, 2);
     m_ui.sliderContrast->setSingleStep(1.0);
     KisSpinBoxI18nHelper::setText(m_ui.sliderContrast, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     m_ui.buttonSizeModeResolutionBased->setGroupPosition(KoGroupButton::GroupLeft);
     m_ui.buttonSizeModePixelBased->setGroupPosition(KoGroupButton::GroupRight);
+
     m_ui.sliderResolution->setRange(1.0, 9999.0, 2);
     m_ui.sliderResolution->setSoftRange(72.0, 600.0);
+
     m_ui.sliderFrequencyX->setPrefix(i18n("X: "));
     m_ui.sliderFrequencyX->setSingleStep(1.0);
+
     m_ui.sliderFrequencyY->setPrefix(i18n("Y: "));
     m_ui.sliderFrequencyY->setSingleStep(1.0);
+
     slot_setFrequencySlidersRanges();
+
     slot_comboBoxUnits_currentIndexChanged(0);
+
     m_ui.sliderPositionX->setRange(-1000.0, 1000.0, 2);
     m_ui.sliderPositionX->setSoftRange(-100.0, 100.0);
     m_ui.sliderPositionX->setPrefix(i18n("X: "));
     m_ui.sliderPositionX->setSuffix(i18n(" px"));
     m_ui.sliderPositionX->setSingleStep(1.0);
+
     m_ui.sliderPositionY->setRange(-1000.0, 1000.0, 2);
     m_ui.sliderPositionY->setSoftRange(-100.0, 100.0);
     m_ui.sliderPositionY->setPrefix(i18n("Y: "));
     m_ui.sliderPositionY->setSuffix(i18n(" px"));
     m_ui.sliderPositionY->setSingleStep(1.0);
+
     m_ui.sliderSizeX->setRange(1.0, 1000.0, 2);
     m_ui.sliderSizeX->setSoftRange(1.0, 100.0);
     m_ui.sliderSizeX->setPrefix(i18n("X: "));
     m_ui.sliderSizeX->setSuffix(i18n(" px"));
     m_ui.sliderSizeX->setSingleStep(1.0);
     m_ui.sliderSizeX->setExponentRatio(4.32);
+
     m_ui.sliderSizeY->setRange(1.0, 1000.0, 2);
     m_ui.sliderSizeY->setSoftRange(1.0, 100.0);
     m_ui.sliderSizeY->setPrefix(i18n("Y: "));
     m_ui.sliderSizeY->setSuffix(i18n(" px"));
     m_ui.sliderSizeY->setSingleStep(1.0);
     m_ui.sliderSizeY->setExponentRatio(4.32);
+
     m_ui.sliderShearX->setRange(-10.0, 10.0, 2);
     m_ui.sliderShearX->setSoftRange(-2.0, 2.0);
     m_ui.sliderShearX->setPrefix(i18n("X: "));
     m_ui.sliderShearX->setSingleStep(0.1);
+
     m_ui.sliderShearY->setRange(-10.0, 10.0, 2);
     m_ui.sliderShearY->setSoftRange(-2.0, 2.0);
     m_ui.sliderShearY->setPrefix(i18n("Y: "));
     m_ui.sliderShearY->setSingleStep(0.1);
+
     m_ui.sliderAlignToPixelGridX->setRange(1, 20);
     m_ui.sliderAlignToPixelGridY->setRange(1, 20);
+
     KisSpinBoxI18nHelper::install(m_ui.sliderAlignToPixelGridX, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
         return i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell horizontally", "Every {n} cells horizontally", value);
     });
+
     KisSpinBoxI18nHelper::install(m_ui.sliderAlignToPixelGridY, [](int value) {
         // i18n: This is meant to be used in a spinbox so keep the {n} in the text
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
         return i18ncp("Vertical pixel grid alignment prefix/suffix for spinboxes in screentone generator", "Every {n} cell vertically", "Every {n} cells vertically", value);
     });
+
     slot_buttonSizeModeResolutionBased_toggled(true);
 
     connect(m_ui.comboBoxPattern, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxPattern_currentIndexChanged(int)));
     connect(m_ui.comboBoxShape, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxShape_currentIndexChanged(int)));
     connect(m_ui.comboBoxInterpolation, SIGNAL(currentIndexChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.buttonEqualizationNone, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.buttonEqualizationFunctionBased, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.buttonEqualizationTemplateBased, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     
     connect(m_ui.buttonForegroundColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderForegroundOpacity, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.buttonBackgroundColor, SIGNAL(changed(const KoColor&)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderBackgroundOpacity, SIGNAL(valueChanged(int)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.checkBoxInvert, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.sliderBrightness, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderContrast, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     
     connect(m_ui.buttonSizeModeResolutionBased, SIGNAL(toggled(bool)), this, SLOT(slot_buttonSizeModeResolutionBased_toggled(bool)));
     connect(m_ui.buttonSizeModePixelBased, SIGNAL(toggled(bool)), this, SLOT(slot_buttonSizeModePixelBased_toggled(bool)));
+
     connect(m_ui.comboBoxUnits, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxUnits_currentIndexChanged(int)));
+
     connect(m_ui.sliderResolution, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderResolution_valueChanged(qreal)));
     connect(m_ui.sliderResolution, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.buttonResolutionFromImage, SIGNAL(clicked()), this, SLOT(slot_buttonResolutionFromImage_clicked()));
+
     connect(m_ui.sliderFrequencyX, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderFrequencyX_valueChanged(qreal)));
     connect(m_ui.sliderFrequencyY, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderFrequencyY_valueChanged(qreal)));
     connect(m_ui.buttonConstrainFrequency, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slot_buttonConstrainFrequency_keepAspectRatioChanged(bool)));
+
     connect(m_ui.sliderPositionX, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderPositionY, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.sliderSizeX, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderSizeX_valueChanged(qreal)));
     connect(m_ui.sliderSizeY, SIGNAL(valueChanged(qreal)), this, SLOT(slot_sliderSizeY_valueChanged(qreal)));
     connect(m_ui.buttonConstrainSize, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slot_buttonConstrainSize_keepAspectRatioChanged(bool)));
+
     connect(m_ui.sliderShearX, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderShearY, SIGNAL(valueChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.angleSelectorRotation, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
     connect(m_ui.checkBoxAlignToPixelGrid, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_ui.sliderAlignToPixelGridX, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridX_valueChanged(int)));
     connect(m_ui.sliderAlignToPixelGridY, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridY_valueChanged(int)));

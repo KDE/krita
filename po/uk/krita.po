@@ -5,13 +5,13 @@
 #
 # Andriy Rysin <arysin@yahoo.com>, 2000.
 # Ivan Petrouchtchak <fr.ivan@ukrainian-orthodox.org>, 2006, 2007, 2008.
-# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# Yuri Chornoivan <yurchor@ukr.net>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2024-11-23 08:59+0200\n"
+"PO-Revision-Date: 2025-01-23 21:00+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -7865,12 +7865,10 @@ msgstr "Розірвати у точці"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Розірвати на відрізку"
+msgstr "Розірвати на позначеному"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -16512,18 +16510,16 @@ msgstr ""
 "кнопкою миші, щоб додати нову точку контуру."
 
 #: libs/flake/tools/KoPathTool.cpp:708
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "Натисніть клавішу «B», щоб розбити контур у вибраній точці."
+msgstr "Натисніть клавішу %1, щоб розбити контур у вибраній точці."
 
 #: libs/flake/tools/KoPathTool.cpp:710
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "Натисніть клавішу «B», щоб розбити контур на вибраних відрізках."
+msgstr "Натисніть клавішу %1, щоб розбити контур на вибраних відрізках."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format

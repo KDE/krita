@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-23 01:50+0000\n"
+"POT-Creation-Date: 2025-01-25 01:56+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17649,12 +17649,12 @@ msgstr "축소(&M)"
 #: libs/widgets/wdg_file_name_requester.ui:49
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:84
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:148
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:200
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:219
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:244
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:269
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:294
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:335
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -17864,10 +17864,10 @@ msgstr "크기"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
 #: plugins/generators/pattern/wdgpatternoptions.ui:128
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:93
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -23895,8 +23895,8 @@ msgstr "레이어 속성"
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
@@ -31179,8 +31179,8 @@ msgstr "브러시 사전 설정 선택"
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
@@ -40591,32 +40591,39 @@ msgstr "레이어의 혼합 모드를 선택합니다."
 msgid "Layer Opacity"
 msgstr "레이어 불투명도"
 
+#. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
+#, fuzzy, kde-format
+#| msgid "Move layer or mask up"
+msgid "Add new layer or mask"
+msgstr "레이어/마스크 위로 이동"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:213
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
 #, kde-format
 msgid "Duplicate layer or mask"
 msgstr "레이어/마스크 복제"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:238
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #, kde-format
 msgid "Move layer or mask down"
 msgstr "레이어/마스크 아래로 이동"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:263
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #, kde-format
 msgid "Move layer or mask up"
 msgstr "레이어/마스크 위로 이동"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:288
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
 #, kde-format
 msgid "View or change the layer properties"
 msgstr "레이어 속성 보기/변경"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "레이어/마스크 삭제"
@@ -48336,10 +48343,10 @@ msgstr "색 인수"
 #: plugins/generators/pattern/wdgpatternoptions.ui:76
 #: plugins/generators/pattern/wdgpatternoptions.ui:121
 #: plugins/generators/pattern/wdgpatternoptions.ui:148
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:99
 #, kde-format
 msgid "X: "
 msgstr "X: "
@@ -48351,10 +48358,10 @@ msgstr "X: "
 #: plugins/generators/pattern/wdgpatternoptions.ui:98
 #: plugins/generators/pattern/wdgpatternoptions.ui:131
 #: plugins/generators/pattern/wdgpatternoptions.ui:161
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:92
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:104
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
@@ -48435,7 +48442,7 @@ msgstr "픽셀 격자:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:114
 #, fuzzy, kde-format
 #| msgid "Sobel horizontally"
 msgctxt ""
@@ -48448,7 +48455,7 @@ msgstr[0] "소벨 수평"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:121
 #, fuzzy, kde-format
 #| msgid "Sobel vertically"
 msgctxt ""
@@ -48458,27 +48465,27 @@ msgid "Every {n} cell vertically"
 msgid_plural "Every {n} cells vertically"
 msgstr[0] "소벨 수직"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, fuzzy, kde-format
 #| msgid "Pixels/Inch"
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr "픽셀/인치"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:479
 #, fuzzy, kde-format
 #| msgid "Pixels/Inch"
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr "픽셀/인치"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:482
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr ""
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:483
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "h264 profile name, check simplescreenrecorder for standard translations"

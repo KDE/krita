@@ -38948,10 +38948,9 @@ msgstr "图层不透明度"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgid "Move layer or mask up"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "上移图层/蒙版"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216

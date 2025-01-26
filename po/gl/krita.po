@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-25 01:56+0000\n"
-"PO-Revision-Date: 2025-01-19 13:48+0100\n"
+"PO-Revision-Date: 2025-01-25 12:00+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -58598,16 +58598,13 @@ msgstr "Mo&ver a capa co contido"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Mover o grupo que contén a primeira capa con contido visíbel. Atallo: Ctrl + "
-"Maiús + clic."
+"clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

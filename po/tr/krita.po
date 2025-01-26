@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-25 01:56+0000\n"
-"PO-Revision-Date: 2025-01-21 10:35+0300\n"
+"PO-Revision-Date: 2025-01-25 17:29+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -24833,8 +24833,9 @@ msgid ""
 "it can get from the profile you are converting from and the profile you are "
 "converting to."
 msgstr ""
-"Krita bunu dönüştürdüğünüz profile ya da profileden alabildiği bilgiye "
-"dayanarak işaretler ya da bundan işareti kaldırır."
+"Krita, dönüştürdüğünüz profilden ve dönüştürdüğünüz profilden alabileceği "
+"bilgilere dayanarak bunu kendiliğinden denetlemeye veya işaretini kaldırmaya "
+"çalışır."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
@@ -30751,7 +30752,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
 msgid "File(s) or URL(s) to open"
-msgstr "Açılacak dosya ya da Ades(ler)"
+msgstr "Açılacak dosyalar veya URL’ler"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:170
 #, kde-format
@@ -39353,28 +39354,27 @@ msgstr "Katman Matlığı"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgid "Move layer or mask up"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "Katman ya da maskeyi yukarı taşı"
+msgstr "Yeni katman veya maske ekle"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
 #, kde-format
 msgid "Duplicate layer or mask"
-msgstr "Katman ya da maskeyi çoğalt"
+msgstr "Katmanı veya maskeyi çoğalt"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #, kde-format
 msgid "Move layer or mask down"
-msgstr "Katman ya da maskeyi aşağı taşı"
+msgstr "Katmanı veya maskeyi aşağı taşı"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #, kde-format
 msgid "Move layer or mask up"
-msgstr "Katman ya da maskeyi yukarı taşı"
+msgstr "Katmanı veya maskeyi yukarı taşı"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:291
@@ -39386,7 +39386,7 @@ msgstr "Katman özelliklerini görüntüle veya değiştir"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #, kde-format
 msgid "Delete the layer or mask"
-msgstr "Katman ya da maskeyi sil"
+msgstr "Katmanı veya maskeyi sil"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
@@ -61023,7 +61023,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın ya da seçimin şeklini değiştir"
+msgstr "Bir katmanın veya seçimin şeklini değiştir"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
 #, kde-format
@@ -61167,7 +61167,7 @@ msgstr "Dönüşüm Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın ya da seçimin şeklini değiştir"
+msgstr "Bir katmanın veya seçimin şeklini değiştir"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61

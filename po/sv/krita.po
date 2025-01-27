@@ -1146,7 +1146,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch."
 "gbr"
 msgid "A_Nice Sketch"
-msgstr "A Fin sketch"
+msgstr "En fin skiss"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1154,7 +1154,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/A_Nice_sketch2."
 "gbr"
 msgid "A_Nice Sketch2"
-msgstr "A Fin sketch 2"
+msgstr "En fin skiss 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -79114,11 +79114,11 @@ msgstr "Referensbildverktyg"
 
 #~ msgctxt "(qtundo-format) ./krita/data/brushes/A_Nice_sketch.gbr"
 #~ msgid "A_Nice Sketch"
-#~ msgstr "A Fin sketch"
+#~ msgstr "En fin skiss"
 
 #~ msgctxt "(qtundo-format) ./krita/data/brushes/A_Nice_sketch2.gbr"
 #~ msgid "A_Nice Sketch2"
-#~ msgstr "A Fin sketch 2"
+#~ msgstr "En fin skiss 2"
 
 #~ msgctxt "(qtundo-format) ./krita/data/brushes/A_provencal.gbr"
 #~ msgid "A_provencal"
@@ -90624,11 +90624,11 @@ msgstr "Referensbildverktyg"
 
 #~ msgctxt "(qtundo-format) PaintOp instant preview limitation"
 #~ msgid "Sketch brush (differences in connecting lines are possible)"
-#~ msgstr "Sketchpensel (skillnader i anslutningslinjer är möjliga)"
+#~ msgstr "Skisspensel (skillnader i anslutningslinjer är möjliga)"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sketch"
-#~ msgstr "Sketch"
+#~ msgstr "Skiss"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Particle Count"
@@ -91987,7 +91987,7 @@ msgstr "Referensbildverktyg"
 #~ msgstr "Använd fullskärmsläge"
 
 #~ msgid "Start with the Sketch interface"
-#~ msgstr "Starta med sketchgränssnittet"
+#~ msgstr "Starta med skissgränssnittet"
 
 #~ msgid "%1 doesn't exist."
 #~ msgstr "%1 finns inte."
@@ -91997,10 +91997,10 @@ msgstr "Referensbildverktyg"
 #~ msgstr "Krita: Ingen QML hittades"
 
 #~ msgid "Krita Sketch: Painting on the Go for Artists"
-#~ msgstr "Krita Sketch: Digital målning i farten för konstnärer"
+#~ msgstr "Krita skiss: Digital målning i farten för konstnärer"
 
 #~ msgid "Open sketch in a window, otherwise defaults to full-screen"
-#~ msgstr "Öppna sketch i ett fönster, annars är fullskärmsläge standard"
+#~ msgstr "Öppna skiss i ett fönster, annars är fullskärmsläge standard"
 
 #~ msgid "Filename to write profiling information into."
 #~ msgstr "Filnamn att skriva profileringsinformation till."
@@ -95808,7 +95808,7 @@ msgstr "Referensbildverktyg"
 #~ msgstr "Verklig olja 3"
 
 #~ msgid "Real Oil sketch"
-#~ msgstr "Verklig oljesketch"
+#~ msgstr "Verklig oljeskiss"
 
 #~ msgid "Real Oil 2b"
 #~ msgstr "Verkliga olja 2 B"

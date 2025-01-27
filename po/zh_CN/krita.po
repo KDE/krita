@@ -38950,7 +38950,7 @@ msgstr "图层不透明度"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
 #, kde-format
 msgid "Add new layer or mask"
-msgstr ""
+msgstr "新增图层或蒙版"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216

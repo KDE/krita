@@ -20,7 +20,7 @@
 # Simone Solinas <ksolsim@gmail.com>, 2008, 2009, 2010, 2011.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2022, 2023.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Valter Mura <valtermura@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Valter Mura <valtermura@gmail.com>
 #
 # Per i motivi/sfumature, vedere il seguente collegamento:
 # http://craik.shef.ac.uk/cpt-city/ggr/
@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2024-12-21 11:18+0100\n"
+"PO-Revision-Date: 2025-01-25 18:28+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -60316,14 +60316,14 @@ msgstr "Spazio tra due applicazioni sequenziali della deformazione"
 msgctxt "@info:tooltip"
 msgid "Scale <b>Size</b> value according to current stylus pressure"
 msgstr ""
-"Valore di scala <b>Dimensione</b> in base allo stile di pressione attuale"
+"Valore di scala <b>Dimensione</b> in base alla pressione attuale dello stilo"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:251
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Amount</b> value according to current stylus pressure"
 msgstr ""
-"Valore di scala <b>Quantità</b> in base allo stile di pressione attuale"
+"Valore di scala <b>Quantità</b> in base alla pressione attuale dello stilo"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:256
 #, kde-format

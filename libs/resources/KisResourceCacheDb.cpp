@@ -1421,6 +1421,46 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     return true;
 }
 
+bool KisResourceCacheDb::registerStorageType(const KisResourceStorage::StorageType storageType)
+{
+    // Check whether the type already exists
+    const QString name = KisResourceStorage::storageTypeToUntranslatedString(storageType);
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("SELECT count(*)\n"
+                       "FROM   storage_types\n"
+                       "WHERE  name = :storage_type\n")) {
+            qWarning() << "Could not prepare select from storage_types query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":storage_type", name);
+        if (!q.exec()) {
+            qWarning() << "Could not execute select from storage_types query" << q.lastError();
+            return false;
+        }
+        q.first();
+        int rowCount = q.value(0).toInt();
+        if (rowCount > 0) {
+            return true;
+        }
+    }
+    // if not, add it
+    QFile f(":/fill_storage_types.sql");
+    if (f.open(QFile::ReadOnly)) {
+        QString sql = f.readAll();
+        QSqlQuery q(sql);
+        q.addBindValue(name);
+        if (!q.exec()) {
+            qWarning() << "Could not insert" << name << q.lastError();
+            return false;
+        }
+        return true;
+    }
+    qWarning() << "Could not open fill_storage_types.sql";
+    return false;
+}
+
 bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstalled)
 {
     bool r = true;

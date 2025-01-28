@@ -114,6 +114,12 @@ private:
     static bool addTag(const QString &resourceType, const QString storageLocation, KisTagSP tag);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
+    /**
+     * @brief registerStorageType registers this storage type in the database
+     * @param storageType the enum value that represents the type
+     * @return true if the type was registered or had already been registered
+     */
+    static bool registerStorageType(const KisResourceStorage::StorageType storageType);
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);
     static bool addStorageTags(KisResourceStorageSP storage);
 

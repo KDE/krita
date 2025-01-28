@@ -304,6 +304,7 @@ public:
     virtual ~KisStoragePluginRegistry();
 
     void addStoragePluginFactory(KisResourceStorage::StorageType storageType, KisStoragePluginFactoryBase *factory);
+    QList<KisResourceStorage::StorageType> storageTypes() const;
     static KisStoragePluginRegistry *instance();
 private:
     friend class KisResourceStorage;

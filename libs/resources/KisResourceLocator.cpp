@@ -1090,6 +1090,11 @@ void KisResourceLocator::findStorages()
         }
         d->storages[storage->location()] = storage;
     }
+
+    // Add any missing storage types to the resource cache database.
+    Q_FOREACH(const KisResourceStorage::StorageType &type, KisStoragePluginRegistry::instance()->storageTypes()) {
+        KisResourceCacheDb::registerStorageType(type);
+    }
 }
 
 QList<KisResourceStorageSP> KisResourceLocator::storages() const

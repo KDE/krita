@@ -65,6 +65,11 @@ void KisStoragePluginRegistry::addStoragePluginFactory(KisResourceStorage::Stora
     m_storageFactoryMap[storageType] = factory;
 }
 
+QList<KisResourceStorage::StorageType> KisStoragePluginRegistry::storageTypes() const
+{
+    return m_storageFactoryMap.keys();
+}
+
 KisStoragePluginRegistry *KisStoragePluginRegistry::instance()
 {
     return s_instance;

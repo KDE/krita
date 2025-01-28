@@ -435,6 +435,7 @@ void KisWelcomePageWidget::slotUpdateThemeColors()
     if (KisMacosEntitlements().sandbox()) {
         supportKritaLink->hide();
         supportKritaIcon->hide();
+        labelSupportText->hide();
     }
 #endif
 }

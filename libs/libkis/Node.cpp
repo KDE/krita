@@ -879,7 +879,7 @@ void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, double pres
     pointTwoInfo.setPressure(pressureTwo);
     pointTwoInfo.setPos(pointTwo);
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, node(), strokeStyle);
     helper.paintLine(pointOneInfo, pointTwoInfo);
 }
 
@@ -894,7 +894,7 @@ void Node::paintRectangle(const QRectF &rect, const QString strokeStyle, const Q
     // reference class where this stuff is being done. Maybe can use the "facade" like that does for setup?
     // void KisFigurePaintingToolHelper::paintRect(const QRectF &rect)
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, node(), strokeStyle, fillStyle);
     helper.paintRect(rect);
 }
 
@@ -908,7 +908,7 @@ void Node::paintPolygon(const QList<QPointF> listPoint, const QString strokeStyl
 
     // strategy needs points in vPointF format
     QVector<QPointF> points = points.fromList(listPoint);
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, node(), strokeStyle, fillStyle);
     helper.paintPolygon(points);
 }
 
@@ -920,7 +920,7 @@ void Node::paintEllipse(const QRectF &rect, const QString strokeStyle, const QSt
         return;
     }
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, node(), strokeStyle, fillStyle);
     helper.paintEllipse(rect);
 }
 
@@ -932,6 +932,6 @@ void Node::paintPath(const QPainterPath &path, const QString strokeStyle, const 
         return;
     }
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, node(), strokeStyle, fillStyle);
     helper.paintPainterPath(path);
 }

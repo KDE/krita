@@ -21,6 +21,7 @@ namespace PaintingResources
     const QString defaultFillStyle = "None";
 
     KisFigurePaintingToolHelper createHelper(KisImageWSP image,
+                                             KisNodeSP node,
                                              const QString strokeStyle = defaultStrokeStyle,
                                              const QString fillStyle = defaultFillStyle);
 

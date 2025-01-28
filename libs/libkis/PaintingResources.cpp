@@ -28,15 +28,13 @@ const QStringList FillStyle = {
 };
 
 KisFigurePaintingToolHelper PaintingResources::createHelper(KisImageWSP image,
+                                                            KisNodeSP node,
                                                             const QString strokeStyleString,
                                                             const QString fillStyleString)
 {
     // need to grab the resource provider
     KisView *activeView = KisPart::instance()->currentMainwindow()->activeView();
     KoCanvasResourceProvider *resourceManager = activeView->viewManager()->canvasResourceProvider()->resourceManager();
-
-    // grab the image and current layer
-    KisNodeSP node = activeView->currentNode();
 
     int strokeIndex = StrokeStyle.indexOf(strokeStyleString);
     if (strokeIndex == -1) {

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 01:56+0000\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -18436,7 +18436,7 @@ msgstr ""
 msgid "Import frames"
 msgstr ""
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr ""

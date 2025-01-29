@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 01:56+0000\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -18917,7 +18917,7 @@ msgstr "Bild aftrennen"
 msgid "Import frames"
 msgstr "Bild importeren"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"

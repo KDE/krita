@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 01:56+0000\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
 "PO-Revision-Date: 2011-01-17 21:35+0100\n"
 "Last-Translator: Jean Cayron <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -18838,7 +18838,7 @@ msgstr "Distrocler imådje"
 msgid "Import frames"
 msgstr "Abaguer imådje"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"

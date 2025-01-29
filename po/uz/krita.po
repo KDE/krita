@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-25 01:56+0000\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -18607,7 +18607,7 @@ msgstr "Rasmning nomini oʻzgartirish"
 msgid "Import frames"
 msgstr "Rasmni import qilish"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"

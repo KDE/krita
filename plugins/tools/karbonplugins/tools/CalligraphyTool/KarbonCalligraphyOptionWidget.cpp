@@ -14,7 +14,6 @@
 #include <ksharedconfig.h>
 #include <kconfig.h>
 #include <QDebug>
-#include <kmessagebox.h>
 #include <KisAngleSelector.h>
 
 #include <QInputDialog>
@@ -23,6 +22,7 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QToolButton>
+#include <QMessageBox>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
@@ -215,19 +215,21 @@ void KarbonCalligraphyOptionWidget::saveProfileAs()
         }
 
         if (name.isEmpty() || name == i18n("Current")) {
-            KMessageBox::error(this,
-                               i18n("The name you entered is invalid."),
-                               i18nc("invalid profile name", "Invalid name."));
+            QMessageBox::warning(this,
+                                i18n("The name you entered is invalid."),
+                                i18nc("invalid profile name", "Invalid name."));
 
             continue; // ask again
         }
 
         if (m_profiles.contains(name)) {
-            int ret = KMessageBox::warningYesNo(this,
-                                                i18n("A profile with that name already exists.\n"
-                                                        "Do you want to overwrite it?"));
+            int ret = QMessageBox::warning(this,
+                                           i18nc("@title:window", "Krita"),
+                                           i18n("A profile with that name already exists.\n"
+                                                "Do you want to overwrite it?"),
+                    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Yes);
 
-            if (ret == KMessageBox::Yes) {
+            if (ret == QMessageBox::Yes) {
                 break;    // exit while loop (save profile)
             }
             // else ask again

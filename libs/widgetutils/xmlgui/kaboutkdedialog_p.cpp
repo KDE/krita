@@ -23,6 +23,10 @@
 
 #include <kis_icon_utils.h>
 
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
+#endif
+
 namespace KDEPrivate
 {
 
@@ -106,22 +110,32 @@ KisKAboutKdeDialog::KisKAboutKdeDialog(QWidget *parent)
     support->setWordWrap(true);
     support->setOpenExternalLinks(true);
     support->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    support->setText(i18n("<html>"
-                          "KDE software is and will always be available free of charge, however creating it is not free.<br /><br />"
-                          "To support development the KDE community has formed the KDE e.V., a non-profit organization "
-                          "legally founded in Germany. KDE e.V. represents the KDE community in legal and financial matters. "
-                          "See <a href=\"%1\">%1</a>"
-                          " for information on KDE e.V.<br /><br />"
-                          "KDE benefits from many kinds of contributions, including financial. "
-                          "We use the funds to reimburse members and others for expenses "
-                          "they incur when contributing. Further funds are used for legal "
-                          "support and organizing conferences and meetings. <br /> <br />"
-                          "We would like to encourage you to support our efforts with a "
-                          "financial donation, using one of the ways described at "
-                          "<a href=\"%2\">%2</a>."
-                          "<br /><br />Thank you very much in advance for your support.</html>",
-                          QStringLiteral("https://ev.kde.org/"),
-                          QStringLiteral("https://www.kde.org/community/donations/")) + QLatin1String("<br /><br />")); // FIXME: ugly <br /> at the end...
+
+    QStringList supportText;
+    supportText << "<html>"
+                << i18n("<p>KDE software is and will always be available free of charge, however creating it is not free.<br /><br />"
+                   "To support development the KDE community has formed the KDE e.V., a non-profit organization "
+                   "legally founded in Germany. KDE e.V. represents the KDE community in legal and financial matters. "
+                   "See <a href=\"%1\">%1</a>"
+                   " for information on KDE e.V.</p>",
+                   QStringLiteral("https://ev.kde.org/"))
+                << i18n("<p>KDE benefits from many kinds of contributions, including financial. "
+                   "We use the funds to reimburse members and others for expenses "
+                   "they incur when contributing. Further funds are used for legal "
+                   "support and organizing conferences and meetings.</p>");
+#ifdef Q_OS_MACOS
+    // MACOS store version should not contain external links
+    if (!KisMacosEntitlements().sandbox()) {
+#endif
+        supportText << i18n("<p>We would like to encourage you to support our efforts with a "
+                    "financial donation, using one of the ways described at "
+                    "<a href=\"%1\">%1</a>.</p>",
+                    QStringLiteral("https://www.kde.org/community/donations/"));
+#ifdef Q_OS_MACOS
+    }
+#endif
+    supportText << "<p>Thank you very much in advance for your support.</p></html>";
+    support->setText(supportText.join(""));
 
     QTabWidget *tabWidget = new QTabWidget;
     tabWidget->setUsesScrollButtons(false);

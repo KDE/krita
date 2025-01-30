@@ -15,12 +15,13 @@
 #include <QStringList>
 
 #include "kis_config.h"
+#include <KisQStringListFwd.h>
 
 #include "kritaui_export.h"
 
 class QOpenGLContext;
 class QString;
-
+class QSurfaceFormat;
 
 /**
  * This class manages a shared OpenGL context and provides utility

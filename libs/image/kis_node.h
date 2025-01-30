@@ -10,6 +10,7 @@
 
 #include "kis_base_node.h"
 #include "KisNodeAdditionFlags.h"
+#include <KisQStringListFwd.h>
 
 #include "kritaimage_export.h"
 
@@ -17,8 +18,6 @@
 #include <KisRegion.h>
 
 class QRect;
-#include <QStringList>
-
 class KoProperties;
 
 class KisNodeVisitor;

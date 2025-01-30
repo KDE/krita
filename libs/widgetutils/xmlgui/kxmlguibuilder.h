@@ -9,7 +9,7 @@
 
 #include <kritawidgetutils_export.h>
 
-#include <QStringList>
+#include <KisQStringListFwd.h>
 
 class KisKXMLGUIBuilderPrivate;
 class KisKXMLGUIClient;

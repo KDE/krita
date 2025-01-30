@@ -26,8 +26,6 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
     QString name;
     qint32 version;
     QBitArray channelFlags;
-    KisCubicCurve curve;
-    QList< KisCubicCurve > curves;
     KisResourcesInterfaceSP resourcesInterface = 0;
 
     Private(const QString & _name, qint32 _version, KisResourcesInterfaceSP _resourcesInterface)
@@ -41,8 +39,6 @@ struct Q_DECL_HIDDEN KisFilterConfiguration::Private {
         : name(rhs.name),
           version(rhs.version),
           channelFlags(rhs.channelFlags),
-          curve(rhs.curve),
-          curves(rhs.curves),
           resourcesInterface(rhs.resourcesInterface)
     {
     }
@@ -118,21 +114,6 @@ void KisFilterConfiguration::setVersion(qint32 version)
     d->version = version;
 }
 
-const KisCubicCurve& KisFilterConfiguration::curve() const
-{
-    return d->curve;
-}
-
-void KisFilterConfiguration::setCurve(const KisCubicCurve& curve)
-{
-    d->curve = curve;
-}
-
-const QList< KisCubicCurve >& KisFilterConfiguration::curves() const
-{
-    return d->curves;
-}
-
 KisResourcesInterfaceSP KisFilterConfiguration::resourcesInterface() const
 {
     return d->resourcesInterface;
@@ -175,11 +156,6 @@ QList<KoResourceLoadResult> KisFilterConfiguration::embeddedResources(KisResourc
     return {};
 }
 
-void KisFilterConfiguration::setCurves(QList< KisCubicCurve >& curves)
-{
-    d->curves = curves;
-}
-
 bool KisFilterConfiguration::isCompatible(const KisPaintDeviceSP) const
 {
     return true;
@@ -193,9 +169,7 @@ bool KisFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) co
             && KisPropertiesConfiguration::compareTo(rhs)
             && name() == otherConfig->name()
             && version() == otherConfig->version()
-            && channelFlags() == otherConfig->channelFlags()
-            && curve() == otherConfig->curve()
-            && curves() == otherConfig->curves();
+            && channelFlags() == otherConfig->channelFlags();
 }
 
 QBitArray KisFilterConfiguration::channelFlags() const

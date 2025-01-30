@@ -20,7 +20,7 @@
 # Simone Solinas <ksolsim@gmail.com>, 2008, 2009, 2010, 2011.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2022, 2023.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Valter Mura <valtermura@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Valter Mura <valtermura@gmail.com>
 #
 # Per i motivi/sfumature, vedere il seguente collegamento:
 # http://craik.shef.ac.uk/cpt-city/ggr/
@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
-"PO-Revision-Date: 2024-12-21 11:18+0100\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"PO-Revision-Date: 2025-01-25 18:28+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16752,12 +16752,12 @@ msgstr "Rimpicci&olisci"
 #: libs/widgets/wdg_file_name_requester.ui:49
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:84
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:148
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:200
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:219
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:244
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:269
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:294
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:335
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -16817,7 +16817,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "Converti in tracciato"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -16967,10 +16967,10 @@ msgstr "Dimensione"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
 #: plugins/generators/pattern/wdgpatternoptions.ui:128
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:93
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -18485,7 +18485,7 @@ msgstr "Immagine RGBE Radiance"
 msgid "Import frames"
 msgstr "Importa fotogrammi"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr "Tratto pennello con script"
@@ -19832,7 +19832,7 @@ msgstr "Risorse locali"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -22775,58 +22775,52 @@ msgstr "Imposta il colore da usare per gli avvisi"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1153
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
-msgstr "Percettiva"
+msgstr "Percettivo"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1154
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "Colorimetrica relativa"
+msgstr "Colorimetrico relativo"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Saturazione"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "Colorimetrica assoluta"
+msgstr "Colorimetrico assoluto"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Impostazioni di visualizzazione"
+msgstr "Usa le impostazioni globali di visualizzazione"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simula bianco e nero cartaceo"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
-msgstr "Configurabile"
+msgstr "Personalizzata"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:123
 #, kde-format
@@ -22835,6 +22829,8 @@ msgid ""
 "Use Rendering Intent, Blackpoint compensation and Adaptation set in the "
 "color management configuration."
 msgstr ""
+"Usa l'obbiettivo di resa, la compensazione del punto nero e l'adattamento "
+"impostati nella configurazione della gestione dei colori."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:125
 #, kde-format
@@ -22843,12 +22839,14 @@ msgid ""
 "Simulate paper by using absolute colorimetric and disabling white point "
 "adaptation and blackpoint compensation."
 msgstr ""
+"Simula la carta utilizzando la colorimetrica assoluta e disabilitando "
+"l'adattamento del punto bianco e la compensazione del punto nero."
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:127
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Select custom settings for the second transform."
-msgstr ""
+msgstr "Scegli le impostazioni personalizzate per la seconda trasformazione."
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:62
 #, kde-format
@@ -22921,8 +22919,8 @@ msgstr "Proprietà del livello"
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
@@ -24672,20 +24670,18 @@ msgstr "Avviso gamut:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Trasformazione motivo"
+msgstr "Trasformazione di resa colore"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Obbiettivo di resa"
+msgstr "Obbiettivo di resa:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24709,10 +24705,9 @@ msgstr "Stato di adattamento:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Vista:"
+msgstr "Modalità di visualizzazione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -26225,31 +26220,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
-#, fuzzy, kde-format
-#| msgid "Automatic hyphenation"
+#, kde-format
 msgid "Automatic layer naming"
-msgstr "Sillabazione automatica"
+msgstr "Denominazione automatica dei livelli"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1479
-#, fuzzy, kde-format
-#| msgid "Add \"Merged\" to merged group layers"
+#, kde-format
 msgid "Append \"Merged\" to merged group layers"
 msgstr "Aggiungi «Unito» ai livelli di gruppo uniti"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1486
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Aggiungi «(incollato)» ai livelli incollati"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1493
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Aggiungi «(incollato)» ai livelli incollati"
+msgstr "Anteponi «Copia di» ai livelli duplicati"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518
@@ -30143,8 +30134,8 @@ msgstr "Scegli la preimpostazione dei pennelli"
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
@@ -39562,32 +39553,38 @@ msgstr "Seleziona il metodo di fusione del livello."
 msgid "Layer Opacity"
 msgstr "Opacità del livello"
 
+#. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
+#, kde-format
+msgid "Add new layer or mask"
+msgstr "Aggiungi nuovo livello o maschera"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:213
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
 #, kde-format
 msgid "Duplicate layer or mask"
 msgstr "Duplica livello o maschera"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:238
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #, kde-format
 msgid "Move layer or mask down"
 msgstr "Sposta livello o maschera in basso"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:263
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #, kde-format
 msgid "Move layer or mask up"
 msgstr "Sposta livello o maschera in alto"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:288
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
 #, kde-format
 msgid "View or change the layer properties"
 msgstr "Mostra o cambia le proprietà del livello"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Elimina il livello o la maschera"
@@ -44966,7 +44963,7 @@ msgstr "Bilanciamento del &colore..."
 msgid "Color Balance"
 msgstr "Bilanciamento del colore"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Curve di regolazione dei canali in&crociati..."
@@ -45048,7 +45045,7 @@ msgstr "Regolazione &HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Regolazione HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -45057,7 +45054,7 @@ msgstr ""
 "L'attuale configurazione è stata creata per uno spazio dei colori diverso e "
 "non è stato possibile utilizzarla. Tutte le curve saranno azzerate."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Curve di regolazione dei &colori..."
@@ -47174,10 +47171,10 @@ msgstr "Fattori colore"
 #: plugins/generators/pattern/wdgpatternoptions.ui:76
 #: plugins/generators/pattern/wdgpatternoptions.ui:121
 #: plugins/generators/pattern/wdgpatternoptions.ui:148
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:99
 #, kde-format
 msgid "X: "
 msgstr "X: "
@@ -47189,10 +47186,10 @@ msgstr "X: "
 #: plugins/generators/pattern/wdgpatternoptions.ui:98
 #: plugins/generators/pattern/wdgpatternoptions.ui:131
 #: plugins/generators/pattern/wdgpatternoptions.ui:161
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:92
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:104
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
@@ -47270,7 +47267,7 @@ msgstr "Allinea alla griglia dei pixel:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:114
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47283,7 +47280,7 @@ msgstr[1] "Ogni {n} celle orizzontalmente"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:121
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47293,25 +47290,25 @@ msgid_plural "Every {n} cells vertically"
 msgstr[0] "Ogni {n} cella verticalmente"
 msgstr[1] "Ogni {n} celle verticalmente"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " pixel/pollice"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:479
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " pixel/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:482
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " linee/pollice"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:483
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -58729,16 +58726,13 @@ msgstr "Sposta li&vello con contenuto"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Sposta il gruppo contenente il primo livello con contenuto visibile. "
-"Scorciatoia: Ctrl+Maiusc+clic."
+"Scorciatoia: Ctrl+clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
@@ -61449,14 +61443,14 @@ msgstr "Spazio tra due applicazioni sequenziali della deformazione"
 msgctxt "@info:tooltip"
 msgid "Scale <b>Size</b> value according to current stylus pressure"
 msgstr ""
-"Valore di scala <b>Dimensione</b> in base allo stile di pressione attuale"
+"Valore di scala <b>Dimensione</b> in base alla pressione attuale dello stilo"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:254
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale <b>Amount</b> value according to current stylus pressure"
 msgstr ""
-"Valore di scala <b>Quantità</b> in base allo stile di pressione attuale"
+"Valore di scala <b>Quantità</b> in base alla pressione attuale dello stilo"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:259
 #, kde-format

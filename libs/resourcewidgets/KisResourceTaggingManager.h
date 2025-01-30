@@ -16,7 +16,7 @@
 #define KISRESOURCETAGGINGMANAGER_H
 
 #include <QObject>
-#include <QStringList>
+#include <KisQStringListFwd.h>
 #include <KoResource.h>
 #include <KisTag.h>
 #include <KisTagModel.h>

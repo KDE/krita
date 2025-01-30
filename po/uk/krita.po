@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
-"PO-Revision-Date: 2025-01-17 10:21+0200\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"PO-Revision-Date: 2025-01-25 09:04+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16810,12 +16810,12 @@ msgstr "З&меншити"
 #: libs/widgets/wdg_file_name_requester.ui:49
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:84
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:148
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:200
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:219
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:244
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:269
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:294
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:335
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -16875,7 +16875,7 @@ msgstr "…"
 msgid "Convert to Path"
 msgstr "Перетворити на контур"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -17025,10 +17025,10 @@ msgstr "Розмір"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
 #: plugins/generators/pattern/wdgpatternoptions.ui:128
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:93
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -18696,7 +18696,7 @@ msgstr "зображення Radiance RGBE"
 msgid "Import frames"
 msgstr "Імпортувати кадри"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr ""
@@ -20045,7 +20045,7 @@ msgstr "Локальні ресурси"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -23165,8 +23165,8 @@ msgstr "Властивості шару"
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
@@ -30465,8 +30465,8 @@ msgstr "Вибрати набір пензлів"
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
@@ -40027,32 +40027,38 @@ msgstr "Виберіть режим об’єднання для цього ша
 msgid "Layer Opacity"
 msgstr "Непрозорість шару"
 
+#. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
+#, kde-format
+msgid "Add new layer or mask"
+msgstr "Додати новий шар або маску"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:213
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
 #, kde-format
 msgid "Duplicate layer or mask"
 msgstr "Дублювати шар або маску"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:238
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #, kde-format
 msgid "Move layer or mask down"
 msgstr "Пересунути шар або маску вниз"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:263
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #, kde-format
 msgid "Move layer or mask up"
 msgstr "Пересунути шар або маску вгору"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:288
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
 #, kde-format
 msgid "View or change the layer properties"
 msgstr "Переглянути або змінити властивості шару"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Вилучити шар або маску"
@@ -45470,7 +45476,7 @@ msgstr "&Баланс кольорів…"
 msgid "Color Balance"
 msgstr "Баланс кольорів"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Міжканальні криві коригування &кольору…"
@@ -45552,7 +45558,7 @@ msgstr "Коригування переда&чі кольорів…"
 msgid "HSV/HSL Adjustment"
 msgstr "Коригування HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -45561,7 +45567,7 @@ msgstr ""
 "Поточні налаштування було створено для іншого простору кольорів. Ними не "
 "можна скористатися. Для усіх кривих буде відновлено початкові форми."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Криві коригування &кольору…"
@@ -47677,10 +47683,10 @@ msgstr "Параметри кольорів"
 #: plugins/generators/pattern/wdgpatternoptions.ui:76
 #: plugins/generators/pattern/wdgpatternoptions.ui:121
 #: plugins/generators/pattern/wdgpatternoptions.ui:148
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:99
 #, kde-format
 msgid "X: "
 msgstr "X: "
@@ -47692,10 +47698,10 @@ msgstr "X: "
 #: plugins/generators/pattern/wdgpatternoptions.ui:98
 #: plugins/generators/pattern/wdgpatternoptions.ui:131
 #: plugins/generators/pattern/wdgpatternoptions.ui:161
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:92
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:104
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
@@ -47777,7 +47783,7 @@ msgstr "Вирівнювання до піксельної ґратки:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:114
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47792,7 +47798,7 @@ msgstr[3] "Кожну {n} комірку горизонтально"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:121
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47804,25 +47810,25 @@ msgstr[1] "Кожні {n} комірки вертикально"
 msgstr[2] "Кожні {n} комірок вертикально"
 msgstr[3] "Кожну {n} комірку вертикально"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " пікселів/дюйм"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:479
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " пікселів/см"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:482
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
 msgstr " ліній/дюйм"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:483
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -59233,16 +59239,13 @@ msgstr "Пе&ресунути шар з вмістом"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Пересунути групу, що містить перший шар з видимим вмістом. Скорочення: Ctrl-"
-"Shift-клацання"
+"клацання"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

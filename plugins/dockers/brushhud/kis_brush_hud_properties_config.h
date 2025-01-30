@@ -9,11 +9,11 @@
 
 #include <QScopedPointer>
 #include "kritaui_export.h"
+#include <KisQStringListFwd.h>
 
 #include "brushengine/kis_uniform_paintop_property.h"
 
 class QDomDocument;
-#include <QStringList>
 class QString;
 
 

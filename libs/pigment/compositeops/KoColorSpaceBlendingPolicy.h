@@ -8,7 +8,7 @@
 
 #include <kritapigment_export.h>
 
-#include <QStringList>
+#include <KisQStringListFwd.h>
 
 /**
  * @brief default blending policy used in additive color spaces

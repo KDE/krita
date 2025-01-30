@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-21 01:52+0000\n"
-"PO-Revision-Date: 2025-01-17 12:02+0100\n"
+"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"PO-Revision-Date: 2025-01-25 14:20+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16703,12 +16703,12 @@ msgstr "O&ddalji"
 #: libs/widgets/wdg_file_name_requester.ui:49
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:84
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:148
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:200
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:219
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:244
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:269
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:294
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:335
 #: plugins/dockers/logdocker/WdgLogDocker.ui:49
 #: plugins/dockers/logdocker/WdgLogDocker.ui:65
 #: plugins/dockers/logdocker/WdgLogDocker.ui:78
@@ -16768,7 +16768,7 @@ msgstr "..."
 msgid "Convert to Path"
 msgstr "Pretvori v pot"
 
-#: libs/global/kis_assert.cpp:83
+#: libs/global/kis_assert.cpp:82
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Internal Error"
@@ -16918,10 +16918,10 @@ msgstr "Velikost"
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
 #: plugins/generators/pattern/wdgpatternoptions.ui:118
 #: plugins/generators/pattern/wdgpatternoptions.ui:128
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:80
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:86
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:93
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings.cpp:78
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:31
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:26
@@ -18436,7 +18436,7 @@ msgstr "Slika RGBE Radiance"
 msgid "Import frames"
 msgstr "Uvozi sličice"
 
-#: libs/libkis/PaintingResources.cpp:63
+#: libs/libkis/PaintingResources.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr "Poteza s čopičem po skriptu"
@@ -19782,7 +19782,7 @@ msgstr "Krajevni viri"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:327
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:359
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:375
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
@@ -22112,13 +22112,13 @@ msgstr "FFmpeg"
 #: libs/ui/animation/VideoImportDialog.ui:607
 #, kde-format
 msgid "FFmpeg path:"
-msgstr "Pot FFMpeg"
+msgstr "Pot FFMpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
 #, kde-format
 msgid "FFprobe path:"
-msgstr "Pot FFProbe"
+msgstr "Pot FFProbe:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -22240,7 +22240,7 @@ msgstr "Mesto FFmpeg:"
 #: libs/ui/animation/wdg_animationrenderer.ui:249
 #, kde-format
 msgid "FFmpeg version:"
-msgstr "Različica FFMpeg: "
+msgstr "Različica FFMpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22853,8 +22853,8 @@ msgstr "Lastnosti plasti"
 #: libs/widgets/kis_color_input.cpp:137 libs/widgets/kis_color_input.cpp:168
 #: plugins/dockers/layerdocker/LayerBox.cpp:213
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:49
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:46
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:49
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:53
 #: plugins/impex/jpeg/kis_jpeg_export.cc:218
 #: plugins/impex/jpeg/kis_jpeg_export.cc:220
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:263
@@ -25782,7 +25782,7 @@ msgstr "Omogoči samodejno shranjevanje"
 #: libs/ui/forms/wdggeneralsettings.ui:887
 #, kde-format
 msgid "Autosave Interval:"
-msgstr "Samodejno shrani vsakih:"
+msgstr "Samodejno shranjevanje:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:894
@@ -25796,7 +25796,7 @@ msgstr " minut"
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
-msgstr " "
+msgstr "Vsakih "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
 #: libs/ui/forms/wdggeneralsettings.ui:916
@@ -26844,7 +26844,7 @@ msgid ""
 "reconfigured in `Image > Properties.`"
 msgstr ""
 "Uporabi barvo ozadja in prekrivnost kot osnovno barvo platna. To lahko znova "
-"prilagodite pod Slika > Lastnosti."
+"prilagodite pod `Slika > Lastnosti.`"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -30032,8 +30032,8 @@ msgstr "Izberite prednastavitev čopiča"
 #: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:40
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:44
 #: plugins/tools/basictools/kis_tool_fill.cc:559
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
@@ -37339,7 +37339,7 @@ msgstr "Shrani pomočnika"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1727
 #, kde-format
 msgid "Opacity: "
-msgstr "Prekrivnost:"
+msgstr "Prekrivnost: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1734
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1738
@@ -39420,32 +39420,38 @@ msgstr "Izberite način zlivanja za plast."
 msgid "Layer Opacity"
 msgstr "Prekrivnost plasti"
 
+#. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:197
+#, kde-format
+msgid "Add new layer or mask"
+msgstr "Dodaj novo plast ali masko"
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:213
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:216
 #, kde-format
 msgid "Duplicate layer or mask"
 msgstr "Podvoji plast ali masko"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLower)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:238
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:241
 #, kde-format
 msgid "Move layer or mask down"
 msgstr "Premakni plast ali masko navzdol"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:263
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:266
 #, kde-format
 msgid "Move layer or mask up"
 msgstr "Premakni plast ali masko navzgor"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:288
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:291
 #, kde-format
 msgid "View or change the layer properties"
 msgstr "Poglej ali spremeni lastnosti plasti"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
-#: plugins/dockers/layerdocker/WdgLayerBox.ui:329
+#: plugins/dockers/layerdocker/WdgLayerBox.ui:332
 #, kde-format
 msgid "Delete the layer or mask"
 msgstr "Izbriši plast ali masko"
@@ -44815,7 +44821,7 @@ msgstr "Barvna &uravnoteženost ..."
 msgid "Color Balance"
 msgstr "Barvna uravnoteženost"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:327
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Krivulje prilagoditev med kanali …"
@@ -44897,7 +44903,7 @@ msgstr "Prilagoditev &HSV..."
 msgid "HSV/HSL Adjustment"
 msgstr "Prilagoditev HSV/HSL"
 
-#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:467
+#: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:488
 #, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
@@ -44906,7 +44912,7 @@ msgstr ""
 "Trenutna prilagoditev je bila ustvarjena za drug barvni prostor in je ni "
 "mogoče uporabiti. Vse krivulje bodo ponastavljene."
 
-#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
+#: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
 msgstr "Krivulje prilagoditev &barv ..."
@@ -44950,7 +44956,7 @@ msgstr "Modra  "
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:205
 #, kde-format
 msgid "Reset Midtones  "
-msgstr "Ponastavi srednje tone"
+msgstr "Ponastavi srednje tone  "
 
 #. i18n: ectx: property (text), widget (QPushButton, pushResetHighlights)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
@@ -46988,7 +46994,7 @@ msgstr "Barve"
 #, kde-format
 msgctxt "Line color"
 msgid "Lines: "
-msgstr "Črte:"
+msgstr "Črte: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:119
@@ -47010,10 +47016,10 @@ msgstr "Barvni faktorji"
 #: plugins/generators/pattern/wdgpatternoptions.ui:76
 #: plugins/generators/pattern/wdgpatternoptions.ui:121
 #: plugins/generators/pattern/wdgpatternoptions.ui:148
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:61
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:99
 #, kde-format
 msgid "X: "
 msgstr "X: "
@@ -47025,10 +47031,10 @@ msgstr "X: "
 #: plugins/generators/pattern/wdgpatternoptions.ui:98
 #: plugins/generators/pattern/wdgpatternoptions.ui:131
 #: plugins/generators/pattern/wdgpatternoptions.ui:161
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:92
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:104
 #, kde-format
 msgid "Y: "
 msgstr "Y: "
@@ -47110,7 +47116,7 @@ msgstr "Poravnaj z mrežo sl. točk:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:97
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:114
 #, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47125,7 +47131,7 @@ msgstr[3] "Vsake {n} celice vodoravno"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:103
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:121
 #, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
@@ -47137,25 +47143,25 @@ msgstr[1] "Vsako {n} celico navpično"
 msgstr[2] "Vsaki {n} celici navpično"
 msgstr[3] "Vsake {n} celice navpično"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:447
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:478
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/inch"
 msgid " pixels/inch"
 msgstr " sl. točk/palec"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:448
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:479
 #, kde-format
 msgctxt "Screentone generator resolution units - pixels/cm"
 msgid " pixels/cm"
 msgstr " sl. točk/cm"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:482
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr "črt/palec"
+msgstr " črt/palec"
 
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:452
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:483
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
@@ -49045,7 +49051,7 @@ msgstr "DC nizke ločljivosti"
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"Nastavite progresivni način z uporabo slik DC nižje ločljivosti za VarDCT. "
+"Nastavite progresivni način z uporabo slik DC nižje ločljivosti za VarDCT."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:661
@@ -53560,7 +53566,7 @@ msgstr "Vir"
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:78
 #, kde-format
 msgid "Strength: "
-msgstr "Moč:"
+msgstr "Moč: "
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDistance.cpp:69
 #, kde-format
@@ -55412,7 +55418,7 @@ msgstr "Vzdevek"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
 msgid "Given Name"
-msgstr " Ime"
+msgstr "Ime"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
@@ -55821,7 +55827,7 @@ msgstr "Če je to del serije, vnesite ime serije in številko."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
 msgid "No. "
-msgstr "Št."
+msgstr "Št. "
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
 msgid "Vol. "
@@ -57623,7 +57629,7 @@ msgstr "Barvne informacije: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
 msgid "Script files "
-msgstr "Skriptne datoteke"
+msgstr "Skriptne datoteke "
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:20
 msgctxt "@title:window"
@@ -57853,7 +57859,7 @@ msgstr "Širjenje: {n} %"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Skleni vrzel:"
+msgstr "Skleni vrzel: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -58454,16 +58460,13 @@ msgstr "Prema&kni plast z vsebino"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Premaknite skupino, ki vsebuje prvo plast, ki vsebuje vidno vsebino. "
-"Bližnjica: krmilka-dvigalka-klik."
+"Bližnjica: krmilka-klik."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
@@ -59278,7 +59281,7 @@ msgstr ""
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Skleni vrzel:"
+msgstr "Skleni vrzel: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -60179,7 +60182,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 "Uporabi način togega oblivanja SVG v CSS z `white-space: pre-wrap` in z "
-"določanjem širine besedila s parametrom `inline-size`"
+"določanjem širine besedila s parametrom `inline-size`."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
@@ -60627,7 +60630,7 @@ msgstr "Širjenje: {n} %"
 #, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Skleni vrzel:"
+msgstr "Skleni vrzel: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format

@@ -109,7 +109,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -192,6 +192,9 @@
          <width>16777215</width>
          <height>28</height>
         </size>
+       </property>
+       <property name="toolTip">
+        <string>Add new layer or mask</string>
        </property>
        <property name="text">
         <string>...</string>
@@ -348,9 +351,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
+   <class>KisDoubleParseSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header>kis_double_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>KisDoubleParseSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -60,18 +60,20 @@ public:
     void fromXML(const QDomElement& e) override;
     void toXML(QDomDocument& doc, QDomElement& root) const override;
 
-    void setCurves(QList<KisCubicCurve> &curves) override;
+    void setCurves(QList<KisCubicCurve> &curves);
     bool isCompatible(const KisPaintDeviceSP) const override;
 
     const QVector<QVector<quint16> >& transfers() const;
-    const QList<KisCubicCurve>& curves() const override;
+    const QList<KisCubicCurve>& curves() const;
 
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
     void setProperty(const QString& name, const QVariant& value) override;
+    void setActiveCurve(int value);
 
 protected:
     int m_channelCount {0};
+    int m_activeCurve {-1};
     QList<KisCubicCurve> m_curves;
     QVector<QVector<quint16>> m_transfers;
 
@@ -119,12 +121,14 @@ public:
 protected Q_SLOTS:
     void logHistView();
     void resetCurve();
+    void slotCurveModified();
     void slotChannelSelected(int index);
 
 protected:
     void init();
     void resetCurves();
     void setActiveChannel(int ch);
+    virtual int findDefaultVirtualChannelSelection();
 
     virtual void updateChannelControls() = 0;
     virtual KisPropertiesConfigurationSP getDefaultConfiguration() = 0;

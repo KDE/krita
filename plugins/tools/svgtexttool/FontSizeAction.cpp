@@ -136,7 +136,11 @@ qreal FontSizeAction::fontSize() const
     return currentText().toDouble();
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void FontSizeAction::actionTriggered(QAction *action)
+#else
+void FontSizeAction::slotActionTriggered(QAction *action)
+#endif
 {
     Q_EMIT fontSizeChanged(action->text().toDouble());
     KSelectAction::actionTriggered(action);

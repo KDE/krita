@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QMimeData>
 #include <QRegularExpression>
+#include <QIODevice>
 
 #include <kis_icon.h>
 

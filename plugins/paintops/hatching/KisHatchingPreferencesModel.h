@@ -10,6 +10,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 #include "KisHatchingPreferencesData.h"
 #include "KisWidgetConnectionUtils.h"
 

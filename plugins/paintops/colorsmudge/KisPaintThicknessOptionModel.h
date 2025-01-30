@@ -12,6 +12,8 @@
 #include "KisPaintThicknessOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisPaintThicknessOptionModel : public QObject
 {
     Q_OBJECT

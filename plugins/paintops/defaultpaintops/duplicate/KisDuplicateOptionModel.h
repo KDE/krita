@@ -10,6 +10,7 @@
 #include <KisDuplicateOptionData.h>
 
 #include <QDebug>
+#include <QObject>
 
 #include <lager/extra/qt.hpp>
 

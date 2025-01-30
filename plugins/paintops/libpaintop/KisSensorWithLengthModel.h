@@ -8,6 +8,8 @@
 
 #include "kritapaintop_export.h"
 
+#include <QObject>
+
 #include <KisCurveOptionData.h>
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>

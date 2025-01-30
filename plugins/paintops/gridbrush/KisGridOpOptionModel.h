@@ -12,6 +12,8 @@
 #include "KisGridOpOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisGridOpOptionModel : public QObject
 {
     Q_OBJECT

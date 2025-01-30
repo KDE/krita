@@ -12,6 +12,7 @@
 
 #include "KisSmudgeOverlayModeOptionData.h"
 
+#include <QObject>
 
 class KisSmudgeOverlayModeOptionModel : public QObject
 {

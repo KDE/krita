@@ -9,6 +9,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 #include "KisMirrorOptionData.h"
 
 class PAINTOP_EXPORT KisMirrorOptionModel : public QObject

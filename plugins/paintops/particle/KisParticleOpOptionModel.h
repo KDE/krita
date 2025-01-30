@@ -12,6 +12,8 @@
 #include "KisParticleOpOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisParticleOpOptionModel : public QObject
 {
     Q_OBJECT

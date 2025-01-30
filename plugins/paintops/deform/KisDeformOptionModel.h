@@ -12,6 +12,8 @@
 #include "KisDeformOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisDeformOptionModel : public QObject
 {
     Q_OBJECT

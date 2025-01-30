@@ -11,7 +11,7 @@
 #include <QAbstractListModel>
 #include <lager/cursor.hpp>
 #include <KoID.h>
-
+#include <QObject>
 
 class KisCubicCurve;
 class KisCurveOption;

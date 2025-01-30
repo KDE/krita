@@ -12,6 +12,8 @@
 #include "KisRoundMarkerOpOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisRoundMarkerOpOptionModel : public QObject
 {
     Q_OBJECT

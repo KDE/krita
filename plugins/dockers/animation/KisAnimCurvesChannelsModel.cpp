@@ -6,6 +6,9 @@
 
 #include "KisAnimCurvesChannelsModel.h"
 
+#include <QApplication>
+#include <QPalette>
+
 #include "KisAnimCurvesModel.h"
 #include "kis_dummies_facade_base.h"
 #include "kis_node_dummies_graph.h"
@@ -14,10 +17,8 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_signal_auto_connection.h"
 #include <kis_painting_tweaks.h>
-#include "kis_image.h"
 #include "KisAnimUtils.h"
-
-#include <QApplication>
+#include <kis_image.h>
 
 const quintptr ID_NODE = 0xffffffff;
 
@@ -86,7 +87,7 @@ void KisAnimCurvesChannelsModel::setDummiesFacade(KisDummiesFacadeBase *facade)
                                                 this, SLOT(slotNotifyDummyRemoved(KisNodeDummy*)));
 }
 
-void KisAnimCurvesChannelsModel::selectedNodesChanged(const KisNodeList &nodes)
+void KisAnimCurvesChannelsModel::selectedNodesChanged(const QList<KisNodeSP> &nodes)
 {
     // Remove unselected nodes
     for (int i = m_d->items.count()-1; i >= 0; i--) {

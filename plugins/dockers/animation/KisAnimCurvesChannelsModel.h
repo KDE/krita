@@ -9,7 +9,7 @@
 
 #include <QAbstractItemModel>
 
-#include "kis_types.h"
+#include <kis_node.h>
 
 class KisAnimCurvesModel;
 class KisDummiesFacadeBase;
@@ -44,7 +44,7 @@ public:
     };
 
 public Q_SLOTS:
-    void selectedNodesChanged(const KisNodeList &nodes);
+    void selectedNodesChanged(const QList<KisNodeSP> &nodes);
     void reset(const QModelIndex& index);
     void clear();
     void keyframeChannelAddedToNode(KisKeyframeChannel *channel);

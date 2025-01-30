@@ -668,8 +668,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         // Icons in menus are ugly and distracting
         KisApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
     }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KisApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
+#endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {

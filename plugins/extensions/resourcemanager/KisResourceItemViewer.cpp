@@ -10,7 +10,9 @@
 #include "KisPopupButton.h"
 #include <KoIcon.h>
 #include <kis_config.h>
+
 #include <QMenu>
+#include <QActionGroup>
 
 KisResourceItemViewer::KisResourceItemViewer(Viewer type, QWidget *parent) :
     KisPopupButton(parent),

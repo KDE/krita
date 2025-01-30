@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-29 01:54+0000\n"
-"PO-Revision-Date: 2025-01-26 10:10+0100\n"
+"PO-Revision-Date: 2025-01-28 15:01+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -20850,8 +20850,8 @@ msgid ""
 msgstr ""
 "Un fichier existe déjà à l'emplacement où vous souhaitez effectuer le rendu "
 "de votre vidéo [%1]... \n"
-"                                                              Êtes-vous sûr "
-"de vouloir écraser le fichier existant ?"
+"                                                              Voulez-vous "
+"vraiment l'écraser ?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:151
 #: libs/ui/animation/KisAnimationRender.cpp:153
@@ -25906,7 +25906,7 @@ msgstr "Pas de zoom entre des puissances de 2"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr "Utiliser l’axe horizontal pour l'action de zoom sur le canevas"
+msgstr "Utiliser l'axe horizontal pour l'action de zoom sur le canevas"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -25954,8 +25954,8 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
-"Activer la lecture de l'état de pression pour les événements tactiles. Ces "
-"données peuvent être indisponibles sur certaines plateformes, par exemple "
+"Activer la lecture de l'état de pression pour les évènements tactiles. Ces "
+"données peuvent être indisponibles sur certaines plate-formes, par exemple "
 "sur certains périphériques sous Android, où la pression peut être signalée à "
 "0,0 tout le temps."
 
@@ -31539,8 +31539,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "layer</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"Tentative d’exportation avancée d'une image contenant un <b>calque de "
-"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
+"Tentative d'exportation avancée d'une image contenant un <b>calque de "
+"filtre</b>. L'image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:594
 #, kde-format
@@ -31549,8 +31549,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>filter "
 "mask</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"Tentative d’exportation avancée d'une image contenant un <b>masque de "
-"filtre</b>. L’image sera <b>aplatie</b> avant le redimensionnement."
+"Tentative d'exportation avancée d'une image contenant un <b>masque de "
+"filtre</b>. L'image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:605
 #, kde-format
@@ -31559,8 +31559,8 @@ msgid ""
 "Trying to perform an Advanced Export with the image containing a <b>layer "
 "style</b>. The image will be <b>flattened</b> before resizing."
 msgstr ""
-"Tentative d’exportation avancée d'une image contenant un <b>style de calque</"
-"b>. L’image sera <b>aplatie</b> avant le redimensionnement."
+"Tentative d'exportation avancée d'une image contenant un <b>style de calque</"
+"b>. L'image sera <b>aplatie</b> avant le redimensionnement."
 
 #: libs/ui/KisImportExportManager.cpp:612
 #, kde-format
@@ -31838,7 +31838,7 @@ msgstr "&Thèmes"
 #: libs/ui/KisMainWindow.cpp:3037
 #, kde-format
 msgid "Expanding Spacer"
-msgstr "Expansion de l'espaceur"
+msgstr "Expansion de séparateur"
 
 #: libs/ui/KisNodeActivationActionCreatorVisitor.cpp:26
 #, kde-format
@@ -44829,7 +44829,7 @@ msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
 msgstr ""
-"Les gestes suivants sont pris en charge pour les périphériques « Note 10 »,  "
+"Les gestes suivants sont pris en charge pour les périphériques « Note 10 », "
 "« Tab S6 », « Tab S9 »."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
@@ -58374,7 +58374,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Échelle : {n}%"
+msgstr "Échelle : {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -58394,7 +58394,7 @@ msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Étendue : {n}%"
+msgstr "Étendue : {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -58517,7 +58517,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Combler les écarts dans les lignes jusqu’à la quantité définie"
+msgstr "Combler les écarts dans les lignes jusqu'à la quantité définie"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
@@ -59475,7 +59475,7 @@ msgstr "Images de référence"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "L'opacité [*varie de*] : {n}%"
+msgstr "L'opacité [*varie de*] : {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
@@ -59487,7 +59487,7 @@ msgstr "Saturation : {n} %"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "La saturation [*varie de*] : {n}%"
+msgstr "La saturation [*varie de*] : {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -59788,7 +59788,7 @@ msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étendue : {n}%"
+msgstr "Étendue : {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
@@ -59959,7 +59959,7 @@ msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étendue : {n}%"
+msgstr "Étendue : {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -61182,7 +61182,7 @@ msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Échelle : {n}%"
+msgstr "Échelle : {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
@@ -61196,7 +61196,7 @@ msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Étendue : {n}%"
+msgstr "Étendue : {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, kde-format
@@ -61558,7 +61558,7 @@ msgstr ""
 "GNU. Par conséquent, vous ne pouvez donc pas redimensionner la sélection "
 "avec des poignées. Veuillez compiler Krita avec la prise en charge de la "
 "librairie scientifique GNU ou utiliser le composant graphique des options "
-"pour modifier manuellement les valeurs de redimensionnement ."
+"pour modifier manuellement les valeurs de redimensionnement."
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
 #, kde-format

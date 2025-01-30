@@ -26,7 +26,6 @@
 #include <QAbstractTextDocumentLayout>
 #include <QSvgGenerator>
 #include <QSvgRenderer>
-#include <QGraphicsSvgItem>
 #include <QMessageBox>
 #include <QSizePolicy>
 

@@ -20,6 +20,7 @@
 #include <kis_cross_device_color_sampler.h>
 #include <kis_fixed_paint_device.h>
 
+#include <kis_global.h>
 
 #include <cmath>
 #include <ctime>
@@ -289,7 +290,7 @@ void HairyBrush::opacityDepletion(Bristle* bristle, KoColor& bristleColor, qreal
             bristle->inkAmount();
     }
 
-    opacity = qBound(0.0, opacity, 1.0);
+    opacity = kisBoundFast(0.0, opacity, 1.0);
     bristleColor.setOpacity(opacity);
 }
 
@@ -334,22 +335,22 @@ void HairyBrush::paintParticle(QPointF pos, const KoColor& color, qreal weight)
     const KoColorSpace * cs = m_dab->colorSpace();
 
     m_dabAccessor->moveTo(ipx  , ipy);
-    btl = quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
+    btl = quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
     memcpy(m_dabAccessor->rawData(), color.data(), cs->pixelSize());
     cs->setOpacity(m_dabAccessor->rawData(), btl, 1);
 
     m_dabAccessor->moveTo(ipx + 1, ipy);
-    btr =  quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btr + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
+    btr =  quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, btr + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
     memcpy(m_dabAccessor->rawData(), color.data(), cs->pixelSize());
     cs->setOpacity(m_dabAccessor->rawData(), btr, 1);
 
     m_dabAccessor->moveTo(ipx, ipy + 1);
-    bbl = quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, bbl + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
+    bbl = quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, bbl + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
     memcpy(m_dabAccessor->rawData(), color.data(), cs->pixelSize());
     cs->setOpacity(m_dabAccessor->rawData(), bbl, 1);
 
     m_dabAccessor->moveTo(ipx + 1, ipy + 1);
-    bbr = quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, bbr + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
+    bbr = quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, bbr + cs->opacityU8(m_dabAccessor->rawData()), OPACITY_OPAQUE_U8));
     memcpy(m_dabAccessor->rawData(), color.data(), cs->pixelSize());
     cs->setOpacity(m_dabAccessor->rawData(), bbr, 1);
 }

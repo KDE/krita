@@ -33,6 +33,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTimer>
+#include <QRegExp>
 
 namespace
 {

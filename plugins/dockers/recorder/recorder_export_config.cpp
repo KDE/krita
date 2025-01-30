@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <QDir>
+#include <QRegExp>
 
 namespace
 {

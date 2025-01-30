@@ -9,7 +9,6 @@
 
 #include <QDockWidget>
 #include <QPointer>
-#include <QRegExpValidator>
 #include <QMessageBox>
 
 #include <KoCanvasObserverBase.h>
@@ -100,7 +99,6 @@ private:
     KisResourceItemChooser* m_maskChooser {nullptr};
 
     KoGamutMaskSP m_selectedMask;
-    QRegExpValidator* m_maskTitleValidator {nullptr};
 
     KisDocument* m_maskDocument {nullptr};
     KisView* m_view {nullptr};

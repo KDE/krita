@@ -65,7 +65,10 @@ private Q_SLOTS:
     void testUnicodeGraphemeClusters();
 
     void testFontSelectionForText();
-    void testFontStyleSelection();
+    void testWWSConverterWeight_data();
+    void testWWSConverterWeight();
+    void testWWSConverterSlant_data();
+    void testWWSConverterSlant();
     void testFontSizeConfiguration();
 
     void testFontSizeRender();

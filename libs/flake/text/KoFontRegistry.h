@@ -97,6 +97,14 @@ public:
      */
     void updateConfig();
 
+    /**
+     * @brief slantMode
+     * testing the slant mode can be annoying, so this is a convenience function to return the slant mode.
+     * @param face the freetype face to test for.
+     * @return the slant mode, can be normal, italic or oblique.
+     */
+    static QFont::Style slantMode(FT_FaceSP face);
+
 private:
     class Private;
 

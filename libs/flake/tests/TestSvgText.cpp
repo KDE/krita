@@ -1662,68 +1662,166 @@ void TestSvgText::testFontSelectionForText()
                  .toLatin1());
 }
 
-/**
- * @brief TestSvgText::testFontStyleSelection
- *
- * This tests whether the font registery is selecting things like bold or italics correctly.
+/*
+ * Now we go through a table of font-weights for the given test fonts.
+ * This test is an adaptation of web-platform-test font-weight-normal-001.xht
  */
-void TestSvgText::testFontStyleSelection()
-{
-    QString verifyCSSTest = "CSSTest Verify";
-    QString test = "A";
-    QMap<QString, qreal> axisSettings;
+void TestSvgText::testWWSConverterWeight_data() {
+    QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<int>("requestedWeight");
+    QTest::addColumn<int>("expectedWeight");
 
-    // First we verify that we can find the test fonts.
+    QTest::addRow("full 100") << QString("CSSTest Weights Full") << 100 << 100;
+    QTest::addRow("full 200") << QString("CSSTest Weights Full") << 200 << 200;
+    QTest::addRow("full 300") << QString("CSSTest Weights Full") << 300 << 300;
+    QTest::addRow("full 400") << QString("CSSTest Weights Full") << 400 << 400;
+    QTest::addRow("full 500") << QString("CSSTest Weights Full") << 500 << 500;
+    QTest::addRow("full 600") << QString("CSSTest Weights Full") << 600 << 600;
+    QTest::addRow("full 700") << QString("CSSTest Weights Full") << 700 << 700;
+    QTest::addRow("full 800") << QString("CSSTest Weights Full") << 800 << 800;
+    QTest::addRow("full 900") << QString("CSSTest Weights Full") << 900 << 900;
 
-    {
-        QVector<int> lengths;
-        const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues({verifyCSSTest}, lengths, axisSettings, test);
+    QTest::addRow("W1479 100") << QString("CSSTest Weights W1479") << 100 << 100;
+    QTest::addRow("W1479 200") << QString("CSSTest Weights W1479") << 200 << 100;
+    QTest::addRow("W1479 300") << QString("CSSTest Weights W1479") << 300 << 100;
+    QTest::addRow("W1479 400") << QString("CSSTest Weights W1479") << 400 << 400;
+    QTest::addRow("W1479 500") << QString("CSSTest Weights W1479") << 500 << 400;
+    QTest::addRow("W1479 600") << QString("CSSTest Weights W1479") << 600 << 700;
+    QTest::addRow("W1479 700") << QString("CSSTest Weights W1479") << 700 << 700;
+    QTest::addRow("W1479 800") << QString("CSSTest Weights W1479") << 800 << 900;
+    QTest::addRow("W1479 900") << QString("CSSTest Weights W1479") << 900 << 900;
 
-        bool res = false;
-        for (const FT_FaceSP &face : faces) {
-            // qDebug() << face->family_name;
-            if (face->family_name == verifyCSSTest) {
-                res = true;
-                break;
-            }
-        }
-        QVERIFY2(res, QString("KoFontRegistry did not return the expected test font %1").arg(verifyCSSTest).toLatin1());
+    QTest::addRow("W15 100") << QString("CSSTest Weights W15") << 100 << 100;
+    QTest::addRow("W15 200") << QString("CSSTest Weights W15") << 200 << 100;
+    QTest::addRow("W15 300") << QString("CSSTest Weights W15") << 300 << 100;
+    QTest::addRow("W15 400") << QString("CSSTest Weights W15") << 400 << 500;
+    QTest::addRow("W15 500") << QString("CSSTest Weights W15") << 500 << 500;
+    QTest::addRow("W15 600") << QString("CSSTest Weights W15") << 600 << 500;
+    QTest::addRow("W15 700") << QString("CSSTest Weights W15") << 700 << 500;
+    QTest::addRow("W15 800") << QString("CSSTest Weights W15") << 800 << 500;
+    QTest::addRow("W15 900") << QString("CSSTest Weights W15") << 900 << 500;
 
-        // Now we go through a table of font-weights for the given test fonts.
-        // This test is an adaptation of web-platform-test font-weight-bolder-001.xht
-        // Note: when comparing to
-        // https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
-        // our implementation leaves things to be desired, but at the least it's using the correct fonts.
+    QTest::addRow("W24 100") << QString("CSSTest Weights W24") << 100 << 200;
+    QTest::addRow("W24 200") << QString("CSSTest Weights W24") << 200 << 200;
+    QTest::addRow("W24 300") << QString("CSSTest Weights W24") << 300 << 200;
+    QTest::addRow("W24 400") << QString("CSSTest Weights W24") << 400 << 400;
+    QTest::addRow("W24 500") << QString("CSSTest Weights W24") << 500 << 400;
+    QTest::addRow("W24 600") << QString("CSSTest Weights W24") << 600 << 400;
+    QTest::addRow("W24 700") << QString("CSSTest Weights W24") << 700 << 400;
+    QTest::addRow("W24 800") << QString("CSSTest Weights W24") << 800 << 400;
+    QTest::addRow("W24 900") << QString("CSSTest Weights W24") << 900 << 400;
 
-        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-weight-bolder-001.svg"));
-        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
-        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+    QTest::addRow("W2569 100") << QString("CSSTest Weights W2569") << 100 << 200;
+    QTest::addRow("W2569 200") << QString("CSSTest Weights W2569") << 200 << 200;
+    QTest::addRow("W2569 300") << QString("CSSTest Weights W2569") << 300 << 200;
+    QTest::addRow("W2569 400") << QString("CSSTest Weights W2569") << 400 << 500;
+    QTest::addRow("W2569 500") << QString("CSSTest Weights W2569") << 500 << 500;
+    QTest::addRow("W2569 600") << QString("CSSTest Weights W2569") << 600 << 600;
+    QTest::addRow("W2569 700") << QString("CSSTest Weights W2569") << 700 << 900;
+    QTest::addRow("W2569 800") << QString("CSSTest Weights W2569") << 800 << 900;
+    QTest::addRow("W2569 900") << QString("CSSTest Weights W2569") << 900 << 900;
 
-        QRect renderRect(0, 0, 300, 150);
+    QTest::addRow("W258 100") << QString("CSSTest Weights W258") << 100 << 200;
+    QTest::addRow("W258 200") << QString("CSSTest Weights W258") << 200 << 200;
+    QTest::addRow("W258 300") << QString("CSSTest Weights W258") << 300 << 200;
+    QTest::addRow("W258 400") << QString("CSSTest Weights W258") << 400 << 500;
+    QTest::addRow("W258 500") << QString("CSSTest Weights W258") << 500 << 500;
+    QTest::addRow("W258 600") << QString("CSSTest Weights W258") << 600 << 800;
+    QTest::addRow("W258 700") << QString("CSSTest Weights W258") << 700 << 800;
+    QTest::addRow("W258 800") << QString("CSSTest Weights W258") << 800 << 800;
+    QTest::addRow("W258 900") << QString("CSSTest Weights W258") << 900 << 800;
 
-        SvgRenderTester t(file.readAll());
-        t.setFuzzyThreshold(5);
-        t.setCheckQImagePremultiplied(true);
-        t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
-    }
+    QTest::addRow("W3589 100") << QString("CSSTest Weights W3589") << 100 << 300;
+    QTest::addRow("W3589 200") << QString("CSSTest Weights W3589") << 200 << 300;
+    QTest::addRow("W3589 300") << QString("CSSTest Weights W3589") << 300 << 300;
+    QTest::addRow("W3589 400") << QString("CSSTest Weights W3589") << 400 << 500;
+    QTest::addRow("W3589 500") << QString("CSSTest Weights W3589") << 500 << 500;
+    QTest::addRow("W3589 600") << QString("CSSTest Weights W3589") << 600 << 800;
+    QTest::addRow("W3589 700") << QString("CSSTest Weights W3589") << 700 << 800;
+    QTest::addRow("W3589 800") << QString("CSSTest Weights W3589") << 800 << 800;
+    QTest::addRow("W3589 900") << QString("CSSTest Weights W3589") << 900 << 900;
 
-    {
-        QString testItalic = "CSS Test Basic";
-        QVector<int> lengths;
-        const std::vector<FT_FaceSP> faces =
-            KoFontRegistry::instance()->facesForCSSValues({testItalic}, lengths, axisSettings, test, 72, 72, 1, 1.0, 400, 100, QFont::StyleItalic);
-
-        bool res = false;
-        for (const FT_FaceSP &face : faces) {
-            // qDebug() << face->family_name;
-            if (face->style_flags == FT_STYLE_FLAG_ITALIC) {
-                res = true;
-                break;
-            }
-        }
-        QVERIFY2(res, QString("KoFontRegistry did not return a font with italics as requested.").toLatin1());
-    }
+    QTest::addRow("W47 100") << QString("CSSTest Weights W47") << 100 << 400;
+    QTest::addRow("W47 200") << QString("CSSTest Weights W47") << 200 << 400;
+    QTest::addRow("W47 300") << QString("CSSTest Weights W47") << 300 << 400;
+    QTest::addRow("W47 400") << QString("CSSTest Weights W47") << 400 << 400;
+    QTest::addRow("W47 500") << QString("CSSTest Weights W47") << 500 << 400;
+    QTest::addRow("W47 600") << QString("CSSTest Weights W47") << 600 << 700;
+    QTest::addRow("W47 700") << QString("CSSTest Weights W47") << 700 << 700;
+    QTest::addRow("W47 800") << QString("CSSTest Weights W47") << 800 << 700;
+    QTest::addRow("W47 900") << QString("CSSTest Weights W47") << 900 << 700;
 }
+
+void TestSvgText::testWWSConverterWeight() {
+    const QString testString("A");
+    const QMap<QString, qreal> axisSettings;
+    QVector<int> lengths;
+    QFETCH(QString, fontFamily);
+    QFETCH(int, requestedWeight);
+    QFETCH(int, expectedWeight);
+
+    const std::vector<FT_FaceSP> faces =
+        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, requestedWeight);
+
+    QVERIFY(!faces.empty());
+
+    FT_FaceSP first = faces.at(0);
+    hb_font_t_sp hbFont(hb_ft_font_create_referenced(first.data()));
+    int testedWeight = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WEIGHT);
+
+    QVERIFY2(testedWeight == expectedWeight,
+             QString("Tested font does not have weight %1, instead %2, font-family: %3")
+                 .arg(QString::number(expectedWeight))
+                 .arg(QString::number(testedWeight))
+                 .arg(first->family_name)
+                 .toLatin1());
+}
+/**
+ * @brief TestSvgText::testWWSConverterSlant
+ *
+ * This currently tests whether if requesting regular, it returns regular,
+ * requesting italic returns italic, and requesting oblique also returns italic.
+ *
+ * Missing:
+ * requesting oblique returning oblique.
+ * requesting italic returning oblique.
+ *
+ * requesting slant value returning correct slant?
+ */
+void TestSvgText::testWWSConverterSlant_data() {
+    QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<QFont::Style>("requestedMode");
+    QTest::addColumn<QFont::Style>("expectedMode");
+
+    QTest::addRow("regular") << QString("CSS Test Basic") << QFont::StyleNormal << QFont::StyleNormal;
+    QTest::addRow("italic") << QString("CSS Test Basic") << QFont::StyleItalic << QFont::StyleItalic;
+    QTest::addRow("oblique") << QString("CSS Test Basic") << QFont::StyleOblique << QFont::StyleItalic;
+}
+
+void TestSvgText::testWWSConverterSlant() {
+    const QString testString("A");
+    const QMap<QString, qreal> axisSettings;
+    QVector<int> lengths;
+    QFETCH(QString, fontFamily);
+    QFETCH(QFont::Style, requestedMode);
+    QFETCH(QFont::Style, expectedMode);
+
+    const std::vector<FT_FaceSP> faces =
+        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, 100, requestedMode);
+
+    QVERIFY(!faces.empty());
+
+    FT_FaceSP first = faces.at(0);
+    QFont::Style testedMode = KoFontRegistry::slantMode(first);
+
+    QVERIFY2(testedMode == expectedMode,
+             QString("Tested font does not have slant mode %1, instead %2, font-family: %3")
+                 .arg(QString::number(expectedMode))
+                 .arg(QString::number(testedMode))
+                 .arg(first->family_name)
+                 .toLatin1());
+}
+
 /**
  * @brief TestSvgText::testFontSizeConfiguration
  *

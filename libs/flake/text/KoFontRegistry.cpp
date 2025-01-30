@@ -27,6 +27,7 @@
 #include "KoFFWWSConverter.h"
 #include "KoFontChangeTracker.h"
 #include <KisResourceLocator.h>
+#include FT_TRUETYPE_TABLES_H
 
 
 static unsigned int firstCharUcs4(const QStringView qsv)
@@ -131,7 +132,6 @@ public:
         changeTracker->resetChangeTracker();
 
         reloadConverter();
-        fontFamilyConverter->debugInfo();
     }
 
     ~Private() = default;
@@ -192,6 +192,10 @@ public:
         return m_data.localData()->m_suggestedFiles;
     }
 
+    void debugConverter() {
+        fontFamilyConverter->debugInfo();
+    }
+
 public Q_SLOTS:
     void updateConfig() {
         if (!FcInitBringUptoDate()) {
@@ -239,6 +243,18 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
     if (fontSizeAdjust != 1.0) {
         modifications += QString::number(fontSizeAdjust);
+    }
+    if (weight != 400) {
+        modifications += "weight:"+QString::number(weight);
+    }
+    if (width != 100) {
+        modifications += "width:"+QString::number(width);
+    }
+    if (slantMode != 0) {
+        modifications += "slantMode:"+QString::number(slantMode);
+        if (slantValue != 0) {
+            modifications += "val:"+QString::number(slantValue);
+        }
     }
     if (!axisSettings.isEmpty()) {
         Q_FOREACH (const QString &key, axisSettings.keys()) {
@@ -656,6 +672,37 @@ QString KoFontRegistry::wwsNameByFamilyName(const QString familyName, bool *foun
 void KoFontRegistry::updateConfig()
 {
     d->updateConfig();
+}
+
+QFont::Style KoFontRegistry::slantMode(FT_FaceSP face)
+{
+    constexpr unsigned OS2_ITALIC = 1u << 0; /// Is italic
+    constexpr unsigned OS2_REGULAR = 1u << 6; /// Is truly regular (instead of italic or oblique)
+    constexpr unsigned OS2_OBLIQUE = 1u << 9; // Is an oblique instead of an italic.
+
+    if (FT_IS_SFNT(face.data())) {
+        hb_font_t_sp hbFont(hb_ft_font_create_referenced(face.data()));
+        bool isItalic = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_ITALIC) > 0;
+        bool isOblique = false;
+
+        if (FT_HAS_MULTIPLE_MASTERS(face)) {
+            isOblique = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE) != 0;
+        } else {
+            TT_OS2 *os2Table = nullptr;
+            os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
+            if (os2Table) {
+                isItalic = os2Table->fsSelection & OS2_ITALIC;
+                isOblique = os2Table->fsSelection & OS2_OBLIQUE;
+            }
+            if (os2Table->fsSelection & OS2_REGULAR) {
+                isItalic = false;
+                isOblique = false;
+            }
+        }
+        return isItalic? isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+    } else {
+        return face->style_flags & FT_STYLE_FLAG_ITALIC? QFont::StyleItalic: QFont::StyleNormal;
+    }
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)

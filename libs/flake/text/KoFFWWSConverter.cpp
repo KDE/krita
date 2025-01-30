@@ -189,8 +189,9 @@ struct FontFamilyNode {
 
 QStringList FontFamilyNode::debugInfo() const
 {
-    QString style = isItalic? isOblique? "Oblique": "Italic": "Roman";
-    QStringList debug = {QString("\'%1\' \'%2\', style: %3, type:%4").arg(fontFamily, fontStyle, style).arg(type)};
+    const QString style = isItalic? isOblique? "Oblique": "Italic": "Roman";
+    const QString fullname = localizedFullName.empty()? "": localizedFullName.values().first();
+    QStringList debug = {QString("\'%1\' \'%2\', style: %3, type:%4, full name: %5").arg(fontFamily, fontStyle, style).arg(type).arg(fullname)};
     debug.append(QString("Index: %1, File: %2").arg(fileIndex).arg(fileName));
     for (int i=0; i< axes.size(); i++) {
         KoSvgText::FontFamilyAxis axis = axes.value(axes.keys().at(i));
@@ -539,7 +540,10 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             fontFamily.fontFamily = ribbiFamilyNames.value(english, ribbiFamilyNames.values().first());
             fontFamily.localizedFontFamilies = ribbiFamilyNames;
         }
-        if (!fullNames.isEmpty()) {
+        // Second check is a hack to avoid issues with the css test fonts. Why they are configure this way, beats me.
+        // Either way, if the fullname, which has 100% priority is the name as typographic name (which is tested last)
+        // the font search will only select the node with this fullname, which we don't want.
+        if (!fullNames.isEmpty() && fullNames != typographicFamilyNames) {
             fontFamily.localizedFullName = fullNames;
         }
         if (!ribbiStyleNames.isEmpty()) {
@@ -1027,26 +1031,37 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
             auto wws = siblingCurrent(it);
 
             // check if we're in a typographic family by testing the hierarchy.
-            // if so, select the wws family.
+            // if so, select all subnodes.
+            // Because we test subtree depth-first for finding the nodes, wws
+            // and full names are tested before typographic.
             auto hierarchy = hierarchyBegin(wws);
             hierarchy++;
+            QVector<FontFamilyNode> candidates;
             if (hierarchy == hierarchyEnd(wws)) {
-                wws = childBegin(it);
+                auto nodes = subtreeBegin(wws);
+                auto endNodes = subtreeEnd(wws);
+                for (;nodes != endNodes; nodes++) {
+                    if (childBegin(nodes) == childEnd(nodes)) {
+                        candidates.append(*nodes);
+                    }
+                }
+            } else if (childBegin(wws) == childEnd(wws)) {
+                candidates.append(*wws);
+            } else {
+                auto style = childBegin(wws);
+                auto styleEnd = childEnd(wws);
+                for (;style != styleEnd; style++) {
+                    candidates.append(*style);
+                }
             }
-            auto style = childBegin(wws);
-            auto styleEnd = childEnd(wws);
-            if (style == styleEnd) {
+
+            if (candidates.size() == 1) {
                 // direct match.
                 QStringList fileNames = wws->pixelSizes.value(pixelSize, {wws->fileName});
                 Q_FOREACH(const QString &fileName, fileNames) {
                     candidateFileNames.append(fileName);
                 }
-
             } else {
-                QVector<FontFamilyNode> candidates;
-                for (;style != styleEnd; style++) {
-                    candidates.append(*style);
-                }
 
                 if (candidates.size() > 1) {
                     // first find width

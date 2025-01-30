@@ -37,6 +37,8 @@
 #include <kis_assert.h>
 #include <QInputMethodEvent>
 #include <QBuffer>
+#include <QWidget>
+
 
 struct IMEDecorationInfo {
     int start = -1; ///< The startPos from the attribute.

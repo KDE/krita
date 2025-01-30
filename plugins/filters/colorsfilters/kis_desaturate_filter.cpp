@@ -47,7 +47,7 @@
 KisDesaturateFilter::KisDesaturateFilter()
    : KisColorTransformationFilter(id(), FiltersCategoryAdjustId, i18n("&Desaturate..."))
 {
-    setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
+    setShortcut(QKeySequence(Qt::CTRL, Qt::SHIFT, Qt::Key_U));
     setSupportsPainting(true);
 }
 

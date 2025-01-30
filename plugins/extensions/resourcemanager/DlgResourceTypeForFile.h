@@ -28,8 +28,6 @@ public:
 
     DlgResourceTypeForFile(QWidget* parent, QMap<QString, QStringList> resourceTypesForMimetype);
 
-    explicit DlgResourceTypeForFile(QWidget *parent = 0);
-
     QString getResourceTypeForMimetype(QString mimetype);
 
 

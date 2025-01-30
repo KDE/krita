@@ -7,6 +7,7 @@
  */
 
 #include <QRegularExpression>
+#include <QRegExp>
 
 #include <KoCompositeOpRegistry.h>
 #include <commands/KisNodeRenameCommand.h>

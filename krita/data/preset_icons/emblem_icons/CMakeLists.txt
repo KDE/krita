@@ -24,5 +24,5 @@ question.png
 sketch.png
 wet.png
 whirlpool.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/preset_icons/emblem_icons)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/preset_icons/emblem_icons)
 

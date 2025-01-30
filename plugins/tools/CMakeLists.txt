@@ -14,4 +14,4 @@ add_subdirectory( tool_enclose_and_fill )
 
 install( FILES
     tools.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

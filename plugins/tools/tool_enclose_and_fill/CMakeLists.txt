@@ -15,4 +15,4 @@ target_link_libraries(kritatoolencloseandfill kritaui kritabasicflakes)
 
 install(TARGETS kritatoolencloseandfill  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( FILES KisToolEncloseAndFill.action DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+install( FILES KisToolEncloseAndFill.action DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

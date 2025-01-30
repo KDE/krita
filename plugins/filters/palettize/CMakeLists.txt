@@ -5,4 +5,4 @@ target_link_libraries(kritapalettize kritaui)
 install(TARGETS kritapalettize  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     palettize.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

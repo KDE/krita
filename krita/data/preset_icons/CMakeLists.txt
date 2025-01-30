@@ -4,5 +4,5 @@ add_subdirectory(emblem_icons)
 
 install(FILES
 background.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/preset_icons)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/preset_icons)
 

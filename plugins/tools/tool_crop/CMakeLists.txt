@@ -16,4 +16,4 @@ install(TARGETS kritatoolcrop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
     KisToolCrop.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

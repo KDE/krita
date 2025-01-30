@@ -25,5 +25,5 @@ Pixel_240x256.predefinedimage
 Film_16_9_4K.predefinedimage
 Film_64_27_4K_Wide.predefinedimage
 Film_4_3_4K.predefinedimage
-    DESTINATION ${DATA_INSTALL_DIR}/krita/predefined_image_sizes)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/predefined_image_sizes)
 

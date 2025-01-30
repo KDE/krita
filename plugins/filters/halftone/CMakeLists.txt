@@ -15,4 +15,4 @@ target_link_libraries(kritahalftone kritaui)
 install(TARGETS kritahalftone DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     halftone.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

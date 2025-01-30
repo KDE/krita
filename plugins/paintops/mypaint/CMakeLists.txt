@@ -34,4 +34,4 @@ install(TARGETS kritamypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita-mypaint.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-mypaint.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)

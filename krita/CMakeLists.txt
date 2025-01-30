@@ -152,10 +152,10 @@ endif()
 
 install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.kde.krita.desktop DESTINATION ${KDE_INSTALL_APPDIR})
-install(FILES  krita.action kritamenu.action DESTINATION ${DATA_INSTALL_DIR}/krita/actions)
+install(FILES  krita.action kritamenu.action DESTINATION ${KDE_INSTALL_DATADIR}/krita/actions)
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 
-install(DIRECTORY DESTINATION ${DATA_INSTALL_DIR}/krita/shortcuts)
+install(DIRECTORY DESTINATION ${KDE_INSTALL_DATADIR}/krita/shortcuts)
 
 if (WIN32)
     configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)

@@ -1,4 +1,4 @@
 install( FILES
 triangle.svg
 
-DESTINATION  ${DATA_INSTALL_DIR}/krita/brushes)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/brushes)

@@ -22,6 +22,6 @@ target_link_libraries(kritahairypaintop kritalibpaintop)
 
 install(TARGETS kritahairypaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
-    krita-sumi.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+    krita-sumi.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 
 

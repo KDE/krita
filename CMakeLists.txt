@@ -811,7 +811,7 @@ if (ANDROID)
     endif()
 
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
-    # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+    # set (KDE_INSTALL_DATADIR ${CMAKE_INSTALL_PREFIX}/assets)
 
     # From ECM
     # Because Qt changes library suffix (to include arch), this changes name of

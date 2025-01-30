@@ -8,5 +8,5 @@ install( FILES
     xmpmm.schema
     xmprights.schema
 
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/metadata/schemas)
                                                              

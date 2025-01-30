@@ -778,7 +778,7 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 if (APPLE)
-    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+    install(FILES osx.stylesheet DESTINATION ${KDE_INSTALL_DATADIR}/krita)
 endif ()
 
 if (UNIX AND BUILD_TESTING AND ENABLE_UPDATERS)

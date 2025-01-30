@@ -20,6 +20,6 @@ install(TARGETS kritaparticlepaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita-particle.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-particle.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 
 

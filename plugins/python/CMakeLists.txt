@@ -20,17 +20,17 @@ function(install_pykrita_plugin name)
         message(FATAL_ERROR "Plugin filename is not given")
     endif()
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${name}.py)
-        install(FILES kritapykrita_${name}.desktop DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
+        install(FILES kritapykrita_${name}.desktop DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita)
         foreach(_f ${name}.py ${name}.ui ${install_pykrita_plugin_FILE})
             if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${_f})
-                install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${_f} DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
+                install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${_f} DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita)
             endif()
         endforeach()
     elseif(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/${name})
-        install(FILES ${name}/kritapykrita_${name}.desktop DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita)
+        install(FILES ${name}/kritapykrita_${name}.desktop DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita)
         install(
             DIRECTORY ${name}
-            DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
+            DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita
             FILES_MATCHING
                 PATTERN "*.py"
                 PATTERN "*.ui"
@@ -46,7 +46,7 @@ function(install_pykrita_plugin name)
         foreach(_pattern ${install_pykrita_plugin_PATTERNS})
             install(
                 DIRECTORY ${name}
-                DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
+                DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita
                 FILES_MATCHING
                     PATTERN "${_pattern}"
                     PATTERN "__pycache__*" EXCLUDE
@@ -90,11 +90,11 @@ install( FILES
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
     plugin_importer/plugin_importer.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)
 
 install(
     DIRECTORY libkritapykrita
-    DESTINATION ${DATA_INSTALL_DIR}/krita/pykrita
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/pykrita
     FILES_MATCHING
         PATTERN "*.py"
         PATTERN "__pycache__*" EXCLUDE

@@ -9,5 +9,5 @@ install( FILES
     Storyboarding.kws
     VFX_Paint.kws
     Minimal.kws
-    DESTINATION ${DATA_INSTALL_DIR}/krita/workspaces)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/workspaces)
 

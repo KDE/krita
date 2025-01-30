@@ -15,5 +15,5 @@ target_link_libraries(kritaroundmarkerpaintop kritalibpaintop)
 
 
 install(TARGETS kritaroundmarkerpaintop DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  krita_roundmarkerop.svg DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita_roundmarkerop.svg DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 

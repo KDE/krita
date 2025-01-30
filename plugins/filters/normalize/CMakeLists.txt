@@ -6,4 +6,4 @@ target_link_libraries(kritanormalize kritaui)
 install(TARGETS kritanormalize  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     normalize.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

@@ -37,4 +37,4 @@ install( FILES
     krita-paintbrush.png
     krita-eraser.png
     krita-duplicate.png
-     DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+     DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)

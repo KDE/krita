@@ -14,4 +14,4 @@ i\)_Wet_Knife_Plus_\(mypaint\)_prev.png
 i\)_Wet_Paint_Plus_\(mypaint\).myb
 i\)_Wet_Paint_Plus_\(mypaint\)_prev.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/krita/paintoppresets)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/paintoppresets)

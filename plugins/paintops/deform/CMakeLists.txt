@@ -19,4 +19,4 @@ kis_add_library(kritadeformpaintop MODULE ${kritadeformpaintop_SOURCES})
 target_link_libraries(kritadeformpaintop kritaui kritalibpaintop)
 
 install(TARGETS kritadeformpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  krita-deform.png DESTINATION ${DATA_INSTALL_DIR}/krita/images )
+install( FILES  krita-deform.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images )

@@ -33,4 +33,4 @@ target_link_libraries(kritaassistanttool kritaassistanttool_static)
 
 install(TARGETS kritaassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( FILES krita_tool_assistant.png dark_krita_tool_assistant.png light_krita_tool_assistant.png DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+install( FILES krita_tool_assistant.png dark_krita_tool_assistant.png light_krita_tool_assistant.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/pics)

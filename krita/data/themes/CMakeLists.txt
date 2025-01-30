@@ -5,7 +5,7 @@ if (FOUNDATION_BUILD)
         BreezeDark.colors
         BreezeHighContrast.colors
         BreezeLight.colors
-         ${schemefiles} DESTINATION ${DATA_INSTALL_DIR}/color-schemes
+         ${schemefiles} DESTINATION ${KDE_INSTALL_DATADIR}/color-schemes
 )
 endif()
 
@@ -16,6 +16,6 @@ KritaBright.colors
 KritaDark.colors
 KritaDarkOrange.colors
 KritaDarker.colors
- ${schemefiles} DESTINATION ${DATA_INSTALL_DIR}/color-schemes
+ ${schemefiles} DESTINATION ${KDE_INSTALL_DATADIR}/color-schemes
 )
 

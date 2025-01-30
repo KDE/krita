@@ -17,4 +17,4 @@ light_arrow_south.png
 light_arrow_south_east.png
 light_arrow_south_west.png
 light_arrow_west.png
-DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/pics)

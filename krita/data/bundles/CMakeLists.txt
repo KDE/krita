@@ -14,4 +14,4 @@ endif()
 
 install( FILES
     ${krita_BUNDLE_FILES}
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/bundles)
+    DESTINATION  ${KDE_INSTALL_DATADIR}/krita/bundles)

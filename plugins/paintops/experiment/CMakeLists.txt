@@ -17,6 +17,6 @@ target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 
 install(TARGETS kritaexperimentpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
-    krita-experiment.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+    krita-experiment.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 
 

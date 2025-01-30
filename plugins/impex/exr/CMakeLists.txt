@@ -32,6 +32,6 @@ install(TARGETS kritaexrexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( FILES
     exrchannels.schema
-    DESTINATION ${DATA_INSTALL_DIR}/krita/metadata/schemas)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/metadata/schemas)
 
 install(FILES krita_exr.desktop DESTINATION ${KDE_INSTALL_APPDIR})

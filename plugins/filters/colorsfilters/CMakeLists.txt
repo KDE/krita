@@ -22,4 +22,4 @@ target_link_libraries(kritacolorsfilters kritaui)
 install(TARGETS kritacolorsfilters  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     colorsfilters.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

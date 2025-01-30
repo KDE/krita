@@ -19,6 +19,6 @@ install(TARGETS kritasketchpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  krita-sketch.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-sketch.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 
 

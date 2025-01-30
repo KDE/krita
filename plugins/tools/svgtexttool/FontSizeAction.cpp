@@ -16,7 +16,7 @@
 #include <QFontDatabase>
 #include <QToolBar>
 #include <QToolButton>
-
+#include <QRegularExpression>
 #include <QDebug>
 #include <klocalizedstring.h>
 #include <QIcon>
@@ -27,7 +27,7 @@ QString format(qreal v)
 {
     static const QString f("%1");
     static const QString e;
-    static const QRegExp r("\\.?0+$");
+    static const QRegularExpression r("\\.?0+$");
     return f.arg(v, 0, 'f').replace(r, e);
 }
 

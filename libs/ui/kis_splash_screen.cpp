@@ -222,10 +222,14 @@ void KisSplashScreen::displayLinks(bool show) {
                         << "<head/>"
                         << "<body><table style=\"width:100%\" cellpadding=\"30\"><tr><td>"
                         << i18n("<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>",color);
+
 #ifdef Q_OS_MACOS
         // MACOS store version should not contain external links
         if (!KisMacosEntitlements().sandbox()) {
+#endif
+
             lblLinksText    << i18n("<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; color:%1;\">Support Krita's Development!</span></a></p>",color);
+#ifdef Q_OS_MACOS
         }
 #endif
         lblLinksText    << i18n("<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style=\" text-decoration: underline; color:%1;\">Getting Started</span></a></p>",color)

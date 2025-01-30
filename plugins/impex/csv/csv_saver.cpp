@@ -14,6 +14,7 @@
 #include <QIODevice>
 #include <QRect>
 #include <QVector>
+#include <QRegularExpression>
 
 #include <KisDocument.h>
 #include <KisMimeDatabase.h>
@@ -110,7 +111,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
             layers.prepend(layerRecord); //reverse order!
 
             layerRecord->name = paintLayer->name();
-            layerRecord->name.replace(QRegExp("[\"\\r\\n]"), "_");
+            layerRecord->name.replace(QRegularExpression("[\"\\r\\n]"), "_");
 
             if (layerRecord->name.isEmpty())
                 layerRecord->name= QString("Unnamed-%1").arg(idx);

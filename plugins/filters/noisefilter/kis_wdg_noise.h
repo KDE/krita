@@ -17,18 +17,22 @@ class KisFilter;
 class KisWdgNoise : public KisConfigWidget
 {
     Q_OBJECT
+
 public:
     KisWdgNoise(KisFilter* nfilter, QWidget* parent = 0);
     ~KisWdgNoise() override;
+
 public:
-    inline const Ui_WdgNoiseOptions* widget() const {
-        return m_widget;
-    }
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
+
 private:
-    Ui_WdgNoiseOptions* m_widget;
-    int m_seedThreshold, m_seedRed, m_seedGreen, m_seedBlue;
+    QScopedPointer<Ui_WdgNoiseOptions> m_widget;
+    int m_seedThreshold;
+    int m_seedRed;
+    int m_seedGreen;
+    int m_seedBlue;
+    bool m_isGrayscale;
 };
 
 #endif

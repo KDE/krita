@@ -351,8 +351,10 @@ endif(WIN32)
 option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
 if (BUILD_WITH_QT6)
     set(QT_MAJOR_VERSION 6)
+    find_package(ECM 6.0 REQUIRED CONFIG)
 else()
     set(QT_MAJOR_VERSION 5)
+    find_package(ECM 5.22 REQUIRED CONFIG)
 endif()
 
 # KDE Frameworks
@@ -362,7 +364,6 @@ if (KF_MAJOR STREQUAL "6")
     set(KF_DEP_VERSION "6.0.0")
 endif()
 
-find_package(ECM 5.22 REQUIRED CONFIG)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(ECMOptionalAddSubdirectory)
@@ -378,13 +379,18 @@ include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 
-include(KDEInstallDirs)
 if (QT_MAJOR_VERSION STREQUAL "6")
-    set(ICON_INSTALL_DIR ${KDE_INSTALL_ICONDIR})
+    set (KDE_COMPILERSETTINGS_LEVEL "5.0")
+    set (KDE_QT_MODERNCODE_DEFINITIONS_LEVEL "5.0")
+    set (KDE_SKIP_PEDANTIC_WARNINGS_SETTINGS TRUE)
+    set (KDE_SKIP_MISSING_INCLUDE_DIRS_WARNINGS_SETTINGS TRUE)
+    set (KDE_SKIP_NULLPTR_WARNINGS_SETTINGS TRUE)
 endif()
+include(KDECompilerSettings)
+
+include(KDEInstallDirs)
 
 include(KDECMakeSettings)
-include(KDECompilerSettings)
 
 if (WIN32)
 # KDECompilerSettings sets Windows Vista as the default,
@@ -625,12 +631,6 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
-remove_definitions(
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_FOREACH
-)
-
-
 # MSVC is unable to disambiguate between definitions of QVector<QPointF> 
 # and QPolygonF. This is a known upstream bug e.g.:
 # - https://phabricator.kde.org/D21314
@@ -810,7 +810,7 @@ if (ANDROID)
         message (FATAL_ERROR "ANDROID_SDK_ROOT argument is not set")
     endif()
 
-    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
+    set (KRITA_PLUGIN_INSTALL_DIR ${KDE_INSTALL_LIBDIR})
     # set (KDE_INSTALL_DATADIR ${CMAKE_INSTALL_PREFIX}/assets)
 
     # From ECM

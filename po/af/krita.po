@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -29725,7 +29725,7 @@ msgstr "Patrone"
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, kde-format
@@ -44812,7 +44812,7 @@ msgstr "Kanale"
 msgid "&Levels..."
 msgstr "Vlak"
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, fuzzy, kde-format
 msgid "&Random Noise..."
 msgstr "Roteer 90"
@@ -44828,6 +44828,12 @@ msgstr "Roteer 90"
 #, fuzzy, kde-format
 msgid "Level:"
 msgstr "Vlak"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+msgid "Grayscale"
+msgstr "Gryskleur"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, fuzzy, kde-format

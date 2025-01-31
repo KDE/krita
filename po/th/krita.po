@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -29834,7 +29834,7 @@ msgstr "แบน"
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, kde-format
@@ -44972,7 +44972,7 @@ msgstr "ช่อง"
 msgid "&Levels..."
 msgstr "&ระดับ"
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, fuzzy, kde-format
 msgid "&Random Noise..."
 msgstr "หมุน &90"
@@ -44988,6 +44988,12 @@ msgstr "หมุน &90"
 #, fuzzy, kde-format
 msgid "Level:"
 msgstr "ระดับ"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+msgid "Grayscale"
+msgstr "ระดับสีเทา"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, fuzzy, kde-format

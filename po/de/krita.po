@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -31128,7 +31128,7 @@ msgstr "Muster-Skalierung:"
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, kde-format
@@ -47027,7 +47027,7 @@ msgstr "Alle Kanäle zurücksetzen"
 msgid "&Levels..."
 msgstr "&Stufen ..."
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
 msgstr "&Weißes Rauschen ..."
@@ -47043,6 +47043,13 @@ msgstr "Weißes Rauschen"
 #, kde-format
 msgid "Level:"
 msgstr "Stufe:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+#| msgid "Grayscale/Alpha"
+msgid "Grayscale"
+msgstr "Graustufen/Alpha"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

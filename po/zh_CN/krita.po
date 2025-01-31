@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -29820,7 +29820,7 @@ msgstr "图案缩放："
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, kde-format
@@ -45227,7 +45227,7 @@ msgstr "重置所有通道"
 msgid "&Levels..."
 msgstr "色阶(&L)..."
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
 msgstr "随机噪点(&R)..."
@@ -45243,6 +45243,13 @@ msgstr "随机噪点"
 #, kde-format
 msgid "Level:"
 msgstr "色阶："
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+#| msgid "Grayscale/Alpha"
+msgid "Grayscale"
+msgstr "灰阶/透明度"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

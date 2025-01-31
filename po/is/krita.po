@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2024-12-18 14:36+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -30120,7 +30120,7 @@ msgstr "Mynstur"
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, fuzzy, kde-format
@@ -45556,7 +45556,7 @@ msgstr "Allar litrásir"
 msgid "&Levels..."
 msgstr "Yfirlegg"
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
 msgstr "Stillingar"
@@ -45572,6 +45572,13 @@ msgstr "Stillingar"
 #, fuzzy, kde-format
 msgid "Level:"
 msgstr "Styrkur:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+#| msgid "Grayscale/Alpha"
+msgid "Grayscale"
+msgstr "Grátóna/Alfa"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, fuzzy, kde-format

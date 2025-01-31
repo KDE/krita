@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-29 01:54+0000\n"
+"POT-Creation-Date: 2025-01-31 01:54+0000\n"
 "PO-Revision-Date: 2025-01-26 17:25+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -30153,7 +30153,7 @@ msgstr "Escala do padrón:"
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
-#: plugins/filters/noisefilter/wdgnoiseoptions.ui:56
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
 #, kde-format
@@ -45856,7 +45856,7 @@ msgstr "Restabelecer todas as canles"
 msgid "&Levels..."
 msgstr "&Niveis…"
 
-#: plugins/filters/noisefilter/noisefilter.cpp:53
+#: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
 msgstr "&Ruído aleatorio…"
@@ -45872,6 +45872,13 @@ msgstr "Ruído aleatorio"
 #, kde-format
 msgid "Level:"
 msgstr "Nivel:"
+
+#. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
+#: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
+#, fuzzy, kde-format
+#| msgid "Grayscale/Alpha"
+msgid "Grayscale"
+msgstr "Escala de grises/Alfa"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format
@@ -47459,14 +47466,14 @@ msgstr "Cargar de novo a predefinición"
 msgctxt "SeExpr variable"
 msgid "Normalized X axis coordinate of the image from its top-left corner"
 msgstr ""
-"Coordenada do eixo X normalizada da imaxe desde a esquina superior esquerda"
+"Coordenada do eixe X normalizada da imaxe desde a esquina superior esquerda"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:54
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized Y axis coordinate of the image from its top-left corner"
 msgstr ""
-"Coordenada do eixo Y normalizada da imaxe desde a esquina superior esquerda"
+"Coordenada do eixe Y normalizada da imaxe desde a esquina superior esquerda"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
 #, kde-format
@@ -53978,7 +53985,7 @@ msgstr "Eixe  X"
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:46
 #, kde-format
 msgid "Axis Y"
-msgstr "Eixo Y"
+msgstr "Eixe Y"
 
 #: plugins/paintops/libpaintop/KisScatterOptionWidget.cpp:47
 #, kde-format
@@ -55179,7 +55186,7 @@ msgid ""
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Usar a dirección de debuxo para determinar os eixes X "
-"e Y, mentres e a elevación da inclinación se usa para o eixo Z.</p></body></"
+"e Y, mentres e a elevación da inclinación se usa para o eixe Z.</p></body></"
 "html>"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionRotation)
@@ -55192,7 +55199,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Usar o sensor de rotación dispoñíbel en certos "
 "bolígrafos para determinar os eixes X e Y, mentres e a elevación da "
-"inclinación se usa para o eixo Z.</p></body></html>"
+"inclinación se usa para o eixe Z.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
@@ -55210,7 +55217,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Mesturar os ángulos de inclinación e debuxo para "
 "determinar os eixes X e Y, mentres e a elevación da inclinación se usa para "
-"o eixo Z.</p></body></html>"
+"o eixe Z.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
@@ -61517,7 +61524,7 @@ msgstr "fóra do lenzo"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:793
 #, kde-format
 msgid "Rotate around X-Axis"
-msgstr "Rotar en torno ao eixo X"
+msgstr "Rotar en torno ao eixe X"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
@@ -61525,7 +61532,7 @@ msgstr "Rotar en torno ao eixo X"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:828
 #, kde-format
 msgid "Rotate around Y-Axis"
-msgstr "Rotar en torno ao eixo Y"
+msgstr "Rotar en torno ao eixe Y"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
@@ -61533,7 +61540,7 @@ msgstr "Rotar en torno ao eixo Y"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:872
 #, kde-format
 msgid "Rotate around Z-Axis"
-msgstr "Rotar en torno ao eixo Z"
+msgstr "Rotar en torno ao eixe Z"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:853

@@ -119,6 +119,7 @@ void TestSvgText::initTestCase()
     for (const char *const fontDir : {
              "fonts/CSSTest",
              "fonts/testFontsCozens",
+             "fonts/testFontNames",
          }) {
         QString fileName = TestUtil::fetchDataFileLazy(fontDir);
         bool res = KoFontRegistry::instance()->addFontFileDirectoryToRegistery(fileName);
@@ -1819,7 +1820,70 @@ void TestSvgText::testWWSConverterSlant() {
                  .arg(QString::number(expectedMode))
                  .arg(QString::number(testedMode))
                  .arg(first->family_name)
-                 .toLatin1());
+             .toLatin1());
+}
+
+void TestSvgText::testWWSConverterFamilyNames_data()
+{
+    QTest::addColumn<QString>("requestedFamily");
+    QTest::addColumn<QString>("expectedFamily");
+    QTest::addColumn<QString>("expectedStyle");
+
+    /*
+     *  The following should select Font A. This is complicated by the fact that Font A has no typographic family, while B, C and D do,
+     *  which means it ought to select it by RIBBI family.
+     */
+    QTest::addRow("test typographic, ribbi same as typographic") << QString("Test Typographic Family") << QString("Test Typographic Family") << QString("A");
+    QTest::addRow("test typographic, ribbi same as typographic, NL locale") << QString("Test Typografische Familie") << QString("Test Typographic Family") << QString("B");
+
+    /**
+     * Test selecting the ribbi name
+     */
+    QTest::addRow("test typographic, ribbi unique") << QString("Test Typographic RIBBI Family B") << QString("Test Typographic Family") << QString("B");
+    /**
+     * This tests whether the font is filtered separately when size is selected.
+     */
+    QTest::addRow("test typographic, ribbi same as typo, size different") << QString("Test Typographic Family Full C") << QString("Test Typographic Family") << QString("Regular");
+    /**
+     * Test selecting the font with a wws name.
+     */
+    QTest::addRow("test typographic, wws unique") << QString("Test Typographic WWS Family D") << QString("Test Typographic WWS Family D") << QString("Bold");
+    QTest::addRow("test typographic, wws unique, NL locale") << QString("Test Typografische Familie WWS Familie D") << QString("Test Typographic WWS Family D") << QString("Bold");
+    /**
+     * Test selecting the font with a full name
+     */
+    QTest::addRow("test typographic, fullname") << QString("Test Typographic Family Full A") << QString("Test Typographic Family") << QString("A");
+
+    QTest::addRow("test family, JA locale") << QString("ＣＳＳテスト　フォント名") << QString("CSSTest FamilyName") << QString("Regular");
+    // Test true type collections.
+    QTest::addRow("test collection index") << QString("Test Collection Index B") << QString("Test Collection Index B") << QString("Regular");
+
+}
+
+void TestSvgText::testWWSConverterFamilyNames()
+{
+    const QMap<QString, qreal> axisSettings;
+    QVector<int> lengths;
+    QFETCH(QString, requestedFamily);
+    QFETCH(QString, expectedFamily);
+    QFETCH(QString, expectedStyle);
+
+    const std::vector<FT_FaceSP> faces =
+        KoFontRegistry::instance()->facesForCSSValues({requestedFamily}, lengths, axisSettings);
+
+    QVERIFY(!faces.empty());
+
+    FT_FaceSP first = faces.at(0);
+
+    qDebug() << first->family_name << first->style_name;
+
+    QVERIFY2(first->family_name == expectedFamily && first->style_name == expectedStyle,
+             QString("Incorrect font-family, expected %1 - %2, got %3 - %4")
+                 .arg(expectedFamily)
+                 .arg(expectedStyle)
+                 .arg(first->family_name)
+                 .arg(first->style_name)
+             .toLatin1());
 }
 
 /**

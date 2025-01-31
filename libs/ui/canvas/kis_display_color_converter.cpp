@@ -711,12 +711,16 @@ void KisDisplayColorConverter::getHsvF(const KoColor &srcColor, qreal *h, qreal 
     fH = *h;
     fS = *s;
     fV = *v;
-    fA = *a;
+    if (a) {
+        fA = *a;
+    }
     color.getHsvF(&fH, &fS, &fV, &fA);
     *h = fH;
     *s = fS;
     *v = fV;
-    *a = fA;
+    if (a) {
+        *a = fA;
+    }
 #endif
 }
 
@@ -743,13 +747,16 @@ void KisDisplayColorConverter::getHslF(const KoColor &srcColor, qreal *h, qreal 
     fH = *h;
     fS = *s;
     fL = *l;
-    fA = *a;
+    if (a) {
+        fA = *a;
+    }
     color.getHslF(&fH, &fS, &fL, &fA);
     *h = fH;
     *s = fS;
     *l = fL;
-    *a = fA;
-
+    if (a) {
+        *a = fA;
+    }
 #endif
 }
 

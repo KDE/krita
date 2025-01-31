@@ -11,4 +11,4 @@ ICONS
 64-apps-krita.png
 sc-apps-krita.svgz
 DESTINATION
- ${ICON_INSTALL_DIR} )
+ ${KDE_INSTALL_ICONDIR} )

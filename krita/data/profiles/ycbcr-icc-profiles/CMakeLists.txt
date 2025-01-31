@@ -8,4 +8,4 @@ install(FILES
     bt709-6_bt1886_ycbcr_v4.icc
     bt709-6_ycbcr_v2.icc
     bt709-6_ycbcr_v4.icc
-DESTINATION ${SHARE_INSTALL_PREFIX}/color/icc/krita)
+DESTINATION ${KDE_INSTALL_DATADIR}/color/icc/krita)

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-31 01:54+0000\n"
-"PO-Revision-Date: 2025-01-25 17:29+0300\n"
+"PO-Revision-Date: 2025-01-31 16:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -45720,10 +45720,9 @@ msgstr "Düzey:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Gri Tonlu/Alfa"
+msgstr "Gri tonlu"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

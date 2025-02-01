@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-31 01:54+0000\n"
-"PO-Revision-Date: 2025-01-25 09:04+0200\n"
+"PO-Revision-Date: 2025-01-31 08:42+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -46459,10 +46459,9 @@ msgstr "Рівень:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Тони сірого/Альфа"
+msgstr "Тони сірого"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

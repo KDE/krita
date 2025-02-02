@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-31 01:54+0000\n"
+"POT-Creation-Date: 2025-02-02 01:57+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -19786,7 +19786,7 @@ msgstr "ローカルリソース"
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:701 libs/ui/KisView.cpp:1191
-#: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:740 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
@@ -23923,7 +23923,7 @@ msgid "Start"
 msgstr "開始"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:645
 #, kde-format
 msgid "DEV BUILD"
 msgstr "開発ビルド"
@@ -30261,7 +30261,7 @@ msgstr ""
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Krita を使う</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:228
+#: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
@@ -30270,7 +30270,7 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Krita の開発を支援する！</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30281,7 +30281,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">はじめに</span></"
 "a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:232
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -30290,7 +30290,7 @@ msgstr ""
 "<p><a href=\"https://docs.krita.org/ja\"><span style=\" text-decoration: "
 "underline; color:%1;\">マニュアル</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
@@ -30299,12 +30299,12 @@ msgstr ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita ウェブサイト</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Krita の開発</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
@@ -30313,7 +30313,7 @@ msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">ユーザーコミュニティ</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
@@ -30322,7 +30322,7 @@ msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">ソースコード</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
@@ -30331,7 +30331,7 @@ msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">スクリプト API</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:243
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
@@ -32085,23 +32085,23 @@ msgstr "言語"
 msgid "English news is always up to date."
 msgstr "英語のお知らせが更新されています"
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:668
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\"を消去"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:759
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "新しいバージョンの Krita があります。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "アップデート中にエラーが発生しました。"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:794
 #, kde-format
 msgid "Restart is required."
 msgstr "再起動が必要です。"
@@ -36252,17 +36252,17 @@ msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:37
 #, kde-format
 msgid "About KDE"
 msgstr "KDE について"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:40
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
 msgstr "<html><font size=\"5\">KDE - 自由たれ!</font></html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:54
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
@@ -36285,7 +36285,7 @@ msgstr ""
 ">KDE コミュニティと KDE ソフトウェアについての詳細は <a href=\"%2\">%2</a> を"
 "ご覧ください。</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:73
 #, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
@@ -36305,7 +36305,7 @@ msgstr ""
 "望をぜひお寄せください。この場合、重要度 (severity) には「要望 (Wishlist)」を"
 "指定するようお願いします。</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:91
 #, kde-format
 msgid ""
 "<html>You do not have to be a software developer to be a member of the KDE "
@@ -36323,50 +36323,49 @@ msgstr ""
 "は<a href=\"%1\">%1</a>をご覧ください<br /><br />さらに詳しい情報やドキュメン"
 "トが必要な場合は<a href=\"%2\">%2</a>をご覧ください。</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:109
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:116
 #, kde-format
 msgid ""
-"<html>KDE software is and will always be available free of charge, however "
+"<p>KDE software is and will always be available free of charge, however "
 "creating it is not free.<br /><br />To support development the KDE community "
 "has formed the KDE e.V., a non-profit organization legally founded in "
 "Germany. KDE e.V. represents the KDE community in legal and financial "
-"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.<br /><br /"
-">KDE benefits from many kinds of contributions, including financial. We use "
-"the funds to reimburse members and others for expenses they incur when "
-"contributing. Further funds are used for legal support and organizing "
-"conferences and meetings. <br /> <br />We would like to encourage you to "
-"support our efforts with a financial donation, using one of the ways "
-"described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
-"advance for your support.</html>"
+"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
-"<html>KDE ソフトウェアは今までも、そしてこれからも無償で配布されますが、その"
-"開発には費用がかかります。<br /><br />開発支援のため、KDE コミュニティは KDE "
-"e.V というドイツで法律に基づき設立された非営利組織を結成しています。KDE e.V "
-"についての詳しい情報は<a href=\"%1\">%1</a>をご覧ください<br /><br />KDE は資"
-"金的なものも含めた様々な種類の貢献から利益を得ています。KDE はそれによって得"
-"られた資金を KDE のメンバーやその他の人々が KDE に貢献する際に支払った費用の"
-"払い戻しに使っています。その他の資金は法的支援や会議を行うのに使われていま"
-"す。<br /> <br /><a href=\"%2\">%2</a>で説明されている方法を使って我々の成果"
-"を寄付によって皆さんが支援していただけたなら我々は嬉しく思います。<br /><br /"
-">いささか早とちりではありますが皆さんの支援に感謝します。</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
+#, kde-format
+msgid ""
+"<p>KDE benefits from many kinds of contributions, including financial. We "
+"use the funds to reimburse members and others for expenses they incur when "
+"contributing. Further funds are used for legal support and organizing "
+"conferences and meetings.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#, kde-format
+msgid ""
+"<p>We would like to encourage you to support our efforts with a financial "
+"donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "KDE について(&A)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "バグもしくはこうしてほしいという希望を報告(&X)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Join KDE"
 msgstr "KDE に参加する(&J)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
 #, kde-format
 msgid "&Support KDE"
 msgstr "KDE を支援する(&S)"
@@ -61864,6 +61863,32 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
+
+#~ msgid ""
+#~ "<html>KDE software is and will always be available free of charge, "
+#~ "however creating it is not free.<br /><br />To support development the "
+#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
+#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
+#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
+#~ "<br /><br />KDE benefits from many kinds of contributions, including "
+#~ "financial. We use the funds to reimburse members and others for expenses "
+#~ "they incur when contributing. Further funds are used for legal support "
+#~ "and organizing conferences and meetings. <br /> <br />We would like to "
+#~ "encourage you to support our efforts with a financial donation, using one "
+#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
+#~ "much in advance for your support.</html>"
+#~ msgstr ""
+#~ "<html>KDE ソフトウェアは今までも、そしてこれからも無償で配布されますが、そ"
+#~ "の開発には費用がかかります。<br /><br />開発支援のため、KDE コミュニティ"
+#~ "は KDE e.V というドイツで法律に基づき設立された非営利組織を結成していま"
+#~ "す。KDE e.V についての詳しい情報は<a href=\"%1\">%1</a>をご覧ください<br /"
+#~ "><br />KDE は資金的なものも含めた様々な種類の貢献から利益を得ています。"
+#~ "KDE はそれによって得られた資金を KDE のメンバーやその他の人々が KDE に貢献"
+#~ "する際に支払った費用の払い戻しに使っています。その他の資金は法的支援や会議"
+#~ "を行うのに使われています。<br /> <br /><a href=\"%2\">%2</a>で説明されてい"
+#~ "る方法を使って我々の成果を寄付によって皆さんが支援していただけたなら我々は"
+#~ "嬉しく思います。<br /><br />いささか早とちりではありますが皆さんの支援に感"
+#~ "謝します。</html>"
 
 #~ msgid "Proofing Rendering Intent:"
 #~ msgstr "校正での色空間変換の方法:"

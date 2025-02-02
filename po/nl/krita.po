@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-31 01:54+0000\n"
+"POT-Creation-Date: 2025-02-02 01:57+0000\n"
 "PO-Revision-Date: 2025-01-31 11:17+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -19847,7 +19847,7 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:701 libs/ui/KisView.cpp:1191
-#: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:740 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
@@ -24000,7 +24000,7 @@ msgid "Start"
 msgstr "Starten"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:645
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -30384,7 +30384,7 @@ msgstr ""
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Krita gebruiken</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:228
+#: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
@@ -30393,7 +30393,7 @@ msgstr ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Ondersteun de ontwikkeling van Krita!</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30404,7 +30404,7 @@ msgstr ""
 "\"><span style=\" text-decoration: underline; color:%1;\">Hoe te beginnen</"
 "span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:232
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
@@ -30413,7 +30413,7 @@ msgstr ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Handleiding</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
@@ -30422,12 +30422,12 @@ msgstr ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Website van Krita</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr "<p><span style=\" color:%1;\"><b>Krita coderen</b></span></p>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
@@ -30436,7 +30436,7 @@ msgstr ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">Gebruikersgemeenschap</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
@@ -30445,7 +30445,7 @@ msgstr ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Broncode</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
@@ -30454,7 +30454,7 @@ msgstr ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">API voor scripts maken</span></a></p>"
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:243
 #, kde-format
 msgid ""
 "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style="
@@ -32220,23 +32220,23 @@ msgstr "Taal"
 msgid "English news is always up to date."
 msgstr "Engels nieuws is altijd bijgewerkt."
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:668
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\" vergeten"
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:759
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Nieuwe versie van Krita is beschikbaar."
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Er deed zich een fout voor bij het bijwerken"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:794
 #, kde-format
 msgid "Restart is required."
 msgstr "Een herstart is vereist."
@@ -36440,17 +36440,17 @@ msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:37
 #, kde-format
 msgid "About KDE"
 msgstr "Over KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:40
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
 msgstr "<html><font size=\"5\">KDE - Wees vrij!</font></html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:54
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
@@ -36474,7 +36474,7 @@ msgstr ""
 "voor meer informatie over het KDE-project en over de software die we maken "
 "op <a href=\"%2\">%2</a>.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:73
 #, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
@@ -36495,7 +36495,7 @@ msgstr ""
 "te gebruiken om uw wens door te geven. Kies dan in het dialoogvenster van "
 "het bug-traceersysteem bij \"Severity\" voor \"Wishlist\".</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:91
 #, kde-format
 msgid ""
 "<html>You do not have to be a software developer to be a member of the KDE "
@@ -36514,53 +36514,49 @@ msgstr ""
 "deelnemen.<br /><br />Kijk voor meer informatie en documentatie op <a href="
 "\"%2\">%2</a>.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:109
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:116
 #, kde-format
 msgid ""
-"<html>KDE software is and will always be available free of charge, however "
+"<p>KDE software is and will always be available free of charge, however "
 "creating it is not free.<br /><br />To support development the KDE community "
 "has formed the KDE e.V., a non-profit organization legally founded in "
 "Germany. KDE e.V. represents the KDE community in legal and financial "
-"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.<br /><br /"
-">KDE benefits from many kinds of contributions, including financial. We use "
-"the funds to reimburse members and others for expenses they incur when "
-"contributing. Further funds are used for legal support and organizing "
-"conferences and meetings. <br /> <br />We would like to encourage you to "
-"support our efforts with a financial donation, using one of the ways "
-"described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
-"advance for your support.</html>"
+"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
-"<html>KDE-software is en zal altijd gratis verkrijgbaar zijn, maar de "
-"ontwikkeling ervan is allerminst vrij van kosten.<br /><br />Daarom heeft de "
-"KDE-gemeenschap KDE e.V. gevormd, een non-profit organisatie die gevestigd "
-"is in Duitsland. KDE e.V. representeert de KDE-gemeenschap in juridische en "
-"financiële zaken. Kijk voor meer informatie over KDE e.V. op <a href=\"%1\">"
-"%1</a>.<br /><br /> KDE profiteert van allerlei bijdragen inclusief "
-"financiële. We gebruiken de fondsen om de kosten te vergoeden die KDE-leden "
-"en anderen gemaakt hebben voor hun bijdrage aan KDE. Andere fondsen worden "
-"gebruikt voor juridische ondersteuning en voor het organiseren van "
-"conferenties en bijeenkomsten.<br /><br />Wij willen u graag aanmoedigen om "
-"KDE te ondersteunen door middel van een financiële donatie op een van de "
-"manieren beschreven op <a href=\"%2\">%2</a>.<br /><br />Alvast hartelijk "
-"bedankt voor uw bijdrage.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
+#, kde-format
+msgid ""
+"<p>KDE benefits from many kinds of contributions, including financial. We "
+"use the funds to reimburse members and others for expenses they incur when "
+"contributing. Further funds are used for legal support and organizing "
+"conferences and meetings.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#, kde-format
+msgid ""
+"<p>We would like to encourage you to support our efforts with a financial "
+"donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "&Over"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "&Feedback doorgeven"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Join KDE"
 msgstr "&Lid worden van KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
 #, kde-format
 msgid "&Support KDE"
 msgstr "KDE onder&steunen"
@@ -62126,6 +62122,34 @@ msgstr "Zoomen"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referentie-afbeeldingen"
+
+#~ msgid ""
+#~ "<html>KDE software is and will always be available free of charge, "
+#~ "however creating it is not free.<br /><br />To support development the "
+#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
+#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
+#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
+#~ "<br /><br />KDE benefits from many kinds of contributions, including "
+#~ "financial. We use the funds to reimburse members and others for expenses "
+#~ "they incur when contributing. Further funds are used for legal support "
+#~ "and organizing conferences and meetings. <br /> <br />We would like to "
+#~ "encourage you to support our efforts with a financial donation, using one "
+#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
+#~ "much in advance for your support.</html>"
+#~ msgstr ""
+#~ "<html>KDE-software is en zal altijd gratis verkrijgbaar zijn, maar de "
+#~ "ontwikkeling ervan is allerminst vrij van kosten.<br /><br />Daarom heeft "
+#~ "de KDE-gemeenschap KDE e.V. gevormd, een non-profit organisatie die "
+#~ "gevestigd is in Duitsland. KDE e.V. representeert de KDE-gemeenschap in "
+#~ "juridische en financiële zaken. Kijk voor meer informatie over KDE e.V. "
+#~ "op <a href=\"%1\">%1</a>.<br /><br /> KDE profiteert van allerlei "
+#~ "bijdragen inclusief financiële. We gebruiken de fondsen om de kosten te "
+#~ "vergoeden die KDE-leden en anderen gemaakt hebben voor hun bijdrage aan "
+#~ "KDE. Andere fondsen worden gebruikt voor juridische ondersteuning en voor "
+#~ "het organiseren van conferenties en bijeenkomsten.<br /><br />Wij willen "
+#~ "u graag aanmoedigen om KDE te ondersteunen door middel van een financiële "
+#~ "donatie op een van de manieren beschreven op <a href=\"%2\">%2</a>.<br /"
+#~ "><br />Alvast hartelijk bedankt voor uw bijdrage.</html>"
 
 #~ msgid "Proofing Rendering Intent:"
 #~ msgstr "Renderingmethode voor proofing"

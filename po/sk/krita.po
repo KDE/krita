@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-31 01:54+0000\n"
+"POT-Creation-Date: 2025-02-02 01:57+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -19871,7 +19871,7 @@ msgstr "Lokálne zdroje"
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
 #: libs/ui/KisView.cpp:701 libs/ui/KisView.cpp:1191
-#: libs/ui/KisWelcomePageWidget.cpp:739 libs/ui/KisWindowLayoutResource.cpp:375
+#: libs/ui/KisWelcomePageWidget.cpp:740 libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1535
@@ -24061,7 +24061,7 @@ msgid "Start"
 msgstr "Spustiť"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:645
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -30511,14 +30511,14 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Nedávne súbory</span></"
 "b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:228
+#: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30526,21 +30526,21 @@ msgid ""
 "span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:232
+#: libs/ui/kis_splash_screen.cpp:236
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:237
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:239
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
@@ -30550,28 +30550,28 @@ msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">Nedávne súbory</span></"
 "b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:241
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:238
+#: libs/ui/kis_splash_screen.cpp:242
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:239
+#: libs/ui/kis_splash_screen.cpp:243
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -32345,23 +32345,23 @@ msgstr "Jazyk"
 msgid "English news is always up to date."
 msgstr "Novinky v angličtine sú vždy aktuálne."
 
-#: libs/ui/KisWelcomePageWidget.cpp:667
+#: libs/ui/KisWelcomePageWidget.cpp:668
 #: plugins/dockers/presethistory/presethistory_dock.cpp:302
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Zabudnúť \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:758
+#: libs/ui/KisWelcomePageWidget.cpp:759
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "K dispozícii je nová verzia Krita."
 
-#: libs/ui/KisWelcomePageWidget.cpp:787
+#: libs/ui/KisWelcomePageWidget.cpp:788
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Počas aktualizácie sa vyskytla chyba"
 
-#: libs/ui/KisWelcomePageWidget.cpp:793
+#: libs/ui/KisWelcomePageWidget.cpp:794
 #, kde-format
 msgid "Restart is required."
 msgstr "Vyžaduje sa reštart."
@@ -36567,17 +36567,17 @@ msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:37
 #, kde-format
 msgid "About KDE"
 msgstr "Informácie o KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:40
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
 msgstr "<html><font size=\"5\">KDE - Buďte voľní!</font></html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:54
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
@@ -36599,7 +36599,7 @@ msgstr ""
 "pripojiť a prispieť do KDE, vrátane vás.<br /><br />Navštívte <a href=\"%2\">"
 "%2</a> pre viac informácií o komunite KDE a softvéri, ktorý vytvárame.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:73
 #, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
@@ -36618,7 +36618,7 @@ msgstr ""
 "na zlepšenie, pošlite svoje želanie do systému pre sledovanie chýb. "
 "Nezabudnite nastaviť závažnosť na \"Želanie\".</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:91
 #, kde-format
 msgid ""
 "<html>You do not have to be a software developer to be a member of the KDE "
@@ -36636,50 +36636,49 @@ msgstr ""
 "nájdete na <a href=\"%1\">%1</a>.<br /><br />Ak potrebujete viac informácií "
 "alebo dokumentáciu, navštívte <a href=\"%2\">%2</a>.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:109
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:116
 #, kde-format
 msgid ""
-"<html>KDE software is and will always be available free of charge, however "
+"<p>KDE software is and will always be available free of charge, however "
 "creating it is not free.<br /><br />To support development the KDE community "
 "has formed the KDE e.V., a non-profit organization legally founded in "
 "Germany. KDE e.V. represents the KDE community in legal and financial "
-"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.<br /><br /"
-">KDE benefits from many kinds of contributions, including financial. We use "
-"the funds to reimburse members and others for expenses they incur when "
-"contributing. Further funds are used for legal support and organizing "
-"conferences and meetings. <br /> <br />We would like to encourage you to "
-"support our efforts with a financial donation, using one of the ways "
-"described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
-"advance for your support.</html>"
+"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
-"<html>KDE je a vždy bude dostupné zadarmo, ale jeho vývoj nie je zadarmo."
-"<br /><br />Na podporu vývoja preto komunita KDE vytvorila KDE e.V., "
-"neziskovú organizáciu založenú v Nemecku. KDE e.V. reprezentuje komunitu KDE "
-"v právnych a finančných záležitostiach. Pozrite si <a href=\"%1\">%1</a>, "
-"kde nájdete viac informácií o KDE e.V.<br /><br />KDE potrebuje finančnú "
-"podporu. Väčšina peňazí je použitá na výdaje pre členov tímu a iné výdaje "
-"pri prispievaní do KDE. Ďalšie peniaze sú použité na právnu podporu a "
-"organizovanie konferencií a stretnutí. Budeme radi, ak podporíte naše úsilie "
-"finančným darom niektorým z postupov popísaných na adrese <a href=\"%2\">%2</"
-"a>.<br /><br />Vopred ďakujeme za vašu podporu.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
+#, kde-format
+msgid ""
+"<p>KDE benefits from many kinds of contributions, including financial. We "
+"use the funds to reimburse members and others for expenses they incur when "
+"contributing. Further funds are used for legal support and organizing "
+"conferences and meetings.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#, kde-format
+msgid ""
+"<p>We would like to encourage you to support our efforts with a financial "
+"donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "O programe"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "&Nahláste chyby alebo želania"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Join KDE"
 msgstr "&Pripojte sa ku KDE"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
 #, kde-format
 msgid "&Support KDE"
 msgstr "Po&dporte KDE"
@@ -62450,6 +62449,32 @@ msgstr "Nástroj priblíženia"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Nástroj referenčných obrázkov"
+
+#~ msgid ""
+#~ "<html>KDE software is and will always be available free of charge, "
+#~ "however creating it is not free.<br /><br />To support development the "
+#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
+#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
+#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
+#~ "<br /><br />KDE benefits from many kinds of contributions, including "
+#~ "financial. We use the funds to reimburse members and others for expenses "
+#~ "they incur when contributing. Further funds are used for legal support "
+#~ "and organizing conferences and meetings. <br /> <br />We would like to "
+#~ "encourage you to support our efforts with a financial donation, using one "
+#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
+#~ "much in advance for your support.</html>"
+#~ msgstr ""
+#~ "<html>KDE je a vždy bude dostupné zadarmo, ale jeho vývoj nie je zadarmo."
+#~ "<br /><br />Na podporu vývoja preto komunita KDE vytvorila KDE e.V., "
+#~ "neziskovú organizáciu založenú v Nemecku. KDE e.V. reprezentuje komunitu "
+#~ "KDE v právnych a finančných záležitostiach. Pozrite si <a href=\"%1\">%1</"
+#~ "a>, kde nájdete viac informácií o KDE e.V.<br /><br />KDE potrebuje "
+#~ "finančnú podporu. Väčšina peňazí je použitá na výdaje pre členov tímu a "
+#~ "iné výdaje pri prispievaní do KDE. Ďalšie peniaze sú použité na právnu "
+#~ "podporu a organizovanie konferencií a stretnutí. Budeme radi, ak "
+#~ "podporíte naše úsilie finančným darom niektorým z postupov popísaných na "
+#~ "adrese <a href=\"%2\">%2</a>.<br /><br />Vopred ďakujeme za vašu podporu."
+#~ "</html>"
 
 #~ msgid "Proofing Rendering Intent:"
 #~ msgstr "Vykresľovací zámer mäkkého overenia:"

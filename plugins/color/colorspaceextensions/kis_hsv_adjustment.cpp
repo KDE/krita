@@ -50,18 +50,18 @@ void clamp<quint16>(float* r, float* g, float* b)
 template<>
 void clamp<half>(float* r, float* g, float* b)
 {
-    Q_UNUSED(r);
-    Q_UNUSED(g);
-    Q_UNUSED(b);
+    *r = qMax(0.0f, *r);
+    *g = qMax(0.0f, *g);
+    *b = qMax(0.0f, *b);
 }
 #endif
 
 template<>
 void clamp<float>(float* r, float* g, float* b)
 {
-    Q_UNUSED(r);
-    Q_UNUSED(g);
-    Q_UNUSED(b);
+    *r = qMax(0.0f, *r);
+    *g = qMax(0.0f, *g);
+    *b = qMax(0.0f, *b);
 }
 
 #include "kis_global.h"

@@ -13,8 +13,6 @@
 
 #include <QFileInfo>
 
-#include <QFontDatabase>
-
 
 /**
  * @brief The FontFamilySizeInfo class

@@ -6,6 +6,7 @@
 #include "KoCssTextUtils.h"
 #include "graphemebreak.h"
 #include <QChar>
+#include <kis_assert.h>
 
 QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
     QVector<QPair<int, int>> positions;
@@ -574,8 +575,9 @@ void KoCssTextUtils::removeText(QString &text, int &start, int length)
     text.remove(start, end-start);
 }
 
-qreal KoCssTextUtils::cssSelectFontStyleValue(const QVector<qreal> &values, const qreal &targetValue, const qreal &defaultValue, const qreal &defaultValueUpper, const bool &shouldNotReturnDefault)
+qreal KoCssTextUtils::cssSelectFontStyleValue(const QVector<qreal> &values, const qreal targetValue, const qreal defaultValue, const qreal defaultValueUpper, const bool shouldNotReturnDefault)
 {
+    KIS_SAFE_ASSERT_RECOVER(!values.isEmpty())
     // follow the CSS Fonts selection mechanism.
     // See https://drafts.csswg.org/css-fonts-4/#font-style-matching
     QVector<qreal> sortedValues = values;

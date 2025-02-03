@@ -224,10 +224,10 @@ public:
      * @return closest value on this list.
      */
     static qreal cssSelectFontStyleValue(const QVector<qreal> &values,
-                                         const qreal &targetValue,
-                                         const qreal &defaultValue,
-                                         const qreal &defaultValueUpper,
-                                         const bool &shouldNotReturnDefault);
+                                         const qreal targetValue,
+                                         const qreal defaultValue,
+                                         const qreal defaultValueUpper,
+                                         const bool shouldNotReturnDefault);
 };
 
 #endif // KOCSSTEXTUTILS_H

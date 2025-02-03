@@ -147,6 +147,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
 
     m_map.insert(m_categories[8], KoID(COMPOSITE_COLOR         ,  i18nc("Blending mode - Color HSY", "Color")));
     m_map.insert(m_categories[8], KoID(COMPOSITE_HUE           ,  i18nc("Blending mode - Hue HSY", "Hue")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_TINT          ,  i18nc("Blending mode - Tint HSY", "Tint")));
     m_map.insert(m_categories[8], KoID(COMPOSITE_SATURATION    ,  i18nc("Blending mode - Saturation HSY", "Saturation")));
     m_map.insert(m_categories[8], KoID(COMPOSITE_LUMINIZE      ,  i18nc("Blending mode - Luminosity HSY", "Luminosity")));
     m_map.insert(m_categories[8], KoID(COMPOSITE_DEC_SATURATION,  i18nc("Blending mode - Decrease Saturation HSY", "Decrease Saturation")));

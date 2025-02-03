@@ -120,6 +120,22 @@ struct CFColor : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<chan
 };
 
 template<class HSXType, typename channels_type>
+struct CFTint : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
+{
+    static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {
+        using namespace Arithmetic;
+        // This mode is useful to change the color of a sketch, to make it easier to ink over it.
+        // Unlike the Color function above, it changes black to the src color and interpolates to white.
+
+        const float light = getLightness<HSXType>(dstR, dstG, dstB);
+        const float oneMinusLight = unitValue<float>() - light;
+        dstR = light + srcR * oneMinusLight;
+        dstG = light + srcG * oneMinusLight;
+        dstB = light + srcB * oneMinusLight;
+    }
+};
+
+template<class HSXType, typename channels_type>
 struct CFLambertLighting : KoClampedSourceAndDestinationCompositeOpGenericFunctorBase<channels_type>
 {
     static void composeChannels(float srcR, float srcG, float srcB, float& dstR, float& dstG, float& dstB) {

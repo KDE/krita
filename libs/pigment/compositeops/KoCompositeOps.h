@@ -332,6 +332,7 @@ struct AddRGBOps<Traits, true>
         add<CFReorientedNormalMapCombine<channels_type>>(cs, COMPOSITE_COMBINE_NORMAL, KoCompositeOp::categoryMisc());
         add<CFColor<HSYType, channels_type>>(cs, COMPOSITE_COLOR, KoCompositeOp::categoryHSY());
         add<CFHue<HSYType, channels_type>>(cs, COMPOSITE_HUE, KoCompositeOp::categoryHSY());
+        add<CFTint<HSYType, channels_type>>(cs, COMPOSITE_TINT, KoCompositeOp::categoryHSY());
         add<CFSaturation<HSYType, channels_type>>(cs, COMPOSITE_SATURATION, KoCompositeOp::categoryHSY());
         add<CFIncreaseSaturation<HSYType, channels_type>>(cs, COMPOSITE_INC_SATURATION, KoCompositeOp::categoryHSY());
         add<CFDecreaseSaturation<HSYType, channels_type>>(cs, COMPOSITE_DEC_SATURATION, KoCompositeOp::categoryHSY());

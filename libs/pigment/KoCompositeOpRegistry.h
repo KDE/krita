@@ -117,6 +117,7 @@ const QString COMPOSITE_LUMINOSITY_SAI        = "luminosity_sai";
 
 const QString COMPOSITE_HUE            = "hue";
 const QString COMPOSITE_COLOR          = "color";
+const QString COMPOSITE_TINT           = "tint";
 const QString COMPOSITE_SATURATION     = "saturation";
 const QString COMPOSITE_INC_SATURATION = "inc_saturation";
 const QString COMPOSITE_DEC_SATURATION = "dec_saturation";

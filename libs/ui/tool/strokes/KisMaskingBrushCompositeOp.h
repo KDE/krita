@@ -136,7 +136,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, fal
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(src, dst);
+        return CFOverlay<channels_type>::composeChannel(src, dst);
     }
 };
 
@@ -148,7 +148,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, tru
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return CFOverlay<channels_type>::composeChannel(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 
@@ -165,7 +165,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, tru
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfOverlay(Arithmetic::unionShapeOpacity(src, invertedStrength), dst);
+        return CFOverlay<channels_type>::composeChannel(Arithmetic::unionShapeOpacity(src, invertedStrength), dst);
     }
 };
 
@@ -193,8 +193,8 @@ inline T colorDodgeAlphaHelper(T src, T dst)
     // this case we also treat the denominator as an infinitely small number,
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
-    if (src == unitValue<T>()) {
-        return dst == zeroValue<T>() ? zeroValue<T>() : unitValue<T>();
+    if (isUnitValueFuzzy<T>(src)) {
+        return isZeroValueFuzzy<T>(dst) ? zeroValue<T>() : unitValue<T>();
     }
     return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
                   div(dst, inv(src)),
@@ -260,33 +260,20 @@ inline T colorBurnAlphaHelper(T src, T dst)
     using namespace Arithmetic;
     // Handle the case where the denominator is 0. See color dodge for a
     // detailed explanation
-    if(src == zeroValue<T>()) {
-        return dst == unitValue<T>() ? zeroValue<T>() : unitValue<T>();
+    if(isZeroValueFuzzy<T>(src)) {
+        return isUnitValueFuzzy<T>(dst) ? zeroValue<T>() : unitValue<T>();
     }
     return qBound(composite_type(KoColorSpaceMathsTraits<T>::zeroValue),
                   div(inv(dst), src),
                   composite_type(KoColorSpaceMathsTraits<T>::unitValue));
 }
 
-// Integer version of color burn alpha
 template<class T>
-inline typename std::enable_if<std::numeric_limits<T>::is_integer, T>::type
-colorBurnAlpha(T src, T dst)
+inline T colorBurnAlpha(T src, T dst)
 {
     using namespace Arithmetic;
-    return inv(colorBurnHelper(src, dst));
-}
-
-// Floating point version of color burn alpha
-template<class T>
-inline typename std::enable_if<!std::numeric_limits<T>::is_integer, T>::type
-colorBurnAlpha(T src, T dst)
-{
-    using namespace Arithmetic;
-    const T result = colorBurnAlphaHelper(src, dst);
-    // Constantly dividing by small numbers can quickly make the result
-    // become infinity or NaN, so we check that and correct (kind of clamping)
-    return inv(std::isfinite(result) ? result : KoColorSpaceMathsTraits<T>::unitValue);
+    using namespace KoCompositeOpClampPolicy;
+    return CFColorBurn<T>::composeChannel(src, dst);
 }
 
 template <typename channels_type>
@@ -341,7 +328,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE
     {
         using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
         using namespace Arithmetic;
-        if (dst == zeroValue<channels_type>()) {
+        if (isZeroValueFuzzy<channels_type>(dst)) {
             return zeroValue<channels_type>();
         }
         return qMin(composite_type(src) + dst, composite_type(unitValue<channels_type>()));
@@ -358,7 +345,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE
     {
         using composite_type = typename KoColorSpaceMathsTraits<channels_type>::compositetype;
         using namespace Arithmetic;
-        if (dst == zeroValue<channels_type>()) {
+        if (isZeroValueFuzzy<channels_type>(dst)) {
             return zeroValue<channels_type>();
         }
         if constexpr (use_soft_texturing) {
@@ -431,7 +418,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
 {
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixPhotoshop(src, dst);
+        return CFHardMixPhotoshop<channels_type>::composeChannel(src, dst);
     }
 };
 
@@ -443,7 +430,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
     
     channels_type apply(channels_type src, channels_type dst)
     {
-        return cfHardMixPhotoshop(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
+        return CFHardMixPhotoshop<channels_type>::composeChannel(src, Arithmetic::mul(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };
 
@@ -461,7 +448,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHO
     channels_type apply(channels_type src, channels_type dst)
     {
         using namespace Arithmetic;
-        return mul(cfHardMixPhotoshop(unionShapeOpacity(src, invertedStrength), dst),
+        return mul(CFHardMixPhotoshop<channels_type>::composeChannel(unionShapeOpacity(src, invertedStrength), dst),
                    unionShapeOpacity(dst, StrengthCompositeFunctionBase<channels_type>::strength));
     }
 };

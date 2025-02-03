@@ -129,7 +129,7 @@ template<>
 class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<float>
 {
 public:
-    typedef double compositetype;
+    typedef float compositetype;
     typedef double mixtype;
     static const float zeroValue;
     static const float unitValue;
@@ -273,6 +273,51 @@ public:
         return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 
+    inline static _T clampChannelToSDR(_T val) {
+        if constexpr (std::numeric_limits<_T>::is_integer) {
+            return val;
+        } else {
+            return qBound<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val, KoColorSpaceMathsTraits<_T>::unitValue);
+        }
+    }
+
+    inline static _T clampChannelToSDRBottom(_T val)
+    {
+        if constexpr (std::numeric_limits<_T>::is_integer) {
+            return val;
+        } else {
+            return qMax<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val);
+        }
+    }
+
+    inline static dst_compositetype clampToSDR(dst_compositetype val) {
+        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
+    }
+
+    inline static dst_compositetype clampToSDRTop(dst_compositetype val) {
+        return qMin<dst_compositetype>(val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
+    }
+
+    inline static dst_compositetype clampToSDRBottom(dst_compositetype val) {
+        return qMax<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val);
+    }
+
+    inline static dst_compositetype divideInCompositeSpace(dst_compositetype a, dst_compositetype b) {
+        if constexpr (std::numeric_limits<_Tdst>::is_integer) {
+            return a * KoColorSpaceMathsTraits<_Tdst>::unitValue / b;
+        } else {
+            return a / b;
+        }
+    }
+
+    inline static dst_compositetype multiplyInCompositeSpace(dst_compositetype a, dst_compositetype b) {
+        if constexpr (std::numeric_limits<_Tdst>::is_integer) {
+            return a * b / KoColorSpaceMathsTraits<_Tdst>::unitValue;
+        } else {
+            return a * b;
+        }
+    }
+
     /**
      * Clamps the composite type on higher border only. That is a fast path
      * for scale-only transformations
@@ -282,7 +327,34 @@ public:
     }
 
     inline static _T isUnsafeAsDivisor(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
         return value == KoColorSpaceMathsTraits<_T>::zeroValue;
+    }
+
+    inline static bool isUnitValueFuzzy(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return value == KoColorSpaceMathsTraits<_T>::unitValue;
+    }
+
+    inline static bool isZeroValueFuzzy(_T value) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return value == KoColorSpaceMathsTraits<_T>::zeroValue;
+    }
+
+    inline static bool isZeroValueClampedFuzzy(_T v) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v <= 0;
+    }
+
+    static inline bool isUnitValueClampedFuzzy(_T v) {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v >= KoColorSpaceMathsTraits<_T>::unitValue;
+    }
+
+    static inline bool isHalfValueFuzzy(_T v)
+    {
+        static_assert(std::numeric_limits<_Tdst>::is_integer);
+        return v == KoColorSpaceMathsTraits<_T>::halfValue;
     }
 };
 
@@ -322,6 +394,35 @@ inline double KoColorSpaceMaths<double>::clamp(double a)
 template<>
 inline double KoColorSpaceMaths<double>::isUnsafeAsDivisor(double value) {
     return value < 1e-6; // negative values are also unsafe!
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isUnitValueFuzzy(double value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::unitValue);
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isZeroValueFuzzy(double value) {
+    return qFuzzyIsNull(value);
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isZeroValueClampedFuzzy(double d)
+{
+    // constant is from qFuzzyIsNull()
+    return d <= 0.000000000001;
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isUnitValueClampedFuzzy(double d)
+{
+    // constant is from qFuzzyIsNull()
+    return d > 1.0 - 0.000000000001;
+}
+
+template<>
+inline bool KoColorSpaceMaths<double>::isHalfValueFuzzy(double value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<double>::halfValue);
 }
 
 //------------------------------ float specialization ------------------------------//
@@ -371,7 +472,7 @@ inline float KoColorSpaceMaths<float>::blend(float a, float b, float alpha)
 }
 
 template<>
-inline double KoColorSpaceMaths<float>::clamp(double a)
+inline float KoColorSpaceMaths<float>::clamp(float a)
 {
     return a;
 }
@@ -379,6 +480,35 @@ inline double KoColorSpaceMaths<float>::clamp(double a)
 template<>
 inline float KoColorSpaceMaths<float>::isUnsafeAsDivisor(float value) {
     return value < 1e-6; // negative values are also unsafe!
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isUnitValueFuzzy(float value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::unitValue);
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isZeroValueFuzzy(float value) {
+    return qFuzzyIsNull(value);
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isZeroValueClampedFuzzy(float f)
+{
+    // constant is from qFuzzyIsNull()
+    return f <= 0.00001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isUnitValueClampedFuzzy(float f)
+{
+    // constant is from qFuzzyIsNull()
+    return f > 1.0 - 0.00001f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<float>::isHalfValueFuzzy(float value) {
+    return qFuzzyCompare(value, KoColorSpaceMathsTraits<float>::halfValue);
 }
 
 //------------------------------ half specialization ------------------------------//
@@ -455,6 +585,38 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
 template<>
 inline half KoColorSpaceMaths<half>::isUnsafeAsDivisor(half value) {
     return value < 1e-6; // negative values are also unsafe!
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isUnitValueFuzzy(half value) {
+    // ~ 2 * HALF_ESPILON
+    return qAbs(value - KoColorSpaceMathsTraits<half>::unitValue) < 0.002f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isZeroValueFuzzy(half value) {
+    // ~ 2 * HALF_ESPILON
+    return qAbs(value) < 0.002f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isZeroValueClampedFuzzy(half f)
+{
+    // ~ 2 * HALF_ESPILON
+    return f <= 0.002f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isUnitValueClampedFuzzy(half f)
+{
+    // ~ 2 * HALF_ESPILON
+    return f > 1.0 - 0.002f;
+}
+
+template<>
+inline bool KoColorSpaceMaths<half>::isHalfValueFuzzy(half value) {
+    // TODO: check actual constant
+    return qAbs(value - 0.5f) < 0.001f;
 }
 
 #endif
@@ -604,7 +766,99 @@ namespace Arithmetic
     inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
         return KoColorSpaceMaths<T>::clamp(a);
     }
+
+    template<class T>
+    inline T clampChannelToSDR(T a) {
+        return KoColorSpaceMaths<T>::clampChannelToSDR(a);
+    }
+
+    template<class T>
+    inline T clampChannelToSDRBottom(T a) {
+        return KoColorSpaceMaths<T>::clampChannelToSDRBottom(a);
+    }
+
+    template<class T>
+    inline T clampToSDR(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        return KoColorSpaceMaths<T>::clampToSDR(a);
+    }
+
+    template<class T>
+    inline T clampToSDRTop(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        return KoColorSpaceMaths<T>::clampToSDRTop(a);
+    }
+
+    template<class T>
+    inline T clampToSDRBottom(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        return KoColorSpaceMaths<T>::clampToSDRBottom(a);
+    }
+
+    template<class T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+    inline composite_type divideInCompositeSpace(composite_type a, composite_type b) {
+        return KoColorSpaceMaths<T>::divideInCompositeSpace(a, b);
+    }
+
+    template<class T, typename composite_type = typename KoColorSpaceMathsTraits<T>::compositetype>
+    inline composite_type multiplyInCompositeSpace(composite_type a, composite_type b) {
+        return KoColorSpaceMaths<T>::multiplyInCompositeSpace(a, b);
+    }
     
+    template <typename T>
+    static inline bool isZeroValueFuzzy(T v)
+    {
+        return KoColorSpaceMaths<T>::isZeroValueFuzzy(v);
+    }
+
+    template <typename T>
+    static inline bool isUnitValueFuzzy(T v)
+    {
+        return KoColorSpaceMaths<T>::isUnitValueFuzzy(v);
+    }
+
+    template <typename T>
+    static inline bool isZeroValueClampedFuzzy(T v)
+    {
+        return KoColorSpaceMaths<T>::isZeroValueClampedFuzzy(v);
+    }
+
+    template <typename T>
+    static inline bool isUnitValueClampedFuzzy(T v)
+    {
+        return KoColorSpaceMaths<T>::isUnitValueClampedFuzzy(v);
+    }
+
+    template <typename T>
+    static inline bool isHalfValueFuzzy(T v)
+    {
+        return KoColorSpaceMaths<T>::isHalfValueFuzzy(v);
+    }
+
+    template <typename T>
+    inline bool isUnitValueStrict(T value) {
+        return value == KoColorSpaceMathsTraits<T>::unitValue;
+    }
+    template <typename T>
+    inline bool isZeroValueStrict(T value) {
+        return value == KoColorSpaceMathsTraits<T>::zeroValue;
+    }
+
+    template <typename T>
+    inline bool isUnitValueClampedStrict(T value) {
+        if constexpr (std::numeric_limits<T>::is_integer) {
+            return value == KoColorSpaceMathsTraits<T>::unitValue;
+        } else {
+            return value >= KoColorSpaceMathsTraits<T>::unitValue;
+        }
+    }
+    template <typename T>
+    inline bool isZeroValueClampedStrict(T value) {
+        if constexpr (std::numeric_limits<T>::is_integer) {
+            return value == KoColorSpaceMathsTraits<T>::zeroValue;
+        } else {
+            return value <= KoColorSpaceMathsTraits<T>::zeroValue;
+        }
+    }
+
+
     template<class T>
     inline T min(T a, T b, T c) {
         b = (a < b) ? a : b;
@@ -661,6 +915,8 @@ struct HSYType
     inline static TReal getSaturation(TReal r, TReal g, TReal b) {
         return Arithmetic::max(r,g,b) - Arithmetic::min(r,g,b);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSIType
@@ -679,6 +935,8 @@ struct HSIType
         return (chroma > std::numeric_limits<TReal>::epsilon()) ?
             (TReal(1.0) - min / getLightness(r, g, b)) : TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSLType
@@ -701,8 +959,10 @@ struct HSLType
         if(div > std::numeric_limits<TReal>::epsilon())
             return chroma / div;
         
-        return TReal(1.0);
+        return TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = true;
 };
 
 struct HSVType
@@ -716,8 +976,10 @@ struct HSVType
     inline static TReal getSaturation(TReal r, TReal g, TReal b) {
         TReal max = Arithmetic::max(r, g, b);
         TReal min = Arithmetic::min(r, g, b);
-        return (max == TReal(0.0)) ? TReal(0.0) : (max - min) / max;
+        return (max > std::numeric_limits<TReal>::epsilon()) ? (max - min) / max : TReal(0.0);
     }
+
+    static constexpr bool lightnessIsAverage = false;
 };
 
 template<class TReal>
@@ -785,32 +1047,86 @@ inline static TReal getLightness(TReal r, TReal g, TReal b) {
 }
 
 template<class HSXType, class TReal>
-inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+inline void ToneMapping(TReal& r, TReal& g, TReal& b)
 {
     using namespace Arithmetic;
-    
-    r += light;
-    g += light;
-    b += light;
-    
+
+
     TReal l = HSXType::getLightness(r, g, b);
     TReal n = min(r, g, b);
     TReal x = max(r, g, b);
-    
+
     if(n < TReal(0.0)) {
-        TReal iln = TReal(1.0) / (l-n);
-        r = l + ((r-l) * l) * iln;
-        g = l + ((g-l) * l) * iln;
-        b = l + ((b-l) * l) * iln;
+        if (isZeroValueClampedFuzzy<float>(l)) {
+            /**
+             * The tonemapping method we use does **not** support lightness
+             * values below 0.0, so we just clamp the value.
+             *
+             * TODO: use proper HSV/HSI shape-tracking clamping methods we use
+             * in kis_hsv_adjustment.cpp
+             */
+            r = g = b = TReal(0.0);
+        } else {
+            const TReal stretch = l - n;
+
+            if (stretch < std::numeric_limits<TReal>::epsilon()) {
+                r = g = b = TReal(0.0);
+            } else {
+                TReal iln = TReal(1.0) / stretch;
+                r = l + ((r-l) * l) * iln;
+                g = l + ((g-l) * l) * iln;
+                b = l + ((b-l) * l) * iln;
+            }
+        }
     }
-    
-    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon()) {
-        TReal il  = TReal(1.0) - l;
-        TReal ixl = TReal(1.0) / (x - l);
-        r = l + ((r-l) * il) * ixl;
-        g = l + ((g-l) * il) * ixl;
-        b = l + ((b-l) * il) * ixl;
+
+    if(x > TReal(1.0)) {
+        auto setFallbackValues = [&] () {
+            if constexpr (HSXType::lightnessIsAverage) {
+                r = g = b = TReal(1.0);
+            } else {
+                r = qMin(r, TReal(1.0));
+                g = qMin(g, TReal(1.0));
+                b = qMin(b, TReal(1.0));
+            }
+        };
+
+        if (l > TReal(1.0)) {
+            /**
+             * The tonemapping method we use does **not** support lightness
+             * values above 1.0, so we just clamp the value.
+             *
+             * TODO: use proper HSV/HSI shape-tracking clamping methods we use
+             * in kis_hsv_adjustment.cpp
+             */
+            setFallbackValues();
+        } else {
+            const TReal stretch = x - l;
+
+            if (stretch < std::numeric_limits<TReal>::epsilon()) {
+                setFallbackValues();
+            } else {
+                TReal il  = TReal(1.0) - l;
+                TReal ixl = TReal(1.0) / stretch;
+
+                r = l + ((r-l) * il) * ixl;
+                g = l + ((g-l) * il) * ixl;
+                b = l + ((b-l) * il) * ixl;
+            }
+        }
     }
+}
+
+template<class HSXType, class TReal>
+inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    using namespace Arithmetic;
+
+    r += light;
+    g += light;
+    b += light;
+
+    ToneMapping<HSXType, TReal>(r, g, b);
 }
 
 template<class HSXType, class TReal>
@@ -850,7 +1166,7 @@ inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
         mid = tmp;
     }
     
-    if((rgb[max] - rgb[min]) > TReal(0.0)) {
+    if((rgb[max] - rgb[min]) > std::numeric_limits<TReal>::epsilon()) {
         rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
         rgb[max] = sat;
         rgb[min] = TReal(0.0);
@@ -862,65 +1178,4 @@ inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
     else r = g = b = TReal(0.0);
 }
 
-template<class HSXType, class TReal>
-inline void ToneMapping(TReal& r, TReal& g, TReal& b)
-{
-    using namespace Arithmetic;
-    
-    
-    TReal l = HSXType::getLightness(r, g, b);
-    TReal n = min(r, g, b);
-    TReal x = max(r, g, b);
-	
-	TReal _r,_g,_b;
-    
-    if(n < TReal(0.0)) {
-        TReal iln = TReal(1.0) / (l-n);
-        r = l + ((r-l) * l) * iln;
-        g = l + ((g-l) * l) * iln;
-        b = l + ((b-l) * l) * iln;
-    }
-    
-    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon())
-	{
-        TReal il  = TReal(1.0) - l;
-        TReal ixl = TReal(1.0) / (x - l);
-        _r = l + ((r-l) * il) * ixl;
-        _g = l + ((g-l) * il) * ixl;
-        _b = l + ((b-l) * il) * ixl;
-		
-		if(r >= _r)
-		{
-			if(r > 1.0){
-				r = 1.0;
-			}
-		}
-		else
-		{
-			r = _r;
-		}
-		
-		if(g >= _g)
-		{
-			if(g > 1.0){
-				g = 1.0;
-			}
-		}
-		else
-		{
-			g = _g;
-		}
-		
-		if(b >= _b)
-		{
-			if(b > 1.0){
-				b = 1.0;
-			}
-		}
-		else
-		{
-			b = _b;
-		}
-    }
-}
 #endif

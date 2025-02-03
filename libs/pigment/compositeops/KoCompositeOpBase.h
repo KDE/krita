@@ -8,7 +8,7 @@
 #define KOCOMPOSITEOP_BASE_H_
 
 #include <KoCompositeOp.h>
-#include "KoCompositeOpFunctions.h"
+#include <KoColorSpaceMaths.h>
 
 /**
  * A template base class that can be used for most composite modes/ops

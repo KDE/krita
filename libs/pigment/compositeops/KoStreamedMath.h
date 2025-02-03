@@ -24,8 +24,8 @@
 #endif
 
 #include <KoAlwaysInline.h>
-#include <KoColorSpaceMaths.h>
 #include <KoCompositeOp.h>
+#include <KoColorSpaceMaths.h>
 
 #define BLOCKDEBUG 0
 
@@ -165,8 +165,6 @@ struct KoStreamedMath {
     template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     static void genericComposite_novector(const KoCompositeOp::ParameterInfo &params)
     {
-        using namespace Arithmetic;
-
         const qint32 linearInc = pixelSize;
         qint32 srcLinearInc = params.srcRowStride ? pixelSize : 0;
 
@@ -328,8 +326,6 @@ struct KoStreamedMath {
     template<bool useMask, bool useFlow, class Compositor, int pixelSize>
     static void genericComposite(const KoCompositeOp::ParameterInfo &params)
     {
-        using namespace Arithmetic;
-
         const int vectorSize = static_cast<int>(float_v::size);
         const qint32 vectorInc = pixelSize * vectorSize;
         const qint32 linearInc = pixelSize;

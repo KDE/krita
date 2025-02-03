@@ -47,10 +47,10 @@ public:
                                                      const QBitArray& channelFlags                    )  {
         using namespace Arithmetic;
                 
-        if (dstAlpha     == unitValue<channels_type>()) return dstAlpha;
+        if (isUnitValueFuzzy(dstAlpha)) return dstAlpha;
         channels_type appliedAlpha       = mul(maskAlpha, srcAlpha, opacity);
         
-        if (appliedAlpha == zeroValue<channels_type>()) return dstAlpha;
+        if (isZeroValueFuzzy(appliedAlpha)) return dstAlpha;
         channels_type newDstAlpha;
         
         float dA = scale<float>(dstAlpha);
@@ -70,8 +70,10 @@ public:
         if (a<dA) a = dA;
 		float fakeOpacity = 1.0f - (1.0f - a)/(1.0f - dA + 1e-16f);
         newDstAlpha=scale<channels_type>(a);
-       
-        if (dstAlpha != zeroValue<channels_type>()) {	   
+
+        if (isZeroValueFuzzy(newDstAlpha)) {
+          // just do nothing with color channels and return null opacity
+        } else if (!isZeroValueFuzzy(dstAlpha)) {
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel)))
                 {
@@ -80,9 +82,7 @@ public:
                     channels_type dstMult = mul(BlendingPolicy::toAdditiveSpace(dst[channel]), dstAlpha);
                     channels_type srcMult = mul(BlendingPolicy::toAdditiveSpace(src[channel]), unitValue<channels_type>());
                     channels_type blendedValue = lerp(dstMult, srcMult, scale<channels_type>(fakeOpacity));
-                    // CID 249016 (#1 of 15):
-                    // Division or modulo by zero (DIVIDE_BY_ZERO)12. divide_by_zero: In function call divide, division by expression newDstAlpha which may be zero has undefined behavior.
-                    if (newDstAlpha == 0) newDstAlpha = 1;
+
                     composite_type normedValue = KoColorSpaceMaths<channels_type>::divide(blendedValue, newDstAlpha);
 
                     dst[channel] = BlendingPolicy::fromAdditiveSpace(KoColorSpaceMaths<channels_type>::clampAfterScale(normedValue));

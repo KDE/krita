@@ -50,4 +50,12 @@ void TestKoColorSpaceSanity::testChannelsInfo()
     }
 }
 
+
+
+
+void TestKoColorSpaceSanity::testIterator()
+{
+
+}
+
 KISTEST_MAIN(TestKoColorSpaceSanity)

@@ -11,7 +11,6 @@
 #include <QList>
 
 #include "KoColorSpace.h"
-#include "KoColorSpaceMaths.h"
 #include "KoCompositeOpRegistry.h"
 
 static QString compositeOpDisplayName(const QString &id)
@@ -160,8 +159,6 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
 
 void KoCompositeOp::composite(const KoCompositeOp::ParameterInfo& params) const
 {
-    using namespace Arithmetic;
-
     composite(params.dstRowStart           , params.dstRowStride ,
               params.srcRowStart           , params.srcRowStride ,
               params.maskRowStart          , params.maskRowStride,

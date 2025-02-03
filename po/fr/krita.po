@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-02 01:57+0000\n"
-"PO-Revision-Date: 2025-01-28 15:01+0100\n"
+"PO-Revision-Date: 2025-02-01 10:36+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -46177,10 +46177,9 @@ msgstr "Niveau :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Nuances de gris / Alpha"
+msgstr "Niveau de gris"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

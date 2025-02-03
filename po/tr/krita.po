@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-02 01:57+0000\n"
-"PO-Revision-Date: 2025-01-31 16:53+0300\n"
+"PO-Revision-Date: 2025-02-02 12:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36312,6 +36312,10 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>KDE yazılımları ücretsizdir ve her zaman ücretsiz kalacaktır; ancak "
+"onları yapmak bedava değildir.<br /><br />KDE topluluğu, kâr amacı gütmeyen "
+"bir organizasyon olan KDE e.V’yi Almanya’da kurmuştur. KDE e.V hakkında "
+"bilgi almak için <a href=\"%1\">%1</a> adresini ziyaret edin.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36321,6 +36325,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE Takımı’nın her zaman finansal desteğe gereksinimi vardır. Yapılan "
+"bağışlar; yasal destek, KDE geliştiricilerinin KDE’ye yaptıkları desteğin "
+"sürekliliğini sağlamak ve toplantıların/konferansların organizasyonu için "
+"harcanır.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36328,6 +36336,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Sizin de <a href=\"%1\">%1</a> adresinde anlatılan biçimde KDE’ye "
+"yardımlarınızı bekliyoruz.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format

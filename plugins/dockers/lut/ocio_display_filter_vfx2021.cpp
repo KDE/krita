@@ -363,8 +363,7 @@ bool OcioDisplayFilter::updateShader()
 #if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)
         QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
         profile.setVersion(3,2);
-        QAbstractOpenGLFunctions *f = QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext());
-
+        QOpenGLFunctions_3_2 *f = reinterpret_cast<QOpenGLFunctions_3_2 *>(QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext()));
 #else
         QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
         profile.setVersion(3,0);

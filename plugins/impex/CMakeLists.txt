@@ -19,7 +19,7 @@ if(OpenEXR_FOUND)
     add_subdirectory(exr)
 endif()
 
-if(Poppler_Qt5_FOUND)
+if(Poppler_Qt${QT_MAJOR_VERSION}_FOUND)
     add_subdirectory(pdf)
 endif()
 

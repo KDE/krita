@@ -1189,7 +1189,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-find_package(Poppler COMPONENTS Qt5)
+find_package(Poppler COMPONENTS Qt${QT_MAJOR_VERSION})
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "https://poppler.freedesktop.org/"

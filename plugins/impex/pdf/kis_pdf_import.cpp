@@ -7,7 +7,11 @@
 #include "kis_pdf_import.h"
 
 // poppler's headers
+#if QT_VERSION_MAJOR == 6
+#include <poppler-qt6.h>
+#else
 #include <poppler-qt5.h>
+#endif
 
 // Qt's headers
 #include <QFile>
@@ -55,7 +59,7 @@ KisPDFImport::~KisPDFImport()
 
 KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
-    Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
+    std::unique_ptr<Poppler::Document> pdoc = Poppler::Document::loadFromData(io->readAll());
 
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";
@@ -80,14 +84,13 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 
-    KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
+    KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc.get(), kdb);
     kdb->setMainWidget(wdg);
 
     {
         KisCursorOverrideHijacker cursorHijacker;
 
         if (kdb->exec() == QDialog::Rejected) {
-            delete pdoc;
             delete kdb;
             return ImportExportCodes::Cancelled;
         }
@@ -108,19 +111,17 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
                 quint8_MAX);
 
 
-        Poppler::Page* page = pdoc->page(*it);
+        std::unique_ptr<Poppler::Page> page = pdoc->page(*it);
 
         QImage img = page->renderToImage(wdg->intResolution->value(), wdg->intResolution->value(), 0, 0, width, height);
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
 
-        delete page;
         image->addNode(layer, image->rootLayer(), 0);
         setProgress(qreal(*it + 1) * 100 / pages.count());
     }
 
     document->setCurrentImage(image);
 
-    delete pdoc;
     delete kdb;
     return ImportExportCodes::OK;
 }

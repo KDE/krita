@@ -78,7 +78,7 @@ inline std::vector<SensorData*> sensors(Data *data)
 MyPaintSensorDataWithRange::MyPaintSensorDataWithRange(const KoID &id)
     : KisSensorData(id)
 {
-    QVector<QPointF> points;
+    QList<QPointF> points;
 
     if (id == MyPaintPressureId) {
         points = {{0,0}, {1,1}};

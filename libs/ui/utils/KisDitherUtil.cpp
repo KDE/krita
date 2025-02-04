@@ -32,16 +32,20 @@ void KisDitherUtil::setPattern(const QString &md5sum, const QString &patternName
 
     if (m_pattern && m_thresholdMode == ThresholdMode::Pattern && m_patternValueMode == PatternValueMode::Auto) {
         // Automatically pick between lightness-based and alpha-based patterns by whichever has maximum range
-        qreal lightnessMin = 1.0, lightnessMax = 0.0;
-        qreal alphaMin = 1.0, alphaMax = 0.0;
+
+        // FIXME QT6: remove after we derecate Qt5 (and use float all the time)
+        using float_type = decltype(std::declval<QColor>().alphaF());
+
+        float_type lightnessMin = 1.0, lightnessMax = 0.0;
+        float_type alphaMin = 1.0, alphaMax = 0.0;
         const QImage &image = m_pattern->pattern();
         for (int y = 0; y < image.height(); ++y) {
             for (int x = 0; x < image.width(); ++x) {
                 const QColor pixel = image.pixelColor(x, y);
-                lightnessMin = std::min(lightnessMin, (qreal)pixel.lightnessF());
-                lightnessMax = std::max(lightnessMax, (qreal)pixel.lightnessF());
-                alphaMin = std::min(alphaMin, (qreal)pixel.alphaF());
-                alphaMax = std::max(alphaMax, (qreal)pixel.alphaF());
+                lightnessMin = std::min(lightnessMin, pixel.lightnessF());
+                lightnessMax = std::max(lightnessMax, pixel.lightnessF());
+                alphaMin = std::min(alphaMin, pixel.alphaF());
+                alphaMax = std::max(alphaMax, pixel.alphaF());
             }
         }
         m_patternUseAlpha = (alphaMax - alphaMin > lightnessMax - lightnessMin);

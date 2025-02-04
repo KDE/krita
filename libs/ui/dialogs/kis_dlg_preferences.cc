@@ -1947,7 +1947,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
 #else
-        // FIXME: find a way to get the namedcolorspace field out of QColorSpace.
+        // FIXME QT6: find a way to get the namedcolorspace field out of QColorSpace.
         QColorSpace colorspace = currentFormat.colorSpace();
         lblCurrentRootSurfaceFormat->setText(colorspace.description());
 #endif

@@ -64,7 +64,7 @@ const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
     const QColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
     if (surfaceColorSpace == QColorSpace(QColorSpace::NamedColorSpace::SRgb)) {
         // use the default one!
-// XXX: Fix this when fixing HDR!!!
+// FIXME QT6: Fix this when fixing HDR!!!
 // #ifdef HAVE_HDR
 //     } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace) {
 //         profile = KoColorSpaceRegistry::instance()->p709G10Profile();

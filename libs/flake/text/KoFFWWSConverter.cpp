@@ -718,6 +718,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             // Then sort the rest of the family nodes into wws families.
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
                 auto wws = childBegin(typographic);
+                auto wwsCandidate = childEnd(typographic);
                 for (; wws != childEnd(typographic); wws++) {
                     auto wwsChild = childBegin(wws);
                     if (font->type != KoSvgText::OpenTypeFontType && font->type != KoSvgText::Type1FontType) {
@@ -770,8 +771,16 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                             continue;
                         }
                     } else {
-                        d->fontFamilyCollection.insert(childEnd(wws), *font);
-                        break;
+                        /*
+                         * Try to match the wws family with the same fontfamily, otherwise select the first candidate.
+                         */
+                        if (wwsCandidate == childEnd(typographic)) {
+                            wwsCandidate = wws;
+                        }
+                        if (wws->fontFamily == font->fontFamily) {
+                            wwsCandidate = wws;
+                            break;
+                        }
                     }
                 }
                 if (wws == childEnd(typographic)) {
@@ -779,6 +788,8 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     wwsNames.append(wwsFamily.fontFamily);
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
+                } else if (wwsCandidate != childEnd(typographic)) {
+                    d->fontFamilyCollection.insert(childEnd(wwsCandidate), *font);
                 }
             }
             // This only triggers when the first wws family was created with the typographic name,
@@ -1053,98 +1064,88 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                 }
             }
 
-            if (candidates.size() == 1) {
-                // direct match.
-                QStringList fileNames = wws->pixelSizes.value(pixelSize, {wws->fileName});
+            if (candidates.size() > 1) {
+                // first find width
+                candidates = findNodesByAxis(candidates, WIDTH_TAG, width, 100.0, 100.0);
+            }
+
+            if (candidates.size() > 1) {
+                // then find weight
+                candidates = findNodesByAxis(candidates, WEIGHT_TAG, weight, 400.0, 500.0);
+            }
+            // then match italic
+            if (candidates.size() > 1) {
+                QVector<FontFamilyNode> italics;
+                QVector<FontFamilyNode> obliques;
+
+                if (wws->isVariable) {
+                    italics = findNodesByAxis(candidates, ITALIC_TAG, 1.0, 0.0, 0.0);
+                    obliques = findNodesByAxis(candidates, SLANT_TAG, -slantValue, 0.0, 0.0);
+                }
+                if (italics.isEmpty() && obliques.isEmpty()) {
+                    Q_FOREACH(const FontFamilyNode &node, candidates) {
+                        if (node.isItalic) {
+                            if (!node.isOblique) {
+                                italics.append(node);
+                            } else {
+                                obliques.append(node);
+                            }
+                        }
+                    }
+                }
+
+                if (slantMode == QFont::StyleItalic) {
+                    if (!italics.isEmpty()) {
+                        candidates = italics;
+                    } else if (!obliques.isEmpty()) {
+                        candidates = obliques;
+                    }
+                } else if (slantMode == QFont::StyleOblique) {
+                    if (!obliques.isEmpty()) {
+                        candidates = obliques;
+                    } else if (!italics.isEmpty()) {
+                        candidates = italics;
+                    }
+                } else {
+                    QStringList slantedFontFiles;
+                    QVector<FontFamilyNode> regular;
+                    Q_FOREACH(const FontFamilyNode &italic, italics) {
+                        slantedFontFiles.append(italic.fileName);
+                    }
+                    Q_FOREACH(const FontFamilyNode &oblique, obliques) {
+                        slantedFontFiles.append(oblique.fileName);
+                    }
+                    Q_FOREACH(const FontFamilyNode &node, candidates) {
+                        if (!slantedFontFiles.contains(node.fileName)) {
+                            regular.append(node);
+                        }
+                    }
+                    if (!regular.isEmpty()) {
+                        candidates = regular;
+                    }
+                }
+            }
+
+            // prefer opentype
+            if (candidates.size() > 1) {
+                QVector<FontFamilyNode> openType;
+                Q_FOREACH(const FontFamilyNode &node, candidates) {
+                    if (node.type == KoSvgText::OpenTypeFontType) {
+                        openType.append(node);
+                    }
+                }
+                if (!openType.isEmpty()) {
+                    candidates = openType;
+                }
+            }
+
+            // finally, match size.
+            Q_FOREACH(const FontFamilyNode &node, candidates) {
+                QStringList fileNames = node.otherFiles;
+                fileNames.append(node.fileName);
+                fileNames = node.pixelSizes.value(pixelSize, fileNames);
                 Q_FOREACH(const QString &fileName, fileNames) {
                     candidateFileNames.append(fileName);
-                }
-            } else {
-
-                if (candidates.size() > 1) {
-                    // first find width
-                    candidates = findNodesByAxis(candidates, WIDTH_TAG, width, 100.0, 100.0);
-                }
-
-                if (candidates.size() > 1) {
-                    // then find weight
-                    candidates = findNodesByAxis(candidates, WEIGHT_TAG, weight, 400.0, 500.0);
-
-                }
-                // then match italic
-                if (candidates.size() > 1) {
-                    QVector<FontFamilyNode> italics;
-                    QVector<FontFamilyNode> obliques;
-
-                    if (wws->isVariable) {
-                        italics = findNodesByAxis(candidates, ITALIC_TAG, 1.0, 0.0, 0.0);
-                        obliques = findNodesByAxis(candidates, SLANT_TAG, -slantValue, 0.0, 0.0);
-                    }
-                    if (italics.isEmpty() && obliques.isEmpty()) {
-                        Q_FOREACH(const FontFamilyNode &node, candidates) {
-                            if (node.isItalic) {
-                                if (!node.isOblique) {
-                                    italics.append(node);
-                                } else {
-                                    obliques.append(node);
-                                }
-                            }
-                        }
-                    }
-
-                    if (slantMode == QFont::StyleItalic) {
-                        if (!italics.isEmpty()) {
-                            candidates = italics;
-                        } else if (!obliques.isEmpty()) {
-                            candidates = obliques;
-                        }
-                    } else if (slantMode == QFont::StyleOblique) {
-                        if (!obliques.isEmpty()) {
-                            candidates = obliques;
-                        } else if (!italics.isEmpty()) {
-                            candidates = italics;
-                        }
-                    } else {
-                        QStringList slantedFontFiles;
-                        QVector<FontFamilyNode> regular;
-                        Q_FOREACH(const FontFamilyNode &italic, italics) {
-                            slantedFontFiles.append(italic.fileName);
-                        }
-                        Q_FOREACH(const FontFamilyNode &oblique, obliques) {
-                            slantedFontFiles.append(oblique.fileName);
-                        }
-                        Q_FOREACH(const FontFamilyNode &node, candidates) {
-                            if (!slantedFontFiles.contains(node.fileName)) {
-                                regular.append(node);
-                            }
-                        }
-                        if (!regular.isEmpty()) {
-                            candidates = regular;
-                        }
-                    }
-                }
-
-                // prefer opentype
-                if (candidates.size() > 1) {
-                    QVector<FontFamilyNode> openType;
-                    Q_FOREACH(const FontFamilyNode &node, candidates) {
-                        if (node.type == KoSvgText::OpenTypeFontType) {
-                            openType.append(node);
-                        }
-                    }
-                    if (!openType.isEmpty()) {
-                        candidates = openType;
-                    }
-                }
-
-                // finally, match size.
-                Q_FOREACH(const FontFamilyNode &node, candidates) {
-                    QStringList fileNames = node.otherFiles;
-                    fileNames.append(node.fileName);
-                    fileNames = node.pixelSizes.value(pixelSize, fileNames);
-                    Q_FOREACH(const QString &fileName, fileNames) {
-                        candidateFileNames.append(fileName);
-                    }
                 }
             }
         }

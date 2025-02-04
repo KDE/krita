@@ -1783,42 +1783,66 @@ void TestSvgText::testWWSConverterWeight() {
  * This currently tests whether if requesting regular, it returns regular,
  * requesting italic returns italic, and requesting oblique also returns italic.
  *
- * Missing:
- * requesting oblique returning oblique.
- * requesting italic returning oblique.
- *
- * requesting slant value returning correct slant?
  */
 void TestSvgText::testWWSConverterSlant_data() {
     QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<QString>("testString");
     QTest::addColumn<QFont::Style>("requestedMode");
     QTest::addColumn<QFont::Style>("expectedMode");
+    QTest::addColumn<int>("requestedSlant");
+    QTest::addColumn<int>("expectedSlant");
 
-    QTest::addRow("regular") << QString("CSS Test Basic") << QFont::StyleNormal << QFont::StyleNormal;
-    QTest::addRow("italic") << QString("CSS Test Basic") << QFont::StyleItalic << QFont::StyleItalic;
-    QTest::addRow("oblique") << QString("CSS Test Basic") << QFont::StyleOblique << QFont::StyleItalic;
+    QTest::addRow("regular") << QString("CSS Test Basic") << QString("A") << QFont::StyleNormal << QFont::StyleNormal << 0 << 0;
+    QTest::addRow("italic") << QString("CSS Test Basic") << QString("A") << QFont::StyleItalic << QFont::StyleItalic << 0 << -8;
+    QTest::addRow("oblique-get-italic") << QString("CSS Test Basic") << QString("A") << QFont::StyleOblique << QFont::StyleItalic << 0 << -8;
+
+    QTest::addRow("regular-oblique") << QString("Test Typographic RIBBI Family B") << QString("A") << QFont::StyleNormal << QFont::StyleNormal << 0 << 0;
+    QTest::addRow("oblique") << QString("Test Typographic RIBBI Family B") << QString("A") << QFont::StyleOblique << QFont::StyleOblique << 0 << -30;
+    QTest::addRow("italic-get-oblique") << QString("Test Typographic RIBBI Family B") << QString("A") << QFont::StyleItalic << QFont::StyleOblique << 0 << -30;
+
+    QTest::addRow("variable-regular") << QString("Variable Test Axis Matching") << QString("O") << QFont::StyleNormal << QFont::StyleNormal << 0 << 0;
+    // Tested mode is oblique when var contains both italic and oblique, this is because of a limitation in harfbuzz.
+    QTest::addRow("variable-italic") << QString("Variable Test Axis Matching") << QString("O") << QFont::StyleItalic << QFont::StyleOblique << -14 << -11;
+    QTest::addRow("variable-oblique") << QString("Variable Test Axis Matching") << QString("O") << QFont::StyleOblique << QFont::StyleOblique << -14 << -14;
+    QTest::addRow("variable-oblique-backslant") << QString("Variable Test Axis Matching") << QString("O") << QFont::StyleOblique << QFont::StyleOblique << 14 << 14;
 }
 
 void TestSvgText::testWWSConverterSlant() {
-    const QString testString("A");
-    const QMap<QString, qreal> axisSettings;
+    QMap<QString, qreal> axisSettings;
     QVector<int> lengths;
     QFETCH(QString, fontFamily);
+    QFETCH(QString, testString);
     QFETCH(QFont::Style, requestedMode);
     QFETCH(QFont::Style, expectedMode);
+    QFETCH(int, requestedSlant);
+    QFETCH(int, expectedSlant);
+
+    if (requestedMode == QFont::StyleOblique) {
+        axisSettings.insert("slnt", requestedSlant);
+    } else if (requestedMode == QFont::StyleItalic) {
+        axisSettings.insert("ital", 1.0);
+    }
 
     const std::vector<FT_FaceSP> faces =
-        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, 100, requestedMode);
+        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, 100, requestedMode, requestedSlant);
 
     QVERIFY(!faces.empty());
 
     FT_FaceSP first = faces.at(0);
     QFont::Style testedMode = KoFontRegistry::slantMode(first);
+    hb_font_t_sp hbFont(hb_ft_font_create_referenced(first.data()));
+    int testedSlant = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE);
 
     QVERIFY2(testedMode == expectedMode,
              QString("Tested font does not have slant mode %1, instead %2, font-family: %3")
                  .arg(QString::number(expectedMode))
                  .arg(QString::number(testedMode))
+                 .arg(first->family_name)
+             .toLatin1());
+    QVERIFY2(testedSlant == expectedSlant,
+             QString("Tested font does not have slant value %1, instead %2, font-family: %3")
+                 .arg(QString::number(expectedSlant))
+                 .arg(QString::number(testedSlant))
                  .arg(first->family_name)
              .toLatin1());
 }
@@ -1834,7 +1858,7 @@ void TestSvgText::testWWSConverterFamilyNames_data()
      *  which means it ought to select it by RIBBI family.
      */
     QTest::addRow("test typographic, ribbi same as typographic") << QString("Test Typographic Family") << QString("Test Typographic Family") << QString("A");
-    QTest::addRow("test typographic, ribbi same as typographic, NL locale") << QString("Test Typografische Familie") << QString("Test Typographic Family") << QString("B");
+    QTest::addRow("test typographic, ribbi same as typographic, NL locale") << QString("Test Typografische Familie") << QString("Test Typographic Family") << QString("A");
 
     /**
      * Test selecting the ribbi name
@@ -1874,8 +1898,6 @@ void TestSvgText::testWWSConverterFamilyNames()
     QVERIFY(!faces.empty());
 
     FT_FaceSP first = faces.at(0);
-
-    qDebug() << first->family_name << first->style_name;
 
     QVERIFY2(first->family_name == expectedFamily && first->style_name == expectedStyle,
              QString("Incorrect font-family, expected %1 - %2, got %3 - %4")

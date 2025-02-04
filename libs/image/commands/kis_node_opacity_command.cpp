@@ -91,8 +91,8 @@ bool KisNodeOpacityCommand::canMergeWith(const KUndo2Command *command) const
     if (!other) return false;
 
 
-    bool otherCreatedKeyframe = !other->m_autokey.isNull();
-    bool weCreatedKeyframe = !m_autokey.isNull();
+    bool otherCreatedKeyframe = bool(other->m_autokey);
+    bool weCreatedKeyframe = bool(m_autokey);
     bool canMergeKeyframe = ((otherCreatedKeyframe ^ weCreatedKeyframe) == true) || (!otherCreatedKeyframe && !weCreatedKeyframe);
 
     return other->m_node == m_node && canMergeKeyframe;

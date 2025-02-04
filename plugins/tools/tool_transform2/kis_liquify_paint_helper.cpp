@@ -126,7 +126,7 @@ bool KisLiquifyPaintHelper::endPaint(KoPointerEvent *event)
 void KisLiquifyPaintHelper::hoverPaint(KoPointerEvent *event)
 {
     QPointF imagePoint = m_d->converter->documentToImage(event->pos());
-    KisPaintInformation pi = m_d->infoBuilder->hover(imagePoint, event, !m_d->paintOp.isNull());
+    KisPaintInformation pi = m_d->infoBuilder->hover(imagePoint, event, bool(m_d->paintOp));
 
     m_d->updatePreviousPaintInfo(pi);
 }

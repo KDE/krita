@@ -314,7 +314,7 @@ void KisOpenGLCanvasRenderer::initializeDisplayShader()
 
     try {
         d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-        d->displayShaderCompiledWithDisplayFilterSupport = !d->displayFilter.isNull();
+        d->displayShaderCompiledWithDisplayFilterSupport = bool(d->displayFilter);
     } catch (const ShaderLoaderException &e) {
         reportFailedShaderCompilation(e.what());
     }

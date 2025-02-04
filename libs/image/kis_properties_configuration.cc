@@ -59,10 +59,7 @@ bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
     }
 
     QDomDocument doc;
-    bool retval = false;
-    if (doc.setContent(xml)) {
-        retval = true;
-    }
+    bool retval = bool(doc.setContent(xml));
     if (retval) {
         QDomElement e = doc.documentElement();
         fromXML(e);

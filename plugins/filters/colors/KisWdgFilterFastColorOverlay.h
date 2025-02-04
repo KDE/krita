@@ -24,9 +24,16 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP) override;
     KisPropertiesConfigurationSP configuration() const override;
 
+private Q_SLOTS:
+    void slotCompositeOpNormalToggled(bool checked);
+    void slotCompositeOpTintToggled(bool checked);
+    void slotCompositeOpCustomToggled(bool checked);
+    void slotCompositeOpComboIndexChanged(int index);
+
 private:
     QScopedPointer<Ui_WdgFilterFastColorOverlay> m_widget;
     KisViewManager *m_view;
+    KoID m_compositeOp;
 };
 
 #endif // KISWDGFILTERFASTCOLOROVERLAY_H

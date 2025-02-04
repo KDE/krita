@@ -121,8 +121,8 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
 
     // initialize values for free transform sliders
-    shearXBox->setSuffix(QChar(Qt::Key_Percent));
-    shearYBox->setSuffix(QChar(Qt::Key_Percent));
+    shearXBox->setSuffix(QStringLiteral("%"));
+    shearYBox->setSuffix(QStringLiteral("%"));
     shearXBox->setRange(-500, 500, 2);
     shearYBox->setRange(-500, 500, 2);
     shearXBox->setSingleStep(1);

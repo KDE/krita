@@ -31,32 +31,32 @@ struct SliderWrapper
 
     void setValue(qreal value) {
 
-        if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
+        if (m_slider.value<KisDoubleParseUnitSpinBox*>()) {
             // assume value from a KisDoubleParseUnitSpinBox is always provided in Pt
             m_slider.value<KisDoubleParseUnitSpinBox*>()->changeValuePt(value);
 
-        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleParseSpinBox*>()) {
             m_slider.value<KisDoubleParseSpinBox*>()->setValue(value);
 
-        } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleSliderSpinBox*>()) {
             m_slider.value<KisDoubleSliderSpinBox*>()->setValue(value);
 
-        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
+        } else if (m_slider.value<QDoubleSpinBox*>()) {
             m_slider.value<QDoubleSpinBox*>()->setValue(value);
 
-        } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
+        } else if (m_slider.value<KisIntParseSpinBox*>()) {
             m_slider.value<KisIntParseSpinBox*>()->setValue(qRound(value));
 
-        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
+        } else if (m_slider.value<KisSliderSpinBox*>()) {
             m_slider.value<KisSliderSpinBox*>()->setValue(qRound(value));
 
-        } else if (m_slider.canConvert<QSpinBox*>()) {
+        } else if (m_slider.value<QSpinBox*>()) {
             m_slider.value<QSpinBox*>()->setValue(qRound(value));
 
-        } else if (m_slider.canConvert<KisAngleSelector*>()) {
+        } else if (m_slider.value<KisAngleSelector*>()) {
             m_slider.value<KisAngleSelector*>()->setAngle(value);
 
-        } else if (m_slider.canConvert<KisAngleGauge*>()) {
+        } else if (m_slider.value<KisAngleGauge*>()) {
             m_slider.value<KisAngleGauge*>()->setAngle(value);
         }
     }
@@ -64,30 +64,30 @@ struct SliderWrapper
     qreal value() const {
         qreal result = 0.0;
 
-        if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
+        if (m_slider.value<KisDoubleParseUnitSpinBox*>()) {
             result = m_slider.value<KisDoubleParseUnitSpinBox*>()->valuePt();
-        } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleParseSpinBox*>()) {
             result = m_slider.value<KisDoubleParseSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleSliderSpinBox*>()) {
             result = m_slider.value<KisDoubleSliderSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<QDoubleSpinBox*>()) {
+        } else if (m_slider.value<QDoubleSpinBox*>()) {
             result = m_slider.value<QDoubleSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<KisIntParseSpinBox*>()) {
+        } else if (m_slider.value<KisIntParseSpinBox*>()) {
             result = m_slider.value<KisIntParseSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<KisSliderSpinBox*>()) {
+        } else if (m_slider.value<KisSliderSpinBox*>()) {
             result = m_slider.value<KisSliderSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<QSpinBox*>()) {
+        } else if (m_slider.value<QSpinBox*>()) {
             result = m_slider.value<QSpinBox*>()->value();
 
-        } else if (m_slider.canConvert<KisAngleSelector*>()) {
+        } else if (m_slider.value<KisAngleSelector*>()) {
             result = m_slider.value<KisAngleSelector*>()->angle();
 
-        } else if (m_slider.canConvert<KisAngleGauge*>()) {
+        } else if (m_slider.value<KisAngleGauge*>()) {
             result = m_slider.value<KisAngleGauge*>()->angle();
 
         }
@@ -98,10 +98,10 @@ struct SliderWrapper
     bool isDragging() const {
         bool result = false;
 
-        if (m_slider.canConvert<KisSliderSpinBox*>()) {
+        if (m_slider.value<KisSliderSpinBox*>()) {
             result = m_slider.value<KisSliderSpinBox*>()->isDragging();
 
-        } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleSliderSpinBox*>()) {
             result = m_slider.value<KisDoubleSliderSpinBox*>()->isDragging();
         }
 
@@ -110,11 +110,11 @@ struct SliderWrapper
 
     void connectDraggingFinished(QObject *receiver, const char *amember) {
 
-        if (m_slider.canConvert<KisSliderSpinBox*>()) {
+        if (m_slider.value<KisSliderSpinBox*>()) {
             QObject::connect(m_slider.value<KisSliderSpinBox*>(), SIGNAL(draggingFinished()),
                              receiver, amember);
 
-        } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
+        } else if (m_slider.value<KisDoubleSliderSpinBox*>()) {
             QObject::connect(m_slider.value<KisDoubleSliderSpinBox*>(), SIGNAL(draggingFinished()),
                              receiver, amember);
         }

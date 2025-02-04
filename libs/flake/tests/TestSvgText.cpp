@@ -1669,97 +1669,105 @@ void TestSvgText::testFontSelectionForText()
  */
 void TestSvgText::testWWSConverterWeight_data() {
     QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<QString>("testString");
     QTest::addColumn<int>("requestedWeight");
     QTest::addColumn<int>("expectedWeight");
 
-    QTest::addRow("full 100") << QString("CSSTest Weights Full") << 100 << 100;
-    QTest::addRow("full 200") << QString("CSSTest Weights Full") << 200 << 200;
-    QTest::addRow("full 300") << QString("CSSTest Weights Full") << 300 << 300;
-    QTest::addRow("full 400") << QString("CSSTest Weights Full") << 400 << 400;
-    QTest::addRow("full 500") << QString("CSSTest Weights Full") << 500 << 500;
-    QTest::addRow("full 600") << QString("CSSTest Weights Full") << 600 << 600;
-    QTest::addRow("full 700") << QString("CSSTest Weights Full") << 700 << 700;
-    QTest::addRow("full 800") << QString("CSSTest Weights Full") << 800 << 800;
-    QTest::addRow("full 900") << QString("CSSTest Weights Full") << 900 << 900;
+    QTest::addRow("full 100") << QString("CSSTest Weights Full") << QString("A") << 100 << 100;
+    QTest::addRow("full 200") << QString("CSSTest Weights Full") << QString("A") << 200 << 200;
+    QTest::addRow("full 300") << QString("CSSTest Weights Full") << QString("A") << 300 << 300;
+    QTest::addRow("full 400") << QString("CSSTest Weights Full") << QString("A") << 400 << 400;
+    QTest::addRow("full 500") << QString("CSSTest Weights Full") << QString("A") << 500 << 500;
+    QTest::addRow("full 600") << QString("CSSTest Weights Full") << QString("A") << 600 << 600;
+    QTest::addRow("full 700") << QString("CSSTest Weights Full") << QString("A") << 700 << 700;
+    QTest::addRow("full 800") << QString("CSSTest Weights Full") << QString("A") << 800 << 800;
+    QTest::addRow("full 900") << QString("CSSTest Weights Full") << QString("A") << 900 << 900;
 
-    QTest::addRow("W1479 100") << QString("CSSTest Weights W1479") << 100 << 100;
-    QTest::addRow("W1479 200") << QString("CSSTest Weights W1479") << 200 << 100;
-    QTest::addRow("W1479 300") << QString("CSSTest Weights W1479") << 300 << 100;
-    QTest::addRow("W1479 400") << QString("CSSTest Weights W1479") << 400 << 400;
-    QTest::addRow("W1479 500") << QString("CSSTest Weights W1479") << 500 << 400;
-    QTest::addRow("W1479 600") << QString("CSSTest Weights W1479") << 600 << 700;
-    QTest::addRow("W1479 700") << QString("CSSTest Weights W1479") << 700 << 700;
-    QTest::addRow("W1479 800") << QString("CSSTest Weights W1479") << 800 << 900;
-    QTest::addRow("W1479 900") << QString("CSSTest Weights W1479") << 900 << 900;
+    QTest::addRow("W1479 100") << QString("CSSTest Weights W1479") << QString("A") << 100 << 100;
+    QTest::addRow("W1479 200") << QString("CSSTest Weights W1479") << QString("A") << 200 << 100;
+    QTest::addRow("W1479 300") << QString("CSSTest Weights W1479") << QString("A") << 300 << 100;
+    QTest::addRow("W1479 400") << QString("CSSTest Weights W1479") << QString("A") << 400 << 400;
+    QTest::addRow("W1479 500") << QString("CSSTest Weights W1479") << QString("A") << 500 << 400;
+    QTest::addRow("W1479 600") << QString("CSSTest Weights W1479") << QString("A") << 600 << 700;
+    QTest::addRow("W1479 700") << QString("CSSTest Weights W1479") << QString("A") << 700 << 700;
+    QTest::addRow("W1479 800") << QString("CSSTest Weights W1479") << QString("A") << 800 << 900;
+    QTest::addRow("W1479 900") << QString("CSSTest Weights W1479") << QString("A") << 900 << 900;
 
-    QTest::addRow("W15 100") << QString("CSSTest Weights W15") << 100 << 100;
-    QTest::addRow("W15 200") << QString("CSSTest Weights W15") << 200 << 100;
-    QTest::addRow("W15 300") << QString("CSSTest Weights W15") << 300 << 100;
-    QTest::addRow("W15 400") << QString("CSSTest Weights W15") << 400 << 500;
-    QTest::addRow("W15 500") << QString("CSSTest Weights W15") << 500 << 500;
-    QTest::addRow("W15 600") << QString("CSSTest Weights W15") << 600 << 500;
-    QTest::addRow("W15 700") << QString("CSSTest Weights W15") << 700 << 500;
-    QTest::addRow("W15 800") << QString("CSSTest Weights W15") << 800 << 500;
-    QTest::addRow("W15 900") << QString("CSSTest Weights W15") << 900 << 500;
+    QTest::addRow("W15 100") << QString("CSSTest Weights W15") << QString("A") << 100 << 100;
+    QTest::addRow("W15 200") << QString("CSSTest Weights W15") << QString("A") << 200 << 100;
+    QTest::addRow("W15 300") << QString("CSSTest Weights W15") << QString("A") << 300 << 100;
+    QTest::addRow("W15 400") << QString("CSSTest Weights W15") << QString("A") << 400 << 500;
+    QTest::addRow("W15 500") << QString("CSSTest Weights W15") << QString("A") << 500 << 500;
+    QTest::addRow("W15 600") << QString("CSSTest Weights W15") << QString("A") << 600 << 500;
+    QTest::addRow("W15 700") << QString("CSSTest Weights W15") << QString("A") << 700 << 500;
+    QTest::addRow("W15 800") << QString("CSSTest Weights W15") << QString("A") << 800 << 500;
+    QTest::addRow("W15 900") << QString("CSSTest Weights W15") << QString("A") << 900 << 500;
 
-    QTest::addRow("W24 100") << QString("CSSTest Weights W24") << 100 << 200;
-    QTest::addRow("W24 200") << QString("CSSTest Weights W24") << 200 << 200;
-    QTest::addRow("W24 300") << QString("CSSTest Weights W24") << 300 << 200;
-    QTest::addRow("W24 400") << QString("CSSTest Weights W24") << 400 << 400;
-    QTest::addRow("W24 500") << QString("CSSTest Weights W24") << 500 << 400;
-    QTest::addRow("W24 600") << QString("CSSTest Weights W24") << 600 << 400;
-    QTest::addRow("W24 700") << QString("CSSTest Weights W24") << 700 << 400;
-    QTest::addRow("W24 800") << QString("CSSTest Weights W24") << 800 << 400;
-    QTest::addRow("W24 900") << QString("CSSTest Weights W24") << 900 << 400;
+    QTest::addRow("W24 100") << QString("CSSTest Weights W24") << QString("A") << 100 << 200;
+    QTest::addRow("W24 200") << QString("CSSTest Weights W24") << QString("A") << 200 << 200;
+    QTest::addRow("W24 300") << QString("CSSTest Weights W24") << QString("A") << 300 << 200;
+    QTest::addRow("W24 400") << QString("CSSTest Weights W24") << QString("A") << 400 << 400;
+    QTest::addRow("W24 500") << QString("CSSTest Weights W24") << QString("A") << 500 << 400;
+    QTest::addRow("W24 600") << QString("CSSTest Weights W24") << QString("A") << 600 << 400;
+    QTest::addRow("W24 700") << QString("CSSTest Weights W24") << QString("A") << 700 << 400;
+    QTest::addRow("W24 800") << QString("CSSTest Weights W24") << QString("A") << 800 << 400;
+    QTest::addRow("W24 900") << QString("CSSTest Weights W24") << QString("A") << 900 << 400;
 
-    QTest::addRow("W2569 100") << QString("CSSTest Weights W2569") << 100 << 200;
-    QTest::addRow("W2569 200") << QString("CSSTest Weights W2569") << 200 << 200;
-    QTest::addRow("W2569 300") << QString("CSSTest Weights W2569") << 300 << 200;
-    QTest::addRow("W2569 400") << QString("CSSTest Weights W2569") << 400 << 500;
-    QTest::addRow("W2569 500") << QString("CSSTest Weights W2569") << 500 << 500;
-    QTest::addRow("W2569 600") << QString("CSSTest Weights W2569") << 600 << 600;
-    QTest::addRow("W2569 700") << QString("CSSTest Weights W2569") << 700 << 900;
-    QTest::addRow("W2569 800") << QString("CSSTest Weights W2569") << 800 << 900;
-    QTest::addRow("W2569 900") << QString("CSSTest Weights W2569") << 900 << 900;
+    QTest::addRow("W2569 100") << QString("CSSTest Weights W2569") << QString("A") << 100 << 200;
+    QTest::addRow("W2569 200") << QString("CSSTest Weights W2569") << QString("A") << 200 << 200;
+    QTest::addRow("W2569 300") << QString("CSSTest Weights W2569") << QString("A") << 300 << 200;
+    QTest::addRow("W2569 400") << QString("CSSTest Weights W2569") << QString("A") << 400 << 500;
+    QTest::addRow("W2569 500") << QString("CSSTest Weights W2569") << QString("A") << 500 << 500;
+    QTest::addRow("W2569 600") << QString("CSSTest Weights W2569") << QString("A") << 600 << 600;
+    QTest::addRow("W2569 700") << QString("CSSTest Weights W2569") << QString("A") << 700 << 900;
+    QTest::addRow("W2569 800") << QString("CSSTest Weights W2569") << QString("A") << 800 << 900;
+    QTest::addRow("W2569 900") << QString("CSSTest Weights W2569") << QString("A") << 900 << 900;
 
-    QTest::addRow("W258 100") << QString("CSSTest Weights W258") << 100 << 200;
-    QTest::addRow("W258 200") << QString("CSSTest Weights W258") << 200 << 200;
-    QTest::addRow("W258 300") << QString("CSSTest Weights W258") << 300 << 200;
-    QTest::addRow("W258 400") << QString("CSSTest Weights W258") << 400 << 500;
-    QTest::addRow("W258 500") << QString("CSSTest Weights W258") << 500 << 500;
-    QTest::addRow("W258 600") << QString("CSSTest Weights W258") << 600 << 800;
-    QTest::addRow("W258 700") << QString("CSSTest Weights W258") << 700 << 800;
-    QTest::addRow("W258 800") << QString("CSSTest Weights W258") << 800 << 800;
-    QTest::addRow("W258 900") << QString("CSSTest Weights W258") << 900 << 800;
+    QTest::addRow("W258 100") << QString("CSSTest Weights W258") << QString("A") << 100 << 200;
+    QTest::addRow("W258 200") << QString("CSSTest Weights W258") << QString("A") << 200 << 200;
+    QTest::addRow("W258 300") << QString("CSSTest Weights W258") << QString("A") << 300 << 200;
+    QTest::addRow("W258 400") << QString("CSSTest Weights W258") << QString("A") << 400 << 500;
+    QTest::addRow("W258 500") << QString("CSSTest Weights W258") << QString("A") << 500 << 500;
+    QTest::addRow("W258 600") << QString("CSSTest Weights W258") << QString("A") << 600 << 800;
+    QTest::addRow("W258 700") << QString("CSSTest Weights W258") << QString("A") << 700 << 800;
+    QTest::addRow("W258 800") << QString("CSSTest Weights W258") << QString("A") << 800 << 800;
+    QTest::addRow("W258 900") << QString("CSSTest Weights W258") << QString("A") << 900 << 800;
 
-    QTest::addRow("W3589 100") << QString("CSSTest Weights W3589") << 100 << 300;
-    QTest::addRow("W3589 200") << QString("CSSTest Weights W3589") << 200 << 300;
-    QTest::addRow("W3589 300") << QString("CSSTest Weights W3589") << 300 << 300;
-    QTest::addRow("W3589 400") << QString("CSSTest Weights W3589") << 400 << 500;
-    QTest::addRow("W3589 500") << QString("CSSTest Weights W3589") << 500 << 500;
-    QTest::addRow("W3589 600") << QString("CSSTest Weights W3589") << 600 << 800;
-    QTest::addRow("W3589 700") << QString("CSSTest Weights W3589") << 700 << 800;
-    QTest::addRow("W3589 800") << QString("CSSTest Weights W3589") << 800 << 800;
-    QTest::addRow("W3589 900") << QString("CSSTest Weights W3589") << 900 << 900;
+    QTest::addRow("W3589 100") << QString("CSSTest Weights W3589") << QString("A") << 100 << 300;
+    QTest::addRow("W3589 200") << QString("CSSTest Weights W3589") << QString("A") << 200 << 300;
+    QTest::addRow("W3589 300") << QString("CSSTest Weights W3589") << QString("A") << 300 << 300;
+    QTest::addRow("W3589 400") << QString("CSSTest Weights W3589") << QString("A") << 400 << 500;
+    QTest::addRow("W3589 500") << QString("CSSTest Weights W3589") << QString("A") << 500 << 500;
+    QTest::addRow("W3589 600") << QString("CSSTest Weights W3589") << QString("A") << 600 << 800;
+    QTest::addRow("W3589 700") << QString("CSSTest Weights W3589") << QString("A") << 700 << 800;
+    QTest::addRow("W3589 800") << QString("CSSTest Weights W3589") << QString("A") << 800 << 800;
+    QTest::addRow("W3589 900") << QString("CSSTest Weights W3589") << QString("A") << 900 << 900;
 
-    QTest::addRow("W47 100") << QString("CSSTest Weights W47") << 100 << 400;
-    QTest::addRow("W47 200") << QString("CSSTest Weights W47") << 200 << 400;
-    QTest::addRow("W47 300") << QString("CSSTest Weights W47") << 300 << 400;
-    QTest::addRow("W47 400") << QString("CSSTest Weights W47") << 400 << 400;
-    QTest::addRow("W47 500") << QString("CSSTest Weights W47") << 500 << 400;
-    QTest::addRow("W47 600") << QString("CSSTest Weights W47") << 600 << 700;
-    QTest::addRow("W47 700") << QString("CSSTest Weights W47") << 700 << 700;
-    QTest::addRow("W47 800") << QString("CSSTest Weights W47") << 800 << 700;
-    QTest::addRow("W47 900") << QString("CSSTest Weights W47") << 900 << 700;
+    QTest::addRow("W47 100") << QString("CSSTest Weights W47") << QString("A") << 100 << 400;
+    QTest::addRow("W47 200") << QString("CSSTest Weights W47") << QString("A") << 200 << 400;
+    QTest::addRow("W47 300") << QString("CSSTest Weights W47") << QString("A") << 300 << 400;
+    QTest::addRow("W47 400") << QString("CSSTest Weights W47") << QString("A") << 400 << 400;
+    QTest::addRow("W47 500") << QString("CSSTest Weights W47") << QString("A") << 500 << 400;
+    QTest::addRow("W47 600") << QString("CSSTest Weights W47") << QString("A") << 600 << 700;
+    QTest::addRow("W47 700") << QString("CSSTest Weights W47") << QString("A") << 700 << 700;
+    QTest::addRow("W47 800") << QString("CSSTest Weights W47") << QString("A") << 800 << 700;
+    QTest::addRow("W47 900") << QString("CSSTest Weights W47") << QString("A") << 900 << 700;
+
+    QTest::addRow("variable - test 100") << QString("Variable Test Axis Matching") << QString("O") << 100 << 100;
+    QTest::addRow("variable - test 300") << QString("Variable Test Axis Matching") << QString("O") << 300 << 300;
+    QTest::addRow("variable - test 400") << QString("Variable Test Axis Matching") << QString("O") << 400 << 400;
+    QTest::addRow("variable - test 700") << QString("Variable Test Axis Matching") << QString("O") << 700 << 700;
+    QTest::addRow("variable - test 900") << QString("Variable Test Axis Matching") << QString("O") << 900 << 900;
 }
 
 void TestSvgText::testWWSConverterWeight() {
-    const QString testString("A");
-    const QMap<QString, qreal> axisSettings;
     QVector<int> lengths;
     QFETCH(QString, fontFamily);
+    QFETCH(QString, testString);
     QFETCH(int, requestedWeight);
     QFETCH(int, expectedWeight);
+    QMap<QString, qreal> axisSettings;
+    axisSettings.insert("wght", requestedWeight);
 
     const std::vector<FT_FaceSP> faces =
         KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, requestedWeight);
@@ -1768,9 +1776,9 @@ void TestSvgText::testWWSConverterWeight() {
 
     FT_FaceSP first = faces.at(0);
     hb_font_t_sp hbFont(hb_ft_font_create_referenced(first.data()));
-    int testedWeight = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WEIGHT);
+    float testedWeight = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WEIGHT);
 
-    QVERIFY2(testedWeight == expectedWeight,
+    QVERIFY2(qRound(testedWeight) == expectedWeight,
              QString("Tested font does not have weight %1, instead %2, font-family: %3")
                  .arg(QString::number(expectedWeight))
                  .arg(QString::number(testedWeight))
@@ -1831,7 +1839,7 @@ void TestSvgText::testWWSConverterSlant() {
     FT_FaceSP first = faces.at(0);
     QFont::Style testedMode = KoFontRegistry::slantMode(first);
     hb_font_t_sp hbFont(hb_ft_font_create_referenced(first.data()));
-    int testedSlant = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE);
+    float testedSlant = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_SLANT_ANGLE);
 
     QVERIFY2(testedMode == expectedMode,
              QString("Tested font does not have slant mode %1, instead %2, font-family: %3")
@@ -1839,12 +1847,62 @@ void TestSvgText::testWWSConverterSlant() {
                  .arg(QString::number(testedMode))
                  .arg(first->family_name)
              .toLatin1());
-    QVERIFY2(testedSlant == expectedSlant,
+    QVERIFY2(qRound(testedSlant) == expectedSlant,
              QString("Tested font does not have slant value %1, instead %2, font-family: %3")
                  .arg(QString::number(expectedSlant))
                  .arg(QString::number(testedSlant))
                  .arg(first->family_name)
              .toLatin1());
+}
+
+void TestSvgText::testWWSConverterWidth_data()
+{
+    QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<int>("requestedWidth");
+    QTest::addColumn<int>("expectedWidth");
+
+    QTest::addRow("test ultra-condensed") << QString("Test Width Family") << 50 << 50;
+    QTest::addRow("test extra-condensed") << QString("Test Width Family") << 63 << 50;
+    QTest::addRow("test condensed") << QString("Test Width Family") << 75 << 75;
+    QTest::addRow("test semi-condensed") << QString("Test Width Family") << 88 << 75;
+    QTest::addRow("test regular") << QString("Test Width Family") << 100 << 100;
+    QTest::addRow("test semi-expanded") << QString("Test Width Family") << 113 << 125;
+    QTest::addRow("test expanded") << QString("Test Width Family") << 125 << 125;
+    QTest::addRow("test extra-expanded") << QString("Test Width Family") << 150 << 200;
+    QTest::addRow("test ultra-expanded") << QString("Test Width Family") << 200 << 200;
+
+    QTest::addRow("variable - test ultra-condensed") << QString("Variable Test Axis Matching") << 50 << 50;
+    QTest::addRow("variable - test condensed") << QString("Variable Test Axis Matching") << 75 << 75;
+    QTest::addRow("variable - test regular") << QString("Variable Test Axis Matching") << 100 << 100;
+    QTest::addRow("variable - test expanded") << QString("Variable Test Axis Matching") << 125 << 125;
+    QTest::addRow("variable - test ultra-expanded") << QString("Variable Test Axis Matching") << 200 << 200;
+}
+
+void TestSvgText::testWWSConverterWidth()
+{
+    const QString testString("O");
+    QVector<int> lengths;
+    QFETCH(QString, fontFamily);
+    QFETCH(int, requestedWidth);
+    QFETCH(int, expectedWidth);
+    QMap<QString, qreal> axisSettings;
+    axisSettings.insert("wdth", requestedWidth);
+
+    const std::vector<FT_FaceSP> faces =
+        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, requestedWidth);
+
+    QVERIFY(!faces.empty());
+
+    FT_FaceSP first = faces.at(0);
+    hb_font_t_sp hbFont(hb_ft_font_create_referenced(first.data()));
+    float testedWidth = hb_style_get_value(hbFont.data(), HB_STYLE_TAG_WIDTH);
+
+    QVERIFY2(qRound(testedWidth) == expectedWidth,
+             QString("Tested font does not have width %1, instead %2, font-family: %3")
+                 .arg(QString::number(expectedWidth))
+                 .arg(QString::number(testedWidth))
+                 .arg(first->family_name)
+                 .toLatin1());
 }
 
 void TestSvgText::testWWSConverterFamilyNames_data()

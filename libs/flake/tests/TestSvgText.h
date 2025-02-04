@@ -70,6 +70,8 @@ private Q_SLOTS:
     void testWWSConverterWeight();
     void testWWSConverterSlant_data();
     void testWWSConverterSlant();
+    void testWWSConverterWidth_data();
+    void testWWSConverterWidth();
     void testWWSConverterFamilyNames_data();
     void testWWSConverterFamilyNames();
 

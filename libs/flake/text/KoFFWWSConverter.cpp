@@ -783,13 +783,13 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                         }
                     }
                 }
-                if (wws == childEnd(typographic)) {
+                if (wwsCandidate != childEnd(typographic)) {
+                    d->fontFamilyCollection.insert(childEnd(wwsCandidate), *font);
+                } else if (wws == childEnd(typographic)) {
                     FontFamilyNode wwsFamily = FontFamilyNode::createWWSFamilyNode(*font, *typographic, wwsNames);
                     wwsNames.append(wwsFamily.fontFamily);
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
-                } else if (wwsCandidate != childEnd(typographic)) {
-                    d->fontFamilyCollection.insert(childEnd(wwsCandidate), *font);
                 }
             }
             // This only triggers when the first wws family was created with the typographic name,

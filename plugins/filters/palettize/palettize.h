@@ -23,6 +23,7 @@ class KisResourceItemChooser;
 
 class Palettize : public QObject
 {
+    Q_OBJECT
 public:
     Palettize(QObject *parent, const QVariantList &);
 };

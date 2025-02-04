@@ -13,6 +13,7 @@
 
 class KisXmpPlugin : public QObject
 {
+    Q_OBJECT
 public:
     KisXmpPlugin(QObject *parent, const QVariantList &);
     ~KisXmpPlugin() override;

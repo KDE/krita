@@ -35,7 +35,7 @@ Scratchpad::Scratchpad(View *view, const QColor & defaultColor, QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->scratchpad);
 
-    // Forward KisScratchPad::scaleChanged to Scratchpad::scaleCha`nged
+    // Forward KisScratchPad::scaleChanged to Scratchpad::scaleChanged
     connect(d->scratchpad, SIGNAL(scaleChanged(qreal)), this, SIGNAL(scaleChanged(qreal)));
 
     // Forward KisScratchPad::contentChanged to Scratchpad::contentChanged

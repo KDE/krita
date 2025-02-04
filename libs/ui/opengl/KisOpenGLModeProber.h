@@ -45,7 +45,7 @@ public:
     const KoColorProfile *rootSurfaceColorProfile() const;
 
     boost::optional<Result> probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
-                                        bool adjustGlobalState = true);;;;
+                                        bool adjustGlobalState = true);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     static bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs,
                                         const QSurfaceFormat::ColorSpace &rhs);

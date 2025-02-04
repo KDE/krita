@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-02 01:57+0000\n"
+"POT-Creation-Date: 2025-02-04 01:53+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -19680,735 +19680,768 @@ msgstr "Izbjegavanje boja"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
 #, fuzzy, kde-format
+#| msgid "Color Dodge"
+msgctxt "Blending mode - Color Dodge HDR"
+msgid "Color Dodge HDR"
+msgstr "Izbjegavanje boja"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:73
+#, fuzzy, kde-format
 #| msgid "Linear Dodge"
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
 msgstr "Linearno izbjegavanje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:73
+#: libs/pigment/KoCompositeOpRegistry.cpp:74
 #, fuzzy, kde-format
 #| msgid "Lighten"
 msgctxt "Blending mode - Lighten"
 msgid "Lighten"
 msgstr "Posvijetli"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:74
+#: libs/pigment/KoCompositeOpRegistry.cpp:75
 #, fuzzy, kde-format
 #| msgid "Linear Light"
 msgctxt "Blending mode - Linear Light"
 msgid "Linear Light"
 msgstr "Linearno svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:75
+#: libs/pigment/KoCompositeOpRegistry.cpp:76
 #, fuzzy, kde-format
 #| msgid "Screen"
 msgctxt "Blending mode - Screen"
 msgid "Screen"
 msgstr "Ekran"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:76
+#: libs/pigment/KoCompositeOpRegistry.cpp:77
 #, fuzzy, kde-format
 #| msgid "Pin Light"
 msgctxt "Blending mode - Pin Light"
 msgid "Pin Light"
 msgstr "Dodirujuće svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:77
+#: libs/pigment/KoCompositeOpRegistry.cpp:78
 #, fuzzy, kde-format
 #| msgid "Vivid Light"
 msgctxt "Blending mode - Vivid Light"
 msgid "Vivid Light"
 msgstr "Živopisno svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:78
+#: libs/pigment/KoCompositeOpRegistry.cpp:79
+#, fuzzy, kde-format
+#| msgid "Vivid Light"
+msgctxt "Blending mode - Vivid Light HDR"
+msgid "Vivid Light HDR"
+msgstr "Živopisno svjetlo"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, fuzzy, kde-format
 #| msgid "Hard Light"
 msgctxt "Blending mode - Flat Light"
 msgid "Flat Light"
 msgstr "Jako svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:79
+#: libs/pigment/KoCompositeOpRegistry.cpp:81
 #, fuzzy, kde-format
 #| msgid "Hard Light"
 msgctxt "Blending mode - Hard Light"
 msgid "Hard Light"
 msgstr "Jako svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:80
+#: libs/pigment/KoCompositeOpRegistry.cpp:82
 #, fuzzy, kde-format
 #| msgid "Soft Light (SVG)"
 msgctxt "Blending mode - Soft Light (IFS Illusions)"
 msgid "Soft Light (IFS Illusions)"
 msgstr "Blago svjetlo (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:81
+#: libs/pigment/KoCompositeOpRegistry.cpp:83
 #, fuzzy, kde-format
 #| msgid "Soft Light (Photoshop)"
 msgctxt "Blending mode - Soft Light (Pegtop-Delphi)"
 msgid "Soft Light (Pegtop-Delphi)"
 msgstr "Blago svjetlo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:82
+#: libs/pigment/KoCompositeOpRegistry.cpp:84
 #, fuzzy, kde-format
 #| msgid "Soft Light (Photoshop)"
 msgctxt "Blending mode - Soft Light (Photoshop)"
 msgid "Soft Light (Photoshop)"
 msgstr "Blago svjetlo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:83
+#: libs/pigment/KoCompositeOpRegistry.cpp:85
 #, fuzzy, kde-format
 #| msgid "Soft Light (SVG)"
 msgctxt "Blending mode - Soft Light (SVG)"
 msgid "Soft Light (SVG)"
 msgstr "Blago svjetlo (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:84
+#: libs/pigment/KoCompositeOpRegistry.cpp:86
 #, fuzzy, kde-format
 #| msgid "Gamma Light"
 msgctxt "Blending mode - Gamma Light"
 msgid "Gamma Light"
 msgstr "Gama svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:85
+#: libs/pigment/KoCompositeOpRegistry.cpp:87
 #, fuzzy, kde-format
 #| msgid "Inclination"
 msgctxt "Blending mode - Gamma Illumination"
 msgid "Gamma Illumination"
 msgstr "Nagib"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:86
+#: libs/pigment/KoCompositeOpRegistry.cpp:88
 #, fuzzy, kde-format
 msgctxt "Blending mode - Lighter Color"
 msgid "Lighter Color"
 msgstr "Boja linije"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:87
+#: libs/pigment/KoCompositeOpRegistry.cpp:89
 #, kde-format
 msgctxt "Blending mode - P-Norm A"
 msgid "P-Norm A"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:88
+#: libs/pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
 msgctxt "Blending mode - P-Norm B"
 msgid "P-Norm B"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:89
+#: libs/pigment/KoCompositeOpRegistry.cpp:91
 #, fuzzy, kde-format
 #| msgid "Linear Light"
 msgctxt "Blending mode - Super Light"
 msgid "Super Light"
 msgstr "Linearno svjetlo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:90
+#: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, fuzzy, kde-format
 #| msgid "Soft Light (SVG)"
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
 msgstr "Blago svjetlo (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:91
+#: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, fuzzy, kde-format
 #| msgid "Soft Light (SVG)"
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
 msgstr "Blago svjetlo (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:92
+#: libs/pigment/KoCompositeOpRegistry.cpp:94
 #, fuzzy, kde-format
 #| msgid "Dodge"
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
 msgstr "Izvrdaj"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:93
+#: libs/pigment/KoCompositeOpRegistry.cpp:95
 #, fuzzy, kde-format
 #| msgid "Luminosity"
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
 msgstr "Osvjetljenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:95
+#: libs/pigment/KoCompositeOpRegistry.cpp:97
 #, kde-format
 msgctxt "Blending mode - Modulo"
 msgid "Modulo"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:96
+#: libs/pigment/KoCompositeOpRegistry.cpp:98
 #, kde-format
 msgctxt "Blending mode - Modulo - Continuous"
 msgid "Modulo - Continuous"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:97
+#: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, fuzzy, kde-format
 #| msgid "Division level:"
 msgctxt "Blending mode - Divisive Modulo"
 msgid "Divisive Modulo"
 msgstr "Nivo podjele:"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:98
+#: libs/pigment/KoCompositeOpRegistry.cpp:100
 #, fuzzy, kde-format
 #| msgid "Division level:"
 msgctxt "Blending mode - Divisive Modulo - Continuous"
 msgid "Divisive Modulo - Continuous"
 msgstr "Nivo podjele:"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:99
+#: libs/pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgctxt "Blending mode - Modulo Shift"
 msgid "Modulo Shift"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:100
+#: libs/pigment/KoCompositeOpRegistry.cpp:102
 #, kde-format
 msgctxt "Blending mode - Modulo Shift - Continuous"
 msgid "Modulo Shift - Continuous"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:102
+#: libs/pigment/KoCompositeOpRegistry.cpp:104
 #, fuzzy, kde-format
 #| msgid "Difference"
 msgctxt "Blending mode - Difference"
 msgid "Difference"
 msgstr "Razlika"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:103
+#: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, fuzzy, kde-format
 #| msgid "Equivalence"
 msgctxt "Blending mode - Equivalence"
 msgid "Equivalence"
 msgstr "Ekvivalencija"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:104
+#: libs/pigment/KoCompositeOpRegistry.cpp:106
 #, fuzzy, kde-format
 #| msgid "Additive Subtractive"
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
 msgstr "Odbijajaući dodatak"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:105
+#: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, fuzzy, kde-format
 #| msgid "Exclusion"
 msgctxt "Blending mode - Exclusion"
 msgid "Exclusion"
 msgstr "Isključenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:106
+#: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, fuzzy, kde-format
 #| msgid "Arcus Tangent"
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
 msgstr "Arcus Tangens"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:107
+#: libs/pigment/KoCompositeOpRegistry.cpp:109
 #, fuzzy, kde-format
 #| msgid "Negative"
 msgctxt "Blending mode - Negation"
 msgid "Negation"
 msgstr "Negativ"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:110
+#: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, fuzzy, kde-format
 #| msgid "Behind"
 msgctxt "Blending mode - Behind"
 msgid "Behind"
 msgstr "Iza"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:111
+#: libs/pigment/KoCompositeOpRegistry.cpp:113
 #, fuzzy, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
 msgstr "Kreiraj"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:112
+#: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, fuzzy, kde-format
 #| msgid "Overlay"
 msgctxt "Blending mode - Overlay"
 msgid "Overlay"
 msgstr "Preklapanje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:113
+#: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:114
+#: libs/pigment/KoCompositeOpRegistry.cpp:116
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:115
+#: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, fuzzy, kde-format
 #| msgid "Erase"
 msgctxt "Blending mode - Erase"
 msgid "Erase"
 msgstr "Briši"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:116
+#: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, fuzzy, kde-format
 #| msgid "Alpha Darken"
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
 msgstr "Alfa-potamnjenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:117
+#: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, fuzzy, kde-format
 #| msgid "Hard Mix"
 msgctxt "Blending mode - Hard Mix"
 msgid "Hard Mix"
 msgstr "Čvrsta mješavina"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:118
+#: libs/pigment/KoCompositeOpRegistry.cpp:120
+#, fuzzy, kde-format
+#| msgid "Hard Mix"
+msgctxt "Blending mode - Hard Mix HDR"
+msgid "Hard Mix HDR"
+msgstr "Čvrsta mješavina"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, fuzzy, kde-format
 #| msgid "Soft Light (Photoshop)"
 msgctxt "Blending mode - Hard Mix (Photoshop)"
 msgid "Hard Mix (Photoshop)"
 msgstr "Blago svjetlo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:119
+#: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, fuzzy, kde-format
 #| msgid "Soft Light (Photoshop)"
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
 msgstr "Blago svjetlo (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:120
+#: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, fuzzy, kde-format
 #| msgid "Grain Merge"
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
 msgstr "Spojena zrna"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:121
+#: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, fuzzy, kde-format
 #| msgid "Grain Extract"
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
 msgstr "Izvađena zrna"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:122
+#: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, fuzzy, kde-format
 #| msgid "Parallel"
 msgctxt "Blending mode - Parallel"
 msgid "Parallel"
 msgstr "Paralelno"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:123
+#: libs/pigment/KoCompositeOpRegistry.cpp:126
 #, fuzzy, kde-format
 #| msgid "Allanon"
 msgctxt "Blending mode - Allanon"
 msgid "Allanon"
 msgstr "Allanon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:124
+#: libs/pigment/KoCompositeOpRegistry.cpp:127
 #, fuzzy, kde-format
 #| msgid "Geometric Mean"
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "Geometrijska sredina"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:125
+#: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, fuzzy, kde-format
 #| msgid "Declination"
 msgctxt "Blending mode - Destination Atop"
 msgid "Destination Atop"
 msgstr "Odbijanje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:126
+#: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, fuzzy, kde-format
 #| msgid "Declination"
 msgctxt "Blending mode - Destination In"
 msgid "Destination In"
 msgstr "Odbijanje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:127
+#: libs/pigment/KoCompositeOpRegistry.cpp:130
 #, fuzzy, kde-format
 msgctxt "Blending mode - Hard Overlay"
 msgid "Hard Overlay"
 msgstr "Šema"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:128
+#: libs/pigment/KoCompositeOpRegistry.cpp:131
+#, fuzzy, kde-format
+msgctxt "Blending mode - Hard Overlay HDR"
+msgid "Hard Overlay HDR"
+msgstr "Šema"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, fuzzy, kde-format
 #| msgid "Iterations:"
 msgctxt "Blending mode - Interpolation"
 msgid "Interpolation"
 msgstr "Iteracije:"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:129
+#: libs/pigment/KoCompositeOpRegistry.cpp:133
 #, fuzzy, kde-format
 msgctxt "Blending mode - Interpolation - 2X"
 msgid "Interpolation - 2X"
 msgstr "Bilinearna interpolacija"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:130
+#: libs/pigment/KoCompositeOpRegistry.cpp:134
 #, kde-format
 msgctxt "Blending mode - Penumbra A"
 msgid "Penumbra A"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:131
+#: libs/pigment/KoCompositeOpRegistry.cpp:135
 #, kde-format
 msgctxt "Blending mode - Penumbra B"
 msgid "Penumbra B"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:132
+#: libs/pigment/KoCompositeOpRegistry.cpp:136
 #, kde-format
 msgctxt "Blending mode - Penumbra C"
 msgid "Penumbra C"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:133
+#: libs/pigment/KoCompositeOpRegistry.cpp:137
 #, kde-format
 msgctxt "Blending mode - Penumbra D"
 msgid "Penumbra D"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:135
+#: libs/pigment/KoCompositeOpRegistry.cpp:139
 #, fuzzy, kde-format
 #| msgid "Bumpmap"
 msgctxt "Blending mode - Bumpmap"
 msgid "Bumpmap"
 msgstr "Mapa reljefa"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:136
+#: libs/pigment/KoCompositeOpRegistry.cpp:140
 #, fuzzy, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
 msgstr "Kombinuj ugao:"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:137
+#: libs/pigment/KoCompositeOpRegistry.cpp:141
 #, fuzzy, kde-format
 #| msgid "Dissolve"
 msgctxt "Blending mode - Dissolve"
 msgid "Dissolve"
 msgstr "Razloži"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:138
+#: libs/pigment/KoCompositeOpRegistry.cpp:142
 #, fuzzy, kde-format
 #| msgid "Copy Red"
 msgctxt "Blending mode - Copy Red"
 msgid "Copy Red"
 msgstr "Kopiraj crveno"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:139
+#: libs/pigment/KoCompositeOpRegistry.cpp:143
 #, fuzzy, kde-format
 #| msgid "Copy Green"
 msgctxt "Blending mode - Copy Green"
 msgid "Copy Green"
 msgstr "Kopiraj zeleno"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:140
+#: libs/pigment/KoCompositeOpRegistry.cpp:144
 #, fuzzy, kde-format
 #| msgid "Copy Blue"
 msgctxt "Blending mode - Copy Blue"
 msgid "Copy Blue"
 msgstr "Kopiraj plavo"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:141
+#: libs/pigment/KoCompositeOpRegistry.cpp:145
 #, fuzzy, kde-format
 #| msgid "Copy"
 msgctxt "Blending mode - Copy"
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:142
+#: libs/pigment/KoCompositeOpRegistry.cpp:146
 #, fuzzy, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
 msgstr "Normalan"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:144
+#: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Blending mode - Color HSY"
 msgid "Color"
 msgstr "Boja"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:145
+#: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, fuzzy, kde-format
 #| msgid "Hue"
 msgctxt "Blending mode - Hue HSY"
 msgid "Hue"
 msgstr "Hue"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:146
+#: libs/pigment/KoCompositeOpRegistry.cpp:150
+#, kde-format
+msgctxt "Blending mode - Tint HSY"
+msgid "Tint"
+msgstr ""
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Blending mode - Saturation HSY"
 msgid "Saturation"
 msgstr "Zasićenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:147
+#: libs/pigment/KoCompositeOpRegistry.cpp:152
 #, fuzzy, kde-format
 #| msgid "Luminosity"
 msgctxt "Blending mode - Luminosity HSY"
 msgid "Luminosity"
 msgstr "Osvjetljenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:148
+#: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, fuzzy, kde-format
 #| msgid "Decrease Saturation"
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
 msgstr "Smanji zasićenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:149
+#: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, fuzzy, kde-format
 #| msgid "Increase Saturation"
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
 msgstr "Povećaj zasićenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:150
+#: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, fuzzy, kde-format
 #| msgid "Decrease Luminosity"
 msgctxt "Blending mode - Decrease Luminosity HSY"
 msgid "Decrease Luminosity"
 msgstr "Smanji osvjetljenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:151
+#: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, fuzzy, kde-format
 #| msgid "Increase Luminosity"
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
 msgstr "Povećaj osvjetljenje"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:153
+#: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, fuzzy, kde-format
 #| msgid "Color HSI"
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
 msgstr "Boja HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:154
+#: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, fuzzy, kde-format
 #| msgid "Hue HSI"
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
 msgstr "Nijansa HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:155
+#: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, fuzzy, kde-format
 #| msgid "Saturation HSI"
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
 msgstr "Zasićenje HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:156
+#: libs/pigment/KoCompositeOpRegistry.cpp:161
 #, fuzzy, kde-format
 #| msgid "Intensity"
 msgctxt "Blending mode - Intensity HSI"
 msgid "Intensity"
 msgstr "Intenzitet"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:157
+#: libs/pigment/KoCompositeOpRegistry.cpp:162
 #, fuzzy, kde-format
 #| msgid "Decrease Saturation HSI"
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
 msgstr "Smanji zasićenje HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:158
+#: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, fuzzy, kde-format
 #| msgid "Increase Saturation HSI"
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
 msgstr "Povećaj zasićenje HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:159
+#: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, fuzzy, kde-format
 #| msgid "Decrease Intensity"
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
 msgstr "Smanji intenzitet"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:160
+#: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, fuzzy, kde-format
 #| msgid "Increase Intensity"
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
 msgstr "Povećaj intenzitet"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:162
+#: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, fuzzy, kde-format
 #| msgid "Color HSL"
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
 msgstr "Boja HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:163
+#: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, fuzzy, kde-format
 #| msgid "Hue HSL"
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
 msgstr "Nijansa HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:164
+#: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, fuzzy, kde-format
 #| msgid "Saturation HSL"
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
 msgstr "Zasićenje HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:165
+#: libs/pigment/KoCompositeOpRegistry.cpp:170
 #, fuzzy, kde-format
 #| msgid "Lightness"
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
 msgstr "Osvijetljenost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:166
+#: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, fuzzy, kde-format
 #| msgid "Decrease Saturation HSL"
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
 msgstr "Smanji zasićenje HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:167
+#: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, fuzzy, kde-format
 #| msgid "Increase Saturation HSL"
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
 msgstr "Povećaj zasićenje HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:168
+#: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, fuzzy, kde-format
 #| msgid "Decrease Lightness"
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
 msgstr "Smanji osvjetljenost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:169
+#: libs/pigment/KoCompositeOpRegistry.cpp:174
 #, fuzzy, kde-format
 #| msgid "Increase Lightness"
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
 msgstr "Pojačaj osvjetljenost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:171
+#: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, fuzzy, kde-format
 #| msgid "Color HSV"
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
 msgstr "Boja HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:172
+#: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, fuzzy, kde-format
 #| msgid "Hue HSV"
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
 msgstr "Nijansa HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:173
+#: libs/pigment/KoCompositeOpRegistry.cpp:178
 #, fuzzy, kde-format
 #| msgid "Saturation HSV"
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
 msgstr "Zasićenje HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:174
+#: libs/pigment/KoCompositeOpRegistry.cpp:179
 #, fuzzy, kde-format
 #| msgid "Value"
 msgctxt "Blending mode - Value HSV"
 msgid "Value"
 msgstr "Vrijednost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:175
+#: libs/pigment/KoCompositeOpRegistry.cpp:180
 #, fuzzy, kde-format
 #| msgid "Decrease Saturation HSV"
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
 msgstr "Smanji zasićenje HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:176
+#: libs/pigment/KoCompositeOpRegistry.cpp:181
 #, fuzzy, kde-format
 #| msgid "Increase Saturation HSV"
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
 msgstr "Povećaj zasićenje HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:177
+#: libs/pigment/KoCompositeOpRegistry.cpp:182
 #, fuzzy, kde-format
 #| msgid "Decrease Value"
 msgctxt "Blending mode - Decrease Value HSV"
 msgid "Decrease Value"
 msgstr "Smanji vrijednost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:178
+#: libs/pigment/KoCompositeOpRegistry.cpp:183
 #, fuzzy, kde-format
 #| msgid "Increase Value"
 msgctxt "Blending mode - Increase Value HSV"
 msgid "Increase Value"
 msgstr "Povećaj vrijednost"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:180
+#: libs/pigment/KoCompositeOpRegistry.cpp:185
 #, fuzzy, kde-format
 #| msgid "Reflect"
 msgctxt "Blending mode - Reflect"
 msgid "Reflect"
 msgstr "Reflektovano"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:181
+#: libs/pigment/KoCompositeOpRegistry.cpp:186
 #, kde-format
 msgctxt "Blending mode - Glow"
 msgid "Glow"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:182
+#: libs/pigment/KoCompositeOpRegistry.cpp:187
 #, fuzzy, kde-format
 #| msgid "Free"
 msgctxt "Blending mode - Freeze"
 msgid "Freeze"
 msgstr "Slobodno"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:183
+#: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:184
+#: libs/pigment/KoCompositeOpRegistry.cpp:189
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:185
+#: libs/pigment/KoCompositeOpRegistry.cpp:190
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:186
+#: libs/pigment/KoCompositeOpRegistry.cpp:191
 #, fuzzy, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
 msgstr "Odabrano"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:187
+#: libs/pigment/KoCompositeOpRegistry.cpp:192
 #, fuzzy, kde-format
 #| msgid "Reflect"
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
 msgstr "Reflektovano"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:188
+#: libs/pigment/KoCompositeOpRegistry.cpp:193
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
 msgstr ""
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:212
+#: libs/pigment/KoCompositeOpRegistry.cpp:217
 #, kde-format
 msgid "In"
 msgstr "Ulaz"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:214
+#: libs/pigment/KoCompositeOpRegistry.cpp:219
 #, kde-format
 msgid "Out"
 msgstr "Izlaz"
@@ -66158,9 +66191,6 @@ msgstr "Referentne slike"
 #~ msgid "Grain Extract"
 #~ msgstr "Izvađena zrna"
 
-#~ msgid "Hard Mix"
-#~ msgstr "Čvrsta mješavina"
-
 #, fuzzy
 #~| msgid "Soft Light (Photoshop)"
 #~ msgid "Hard Mix (Photoshop)"
@@ -66181,10 +66211,6 @@ msgstr "Referentne slike"
 #~ msgstr "Allanon"
 
 #, fuzzy
-#~ msgid "Hard Overlay"
-#~ msgstr "Šema"
-
-#, fuzzy
 #~| msgid "Iterations:"
 #~ msgid "Interpolation"
 #~ msgstr "Iteracije:"
@@ -66195,9 +66221,6 @@ msgstr "Referentne slike"
 
 #~ msgid "Screen"
 #~ msgstr "Ekran"
-
-#~ msgid "Color Dodge"
-#~ msgstr "Izbjegavanje boja"
 
 #~ msgid "Linear Dodge"
 #~ msgstr "Linearno izbjegavanje"
@@ -66231,9 +66254,6 @@ msgstr "Referentne slike"
 #~| msgid "Inclination"
 #~ msgid "Gamma Illumination"
 #~ msgstr "Nagib"
-
-#~ msgid "Vivid Light"
-#~ msgstr "Živopisno svjetlo"
 
 #~ msgid "Pin Light"
 #~ msgstr "Dodirujuće svjetlo"

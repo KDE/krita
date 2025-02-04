@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-02 01:57+0000\n"
+"POT-Creation-Date: 2025-02-04 01:53+0000\n"
 "PO-Revision-Date: 2025-01-31 12:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -19060,654 +19060,692 @@ msgid "Color Dodge"
 msgstr "Esvaïment del color"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Color Dodge"
+#| msgid "Color Dodge"
+msgctxt "Blending mode - Color Dodge HDR"
+msgid "Color Dodge HDR"
+msgstr "Esvaïment del color"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
 msgctxt "Blending mode - Linear Dodge"
 msgid "Linear Dodge"
 msgstr "Esvaïment lineal"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:73
+#: libs/pigment/KoCompositeOpRegistry.cpp:74
 #, kde-format
 msgctxt "Blending mode - Lighten"
 msgid "Lighten"
 msgstr "Aclarit"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:74
+#: libs/pigment/KoCompositeOpRegistry.cpp:75
 #, kde-format
 msgctxt "Blending mode - Linear Light"
 msgid "Linear Light"
 msgstr "Llum lineal"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:75
+#: libs/pigment/KoCompositeOpRegistry.cpp:76
 #, kde-format
 msgctxt "Blending mode - Screen"
 msgid "Screen"
 msgstr "Pantalla"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:76
+#: libs/pigment/KoCompositeOpRegistry.cpp:77
 #, kde-format
 msgctxt "Blending mode - Pin Light"
 msgid "Pin Light"
 msgstr "Llum focal"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:77
+#: libs/pigment/KoCompositeOpRegistry.cpp:78
 #, kde-format
 msgctxt "Blending mode - Vivid Light"
 msgid "Vivid Light"
 msgstr "Llum vívida"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:78
+#: libs/pigment/KoCompositeOpRegistry.cpp:79
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Vivid Light"
+#| msgid "Vivid Light"
+msgctxt "Blending mode - Vivid Light HDR"
+msgid "Vivid Light HDR"
+msgstr "Llum vívida"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
 msgctxt "Blending mode - Flat Light"
 msgid "Flat Light"
 msgstr "Llum plana"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:79
+#: libs/pigment/KoCompositeOpRegistry.cpp:81
 #, kde-format
 msgctxt "Blending mode - Hard Light"
 msgid "Hard Light"
 msgstr "Llum forta"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:80
+#: libs/pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
 msgctxt "Blending mode - Soft Light (IFS Illusions)"
 msgid "Soft Light (IFS Illusions)"
 msgstr "Llum suau (il·lusions IFS)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:81
+#: libs/pigment/KoCompositeOpRegistry.cpp:83
 #, kde-format
 msgctxt "Blending mode - Soft Light (Pegtop-Delphi)"
 msgid "Soft Light (Pegtop-Delphi)"
 msgstr "Llum suau (Pegtop-Delphi)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:82
+#: libs/pigment/KoCompositeOpRegistry.cpp:84
 #, kde-format
 msgctxt "Blending mode - Soft Light (Photoshop)"
 msgid "Soft Light (Photoshop)"
 msgstr "Llum suau (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:83
+#: libs/pigment/KoCompositeOpRegistry.cpp:85
 #, kde-format
 msgctxt "Blending mode - Soft Light (SVG)"
 msgid "Soft Light (SVG)"
 msgstr "Llum suau (SVG)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:84
+#: libs/pigment/KoCompositeOpRegistry.cpp:86
 #, kde-format
 msgctxt "Blending mode - Gamma Light"
 msgid "Gamma Light"
 msgstr "Llum gamma"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:85
+#: libs/pigment/KoCompositeOpRegistry.cpp:87
 #, kde-format
 msgctxt "Blending mode - Gamma Illumination"
 msgid "Gamma Illumination"
 msgstr "Il·luminació gamma"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:86
+#: libs/pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgctxt "Blending mode - Lighter Color"
 msgid "Lighter Color"
 msgstr "Color més clar"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:87
+#: libs/pigment/KoCompositeOpRegistry.cpp:89
 #, kde-format
 msgctxt "Blending mode - P-Norm A"
 msgid "P-Norm A"
 msgstr "P-Norm A"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:88
+#: libs/pigment/KoCompositeOpRegistry.cpp:90
 #, kde-format
 msgctxt "Blending mode - P-Norm B"
 msgid "P-Norm B"
 msgstr "P-Norm B"
 
 # skip-rule: k-Super
-#: libs/pigment/KoCompositeOpRegistry.cpp:89
+#: libs/pigment/KoCompositeOpRegistry.cpp:91
 #, kde-format
 msgctxt "Blending mode - Super Light"
 msgid "Super Light"
 msgstr "Superllum"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:90
+#: libs/pigment/KoCompositeOpRegistry.cpp:92
 #, kde-format
 msgctxt "Blending mode - Tint (IFS Illusions)"
 msgid "Tint (IFS Illusions)"
 msgstr "Tint (il·lusions IFS)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:91
+#: libs/pigment/KoCompositeOpRegistry.cpp:93
 #, kde-format
 msgctxt "Blending mode - Fog Lighten (IFS Illusions)"
 msgid "Fog Lighten (IFS Illusions)"
 msgstr "Boira clara (il·lusions IFS)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:92
+#: libs/pigment/KoCompositeOpRegistry.cpp:94
 #, kde-format
 msgctxt "Blending mode - Easy Dodge"
 msgid "Easy Dodge"
 msgstr "Esvaïment fàcil"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:93
+#: libs/pigment/KoCompositeOpRegistry.cpp:95
 #, kde-format
 msgctxt "Blending mode - Luminosity/Shine (SAI)"
 msgid "Luminosity/Shine (SAI)"
 msgstr "Lluminositat/Brillantor (SAI)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:95
+#: libs/pigment/KoCompositeOpRegistry.cpp:97
 #, kde-format
 msgctxt "Blending mode - Modulo"
 msgid "Modulo"
 msgstr "Mòdul"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:96
+#: libs/pigment/KoCompositeOpRegistry.cpp:98
 #, kde-format
 msgctxt "Blending mode - Modulo - Continuous"
 msgid "Modulo - Continuous"
 msgstr "Mòdul - Continu"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:97
+#: libs/pigment/KoCompositeOpRegistry.cpp:99
 #, kde-format
 msgctxt "Blending mode - Divisive Modulo"
 msgid "Divisive Modulo"
 msgstr "Mòdul divisible"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:98
+#: libs/pigment/KoCompositeOpRegistry.cpp:100
 #, kde-format
 msgctxt "Blending mode - Divisive Modulo - Continuous"
 msgid "Divisive Modulo - Continuous"
 msgstr "Mòdul divisible - Continu"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:99
+#: libs/pigment/KoCompositeOpRegistry.cpp:101
 #, kde-format
 msgctxt "Blending mode - Modulo Shift"
 msgid "Modulo Shift"
 msgstr "Desplaçament de mòdul"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:100
+#: libs/pigment/KoCompositeOpRegistry.cpp:102
 #, kde-format
 msgctxt "Blending mode - Modulo Shift - Continuous"
 msgid "Modulo Shift - Continuous"
 msgstr "Desplaçament de mòdul - Continu"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:102
+#: libs/pigment/KoCompositeOpRegistry.cpp:104
 #, kde-format
 msgctxt "Blending mode - Difference"
 msgid "Difference"
 msgstr "Diferència"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:103
+#: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
 msgctxt "Blending mode - Equivalence"
 msgid "Equivalence"
 msgstr "Equivalència"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:104
+#: libs/pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
 msgstr "Additiu subtractiu"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:105
+#: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, kde-format
 msgctxt "Blending mode - Exclusion"
 msgid "Exclusion"
 msgstr "Exclusió"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:106
+#: libs/pigment/KoCompositeOpRegistry.cpp:108
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
 msgstr "Arctangent"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:107
+#: libs/pigment/KoCompositeOpRegistry.cpp:109
 #, kde-format
 msgctxt "Blending mode - Negation"
 msgid "Negation"
 msgstr "Negació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:110
+#: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
 msgctxt "Blending mode - Behind"
 msgid "Behind"
 msgstr "Darrere"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:111
+#: libs/pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
 msgstr "Engrandix"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:112
+#: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Overlay"
 msgid "Overlay"
 msgstr "Superposició"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:113
+#: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
 msgstr "Il·luminació de Lambert (lineal)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:114
+#: libs/pigment/KoCompositeOpRegistry.cpp:116
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
 msgstr "Il·luminació de Lambert (gamma 2.2)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:115
+#: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
 msgctxt "Blending mode - Erase"
 msgid "Erase"
 msgstr "Esborra"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:116
+#: libs/pigment/KoCompositeOpRegistry.cpp:118
 #, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
 msgstr "Enfosquiment alfa"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:117
+#: libs/pigment/KoCompositeOpRegistry.cpp:119
 #, kde-format
 msgctxt "Blending mode - Hard Mix"
 msgid "Hard Mix"
 msgstr "Mescla forta"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:118
+#: libs/pigment/KoCompositeOpRegistry.cpp:120
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hard Mix"
+#| msgid "Hard Mix"
+msgctxt "Blending mode - Hard Mix HDR"
+msgid "Hard Mix HDR"
+msgstr "Mescla forta"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgctxt "Blending mode - Hard Mix (Photoshop)"
 msgid "Hard Mix (Photoshop)"
 msgstr "Mescla forta (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:119
+#: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
 msgstr "Mescla forta més suau (Photoshop)"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:120
+#: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
 msgstr "Fusió de gra"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:121
+#: libs/pigment/KoCompositeOpRegistry.cpp:124
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
 msgstr "Extracció de gra"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:122
+#: libs/pigment/KoCompositeOpRegistry.cpp:125
 #, kde-format
 msgctxt "Blending mode - Parallel"
 msgid "Parallel"
 msgstr "Paral·lel"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:123
+#: libs/pigment/KoCompositeOpRegistry.cpp:126
 #, kde-format
 msgctxt "Blending mode - Allanon"
 msgid "Allanon"
 msgstr "Allanon"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:124
+#: libs/pigment/KoCompositeOpRegistry.cpp:127
 #, kde-format
 msgctxt "Blending mode - Geometric Mean"
 msgid "Geometric Mean"
 msgstr "Mitjana geomètrica"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:125
+#: libs/pigment/KoCompositeOpRegistry.cpp:128
 #, kde-format
 msgctxt "Blending mode - Destination Atop"
 msgid "Destination Atop"
 msgstr "Destinació a dalt"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:126
+#: libs/pigment/KoCompositeOpRegistry.cpp:129
 #, kde-format
 msgctxt "Blending mode - Destination In"
 msgid "Destination In"
 msgstr "Destinació a dins"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:127
+#: libs/pigment/KoCompositeOpRegistry.cpp:130
 #, kde-format
 msgctxt "Blending mode - Hard Overlay"
 msgid "Hard Overlay"
 msgstr "Superposició forta"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:128
+#: libs/pigment/KoCompositeOpRegistry.cpp:131
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hard Overlay"
+#| msgid "Hard Overlay"
+msgctxt "Blending mode - Hard Overlay HDR"
+msgid "Hard Overlay HDR"
+msgstr "Superposició forta"
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
 msgctxt "Blending mode - Interpolation"
 msgid "Interpolation"
 msgstr "Interpolació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:129
+#: libs/pigment/KoCompositeOpRegistry.cpp:133
 #, kde-format
 msgctxt "Blending mode - Interpolation - 2X"
 msgid "Interpolation - 2X"
 msgstr "Interpolació - 2X"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:130
+#: libs/pigment/KoCompositeOpRegistry.cpp:134
 #, kde-format
 msgctxt "Blending mode - Penumbra A"
 msgid "Penumbra A"
 msgstr "Penombra A"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:131
+#: libs/pigment/KoCompositeOpRegistry.cpp:135
 #, kde-format
 msgctxt "Blending mode - Penumbra B"
 msgid "Penumbra B"
 msgstr "Penombra B"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:132
+#: libs/pigment/KoCompositeOpRegistry.cpp:136
 #, kde-format
 msgctxt "Blending mode - Penumbra C"
 msgid "Penumbra C"
 msgstr "Penombra C"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:133
+#: libs/pigment/KoCompositeOpRegistry.cpp:137
 #, kde-format
 msgctxt "Blending mode - Penumbra D"
 msgid "Penumbra D"
 msgstr "Penombra D"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:135
+#: libs/pigment/KoCompositeOpRegistry.cpp:139
 #, kde-format
 msgctxt "Blending mode - Bumpmap"
 msgid "Bumpmap"
 msgstr "Mapa de relleu"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:136
+#: libs/pigment/KoCompositeOpRegistry.cpp:140
 #, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
 msgstr "Combina mapa normal"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:137
+#: libs/pigment/KoCompositeOpRegistry.cpp:141
 #, kde-format
 msgctxt "Blending mode - Dissolve"
 msgid "Dissolve"
 msgstr "Dissoldre"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:138
+#: libs/pigment/KoCompositeOpRegistry.cpp:142
 #, kde-format
 msgctxt "Blending mode - Copy Red"
 msgid "Copy Red"
 msgstr "Copia el roig"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:139
+#: libs/pigment/KoCompositeOpRegistry.cpp:143
 #, kde-format
 msgctxt "Blending mode - Copy Green"
 msgid "Copy Green"
 msgstr "Copia el verd"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:140
+#: libs/pigment/KoCompositeOpRegistry.cpp:144
 #, kde-format
 msgctxt "Blending mode - Copy Blue"
 msgid "Copy Blue"
 msgstr "Copia el blau"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:141
+#: libs/pigment/KoCompositeOpRegistry.cpp:145
 #, kde-format
 msgctxt "Blending mode - Copy"
 msgid "Copy"
 msgstr "Copia"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:142
+#: libs/pigment/KoCompositeOpRegistry.cpp:146
 #, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
 msgstr "Mapa de la normal de la tangent"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:144
+#: libs/pigment/KoCompositeOpRegistry.cpp:148
 #, kde-format
 msgctxt "Blending mode - Color HSY"
 msgid "Color"
 msgstr "Color"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:145
+#: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, kde-format
 msgctxt "Blending mode - Hue HSY"
 msgid "Hue"
 msgstr "To"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:146
+#: libs/pigment/KoCompositeOpRegistry.cpp:150
+#, kde-format
+msgctxt "Blending mode - Tint HSY"
+msgid "Tint"
+msgstr ""
+
+#: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
 msgctxt "Blending mode - Saturation HSY"
 msgid "Saturation"
 msgstr "Saturació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:147
+#: libs/pigment/KoCompositeOpRegistry.cpp:152
 #, kde-format
 msgctxt "Blending mode - Luminosity HSY"
 msgid "Luminosity"
 msgstr "Lluminositat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:148
+#: libs/pigment/KoCompositeOpRegistry.cpp:153
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
 msgstr "Disminuïx la saturació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:149
+#: libs/pigment/KoCompositeOpRegistry.cpp:154
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
 msgstr "Augmenta la saturació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:150
+#: libs/pigment/KoCompositeOpRegistry.cpp:155
 #, kde-format
 msgctxt "Blending mode - Decrease Luminosity HSY"
 msgid "Decrease Luminosity"
 msgstr "Disminuïx la lluminositat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:151
+#: libs/pigment/KoCompositeOpRegistry.cpp:156
 #, kde-format
 msgctxt "Blending mode - Increase Luminosity HSY"
 msgid "Increase Luminosity"
 msgstr "Augmenta la brillantor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:153
+#: libs/pigment/KoCompositeOpRegistry.cpp:158
 #, kde-format
 msgctxt "Blending mode - Color HSI"
 msgid "Color HSI"
 msgstr "Color HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:154
+#: libs/pigment/KoCompositeOpRegistry.cpp:159
 #, kde-format
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
 msgstr "To HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:155
+#: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, kde-format
 msgctxt "Blending mode - Saturation HSI"
 msgid "Saturation HSI"
 msgstr "Saturació HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:156
+#: libs/pigment/KoCompositeOpRegistry.cpp:161
 #, kde-format
 msgctxt "Blending mode - Intensity HSI"
 msgid "Intensity"
 msgstr "Intensitat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:157
+#: libs/pigment/KoCompositeOpRegistry.cpp:162
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSI"
 msgid "Decrease Saturation HSI"
 msgstr "Disminuïx la saturació HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:158
+#: libs/pigment/KoCompositeOpRegistry.cpp:163
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSI"
 msgid "Increase Saturation HSI"
 msgstr "Augmenta la saturació HSI"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:159
+#: libs/pigment/KoCompositeOpRegistry.cpp:164
 #, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
 msgstr "Disminuïx la intensitat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:160
+#: libs/pigment/KoCompositeOpRegistry.cpp:165
 #, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
 msgstr "Augmenta la intensitat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:162
+#: libs/pigment/KoCompositeOpRegistry.cpp:167
 #, kde-format
 msgctxt "Blending mode - Color HSL"
 msgid "Color HSL"
 msgstr "Color HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:163
+#: libs/pigment/KoCompositeOpRegistry.cpp:168
 #, kde-format
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
 msgstr "To HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:164
+#: libs/pigment/KoCompositeOpRegistry.cpp:169
 #, kde-format
 msgctxt "Blending mode - Saturation HSL"
 msgid "Saturation HSL"
 msgstr "Saturació HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:165
+#: libs/pigment/KoCompositeOpRegistry.cpp:170
 #, kde-format
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
 msgstr "Claredat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:166
+#: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSL"
 msgid "Decrease Saturation HSL"
 msgstr "Disminuïx la saturació HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:167
+#: libs/pigment/KoCompositeOpRegistry.cpp:172
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSL"
 msgid "Increase Saturation HSL"
 msgstr "Augmenta la saturació HSL"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:168
+#: libs/pigment/KoCompositeOpRegistry.cpp:173
 #, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
 msgstr "Disminuïx la claredat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:169
+#: libs/pigment/KoCompositeOpRegistry.cpp:174
 #, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
 msgstr "Augmenta la claredat"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:171
+#: libs/pigment/KoCompositeOpRegistry.cpp:176
 #, kde-format
 msgctxt "Blending mode - Color HSV"
 msgid "Color HSV"
 msgstr "Color HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:172
+#: libs/pigment/KoCompositeOpRegistry.cpp:177
 #, kde-format
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
 msgstr "To HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:173
+#: libs/pigment/KoCompositeOpRegistry.cpp:178
 #, kde-format
 msgctxt "Blending mode - Saturation HSV"
 msgid "Saturation HSV"
 msgstr "Saturació HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:174
+#: libs/pigment/KoCompositeOpRegistry.cpp:179
 #, kde-format
 msgctxt "Blending mode - Value HSV"
 msgid "Value"
 msgstr "Valor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:175
+#: libs/pigment/KoCompositeOpRegistry.cpp:180
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSV"
 msgid "Decrease Saturation HSV"
 msgstr "Disminuïx la saturació HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:176
+#: libs/pigment/KoCompositeOpRegistry.cpp:181
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSV"
 msgid "Increase Saturation HSV"
 msgstr "Augmenta la saturació HSV"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:177
+#: libs/pigment/KoCompositeOpRegistry.cpp:182
 #, kde-format
 msgctxt "Blending mode - Decrease Value HSV"
 msgid "Decrease Value"
 msgstr "Disminuïx el valor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:178
+#: libs/pigment/KoCompositeOpRegistry.cpp:183
 #, kde-format
 msgctxt "Blending mode - Increase Value HSV"
 msgid "Increase Value"
 msgstr "Augmenta el valor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:180
+#: libs/pigment/KoCompositeOpRegistry.cpp:185
 #, kde-format
 msgctxt "Blending mode - Reflect"
 msgid "Reflect"
 msgstr "Reflectix"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:181
+#: libs/pigment/KoCompositeOpRegistry.cpp:186
 #, kde-format
 msgctxt "Blending mode - Glow"
 msgid "Glow"
 msgstr "Lluïssor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:182
+#: libs/pigment/KoCompositeOpRegistry.cpp:187
 #, kde-format
 msgctxt "Blending mode - Freeze"
 msgid "Freeze"
 msgstr "Congelació"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:183
+#: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
 msgctxt "Blending mode - Heat"
 msgid "Heat"
 msgstr "Calor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:184
+#: libs/pigment/KoCompositeOpRegistry.cpp:189
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
 msgstr "Lluïssor de calor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:185
+#: libs/pigment/KoCompositeOpRegistry.cpp:190
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
 msgstr "Calor de lluïssor"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:186
+#: libs/pigment/KoCompositeOpRegistry.cpp:191
 #, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
 msgstr "Reflexió-Gel"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:187
+#: libs/pigment/KoCompositeOpRegistry.cpp:192
 #, kde-format
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
 msgstr "Gel-Reflexió"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:188
+#: libs/pigment/KoCompositeOpRegistry.cpp:193
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
 msgstr "Híbrid de calor de lluïssor i gel-reflexió"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:212
+#: libs/pigment/KoCompositeOpRegistry.cpp:217
 #, kde-format
 msgid "In"
 msgstr "Acosta"
 
-#: libs/pigment/KoCompositeOpRegistry.cpp:214
+#: libs/pigment/KoCompositeOpRegistry.cpp:219
 #, kde-format
 msgid "Out"
 msgstr "Allunya"

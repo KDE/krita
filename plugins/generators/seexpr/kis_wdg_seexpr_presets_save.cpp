@@ -145,9 +145,15 @@ void KisWdgSeExprPresetsSave::savePreset()
     if (idx.isValid() && !m_useNewPresetDialog) {
         // saving a preset that is replacing an existing one
         const QString presetFileName = m_currentPreset->name().split(" ").join("_");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         if (!presetThumbnailWidget->pixmap()->isNull()) {
             m_currentPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         }
+#else
+        if (!presetThumbnailWidget->pixmap().isNull()) {
+            m_currentPreset->setImage(presetThumbnailWidget->pixmap().toImage());
+        }
+#endif
         m_currentPreset->setScript(m_currentConfiguration->getString("script"));
         m_currentPreset->setFilename(presetFileName + m_currentPreset->defaultFileExtension());
         m_currentPreset->setValid(true);
@@ -164,9 +170,15 @@ void KisWdgSeExprPresetsSave::savePreset()
             const QString presetFileName = newPresetNameTextField->text().split(" ").join("_");
             newPreset->setName(newPresetNameTextField->text());
             newPreset->setFilename(presetFileName + newPreset->defaultFileExtension());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             if (!presetThumbnailWidget->pixmap()->isNull()) {
                 newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
             }
+#else
+            if (!presetThumbnailWidget->pixmap().isNull()) {
+                newPreset->setImage(presetThumbnailWidget->pixmap().toImage());
+            }
+#endif
             newPreset->setScript(m_currentConfiguration->getString("script"));
             newPreset->setValid(true);
 

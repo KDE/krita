@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-04 01:53+0000\n"
-"PO-Revision-Date: 2025-02-01 10:36+0100\n"
+"PO-Revision-Date: 2025-02-03 09:30+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -36726,6 +36726,13 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Les logiciels de KDE sont et seront toujours disponibles gratuitement, "
+"mais leurs créations ne le sont pas.<br /><br />Pour soutenir les "
+"développements, la communauté KDE a formé la fondation KDE e.V., une "
+"organisation à but non lucratif légalement fondée en Allemagne. KDE e.V. "
+"représente la communauté KDE en matière juridique et financière. Veuillez "
+"consulter la page <a href=\"%1\">%1</a> pour plus d'informations sur la "
+"fondation KDE e.V.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36735,6 +36742,11 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE bénéficie de nombreux types de contributions, y compris financières. "
+"Nous utilisons les fonds pour rembourser les membres et les autres personnes "
+"pour les dépenses qu'ils engagent lorsqu'ils contribuent. D'autres fonds "
+"sont utilisés pour le soutien juridique et l'organisation de conférences et "
+"de réunions.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36742,6 +36754,9 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Nous aimerions vous encourager à soutenir nos efforts par un don "
+"financier, en utilisant l'un des moyens décrits à l'adresse <a href=\"%1\">"
+"%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format

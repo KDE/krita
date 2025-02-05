@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-04 01:53+0000\n"
-"PO-Revision-Date: 2025-02-02 09:13+0200\n"
+"PO-Revision-Date: 2025-02-04 10:00+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -19292,11 +19292,10 @@ msgid "Color Dodge"
 msgstr "Висвітлювання кольорів"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Висвітлювання кольорів"
+msgstr "Висвітлювання кольорів HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19335,11 +19334,10 @@ msgid "Vivid Light"
 msgstr "Ясне світло"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Ясне світло"
+msgstr "Ясне світло HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19558,11 +19556,10 @@ msgid "Hard Mix"
 msgstr "Агресивне змішування"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Агресивне змішування"
+msgstr "Агресивне змішування HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19625,11 +19622,10 @@ msgid "Hard Overlay"
 msgstr "Жорстке накладання"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Жорстке накладання"
+msgstr "Жорстке накладання HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19731,7 +19727,7 @@ msgstr "Відтінок"
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr ""
+msgstr "Затінення"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format

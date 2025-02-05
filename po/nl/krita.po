@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-04 01:53+0000\n"
-"PO-Revision-Date: 2025-02-02 14:34+0100\n"
+"PO-Revision-Date: 2025-02-04 22:57+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19121,11 +19121,10 @@ msgid "Color Dodge"
 msgstr "Color Dodge"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Color Dodge"
+msgstr "Color Dodge HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19164,11 +19163,10 @@ msgid "Vivid Light"
 msgstr "Levendig licht"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Vivid Light"
+msgstr "Vivid Light HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19387,11 +19385,10 @@ msgid "Hard Mix"
 msgstr "Harde mix"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Harde mix"
+msgstr "Harde mix HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19454,11 +19451,10 @@ msgid "Hard Overlay"
 msgstr "Hard over elkaar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Hard Overlay"
+msgstr "Hard Overlay HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19557,12 +19553,10 @@ msgid "Hue"
 msgstr "Tint"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Tint: "
+#, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "Tint: "
+msgstr "Tint"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format

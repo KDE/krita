@@ -54,7 +54,7 @@
 # SPDX-FileCopyrightText: 2006 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015, 2025 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez (Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-04 01:53+0000\n"
-"PO-Revision-Date: 2025-02-04 01:08+0100\n"
+"PO-Revision-Date: 2025-02-05 01:32+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -19090,11 +19090,10 @@ msgid "Color Dodge"
 msgstr "Blanqueo de color"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Blanqueo de color"
+msgstr "Blanqueo de color HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19133,11 +19132,10 @@ msgid "Vivid Light"
 msgstr "Luz brillante"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Luz brillante"
+msgstr "Luz brillante HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19356,11 +19354,10 @@ msgid "Hard Mix"
 msgstr "Mezcla fuerte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Mezcla fuerte"
+msgstr "Mezcla fuerte HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19423,11 +19420,10 @@ msgid "Hard Overlay"
 msgstr "Superposición fuerte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Superposición fuerte"
+msgstr "Superposición fuerte HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19526,12 +19522,10 @@ msgid "Hue"
 msgstr "Tono"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Tint: "
+#, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "Tinte: "
+msgstr "Tinte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-04 01:53+0000\n"
-"PO-Revision-Date: 2025-02-02 12:52+0300\n"
+"PO-Revision-Date: 2025-02-04 11:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -19020,12 +19020,10 @@ msgid "Color Dodge"
 msgstr "Renk Soldur"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Color Dodge"
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Renk Soldur"
+msgstr "Renk Soldurmalı HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19064,12 +19062,10 @@ msgid "Vivid Light"
 msgstr "Parlak Işık"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Vivid Light"
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Parlak Işık"
+msgstr "Parlak Işıklı HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19288,12 +19284,10 @@ msgid "Hard Mix"
 msgstr "Sert Karışım"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Sert Karışım"
+msgstr "Sert Karışımlı HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19356,12 +19350,10 @@ msgid "Hard Overlay"
 msgstr "Sert Kaplama"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Overlay"
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Sert Kaplama"
+msgstr "Sert Kaplamalı HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19463,7 +19455,7 @@ msgstr "Ton"
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr ""
+msgstr "Açık Ton"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format

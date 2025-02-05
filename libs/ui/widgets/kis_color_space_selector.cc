@@ -58,7 +58,7 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget *parent)
             this, SLOT(slotModelsComboBoxActivated(KoID)));
     connect(d->colorSpaceSelector->cmbColorDepth, SIGNAL(activated(KoID)),
             this, SLOT(slotDepthsComboBoxActivated()));
-    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(QString)),
+    connect(d->colorSpaceSelector->cmbProfile, SIGNAL(textActivated(QString)),
             this, SLOT(slotProfilesComboBoxActivated()));
     connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()),
             this, SLOT(installProfile()));

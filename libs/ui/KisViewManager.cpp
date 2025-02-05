@@ -787,7 +787,7 @@ void KisViewManager::createActions()
     d->viewPrintSize = actionManager()->createAction("view_print_size");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
-    connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
+    connect(d->actionAuthor, SIGNAL(textTriggered(QString)), this, SLOT(changeAuthorProfile(QString)));
     actionCollection()->addAction("settings_active_author", d->actionAuthor);
     slotUpdateAuthorProfileActions();
 

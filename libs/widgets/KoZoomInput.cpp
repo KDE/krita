@@ -62,7 +62,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     d->inside = false;
     d->isFlat = true;
 
-    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->combo, SIGNAL(textActivated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
 
 KoZoomInput::~KoZoomInput()

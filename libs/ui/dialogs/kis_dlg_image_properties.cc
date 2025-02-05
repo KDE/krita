@@ -163,7 +163,7 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, KisDisplayColorC
         m_page->cmbAnnotations->addItem((*it)->type());
         it++;
     }
-    connect(m_page->cmbAnnotations, SIGNAL(activated(QString)), SLOT(setAnnotation(QString)));
+    connect(m_page->cmbAnnotations, SIGNAL(textActivated(QString)), SLOT(setAnnotation(QString)));
     setAnnotation(m_page->cmbAnnotations->currentText());
     connect(this, SIGNAL(accepted()), SLOT(slotSaveDialogState()));
 

@@ -713,6 +713,7 @@ target_link_libraries(kritaui
     PRIVATE
         Qt6::OpenGLWidgets
         Qt6::SvgWidgets
+        KF6::ColorScheme
 )
 endif()
 

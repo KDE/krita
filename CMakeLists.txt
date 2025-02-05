@@ -486,6 +486,11 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         OpenGLWidgets
         SvgWidgets
     )
+
+    find_package(KF6 ${MIN_FRAMEWORKS_VERSION}
+        REQUIRED COMPONENTS
+        ColorScheme
+    )
 endif()
 
 

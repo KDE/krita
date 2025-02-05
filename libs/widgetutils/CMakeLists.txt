@@ -50,7 +50,6 @@ set(kritawidgetutils_LIB_SRCS
     KisSpinBoxI18nHelper.cpp
     KisScreenMigrationTracker.cpp
 
-    config/kcolorscheme.cpp
     config/khelpclient.cpp
     config/klanguagebutton.cpp
     config/krecentfilesaction.cpp
@@ -95,6 +94,12 @@ set(kritawidgetutils_LIB_SRCS
 
     KisClickableLabel.cpp
 )
+
+if (QT_MAJOR_VERSION STREQUAL "5")
+    set(kritawidgetutils_LIB_SRCS ${kritawidgetutils_LIB_SRCS}
+        config/kcolorscheme.cpp
+    )
+endif()
 
 if (HAVE_DBUS)
     set(kritawidgetutils_LIB_SRCS ${kritawidgetutils_LIB_SRCS}
@@ -162,6 +167,10 @@ target_link_libraries(kritawidgetutils
         
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}
 )
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(kritawidgetutils PRIVATE KF6::ColorScheme)
+endif()
 
 set_target_properties(kritawidgetutils
     PROPERTIES VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

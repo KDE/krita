@@ -18,7 +18,13 @@ ki18n_wrap_ui(krita_raw_import_SOURCES
 )
 
 kis_add_library(krita_raw_import MODULE ${krita_raw_import_SOURCES})
-target_link_libraries(krita_raw_import kritaui KF${KF_MAJOR}::KDcraw kritaexifcommon)
+target_link_libraries(krita_raw_import kritaui kritaexifcommon)
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(krita_raw_import KDcrawQt6)
+else()
+    target_link_libraries(krita_raw_import KF5::KDcraw)
+endif()
 
 install(TARGETS krita_raw_import  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

@@ -1210,13 +1210,23 @@ set_package_properties(QUAZIP PROPERTIES
 ##
 ## Test for KDcraw
 ##
-find_package(KF5KDcraw 5.0.0)
-set_package_properties(KF5KDcraw PROPERTIES
-    DESCRIPTION "A thread-safe wrapper around libraw"
-    URL "https://api.kde.org/libkdcraw/html/index.html"
-    TYPE OPTIONAL
-    PURPOSE "Needed for reading RAW files"
-)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(KDcrawQt6 5.0.0)
+    set_package_properties(KDcrawQt6 PROPERTIES
+        DESCRIPTION "A thread-safe wrapper around libraw"
+        URL "https://api.kde.org/libkdcraw/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Needed for reading RAW files"
+    )
+else()
+    find_package(KF5KDcraw 5.0.0)
+    set_package_properties(KF5KDcraw PROPERTIES
+        DESCRIPTION "A thread-safe wrapper around libraw"
+        URL "https://api.kde.org/libkdcraw/html/index.html"
+        TYPE OPTIONAL
+        PURPOSE "Needed for reading RAW files"
+    )
+endif()
 
 ##
 ## Check for freetype

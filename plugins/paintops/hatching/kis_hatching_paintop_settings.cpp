@@ -98,11 +98,10 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
                                                                 settings,
                                                                 0);
 
-            const QString degree = QChar(Qt::Key_degree);
             prop->setRange(-90, 90);
             prop->setSingleStep(0.01);
             prop->setDecimals(2);
-            prop->setSuffix(degree);
+            prop->setSuffix(QStringLiteral("°"));
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {

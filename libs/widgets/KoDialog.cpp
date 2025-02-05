@@ -256,10 +256,19 @@ void KoDialog::setButtons(ButtonCodes buttonMask)
         d->appendButton(Close, KStandardGuiItem::close());
     }
     if (buttonMask & Yes) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         d->appendButton(Yes, KStandardGuiItem::yes());
+#else
+        d->appendButton(Yes, KStandardGuiItem::apply());
+#endif
     }
     if (buttonMask & No) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         d->appendButton(No, KStandardGuiItem::no());
+#else
+        d->appendButton(No, KStandardGuiItem::cancel());
+#endif
+
     }
     if (buttonMask & Details) {
         d->appendButton(Details, KGuiItem(QString(), "help-about"));

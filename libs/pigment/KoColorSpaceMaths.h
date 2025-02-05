@@ -15,6 +15,8 @@
 #include "KoChannelInfo.h"
 #include "KoLut.h"
 
+#include <kis_global.h>
+
 #undef _T
 
 /**
@@ -270,7 +272,7 @@ public:
     }
 
     inline static dst_compositetype clamp(dst_compositetype val) {
-        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
+        return kisBoundFast<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 
     inline static _T clampChannelToSDR(_T val) {

@@ -13,6 +13,15 @@
 #include <QOpenGLFunctions_2_0>
 #include <QOpenGLFunctions_3_0>
 #include <QOpenGLFunctions_3_2_Core>
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QOpenGLVersionFunctionsFactory>
+#include <QOpenGLFunctions_3_0>
+#include <QOpenGLFunctions_3_1>
+#include <QOpenGLFunctions_3_2_Core>
+#include <QOpenGLFunctions_2_0>
+#else
+#include <QOpenGLVersionFunctions>
+#endif
 
 #include <cmath>
 #include <cstring>
@@ -20,6 +29,7 @@
 #include <kis_config.h>
 #include <kis_debug.h>
 #include <opengl/kis_opengl.h>
+#include <qsurface.h>
 
 #if defined(QT_OPENGL_ES_2)
 #define GL_RGBA32F_ARB GL_RGBA32F_EXT
@@ -328,7 +338,13 @@ bool OcioDisplayFilter::updateShader()
         }
 #if defined(QT_OPENGL_3)
     } else if (KisOpenGL::hasOpenGL3()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
+#else
+        QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
+        profile.setVersion(3,2);
+        QOpenGLFunctions_3_2_Core *f = reinterpret_cast<QOpenGLFunctions_3_2_Core *>(QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext()));
+#endif
         if (f) {
             return updateShaderImpl(f);
         }
@@ -337,10 +353,23 @@ bool OcioDisplayFilter::updateShader()
 
     if (KisOpenGL::supportsLoD()) {
 #if defined(QT_OPENGL_3)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)
         QOpenGLFunctions_3_2_Core *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_2_Core>();
 #else
         QOpenGLFunctions_3_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_3_0>();
+#endif
+#else
+#if defined(Q_OS_MAC) && defined(QT_OPENGL_3_2)
+        QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
+        profile.setVersion(3,2);
+        QOpenGLFunctions_3_2 *f = reinterpret_cast<QOpenGLFunctions_3_2 *>(QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext()));
+#else
+        QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
+        profile.setVersion(3,0);
+        QOpenGLFunctions_3_0 *f = reinterpret_cast<QOpenGLFunctions_3_0 *>(QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext()));
+#endif
+
 #endif
         if (f) {
             return updateShaderImpl(f);
@@ -348,7 +377,13 @@ bool OcioDisplayFilter::updateShader()
 #endif
     }
 #if !defined(QT_OPENGL_ES_2)
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QOpenGLFunctions_2_0 *f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_2_0>();
+#else
+    QOpenGLVersionProfile profile(QOpenGLContext::currentContext()->surface()->format());
+    profile.setVersion(2,0);
+    QOpenGLFunctions_2_0 *f = reinterpret_cast<QOpenGLFunctions_2_0 *>(QOpenGLVersionFunctionsFactory::get(profile, QOpenGLContext::currentContext()));
+#endif
     if (f) {
         return updateShaderImpl(f);
     }

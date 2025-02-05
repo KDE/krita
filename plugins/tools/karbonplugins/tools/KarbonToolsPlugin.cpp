@@ -12,7 +12,6 @@
 #include <KoShapeRegistry.h>
 
 #include <kpluginfactory.h>
-#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KarbonToolsPluginFactory, "karbon_tools.json", registerPlugin<KarbonToolsPlugin>();)
 

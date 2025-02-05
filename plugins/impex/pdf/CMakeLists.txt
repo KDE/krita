@@ -6,7 +6,7 @@ ki18n_wrap_ui(kritapdfimport_SOURCES pdfimportwidgetbase.ui )
 
 kis_add_library(kritapdfimport MODULE ${kritapdfimport_SOURCES})
 
-target_link_libraries(kritapdfimport kritaui Poppler::Qt5)
+target_link_libraries(kritapdfimport kritaui Poppler::Qt${QT_MAJOR_VERSION})
 
 install(TARGETS kritapdfimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

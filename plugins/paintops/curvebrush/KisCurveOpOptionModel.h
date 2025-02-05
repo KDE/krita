@@ -12,6 +12,8 @@
 #include "KisCurveOpOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisCurveOpOptionModel : public QObject
 {
     Q_OBJECT

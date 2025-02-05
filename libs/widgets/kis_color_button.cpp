@@ -237,7 +237,7 @@ void KisColorButton::paintEvent(QPaintEvent *)
     if (hasFocus()) {
         QRect focusRect = style->subElementRect(QStyle::SE_PushButtonFocusRect, &butOpt, this);
         QStyleOptionFocusRect focusOpt;
-        focusOpt.init(this);
+        focusOpt.initFrom(this);
         focusOpt.rect            = focusRect;
         focusOpt.backgroundColor = palette().window().color();
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, &painter, this);

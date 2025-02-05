@@ -68,6 +68,8 @@ if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 if (APPLE)
     add_subdirectory(packaging/macos)
     set(MACOSX_RPATH TRUE)
@@ -349,8 +351,10 @@ endif(WIN32)
 option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
 if (BUILD_WITH_QT6)
     set(QT_MAJOR_VERSION 6)
+    find_package(ECM 6.0 REQUIRED CONFIG)
 else()
     set(QT_MAJOR_VERSION 5)
+    find_package(ECM 5.22 REQUIRED CONFIG)
 endif()
 
 # KDE Frameworks
@@ -360,7 +364,6 @@ if (KF_MAJOR STREQUAL "6")
     set(KF_DEP_VERSION "6.0.0")
 endif()
 
-find_package(ECM 5.22 REQUIRED CONFIG)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 
 include(ECMOptionalAddSubdirectory)
@@ -376,13 +379,18 @@ include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
 
-include(KDEInstallDirs)
 if (QT_MAJOR_VERSION STREQUAL "6")
-    set(ICON_INSTALL_DIR ${KDE_INSTALL_ICONDIR})
+    set (KDE_COMPILERSETTINGS_LEVEL "5.0")
+    set (KDE_QT_MODERNCODE_DEFINITIONS_LEVEL "5.0")
+    set (KDE_SKIP_PEDANTIC_WARNINGS_SETTINGS TRUE)
+    set (KDE_SKIP_MISSING_INCLUDE_DIRS_WARNINGS_SETTINGS TRUE)
+    set (KDE_SKIP_NULLPTR_WARNINGS_SETTINGS TRUE)
 endif()
+include(KDECompilerSettings)
+
+include(KDEInstallDirs)
 
 include(KDECMakeSettings)
-include(KDECompilerSettings)
 
 if (WIN32)
 # KDECompilerSettings sets Windows Vista as the default,
@@ -460,6 +468,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         Core5Compat
         OpenGL
         OpenGLWidgets
+        SvgWidgets
     )
 endif()
 
@@ -621,12 +630,6 @@ add_definitions(
   -DQT_USE_FAST_CONCATENATION 
   -DQT_USE_FAST_OPERATOR_PLUS
 )
-
-remove_definitions(
-    -DQT_NO_CAST_FROM_ASCII
-    -DQT_NO_FOREACH
-)
-
 
 # MSVC is unable to disambiguate between definitions of QVector<QPointF> 
 # and QPolygonF. This is a known upstream bug e.g.:
@@ -807,8 +810,8 @@ if (ANDROID)
         message (FATAL_ERROR "ANDROID_SDK_ROOT argument is not set")
     endif()
 
-    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
-    # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+    set (KRITA_PLUGIN_INSTALL_DIR ${KDE_INSTALL_LIBDIR})
+    # set (KDE_INSTALL_DATADIR ${CMAKE_INSTALL_PREFIX}/assets)
 
     # From ECM
     # Because Qt changes library suffix (to include arch), this changes name of
@@ -816,7 +819,7 @@ if (ANDROID)
     # adapted for this.
     set(CMAKE_FIND_LIBRARY_SUFFIXES "_${CMAKE_ANDROID_ARCH_ABI}.so" ".so" ".a")
 else()
-    set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
+    set (KRITA_PLUGIN_INSTALL_DIR ${KDE_INSTALL_LIBDIR}/kritaplugins)
 endif()
 
 
@@ -897,7 +900,11 @@ set_package_properties(WebP PROPERTIES
 ##
 ## Test for KSeExpr
 ##
-find_package(KSeExpr 4.0.0.0)
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(KSeExpr 4.0.0.0)
+else()
+    find_package(KSeExpr 6.0.0.0)
+endif() 
 set_package_properties(KSeExpr PROPERTIES
     URL "https://invent.kde.org/graphics/kseexpr"
     TYPE OPTIONAL
@@ -1182,7 +1189,7 @@ test_big_endian(CMAKE_WORDS_BIGENDIAN)
 ##
 ## Test for qt-poppler
 ##
-find_package(Poppler COMPONENTS Qt5)
+find_package(Poppler COMPONENTS Qt${QT_MAJOR_VERSION})
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "https://poppler.freedesktop.org/"

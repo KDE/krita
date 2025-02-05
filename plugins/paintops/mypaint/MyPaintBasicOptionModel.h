@@ -11,6 +11,8 @@
 
 #include "MyPaintBasicOptionData.h"
 
+#include <QObject>
+
 class MyPaintBasicOptionModel : public QObject
 {
     Q_OBJECT

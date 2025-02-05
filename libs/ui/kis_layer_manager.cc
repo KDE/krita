@@ -537,7 +537,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     urlRequester->setMimeTypeFilters(listMimeFilter);
     urlRequester->setFileName(m_view->document()->path());
     if (!m_view->document()->path().isEmpty()) {
-        QFileInfo location = QFileInfo(m_view->document()->path()).completeBaseName();
+        QFileInfo location = QFileInfo(m_view->document()->path());
         location.setFile(location.dir(), location.completeBaseName() + "_" + source->name() + ".png");
         urlRequester->setFileName(location.absoluteFilePath());
     }

@@ -101,7 +101,12 @@ protected:
         p.fillRect(0, width(), 50, height(), m_lastUsedColor);
     }
 
-    void enterEvent(QEvent *e) override {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEvent *e) override
+#else
+    void enterEvent(QEnterEvent *e) override
+#endif
+    {
         QWidget::enterEvent(e);
         m_parent->tryHideAllPopups();
     }
@@ -262,8 +267,11 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
         hide();
     }
 }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KisColorSelectorBase::enterEvent(QEvent *e)
+#else
+void KisColorSelectorBase::enterEvent(QEnterEvent *e)
+#endif
 {
     if (m_popup && m_popup->isVisible()) {
         m_popup->m_hideTimer->stop();
@@ -295,7 +303,13 @@ void KisColorSelectorBase::enterEvent(QEvent *e)
         showPopup(DontMove);
     }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QWidget::enterEvent(e);
+#else
+    QEnterEvent *enterEvent = dynamic_cast<QEnterEvent*>(e);
+    QWidget::enterEvent(enterEvent);
+#endif
+
 }
 
 void KisColorSelectorBase::leaveEvent(QEvent *e)

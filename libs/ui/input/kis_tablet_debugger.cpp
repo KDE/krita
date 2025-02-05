@@ -186,8 +186,17 @@ QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &p
     KisPortingUtils::setUtf8OnStream(s);
 
     dumpBaseParams(s, ev, prefix);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     s << (ev.device()->type() ? "TouchPad" : "TouchScreen") << " ";
+#else
+    if (ev.deviceType() == QInputDevice::DeviceType::TouchPad) {
+        s << "Touchpad";
+    }
+    else if (ev.deviceType() == QInputDevice::DeviceType::TouchScreen) {
+        s << "TouchScreen";
+    }
+    s << " ";
+#endif
     for (const auto& touchpoint: ev.touchPoints()) {
         s << "id: " << touchpoint.id() << " ";
         s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";
@@ -224,8 +233,10 @@ template <class Event>
     s << "hires: " << qSetFieldWidth(8) << ev.globalPosF().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.globalPosF().y() << qSetFieldWidth(0) << " ";
     s << "prs: " << qSetFieldWidth(4) << Qt::fixed << ev.pressure() << Qt::reset << " ";
 
-    s << KisTabletDebugger::tabletDeviceToString((QTabletEvent::TabletDevice) ev.deviceType()) << " ";
-    s << KisTabletDebugger::pointerTypeToString((QTabletEvent::PointerType) ev.pointerType()) << " ";
+
+    s << KisTabletDebugger::tabletDeviceToString(ev) << " ";
+    s << KisTabletDebugger::pointerTypeToString(ev) << " ";
+
     s << "id: " << ev.uniqueId() << " ";
 
     s << "xTilt: " << ev.xTilt() << " ";
@@ -242,25 +253,45 @@ QString KisTabletDebugger::eventToString(const QTabletEvent &ev, const QString &
     return tabletEventToString(ev, prefix);
 }
 
-QString KisTabletDebugger::tabletDeviceToString(QTabletEvent::TabletDevice device)
+QString KisTabletDebugger::tabletDeviceToString(const QTabletEvent &event)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     return
-        device == QTabletEvent::NoDevice ? "NoDevice" :
-        device == QTabletEvent::Puck ? "Puck" :
-        device == QTabletEvent::Stylus ? "Stylus" :
-        device == QTabletEvent::Airbrush ? "Airbrush" :
-        device == QTabletEvent::FourDMouse ? "FourDMouse" :
-        device == QTabletEvent::XFreeEraser ? "XFreeEraser" :
-        device == QTabletEvent::RotationStylus ? "RotationStylus" :
-        "unknown";
+        event.deviceType() == QTabletEvent::NoDevice ? "NoDevice" :
+        event.deviceType() == QTabletEvent::Puck ? "Puck" :
+        event.deviceType() == QTabletEvent::Stylus ? "Stylus" :
+        event.deviceType() == QTabletEvent::Airbrush ? "Airbrush" :
+        event.deviceType() == QTabletEvent::FourDMouse ? "FourDMouse" :
+        event.deviceType() == QTabletEvent::XFreeEraser ? "XFreeEraser" :
+        event.deviceType() == QTabletEvent::RotationStylus ? "RotationStylus" :
+        "Unknown";
+#else
+    QInputDevice::DeviceType deviceType = event.deviceType();
+
+    return
+        deviceType == QInputDevice::DeviceType::Puck ? "Puck" :
+        deviceType == QInputDevice::DeviceType::Stylus ? "Stylus" :
+        deviceType == QInputDevice::DeviceType::Airbrush ? "Airbrush" :
+        "Unknown";
+#endif
 }
 
-QString KisTabletDebugger::pointerTypeToString(QTabletEvent::PointerType pointer) {
+QString KisTabletDebugger::pointerTypeToString(const QTabletEvent &event) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     return
-        pointer == QTabletEvent::UnknownPointer ? "UnknownPointer" :
-        pointer == QTabletEvent::Pen ? "Pen" :
-        pointer == QTabletEvent::Cursor ? "Cursor" :
-        pointer == QTabletEvent::Eraser ? "Eraser" :
-        "unknown";
+        event.pointerType() == QTabletEvent::UnknownPointer ? "UnknownPointer" :
+        event.pointerType() == QTabletEvent::Pen ? "Pen" :
+        event.pointerType() == QTabletEvent::Cursor ? "Cursor" :
+        event.pointerType() == QTabletEvent::Eraser ? "Eraser" :
+        "Unknown";
+#else
+    QPointingDevice::PointerType pointerType = event.pointerType();
+    return
+        pointerType == QPointingDevice::PointerType::Pen ? "Pen" :
+        pointerType == QPointingDevice::PointerType::Cursor ? "Cursor" :
+        pointerType == QPointingDevice::PointerType::Eraser ? "Eraser" :
+        "Unknown";
+#endif
+
 }
 

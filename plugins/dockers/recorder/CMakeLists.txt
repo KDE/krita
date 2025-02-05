@@ -27,7 +27,7 @@ ki18n_wrap_ui(KRITA_RECORDERDOCKER_SOURCES
 install(FILES
     recorder.action
 
-    DESTINATION ${DATA_INSTALL_DIR}/krita/actions
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/actions
 )
 
 kis_add_library(kritarecorderdocker MODULE ${KRITA_RECORDERDOCKER_SOURCES})

@@ -17,6 +17,7 @@
 #include <QDomDocument>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include <QRegExp>
 
 #include "KoChannelInfo.h"
 #include "KoBasicHistogramProducers.h"

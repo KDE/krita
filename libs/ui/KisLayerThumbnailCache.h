@@ -8,6 +8,8 @@
 
 #include <kritaui_export.h>
 #include <QScopedPointer>
+#include <QObject>
+
 #include "kis_types.h"
 
 class KisIdleTasksManager;

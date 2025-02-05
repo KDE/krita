@@ -10,6 +10,8 @@
 #include "tablettest.h"
 #include "ui_tablettest.h"
 
+#include <QTabletEvent>
+
 TabletTestDialog::TabletTestDialog(QWidget *parent)
     : KoDialog(parent, Qt::Dialog)
 {
@@ -43,7 +45,12 @@ bool TabletTestDialog::eventFilter(QObject *watched, QEvent *e) {
     Q_UNUSED(watched);
     if(e->type() == QEvent::TabletEnterProximity || e->type() == QEvent::TabletLeaveProximity) {
         QTabletEvent *te = static_cast<QTabletEvent*>(e);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         bool isEraser = te->pointerType() == QTabletEvent::Eraser;
+#else
+        bool isEraser = te->pointingDevice()->pointerType() == QPointingDevice::PointerType::Eraser;
+#endif
+
         bool isNear = e->type() == QEvent::TabletEnterProximity;
         QString msg;
         if(isEraser) {

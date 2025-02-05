@@ -18,6 +18,7 @@
 
 class KoColorSpace;
 class KoColorTransformation;
+class QButtonGroup;
 
 class KisDesaturateFilter : public KisColorTransformationFilter
 {

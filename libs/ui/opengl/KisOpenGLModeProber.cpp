@@ -12,8 +12,10 @@
 #include <QOpenGLContext>
 #include <QOpenGLFunctions>
 #include <QWindow>
+#include <QColorSpace>
 
 #include <QGlobalStatic>
+
 Q_GLOBAL_STATIC(KisOpenGLModeProber, s_instance)
 
 
@@ -47,17 +49,32 @@ QSurfaceFormat KisOpenGLModeProber::surfaceformatInUse() const
 const KoColorProfile *KisOpenGLModeProber::rootSurfaceColorProfile() const
 {
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
-
-    const KisSurfaceColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
-    if (surfaceColorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    const QSurfaceFormat::ColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
+    if (surfaceColorSpace == QSurfaceFormat::ColorSpace::sRGBColorSpace) {
         // use the default one!
 #ifdef HAVE_HDR
-    } else if (surfaceColorSpace == KisSurfaceColorSpace::scRGBColorSpace) {
+    } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p709G10Profile();
-    } else if (surfaceColorSpace == KisSurfaceColorSpace::bt2020PQColorSpace) {
+    } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::bt2020PQColorSpace) {
         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
 #endif
     }
+#else
+    const QColorSpace surfaceColorSpace = surfaceformatInUse().colorSpace();
+    if (surfaceColorSpace == QColorSpace(QColorSpace::NamedColorSpace::SRgb)) {
+        // use the default one!
+// FIXME QT6: Fix this when fixing HDR!!!
+// #ifdef HAVE_HDR
+//     } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace) {
+//         profile = KoColorSpaceRegistry::instance()->p709G10Profile();
+//     } else if (surfaceColorSpace == QSurfaceFormat::ColorSpace::bt2020PQColorSpace) {
+//         profile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+// #endif
+    }
+#endif
+
+
     return profile;
 }
 
@@ -211,15 +228,28 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     return result;
 }
 
-bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs, const KisSurfaceColorSpace &rhs)
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs, const QSurfaceFormat::ColorSpace &rhs)
 {
     return lhs == rhs ||
-        ((lhs == KisSurfaceColorSpace::DefaultColorSpace ||
-          lhs == KisSurfaceColorSpace::sRGBColorSpace) &&
-         (rhs == KisSurfaceColorSpace::DefaultColorSpace ||
-          rhs == KisSurfaceColorSpace::sRGBColorSpace));
+        ((lhs == QSurfaceFormat::ColorSpace::DefaultColorSpace ||
+          lhs == QSurfaceFormat::ColorSpace::sRGBColorSpace) &&
+         (rhs == QSurfaceFormat::ColorSpace::DefaultColorSpace ||
+          rhs == QSurfaceFormat::ColorSpace::sRGBColorSpace));
 }
 
+#else
+bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const QColorSpace &lhs, const QColorSpace &rhs)
+{
+    return lhs == rhs ||
+        (( lhs == QColorSpace() ||
+           lhs == QColorSpace(QColorSpace::NamedColorSpace::SRgb)) &&
+         ( rhs == QColorSpace() ||
+           rhs == QColorSpace(QColorSpace::NamedColorSpace::SRgb)));
+
+}
+#endif
 void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceFormat config,
                                                       QSurfaceFormat *format)
 {
@@ -230,13 +260,21 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setGreenBufferSize(10);
         format->setBlueBufferSize(10);
         format->setAlphaBufferSize(2);
-        format->setColorSpace(KisSurfaceColorSpace::bt2020PQColorSpace);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        format->setColorSpace(QSurfaceFormat::ColorSpace::bt2020PQColorSpace);
+#else
+        format->setColorSpace(QColorSpace(QColorSpace::NamedColorSpace::Bt2100Pq);
+#endif
     } else if (config == KisConfig::BT709_G10) {
         format->setRedBufferSize(16);
         format->setGreenBufferSize(16);
         format->setBlueBufferSize(16);
         format->setAlphaBufferSize(16);
-        format->setColorSpace(KisSurfaceColorSpace::scRGBColorSpace);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        format->setColorSpace(QSurfaceFormat::ColorSpace::scRGBColorSpace);
+#else
+        format->setColorSpace(QColorSpace(QColorSpace::NamedColorSpace::SRgb);
+#endif
     } else
 #else
     if (config == KisConfig::BT2020_PQ) {
@@ -252,7 +290,11 @@ void KisOpenGLModeProber::initSurfaceFormatFromConfig(KisConfig::RootSurfaceForm
         format->setBlueBufferSize(8);
         format->setAlphaBufferSize(8);
         // TODO: check if we can use real sRGB space here
-        format->setColorSpace(KisSurfaceColorSpace::DefaultColorSpace);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        format->setColorSpace(QSurfaceFormat::ColorSpace::DefaultColorSpace);
+#else
+        format->setColorSpace(QColorSpace());
+#endif
     }
 }
 
@@ -261,14 +303,22 @@ bool KisOpenGLModeProber::isFormatHDR(const QSurfaceFormat &format)
 #ifdef HAVE_HDR
 
     bool isBt2020PQ =
-        format.colorSpace() == KisSurfaceColorSpace::bt2020PQColorSpace &&
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        format.colorSpace() == QSurfaceFormat::ColorSpace::bt2020PQColorSpace &&
+#else
+        format.colorSpace() == QColorSpace(QColorSpace::NamedColorSpace::Bt2100Pq) &&
+#endif
         format.redBufferSize() == 10 &&
         format.greenBufferSize() == 10 &&
         format.blueBufferSize() == 10 &&
         format.alphaBufferSize() == 2;
 
     bool isBt709G10 =
-        format.colorSpace() == KisSurfaceColorSpace::scRGBColorSpace &&
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        format.colorSpace() == QSurfaceFormat::ColorSpace::scRGBColorSpace &&
+#else
+        format.colorSpace() == QColorSpace(QColorSpace::NamedColorSpace::SRgb) &&
+#endif
         format.redBufferSize() == 16 &&
         format.greenBufferSize() == 16 &&
         format.blueBufferSize() == 16 &&

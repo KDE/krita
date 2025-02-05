@@ -33,7 +33,7 @@ ki18n_wrap_ui(SvgTextTool_SRCS
 
 install( FILES
     SvgTextTool.action
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/actions
+    DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions
 )
 
 set(SvgTextTool_SOURCES

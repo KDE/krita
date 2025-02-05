@@ -9,6 +9,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 #include "KisFilterOptionData.h"
 
 using FilterState = std::tuple<QString, QString>;

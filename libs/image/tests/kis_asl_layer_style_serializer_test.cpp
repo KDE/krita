@@ -9,6 +9,7 @@
 #include <simpletest.h>
 
 #include <QDomDocument>
+#include <QRegExp>
 
 #include <KoCompositeOpRegistry.h>
 #include <resources/KoAbstractGradient.h>

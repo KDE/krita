@@ -12,6 +12,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 class PAINTOP_EXPORT KisDrawingAngleSensorModel : public QObject
 {
     Q_OBJECT

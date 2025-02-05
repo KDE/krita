@@ -19,5 +19,5 @@ kis_add_library(kritahatchingpaintop MODULE ${kritahatchingpaintop_SOURCES})
 target_link_libraries(kritahatchingpaintop kritalibpaintop)
 
 install(TARGETS kritahatchingpaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  krita-hatching.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-hatching.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)
 

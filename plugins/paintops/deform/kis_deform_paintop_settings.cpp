@@ -175,7 +175,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
                                                              settings,
                                                              0);
 
-            const QString degree = QChar(Qt::Key_degree);
+            const QString degree(QStringLiteral("°"));
             prop->setRange(0, 360);
             prop->setSingleStep(1);
             prop->setSuffix(degree);

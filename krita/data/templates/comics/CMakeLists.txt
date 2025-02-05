@@ -2,7 +2,7 @@ install( FILES
 light_template_comics_empty.png
 dark_template_comics_empty.png
 DESTINATION
-${DATA_INSTALL_DIR}/krita/pics
+${KDE_INSTALL_DATADIR}/krita/pics
 )
 
 install( FILES  
@@ -10,7 +10,7 @@ install( FILES
     BD-EuroTemplate.kra
     Comics-USTemplate.kra
     Manga-JpTemplate.kra
-DESTINATION ${DATA_INSTALL_DIR}/krita/templates/comics/.source)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/comics/.source)
 
 install( FILES  
     .directory 
@@ -18,4 +18,4 @@ install( FILES
     BD-EuroTemplate.desktop
     Comics-USTemplate.desktop
     Manga-JpTemplate.desktop
-DESTINATION ${DATA_INSTALL_DIR}/krita/templates/comics)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/comics)

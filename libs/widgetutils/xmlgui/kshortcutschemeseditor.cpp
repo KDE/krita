@@ -83,7 +83,7 @@ KisKShortcutSchemesEditor::KisKShortcutSchemesEditor(KisShortcutsDialog *parent)
 
     addStretch(1);
 
-    connect(m_schemesList, SIGNAL(activated(QString)),
+    connect(m_schemesList, SIGNAL(textActivated(QString)),
             this, SIGNAL(shortcutsSchemeChanged(QString)));
     connect(m_newScheme, SIGNAL(clicked()), this, SLOT(newScheme()));
     connect(m_deleteScheme, SIGNAL(clicked()), this, SLOT(deleteScheme()));

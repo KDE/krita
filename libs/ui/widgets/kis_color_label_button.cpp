@@ -147,7 +147,11 @@ void KisColorLabelButton::paintEvent(QPaintEvent *event)
     }
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KisColorLabelButton::enterEvent(QEvent *event) {
+#else
+void KisColorLabelButton::enterEvent(QEnterEvent *event) {
+#endif
     Q_UNUSED(event);
     update();
 }

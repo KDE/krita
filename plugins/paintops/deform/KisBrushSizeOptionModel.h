@@ -12,6 +12,8 @@
 #include "KisBrushSizeOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisBrushSizeOptionModel : public QObject
 {
     Q_OBJECT

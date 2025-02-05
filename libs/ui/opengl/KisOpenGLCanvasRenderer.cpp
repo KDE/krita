@@ -26,7 +26,6 @@
 #include <QOpenGLPaintDevice>
 #include <QPointF>
 #include <QPointer>
-#include <QMatrix>
 #include <QTransform>
 #include <QThread>
 #include <QFile>
@@ -315,7 +314,7 @@ void KisOpenGLCanvasRenderer::initializeDisplayShader()
 
     try {
         d->displayShader = d->shaderLoader.loadDisplayShader(d->displayFilter, useHiQualityFiltering);
-        d->displayShaderCompiledWithDisplayFilterSupport = d->displayFilter;
+        d->displayShaderCompiledWithDisplayFilterSupport = bool(d->displayFilter);
     } catch (const ShaderLoaderException &e) {
         reportFailedShaderCompilation(e.what());
     }

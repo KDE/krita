@@ -14,7 +14,8 @@
 
 #include <QButtonGroup>
 #include <QToolButton>
-#include <QStyleOptionFrameV3>
+#include <QStyleOption>
+#include <QActionGroup>
 #include <QPainter>
 #include <QHash>
 #include <QApplication>

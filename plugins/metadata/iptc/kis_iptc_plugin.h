@@ -13,6 +13,7 @@
 
 class KisIptcPlugin : public QObject
 {
+    Q_OBJECT
 public:
     KisIptcPlugin(QObject *parent, const QVariantList &);
     ~KisIptcPlugin() override;

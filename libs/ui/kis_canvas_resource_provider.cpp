@@ -229,7 +229,7 @@ void KisCanvasResourceProvider::slotPatternActivated(KoResourceSP res)
 {
     KoPatternSP pattern = res.dynamicCast<KoPattern>();
     QVariant v;
-    v.setValue<KoPatternSP>(pattern);
+    v.setValue(pattern);
     m_resourceManager->setResource(KoCanvasResource::CurrentPattern, v);
     Q_EMIT sigPatternChanged(pattern);
 }
@@ -239,7 +239,7 @@ void KisCanvasResourceProvider::slotGradientActivated(KoResourceSP res)
 
     KoAbstractGradientSP gradient = res.dynamicCast<KoAbstractGradient>();
     QVariant v;
-    v.setValue<KoAbstractGradientSP>(gradient);
+    v.setValue(gradient);
     m_resourceManager->setResource(KoCanvasResource::CurrentGradient, v);
     Q_EMIT sigGradientChanged(gradient);
 }
@@ -374,7 +374,7 @@ void KisCanvasResourceProvider::slotPainting()
 void KisCanvasResourceProvider::slotGamutMaskActivated(KoGamutMaskSP mask)
 {
     QVariant v;
-    v.setValue<KoGamutMaskSP>(mask);
+    v.setValue(mask);
     m_resourceManager->setResource(KoCanvasResource::CurrentGamutMask, v);
 
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, QVariant::fromValue(true));

@@ -708,6 +708,14 @@ target_link_libraries(kritaui
         kritaresources
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+target_link_libraries(kritaui
+    PRIVATE
+        Qt6::OpenGLWidgets
+        Qt6::SvgWidgets
+)
+endif()
+
 if (Mlt7_FOUND)
     target_link_libraries(kritaui PRIVATE SDL2::SDL2 Mlt7::mlt Mlt7::mlt++)
 endif()
@@ -770,7 +778,7 @@ install(TARGETS kritaui  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 if (APPLE)
-    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/krita)
+    install(FILES osx.stylesheet DESTINATION ${KDE_INSTALL_DATADIR}/krita)
 endif ()
 
 if (UNIX AND BUILD_TESTING AND ENABLE_UPDATERS)

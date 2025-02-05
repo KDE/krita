@@ -11,4 +11,4 @@ target_link_libraries(kritaasccdl kritaui)
 install(TARGETS kritaasccdl  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     asccdl.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)

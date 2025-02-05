@@ -12,6 +12,8 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 
+#include <kis_global.h>
+
 #include <math.h>
 
 const qreal TIME = 0.000030;
@@ -60,19 +62,19 @@ void ParticleBrush::paintParticle(KisRandomAccessorSP accWrite, const KoColorSpa
     quint8 bbr = qRound((fx)  * (fy)  * opacity * weight);
 
     accWrite->moveTo(ipx  , ipy);
-    myColor.setOpacity(quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
+    myColor.setOpacity(quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, btl + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
     accWrite->moveTo(ipx + 1, ipy);
-    myColor.setOpacity(quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, btr + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
+    myColor.setOpacity(quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, btr + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
     accWrite->moveTo(ipx, ipy + 1);
-    myColor.setOpacity(quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, bbl + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
+    myColor.setOpacity(quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, bbl + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 
     accWrite->moveTo(ipx + 1, ipy + 1);
-    myColor.setOpacity(quint8(qBound<quint16>(OPACITY_TRANSPARENT_U8, bbr + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
+    myColor.setOpacity(quint8(kisBoundFast<quint16>(OPACITY_TRANSPARENT_U8, bbr + cs->opacityU8(accWrite->rawData()), OPACITY_OPAQUE_U8)));
     memcpy(accWrite->rawData(), myColor.data(), cs->pixelSize());
 }
 

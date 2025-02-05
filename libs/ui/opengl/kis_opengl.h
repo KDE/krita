@@ -12,6 +12,8 @@
 #include <QFlags>
 
 #include <QSurfaceFormat>
+#include <QStringList>
+
 #include "kis_config.h"
 #include <KisQStringListFwd.h>
 

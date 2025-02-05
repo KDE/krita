@@ -75,7 +75,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
             subLayout->addWidget(btn);
         }
 
-        connect(buttonGroup, SIGNAL(buttonToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
+        connect(buttonGroup, SIGNAL(idToggled(int,bool)), this, SIGNAL(filteringOptionsChanged()));
     }
 
     resetButton = new QPushButton(i18n("Reset Filters"), this);

@@ -6,6 +6,7 @@
 
 #include "palettegeneratorconfig.h"
 #include <QTextStream>
+#include <QIODevice>
 
 PaletteGeneratorConfig::PaletteGeneratorConfig()
 {

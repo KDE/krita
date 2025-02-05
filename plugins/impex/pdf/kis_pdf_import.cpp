@@ -1,3 +1,4 @@
+
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  *
@@ -7,7 +8,11 @@
 #include "kis_pdf_import.h"
 
 // poppler's headers
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <poppler-qt5.h>
+#else
+#include <poppler-qt6.h>
+#endif
 
 // Qt's headers
 #include <QFile>
@@ -55,8 +60,11 @@ KisPDFImport::~KisPDFImport()
 
 KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Poppler::Document* pdoc = Poppler::Document::loadFromData(io->readAll());
-
+#else
+    std::unique_ptr<Poppler::Document> pdoc = Poppler::Document::loadFromData(io->readAll());
+#endif
     if (!pdoc) {
         dbgFile << "Error when reading the PDF";
         return ImportExportCodes::ErrorWhileReading;
@@ -80,14 +88,21 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
     kdb->setCaption(i18n("PDF Import Options"));
     kdb->setModal(false);
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
+#else
+    KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc.get(), kdb);
+#endif
+
     kdb->setMainWidget(wdg);
 
     {
         KisCursorOverrideHijacker cursorHijacker;
 
         if (kdb->exec() == QDialog::Rejected) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             delete pdoc;
+#endif
             delete kdb;
             return ImportExportCodes::Cancelled;
         }
@@ -107,20 +122,23 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
                 i18n("Page %1", *it + 1),
                 quint8_MAX);
 
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         Poppler::Page* page = pdoc->page(*it);
+#else
+        std::unique_ptr<Poppler::Page> page = pdoc->page(*it);
+#endif
 
         QImage img = page->renderToImage(wdg->intResolution->value(), wdg->intResolution->value(), 0, 0, width, height);
         layer->paintDevice()->convertFromQImage(img, 0, 0, 0);
 
-        delete page;
         image->addNode(layer, image->rootLayer(), 0);
         setProgress(qreal(*it + 1) * 100 / pages.count());
     }
 
     document->setCurrentImage(image);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     delete pdoc;
+#endif
     delete kdb;
     return ImportExportCodes::OK;
 }

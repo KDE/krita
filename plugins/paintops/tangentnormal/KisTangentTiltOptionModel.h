@@ -12,6 +12,8 @@
 #include "KisTangentTiltOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisTangentTiltOptionModel : public QObject
 {
     Q_OBJECT

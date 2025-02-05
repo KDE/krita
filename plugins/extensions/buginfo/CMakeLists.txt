@@ -26,4 +26,4 @@ endif()
 
 install(TARGETS kritabuginfo  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( FILES  buginfo.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)
+install( FILES  buginfo.xmlgui  DESTINATION ${KDE_INSTALL_DATADIR}/kritaplugins)

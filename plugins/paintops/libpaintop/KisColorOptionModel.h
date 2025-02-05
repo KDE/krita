@@ -9,6 +9,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 #include "KisColorOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 

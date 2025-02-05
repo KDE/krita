@@ -8,6 +8,7 @@
 
 #include <QSyntaxHighlighter>
 #include <QTextEdit>
+#include <QRegExp>
 
 /**
  * A Basic XML syntax highlighter in C++/Qt (subclass of QSyntaxHighlighter). Uses simple

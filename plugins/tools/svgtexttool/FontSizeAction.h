@@ -49,7 +49,11 @@ protected Q_SLOTS:
     /**
      * This function is called whenever an action from the selections is triggered.
      */
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void actionTriggered(QAction *action) override;
+#else
+    void slotActionTriggered(QAction *action) override;
+#endif
 
 private:
     class Private;

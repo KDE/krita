@@ -12,6 +12,7 @@
 
 class ArtisticColorSelectorPlugin: public QObject
 {
+    Q_OBJECT
 public:
     ArtisticColorSelectorPlugin(QObject *parent, const QVariantList &);
 };

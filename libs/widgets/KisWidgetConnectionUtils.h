@@ -27,6 +27,7 @@ class KisColorButton;
 class QLineEdit;
 class KisMultipliersDoubleSliderSpinBox;
 class KisFileNameRequester;
+class QWidget;
 
 /**
  * A collection of utility functions and classes that

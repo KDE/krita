@@ -332,15 +332,15 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     // enough to filter out this step for non-appimage krita builds.
     const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
     if (isInAppimage) {
-        QByteArray appimageMountDir = qgetenv("APPDIR");
+        QString appimageMountDir = qgetenv("APPDIR");
 
         {   // MLT
             //Plugins Path is where mlt should expect to find its plugin libraries.
-            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt-7/"));
-            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/"));
-            qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
-            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/profiles/"));
-            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/presets/"));
+            qputenv("MLT_REPOSITORY", appimageMountDir.append(QFile::encodeName("/usr/lib/mlt-7/")).toUtf8());
+            qputenv("MLT_DATA", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/")).toUtf8());
+            qputenv("MLT_ROOT_DIR", appimageMountDir.append(QFile::encodeName("/usr/")).toUtf8());
+            qputenv("MLT_PROFILES_PATH", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/profiles/")).toUtf8());
+            qputenv("MLT_PRESETS_PATH", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/presets/")).toUtf8());
         }
 
         {
@@ -441,7 +441,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
 
         // NOTE: This line helps also fontconfig have a user-accessible location on Android (see the commit).
-        qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
+        qputenv("XDG_DATA_DIRS", QString(QFile::encodeName(root + "share") + ":" + originalXdgDataDirs).toUtf8());
     }
 #elif defined(Q_OS_HAIKU)
 	qputenv("KRITA_PLUGIN_PATH", QFile::encodeName(root + "lib"));
@@ -668,7 +668,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         // Icons in menus are ugly and distracting
         KisApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
     }
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KisApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
+#endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
     if (!args.noSplash()) {

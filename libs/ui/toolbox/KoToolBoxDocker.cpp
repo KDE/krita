@@ -16,6 +16,7 @@
 #include <QFrame>
 #include <QAction>
 #include <QMenu>
+#include <QActionGroup>
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>

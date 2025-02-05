@@ -473,7 +473,7 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
         while (i.hasPrevious()) {
             OptionalProperty val = i.previous();
 
-            int emptyIndex = list.lastIndexOf(0);
+            int emptyIndex = list.lastIndexOf(nullptr);
             if (emptyIndex < 0) break;
 
             list[emptyIndex] = val;
@@ -1350,7 +1350,6 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
             opt.textVisible = false;
             opt.textAlignment = Qt::AlignHCenter;
             opt.text = i18n("%1 %", opt.progress);
-            opt.orientation = Qt::Horizontal;
             opt.state = option.state;
             style->drawControl(QStyle::CE_ProgressBar, &opt, p, 0);
         }

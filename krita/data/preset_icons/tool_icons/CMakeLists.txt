@@ -98,5 +98,5 @@ install(FILES
 12_10_Pastel_Bar_04.png
 12_11_Pastel_Bar_02.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/krita/preset_icons/tool_icons)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/preset_icons/tool_icons)
 

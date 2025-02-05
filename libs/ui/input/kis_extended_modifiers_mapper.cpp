@@ -8,7 +8,6 @@
 
 #include <QApplication>
 #include <QKeyEvent>
-#include "kis_debug.h"
 
 #ifdef Q_OS_MACOS
 
@@ -62,8 +61,12 @@ QVector<Qt::Key> queryPressedKeysWin()
 }
 
 #elif defined HAVE_X11
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <QX11Info>
+#else
+#include <QGuiApplication>
+#endif
+
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -99,8 +102,15 @@ struct KisExtendedModifiersMapper::Private
 
 KisExtendedModifiersMapper::Private::Private()
 {
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     XDisplayKeycodes(QX11Info::display(), &minKeyCode, &maxKeyCode);
     XQueryKeymap(QX11Info::display(), keysState);
+#else
+    XDisplayKeycodes(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(),
+                     &minKeyCode, &maxKeyCode);
+    XQueryKeymap(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), keysState);
+#endif
 
     mapping.append(KeyMapping(XK_Shift_L, Qt::Key_Shift));
     mapping.append(KeyMapping(XK_Shift_R, Qt::Key_Shift));
@@ -150,7 +160,11 @@ bool KisExtendedModifiersMapper::Private::checkKeyCodePressedX11(KeyCode key)
 
 bool KisExtendedModifiersMapper::Private::checkKeySymPressedX11(KeySym sym)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     KeyCode key = XKeysymToKeycode(QX11Info::display(), sym);
+#else
+    KeyCode key = XKeysymToKeycode(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), sym);
+#endif
     return key != 0 ? checkKeyCodePressedX11(key) : false;
 }
 
@@ -190,8 +204,11 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
     {
         for (int keyCode = m_d->minKeyCode; keyCode <= m_d->maxKeyCode; keyCode++) {
             if (m_d->checkKeyCodePressedX11(keyCode)) {
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
                 KeySym sym = XkbKeycodeToKeysym(QX11Info::display(), keyCode,
+#else
+                KeySym sym = XkbKeycodeToKeysym(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), keyCode,
+#endif
                                                 0, 0);
                 Q_FOREACH (const KeyMapping &map, m_d->mapping) {
                     if (map.x11KeySym == sym) {

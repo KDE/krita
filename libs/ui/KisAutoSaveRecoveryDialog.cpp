@@ -74,9 +74,17 @@ public:
         return QList<QWidget*>() << page;
     }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void updateItemWidgets(const QList<QWidget*> widgets,
                            const QStyleOptionViewItem &option,
                            const QPersistentModelIndex &index) const override
+#else
+    void updateItemWidgets(const QList<QWidget *> &widgets,
+                           const QStyleOptionViewItem &option,
+                           const QPersistentModelIndex &index) const override
+#endif
+
+
     {
         FileItem *fileItem = (FileItem*)index.data().value<void*>();
 

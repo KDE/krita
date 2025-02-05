@@ -16,6 +16,7 @@
 #include "QToolButton"
 #include "QMenu"
 #include "QWidgetAction"
+#include <QActionGroup>
 
 #include "krita_utils.h"
 #include "kis_canvas2.h"

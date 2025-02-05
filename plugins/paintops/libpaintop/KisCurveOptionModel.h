@@ -15,6 +15,8 @@
 #include <lager/constant.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 using RangeState = std::tuple<qreal, qreal>;
 using StrengthState = std::tuple<qreal, qreal, qreal>;
 using LabelsState = std::tuple<QString, int>;

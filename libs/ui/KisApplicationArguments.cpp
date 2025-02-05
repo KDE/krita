@@ -117,7 +117,11 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
             static const QStringList epicIgnoreArgsExact = {
                 QStringLiteral("EpicPortal"),
             };
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             QStringRef argDashless(&arg);
+#else
+            QStringView argDashless(arg);
+#endif
             // Strip leading dashes.
             while (argDashless.startsWith('-')) {
                 argDashless = argDashless.mid(1);

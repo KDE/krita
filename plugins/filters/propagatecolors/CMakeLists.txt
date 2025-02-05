@@ -20,5 +20,5 @@ install(
     FILES
     propagatecolors.action
     DESTINATION
-    ${DATA_INSTALL_DIR}/krita/actions
+    ${KDE_INSTALL_DATADIR}/krita/actions
 )

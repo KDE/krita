@@ -187,7 +187,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
     connect(m_page->constrainProportionsCkb, SIGNAL(toggled(bool)), this, SLOT(slotAspectChanged(bool)));
     connect(m_page->aspectRatioBtn, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotAspectChanged(bool)));
 
-    connect(m_group, SIGNAL(buttonClicked(int)), SLOT(slotAnchorButtonClicked(int)));
+    connect(m_group, SIGNAL(idClicked(int)), SLOT(slotAnchorButtonClicked(int)));
     connect(m_page->canvasPreview, SIGNAL(sigModifiedXOffset(int)), this, SLOT(slotCanvasPreviewXOffsetChanged(int)));
     connect(m_page->canvasPreview, SIGNAL(sigModifiedYOffset(int)), this, SLOT(slotCanvasPreviewYOffsetChanged(int)));
 }

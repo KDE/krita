@@ -17,7 +17,7 @@
 
 #include <QColor>
 #include <QVBoxLayout>
-
+#include <QWidget>
 
 struct Scratchpad::Private
 {

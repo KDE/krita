@@ -14,7 +14,7 @@
 
 QString KisAndroidFileProxy::getFileFromContentUri(QString contentUri)
 {
-    QFile file = contentUri;
+    QFile file(contentUri);
     const QString savePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 
     QDir dirPath = savePath;

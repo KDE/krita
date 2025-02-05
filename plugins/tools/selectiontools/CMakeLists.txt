@@ -31,5 +31,5 @@ install( FILES
         KisToolSelectOutline.action
         KisToolSelectPath.action
         KisToolSelectMagnetic.action
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/actions
+    DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions
 )

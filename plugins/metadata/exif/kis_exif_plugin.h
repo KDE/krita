@@ -13,6 +13,7 @@
 
 class KisExifPlugin : public QObject
 {
+    Q_OBJECT
 public:
     KisExifPlugin(QObject *parent, const QVariantList &);
     ~KisExifPlugin() override;

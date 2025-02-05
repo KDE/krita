@@ -25,7 +25,7 @@ public:
         setupUi(this);
 
         speed->setRange(0.0, 100.0, 0);
-        speed->setSuffix(QChar(Qt::Key_Percent));
+        speed->setSuffix(QStringLiteral("%"));
         speed->setValue(42.0);
         speed->setSingleStep(1.0);
 
@@ -35,7 +35,7 @@ public:
         smoothThreshold->setSingleStep(1.0);
 
         displaceStrength->setRange(0.0, 100.0, 0);
-        displaceStrength->setSuffix(QChar(Qt::Key_Percent));
+        displaceStrength->setSuffix(QStringLiteral("%"));
         displaceStrength->setValue(42.0);
         displaceStrength->setSingleStep(1.0);
     }

@@ -145,7 +145,7 @@ void KisStopGradientEditor::setCompactMode(bool value)
 void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
 {
     m_gradient = gradient;
-    setEnabled(m_gradient);
+    setEnabled(bool(m_gradient));
 
     if (m_gradient) {
         nameedit->setText(gradient->name());

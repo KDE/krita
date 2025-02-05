@@ -66,7 +66,11 @@ KoResourceSP KisMyPaintPaintOpPreset::clone() const
 void KisMyPaintPaintOpPreset::setColor(const KoColor color, const KoColorSpace *colorSpace) {
 
     float hue, saturation, value;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     qreal r = 0, g = 0, b = 0;
+#else
+    float r = 0, g = 0, b = 0;
+#endif
     QColor dstColor;
 
     if (colorSpace->colorModelId() == RGBAColorModelID) {

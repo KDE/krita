@@ -16,7 +16,7 @@ GPS-Nature-Pure-greens.ggr
 GPS-Nature-random-greens.ggr
 GPS-Simple-Smoke.ggr
 GPS-Steel-Bars.ggr
-    DESTINATION  ${DATA_INSTALL_DIR}/krita/gradients)
+    DESTINATION  ${KDE_INSTALL_DATADIR}/krita/gradients)
 
 
 

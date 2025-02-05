@@ -12,6 +12,8 @@
 #include "KisHairyBristleOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisHairyBristleOptionModel : public QObject
 {
     Q_OBJECT

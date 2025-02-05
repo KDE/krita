@@ -7,6 +7,8 @@
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
 
+#include <QRegExp>
+
 #include "kis_command_ids.h"
 SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int anchor, QString text, KUndo2Command *parent)
     : KUndo2Command(parent)
@@ -27,7 +29,12 @@ SvgTextInsertCommand::SvgTextInsertCommand(KoSvgTextShape *shape, int pos, int a
     // - vertical tab/line tab
     // with a single linefeed to avoid them from being added to the textShape.
     exp.setPattern("[\\r|\\r\\n|\\x2029|\\x2028\\x000b]");
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     text.replace(exp, "\n");
+#else
+    exp.replaceIn(text, "\n");
+#endif
     m_text = text;
 }
 

@@ -1478,7 +1478,7 @@ void KisAssistantTool::loadAssistants()
                 if (assistant) {
                     // load custom shared assistant properties
                     if (xml.attributes().hasAttribute("useCustomColor")) {
-                        QStringRef useCustomColor = xml.attributes().value("useCustomColor");
+                        auto useCustomColor = xml.attributes().value("useCustomColor");
 
                         bool usingColor = false;
                         if (useCustomColor.toString() == "1") {
@@ -1488,7 +1488,7 @@ void KisAssistantTool::loadAssistants()
                     }
 
                     if ( xml.attributes().hasAttribute("useCustomColor")) {
-                        QStringRef customColor = xml.attributes().value("customColor");
+                        auto customColor = xml.attributes().value("customColor");
                         assistant->setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
                     }
@@ -1736,7 +1736,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.twoPointDensitySpinbox->setSingleStep(0.1);
 
         m_options.vanishingPointAngleSpinbox->setPrefix(i18n("Density: "));
-        m_options.vanishingPointAngleSpinbox->setSuffix(QChar(Qt::Key_degree));
+        m_options.vanishingPointAngleSpinbox->setSuffix(QStringLiteral("°"));
         m_options.vanishingPointAngleSpinbox->setRange(1.0, 180.0);
         m_options.vanishingPointAngleSpinbox->setSingleStep(1.0);
         

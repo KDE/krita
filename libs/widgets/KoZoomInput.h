@@ -27,7 +27,11 @@ class KoZoomInput : public QStackedWidget
         void zoomLevelChanged(const QString& level);
 
     protected:
-        void enterEvent(QEvent* event) override;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    void enterEvent(QEvent *e) override;
+#else
+    void enterEvent(QEnterEvent *e) override;
+#endif
         void leaveEvent(QEvent* event) override;
         void keyPressEvent(QKeyEvent* event) override;
 

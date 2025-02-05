@@ -11,6 +11,7 @@
 
 #include "KisColorSourceOptionData.h"
 
+#include <QObject>
 
 class KisColorSourceOptionModel : public QObject
 {

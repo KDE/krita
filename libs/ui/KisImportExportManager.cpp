@@ -235,7 +235,7 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 
         if (json.value(directionKey).toString().split(",", Qt::SkipEmptyParts).contains(mimetype)) {
 
-            KLibFactory *factory = qobject_cast<KLibFactory *>(loader.instance());
+            KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader.instance());
 
             if (!factory) {
                 warnUI << loader.errorString();

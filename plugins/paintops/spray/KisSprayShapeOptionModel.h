@@ -9,6 +9,8 @@
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 
+#include <QObject>
+
 #include "KisSprayShapeOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 

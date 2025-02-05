@@ -33,6 +33,23 @@ const quint8 MAX_SELECTED = std::numeric_limits<quint8>::max();
 const quint8 MIN_SELECTED = std::numeric_limits<quint8>::min();
 const quint8 SELECTION_THRESHOLD = 1;
 
+template <typename T>
+constexpr inline const T &kisBoundFast(const T &min, const T &val, const T &max)
+{
+    /**
+     * This is a fork of an old verion of qBound. It has the following properties:
+     * 1) Does **not** have asserts (we cannot have them in blendmodes)
+     * 2) Does not have automatic type deduction. The user must explicitly type the
+     *    common type in case of ambiguity.
+     *
+     * Rules of thumb:
+     *
+     * 1) If you are writing time-critical code (e.g. blendmodes), use kisBoundFast()
+     * 2) Otherwise use qBound() or std::clamp (the latter may optionally have an assert as well)
+     */
+    return qMax(min, qMin(max, val));
+}
+
 enum OutlineStyle {
     OUTLINE_NONE = 0,
     OUTLINE_CIRCLE,

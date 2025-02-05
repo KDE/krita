@@ -11,6 +11,7 @@
 
 #include "KisCompositeOpOptionData.h"
 
+#include <QObject>
 
 class KisCompositeOpOptionModel : public QObject
 {

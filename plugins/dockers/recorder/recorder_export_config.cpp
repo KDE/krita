@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <QDir>
+#include <QRegularExpression>
 
 namespace
 {
@@ -354,7 +355,7 @@ void RecorderExportConfig::setProfiles(const QList<RecorderProfile> &value)
     const QSet<int> &savedEditedProfilesIndexes = editedProfilesIndexes();
     QSet<int> editedProfilesIndexes = savedEditedProfilesIndexes;
     QString outValue;
-    const QRegExp cleanUp("[\n|]");
+    const QRegularExpression cleanUp("[\n|]");
     int index = 0;
     for (const RecorderProfile &profile : value) {
         const RecorderProfile &defaultProfile = ::defaultProfiles[index];

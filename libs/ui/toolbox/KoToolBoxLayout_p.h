@@ -13,7 +13,6 @@
 #include <QMap>
 #include <QRect>
 #include <QAbstractButton>
-#include <QDesktopWidget>
 #include <QApplication>
 #include <QMouseEvent>
 

@@ -12,6 +12,8 @@
 #include "KisHairyInkOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisHairyInkOptionModel : public QObject
 {
     Q_OBJECT

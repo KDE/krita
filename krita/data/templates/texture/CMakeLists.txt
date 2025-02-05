@@ -2,7 +2,7 @@ install( FILES
 light_template_texture.png
 dark_template_texture.png
 DESTINATION
-${DATA_INSTALL_DIR}/krita/pics )
+${KDE_INSTALL_DATADIR}/krita/pics )
 install( FILES  
 
 Texture1024x10248bitsrgb.kra
@@ -18,7 +18,7 @@ Texture4k8bitsrgb.kra
 Texture512x5128bitsrgb.kra
 Texture8k32bitscalar.kra
 Texture8k8bitsrgb.kra
-DESTINATION ${DATA_INSTALL_DIR}/krita/templates/texture/.source)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/texture/.source)
 
 install( FILES  
     .directory
@@ -36,4 +36,4 @@ Texture4k8bitsrgb.desktop
 Texture512x5128bitsrgb.desktop
 Texture8k32bitscalar.desktop
 Texture8k8bitsrgb.desktop
-DESTINATION ${DATA_INSTALL_DIR}/krita/templates/texture)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/texture)

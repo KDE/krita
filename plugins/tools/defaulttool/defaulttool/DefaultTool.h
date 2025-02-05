@@ -19,6 +19,7 @@
 
 #include <QPolygonF>
 #include <QTime>
+#include <QCursor>
 
 class KisSignalMapper;
 class KoInteractionStrategy;

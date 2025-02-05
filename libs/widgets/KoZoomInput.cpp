@@ -62,15 +62,18 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     d->inside = false;
     d->isFlat = true;
 
-    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->combo, SIGNAL(textActivated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
 }
 
 KoZoomInput::~KoZoomInput()
 {
     delete d;
 }
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void KoZoomInput::enterEvent(QEvent* event)
+#else
+void KoZoomInput::enterEvent(QEnterEvent* event)
+#endif
 {
     Q_UNUSED(event);
 

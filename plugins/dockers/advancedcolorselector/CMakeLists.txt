@@ -40,4 +40,4 @@ install(TARGETS kritacolorselectorng  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  kis_colselng_color_patches.png
 		kis_colselng_color_triangle.png
 		kis_colselng_my_paint_shade_selector.png
-                DESTINATION ${DATA_INSTALL_DIR}/krita/pics)
+                DESTINATION ${KDE_INSTALL_DATADIR}/krita/pics)

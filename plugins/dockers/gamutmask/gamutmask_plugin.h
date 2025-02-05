@@ -12,6 +12,7 @@
 
 class GamutMaskPlugin: public QObject
 {
+    Q_OBJECT
 public:
     GamutMaskPlugin(QObject *parent, const QVariantList &);
 };

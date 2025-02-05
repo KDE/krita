@@ -10,6 +10,8 @@
 #include <kis_types.h>
 #include <kritaimage_export.h>
 
+#include <QObject>
+
 class KisImageResolutionProxy;
 using KisImageResolutionProxySP = QSharedPointer<KisImageResolutionProxy>;
 

@@ -15,7 +15,7 @@ j\)_WaterC_Spread.kpp
 j\)_WaterC_Spread-Pattern.kpp
 j\)_WaterC_Spread_WideArea.kpp
 j\)_WaterC_Water-Pattern.kpp
-DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/paintoppresets)
 
 install( FILES
     "Favorites.tag"
@@ -27,4 +27,4 @@ install( FILES
     Paint.tag        
     Sketch.tag
     Textures.tag
-DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/paintoppresets)

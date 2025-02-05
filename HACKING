@@ -172,6 +172,24 @@ Boolean operators
     Use the standard !, !=, ==, && etc style, not the "not", "and" etc. style. Keep krita code
     using one, easily recognizable, C++ style.
 
+Conversion of QScopedPointer and QSharedPointer to booleans
+
+    With the update to Qt6 we cannot longer use implicit conversions of smart pointers
+    to booleans. Instead we should use convert the result to boolean explicitly:
+
+    Qt5 way:
+
+    QSharedPointer<KisPaintOpPreset> preset = <...>;
+    const bool hasPreset = preset; // does not work anymore!
+
+    Qt6 way:
+
+    QSharedPointer<KisPaintOpPreset> preset = <...>;
+    const bool hasPreset = bool(preset); // convert to bool explicitly!
+
+    Please try to avoid constructions involving `!preset.isNull()`, they
+    are hard to read.
+
 Static initializers
 
     Sometimes we need to declare a static object that performs some actions on Krita

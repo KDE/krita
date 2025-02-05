@@ -21,7 +21,6 @@ class KisAnimTimelineLayersHeader : public QHeaderView
 
 public:
     KisAnimTimelineLayersHeader(QWidget *parent);
-    KisAnimTimelineLayersHeader();
     ~KisAnimTimelineLayersHeader() override;
 
 protected:

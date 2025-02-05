@@ -14,6 +14,8 @@
 #include <KisBrushModel.h>
 #include <KisWidgetConnectionUtils.h>
 
+#include <QObject>
+
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
 

@@ -159,10 +159,12 @@ void KisRecentFileIconCache::iconFetched()
         qWarning() << "KisRecentFileIconCache item not found!";
         return;
     }
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     if (findItem.value().fetchingFuture != future) {
         qWarning() << "KisRecentFileIconCache item has a different QFuture";
         return;
     }
+#endif
     findItem.value().fetchingFuture = QFuture<IconFetchResult>();
     if (result.m_iconWasFetchedOk) {
         findItem.value().cachedIcon = result.m_icon;

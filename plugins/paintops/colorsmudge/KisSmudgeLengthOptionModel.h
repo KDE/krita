@@ -12,6 +12,8 @@
 #include "KisSmudgeLengthOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 class KisSmudgeLengthOptionModel : public QObject
 {
     Q_OBJECT

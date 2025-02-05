@@ -12,6 +12,7 @@
 #include <lager/extra/qt.hpp>
 #include <KisWidgetConnectionUtils.h>
 
+#include <QObject>
 
 class MyPaintCurveRangeModel : public QObject, public KisCurveRangeModelInterface
 {

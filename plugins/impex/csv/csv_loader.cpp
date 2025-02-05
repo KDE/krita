@@ -14,6 +14,7 @@
 #include <QIODevice>
 #include <QStatusBar>
 #include <QFileInfo>
+#include <QRegularExpression>
 
 #include <KisPart.h>
 #include <KisView.h>
@@ -70,7 +71,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 
     KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
-    idx = filename.lastIndexOf(QRegExp("[\\/]"));
+    idx = filename.lastIndexOf(QRegularExpression("[\\/]"));
     QString base = (idx == -1) ? QString() : filename.left(idx + 1); //include separator
     QString path = filename;
 

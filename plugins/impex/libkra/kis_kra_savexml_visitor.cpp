@@ -333,7 +333,7 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
     }
 
     if (el.hasAttribute(UUID)) {
-        layer->setUuid(el.attribute(UUID));
+        layer->setUuid(QUuid::fromString(el.attribute(UUID)));
     }
 
     if (el.hasAttribute(COLLAPSED)) {

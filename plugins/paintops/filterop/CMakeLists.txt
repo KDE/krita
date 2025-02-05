@@ -13,4 +13,4 @@ target_link_libraries(kritafilterop kritalibpaintop)
 install(TARGETS kritafilterop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     krita-filterop.png
-    DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+    DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)

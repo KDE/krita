@@ -37,8 +37,15 @@ struct HSVColor {
         : h(hh), s(ss), v(vv)
     {
     }
-
-    qreal h, s, v;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    qreal h;
+    qreal s;
+    qreal v;
+#else
+    float h;
+    float s;
+    float v;
+#endif
 };
 
 void fromQColor(const QColor minC, const QColor maxC, HSVColor &min, HSVColor &max) {

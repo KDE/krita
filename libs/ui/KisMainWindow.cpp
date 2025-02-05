@@ -48,6 +48,8 @@
 #include <QWindow>
 #include <QTemporaryDir>
 #include <QScrollArea>
+#include <QActionGroup>
+
 #include <kactioncollection.h>
 #include <kactionmenu.h>
 #include <kis_debug.h>

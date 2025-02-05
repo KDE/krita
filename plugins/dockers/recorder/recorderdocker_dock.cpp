@@ -33,6 +33,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTimer>
+#include <QRegularExpression>
 
 namespace
 {
@@ -225,7 +226,7 @@ public:
     QString getPrefix()
     {
         return !canvas ? ""
-               : canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegExp("[^0-9]"));
+               : canvas->imageView()->document()->documentInfo()->aboutInfo("creation-date").remove(QRegularExpression("[^0-9]"));
     }
 
     void updateComboResolution(quint32 width, quint32 height)
@@ -580,7 +581,7 @@ void RecorderDockerDock::onManageRecordingsButtonClicked()
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
     QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::DirectoryOnly);
+    dialog.setOption(QFileDialog::ShowDirsOnly, true);
     const QString &directory = dialog.getExistingDirectory(this,
                                i18n("Select a Directory for Recordings"),
                                d->ui->editDirectory->text(),

@@ -22,7 +22,6 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>
-#include <QDesktopWidget>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>
@@ -41,7 +40,7 @@ private:
 void KoSliderComboContainer::mousePressEvent(QMouseEvent *e)
 {
     QStyleOptionComboBox opt;
-    opt.init(m_parent);
+    opt.initFrom(m_parent);
     opt.subControls = QStyle::SC_All;
     opt.activeSubControls = QStyle::SC_ComboBoxArrow;
     QStyle::SubControl sc = style()->hitTestComplexControl(QStyle::CC_ComboBox, &opt,

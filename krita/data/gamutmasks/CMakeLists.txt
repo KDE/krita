@@ -8,5 +8,5 @@ install( FILES
        Shifted_Triad.kgm
        Split_Complementary.kgm
 
-DESTINATION ${DATA_INSTALL_DIR}/krita/gamutmasks)
+DESTINATION ${KDE_INSTALL_DATADIR}/krita/gamutmasks)
 

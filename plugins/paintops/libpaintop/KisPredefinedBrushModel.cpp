@@ -37,7 +37,7 @@ ComboBoxState calcApplicationSwitchState(enumBrushType brushType, bool supportsH
     }
 
 
-    int currentValue = std::clamp(static_cast<int>(application), 0, values.size() - 1);
+    int currentValue = std::clamp((int)application, 0, (int)values.size() - 1);
     return ComboBoxState{values, currentValue, values.size() > 1, toolTips};
 }
 

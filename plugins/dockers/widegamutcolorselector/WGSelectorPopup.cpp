@@ -79,8 +79,11 @@ void WGSelectorPopup::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(QRect(0, 0, width(), height()), m_margin, m_margin);
 }
 
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void WGSelectorPopup::enterEvent(QEvent *event)
+#else
+void WGSelectorPopup::enterEvent(QEnterEvent *event)
+#endif
 {
     Q_UNUSED(event);
     if (m_hideTimer->isActive())  {

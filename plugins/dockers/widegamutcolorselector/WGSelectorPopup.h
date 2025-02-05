@@ -25,7 +25,12 @@ public Q_SLOTS:
     void slotShowPopup();
 protected:
     void paintEvent(QPaintEvent *event) override;
+
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     void enterEvent(QEvent *event) override;
+#else
+    void enterEvent(QEnterEvent *event) override;
+#endif
     void leaveEvent(QEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void hideEvent(QHideEvent *event) override;

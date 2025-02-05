@@ -1302,7 +1302,7 @@ bool Document::setAudioTracks(const QList<QString> files) const
         fileInfo.setFile(fileName);
         if (fileInfo.exists()) {
             // ensure the file exists before adding it
-            fileList.append(fileName);
+            fileList.append(fileInfo);
         }
         else {
             // if at least one file is not valid, return false

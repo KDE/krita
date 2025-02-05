@@ -9,5 +9,5 @@ target_link_libraries(kritathreshold kritaui)
 install(TARGETS kritathreshold  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES
     threshold.action
-DESTINATION  ${DATA_INSTALL_DIR}/krita/actions)
+DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)
 

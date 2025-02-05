@@ -38,11 +38,11 @@ inline void rectToTexCoords(QVector2D* texCoords, const QRectF &rc)
 }
 
 KisGLImageWidget::KisGLImageWidget(QWidget *parent)
-    : KisGLImageWidget(KisSurfaceColorSpace::sRGBColorSpace, parent)
+    : KisGLImageWidget(QSurfaceFormat::ColorSpace::sRGBColorSpace, parent)
 {
 }
 
-KisGLImageWidget::KisGLImageWidget(KisSurfaceColorSpace colorSpace,
+KisGLImageWidget::KisGLImageWidget(QSurfaceFormat::ColorSpace colorSpace,
                                    QWidget *parent)
     : QOpenGLWidget(parent),
       m_texture(QOpenGLTexture::Target2D)

@@ -1,1 +1,1 @@
-install( FILES  krita.dtd  DESTINATION ${DATA_INSTALL_DIR}/krita/dtd)
+install( FILES  krita.dtd  DESTINATION ${KDE_INSTALL_DATADIR}/krita/dtd)

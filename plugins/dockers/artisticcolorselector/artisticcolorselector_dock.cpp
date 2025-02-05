@@ -28,8 +28,6 @@
 #include <QWidget>
 #include <QMenu>
 #include <QButtonGroup>
-#include <QRegExpValidator>
-#include <QRegExp>
 #include <QFileInfo>
 
 #include "artisticcolorselector_dock.h"
@@ -201,7 +199,7 @@ ArtisticColorSelectorDock::ArtisticColorSelectorDock()
     connect(m_selectorUI->colorSelector         , SIGNAL(sigFgColorChanged(KisColor))     , SLOT(slotFgColorChanged(KisColor)));
     connect(m_selectorUI->colorSelector         , SIGNAL(sigBgColorChanged(KisColor))     , SLOT(slotBgColorChanged(KisColor)));
 
-    connect(m_hsxButtons                        , SIGNAL(buttonClicked(int))                     , SLOT(slotColorSpaceSelected()));
+    connect(m_hsxButtons                        , SIGNAL(idClicked(int))                     , SLOT(slotColorSpaceSelected()));
 
     setWidget(m_selectorUI);
 }

@@ -531,7 +531,7 @@ void KisGenericGradientEditor::updateConvertGradientButton()
         :   i18nc("A gradient wasn't set in the generic gradient editor", "No Gradient Set")
     );
 
-    m_d->buttonConvertGradient->setEnabled(m_d->gradient);
+    m_d->buttonConvertGradient->setEnabled(!m_d->gradient.isNull());
 }
 
 void KisGenericGradientEditor::updateUpdateGradientButton()

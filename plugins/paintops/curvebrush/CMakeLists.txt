@@ -16,4 +16,4 @@ kis_add_library(kritacurvepaintop MODULE ${kritacurvepaintop_SOURCES})
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 
 install(TARGETS kritacurvepaintop  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( FILES  krita-curve.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
+install( FILES  krita-curve.png DESTINATION ${KDE_INSTALL_DATADIR}/krita/images)

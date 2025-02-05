@@ -12,6 +12,8 @@
 #include "KisPaintingModeOptionData.h"
 #include "KisWidgetConnectionUtils.h"
 
+#include <QObject>
+
 using ButtonGroupState = KisWidgetConnectionUtils::ButtonGroupState;
 
 class KisPaintingModeOptionModel : public QObject

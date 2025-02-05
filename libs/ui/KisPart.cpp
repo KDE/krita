@@ -38,6 +38,7 @@
 #include <QMenu>
 #include <QScopedPointer>
 #include <QMap>
+#include <QRegularExpression>
 
 #include <QMenuBar>
 #include <klocalizedstring.h>
@@ -568,7 +569,7 @@ void KisPart::openTemplate(const QUrl &url)
     if (ok) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
         // in case this is a open document template remove the -template from the end
-        mimeType.remove( QRegExp( "-template$" ) );
+        mimeType.remove( QRegularExpression( "-template$" ) );
         document->setMimeTypeAfterLoading(mimeType);
         document->resetPath();
         document->setReadWrite(true);

@@ -28,8 +28,6 @@ class KRITAUI_EXPORT KisHistogramPainter
 {
 public:
     KisHistogramPainter();
-    KisHistogramPainter(const KisHistogramPainter &other);
-    KisHistogramPainter(KisHistogramPainter && other);
     ~KisHistogramPainter();
 
     /**

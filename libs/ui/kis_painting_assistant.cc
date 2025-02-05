@@ -641,12 +641,12 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
         case QXmlStreamReader::StartElement:
             if (xml.name() == "assistant") {
 
-                QStringRef active = xml.attributes().value("active");
+                auto active = xml.attributes().value("active");
                 setSnappingActive( (active != "0")  );
 
                 // load custom shared assistant properties
                 if ( xml.attributes().hasAttribute("useCustomColor")) {
-                    QStringRef useCustomColor = xml.attributes().value("useCustomColor");
+                    auto useCustomColor = xml.attributes().value("useCustomColor");
 
                     bool usingColor = false;
                     if (useCustomColor.toString() == "1") {
@@ -662,13 +662,13 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                 }
 
                 if ( xml.attributes().hasAttribute("customColor")) {
-                    QStringRef customColor = xml.attributes().value("customColor");
+                    auto customColor = xml.attributes().value("customColor");
                     setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
                 }
 
                 if ( xml.attributes().hasAttribute("locked")) {
-                    QStringRef locked = xml.attributes().value("locked");
+                    auto locked = xml.attributes().value("locked");
                     setLocked(locked == "1");
                 }
 

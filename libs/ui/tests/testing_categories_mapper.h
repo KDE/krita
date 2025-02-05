@@ -10,12 +10,12 @@
 #include "kis_categories_mapper.h"
 #include <simpletest.h>
 
-struct QStringConverter {
+struct StringConverter {
     QString operator() (const QString &entry) {
         return entry;
     }
 };
-typedef KisCategoriesMapper<QString, QStringConverter> TestingBaseMapper;
+typedef KisCategoriesMapper<QString, StringConverter> TestingBaseMapper;
 
 class TestingMapper : public TestingBaseMapper
 {

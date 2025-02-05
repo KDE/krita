@@ -22,6 +22,8 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 
 #include <klocalizedstring.h>
 
@@ -394,7 +396,7 @@ QWidget* KisHexColorInput::createInput()
 
     int digits = 2*m_color->colorSpace()->colorChannelCount();
     QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);
-    m_hexInput->setValidator(new QRegExpValidator(QRegExp(pattern), this));
+    m_hexInput->setValidator(new QRegularExpressionValidator(QRegularExpression(pattern), this));
     connect(m_hexInput, SIGNAL(editingFinished()), this, SLOT(setValue()));
     return m_hexInput;
 }
@@ -677,24 +679,44 @@ void KisHsvColorInput::fillColor(QColor& c, const qreal& h, const qreal& s, cons
 void KisHsvColorInput::getHsxF(const QColor& color, qreal* h, qreal* s, qreal* x)
 {
     qreal tempH;
-	switch (m_mixMode) {
-	case KisHsvColorSlider::MIX_MODE::HSL:
+#if (QT_VERSION > QT_VERSION_CHECK(6, 0, 0))
+    float fS = *s;
+    float fX = *x;
+#endif
+    switch (m_mixMode) {
+    case KisHsvColorSlider::MIX_MODE::HSL:
+    {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         color.getHslF(&tempH, s, x);
+#else
+        float th;
+        color.getHslF(&th, &fS, &fX);
+        tempH = th;
+#endif
+    }
 		break;
 
 	case KisHsvColorSlider::MIX_MODE::HSY: {
-		RGBToHSY(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
+        RGBToHSY(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
 		break;
 	}
 
 	case KisHsvColorSlider::MIX_MODE::HSI: {
-		RGBToHSI(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
+        RGBToHSI(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
 		break;
 	}
 
 	default: // fallthrough
 	case KisHsvColorSlider::MIX_MODE::HSV:
+    {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 		color.getHsvF(&tempH, s, x);
+#else
+        float th;
+        color.getHsvF(&th, &fS, &fX);
+        tempH = th;
+#endif
+    }
 		break;
 	}
 

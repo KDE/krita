@@ -704,7 +704,24 @@ void KisDisplayColorConverter::getHsvF(const KoColor &srcColor, qreal *h, qreal 
 {
     // we are going through sRGB here!
     QColor color = m_d->approximateToQColor(srcColor);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     color.getHsvF(h, s, v, a);
+#else
+    float fH, fS, fV, fA;
+    fH = *h;
+    fS = *s;
+    fV = *v;
+    if (a) {
+        fA = *a;
+    }
+    color.getHsvF(&fH, &fS, &fV, &fA);
+    *h = fH;
+    *s = fS;
+    *v = fV;
+    if (a) {
+        *a = fA;
+    }
+#endif
 }
 
 KoColor KisDisplayColorConverter::fromHslF(qreal h, qreal s, qreal l, qreal a)
@@ -723,7 +740,24 @@ void KisDisplayColorConverter::getHslF(const KoColor &srcColor, qreal *h, qreal 
 {
     // we are going through sRGB here!
     QColor color = m_d->approximateToQColor(srcColor);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     color.getHslF(h, s, l, a);
+#else
+    float fH, fS, fL, fA;
+    fH = *h;
+    fS = *s;
+    fL = *l;
+    if (a) {
+        fA = *a;
+    }
+    color.getHslF(&fH, &fS, &fL, &fA);
+    *h = fH;
+    *s = fS;
+    *l = fL;
+    if (a) {
+        *a = fA;
+    }
+#endif
 }
 
 KoColor KisDisplayColorConverter::fromHsiF(qreal h, qreal s, qreal i)

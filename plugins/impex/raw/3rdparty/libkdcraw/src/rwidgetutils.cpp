@@ -614,7 +614,7 @@ void RColorSelector::paintEvent(QPaintEvent*)
     {
         QRect focusRect = style->subElementRect(QStyle::SE_PushButtonFocusRect, &opt, this);
         QStyleOptionFocusRect focusOpt;
-        focusOpt.init(this);
+        focusOpt.initFrom(this);
         focusOpt.rect            = focusRect;
         focusOpt.backgroundColor = palette().window().color();
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, &painter, this);

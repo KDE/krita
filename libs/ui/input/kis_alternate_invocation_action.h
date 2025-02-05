@@ -29,6 +29,8 @@ public:
         SecondaryAlternateModeShortcut, ///< Toggle Secondary mode.
         SampleColorFgLayerModeShortcut,
         SampleColorBgLayerModeShortcut,
+        SampleColorFgGroupModeShortcut,
+        SampleColorBgGroupModeShortcut,
         SampleColorFgImageModeShortcut,
         SampleColorBgImageModeShortcut,
         TertiaryAlternateModeShortcut ///< Warning: don't reorder the items of this enum, it breaks user configs!

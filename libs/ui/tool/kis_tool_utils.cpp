@@ -268,7 +268,7 @@ namespace KisToolUtils {
         , updateColor(true)
         , addColorToCurrentPalette(false)
         , normaliseValues(false)
-        , sampleMerged(true)
+        , sampleSource(0)
         , radius(1)
         , blend(100)
     {
@@ -281,7 +281,7 @@ namespace KisToolUtils {
         props.setProperty("updateColor", updateColor);
         props.setProperty("addPalette", addColorToCurrentPalette);
         props.setProperty("normaliseValues", normaliseValues);
-        props.setProperty("sampleMerged", sampleMerged);
+        props.setProperty("sampleSource", sampleSource);
         props.setProperty("radius", radius);
         props.setProperty("blend", blend);
 
@@ -301,7 +301,7 @@ namespace KisToolUtils {
         updateColor = props.getBool("updateColor", true);
         addColorToCurrentPalette = props.getBool("addPalette", false);
         normaliseValues = props.getBool("normaliseValues", false);
-        sampleMerged = props.getBool("sampleMerged", true);
+        sampleSource = props.getInt("sampleSource", 0);
         radius = props.getInt("radius", 1);
         blend = props.getInt("blend", 100);
     }

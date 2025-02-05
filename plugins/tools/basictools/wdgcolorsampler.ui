@@ -142,6 +142,11 @@
      </item>
      <item>
       <property name="text">
+       <string>Sample Current Group</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
        <string>Sample Current Layer</string>
       </property>
      </item>

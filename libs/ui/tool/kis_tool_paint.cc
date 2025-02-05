@@ -288,9 +288,26 @@ void KisToolPaint::activateAlternateAction(AlternateAction action)
         return;
     }
 
-    const bool sampleCurrentLayer = action == SampleFgNode || action == SampleBgNode;
-    const bool sampleFgColor = action == SampleFgNode || action == SampleFgImage;
-    m_colorSamplerHelper.activate(sampleCurrentLayer, sampleFgColor);
+    int sampleSource;
+
+    switch (action) {
+    case SampleFgGroup:
+    case SampleBgGroup:
+        sampleSource = 1;
+        break;
+    case SampleFgNode:
+    case SampleBgNode:
+        sampleSource = 2;
+        break;
+    case SampleFgImage:
+    case SampleBgImage:
+    default:
+        sampleSource = 0;
+        break;
+    }
+
+    const bool sampleFgColor = action == SampleFgNode || action == SampleFgGroup || action == SampleFgImage;
+    m_colorSamplerHelper.activate(sampleSource, sampleFgColor);
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
@@ -306,6 +323,8 @@ void KisToolPaint::deactivateAlternateAction(AlternateAction action)
 bool KisToolPaint::isSamplingAction(AlternateAction action) {
     return action == SampleFgNode ||
         action == SampleBgNode ||
+        action == SampleFgGroup ||
+        action == SampleBgGroup ||
         action == SampleFgImage ||
         action == SampleBgImage;
 }

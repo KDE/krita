@@ -46,6 +46,8 @@ public:
     static QCursor rotateCanvasDiscreteCursor();
     static QCursor samplerImageForegroundCursor();
     static QCursor samplerImageBackgroundCursor();
+    static QCursor samplerGroupForegroundCursor();
+    static QCursor samplerGroupBackgroundCursor();
     static QCursor samplerLayerForegroundCursor();
     static QCursor samplerLayerBackgroundCursor();
     static QCursor changeExposureCursor();

@@ -120,6 +120,8 @@ public:
         AlternateChangeSizeSnap,
         AlternateSampleFgNode,
         AlternateSampleBgNode,
+        AlternateSampleFgGroup,
+        AlternateSampleBgGroup,
         AlternateSampleFgImage,
         AlternateSampleBgImage,
         AlternateSecondary,
@@ -136,6 +138,8 @@ public:
         ChangeSizeSnap = AlternateChangeSizeSnap, // Default: Shift+Z+Left click
         SampleFgNode = AlternateSampleFgNode, // Default: Ctrl+Alt+Left click
         SampleBgNode = AlternateSampleBgNode, // Default: Ctrl+Alt+Right click
+        SampleFgGroup = AlternateSampleFgGroup,
+        SampleBgGroup = AlternateSampleBgGroup,
         SampleFgImage = AlternateSampleFgImage, // Default: Ctrl+Left click
         SampleBgImage = AlternateSampleBgImage, // Default: Ctrl+Right click
         Secondary = AlternateSecondary,

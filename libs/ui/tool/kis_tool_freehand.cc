@@ -387,7 +387,7 @@ void KisToolFreehand::endPrimaryAction(KoPointerEvent *event)
 
 bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction action)
 {
-    if (action != SampleFgNode && action != SampleFgImage) return false;
+    if (action != SampleFgNode && action != SampleFgGroup && action != SampleFgImage) return false;
 
     /**
      * FIXME: we need some better way to implement modifiers

@@ -149,6 +149,9 @@ void KisSimplifiedActionPolicyStrategy::activateAlternateAction(KisTool::Alterna
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode) {
         m_d->anySamplerModifierActive = true;
         m_d->sampleFromNodeModifierActive = true;
+    } else if (action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup) {
+        m_d->anySamplerModifierActive = true;
+        m_d->sampleFromNodeModifierActive = false;
     } else if (action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
         m_d->anySamplerModifierActive = true;
         m_d->sampleFromNodeModifierActive = false;
@@ -162,6 +165,7 @@ void KisSimplifiedActionPolicyStrategy::deactivateAlternateAction(KisTool::Alter
     if (action == KisTool::ChangeSize) {
         m_d->changeSizeModifierActive = false;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         m_d->anySamplerModifierActive = false;

@@ -50,7 +50,7 @@ public:
         bool updateColor;
         bool addPalette;
         bool normaliseValues;
-        bool sampleMerged;
+        int sampleSource {0};
         int radius;
         int blend;
 

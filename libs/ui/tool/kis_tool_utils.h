@@ -25,7 +25,7 @@ struct KRITAUI_EXPORT ColorSamplerConfig {
     bool updateColor;
     bool addColorToCurrentPalette;
     bool normaliseValues;
-    bool sampleMerged;
+    int sampleSource;
     int radius;
     int blend;
 

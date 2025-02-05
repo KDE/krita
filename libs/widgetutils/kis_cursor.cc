@@ -147,6 +147,16 @@ QCursor KisCursor::samplerImageBackgroundCursor()
     return loadWithSize("color-sampler_image_background.svg", 33, 31,  8, 23);
 }
 
+QCursor KisCursor::samplerGroupForegroundCursor()
+{
+    return load("color-sampler_group_foreground.xpm", 8, 23);
+}
+
+QCursor KisCursor::samplerGroupBackgroundCursor()
+{
+    return load("color-sampler_group_background.xpm", 8, 23);
+}
+
 QCursor KisCursor::samplerLayerForegroundCursor()
 {
     return loadWithSize("color-sampler_layer_foreground.svg", 33, 31, 8, 23);

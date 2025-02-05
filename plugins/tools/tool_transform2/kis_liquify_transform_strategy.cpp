@@ -185,6 +185,7 @@ void KisLiquifyTransformStrategy::hoverActionCommon(KoPointerEvent *event)
 void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+        action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
         action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
@@ -196,6 +197,7 @@ void KisLiquifyTransformStrategy::activateAlternateAction(KisTool::AlternateActi
 void KisLiquifyTransformStrategy::deactivateAlternateAction(KisTool::AlternateAction action)
 {
     if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+        action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
         action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         KisLiquifyProperties *props = m_d->currentArgs.liquifyProperties();
@@ -214,6 +216,7 @@ bool KisLiquifyTransformStrategy::beginAlternateAction(KoPointerEvent *event, Ki
         m_d->startResizeGlobalCursorPos = event->globalPos();
         return true;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         return beginPrimaryAction(event);
@@ -244,6 +247,7 @@ void KisLiquifyTransformStrategy::continueAlternateAction(KoPointerEvent *event,
 
         Q_EMIT requestCursorOutlineUpdate(m_d->startResizeImagePos);
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
 
         return continuePrimaryAction(event);
@@ -258,6 +262,7 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
         KisToolUtils::setCursorPos(m_d->startResizeGlobalCursorPos);
         return true;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
+               action == KisTool::SampleFgGroup || action == KisTool::SampleBgGroup ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {
         return endPrimaryAction(event);
     }

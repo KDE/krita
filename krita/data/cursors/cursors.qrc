@@ -7,6 +7,8 @@
     <qresource>
         <file>color-sampler_image_background.svg</file>
         <file>color-sampler_image_foreground.svg</file>
+        <file>color-sampler_group_background.xpm</file>
+        <file>color-sampler_group_foreground.xpm</file>
         <file>color-sampler_layer_background.svg</file>
         <file>color-sampler_layer_foreground.svg</file>
         <file>cursor-cross.svg</file>

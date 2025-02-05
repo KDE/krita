@@ -51,7 +51,6 @@ set(kritawidgetutils_LIB_SRCS
     KisScreenMigrationTracker.cpp
 
     config/kcolorscheme.cpp
-    config/kcolorschememanager.cpp
     config/khelpclient.cpp
     config/klanguagebutton.cpp
     config/krecentfilesaction.cpp

@@ -150,7 +150,7 @@ QLayout* KisWidgetChooser::createPopupLayout()
     delete m_buttons;
 
     m_buttons = group;
-    connect(m_buttons, SIGNAL(buttonClicked(int)), SLOT(slotWidgetChosen(int)));
+    connect(m_buttons, SIGNAL(idClicked(int)), SLOT(slotWidgetChosen(int)));
 
     return layout;
 }

@@ -205,7 +205,7 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->buttonGroup->setExclusive(false);
     d->buttonGroup->addButton(d->importButton, Button_Import);
     d->buttonGroup->addButton(d->deleteButton, Button_Remove);
-    connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
+    connect(d->buttonGroup, SIGNAL(idClicked(int)), this, SLOT(slotButtonClicked(int)));
 
     d->importExportBtns = new QFrame(this);  
     QHBoxLayout* importExportLayout = new QHBoxLayout(d->importExportBtns);

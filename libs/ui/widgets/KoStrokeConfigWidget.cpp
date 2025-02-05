@@ -287,8 +287,8 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     connect(d->ui->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyDashStyleChanges()));
     connect(d->ui->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyLineWidthChanges()));
 
-    connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
-    connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyJoinCapChanges()));
+    connect(d->capNJoinMenu->capGroup,   SIGNAL(idClicked(int)),       this, SLOT(applyJoinCapChanges()));
+    connect(d->capNJoinMenu->joinGroup,  SIGNAL(idClicked(int)),       this, SLOT(applyJoinCapChanges()));
     connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyJoinCapChanges()));
 
     { // Map the marker signals correctly

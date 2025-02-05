@@ -205,7 +205,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Init Cage Transform Values
     cageTransformButtonGroup->setId(cageAddEditRadio, 0); // we need to set manually since Qt Designer generates negative by default
     cageTransformButtonGroup->setId(cageDeformRadio, 1);
-    connect(cageTransformButtonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotCageOptionsChanged(int)));
+    connect(cageTransformButtonGroup, SIGNAL(idClicked(int)), this, SLOT(slotCageOptionsChanged(int)));
 
     // Init Liquify Transform Values
     liquifySizeSlider->setRange(KisLiquifyProperties::minSize(),

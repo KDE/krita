@@ -90,7 +90,7 @@ KisDesaturateConfigWidget::KisDesaturateConfigWidget(QWidget * parent, Qt::Windo
     m_group->addButton(m_page->radioMin, 4);
     m_group->addButton(m_page->radioMax, 5);
     m_group->setExclusive(true);
-    connect(m_group, SIGNAL(buttonClicked(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_group, SIGNAL(idClicked(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
 KisDesaturateConfigWidget::~KisDesaturateConfigWidget()

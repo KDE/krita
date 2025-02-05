@@ -12,7 +12,6 @@
 #include <KoDialog.h>
 #include <QIcon>
 
-
 #include "ui_wdg_canvassize.h"
 
 class KisDocumentAwareSpinBoxUnitManager;
@@ -54,7 +53,7 @@ public:
 
 private Q_SLOTS:
     void slotAspectChanged(bool keep);
-    void slotAnchorButtonClicked(int id);
+    void slotAnchorButtonClicked(int);
 
     void slotWidthChanged(double v);
     void slotHeightChanged(double v);

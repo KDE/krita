@@ -255,9 +255,9 @@ QWidget *SvgTextTool::createOptionWidget()
     double storedLetterSpacing = m_configGroup.readEntry<double>("defaultLetterSpacing", 0.0);
     optionUi.defLetterSpacing->setValue(storedLetterSpacing);
 
-    connect(m_defAlignment, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defWritingMode, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
-    connect(m_defDirection, SIGNAL(buttonClicked(int)), this, SLOT(storeDefaults()));
+    connect(m_defAlignment, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
+    connect(m_defWritingMode, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
+    connect(m_defDirection, SIGNAL(idClicked(int)), this, SLOT(storeDefaults()));
 
     connect(optionUi.defFont, SIGNAL(currentFontChanged(QFont)), this, SLOT(storeDefaults()));
     connect(optionUi.defPointSize, SIGNAL(currentIndexChanged(int)), this, SLOT(storeDefaults()));

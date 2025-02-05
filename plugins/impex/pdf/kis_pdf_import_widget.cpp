@@ -8,7 +8,11 @@
 
 #define UNSTABLE_POPPLER_QT4
 // poppler's headers
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+#include <poppler-qt5.h>
+#else
 #include <poppler-qt6.h>
+#endif
 
 // Qt's headers
 #include <QRadioButton>
@@ -105,7 +109,11 @@ void KisPDFImportWidget::updateMaxCanvasSize()
 {
     m_maxWidthInch = 0., m_maxHeightInch = 0.;
     for (QList<int>::const_iterator it = m_pages.constBegin(); it != m_pages.constEnd(); ++it) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        Poppler::Page *p = m_pdfDoc->page(*it);
+#else
         std::unique_ptr<Poppler::Page> p = m_pdfDoc->page(*it);
+#endif
         QSizeF size = p->pageSizeF();
         if (size.width() > m_maxWidthInch) {
             m_maxWidthInch = size.width();

@@ -154,12 +154,15 @@ QString TagFilterProxyModelQmlWrapper::localizedNameFromMetadata(
 
     Q_FOREACH(const QString locale, locales) {
         const QLocale l(locale);
+        bool found = false;
         Q_FOREACH(const QString key, localizedNames.keys()) {
             if (QLocale(key) == l) {
                 name = localizedNames.value(key, name).toString();
+                found = true;
                 break;
             }
         }
+        if (found) break;
     }
     return name;
 }

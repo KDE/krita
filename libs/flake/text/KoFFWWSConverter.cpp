@@ -7,6 +7,7 @@
 
 #include <KisForest.h>
 #include <KisStaticInitializer.h>
+#include <kis_assert.h>
 #include <hb.h>
 #include <hb-ft.h>
 #include FT_TRUETYPE_TABLES_H
@@ -691,7 +692,9 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             deleteList.append(child);
         }
         while (!deleteList.isEmpty()) {
-            d->fontFamilyCollection.erase(deleteList.takeFirst());
+            auto child = deleteList.takeFirst();
+            KIS_ASSERT_RECOVER_NOOP(childBegin(child) == childEnd(child));
+            d->fontFamilyCollection.erase(child);
         }
         if (KisForestDetail::size(tempList) > 0) {
             //Do most regular first...

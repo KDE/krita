@@ -1073,13 +1073,6 @@ bool KisResourceCacheDb::addResources(KisResourceStorageSP storage, QString reso
             if (resource && resource->valid()) {
                 resource->setVersion(verIt->guessedVersion());
                 resource->setMD5Sum(storage->resourceMd5(verIt->url()));
-                if (resourceType == ResourceType::FontFamilies) {
-                    // because the iterator shouldn't be updating the thumbnail, but we still need a thumbnail
-                    // before adding to the resource db, we're updating the thumbnail for font families here.
-                    // arguably we could replace this resource check by adding a "synthesized thumbnail" check,
-                    // so this could be generalized for other resources like layer styles.
-                    resource->updateThumbnail();
-                }
 
                 if (resourceId < 0) {
                     if (addResource(storage, iter->lastModified(), resource, iter->type())) {

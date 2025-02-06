@@ -79,6 +79,7 @@ public:
     }
 
     KoResourceSP resourceImpl() const override {
+        m_currentResource->updateThumbnail();
         return m_currentResource;
     }
 private:

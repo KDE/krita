@@ -499,9 +499,9 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             QString lang(hb_language_to_string(entry.language));
             QLocale locale(lang);
             uint length = hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, nullptr, nullptr)+1;
-            char buff[length];
-            hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, &length, buff);
-            QString name = QString::fromUtf8(buff, length);
+            std::vector<char> buff(length);
+            hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, &length, buff.data());
+            QString name = QString::fromUtf8(buff.data(), length);
 
             if (entry.name_id == HB_OT_NAME_ID_FONT_FAMILY) {
                 ribbiFamilyNames.insert(locale, name);
@@ -676,6 +676,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
 
         // This takes all of the current children that aren't inside a wws-node already and puts them into a temp list,
         // as well as tallying the current widths and weights. We need these to find the most regular value.
+        QVector<KisForest<FontFamilyNode>::child_iterator> deleteList;
         for (auto child = childBegin(typographic); child != childEnd(typographic); child++) {
             if (childBegin(child) != childEnd(child)) {
                 wwsNames.append(child->fontFamily);
@@ -687,7 +688,10 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             qreal wdth = child->axes.value(WIDTH_TAG, KoSvgText::FontFamilyAxis::widthAxis(100)).value;
             if (!widths.contains(wdth)) widths.append(wdth);
             types.append(child->type);
-            d->fontFamilyCollection.erase(child);
+            deleteList.append(child);
+        }
+        while (!deleteList.isEmpty()) {
+            d->fontFamilyCollection.erase(deleteList.takeFirst());
         }
         if (KisForestDetail::size(tempList) > 0) {
             //Do most regular first...

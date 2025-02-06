@@ -92,7 +92,6 @@ public:
         FcConfig *config = FcConfigCreate();
         KIS_ASSERT(config && "No Fontconfig support available");
 
-#ifdef Q_OS_LINUX
         /**
          * This loads the fontconfig configured on the host Linux system.
          *
@@ -105,6 +104,13 @@ public:
             QDir appdir("/etc/fonts");
             if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
                 qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(appdir.absolutePath())));
+            } else {
+                // Otherwise use default, which is defined in src/fcinit.c , windows and macos
+                // default locations *are* defined in fontconfig's meson build system.
+                appdir = QDir(KoResourcePaths::getApplicationRoot() +"/etc/fonts");
+                if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
+                    qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(appdir.absolutePath())));
+                }
             }
         }
         if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
@@ -113,11 +119,6 @@ public:
         } else {
             FcConfigSetCurrent(config);
         }
-#else
-        // Otherwise use default, which is defined in src/fcinit.c , windows and macos
-        // default locations *are* defined in fontconfig's meson build system.
-        config = FcConfigGetCurrent();
-#endif
         m_config.reset(config);
 
         /// Setup the change tracker.

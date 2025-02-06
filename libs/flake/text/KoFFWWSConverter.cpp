@@ -719,8 +719,13 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
 
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
-                    tempList.erase(font);
+                    deleteList.append(font);
                 }
+            }
+            while (!deleteList.isEmpty()) {
+                auto child = deleteList.takeFirst();
+                KIS_ASSERT_RECOVER_NOOP(childBegin(child) == childEnd(child));
+                tempList.erase(child);
             }
             // Then sort the rest of the family nodes into wws families.
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {

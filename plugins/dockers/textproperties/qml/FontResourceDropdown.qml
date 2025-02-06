@@ -38,16 +38,16 @@ Button {
             id: fontDelegateItem;
             required property var model;
             property string fontName: model.name;
+            property var meta: familyCmb.modelWrapper.metadataForIndex(model.index);
             // TODO: change this to use the text locale, if possible.
-            property string sample: familyCmb.modelWrapper.localizedSampleForIndex(model.index, locales, "");
+            property string sample: familyCmb.modelWrapper.localizedSampleFromMetadata(meta, locales, "");
             /// When updating the model wrapper, the "model" doesn't always update on the delegate, so we need to manually load
             /// the metadata from the modelwrapper.
-            property var meta: familyCmb.modelWrapper.metadataForIndex(model.index);
             width: fontResourceView.listWidth;
             highlighted: familyCmb.highlightedIndex === model.index;
 
             Component.onCompleted: {
-                fontName = familyCmb.modelWrapper.localizedNameForIndex(model.index, locales, model.name);
+                fontName = familyCmb.modelWrapper.localizedNameFromMetadata(meta, locales, model.name);
             }
 
             contentItem: KoShapeQtQuickLabel {
@@ -167,6 +167,7 @@ Button {
                 onHoveredChanged: familyCmb.highlightedIndex = fontDelegateItem.model.index;
 
                 function openContextMenu(x, y) {
+                    tagActionsContextMenu.resourceName = fontDelegateItem.model.name;
                     tagActionsContextMenu.resourceIndex = fontDelegateItem.model.index;
                     tagActionsContextMenu.popup()
                 }
@@ -229,7 +230,7 @@ Button {
                         property var resourceTaggedModel : [];
                         enabled: resourceIndex >= 0;
                         onResourceIndexChanged: {
-                            resourceName = modelWrapper.localizedNameForIndex(resourceIndex, locales);
+                            resourceName = modelWrapper.localizedNameFromMetadata(modelWrapper.metadataForIndex(tagActionsContextMenu.resourceIndex), locales, resourceName);
                             updateResourceTaggedModel();
                         }
                         function updateResourceTaggedModel() {

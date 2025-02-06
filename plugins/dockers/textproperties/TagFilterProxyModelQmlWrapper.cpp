@@ -144,20 +144,19 @@ void TagFilterProxyModelQmlWrapper::untagResource(const int &tagIndex, const int
     }
 }
 
-QString TagFilterProxyModelQmlWrapper::localizedNameForIndex(
-        const int &resourceIndex,
+QString TagFilterProxyModelQmlWrapper::localizedNameFromMetadata(
+        const QMap<QString, QVariant> &metadata,
         const QStringList &locales,
         const QString &fallBack)
 {
-    QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
-    QString name = fallBack;
-    if (resourceIdx.isValid()) {
-        name = d->tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::Name).toString();
-        QMap<QString, QVariant> metadata = d->tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
-        QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
-        Q_FOREACH(const QString locale, locales) {
-            if (localizedNames.keys().contains(locale) ) {
-                name = localizedNames.value(locale).toString();
+    const QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
+    QString name = fallBack.isEmpty()? localizedNames.value("en").toString(): fallBack;
+
+    Q_FOREACH(const QString locale, locales) {
+        const QLocale l(locale);
+        Q_FOREACH(const QString key, localizedNames.keys()) {
+            if (QLocale(key) == l) {
+                name = localizedNames.value(key, name).toString();
                 break;
             }
         }
@@ -174,21 +173,17 @@ QVariantMap TagFilterProxyModelQmlWrapper::metadataForIndex(const int &resourceI
 }
 
 #include <KoWritingSystemUtils.h>
-QString TagFilterProxyModelQmlWrapper::localizedSampleForIndex(const int &resourceIndex, const QStringList &locales, const QString &fallBack)
+QString TagFilterProxyModelQmlWrapper::localizedSampleFromMetadata(const QMap<QString, QVariant> &metadata, const QStringList &locales, const QString &fallBack)
 {
-    QModelIndex resourceIdx = d->tagFilterProxyModel->index(resourceIndex, 0);
     QString sample = fallBack;
-    if (resourceIdx.isValid()) {
-        QMap<QString, QVariant> metadata = d->tagFilterProxyModel->data(resourceIdx, Qt::UserRole + KisResourceModel::MetaData).toMap();
-        QVariantMap samples = metadata.value("sample_svg").toMap();
-        if (!samples.isEmpty()) sample = samples.value("s_Latn", samples.values().first()).toString();
-        if (!locales.isEmpty()) {
-            Q_FOREACH(const QString locale, locales) {
-                const QString tag = KoWritingSystemUtils::sampleTagForQLocale(QLocale (locale));
-                if (samples.keys().contains(tag) ) {
-                    sample = samples.value(tag).toString();
-                    break;
-                }
+    QVariantMap samples = metadata.value("sample_svg").toMap();
+    if (!samples.isEmpty()) sample = samples.value("s_Latn", samples.values().first()).toString();
+    if (!locales.isEmpty()) {
+        Q_FOREACH(const QString locale, locales) {
+            const QString tag = KoWritingSystemUtils::sampleTagForQLocale(QLocale (locale));
+            if (samples.keys().contains(tag) ) {
+                sample = samples.value(tag).toString();
+                break;
             }
         }
     }

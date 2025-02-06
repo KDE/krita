@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>Mutator User Manual</title>
+</head>
+<body>
+    <h1>Mutator:</h1>
+
+    <p>Mutator is an python extension for Krita that, when invoked, creates additional brush dynamics by randomly mutating the artist's current brush settings.</p>
+    <p>This allows the artist to occasionally inject a bit of variation (from the <i>subtle</i> to the <b>bold</b>) and unpredictability into their artwork.</p>
+    <p>Unlike the "fuzzy" options found in Krita's brush engines (which allow for automatic random variations per dab or stroke), the "Mutate" action is invoked manually by the artist whenever some brush or color variation is desired.</p>
+
+    <h2>Basic Usage:</h2>
+
+    <p>Once Mutator has been properly installed and activated. There are only two steps required to use it:</p>
+
+    <ol>
+        <li><b>Configure your Mutator settings.</b> Open the "Mutator Settings" docker (Settings > Dockers > Mutator Settings) and adjust the sliders for each property that you want to mutate. By default, sliders are set to zero (all the way to the left) which results in no change at all when mutate is called. On the other hand setting the sliders to full (all the way the right) will cause somewhat bold or extreme mutations. While each property that we can mutate has been pre-tuned to a usable range, the amount of mutation that you want will depend on your style and workflow. As such, the best way to find settings that you like is to experiment!</li>
+        <li><b>Mutate.</b> After adjusting your Mutator settings, you're ready to mutate whenever you want. There are a few ways to do this; by keyboard shortcut, by GUI button, or by menu action. Using a keyboard shortcut (Ctrl-Alt-Shift-M, by default) may be the most convenient option, as you can use it while the Mutator Settings docker is hidden, and you don't need to navigate menus.</li>
+    </ol>
+
+    <h2>Tips:</h2>
+
+    <ul>
+        <li>First off, decide whether variation is something you want: The dynamics that Mutator allows for can add nuance to otherwise perfectly flat digital colors. While some art styles and aesthetics might benefit from this, others may not.</li>
+        <li>A little bit goes a long way: If you like the idea of manually triggering some minor variation into your brush and/or colors but you're struggling to use Mutator, then you may be overdoing it. Setting all the mutation sliders to max and mashing on the mutate button may help to create some interesting effects or textures, but sometimes very subtle and occasional mutations are all you need!<li>
+        <li>Mutations add up. Too many mutations (or even a few big ones) can bring you pretty far from your original brush or color settings. Sometimes this might be what you want, but other times it can work against you. When it comes to color mutations, this is easy to mitigate - simply resample your original color with the Color Picker and continue painting and mutating. However, when it comes to brush settings, after too many mutations you may have to manually bring your size, opacity, and flow settings back to where you want them. If this bothers you, opt for very small and subtle brush mutations or avoid brush mutations altogether.</li>
+    </ul>
+    
+    <h2>Contributors</h2>
+
+    <ul>
+        <li>Eoin O'Neill</li>
+        <li>Emmet O'Neill</li>
+    </ul>
+</body>

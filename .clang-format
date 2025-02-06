@@ -77,6 +77,10 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 # no namespace indentation to keep indent level low
 NamespaceIndentation: None
 
+# Automatically add a comment with the namespace name at the closing
+# bracket of the namespace
+FixNamespaceComments: true
+
 # we use template< without space.
 SpaceAfterTemplateKeyword: false
 
@@ -88,6 +92,9 @@ ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH, forever, Q_FOREVER, QBENCHMA
 
 # keep lambda formatting multi-line if not empty
 AllowShortLambdasOnASingleLine: Empty
+
+# Align limbdas against their signature lines
+LambdaBodyIndentation: Signature
 
 # We do not want clang-format to put all arguments on a new line
 AllowAllArgumentsOnNextLine: false

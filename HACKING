@@ -57,6 +57,20 @@ Indentation
     With four spaces. Use the default kdelibs indentation 
     (http://techbase.kde.org/Policies/Kdelibs_Coding_Style)
 
+Indentation of Lambdas
+
+    For indentation of lambdas refer to the `LambdaBodyIndentation: Signature` method used
+    by clang-format, i.e. "align lambda body relative to the lambda signature"
+
+    someMethod(
+        [](SomeReallyLongLambdaSignatureArgument foo) {
+            return;
+        });
+
+    You can use automated "Format Selection" actions of QtCreator and VSCode to format
+    lambdas. They will user the necessary settings from .clang-format file present in
+    the Krita's source tree.
+
 Includes
 
     Avoid as much as possible #includes in header files; use forward declarations

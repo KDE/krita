@@ -93,7 +93,14 @@ public:
         KIS_ASSERT(config && "No Fontconfig support available");
 
 #ifdef Q_OS_LINUX
-        // This loads the fontconfig configured on Linux.
+        /**
+         * This loads the fontconfig configured on the host Linux system.
+         *
+         * Theoretically, it can cause some version inconsistency problems if
+         * the version of fontconfig on the host differs from the version
+         * of fontconfig shipped with Krita. But we estimate such risks as
+         * negligible.
+         */
         if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
             QDir appdir("/etc/fonts");
             if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {

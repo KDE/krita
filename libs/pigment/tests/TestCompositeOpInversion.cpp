@@ -348,9 +348,9 @@ void dumpChannelsState(qreal opacity, float tolerance,
         const QString channelName = srcColorF.colorSpace()->channels()[failedChannelIndex]->name();
         qDebug() << "Failed channel:" << channelName;
     }
-    qDebug() << "U16:" << qSetRealNumberPrecision(8)
+    qDebug() << "U16:" << Qt::fixed << qSetRealNumberPrecision(8)
              << "s:" << dumpPixel(srcColorU, failedChannelIndex) << "+" << "d:" << dumpPixel(dstColorU, failedChannelIndex) << "->" << dumpPixel(resultColorU, failedChannelIndex);
-    qDebug() << "F32:" << qSetRealNumberPrecision(8)
+    qDebug() << "F32:" << Qt::fixed << qSetRealNumberPrecision(8)
              << "s:" << dumpPixel(srcColorF, failedChannelIndex) << "+" << "d:" << dumpPixel(dstColorF, failedChannelIndex) << "->" << dumpPixel(resultColorF, failedChannelIndex);
 }
 
@@ -374,7 +374,7 @@ void dumpChannelsState(qreal opacity, float tolerance,
         const QString channelName = srcColorF.colorSpace()->channels()[failedChannelIndex]->name();
         qDebug() << "Failed channel:" << channelName;
     }
-    qDebug() << "F32:" << qSetRealNumberPrecision(8)
+    qDebug() << "F32:" << Qt::fixed << qSetRealNumberPrecision(8)
              << "s:" << dumpPixel(srcColorF, failedChannelIndex) << "+" << "d:" << dumpPixel(dstColorF, failedChannelIndex) << "->" << dumpPixel(resultColorF, failedChannelIndex);
 }
 
@@ -783,9 +783,9 @@ void TestCompositeOpInversion::testU16ModesConsistent()
 
             qDebug() << "--- integer implementation is inconsistent to the original mode! ---";
             qDebug() << ppVar(it.opacity()) << ppVar(resultColor) << ppVar(referenceColor);
-            qDebug() << "U16 result:   " << qSetRealNumberPrecision(8)
+            qDebug() << "U16 result:   " << Qt::fixed << qSetRealNumberPrecision(8)
                      << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(resultColorU);
-            qDebug() << "U16 reference:" << qSetRealNumberPrecision(8)
+            qDebug() << "U16 reference:" << Qt::fixed << qSetRealNumberPrecision(8)
                      << "s:" << dumpPixel(srcColorU) << "+" << "d:" << dumpPixel(dstColorU) << "->" << dumpPixel(refResultColorU);
             QFAIL("integer implementation is inconsistent to the original mode!");
         }
@@ -1143,7 +1143,7 @@ void TestCompositeOpInversion::testPreservesSdrRangeImpl(bool useStrictRange)
                            // noop, everything is fine
                 } else {
                     for (size_t i = 0; i < transitionalValues.size(); i++) {
-                        qDebug() << qSetRealNumberPrecision(14)
+                        qDebug() << Qt::fixed << qSetRealNumberPrecision(14)
                                  << "    " << i << ":" << transitionalValues[i];
                     }
 
@@ -1236,7 +1236,7 @@ void TestCompositeOpInversion::testSrcCannotMakeNegative()
 
             qDebug() << "--- resulting value in SDR range is negative for SRC-clipped op! ---";
             qDebug() << ppVar(it.opacity());
-            qDebug() << "F32:" << qSetRealNumberPrecision(8)
+            qDebug() << "F32:" << Qt::fixed << qSetRealNumberPrecision(8)
                      << "s:" << dumpPixel(srcColorF) << "+" << "d:" << dumpPixel(dstColorF) << "->" << dumpPixel(resultColorF);
             QFAIL("resulting value in SDR range is negative for SRC-clipped op!");
         }
@@ -1429,9 +1429,9 @@ void TestCompositeOpInversion::testF16Modes()
 
             qDebug() << "--- resulting value in SDR range generates negative result! ---";
             qDebug() << ppVar(itF16.opacity());
-            qDebug() << "F32:" << qSetRealNumberPrecision(8)
+            qDebug() << "F32:" << Qt::fixed << qSetRealNumberPrecision(8)
                      << "s:" << dumpPixel(srcColorF32) << "+" << "d:" << dumpPixel(dstColorF32) << "->" << dumpPixel(resultColorF32);
-            qDebug() << "F16:" << qSetRealNumberPrecision(8)
+            qDebug() << "F16:" << Qt::fixed << qSetRealNumberPrecision(8)
                      << "s:" << dumpPixel(srcColorF16) << "+" << "d:" << dumpPixel(dstColorF16) << "->" << dumpPixel(resultColorF16);
             QFAIL("resulting value in SDR range generates negative result!");
         }

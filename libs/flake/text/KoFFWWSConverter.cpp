@@ -463,8 +463,8 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             for (uint i = 0; i < count; i++) {
                 QHash<QString, float> instanceCoords;
                 uint coordLength = axesTags.size();
-                float coordinate[coordLength];
-                hb_ot_var_named_instance_get_design_coords (hbFace.data(), i, &coordLength, coordinate);
+                std::vector<float> coordinate(coordLength);
+                hb_ot_var_named_instance_get_design_coords (hbFace.data(), i, &coordLength, coordinate.data());
                 for (uint j =0; j < coordLength; j++ ){
                     instanceCoords.insert(axesTags.value(j), coordinate[j]);
                 }

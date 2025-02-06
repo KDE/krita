@@ -279,7 +279,7 @@ public:
         if constexpr (std::numeric_limits<_T>::is_integer) {
             return val;
         } else {
-            return qBound<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val, KoColorSpaceMathsTraits<_T>::unitValue);
+            return kisBoundFast<_T>(KoColorSpaceMathsTraits<_T>::zeroValue, val, KoColorSpaceMathsTraits<_T>::unitValue);
         }
     }
 
@@ -293,7 +293,7 @@ public:
     }
 
     inline static dst_compositetype clampToSDR(dst_compositetype val) {
-        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
+        return kisBoundFast<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::zeroValue, val, KoColorSpaceMathsTraits<_Tdst>::unitValue);
     }
 
     inline static dst_compositetype clampToSDRTop(dst_compositetype val) {

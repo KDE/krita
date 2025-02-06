@@ -10,30 +10,22 @@
 
 /**
  * @brief The KoFontChangeTracker class
- * This class keeps track of the FontConfig refresh value,
- * as well as the paths FontConfig is looking at,
- * and resets the
+ * This class keeps track of the paths FontConfig is looking at,
+ * and resets the font registery if they change.
  */
 class KoFontChangeTracker : public QObject
 {
     Q_OBJECT
 public:
-    explicit KoFontChangeTracker(QStringList paths, int configRefreshValue = 0, QObject *parent = nullptr);
+    explicit KoFontChangeTracker(QStringList paths, QObject *parent = nullptr);
     ~KoFontChangeTracker();
 
     /// This should be called after fontregistery initialization is done to start the signal compressor.
     void resetChangeTracker();
-
-    /// This needs to be manually connected.
-    void connectToRegistery();
-public Q_SLOTS:
-    void updateFontRegistery();
 Q_SIGNALS:
     void sigUpdateConfig();
 private Q_SLOTS:
-    void intervalElapsed();
     void directoriesChanged(QString path);
-    void testUpdate();
 private:
     struct Private;
     QScopedPointer<Private> d;

@@ -6,6 +6,7 @@
 #ifndef KOFONTREGISTRY_H
 #define KOFONTREGISTRY_H
 
+#include <QObject>
 #include <QScopedPointer>
 #include <QVector>
 
@@ -25,10 +26,11 @@
  * It also provides a configuration function to handle all the
  * size and variation axis values.
  */
-class KRITAFLAKE_EXPORT KoFontRegistry
+class KRITAFLAKE_EXPORT KoFontRegistry: public QObject
 {
+    Q_OBJECT
 public:
-    KoFontRegistry();
+    KoFontRegistry(QObject *parent = nullptr);
     ~KoFontRegistry();
 
     static KoFontRegistry *instance();
@@ -93,18 +95,17 @@ public:
     QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;
 
     /**
-     * Update the config and reset the FontChangeListener.
-     */
-    void updateConfig();
-
-    /**
      * @brief slantMode
      * testing the slant mode can be annoying, so this is a convenience function to return the slant mode.
      * @param face the freetype face to test for.
      * @return the slant mode, can be normal, italic or oblique.
      */
     static QFont::Style slantMode(FT_FaceSP face);
-
+private Q_SLOTS:
+    /**
+     * Update the config and reset the FontChangeListener.
+     */
+    void updateConfig();
 private:
     class Private;
 

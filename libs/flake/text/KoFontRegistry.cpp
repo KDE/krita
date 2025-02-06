@@ -133,9 +133,7 @@ public:
             path = QString::fromUtf8(reinterpret_cast<char *>(dirString));
         }
         FcStrListDone(list);
-        int rescanInterval = FcConfigGetRescanInterval(m_config.data());
-        changeTracker.reset(new KoFontChangeTracker(paths, rescanInterval * 1000));
-        changeTracker->connectToRegistery();
+        changeTracker.reset(new KoFontChangeTracker(paths));
         changeTracker->resetChangeTracker();
 
         reloadConverter();
@@ -180,6 +178,10 @@ public:
         return fontFamilyConverter;
     }
 
+    QSharedPointer<KoFontChangeTracker> fontChangeTracker() const {
+        return changeTracker;
+    }
+
     bool reloadConverter() {
         fontFamilyConverter.reset(new KoFFWWSConverter());
         FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, FC_LANG, FC_CHARSET, nullptr);
@@ -203,11 +205,7 @@ public:
         fontFamilyConverter->debugInfo();
     }
 
-public Q_SLOTS:
     void updateConfig() {
-        if (!FcInitBringUptoDate()) {
-            return;
-        }
         if (FcConfigBuildFonts(m_config.data())) {
             reloadConverter();
             KisResourceLocator::instance()->updateFontStorage();
@@ -216,12 +214,15 @@ public Q_SLOTS:
     }
 };
 
-KoFontRegistry::KoFontRegistry()
-    : d(new Private())
+KoFontRegistry::KoFontRegistry(QObject *parent)
+    : QObject(parent)
+    , d(new Private())
 {
+    connect(d->fontChangeTracker().data(), SIGNAL(sigUpdateConfig()), this, SLOT(updateConfig()), Qt::UniqueConnection);
 }
 
-KoFontRegistry::~KoFontRegistry() = default;
+KoFontRegistry::~KoFontRegistry() {
+}
 
 KoFontRegistry *KoFontRegistry::instance()
 {

@@ -118,7 +118,7 @@ public:
      * separate physical representation on the disk
      */
     QString filePathForResource(KoResourceSP resource);
-public Q_SLOTS:
+
     /// This updates the "fontregistery" storage. Called when the font directories change;
     void updateFontStorage();
 

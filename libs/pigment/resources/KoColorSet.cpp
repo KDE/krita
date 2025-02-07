@@ -1411,7 +1411,8 @@ bool KoColorSet::Private::loadAct()
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
     KisSwatch swatch;
-    for (int i = 0; i < data.size(); i += 3) {
+    int numOfTriplets = int(data.size() / 3);
+    for (int i = 0; i < numOfTriplets * 3; i += 3) {
         quint8 r = data[i];
         quint8 g = data[i+1];
         quint8 b = data[i+2];

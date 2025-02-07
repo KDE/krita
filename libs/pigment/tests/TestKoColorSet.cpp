@@ -58,7 +58,7 @@ void TestKoColorSet::testLoadACT()
     QCOMPARE(set.paletteType(), KoColorSet::ACT);
     QVERIFY(set.valid());
 
-    QCOMPARE(set.colorCount(), 258);
+    QCOMPARE(set.colorCount(), 257);
 
     QFile("test.act").remove();
 

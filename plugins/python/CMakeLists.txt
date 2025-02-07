@@ -91,6 +91,7 @@ install( FILES
     tenbrushes/tenbrushes.action
     tenscripts/tenscripts.action
     plugin_importer/plugin_importer.action
+    mutator/mutator.action
 DESTINATION  ${KDE_INSTALL_DATADIR}/krita/actions)
 
 install(

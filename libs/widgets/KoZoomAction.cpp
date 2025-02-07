@@ -118,8 +118,7 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
 
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom);
-
-    connect( this, SIGNAL(triggered(QString)), SLOT(triggered(QString)) );
+    connect( this, SIGNAL(textTriggered(QString)), SLOT(triggered(QString)));
     connect(&d->guiUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterZoom()));
 }
 

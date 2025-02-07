@@ -58,7 +58,7 @@ Q_SIGNALS:
     /// preventing loops (I think...)
     void sigUiNeedChangeActiveNode(KisNodeSP node);
 
-    void sigUiNeedChangeSelectedNodes(const KisNodeList &nodes);
+    void sigUiNeedChangeSelectedNodes(const QList<KisNodeSP> &nodes);
 
 public:
 

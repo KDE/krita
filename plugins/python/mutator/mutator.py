@@ -150,7 +150,7 @@ class MutatorDocker(DockWidget):
     def __init__(self):
         super().__init__()
         
-        self.setWindowTitle("Mutator")
+        self.setWindowTitle(i18n("Mutator"))
         
         # Create body, set widget and setup layout...
         body = QWidget(self)
@@ -167,46 +167,46 @@ class MutatorDocker(DockWidget):
         sizeMutSlider.setRange(0, 100)
         sizeMutSlider.valueChanged.connect(self.update_size_mut)
         sizeMutSlider.setValue(int(nSizeMut * 100))
-        settings.layout().addRow(QLabel("Brush Size"), sizeMutSlider)
+        settings.layout().addRow(QLabel(i18n("Brush Size")), sizeMutSlider)
 
         rotationMutSlider = QSlider(Qt.Horizontal) # Rotation
         rotationMutSlider.setRange(0, 100)
         rotationMutSlider.valueChanged.connect(self.update_rotation_mut)
         rotationMutSlider.setValue(int(nRotationMut * 100))
-        settings.layout().addRow(QLabel("Brush Rotation"), rotationMutSlider)
+        settings.layout().addRow(QLabel(i18n("Brush Rotation")), rotationMutSlider)
         
         opacityMutSlider = QSlider(Qt.Horizontal) # Opacity
         opacityMutSlider.setRange(0, 100)
         opacityMutSlider.valueChanged.connect(self.update_opacity_mut)
         opacityMutSlider.setValue(int(nOpacityMut * 100))
-        settings.layout().addRow(QLabel("Opacity"), opacityMutSlider)
+        settings.layout().addRow(QLabel(i18n("Opacity")), opacityMutSlider)
         
         flowMutSlider = QSlider(Qt.Horizontal) # Flow
         flowMutSlider.setRange(0, 100)
         flowMutSlider.valueChanged.connect(self.update_flow_mut)
         flowMutSlider.setValue(int(nFlowMut * 100))
-        settings.layout().addRow(QLabel("Flow"), flowMutSlider)
+        settings.layout().addRow(QLabel(i18n("Flow")), flowMutSlider)
         
         hueMutSlider = QSlider(Qt.Horizontal) # FGC Hue
         hueMutSlider.setRange(0, 100)
         hueMutSlider.valueChanged.connect(self.update_fgc_hue_mut)
         hueMutSlider.setValue(int(nHueMut * 100))
-        settings.layout().addRow( QLabel("Hue (Foreground)"), hueMutSlider)
+        settings.layout().addRow( QLabel(i18n("Hue (Foreground)")), hueMutSlider)
         
         saturationMutSlider = QSlider(Qt.Horizontal) # FGC Saturation
         saturationMutSlider.setRange(0, 100)
         saturationMutSlider.valueChanged.connect(self.update_fgc_saturation_mut)
         saturationMutSlider.setValue(int(nSaturationMut * 100))
-        settings.layout().addRow(QLabel("Saturation (Foreground)"), saturationMutSlider)
+        settings.layout().addRow(QLabel(i18n("Saturation (Foreground)")), saturationMutSlider)
         
         valueMutSlider = QSlider(Qt.Horizontal) # FGC Value
         valueMutSlider.setRange(0, 100)
         valueMutSlider.valueChanged.connect(self.update_fgc_value_mut)
         valueMutSlider.setValue(int(nValueMut * 100))
-        settings.layout().addRow(QLabel("Value (Foreground)"), valueMutSlider) 
+        settings.layout().addRow(QLabel(i18n("Value (Foreground)")), valueMutSlider) 
 
         # Create mutate button...
-        mutateButton = QPushButton("Mutate")
+        mutateButton = QPushButton(i18n("Mutate"))
         mutateButton.clicked.connect(self.trigger_mutate)
         body.layout().addWidget(mutateButton)
     

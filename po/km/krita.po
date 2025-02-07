@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-06 01:53+0000\n"
+"POT-Creation-Date: 2025-02-07 02:00+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -16191,8 +16191,8 @@ msgid ""
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:693 libs/ui/KisApplication.cpp:413
-#: libs/ui/KisApplication.cpp:685
+#: krita/main.cc:693 libs/ui/KisApplication.cpp:416
+#: libs/ui/KisApplication.cpp:688
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -17813,8 +17813,8 @@ msgid "Onion Skins"
 msgstr "បង្ខំ​ឲ្យ​មាន​សមាមាត្រ"
 
 #: libs/image/kis_layer_properties_icons.cpp:30
-#: libs/resources/KisResourceModel.cpp:142
-#: libs/resources/KisStorageModel.cpp:484
+#: libs/resources/KisResourceModel.cpp:143
+#: libs/resources/KisStorageModel.cpp:485
 #: libs/resources/KisTagResourceModel.cpp:644
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:110
 #, kde-format
@@ -20079,10 +20079,10 @@ msgstr "ឯកសារ​ប្រភព ៖"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1066
-#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
-#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:1004
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1069
+#: libs/ui/KisApplication.cpp:1072 libs/ui/KisApplication.cpp:1088
+#: libs/ui/KisApplication.cpp:1120 libs/ui/KisApplication.cpp:1134
+#: libs/ui/KisApplication.cpp:1162 libs/ui/KisDocument.cpp:1004
 #: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
 #: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -20161,52 +20161,64 @@ msgid "Could not add %1 to the database"
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
 #: libs/resources/KisResourceLocator.cpp:866
-#: libs/resources/KisResourceLocator.cpp:1213
+#: libs/resources/KisResourceLocator.cpp:1236
 #, fuzzy, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: libs/resources/KisResourceLocator.cpp:978
+#: libs/resources/KisResourceLocator.cpp:979
+#, fuzzy, kde-format
+#| msgid "Could not add layer to image."
+msgid "Could not synchronize updated font registery with the database"
+msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
+
+#: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
 msgid ""
 "Krita is running for the first time. Initialization will take some time."
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:985
+#: libs/resources/KisResourceLocator.cpp:994
 #, fuzzy, kde-format
 msgid "3. Could not create the resource location at %1."
 msgstr "ជ្រើស​សំណុំ​ឆានែល​សកម្ម"
 
-#: libs/resources/KisResourceLocator.cpp:998
-#: libs/resources/KisResourceLocator.cpp:1014
+#: libs/resources/KisResourceLocator.cpp:1007
+#: libs/resources/KisResourceLocator.cpp:1023
 #, fuzzy, kde-format
 msgid "Could not copy resource %1 to %2"
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: libs/resources/KisResourceLocator.cpp:1010
+#: libs/resources/KisResourceLocator.cpp:1019
 #, fuzzy, kde-format
 msgid "Installing the resources from bundle %1."
 msgstr "ការ​កំណត់​រចនាសម្ព័ន្ធ​ថ្មី %1"
 
-#: libs/resources/KisResourceLocator.cpp:1032
+#: libs/resources/KisResourceLocator.cpp:1041
 #, fuzzy, kde-format
 msgid "Initializing the resources."
 msgstr "ធនធាន"
 
-#: libs/resources/KisResourceLocator.cpp:1066
+#: libs/resources/KisResourceLocator.cpp:1075
 #, fuzzy, kde-format
 msgid "Temporary Resources"
 msgstr "នាំ​ចូល​រូបភាព"
 
-#: libs/resources/KisResourceLocator.cpp:1189
-#: libs/resources/KisResourceLocator.cpp:1195
+#: libs/resources/KisResourceLocator.cpp:1079
+#: libs/resources/KisResourceStorage.h:127
+#, fuzzy, kde-format
+msgid "Font Storage"
+msgstr "ទំហំ​បោះពុម្ព"
+
+#: libs/resources/KisResourceLocator.cpp:1212
+#: libs/resources/KisResourceLocator.cpp:1218
 #, fuzzy, kde-format
 #| msgid "Could not add layer to image."
 msgid "Could not synchronize %1 with the database"
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: libs/resources/KisResourceModel.cpp:124
-#: libs/resources/KisStorageModel.cpp:474
+#: libs/resources/KisResourceModel.cpp:125
+#: libs/resources/KisStorageModel.cpp:475
 #: libs/resources/KisTagResourceModel.cpp:626
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:81
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:103
@@ -20215,15 +20227,15 @@ msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទ
 msgid "Id"
 msgstr ""
 
-#: libs/resources/KisResourceModel.cpp:126
+#: libs/resources/KisResourceModel.cpp:127
 #: libs/resources/KisTagResourceModel.cpp:628
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
 msgstr ""
 
-#: libs/resources/KisResourceModel.cpp:128
-#: libs/resources/KisStorageModel.cpp:488
+#: libs/resources/KisResourceModel.cpp:129
+#: libs/resources/KisStorageModel.cpp:489
 #: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
@@ -20233,14 +20245,14 @@ msgstr ""
 msgid "Name"
 msgstr "ឈ្មោះ"
 
-#: libs/resources/KisResourceModel.cpp:130
+#: libs/resources/KisResourceModel.cpp:131
 #: libs/resources/KisTagResourceModel.cpp:632
 #, fuzzy, kde-format
 #| msgid "Filename"
 msgid "File Name"
 msgstr "ឈ្មោះ​ឯកសារ"
 
-#: libs/resources/KisResourceModel.cpp:132
+#: libs/resources/KisResourceModel.cpp:133
 #: libs/resources/KisTagResourceModel.cpp:634
 #, fuzzy, kde-format
 msgid "Tooltip"
@@ -20249,7 +20261,7 @@ msgstr "ឧបករណ៍"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbType)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
-#: libs/resources/KisResourceModel.cpp:134
+#: libs/resources/KisResourceModel.cpp:135
 #: libs/resources/KisTagResourceModel.cpp:636
 #: libs/ui/imagesize/imagesize.xmlgui:4
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:156
@@ -20262,14 +20274,14 @@ msgstr "ឧបករណ៍"
 msgid "Image"
 msgstr "រូបភាព"
 
-#: libs/resources/KisResourceModel.cpp:136
+#: libs/resources/KisResourceModel.cpp:137
 #: libs/resources/KisTagResourceModel.cpp:638
 #, fuzzy, kde-format
 msgid "Status"
 msgstr "បង្ហាញ​ស្រទាប់ root"
 
-#: libs/resources/KisResourceModel.cpp:138
-#: libs/resources/KisStorageModel.cpp:478
+#: libs/resources/KisResourceModel.cpp:139
+#: libs/resources/KisStorageModel.cpp:479
 #: libs/resources/KisTagResourceModel.cpp:640
 #: libs/resourcewidgets/KisIconToolTip.cpp:108
 #, fuzzy, kde-format
@@ -20278,14 +20290,14 @@ msgid "Location"
 msgstr "ការបង្វិល ៖"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/resources/KisResourceModel.cpp:140
+#: libs/resources/KisResourceModel.cpp:141
 #: libs/resources/KisTagResourceModel.cpp:642
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, fuzzy, kde-format
 msgid "Resource Type"
 msgstr "ធនធាន"
 
-#: libs/resources/KisResourceModel.cpp:144
+#: libs/resources/KisResourceModel.cpp:145
 #: libs/resources/KisTagResourceModel.cpp:646
 #: libs/resources/KisTagResourceModel.cpp:676
 #, fuzzy, kde-format
@@ -20293,7 +20305,7 @@ msgstr "ធនធាន"
 msgid "Storage Active"
 msgstr "សម្រាប់​រូបភាព​"
 
-#: libs/resources/KisResourceModel.cpp:146
+#: libs/resources/KisResourceModel.cpp:147
 #: libs/resources/KisTagResourceModel.cpp:648
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:86
 #, kde-format
@@ -20301,7 +20313,7 @@ msgid "md5sum"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabTags)
-#: libs/resources/KisResourceModel.cpp:148
+#: libs/resources/KisResourceModel.cpp:149
 #: libs/resources/KisTagResourceModel.cpp:650
 #: libs/resourcewidgets/KisIconToolTip.cpp:99
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
@@ -20309,14 +20321,14 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#: libs/resources/KisResourceModel.cpp:150
+#: libs/resources/KisResourceModel.cpp:151
 #: libs/resources/KisTagResourceModel.cpp:652
 #, fuzzy, kde-format
 #| msgid "Thumbnails"
 msgid "Large Thumbnail"
 msgstr "Thumbnails"
 
-#: libs/resources/KisResourceModel.cpp:152
+#: libs/resources/KisResourceModel.cpp:153
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
@@ -20325,7 +20337,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/resources/KisResourceModel.cpp:154
+#: libs/resources/KisResourceModel.cpp:155
 #: libs/resources/KisTagResourceModel.cpp:656
 #: libs/ui/animation/VideoImportDialog.ui:149
 #: plugins/dockers/logdocker/LogDockerDock.cpp:192
@@ -20338,7 +20350,7 @@ msgstr "ទិន្នន័យ​មេតា"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
-#: libs/resources/KisResourceStorage.h:116
+#: libs/resources/KisResourceStorage.h:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1937
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1941
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
@@ -20349,128 +20361,134 @@ msgstr "ទិន្នន័យ​មេតា"
 msgid "Unknown"
 msgstr "មិន​ស្គាល់"
 
-#: libs/resources/KisResourceStorage.h:118
+#: libs/resources/KisResourceStorage.h:119
 #, fuzzy, kde-format
 msgid "Folder"
 msgstr "ឯកសារ​ប្រភព ៖"
 
-#: libs/resources/KisResourceStorage.h:120
+#: libs/resources/KisResourceStorage.h:121
 #, fuzzy, kde-format
 msgid "Bundle"
 msgstr "បញ្ចូល​ឈ្មោះ"
 
-#: libs/resources/KisResourceStorage.h:122
+#: libs/resources/KisResourceStorage.h:123
 #, kde-format
 msgid "Adobe Brush Library"
 msgstr ""
 
-#: libs/resources/KisResourceStorage.h:124
+#: libs/resources/KisResourceStorage.h:125
 #, fuzzy, kde-format
 msgid "Adobe Style Library"
 msgstr "គ្មាន​ជម្រើស​កំណត់​រចនាសម្ព័ន្ធ ។"
 
-#: libs/resources/KisResourceStorage.h:126
+#: libs/resources/KisResourceStorage.h:129
 #, fuzzy, kde-format
 msgid "Memory"
 msgstr "រក្សាទុក​ត្រូវ​​កំណត់​ជា​មុន​"
 
-#: libs/resources/KisResourceStorage.h:128
+#: libs/resources/KisResourceStorage.h:131
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:47
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:51
 #, kde-format
 msgid "Invalid"
 msgstr "មិន​ត្រឹម​ត្រូវ"
 
-#: libs/resources/KisResourceTypes.cpp:43
+#: libs/resources/KisResourceTypes.cpp:44
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Brush Presets"
 msgstr "ទំហំ​ជក់"
 
-#: libs/resources/KisResourceTypes.cpp:44
+#: libs/resources/KisResourceTypes.cpp:45
 #, fuzzy, kde-format
 #| msgid "Brush Tip"
 msgctxt "resource type"
 msgid "Brush Tips"
 msgstr "ព័ត៌មាន​ជំនួយ​ជក់"
 
-#: libs/resources/KisResourceTypes.cpp:45
+#: libs/resources/KisResourceTypes.cpp:46
 #, fuzzy, kde-format
 #| msgid "Gradients"
 msgctxt "resource type"
 msgid "Gradients"
 msgstr "ជម្រាល​"
 
-#: libs/resources/KisResourceTypes.cpp:46
+#: libs/resources/KisResourceTypes.cpp:47
 #, fuzzy, kde-format
 #| msgid "Palettes"
 msgctxt "resource type"
 msgid "Palettes"
 msgstr "ក្តារលាយ​"
 
-#: libs/resources/KisResourceTypes.cpp:47
+#: libs/resources/KisResourceTypes.cpp:48
 #, fuzzy, kde-format
 #| msgid "Patterns"
 msgctxt "resource type"
 msgid "Patterns"
 msgstr "លំនាំ"
 
-#: libs/resources/KisResourceTypes.cpp:48
+#: libs/resources/KisResourceTypes.cpp:49
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Workspaces"
 msgstr "តំបន់​ធ្វើ​ការ​"
 
-#: libs/resources/KisResourceTypes.cpp:49
+#: libs/resources/KisResourceTypes.cpp:50
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Symbol Libraries"
 msgstr "កាត់​ស្រទាប់"
 
-#: libs/resources/KisResourceTypes.cpp:50
+#: libs/resources/KisResourceTypes.cpp:51
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Window Layouts"
 msgstr "ផ្ទៃ​ខាងក្រោយ​"
 
-#: libs/resources/KisResourceTypes.cpp:51
+#: libs/resources/KisResourceTypes.cpp:52
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgctxt "resource type"
 msgid "Sessions"
 msgstr "វិមាត្រ"
 
-#: libs/resources/KisResourceTypes.cpp:52
+#: libs/resources/KisResourceTypes.cpp:53
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Gamut Masks"
 msgstr "បង្វើល​ផ្ទាំង​គំនូរ​ទៅ​ឆ្វេង​"
 
-#: libs/resources/KisResourceTypes.cpp:53
+#: libs/resources/KisResourceTypes.cpp:54
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "SeExpr Scripts"
 msgstr "ពិពណ៌នា ៖"
 
-#: libs/resources/KisResourceTypes.cpp:54
+#: libs/resources/KisResourceTypes.cpp:55
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Filter Effects"
 msgstr "ជម្រើស​តម្រង"
 
-#: libs/resources/KisResourceTypes.cpp:55
+#: libs/resources/KisResourceTypes.cpp:56
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Task Sets"
 msgstr "ប្រភព​របាំង"
 
-#: libs/resources/KisResourceTypes.cpp:56
+#: libs/resources/KisResourceTypes.cpp:57
 #, fuzzy, kde-format
 msgctxt "resource type"
 msgid "Layer Styles"
 msgstr "ទំហំ​ស្រទាប់​"
 
-#: libs/resources/KisStorageModel.cpp:476
+#: libs/resources/KisResourceTypes.cpp:58
+#, fuzzy, kde-format
+msgctxt "resource type"
+msgid "Font Families"
+msgstr "ទំហំ​បោះពុម្ព"
+
+#: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
@@ -20480,13 +20498,13 @@ msgstr "ទំហំ​ស្រទាប់​"
 msgid "Type"
 msgstr "ប្រភេទ"
 
-#: libs/resources/KisStorageModel.cpp:480
+#: libs/resources/KisStorageModel.cpp:481
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:87
 #, fuzzy, kde-format
 msgid "Creation Date"
 msgstr "បង្កើត"
 
-#: libs/resources/KisStorageModel.cpp:482
+#: libs/resources/KisStorageModel.cpp:483
 #, fuzzy, kde-format
 #| msgid "Uninstall"
 msgid "Preinstalled"
@@ -20494,7 +20512,7 @@ msgstr "លុប"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, iconPanel)
-#: libs/resources/KisStorageModel.cpp:486
+#: libs/resources/KisStorageModel.cpp:487
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
@@ -28147,7 +28165,7 @@ msgid "HSV CCW"
 msgstr "HSV CCW"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgSessionManager)
-#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:355
+#: libs/ui/forms/wdgsessionmanager.ui:18 libs/ui/KisApplication.cpp:356
 #, fuzzy, kde-format
 #| msgid "Dimensions"
 msgid "Sessions"
@@ -29679,7 +29697,7 @@ msgstr "ពណ៌​ផ្ទៃ​ខាង​ក្រោយ ៖"
 msgid "&Docker Box"
 msgstr "ឧបករណ៍​ចូល​ផែ​"
 
-#: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
+#: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:352
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:65
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:61
@@ -29693,8 +29711,8 @@ msgstr "លំនាំ"
 msgid "Custom Pattern"
 msgstr "លំនាំ​ផ្ទាល់ខ្លួន"
 
-#: libs/ui/kis_control_frame.cpp:246 libs/ui/KisApplication.cpp:336
-#: libs/ui/KisApplication.cpp:337
+#: libs/ui/kis_control_frame.cpp:246 libs/ui/KisApplication.cpp:337
+#: libs/ui/KisApplication.cpp:338
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:63
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:59
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
@@ -30271,7 +30289,7 @@ msgstr "លំនាំ"
 #. i18n: ectx: property (text), widget (QLabel, opacityLabel)
 #: libs/ui/kis_paintop_box.cc:274
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:107
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:66
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:103
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:59
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:57
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:126
@@ -30596,21 +30614,21 @@ msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
 msgstr "ពង្រីក"
 
-#: libs/ui/KisApplication.cpp:328
+#: libs/ui/KisApplication.cpp:329
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:257
 #, fuzzy, kde-format
 msgid "Brush presets"
 msgstr "ទំហំ​ជក់"
 
-#: libs/ui/KisApplication.cpp:331 libs/ui/KisApplication.cpp:332
-#: libs/ui/KisApplication.cpp:333 libs/ui/KisApplication.cpp:334
+#: libs/ui/KisApplication.cpp:332 libs/ui/KisApplication.cpp:333
+#: libs/ui/KisApplication.cpp:334 libs/ui/KisApplication.cpp:335
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:258
 #, fuzzy, kde-format
 #| msgid "Brush tip"
 msgid "Brush tips"
 msgstr "ព័ត៌មាន​ជំនួយ​ជក់"
 
-#: libs/ui/KisApplication.cpp:339
+#: libs/ui/KisApplication.cpp:340
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:66
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:62
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:261
@@ -30618,7 +30636,7 @@ msgstr "ព័ត៌មាន​ជំនួយ​ជក់"
 msgid "Palettes"
 msgstr "ក្តារលាយ​"
 
-#: libs/ui/KisApplication.cpp:352 libs/ui/widgets/kis_workspace_chooser.cpp:91
+#: libs/ui/KisApplication.cpp:353 libs/ui/widgets/kis_workspace_chooser.cpp:91
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:67
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:63
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:259
@@ -30626,35 +30644,40 @@ msgstr "ក្តារលាយ​"
 msgid "Workspaces"
 msgstr "តំបន់​ធ្វើ​ការ​"
 
-#: libs/ui/KisApplication.cpp:353
+#: libs/ui/KisApplication.cpp:354
 #, fuzzy, kde-format
 msgid "SVG symbol libraries"
 msgstr "កាត់​ស្រទាប់"
 
-#: libs/ui/KisApplication.cpp:354 libs/ui/widgets/kis_workspace_chooser.cpp:105
+#: libs/ui/KisApplication.cpp:355 libs/ui/widgets/kis_workspace_chooser.cpp:105
 #, fuzzy, kde-format
 #| msgid "Window size"
 msgid "Window layouts"
 msgstr "ទំហំ​​បង្អួច"
 
-#: libs/ui/KisApplication.cpp:356
+#: libs/ui/KisApplication.cpp:357
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:264
 #, fuzzy, kde-format
 msgid "Gamut masks"
 msgstr "បង្វើល​ផ្ទាំង​គំនូរ​ទៅ​ឆ្វេង​"
 
-#: libs/ui/KisApplication.cpp:358
+#: libs/ui/KisApplication.cpp:359
 #, fuzzy, kde-format
 msgid "SeExpr Scripts"
 msgstr "ពិពណ៌នា ៖"
 
-#: libs/ui/KisApplication.cpp:363
+#: libs/ui/KisApplication.cpp:364
 #, fuzzy, kde-format
 msgctxt "Resource type name"
 msgid "Layer styles"
 msgstr "ទំហំ​ស្រទាប់​"
 
-#: libs/ui/KisApplication.cpp:376
+#: libs/ui/KisApplication.cpp:367
+#, fuzzy, kde-format
+msgid "Font Families"
+msgstr "ទំហំ​បោះពុម្ព"
+
+#: libs/ui/KisApplication.cpp:379
 #, kde-format
 msgid ""
 "%1\n"
@@ -30662,13 +30685,13 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:376 libs/ui/KisApplication.cpp:382
+#: libs/ui/KisApplication.cpp:379 libs/ui/KisApplication.cpp:385
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Fatal error"
 msgstr "ត្របាញ់"
 
-#: libs/ui/KisApplication.cpp:382
+#: libs/ui/KisApplication.cpp:385
 #, kde-format
 msgid ""
 "\n"
@@ -30676,7 +30699,7 @@ msgid ""
 "Krita will quit now."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:414
+#: libs/ui/KisApplication.cpp:417
 #, kde-format
 msgid ""
 "You are running a 32 bits build on a 64 bits Windows.\n"
@@ -30684,67 +30707,67 @@ msgid ""
 "Please download and install the x64 build instead."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:431
+#: libs/ui/KisApplication.cpp:434
 #, fuzzy, kde-format
 msgid "Initializing Globals..."
 msgstr "ធនធាន"
 
-#: libs/ui/KisApplication.cpp:463
+#: libs/ui/KisApplication.cpp:466
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "ធនធាន"
 
-#: libs/ui/KisApplication.cpp:467
+#: libs/ui/KisApplication.cpp:470
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "ជក់​ភីកសែល"
 
-#: libs/ui/KisApplication.cpp:473
+#: libs/ui/KisApplication.cpp:476
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "ឯកសារ​ប្រភព ៖"
 
-#: libs/ui/KisApplication.cpp:482
+#: libs/ui/KisApplication.cpp:485
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "ជម្រាល​"
 
-#: libs/ui/KisApplication.cpp:514
+#: libs/ui/KisApplication.cpp:517
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "កំពុងផ្គូផ្គង​សំឡេង..."
 
-#: libs/ui/KisApplication.cpp:583
+#: libs/ui/KisApplication.cpp:586
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:639
+#: libs/ui/KisApplication.cpp:642
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "បង្កើត​សកម្មភាព​បាន​បរាជ័យ ។"
 
-#: libs/ui/KisApplication.cpp:666 libs/ui/KisApplication.cpp:938
+#: libs/ui/KisApplication.cpp:669 libs/ui/KisApplication.cpp:941
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "ត្រង​ស្រទាប់..."
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:679
-#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:677 libs/ui/KisApplication.cpp:682
+#: libs/ui/KisApplication.cpp:935 libs/ui/KisApplication.cpp:949
+#: libs/ui/KisApplication.cpp:954
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "ការ​ព្រមាន!"
 
-#: libs/ui/KisApplication.cpp:675 libs/ui/KisApplication.cpp:947
+#: libs/ui/KisApplication.cpp:678 libs/ui/KisApplication.cpp:950
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "មិន​អាច​រើស​ពណ៌​ពេល​ដែល​ស្រទាប់​សកម្ម​មើល​មិន​ឃើញ ។"
 
-#: libs/ui/KisApplication.cpp:680
+#: libs/ui/KisApplication.cpp:683
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30757,7 +30780,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:686
+#: libs/ui/KisApplication.cpp:689
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30765,32 +30788,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:933
+#: libs/ui/KisApplication.cpp:936
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "មិន​អាច​បន្ថែម​ស្រទាប់​ទៅ​កាន់​រូបភាព​បាន​ទេ ។"
 
-#: libs/ui/KisApplication.cpp:952
+#: libs/ui/KisApplication.cpp:955
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1067
+#: libs/ui/KisApplication.cpp:1070
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "ទំហំ​ស្រទាប់​"
 
-#: libs/ui/KisApplication.cpp:1070
+#: libs/ui/KisApplication.cpp:1073
 #, fuzzy, kde-format
 msgid "Too many templates found for: %1"
 msgstr "ទំហំ​ស្រទាប់​"
 
-#: libs/ui/KisApplication.cpp:1086
+#: libs/ui/KisApplication.cpp:1089
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "ជ្រើស​ទាំងអស់"
 
-#: libs/ui/KisApplication.cpp:1118
+#: libs/ui/KisApplication.cpp:1121
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30800,7 +30823,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1135
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30808,7 +30831,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1160
+#: libs/ui/KisApplication.cpp:1163
 #, fuzzy, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "ផ្លាស់ទី និង​បង្វិល​ផ្ទាំង​គូរ​គំនូរ​របស់​អ្នក"
@@ -31883,8 +31906,10 @@ msgstr "រចនា​សម្ព័ន្ធ"
 msgid "&Preview"
 msgstr "មើល​ជាមុន"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpCustom)
 #: libs/ui/KisTemplateCreateDia.cpp:137
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:58
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:78
 #, fuzzy, kde-format
 msgid "Custom:"
 msgstr "ផ្ទាល់ខ្លួន ៖"
@@ -32390,7 +32415,7 @@ msgstr "បន្លិច​"
 #: libs/ui/layerstyles/wdgInnerGlow.ui:49
 #: libs/ui/layerstyles/WdgPatternOverlay.ui:52
 #: libs/ui/layerstyles/WdgSatin.ui:51
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:59
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:94
 #, fuzzy, kde-format
 msgid "Set the blend mode for the layer"
 msgstr "ជ្រើស​សំណុំ​ឆានែល​សកម្ម"
@@ -40926,7 +40951,14 @@ msgstr "លុប​សកម្មភាព​​បច្ចុប្បន្
 msgid "Delete the taskset"
 msgstr "លុប​ទាំងអស់"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
+#: plugins/dockers/textproperties/FontAxesModel.cpp:107
+#, fuzzy, kde-format
+#| msgid "Optimize"
+msgctxt "@info:label"
+msgid "Optical Size"
+msgstr "បង្កើន​ប្រសិទ្ធភាព"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "លក្ខណៈ​សម្បត្តិ..."
@@ -44671,14 +44703,27 @@ msgstr "គំរូ​ពណ៌ ៖"
 msgid "Blend Mode:"
 msgstr "របៀប​លាយ​"
 
+#. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
+#, fuzzy, kde-format
+msgid "Normal  (layers with transparency)"
+msgstr "ទុក​ឆានែល​អាល់ហ្វា (ភាព​ថ្លា)"
+
+#. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
+#, fuzzy, kde-format
+#| msgid "To layers"
+msgid "Tint  (opaque layers)"
+msgstr "ទៅ​កាន់​ស្រទាប់​"
+
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:88
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
 #, fuzzy, kde-format
 msgid "Set the master opacity for the overlay color"
 msgstr "ជ្រើស​សំណុំ​ឆានែល​សកម្ម"
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
-#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:91
+#: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:128
 #, fuzzy, kde-format
 msgid "Adjust the transparency of the overlay color"
 msgstr "ជ្រើស​សំណុំ​ឆានែល​សកម្ម"
@@ -50633,7 +50678,7 @@ msgctxt "@info:tooltip"
 msgid "Reset to default value"
 msgstr "កំណត់​ទៅលំនាំដើម​ឡើង​វិញ"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:364
+#: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:363
 #, fuzzy, kde-format
 msgid "Browse..."
 msgstr "ពណ៌​ត្នោត​"
@@ -66221,9 +66266,6 @@ msgstr "រូបភាព​យោង ៖"
 
 #~ msgid "Export Layer"
 #~ msgstr "នាំ​ស្រទាប់​ចេញ"
-
-#~ msgid "To layers"
-#~ msgstr "ទៅ​កាន់​ស្រទាប់​"
 
 #~ msgid "To images"
 #~ msgstr "ទៅ​កាន់​រូបភាព​"

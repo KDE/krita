@@ -128,6 +128,7 @@ void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
     m_canvasConnections.clear();
+    m_textCursor.setShape(nullptr);
     const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
     if (canvas2) {
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);

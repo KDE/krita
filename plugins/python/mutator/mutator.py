@@ -37,7 +37,7 @@ nRotationMut = 1.0
 nOpacityMut = 0.1
 nFlowMut = 0.1
 nHueMut = 0.2
-nSaturationMut = 0.3
+nSaturationMut = 0.2
 nValueMut = 0.1
 
 

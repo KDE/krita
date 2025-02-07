@@ -98,8 +98,11 @@ void KRecentFilesActionPrivate::init()
     clearAction->setObjectName(QLatin1String("clear_action"));
     clearAction->setVisible(false);
     q->setEnabled(false);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     q->connect(q, SIGNAL(triggered(QAction*)), SLOT(_k_urlSelected(QAction*)));
-
+#else
+    q->connect(q, SIGNAL(actionTriggered(QAction*)), SLOT(_k_urlSelected(QAction*)));
+#endif
     QString baseStyleName = q->menu()->style()->objectName();
     if (baseStyleName != QLatin1String("windows")) {
         // Force Fusion theme because other themes like Breeze doesn't

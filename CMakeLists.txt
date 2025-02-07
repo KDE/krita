@@ -9,8 +9,17 @@ endif()
 project(krita LANGUAGES ${SUPPORTED_LANGUAGES})
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
+# Select the Qt version we want to use
+# Qt5 is the default, set QT_MAJOR_VERSION to 6 to look for Qt6
+option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
+
+if (BUILD_WITH_QT6)
+set(MIN_QT_VERSION 6.0.0)
+set(MIN_FRAMEWORKS_VERSION 6.0.0)
+else()
 set(MIN_QT_VERSION 5.15.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
+endif()
 
 set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
@@ -104,7 +113,11 @@ endif()
 ## Constants defines ##
 #######################
 ######################
-
+if (BUILD_WITH_QT6)
+set(KRITA_VERSION_STRING "6.0.0-prealpha")
+set(KRITA_STABLE_VERSION_MAJOR 6)
+set(KRITA_STABLE_VERSION_MINOR 0)
+else()
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
 set(KRITA_VERSION_STRING "5.3.0-prealpha")
@@ -112,6 +125,8 @@ set(KRITA_VERSION_STRING "5.3.0-prealpha")
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
 set(KRITA_STABLE_VERSION_MINOR 3)
+endif()
+
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -135,13 +150,17 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 # Define the generic version of the Krita libraries here
 # This makes it easy to advance it when the next Krita release comes.
 # 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
-# (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series
+# (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series, 17 in 5.x
+# and 18 in 6.x
 if(KRITA_STABLE_VERSION_MAJOR EQUAL 5)
     math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
+elseif(KRITA_STABLE_VERSION_MAJOR EQUAL 6)
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 18")
 else()
     # let's make sure we won't forget to update the "16"
     message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
 endif()
+
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")
 set(GENERIC_KRITA_LIB_SOVERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}")
 
@@ -346,9 +365,6 @@ endif(WIN32)
 #########################
 ########################
 
-# Select the Qt version we want to use
-# Qt5 is the default, set QT_MAJOR_VERSION to 6 to look for Qt6
-option(BUILD_WITH_QT6 "Build against Qt 6" OFF)
 if (BUILD_WITH_QT6)
     set(QT_MAJOR_VERSION 6)
     find_package(ECM 6.0 REQUIRED CONFIG)

@@ -31,13 +31,14 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
     qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
     qRegisterMetaType<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
-    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
     qRegisterMetaType<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
-    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
     qRegisterMetaType<KoSvgText::CssFontStyleData>("KoSvgText::CssSlantData");
     qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
+    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
+
     QMetaType::registerEqualsComparator<KoSvgText::CssLengthPercentage>();
     QMetaType::registerDebugStreamOperator<KoSvgText::CssLengthPercentage>();
 

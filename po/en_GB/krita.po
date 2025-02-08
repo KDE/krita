@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 02:00+0000\n"
+"POT-Creation-Date: 2025-02-08 01:52+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -17533,8 +17533,8 @@ msgstr "Rotation (Y)"
 msgid "Rotation (Z)"
 msgstr "Rotation (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
-#: libs/widgets/KoZoomAction.cpp:205
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:193
+#: libs/widgets/KoZoomAction.cpp:204
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19764,8 +19764,8 @@ msgstr "Out"
 
 #: libs/pigment/resources/KoColorSet.cpp:1057
 #: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1480
-#: libs/pigment/resources/KoColorSet.cpp:1889
+#: libs/pigment/resources/KoColorSet.cpp:1481
+#: libs/pigment/resources/KoColorSet.cpp:1890
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -60221,7 +60221,7 @@ msgstr ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 02:00+0000\n"
-"PO-Revision-Date: 2025-02-05 19:24+0100\n"
+"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"PO-Revision-Date: 2025-02-07 11:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17492,8 +17492,8 @@ msgstr "Vrtenje (Y)"
 msgid "Rotation (Z)"
 msgstr "Vrtenje (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
-#: libs/widgets/KoZoomAction.cpp:205
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:193
+#: libs/widgets/KoZoomAction.cpp:204
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19712,8 +19712,8 @@ msgstr "Oddalji"
 
 #: libs/pigment/resources/KoColorSet.cpp:1057
 #: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1480
-#: libs/pigment/resources/KoColorSet.cpp:1889
+#: libs/pigment/resources/KoColorSet.cpp:1481
+#: libs/pigment/resources/KoColorSet.cpp:1890
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -19859,10 +19859,10 @@ msgid "Could not remove storage %1 from the database"
 msgstr "Iz zbirke podatkov ni mogoče odstraniti shrambe %1"
 
 #: libs/resources/KisResourceLocator.cpp:979
-#, fuzzy, kde-format
-#| msgid "Could not synchronize %1 with the database"
+#, kde-format
 msgid "Could not synchronize updated font registery with the database"
-msgstr "%1 ni bilo mogoče uskladiti z zbirko podatkov"
+msgstr ""
+"Posodobljenega registra pisav ni bilo mogoče uskladiti z zbirko podatkov"
 
 #: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
@@ -19898,10 +19898,9 @@ msgstr "Začasni viri"
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Slog pisave"
+msgstr "Shramba pisav"
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20165,11 +20164,10 @@ msgid "Layer Styles"
 msgstr "Slogi plasti"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Družina pisav"
+msgstr "Družine pisav"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -30540,10 +30538,9 @@ msgid "Layer styles"
 msgstr "Slogi plasti"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Družina pisav"
+msgstr "Družine pisav"
 
 #: libs/ui/KisApplication.cpp:379
 #, kde-format
@@ -41206,11 +41203,10 @@ msgid "Delete the taskset"
 msgstr "Izbriši nabor opravil"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimiraj"
+msgstr "Optična velikost"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
@@ -44851,16 +44847,15 @@ msgstr "Način zlivanja:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Sivinsko (brez prosojnosti)"
+msgstr "Navadno (plasti s prosojnostjo)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
 #, kde-format
 msgid "Tint  (opaque layers)"
-msgstr ""
+msgstr "Obarvanost (prekrivne plasti)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -60277,7 +60272,7 @@ msgstr ""
 "Uporabi način togega oblivanja SVG v CSS z `white-space: pre-wrap` in z "
 "določanjem širine besedila s parametrom `inline-size`."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

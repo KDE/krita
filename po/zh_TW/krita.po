@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 02:00+0000\n"
+"POT-Creation-Date: 2025-02-08 01:52+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -17461,8 +17461,8 @@ msgstr "旋轉 (Y)"
 msgid "Rotation (Z)"
 msgstr "旋轉 (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
-#: libs/widgets/KoZoomAction.cpp:205
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:193
+#: libs/widgets/KoZoomAction.cpp:204
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19675,8 +19675,8 @@ msgstr "輸出"
 
 #: libs/pigment/resources/KoColorSet.cpp:1057
 #: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1480
-#: libs/pigment/resources/KoColorSet.cpp:1889
+#: libs/pigment/resources/KoColorSet.cpp:1481
+#: libs/pigment/resources/KoColorSet.cpp:1890
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -59665,7 +59665,7 @@ msgstr ""
 "使用 SVG 格式中的 CSS 樣式 `white-space: pre-wrap` 作自動換行，並以 `inline-"
 "size` 指定文字寛度。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

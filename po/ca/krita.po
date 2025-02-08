@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 02:00+0000\n"
-"PO-Revision-Date: 2025-02-04 10:12+0100\n"
+"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"PO-Revision-Date: 2025-02-07 11:04+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -17517,8 +17517,8 @@ msgstr "Gir (Y)"
 msgid "Rotation (Z)"
 msgstr "Gir (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
-#: libs/widgets/KoZoomAction.cpp:205
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:193
+#: libs/widgets/KoZoomAction.cpp:204
 #, kde-format
 msgid "%1%"
 msgstr "%1%"
@@ -19745,8 +19745,8 @@ msgstr "Allunya"
 
 #: libs/pigment/resources/KoColorSet.cpp:1057
 #: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1480
-#: libs/pigment/resources/KoColorSet.cpp:1889
+#: libs/pigment/resources/KoColorSet.cpp:1481
+#: libs/pigment/resources/KoColorSet.cpp:1890
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -19892,10 +19892,11 @@ msgid "Could not remove storage %1 from the database"
 msgstr "No s'ha pogut eliminar l'emmagatzematge %1 de la base de dades"
 
 #: libs/resources/KisResourceLocator.cpp:979
-#, fuzzy, kde-format
-#| msgid "Could not synchronize %1 with the database"
+#, kde-format
 msgid "Could not synchronize updated font registery with the database"
-msgstr "No s'ha pogut sincronitzar %1 amb la base de dades"
+msgstr ""
+"No s'ha pogut sincronitzar el registre dels tipus de lletra amb la base de "
+"dades"
 
 #: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
@@ -19933,10 +19934,9 @@ msgstr "Recursos temporals"
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Estil del tipus de lletra"
+msgstr "Emmagatzematge dels tipus de lletra"
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20200,11 +20200,10 @@ msgid "Layer Styles"
 msgstr "Estils de capa"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Família del tipus de lletra"
+msgstr "Famílies dels tipus de lletres"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -30616,10 +30615,9 @@ msgid "Layer styles"
 msgstr "Estils de capa"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Família del tipus de lletra"
+msgstr "Famílies dels tipus de lletres"
 
 #: libs/ui/KisApplication.cpp:379
 #, kde-format
@@ -41312,11 +41310,10 @@ msgid "Delete the taskset"
 msgstr "Suprimeix el conjunt de tasques"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimitza"
+msgstr "Mida òptica"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
@@ -44961,16 +44958,15 @@ msgstr "Mode de barreja:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Escala de grisos (sense transparències)"
+msgstr "Normal (capes amb transparència)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
 #, kde-format
 msgid "Tint  (opaque layers)"
-msgstr ""
+msgstr "Tint (capes opaques)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -60487,7 +60483,7 @@ msgstr ""
 "Usa el mode d'ajust CSS `white-space: pre-wrap` de SVG, amb `inline-size` "
 "definint l'amplada del text."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

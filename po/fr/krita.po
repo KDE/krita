@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-07 02:00+0000\n"
-"PO-Revision-Date: 2025-02-03 09:30+0100\n"
+"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"PO-Revision-Date: 2025-02-05 17:59+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -17607,8 +17607,8 @@ msgstr "Rotation (Y)"
 msgid "Rotation (Z)"
 msgstr "Rotation (Z)"
 
-#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:194
-#: libs/widgets/KoZoomAction.cpp:205
+#: libs/image/kis_layer.cc:277 libs/widgets/KoZoomAction.cpp:193
+#: libs/widgets/KoZoomAction.cpp:204
 #, kde-format
 msgid "%1%"
 msgstr "%1 %"
@@ -19153,11 +19153,10 @@ msgid "Color Dodge"
 msgstr "Densité couleur -"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Densité de couleur"
+msgstr "Densité de couleur « HDR »"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19196,11 +19195,10 @@ msgid "Vivid Light"
 msgstr "Lumière vive"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Lumière vive"
+msgstr "Lumière vive « HDR »"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19420,11 +19418,10 @@ msgid "Hard Mix"
 msgstr "Mixage fort"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Mixage dur"
+msgstr "Mixage fort « HDR »"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19487,11 +19484,10 @@ msgid "Hard Overlay"
 msgstr "Incrustation forte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Incrustation dure"
+msgstr "Incrustation forte « HDR »"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19590,11 +19586,10 @@ msgid "Hue"
 msgstr "Teinte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "Teinte :"
+msgstr "Teinte"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -19842,8 +19837,8 @@ msgstr "Dehors"
 
 #: libs/pigment/resources/KoColorSet.cpp:1057
 #: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1480
-#: libs/pigment/resources/KoColorSet.cpp:1889
+#: libs/pigment/resources/KoColorSet.cpp:1481
+#: libs/pigment/resources/KoColorSet.cpp:1890
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -60854,7 +60849,7 @@ msgstr ""
 "Utiliser le mode d'emballage « SVG » avec option « CSS `white-space: pre-"
 "wrap` », avec le paramètre « inline-size » définissant la largeur du texte."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

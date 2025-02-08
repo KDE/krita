@@ -60,7 +60,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="paste_as_reference"/>
       <Action name="paste_shape_style"/>
       <Action name="paste_layer_style"/>
+      <Separator/>
       <Action name="clear"/>
+      <Separator/>
       <Action name="fill_selection_foreground_color"/>
       <Action name="fill_selection_background_color"/>
       <Action name="fill_selection_pattern"/>
@@ -70,6 +72,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
         <Action name="fill_selection_background_color_opacity"/>
         <Action name="fill_selection_pattern_opacity"/>
       </Menu>
+      <Separator/>
       <Action name="stroke_shapes"/>
       <Action name="stroke_selection"/>
       <Action name="delete"/>

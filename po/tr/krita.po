@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-01-25 17:29+0300\n"
+"PO-Revision-Date: 2025-02-07 22:52+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22128,7 +22128,7 @@ msgstr "Anında Önizleme yalnızca OpenGL etkinleştirildiğinde desteklenir"
 #: libs/ui/forms/wdgdisplaysettings.ui:110
 #, kde-format
 msgid "Nearest Neighbour"
-msgstr "En Yakın Komşu"
+msgstr "En yakın komşu"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:373
 #, kde-format
@@ -22812,12 +22812,12 @@ msgstr "Birden Çok Yapıştırma Kaynağı Algılandı"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:208
 #, kde-format
 msgid "No Cursor"
-msgstr "İmleç Yok"
+msgstr "İmleç yok"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:209
 #, kde-format
 msgid "Tool Icon"
-msgstr "Araç Simgesi"
+msgstr "Araç simgesi"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:210
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
@@ -22831,7 +22831,7 @@ msgstr "Ok"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:211
 #, kde-format
 msgid "Small Circle"
-msgstr "Küçük Çember"
+msgstr "Küçük çember"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:212
@@ -22843,43 +22843,43 @@ msgstr "Artı işareti"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:213
 #, kde-format
 msgid "Triangle Righthanded"
-msgstr "Sağ Elli Üçgen"
+msgstr "Sağ elli üçgen"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:214
 #, kde-format
 msgid "Triangle Lefthanded"
-msgstr "Sol Elli Üçgen"
+msgstr "Sol elli üçgen"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:215
 #, kde-format
 msgid "Black Pixel"
-msgstr "Siyah Piksel"
+msgstr "Siyah piksel"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "White Pixel"
-msgstr "Beyaz Piksel"
+msgstr "Beyaz piksel"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
-msgstr "Ana Hat Yok"
+msgstr "Ana hat yok"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
 msgid "Circle Outline"
-msgstr "Çember Ana Hattı"
+msgstr "Çember ana hattı"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Preview Outline"
-msgstr "Ana Hattı Önizle"
+msgstr "Ana hattı önizle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Tilt Outline"
-msgstr "Ana Hattı Eğ"
+msgstr "Ana hattı eğ"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
@@ -22893,17 +22893,17 @@ msgstr "Silgi"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:323
 #, kde-format
 msgid "On Touch Drag"
-msgstr "Dokun Sürükle"
+msgstr "Dokun sürükle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:324
 #, kde-format
 msgid "On Click Drag"
-msgstr "Tıkla Sürükle"
+msgstr "Tıkla sürükle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:325
 #, kde-format
 msgid "On Middle-Click Drag"
-msgstr "Orta Tıkla Sürükle"
+msgstr "Orta tıkla sürükle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:362
 #, kde-format
@@ -24107,7 +24107,7 @@ msgstr "Lisans"
 #: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
-msgstr "Üçüncü Kişi Kitaplıkları"
+msgstr "Üçüncü Parti Kitaplıklar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: libs/ui/forms/wdgapplyprofile.ui:27
@@ -24715,19 +24715,19 @@ msgstr "Doku arabelleğini kullan"
 #: libs/ui/forms/wdgdisplaysettings.ui:115
 #, kde-format
 msgid "Bilinear Filtering"
-msgstr "İki Yönlü Süzme"
+msgstr "İki yönlü süzme"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:120
 #, kde-format
 msgid "Trilinear Filtering"
-msgstr "Üç Yönlü Süzme"
+msgstr "Üç yönlü süzme"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
 #, kde-format
 msgid "High Quality Filtering"
-msgstr "Yüksek Kaliteli Süzme"
+msgstr "Yüksek kaliteli süzme"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
@@ -24765,13 +24765,13 @@ msgstr "Doğrudan (Önerilen)"
 #: libs/ui/forms/wdgdisplaysettings.ui:184
 #, kde-format
 msgid "Pixmap Cache"
-msgstr "Piksel Eşlemi Önbelleği"
+msgstr "Piksel eşlemi önbelleği"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
 #, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Büyük Piksel Eşlemi Önbelleği"
+msgstr "Büyük piksel eşlemi önbelleği"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -25141,7 +25141,7 @@ msgstr "Menü"
 #: libs/ui/forms/wdgfullscreensettings.ui:42
 #, kde-format
 msgid "Toolbars"
-msgstr "Araç Çubukları"
+msgstr "Araç çubukları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkDockers)
 #: libs/ui/forms/wdgfullscreensettings.ui:49
@@ -25153,7 +25153,7 @@ msgstr "Araç kutusu ve paneller"
 #: libs/ui/forms/wdgfullscreensettings.ui:56
 #, kde-format
 msgid "Scrollbars"
-msgstr "Sarma Çubukları"
+msgstr "Sarma çubukları"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTitlebar)
 #: libs/ui/forms/wdgfullscreensettings.ui:63
@@ -25272,7 +25272,7 @@ msgstr "Çoklu belge kipi:"
 #: libs/ui/forms/wdggeneralsettings.ui:350
 #, kde-format
 msgid "Subwindows"
-msgstr "Alt Pencereler"
+msgstr "Alt pencereler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_cmbMDIType)
 #: libs/ui/forms/wdggeneralsettings.ui:355
@@ -25522,25 +25522,25 @@ msgstr "Kaydederken Yedek Dosya Oluştur"
 #: libs/ui/forms/wdggeneralsettings.ui:921
 #, kde-format
 msgid "Backup File Location"
-msgstr "Yedek Dosya Konumu"
+msgstr "Yedek dosyası konumu"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:929
 #, kde-format
 msgid "Same Folder as Original File"
-msgstr "Özgün Dosyayla Aynı Klasörde"
+msgstr "Özgün dosyayla aynı klasörde"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:934
 #, kde-format
 msgid "User Folder"
-msgstr "Kullanıcı Klasörü"
+msgstr "Kullanıcı klasörü"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbBackupFileLocation)
 #: libs/ui/forms/wdggeneralsettings.ui:939
 #, kde-format
 msgid "Temporary File Location"
-msgstr "Geçici Dosya Konumu"
+msgstr "Geçici dosya konumu"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/forms/wdggeneralsettings.ui:947
@@ -27298,7 +27298,7 @@ msgstr "En çok fırça önayarı sayısı:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:49
 #, kde-format
 msgid "Dynamically Adjust Slot Count"
-msgstr "Yuva Sayısını Devingen Olarak Ayarla"
+msgstr "Yuva sayısını devingen olarak ayarla"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:59
@@ -27316,14 +27316,14 @@ msgstr "Renk seçicisi:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:90
 #, kde-format
 msgid "sRGB Triangle Selector"
-msgstr "sRGB Üçgen Seçicisi"
+msgstr "sRGB üçgen seçici"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
 #, kde-format
 msgid "Wide Gamut Selector"
-msgstr "Geniş Gam Seçicisi"
+msgstr "Geniş gam seçicisi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:103
@@ -27335,13 +27335,13 @@ msgstr "Seçici boyutu:"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:126
 #, kde-format
 msgid "Show Color History Ring"
-msgstr "Renk Geçmişi Halkasını Göster"
+msgstr "Renk geçmişi halkasını göster"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRotationTrack)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:136
 #, kde-format
 msgid "Show Rotation Ring"
-msgstr "Döndürme Halkasını Göster"
+msgstr "Döndürme halkasını göster"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -27827,7 +27827,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:220
 #, kde-format
 msgid "Open Tablet Tester..."
-msgstr "Tablet Test Aracını Aç…"
+msgstr "Tablet Sınayıcısını Aç…"
 
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
@@ -37582,27 +37582,27 @@ msgstr "Renk Kısayol Düğmeleri"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
 #, kde-format
 msgid "Change to a Horizontal Layout"
-msgstr "Yatay Bir Yerleşime Dönüştür"
+msgstr "Yatay bir yerleşime dönüştür"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Hide Shade Selector"
-msgstr "Gölge Seçicisini Gizle"
+msgstr "Gölge seçicisini gizle"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
 msgid "Do Nothing"
-msgstr "Hiçbir Şey Yapma"
+msgstr "Bir şey yapma"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
 #, kde-format
 msgid "When Pressing Middle Mouse Button"
-msgstr "Farenin Orta Düğmesine Basıldığında"
+msgstr "Farenin orta düğmesine basıldığında"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
 #, kde-format
 msgid "On Mouse Over"
-msgstr "Fare Üzerine Geldiğinde"
+msgstr "Fareyle üzerine gelindiğinde"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, kde-format
@@ -37617,7 +37617,7 @@ msgstr "MyPaint"
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
 #, kde-format
 msgid "Minimal"
-msgstr "En Küçük Görünüm"
+msgstr "En küçük görünüm"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
 #, kde-format
@@ -37755,13 +37755,13 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:211
 #, kde-format
 msgid "Use custom color for selector background."
-msgstr "Seçici arka planı için özel renk kullan."
+msgstr "Seçici arka planı için özel renk kullan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDifferentColorSpaceCheckbox)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:233
 #, kde-format
 msgid "Color Selector Uses Different Color Space than Ima&ge"
-msgstr "Renk Seçicisi, Görselden Farklı Renk Uzayı Kulla&nır"
+msgstr "Renk seçicisi, görselden farklı renk uzayı kulla&nır"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_general)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:259
@@ -37791,7 +37791,7 @@ msgstr "Yakınlaştırma seçicisi boyutu: "
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:330
 #, kde-format
 msgid "Hide Popup on click."
-msgstr "Açılır Pencereyi tıklamada gizleyin."
+msgstr "Açılır pencereyi tıklayınca gizle"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabShadeSelector)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:351
@@ -37893,7 +37893,7 @@ msgstr "Renk Geçmişi"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:609
 #, kde-format
 msgid "Show Color Histor&y"
-msgstr "Renk Geçmişini Gös&ter"
+msgstr "Renk geçmişini gös&ter"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
@@ -42791,7 +42791,7 @@ msgstr "Yerleşik pykrita modülü yüklenemedi"
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
-msgstr "Python eklentisi başlatılılırken beklenmedik hata."
+msgstr "Python eklenti başlatılırken beklenmedik hata."
 
 #. i18n: ectx: property (whatsThis), widget (QIconButton, actionIcon)
 #. i18n: ectx: property (whatsThis), widget (QIconButton, configPageIcon)
@@ -43072,7 +43072,7 @@ msgstr ""
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
 msgid "Python Plugin Manager"
-msgstr "Python Eklentisi Yöneticisi"
+msgstr "Python Eklenti Yöneticisi"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:131
 #, kde-format
@@ -56254,21 +56254,21 @@ msgstr "URL’den indirme bağlantısı algılanamadı"
 #, kde-format
 msgctxt "action"
 msgid "Python Plugin Importer"
-msgstr "Python Eklentisi İçe Aktarıcı"
+msgstr "Python Eklenti İçe Aktarıcı"
 
 #. i18n: context: text @ Action (plugin_importer_file), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:8
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "Dosyadan Python Eklentisi İçe Aktar…"
+msgstr "Dosyadan Python Eklenti İçe Aktar…"
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Web’den Python Eklentisi İçe Aktar…"
+msgstr "Web’den Python Eklenti İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -56280,11 +56280,11 @@ msgstr "Arşivde eklenti yok"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:32
 msgid "Import Python Plugin from File..."
-msgstr "Dosyadan Python Eklentisi İçe Aktar…"
+msgstr "Dosyadan Python Eklenti İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
 msgid "Import Python Plugin from Web..."
-msgstr "Web’den Python Eklentisi İçe Aktar…"
+msgstr "Web’den Python Eklenti İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -56815,7 +56815,7 @@ msgstr "Ölçeklenebilir Uzaklık"
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
-msgstr "Yardımcılara Tuttur"
+msgstr "Yardımcılara tuttur"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:451
 #, kde-format

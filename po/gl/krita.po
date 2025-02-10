@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-08 01:52+0000\n"
-"PO-Revision-Date: 2025-01-26 17:25+0100\n"
+"PO-Revision-Date: 2025-02-09 13:34+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -19099,11 +19099,10 @@ msgid "Color Dodge"
 msgstr "Aclarado de cores"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Aclarado de cores"
+msgstr "HDR de aclarado de cores"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19142,11 +19141,10 @@ msgid "Vivid Light"
 msgstr "Luz vívida"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Luz vívida"
+msgstr "HDR de luz vívida"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19365,11 +19363,10 @@ msgid "Hard Mix"
 msgstr "Mestura en bruto"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Mestura bruta"
+msgstr "HDR de mestura en bruto"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19432,11 +19429,10 @@ msgid "Hard Overlay"
 msgstr "Sobreposición bruta"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Sobreposición bruta"
+msgstr "HDR de sobreposición bruta"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19535,11 +19531,10 @@ msgid "Hue"
 msgstr "Ton"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
-#, fuzzy, kde-format
-#| msgid "Tint: "
+#, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "Matiz: "
+msgstr "Matiz"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -19934,10 +19929,11 @@ msgid "Could not remove storage %1 from the database"
 msgstr "Non foi posíbel retirar o almacenamento %1 da base de datos"
 
 #: libs/resources/KisResourceLocator.cpp:979
-#, fuzzy, kde-format
-#| msgid "Could not synchronize %1 with the database"
+#, kde-format
 msgid "Could not synchronize updated font registery with the database"
-msgstr "Non foi posíbel sincronizar %1 coa base de datos"
+msgstr ""
+"Non foi posíbel sincronizar o rexistro de fontes actualizado coa base de "
+"datos."
 
 #: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
@@ -19974,10 +19970,9 @@ msgstr "Recursos temporais"
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Estilo do tipo de letra"
+msgstr "Almacenamento de fontes"
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20241,11 +20236,10 @@ msgid "Layer Styles"
 msgstr "Estilos da capa"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Familia do tipo de letra"
+msgstr "Familias de fontes"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -30625,10 +30619,9 @@ msgid "Layer styles"
 msgstr "Estilos da capa"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Familia do tipo de letra"
+msgstr "Familias de fontes"
 
 # skip-rule: trasno-close_reverse
 #: libs/ui/KisApplication.cpp:379
@@ -36507,6 +36500,12 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Os programas de KDE están e sempre estarán dispoñíbeis de maneira "
+"gratuíta, pero facelos non é gratis.<br /><br />Para apoiar o seu "
+"desenvolvemento, a comunidade KDE creou a KDE e.V., unha organización sen "
+"ánimo de lucro con domicilio legal na Alemaña. KDE e.V. representa á "
+"comunidade KDE en asuntos legais e financeiros. Pode consultar información "
+"sobre a KDE e.V. en <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36516,6 +36515,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE recibe todo tipo de contribucións, tamén económicas. Usamos os fondos "
+"para reembolsar a persoas da organización e a outras os gastos derivados de "
+"colaborar. Tamén os usamos para asistencia legal e para organizar "
+"conferencias e encontros.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36523,6 +36526,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Animámoslle a apoiar o noso traballo cunha doazón económica, mediante un "
+"dos métodos que se describen en <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
@@ -41278,11 +41283,10 @@ msgid "Delete the taskset"
 msgstr "Eliminar o grupo de tarefas"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimizar"
+msgstr "Tamaño óptico"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
@@ -44915,17 +44919,15 @@ msgstr "Método de fusión:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Escala e grises (sen transparencia)"
+msgstr "Normal (capas con transparencia)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
-#, fuzzy, kde-format
-#| msgid "To layers"
+#, kde-format
 msgid "Tint  (opaque layers)"
-msgstr "Para as capas"
+msgstr "Tinta (capas opacas)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -45956,10 +45958,9 @@ msgstr "Nivel:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Escala de grises/Alfa"
+msgstr "Escala de grises"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format

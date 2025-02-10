@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-08 01:52+0000\n"
-"PO-Revision-Date: 2025-01-18 12:02+0100\n"
+"PO-Revision-Date: 2025-02-09 08:40+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -19109,11 +19109,10 @@ msgid "Color Dodge"
 msgstr "Rozjaśnianie barwy"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Rozjaśnianie barwy"
+msgstr "Rozjaśnianie barwy HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19152,11 +19151,10 @@ msgid "Vivid Light"
 msgstr "Żywe światło"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Żywe światło"
+msgstr "Żywe światło HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19545,12 +19543,10 @@ msgid "Hue"
 msgstr "Odcień"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Tint: "
+#, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr "Zabarw: "
+msgstr "Zabarw"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -30649,10 +30645,9 @@ msgid "Layer styles"
 msgstr "Warstwy wyglądu"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Rodzina czcionek"
+msgstr "Rodziny czcionek"
 
 #: libs/ui/KisApplication.cpp:379
 #, kde-format
@@ -31063,7 +31058,7 @@ msgstr "Samozapisywanie... %1"
 #: libs/ui/KisDocument.cpp:1478
 #, kde-format
 msgid "Autosaving..."
-msgstr "Samozapisywanie..."
+msgstr "Samozapisywanie…"
 
 #: libs/ui/KisDocument.cpp:1484
 #, kde-format
@@ -36533,6 +36528,12 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Oprogramowanie KDE jest i zawsze będzie dostępne bezpłatnie, jednakże "
+"jego tworzenie nie jest bezpłatne.<br /><br />Aby wesprzeć rozwój, "
+"Społeczność KDE utworzyła KDE e.V., organizację non-profit prawnie założoną "
+"w Niemczech. KDE e.V. reprezentuje społeczność KDE w sprawach prawnych i "
+"finansowych. Po więcej szczegółów o KDE e.V. zajrzyj na <a href=\"%1\">%1</"
+"a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format

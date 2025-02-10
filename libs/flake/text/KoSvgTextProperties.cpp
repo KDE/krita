@@ -320,7 +320,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
 
     } else if (command == "font-style") {
         setProperty(FontStyleId, QVariant::fromValue(KoSvgText::parseFontStyle(value)));
-    } else if (command == "font-variant" || command == "font-variant-position" || command == "font-variant-caps"
+    } else if (command == "font-variant" || command == "font-variant-ligatures" || command == "font-variant-position" || command == "font-variant-caps"
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-alternates") {
         const QStringList features = value.split(" ");
         Q_FOREACH (const QString f, features) {

@@ -19,6 +19,9 @@
 #include "TabSizeModel.h"
 #include "TextTransformModel.h"
 #include "CssFontStyleModel.h"
+#include "FontVariantLigaturesModel.h"
+#include "FontVariantNumericModel.h"
+#include "FontVariantEastAsianModel.h"
 
 #include <kritaflake_export.h>
 
@@ -43,6 +46,9 @@ class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
     Q_PROPERTY(TabSizeModel *tabSize READ tabSize NOTIFY tabSizeChanged)
     Q_PROPERTY(TextTransformModel *textTransform READ textTransform NOTIFY textTransformChanged)
     Q_PROPERTY(CssFontStyleModel *fontStyle READ fontStyle NOTIFY fontStyleChanged)
+    Q_PROPERTY(FontVariantLigaturesModel *fontVariantLigatures READ fontVariantLigatures NOTIFY fontVariantLigaturesChanged)
+    Q_PROPERTY(FontVariantNumericModel *fontVariantNumeric READ fontVariantNumeric NOTIFY fontVariantNumericChanged)
+    Q_PROPERTY(FontVariantEastAsianModel *fontVariantEastAsian READ fontVariantEastAsian NOTIFY fontVariantEastAsianChanged)
 public:
     KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData = lager::make_state(KoSvgTextPropertyData(), lager::automatic_tag{}));
 
@@ -57,6 +63,9 @@ public:
     lager::cursor<KoSvgText::TabSizeInfo> tabSizeData;
     lager::cursor<KoSvgText::TextTransformInfo> textTransformData;
     lager::cursor<KoSvgText::CssFontStyleData> cssFontStyleData;
+    lager::cursor<KoSvgText::FontFeatureLigatures> fontVariantLigaturesData;
+    lager::cursor<KoSvgText::FontFeatureNumeric> fontVariantNumericData;
+    lager::cursor<KoSvgText::FontFeatureEastAsian> fontVariantEastAsianData;
 
 
     CssLengthPercentageModel fontSizeModel;
@@ -70,6 +79,10 @@ public:
     TabSizeModel tabSizeModel;
     TextTransformModel textTransformModel;
     CssFontStyleModel cssFontStyleModel;
+
+    FontVariantLigaturesModel fontVariantLigaturesModel;
+    FontVariantNumericModel fontVariantNumericModel;
+    FontVariantEastAsianModel fontVariantEastAsianModel;
 
     // Whether a given property is set, unset or tristate.
     enum PropertyState {
@@ -168,6 +181,18 @@ public:
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
+    LAGER_QT_CURSOR(int, fontVariantPosition);
+    LAGER_QT_CURSOR(PropertyState, fontVariantPositionState);
+    LAGER_QT_CURSOR(int, fontVariantCaps);
+    LAGER_QT_CURSOR(PropertyState, fontVariantCapsState);
+
+    FontVariantLigaturesModel *fontVariantLigatures();
+    LAGER_QT_CURSOR(PropertyState, fontVariantLigaturesState);
+    FontVariantNumericModel *fontVariantNumeric();
+    LAGER_QT_CURSOR(PropertyState, fontVariantNumericState);
+    FontVariantEastAsianModel *fontVariantEastAsian();
+    LAGER_QT_CURSOR(PropertyState, fontVariantEastAsianState);
+
     /**
      * @brief resolvedFontSize
      * this returns the resolved font (em) size, needed for unit conversion for em.
@@ -199,6 +224,10 @@ Q_SIGNALS:
     void tabSizeChanged();
     void textTransformChanged();
     void fontStyleChanged();
+
+    void fontVariantLigaturesChanged();
+    void fontVariantNumericChanged();
+    void fontVariantEastAsianChanged();
 };
 
 #endif // KOSVGTEXTPROPERTIESMODEL_H

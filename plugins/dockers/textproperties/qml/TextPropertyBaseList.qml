@@ -124,17 +124,16 @@ ColumnLayout {
                 }
                 TextDecoration {
                 }
-                /*
-            OTLigatures {
-            }
-            OTPosition {
-            }
-            OTNumeric {
-            }
-            OTCaps {
-            }
-            OTEastAsian {
-            }*/
+                OTLigatures {
+                }
+                OTPosition {
+                }
+                OTNumeric {
+                }
+                OTCaps {
+                }
+                OTEastAsian {
+                }
                 BaselineShift {
                 }
                 AlignmentBaseline {

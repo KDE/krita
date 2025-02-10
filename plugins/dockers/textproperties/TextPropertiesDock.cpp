@@ -36,6 +36,9 @@
 #include <text/lager/TabSizeModel.h>
 #include <text/lager/TextTransformModel.h>
 #include <text/lager/CssFontStyleModel.h>
+#include <text/lager/FontVariantLigaturesModel.h>
+#include <text/lager/FontVariantNumericModel.h>
+#include <text/lager/FontVariantEastAsianModel.h>
 #include <resources/KoFontFamily.h>
 #include <lager/state.hpp>
 
@@ -53,6 +56,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<TabSizeModel>("org.krita.flake.text", 1, 0, "TabSizeModel");
     qmlRegisterType<TextTransformModel>("org.krita.flake.text", 1, 0, "TextTransformModel");
     qmlRegisterType<CssFontStyleModel>("org.krita.flake.text", 1, 0, "CssFontStyleModel");
+    qmlRegisterType<FontVariantLigaturesModel>("org.krita.flake.text", 1, 0, "FontVariantLigaturesModel");
+    qmlRegisterType<FontVariantNumericModel>("org.krita.flake.text", 1, 0, "FontVariantNumericModel");
+    qmlRegisterType<FontVariantEastAsianModel>("org.krita.flake.text", 1, 0, "FontVariantEastAsianModel");
     qmlRegisterUncreatableMetaObject(KoSvgText::staticMetaObject, "org.krita.flake.text", 1, 0, "KoSvgText", "Error: Namespace with enums");
 
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");

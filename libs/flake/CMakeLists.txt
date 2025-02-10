@@ -234,6 +234,9 @@ set(kritaflake_SRCS
     text/lager/TabSizeModel.cpp
     text/lager/TextTransformModel.cpp
     text/lager/CssFontStyleModel.cpp
+    text/lager/FontVariantLigaturesModel.cpp
+    text/lager/FontVariantNumericModel.cpp
+    text/lager/FontVariantEastAsianModel.cpp
     text/KoFFWWSConverter.cpp
     text/KoFontChangeTracker.cpp
     text/KoWritingSystemUtils.cpp

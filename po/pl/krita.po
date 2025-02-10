@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-01-18 12:02+0100\n"
+"PO-Revision-Date: 2025-02-09 08:40+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,7 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Lokalize 24.12.0\n"
+"X-Generator: Lokalize 24.12.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -30496,7 +30496,7 @@ msgstr "Samozapisywanie... %1"
 #: libs/ui/KisDocument.cpp:1482
 #, kde-format
 msgid "Autosaving..."
-msgstr "Samozapisywanie..."
+msgstr "Samozapisywanie…"
 
 #: libs/ui/KisDocument.cpp:1488
 #, kde-format

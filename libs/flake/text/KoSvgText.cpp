@@ -34,6 +34,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
     qRegisterMetaType<KoSvgText::CssFontStyleData>("KoSvgText::CssSlantData");
     qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
+    qRegisterMetaType<KoSvgText::FontFeatureLigatures>("KoSvgText::FontFeatureLigatures");
+    qRegisterMetaType<KoSvgText::FontFeatureNumeric>("KoSvgText::FontFeatureNumeric");
+    qRegisterMetaType<KoSvgText::FontFeatureEastAsian>("KoSvgText::FontFeatureEastAsian");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
@@ -79,6 +82,15 @@ KIS_DECLARE_STATIC_INITIALIZER {
     
     QMetaType::registerEqualsComparator<KoSvgText::FontFamilyStyleInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::FontFamilyStyleInfo>();
+
+    QMetaType::registerEqualsComparator<KoSvgText::FontFeatureLigatures>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontFeatureLigatures>();
+
+    QMetaType::registerEqualsComparator<KoSvgText::FontFeatureNumeric>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontFeatureNumeric>();
+
+    QMetaType::registerEqualsComparator<KoSvgText::FontFeatureEastAsian>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontFeatureEastAsian>();
 #endif
 }
 
@@ -491,150 +503,6 @@ QString writeTextPathSpacing(TextPathSpacing value)
 QString writeTextPathSide(TextPathSide value)
 {
     return value == TextPathSideLeft ? "left" : "right";
-}
-
-QMap<QString, FontVariantFeature> fontVariantStrings()
-{
-    QMap<QString, FontVariantFeature> features;
-    features.insert("normal", FontVariantNormal);
-    features.insert("none", FontVariantNone);
-
-    features.insert("common-ligatures", CommonLigatures);
-    features.insert("no-common-ligatures", NoCommonLigatures);
-    features.insert("discretionary-ligatures", DiscretionaryLigatures);
-    features.insert("no-discretionary-ligatures", NoDiscretionaryLigatures);
-    features.insert("historical-ligatures", HistoricalLigatures);
-    features.insert("no-historical-ligatures", NoHistoricalLigatures);
-    features.insert("contextual", ContextualAlternates);
-    features.insert("no-contextual", NoContextualAlternates);
-
-    features.insert("sub", PositionSub);
-    features.insert("super", PositionSuper);
-
-    features.insert("small-caps", SmallCaps);
-    features.insert("all-small-caps", AllSmallCaps);
-    features.insert("petite-caps", PetiteCaps);
-    features.insert("all-petite-caps", AllPetiteCaps);
-    features.insert("unicase", Unicase);
-    features.insert("titling-caps", TitlingCaps);
-
-    features.insert("lining-nums", LiningNums);
-    features.insert("oldstyle-nums", OldStyleNums);
-    features.insert("proportional-nums", ProportionalNums);
-    features.insert("tabular-nums", TabularNums);
-    features.insert("diagonal-fractions", DiagonalFractions);
-    features.insert("stacked-fractions", StackedFractions);
-    features.insert("ordinal", Ordinal);
-    features.insert("slashed-zero", SlashedZero);
-
-    features.insert("historical-forms", HistoricalForms);
-    features.insert("stylistic", StylisticAlt);
-    features.insert("styleset", StyleSet);
-    features.insert("character-variant", CharacterVariant);
-    features.insert("swash", Swash);
-    features.insert("ornaments", Ornaments);
-    features.insert("annotation", Annotation);
-
-    features.insert("jis78", EastAsianJis78);
-    features.insert("jis83", EastAsianJis83);
-    features.insert("jis90", EastAsianJis90);
-    features.insert("jis04", EastAsianJis04);
-    features.insert("simplified", EastAsianSimplified);
-    features.insert("traditional", EastAsianTraditional);
-    features.insert("full-width", EastAsianFullWidth);
-    features.insert("proportional-width", EastAsianProportionalWidth);
-    features.insert("ruby", EastAsianRuby);
-
-    return features;
-}
-
-QStringList fontVariantOpentypeTags(FontVariantFeature feature)
-{
-    switch (feature) {
-    case CommonLigatures:
-    case NoCommonLigatures:
-        return {"clig", "liga"};
-    case DiscretionaryLigatures:
-    case NoDiscretionaryLigatures:
-        return {"dlig"};
-    case HistoricalLigatures:
-    case NoHistoricalLigatures:
-        return {"hlig"};
-    case ContextualAlternates:
-    case NoContextualAlternates:
-        return {"calt"};
-
-    case PositionSub:
-        return {"subs"};
-    case PositionSuper:
-        return {"sups"};
-
-    case SmallCaps:
-        return {"smcp"};
-    case AllSmallCaps:
-        return {"smcp", "c2sc"};
-    case PetiteCaps:
-        return {"pcap"};
-    case AllPetiteCaps:
-        return {"pcap", "c2pc"};
-    case Unicase:
-        return {"unic"};
-    case TitlingCaps:
-        return {"titl"};
-
-    case LiningNums:
-        return {"lnum"};
-    case OldStyleNums:
-        return {"onum"};
-    case ProportionalNums:
-        return {"pnum"};
-    case TabularNums:
-        return {"tnum"};
-    case DiagonalFractions:
-        return {"frac"};
-    case StackedFractions:
-        return {"afrc"};
-    case Ordinal:
-        return {"ordn"};
-    case SlashedZero:
-        return {"zero"};
-
-    case HistoricalForms:
-        return {"hist"};
-    case StylisticAlt:
-        return {"salt"};
-    case StyleSet: // add 01 to 99 at the end
-        return {"ss"};
-    case CharacterVariant: // add 01 to 99 at the end
-        return {"cv"};
-    case Swash:
-        return {"swsh", "cswh"};
-    case Ornaments:
-        return {"ornm"};
-    case Annotation:
-        return {"nalt"};
-
-    case EastAsianJis78:
-        return {"jp78"};
-    case EastAsianJis83:
-        return {"jp83"};
-    case EastAsianJis90:
-        return {"jp90"};
-    case EastAsianJis04:
-        return {"jp04"};
-    case EastAsianSimplified:
-        return {"smpl"};
-    case EastAsianTraditional:
-        return {"trad"};
-    case EastAsianFullWidth:
-        return {"fwid"};
-    case EastAsianProportionalWidth:
-        return {"pwid"};
-    case EastAsianRuby:
-        return {"ruby"};
-    default:
-        return {};
-    }
 }
 
 bool whiteSpaceValueToLongHands(const QString &value, TextSpaceCollapse &collapseMethod, TextWrap &wrapMethod, TextSpaceTrims &trimMethod)
@@ -1210,6 +1078,274 @@ QString writeFontStyle(CssFontStyleData value)
         style.append(QString(" ")+QString::number(value.slantValue.customValue)+QString("deg"));
     }
     return style;
+}
+
+FontFeatureLigatures parseFontFeatureLigatures(const QString &value, FontFeatureLigatures features)
+{
+    if (value == "common-ligatures") {
+        features.commonLigatures = true;
+    } else if (value == "no-common-ligatures") {
+        features.commonLigatures = false;
+    } else if (value == "discretionary-ligatures") {
+        features.discretionaryLigatures = true;
+    } else if (value == "no-discretionary-ligatures") {
+        features.discretionaryLigatures = false;
+    } else if (value == "historical-ligatures") {
+        features.historicalLigatures = true;
+    } else if (value == "no-historical-ligatures") {
+        features.historicalLigatures = false;
+    } else if (value == "contextual") {
+        features.contextualAlternates = true;
+    } else if (value == "no-contextual") {
+        features.contextualAlternates = false;
+    } else if (value == "none") {
+        features.commonLigatures = false;
+        features.discretionaryLigatures = false;
+        features.historicalLigatures = false;
+        features.contextualAlternates = false;
+    }
+    return features;
+}
+
+QString writeFontFeatureLigatures(const FontFeatureLigatures &feature)
+{
+    if (feature.commonLigatures && !feature.discretionaryLigatures
+            && !feature.historicalLigatures && feature.commonLigatures) {
+        return "normal";
+    }
+    if (!feature.commonLigatures && !feature.discretionaryLigatures
+            && !feature.historicalLigatures && !feature.commonLigatures) {
+        return "none";
+    }
+    QStringList list;
+    if (!feature.commonLigatures) {
+        list << "no-common-ligatures";
+    }
+    if (feature.discretionaryLigatures) {
+        list << "discretionary-ligatures";
+    }
+    if (feature.historicalLigatures) {
+        list << "historical-ligatures";
+    }
+    if (!feature.contextualAlternates) {
+        list << "no-contextual";
+    }
+    return list.join(" ");
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::FontFeatureLigatures &feature)
+{
+    dbg.nospace() << "Ligatures("<< writeFontFeatureLigatures(feature) <<")";
+    return dbg.space();
+}
+
+FontFeatureNumeric parseFontFeatureNumeric(const QString &value, FontFeatureNumeric features)
+{
+    if (value == "lining-nums") {
+        features.style = NumericFigureStyleLining;
+    } else if (value == "oldstyle-nums") {
+        features.style = NumericFigureStyleOld;
+    } else if (value == "proportional-nums") {
+        features.spacing = NumericFigureSpacingProportional;
+    } else if (value == "tabular-nums") {
+        features.spacing = NumericFigureSpacingTabular;
+    } else if (value == "diagonal-fractions") {
+        features.fractions = NumericFractionsDiagonal;
+    } else if (value == "stacked-fractions") {
+        features.fractions = NumericFractionsStacked;
+    } else if (value == "ordinal") {
+        features.ordinals = true;
+    } else if (value == "slashed-zero") {
+        features.slashedZero = true;
+    } else {
+        features = FontFeatureNumeric();
+    }
+    return features;
+}
+
+QString writeFontFeatureNumeric(const FontFeatureNumeric &feature)
+{
+    if (feature == FontFeatureNumeric()) {
+        return "normal";
+    }
+    QStringList list;
+
+    if (feature.style == NumericFigureStyleLining) {
+        list << "lining-nums";
+    } else if (feature.style == NumericFigureStyleOld) {
+        list << "oldstyle-nums";
+    }
+
+    if (feature.spacing == NumericFigureSpacingProportional) {
+        list << "proportional-nums";
+    } else if (feature.spacing == NumericFigureSpacingTabular) {
+        list << "tabular-nums";
+    }
+
+    if (feature.fractions == NumericFractionsDiagonal) {
+        list << "diagonal-fractions";
+    } else if (feature.fractions == NumericFractionsStacked) {
+        list << "stacked-fractions";
+    }
+
+    if (feature.ordinals) {
+        list << "ordinal";
+    }
+
+    if (feature.slashedZero) {
+        list << "slashed-zero";
+    }
+
+    return list.join(" ");
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::FontFeatureNumeric &feature)
+{
+    dbg.nospace() << "NumericFeatures("<< writeFontFeatureNumeric(feature) <<")";
+    return dbg.space();
+}
+
+FontFeatureEastAsian parseFontFeatureEastAsian(const QString &value, FontFeatureEastAsian features)
+{
+    if (value == "jis78") {
+        features.variant = EastAsianJis78;
+    } else if (value == "jis83") {
+        features.variant = EastAsianJis83;
+    } else if (value == "jis90") {
+        features.variant = EastAsianJis90;
+    } else if (value == "jis04") {
+        features.variant = EastAsianJis04;
+    } else if (value == "simplified") {
+        features.variant = EastAsianSimplified;
+    } else if (value == "traditional") {
+        features.variant = EastAsianTraditional;
+    } else if (value == "full-width") {
+        features.width = EastAsianFullWidth;
+    } else if (value == "proportional-width") {
+        features.width = EastAsianProportionalWidth;
+    } else if (value == "ruby") {
+        features.ruby = true;
+    } else {
+        features = FontFeatureEastAsian();
+    }
+    return features;
+}
+
+QString writeFontFeatureEastAsian(const FontFeatureEastAsian &feature)
+{
+    if (feature == FontFeatureEastAsian()) {
+        return "normal";
+    }
+    QStringList list;
+
+    if (feature.variant == EastAsianJis78) {
+        list << "jis78";
+    } else if (feature.variant == EastAsianJis83) {
+        list << "jis83";
+    } else if (feature.variant == EastAsianJis90) {
+        list << "jis90";
+    } else if (feature.variant == EastAsianJis04) {
+        list << "jis04";
+    } else if (feature.variant == EastAsianSimplified) {
+        list << "simplified";
+    } else if (feature.variant == EastAsianTraditional) {
+        list << "traditional";
+    }
+
+    if (feature.width == EastAsianFullWidth) {
+        list << "full-width";
+    } else if (feature.width == EastAsianProportionalWidth) {
+        list << "proportional-width";
+    }
+
+    if (feature.ruby) {
+        list << "ruby";
+    }
+
+    return list.join(" ");
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::FontFeatureEastAsian &feature)
+{
+    dbg.nospace() << "EastAsianFeatures("<< writeFontFeatureEastAsian(feature) <<")";
+    return dbg.space();
+}
+
+FontFeaturePosition parseFontFeaturePosition(const QString &value, FontFeaturePosition feature)
+{
+    return value == "super"? PositionSuper : value == "sub"? PositionSub : value == "normal"? PositionNormal: feature;
+}
+
+QString writeFontFeaturePosition(const FontFeaturePosition &value)
+{
+    return value == PositionSuper ? "super"
+                                  : value == PositionSub? "sub" : "normal";
+}
+
+FontFeatureCaps parseFontFeatureCaps(const QString &value, FontFeatureCaps feature)
+{
+    return value == "small-caps"          ? CapsSmall
+        : value == "all-small-caps"        ? CapsAllSmall
+        : value == "petite-caps"         ? CapsPetite
+        : value == "all-petite-caps" ? CapsAllPetite
+        : value == "unicase"       ? CapsUnicase
+        : value == "titling-caps"       ? CapsTitling
+        : value == "normal"   ? CapsNormal: feature;
+}
+
+QString writeFontFeatureCaps(const FontFeatureCaps &value)
+{
+    return value == CapsSmall          ? "small-caps"
+        : value == CapsAllSmall        ? "all-small-caps"
+        : value == CapsPetite         ? "petite-caps"
+        : value == CapsAllPetite ? "all-petite-caps"
+        : value == CapsUnicase       ? "unicase"
+        : value == CapsTitling       ? "titling-caps"
+                                     : "normal";
+}
+
+QStringList fontFeaturesPosition(const FontFeaturePosition &feature, const int start, const int end)
+{
+    const QString length = QString("[%1:%2]").arg(start).arg(end);
+    QString tag = feature == PositionSuper? "sups" : feature == PositionSub? "subs": QString();
+    if (!tag.isEmpty()) {
+        tag += length;
+        tag += "=1";
+    }
+    return tag.isEmpty()? QStringList(): QStringList(tag);
+}
+
+QStringList fontFeaturesCaps(const FontFeatureCaps &feature, const int start, const int end)
+{
+    QStringList list;
+    const QString length = QString("[%1:%2]").arg(start).arg(end);
+
+    switch (feature) {
+    case CapsSmall:
+        list << "smcp" + length + "=1";
+        break;
+    case CapsAllSmall:
+        list << "smcp" + length + "=1";
+        list << "c2sc" + length + "=1";
+        break;
+    case CapsPetite:
+        list << "pcap" + length + "=1";
+        break;
+    case CapsAllPetite:
+        list << "pcap" + length + "=1";
+        list << "c2pc" + length + "=1";
+        break;
+    case CapsUnicase:
+        list << "unic" + length + "=1";
+        break;
+    case CapsTitling:
+        list << "titl" + length + "=1";
+        break;
+    default:
+        break;
+    }
+
+    return list;
 }
 
 } // namespace KoSvgText

@@ -298,60 +298,6 @@ enum TextPathSide {
     TextPathSideLeft
 };
 
-/// CSS defines a number of font features as CSS properties. Not all Opentype
-/// features are part of this.
-enum FontVariantFeature {
-    FontVariantNormal, ///< Use default features.
-    FontVariantNone, ///< All features are disabled.
-    /// font-variant-ligatures, common and contextual are on by default.
-    CommonLigatures,
-    NoCommonLigatures,
-    DiscretionaryLigatures,
-    NoDiscretionaryLigatures,
-    HistoricalLigatures,
-    NoHistoricalLigatures,
-    ContextualAlternates,
-    NoContextualAlternates,
-    /// font-variant-position, neither values are on by default.
-    PositionSub,
-    PositionSuper,
-    /// font-variant-caps, none of the values applicable are on by default.
-    SmallCaps,
-    AllSmallCaps,
-    PetiteCaps,
-    AllPetiteCaps,
-    Unicase,
-    TitlingCaps,
-    /// font-variant-numeric, none of the values applicable are on by default.
-    LiningNums,
-    OldStyleNums,
-    ProportionalNums,
-    TabularNums,
-    DiagonalFractions,
-    StackedFractions,
-    Ordinal,
-    SlashedZero,
-    /// font-variant-alternates
-    HistoricalForms,
-    StylisticAlt,
-    StyleSet,
-    CharacterVariant,
-    Swash,
-    Ornaments,
-    Annotation,
-    /// font-variant-east-asian, none of the values applicable are on by
-    /// default.
-    EastAsianJis78,
-    EastAsianJis83,
-    EastAsianJis90,
-    EastAsianJis04,
-    EastAsianSimplified,
-    EastAsianTraditional,
-    EastAsianFullWidth,
-    EastAsianProportionalWidth,
-    EastAsianRuby
-};
-
 Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextDecorations)
 
@@ -531,9 +477,6 @@ static const std::array<const char *, 7> fontSizeNames =
 int parseCSSFontStretch(const QString &value, int currentStretch);
 
 int parseCSSFontWeight(const QString &value, int currentWeight);
-
-QMap<QString, FontVariantFeature> fontVariantStrings();
-QStringList fontVariantOpentypeTags(FontVariantFeature feature);
 
 TextPathMethod parseTextPathMethod(const QString &value);
 TextPathSpacing parseTextPathSpacing(const QString &value);
@@ -812,6 +755,231 @@ struct FontFamilyStyleInfo : public boost::equality_comparable<FontFamilyStyleIn
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFamilyStyleInfo &style);
 
+/**
+ * @brief The FontFeatureLigatures class
+ * This struct represents css font-variant-ligatures
+ */
+struct FontFeatureLigatures : public boost::equality_comparable<FontFeatureLigatures> {
+    bool commonLigatures = true; ///< 'clig' and 'liga'
+    bool discretionaryLigatures = false; ///< 'dlig'
+    bool historicalLigatures = false; ///< 'hlig'
+    bool contextualAlternates = true; ///< 'calt'
+
+    bool operator==(const FontFeatureLigatures & other) const {
+        return (other.commonLigatures == commonLigatures
+                && other.discretionaryLigatures == discretionaryLigatures
+                && other.historicalLigatures == historicalLigatures
+                && other.contextualAlternates == contextualAlternates);
+    }
+
+    QStringList fontFeatures(const int start, const int end) {
+        QStringList list;
+        const QString length = QString("[%1:%2]").arg(start).arg(end);
+        if (!commonLigatures) {
+            list << "clig" + length + "=0";
+            list << "liga" + length + "=0";
+        }
+        if (discretionaryLigatures) {
+            list << "dlig" + length + "=1";
+        }
+        if (historicalLigatures) {
+            list << "hlig" + length + "=1";
+        }
+        if (!contextualAlternates) {
+            list << "calt" + length + "=0";
+        }
+        return list;
+    }
+};
+FontFeatureLigatures parseFontFeatureLigatures(const QString &value, FontFeatureLigatures features);
+QString writeFontFeatureLigatures(const FontFeatureLigatures &feature);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureLigatures &feature);
+/**
+ * @brief The FontFeatureLigatures class
+ * This enum represents css font-variant-position
+ */
+enum FontFeaturePosition {
+    PositionNormal,
+    PositionSuper,
+    PositionSub
+};
+FontFeaturePosition parseFontFeaturePosition(const QString &value, FontFeaturePosition feature);
+QString writeFontFeaturePosition(const FontFeaturePosition &value);
+QStringList fontFeaturesPosition(const FontFeaturePosition &feature, const int start, const int end);
+
+Q_ENUM_NS(FontFeaturePosition)
+/// Represents font-feature-caps
+enum FontFeatureCaps {
+    CapsNormal,
+    CapsSmall,
+    CapsAllSmall,
+    CapsPetite,
+    CapsAllPetite,
+    CapsUnicase,
+    CapsTitling
+};
+FontFeatureCaps parseFontFeatureCaps(const QString &value, FontFeatureCaps feature);
+QString writeFontFeatureCaps(const FontFeatureCaps &value);
+QStringList fontFeaturesCaps(const FontFeatureCaps &feature, const int start, const int end);
+
+Q_ENUM_NS(FontFeatureCaps)
+
+enum NumericFigureStyle {
+    NumericFigureStyleNormal,
+    NumericFigureStyleLining,
+    NumericFigureStyleOld
+};
+Q_ENUM_NS(NumericFigureStyle)
+
+enum NumericFigureSpacing {
+    NumericFigureSpacingNormal,
+    NumericFigureSpacingProportional,
+    NumericFigureSpacingTabular
+};
+Q_ENUM_NS(NumericFigureSpacing)
+enum NumericFractions {
+    NumericFractionsNormal,
+    NumericFractionsDiagonal,
+    NumericFractionsStacked
+};
+Q_ENUM_NS(NumericFractions)
+/**
+ * @brief The FontFeatureLigatures class
+ * This struct represents css font-variant-numeric
+ */
+struct FontFeatureNumeric : public boost::equality_comparable<FontFeatureNumeric> {
+
+
+    NumericFigureStyle style = NumericFigureStyleNormal;
+    NumericFigureSpacing spacing = NumericFigureSpacingNormal;
+    NumericFractions fractions = NumericFractionsNormal;
+    bool ordinals = false;
+    bool slashedZero = false;
+    bool operator==(const FontFeatureNumeric & other) const {
+        return (other.style == style
+                && other.spacing == spacing
+                && other.fractions == fractions
+                && other.ordinals == ordinals
+                && other.slashedZero == slashedZero);
+    }
+
+    QStringList fontFeatures(const int start, const int end) {
+        QStringList list;
+        const QString length = QString("[%1:%2]").arg(start).arg(end);
+        switch (style) {
+        case NumericFigureStyleLining:
+            list << "lnum" + length + "=1";
+            break;
+        case NumericFigureStyleOld:
+            list << "onum" + length + "=1";
+            break;
+        default:
+            break;
+        }
+        switch (spacing) {
+        case NumericFigureSpacingProportional:
+            list << "pnum" + length + "=1";
+            break;
+        case NumericFigureSpacingTabular:
+            list << "tnum" + length + "=1";
+            break;
+        default:
+            break;
+        }
+        switch (fractions) {
+        case NumericFractionsDiagonal:
+            list << "frac" + length + "=1";
+            break;
+        case NumericFractionsStacked:
+            list << "afrc" + length + "=1";
+            break;
+        default:
+            break;
+        }
+        if (ordinals) {
+            list << "ordn" + length + "=1";
+        }
+        if (slashedZero) {
+            list << "zero" + length + "=1";
+        }
+        return list;
+    }
+};
+
+FontFeatureNumeric parseFontFeatureNumeric(const QString &value, FontFeatureNumeric features);
+QString writeFontFeatureNumeric(const FontFeatureNumeric &feature);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureNumeric &feature);
+enum EastAsianVariant {
+    EastAsianVariantNormal,
+    EastAsianJis78,
+    EastAsianJis83,
+    EastAsianJis90,
+    EastAsianJis04,
+    EastAsianSimplified,
+    EastAsianTraditional
+};
+Q_ENUM_NS(EastAsianVariant)
+enum EastAsianWidth {
+    EastAsiantNormalWidth,
+    EastAsianFullWidth,
+    EastAsianProportionalWidth
+};
+Q_ENUM_NS(EastAsianWidth)
+struct FontFeatureEastAsian : public boost::equality_comparable<FontFeatureEastAsian> {
+    EastAsianVariant variant = EastAsianVariantNormal;
+    EastAsianWidth width = EastAsiantNormalWidth;
+    bool ruby = false;
+    bool operator==(const FontFeatureEastAsian & other) const {
+        return (other.variant == variant
+                && other.width == width
+                && other.ruby == ruby);
+    }
+
+    QStringList fontFeatures(const int start, const int end) {
+        QStringList list;
+        const QString length = QString("[%1:%2]").arg(start).arg(end);
+        switch (variant) {
+        case EastAsianJis78:
+            list << "jp78" + length + "=1";
+            break;
+        case EastAsianJis83:
+            list << "jp83" + length + "=1";
+            break;
+        case EastAsianJis90:
+            list << "jp90" + length + "=1";
+            break;
+        case EastAsianJis04:
+            list << "jp04" + length + "=1";
+            break;
+        case EastAsianSimplified:
+            list << "smpl" + length + "=1";
+            break;
+        case EastAsianTraditional:
+            list << "trad" + length + "=1";
+            break;
+        default:
+            break;
+        }
+        switch (width) {
+        case EastAsianFullWidth:
+            list << "fwid" + length + "=1";
+            break;
+        case EastAsianProportionalWidth:
+            list << "pwid" + length + "=1";
+            break;
+        default:
+            break;
+        }
+        if (ruby) {
+            list << "ruby" + length + "=1";
+        }
+        return list;
+    }
+};
+FontFeatureEastAsian parseFontFeatureEastAsian(const QString &value, FontFeatureEastAsian features);
+QString writeFontFeatureEastAsian(const FontFeatureEastAsian &feature);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureEastAsian &feature);
+
 } // namespace KoSvgText
 
 Q_DECLARE_METATYPE(KoSvgText::CssLengthPercentage)
@@ -830,5 +998,9 @@ Q_DECLARE_METATYPE(KoSvgText::CssFontStyleData)
 
 Q_DECLARE_METATYPE(KoSvgText::FontFamilyAxis)
 Q_DECLARE_METATYPE(KoSvgText::FontFamilyStyleInfo)
+
+Q_DECLARE_METATYPE(KoSvgText::FontFeatureLigatures)
+Q_DECLARE_METATYPE(KoSvgText::FontFeatureNumeric)
+Q_DECLARE_METATYPE(KoSvgText::FontFeatureEastAsian)
 
 #endif // KOSVGTEXT_H

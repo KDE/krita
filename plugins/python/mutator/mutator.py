@@ -25,8 +25,8 @@ SOFTWARE.
 
 
 import sys, math, random, colorsys
-from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QFormLayout, QSlider, QPushButton, QLabel
-from krita import Qt, Extension, DockWidget, DockWidgetFactory, SliderSpinBox
+from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
+from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox
 
 
 # Global mutation settings... 
@@ -161,7 +161,6 @@ class MutatorDocker(DockWidget):
         # Create mutation amount sliders...
         mutationSettings = QWidget()
         body.layout().addWidget(mutationSettings)
-
         mutationSettings.setLayout(QVBoxLayout())
 
         sizeMutSlider = SliderSpinBox().widget() # Size
@@ -219,6 +218,9 @@ class MutatorDocker(DockWidget):
         valueMutSlider.valueChanged.connect(self.update_fgc_value_mut)
         valueMutSlider.setValue(int(nValueMut * 100))
         mutationSettings.layout().addWidget(valueMutSlider)
+
+        # Spacer
+        body.layout().addStretch()
 
         # Create mutate button...
         mutateButton = QPushButton(i18n("Mutate"))

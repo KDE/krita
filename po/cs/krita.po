@@ -7902,12 +7902,10 @@ msgstr ""
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Border Selection"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Výběr okrajů..."
+msgstr ""
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -12569,12 +12567,10 @@ msgstr "Převést barevný prostor vrstvy"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3424 krita/krita.action:3427
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Převést barevný prostor vrstvy"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3426
@@ -17211,12 +17207,9 @@ msgid "Convert Projection Color Space"
 msgstr "Převést barevné prostředí projekce"
 
 #: libs/image/kis_image.cc:1384
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Převést barevný prostor vrstvy"
+msgstr ""
 
 #: libs/image/kis_image.cc:1414
 msgctxt "(qtundo-format)"
@@ -29856,10 +29849,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:844
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Nelze uložit do svg: %1"
+msgstr ""
 
 #: libs/ui/KisDocument.cpp:849
 #, kde-format

@@ -191,11 +191,16 @@ KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
          }
      }
 
-    const QPixmap pixmap = QGuiApplication::screens().at(KisPortingUtils::getScreenNumberForWidget(QApplication::activeWindow()))->grabWindow(QApplication::activeWindow()->winId(),
-                                                                                              p.x(), p.y(), 1, 1);
-    QImage i = pixmap.toImage();
     KoColor col = KoColor();
-    col.fromQColor(QColor::fromRgb(i.pixel(0, 0)));
+    QScreen *targetScreen = QGuiApplication::screenAt(p);
+
+    if (targetScreen) {
+        const QPoint screenPos = p - targetScreen->geometry().topLeft();
+
+        QImage grabImage = targetScreen->grabWindow(0, screenPos.x(), screenPos.y(), 1, 1).toImage();
+        col.fromQColor(QColor::fromRgb(grabImage.pixel(0, 0)));
+    }
+
     return col;
 }
 

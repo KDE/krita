@@ -19,7 +19,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public KisOptionCollectionWidget
     Q_OBJECT
 
 public:
-    enum ReferenceLayers { CurrentLayer, AllLayers, ColorLabeledLayers };
+    enum ReferenceLayers { CurrentLayer, ParentLayer, AllLayers, ColorLabeledLayers };
 
     KisSelectionOptions(QWidget *parent = nullptr);
     ~KisSelectionOptions() override;

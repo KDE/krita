@@ -116,6 +116,8 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     if (sampleLayersMode() == SampleCurrentLayer) {
         sourceDevice = m_referencePaintDevice = dev;
+    } else if (sampleLayersMode() == SampleParentLayer) {
+        sourceDevice = m_referencePaintDevice = currentNode()->parent()->projection();
     } else if (sampleLayersMode() == SampleAllLayers) {
         sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {

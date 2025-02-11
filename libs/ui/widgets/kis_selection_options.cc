@@ -87,10 +87,12 @@ public:
         switch (action) {
         case CurrentLayer:
             return 0;
-        case AllLayers:
+        case ParentLayer:
             return 1;
-        case ColorLabeledLayers:
+        case AllLayers:
             return 2;
+        case ColorLabeledLayers:
+            return 3;
         default:
             return 0;
         }
@@ -102,8 +104,10 @@ public:
         case 0:
             return CurrentLayer;
         case 1:
-            return AllLayers;
+            return ParentLayer;
         case 2:
+            return AllLayers;
+        case 3:
             return ColorLabeledLayers;
         default:
             return CurrentLayer;
@@ -214,6 +218,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripReference->addButton(
         KisIconUtils::loadIcon("current-layer"));
     m_d->optionButtonStripReference->addButton(
+        KisIconUtils::loadIcon("parent-layer"));
+    m_d->optionButtonStripReference->addButton(
         KisIconUtils::loadIcon("all-layers"));
     m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
     m_d->optionButtonStripReference->button(0)->setChecked(true);
@@ -252,8 +258,10 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripReference->button(0)->setToolTip(
         i18n("Select regions found from the active layer"));
     m_d->optionButtonStripReference->button(1)->setToolTip(
-        i18n("Select regions found from the merging of all layers"));
+        i18n("Select regions found from the parent layer of the active layer"));
     m_d->optionButtonStripReference->button(2)->setToolTip(
+        i18n("Select regions found from the merging of all layers"));
+    m_d->optionButtonStripReference->button(3)->setToolTip(
         i18n("Select regions found from the merging of layers with specific color labels"));
 
     // Construct the option widget

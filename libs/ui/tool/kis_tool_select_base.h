@@ -90,6 +90,7 @@ public:
     enum SampleLayersMode
     {
         SampleAllLayers,
+        SampleParentLayer,
         SampleCurrentLayer,
         SampleColorLabeledLayers,
     };
@@ -221,6 +222,8 @@ public:
             m_widgetHelper.referenceLayers();
         if (referenceLayers == KisSelectionOptions::AllLayers) {
             return SampleAllLayers;
+        } else if (referenceLayers == KisSelectionOptions::ParentLayer) {
+            return SampleParentLayer;
         } else if (referenceLayers == KisSelectionOptions::CurrentLayer) {
             return SampleCurrentLayer;
         } else if (referenceLayers == KisSelectionOptions::ColorLabeledLayers) {

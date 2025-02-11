@@ -180,9 +180,11 @@ void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(
         "sampleLayersMode",
         referenceLayers == KisSelectionOptions::AllLayers
             ? "sampleAllLayers"
-            : (referenceLayers == KisSelectionOptions::ColorLabeledLayers
-                   ? "sampleColorLabeledLayers"
-                   : "sampleCurrentLayer"));
+            : (referenceLayers == KisSelectionOptions::ParentLayer
+                   ? "sampleParentLayer"
+                   : (referenceLayers == KisSelectionOptions::CurrentLayer
+                          ? "sampleCurrentLayer"
+                          : "sampleColorLabeledLayers")));
 }
 
 void KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged()
@@ -277,9 +279,12 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     const KisSelectionOptions::ReferenceLayers referenceLayers =
         referenceLayersStr == "sampleAllLayers"
         ? KisSelectionOptions::AllLayers
-        : (referenceLayersStr == "sampleColorLabeledLayers"
-               ? KisSelectionOptions::ColorLabeledLayers
-               : KisSelectionOptions::CurrentLayer);
+        : (referenceLayersStr == "sampleParentLayer"
+               ? KisSelectionOptions::ParentLayer
+                   : (referenceLayersStr == "sampleCurrentLayer"
+                          ? KisSelectionOptions::CurrentLayer
+                          : KisSelectionOptions::ColorLabeledLayers));
+
     QList<int> colorLabels;
     for (const QString &colorLabelStr : colorLabelsStr) {
         bool ok;

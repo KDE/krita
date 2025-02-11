@@ -158,9 +158,10 @@ class MutatorDocker(DockWidget):
         body.setLayout(QVBoxLayout())
         body.setSizePolicy(QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred))
         
-        # Create mutation amount slides...
+        # Create mutation amount sliders...
         mutationSettings = QWidget()
         body.layout().addWidget(mutationSettings)
+
         mutationSettings.setLayout(QVBoxLayout())
 
         sizeMutSlider = SliderSpinBox().widget() # Size

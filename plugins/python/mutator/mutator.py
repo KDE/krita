@@ -25,6 +25,7 @@ SOFTWARE.
 
 
 import sys, math, random, colorsys
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
 from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox
 
@@ -121,6 +122,9 @@ class Mutator(Extension):
         
         color_fg.setComponents(postRGBA)
         view.setForeGroundColor(color_fg)
+
+        # Low-priority canvas-floating message...
+        view.showFloatingMessage(i18n("Settings mutated!"), QIcon(), 1000, 2) 
 
 
 def calculate_mutation(mutationMax, nScale):

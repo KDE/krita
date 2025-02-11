@@ -25,8 +25,8 @@ SOFTWARE.
 
 
 import sys, math, random, colorsys
-from PyQt5.QtWidgets import *
-from krita import *
+from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QFormLayout, QSlider, QPushButton, QLabel
+from krita import Qt, Extension, DockWidget, DockWidgetFactory, SliderSpinBox
 
 
 # Global mutation settings... 
@@ -159,51 +159,65 @@ class MutatorDocker(DockWidget):
         body.setSizePolicy(QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred))
         
         # Create mutation amount slides...
-        settings = QWidget()
-        body.layout().addWidget(settings)
-        settings.setLayout(QFormLayout())
-        
-        sizeMutSlider = QSlider(Qt.Horizontal) # Size
-        sizeMutSlider.setRange(0, 100)
+        mutationSettings = QWidget()
+        body.layout().addWidget(mutationSettings)
+        mutationSettings.setLayout(QVBoxLayout())
+
+        sizeMutSlider = SliderSpinBox().widget() # Size
+        sizeMutSlider.setRange(0,100)
+        sizeMutSlider.setPrefix(i18n("Size Mutation: "))
+        sizeMutSlider.setSuffix("%")
         sizeMutSlider.valueChanged.connect(self.update_size_mut)
         sizeMutSlider.setValue(int(nSizeMut * 100))
-        settings.layout().addRow(QLabel(i18n("Brush Size")), sizeMutSlider)
+        mutationSettings.layout().addWidget(sizeMutSlider)
 
-        rotationMutSlider = QSlider(Qt.Horizontal) # Rotation
+        rotationMutSlider = SliderSpinBox().widget() # Rotation
         rotationMutSlider.setRange(0, 100)
+        rotationMutSlider.setPrefix(i18n("Rotation Mutation: "))
+        rotationMutSlider.setSuffix("%")
         rotationMutSlider.valueChanged.connect(self.update_rotation_mut)
         rotationMutSlider.setValue(int(nRotationMut * 100))
-        settings.layout().addRow(QLabel(i18n("Brush Rotation")), rotationMutSlider)
+        mutationSettings.layout().addWidget(rotationMutSlider)
         
-        opacityMutSlider = QSlider(Qt.Horizontal) # Opacity
+        opacityMutSlider = SliderSpinBox().widget() # Opacity
         opacityMutSlider.setRange(0, 100)
+        opacityMutSlider.setPrefix(i18n("Opacity Mutation: "))
+        opacityMutSlider.setSuffix("%")
         opacityMutSlider.valueChanged.connect(self.update_opacity_mut)
         opacityMutSlider.setValue(int(nOpacityMut * 100))
-        settings.layout().addRow(QLabel(i18n("Opacity")), opacityMutSlider)
+        mutationSettings.layout().addWidget(opacityMutSlider)
         
-        flowMutSlider = QSlider(Qt.Horizontal) # Flow
+        flowMutSlider = SliderSpinBox().widget() # Flow
         flowMutSlider.setRange(0, 100)
+        flowMutSlider.setPrefix(i18n("Flow Mutation: "))
+        flowMutSlider.setSuffix("%")
         flowMutSlider.valueChanged.connect(self.update_flow_mut)
         flowMutSlider.setValue(int(nFlowMut * 100))
-        settings.layout().addRow(QLabel(i18n("Flow")), flowMutSlider)
+        mutationSettings.layout().addWidget(flowMutSlider)
         
-        hueMutSlider = QSlider(Qt.Horizontal) # FGC Hue
+        hueMutSlider = SliderSpinBox().widget() # FGC Hue
         hueMutSlider.setRange(0, 100)
+        hueMutSlider.setPrefix(i18n("Hue Mutation: "))
+        hueMutSlider.setSuffix("%")
         hueMutSlider.valueChanged.connect(self.update_fgc_hue_mut)
         hueMutSlider.setValue(int(nHueMut * 100))
-        settings.layout().addRow( QLabel(i18n("Hue (Foreground)")), hueMutSlider)
+        mutationSettings.layout().addWidget(hueMutSlider)
         
-        saturationMutSlider = QSlider(Qt.Horizontal) # FGC Saturation
+        saturationMutSlider = SliderSpinBox().widget() # FGC Saturation
         saturationMutSlider.setRange(0, 100)
+        saturationMutSlider.setPrefix(i18n("Saturation Mutation: "))
+        saturationMutSlider.setSuffix("%")
         saturationMutSlider.valueChanged.connect(self.update_fgc_saturation_mut)
         saturationMutSlider.setValue(int(nSaturationMut * 100))
-        settings.layout().addRow(QLabel(i18n("Saturation (Foreground)")), saturationMutSlider)
+        mutationSettings.layout().addWidget(saturationMutSlider)
         
-        valueMutSlider = QSlider(Qt.Horizontal) # FGC Value
+        valueMutSlider = SliderSpinBox().widget() # FGC Value
         valueMutSlider.setRange(0, 100)
+        valueMutSlider.setPrefix(i18n("Value Mutation: "))
+        valueMutSlider.setSuffix("%")
         valueMutSlider.valueChanged.connect(self.update_fgc_value_mut)
         valueMutSlider.setValue(int(nValueMut * 100))
-        settings.layout().addRow(QLabel(i18n("Value (Foreground)")), valueMutSlider) 
+        mutationSettings.layout().addWidget(valueMutSlider)
 
         # Create mutate button...
         mutateButton = QPushButton(i18n("Mutate"))

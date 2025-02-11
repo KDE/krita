@@ -7902,12 +7902,10 @@ msgstr ""
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Border Selection"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "Výběr okrajů..."
+msgstr ""
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -11474,30 +11472,24 @@ msgstr "Maska filtrů"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Filter Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "Přidat masku filtrů"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Filter Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "Přidat novou masku filtrů"
+msgstr ""
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Colorize Mask"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "Vybarvit masku"
+msgstr ""
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -12675,12 +12667,10 @@ msgstr "Převést barevný prostor vrstvy"
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492 krita/krita.action:3495
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "Převést barevný prostor vrstvy"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3494
@@ -17400,12 +17390,9 @@ msgid "Convert Projection Color Space"
 msgstr "Převést barevné prostředí projekce"
 
 #: libs/image/kis_image.cc:1397
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "Převést barevný prostor vrstvy"
+msgstr ""
 
 #: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
@@ -17571,11 +17558,9 @@ msgid "Error"
 msgstr "Chyba"
 
 #: libs/image/kis_layer_properties_icons.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "Převést barevný prostor vrstvy"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -18979,11 +18964,10 @@ msgid "Color Dodge"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Barevný režim"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19310,12 +19294,10 @@ msgid "Hard Overlay"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Overlay"
-#| msgid "Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Překrytí"
+msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19848,10 +19830,9 @@ msgstr ""
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Styl písma"
+msgstr ""
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20116,11 +20097,10 @@ msgid "Layer Styles"
 msgstr "Styly vrstvy"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Rodina písma"
+msgstr ""
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -22602,43 +22582,38 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
-msgstr "Perceptuální"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "Relativní kolorimetrický"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1157
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
-msgstr "Nasycení"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1158
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "Absolutní kolorimetrický"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Nastavení zobrazení"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1162
@@ -22649,11 +22624,10 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1163
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
-msgstr "Vlastní"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:123
 #, kde-format
@@ -24452,10 +24426,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Zobrazení:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -27336,10 +27309,9 @@ msgstr "Odstín/Sytost/Hodnota"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Show Color Histor&y"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "Zobrazit historii ba&rev"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -29394,10 +29366,9 @@ msgid "Add Fast Color Overlay"
 msgstr ""
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Colorize Mask"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "Vybarvit masku"
+msgstr ""
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -30101,10 +30072,9 @@ msgid "Layer styles"
 msgstr "Styly vrstvy"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Rodina písma"
+msgstr ""
 
 #: libs/ui/KisApplication.cpp:379
 #, kde-format
@@ -30420,10 +30390,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/KisDocument.cpp:853
-#, fuzzy, kde-format
-#| msgid "Could not save to svg: %1"
+#, kde-format
 msgid "Could not start saving %1. Image is busy"
-msgstr "Nelze uložit do svg: %1"
+msgstr ""
 
 #: libs/ui/KisDocument.cpp:858
 #, kde-format
@@ -36091,17 +36060,12 @@ msgid "A scheme with this name already exists."
 msgstr "Schéma s tímto názvem již existuje."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
-"Opravdu si přejete smazat schéma %1?\n"
-"Všimněte si, že tímto neodstraníte žádnou z globálních zkratek."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -36390,10 +36354,9 @@ msgstr "Vlastní barva"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "Možnosti nástrojů"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -38584,10 +38547,9 @@ msgstr "Krytí vrstvy"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgid "Move layer or mask up"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "Posunout vrstvu nebo masku nahoru"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -40235,11 +40197,10 @@ msgid "Delete the taskset"
 msgstr ""
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimalizovat"
+msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
@@ -40449,10 +40410,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgid "Minimal Shade Selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "Minimální paleta odstínů"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -43815,10 +43775,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "&Blend Mode:"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "Režim míse&ní:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
@@ -43834,10 +43793,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
-#, fuzzy, kde-format
-#| msgid "Set a custom opacity for the fill"
+#, kde-format
 msgid "Set the master opacity for the overlay color"
-msgstr "Nastavit vlastní úroveň krytí výplně"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:128
@@ -44852,10 +44810,9 @@ msgstr "Úroveň:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Odstíny šedi/alfa"
+msgstr "Odstíny šedé"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format
@@ -57538,10 +57495,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "Prosím, napište název, pod kterým si přejete tento profil uložit:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "Bohužel, název, který jste zadali, je neplatný."
+msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -60256,297 +60212,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>KDE je dostupné zdarma, ale jeho tvorba stojí peníze. <br /><br /"
-#~ ">Proto jsme vytvořili Asociaci KDE, neziskovou organizaci založenou v "
-#~ "Tuebingenu, Německo. Asociace KDE reprezentuje komunitu KDE v právních a "
-#~ "finančních záležitostech. Informace o Asociaci KDE najdete na webových "
-#~ "stránkách <a href=\"%1\">%1</a>. <br /><br />Tým KDE potřebuje finanční "
-#~ "pomoc. Většina peněz je použita na krytí výdajů spojených s prací na KDE. "
-#~ "Jakákoliv finanční pomoc je vítána; darovat můžete několika způsoby "
-#~ "popsanými na <a href=\"%2\">%2</a>. <br /><br />Předem děkujeme za váš "
-#~ "příspěvek a podporu.</html>"
-
-#~ msgid "Fit View"
-#~ msgstr "Vyplnit pohled"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "Přizpůsobit text šířce"
-
-#~ msgid "&Open..."
-#~ msgstr "&Otevřít..."
-
-#~ msgid "Open an existing document"
-#~ msgstr "Otevřít existující dokument"
-
-#~ msgid "Open &Recent"
-#~ msgstr "Otevřít ne&dávný"
-
-#~ msgid "Open a document which was recently opened"
-#~ msgstr "Otevřít dokument jenž byl nedávno otevřen"
-
-#~ msgid "Save document"
-#~ msgstr "Uložit dokument"
-
-#~ msgid "Save &As..."
-#~ msgstr "Uložit j&ako..."
-
-#~ msgid "Save document under a new name"
-#~ msgstr "Uložit dokument pod jiným názvem"
-
-#~ msgid "Re&vert"
-#~ msgstr "&Vrátit zpět"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "Vrátit neuložené změny v dokumentu"
-
-#~ msgid "Close document"
-#~ msgstr "Zavřít dokument"
-
-#~ msgid "&Print..."
-#~ msgstr "&Tisk..."
-
-#~ msgid "Print document"
-#~ msgstr "Vytisknout dokument"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "Ná&hled před tiskem"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "Zobrazit náhled před tiskem"
-
-#~ msgid "&Mail..."
-#~ msgstr "&Pošta..."
-
-#~ msgid "Send document by mail"
-#~ msgstr "Odeslat dokument emailem"
-
-#~ msgid "&Quit"
-#~ msgstr "U&končit"
-
-#~ msgid "Quit application"
-#~ msgstr "Ukončit aplikaci"
-
-#~ msgid "&Undo"
-#~ msgstr "&Zpět"
-
-#~ msgid "Undo last action"
-#~ msgstr "Vrátit zpět poslední činnost"
-
-#~ msgid "Re&do"
-#~ msgstr "Zno&vu"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "Zopakovat naposled vrácenou činnost"
-
-#~ msgid "Cu&t"
-#~ msgstr "Vyjmou&t"
-
-#~ msgid "Cut selection to clipboard"
-#~ msgstr "Vyjmout výběr do schránky"
-
-#~ msgid "&Copy"
-#~ msgstr "&Kopírovat"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Kopírovat výběr do schránky"
-
-#~ msgid "&Paste"
-#~ msgstr "V&ložit"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "Vložit obsah schránky"
-
-#~ msgid "C&lear"
-#~ msgstr "V&yprázdnit"
-
-#~ msgid "Select &All"
-#~ msgstr "Vybr&at vše"
-
-#~ msgid "Dese&lect"
-#~ msgstr "Zrušit vý&běr"
-
-#~ msgid "&Find..."
-#~ msgstr "Na&jít..."
-
-#~ msgid "Find &Next"
-#~ msgstr "Najít &následující"
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "Na&jít předchozí"
-
-#~ msgid "&Replace..."
-#~ msgstr "Nah&radit..."
-
-#~ msgid "&Actual Size"
-#~ msgstr "&Skutečná velikost"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "Zobrazit dokument v reálné velikosti"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "Přizpůsobit strán&ce"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "Přizpůsobit stránku oknu"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "Přizpůsobit šířce stránk&y"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "Přizpůsobit šířce stránky"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "Přizpůsobit výš&ce stránky"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "Přizpůsobit výšce stránky"
-
-#~ msgid "Zoom &In"
-#~ msgstr "Přiblíž&it"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "O&ddálit"
-
-#~ msgid "&Zoom..."
-#~ msgstr "&Zvětšení..."
-
-#~ msgid "Select zoom level"
-#~ msgstr "Vybrat úroveň přiblížení"
-
-#~ msgid "&Redisplay"
-#~ msgstr "Opětovně zob&razit"
-
-#~ msgid "Redisplay document"
-#~ msgstr "Znovu zobrazit tento dokument"
-
-#~ msgid "&Up"
-#~ msgstr "Nahor&u"
-
-#~ msgid "Go up"
-#~ msgstr "Přejít nahoru"
-
-#~ msgid "&Previous Page"
-#~ msgstr "&Předchozí strana"
-
-#~ msgid "Go to previous page"
-#~ msgstr "Přejít na předchozí stranu"
-
-#~ msgid "&Next Page"
-#~ msgstr "&Následující strana"
-
-#~ msgid "Go to next page"
-#~ msgstr "Přejít na následující stranu"
-
-#~ msgid "&Go To..."
-#~ msgstr "&Přejít na..."
-
-#~ msgid "&Go to Page..."
-#~ msgstr "&Přejít na stranu..."
-
-#~ msgid "&Go to Line..."
-#~ msgstr "&Přejít na řádek..."
-
-#~ msgid "&First Page"
-#~ msgstr "&První strana"
-
-#~ msgid "Go to first page"
-#~ msgstr "Přejít na první stranu"
-
-#~ msgid "&Last Page"
-#~ msgstr "Pos&lední stránka:"
-
-#~ msgid "Go to last page"
-#~ msgstr "Přejít na poslední stranu"
-
-#~ msgid "&Back"
-#~ msgstr "&Zpět"
-
-#~ msgid "Go back in document"
-#~ msgstr "Zpátky v dokumentu"
-
-#~ msgid "&Forward"
-#~ msgstr "&Vpřed"
-
-#~ msgid "Go forward in document"
-#~ msgstr "Vpřed v dokumentu"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "&Přidat k záložkám"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "&Upravit záložky..."
-
-#~ msgid "&Spelling..."
-#~ msgstr "&Pravopis..."
-
-#~ msgid "Check spelling in document"
-#~ msgstr "Zkontrolovat pravopis v tomto dokumentu"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "Zobrazovat nebo skrýt hlavní nabídku"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "Zobrazi&t panel nástrojů"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Zobrazovat nebo skrýt panel nástrojů"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Zobrazovat nebo skrýt stavový panel"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "Celoobrazovkový reži&m"
-
-#~ msgid "&Save Settings"
-#~ msgstr "Na&stavení pro uložení"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "Nastavit z&kratky..."
-
-#~ msgid "&Configure %1..."
-#~ msgstr "N&astavit %1..."
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "Nastavit panely nástro&jů..."
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "&Nastavit upozornění..."
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "Příruč&ka %1"
-
-#~ msgid "What's &This?"
-#~ msgstr "Co je &toto?"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "Tip &dne"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "Nahlásit &chybu..."
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "Přepnout jazyk ap&likace..."
-
-#~ msgid "&About %1"
-#~ msgstr "O aplikaci %1"
-
-#~ msgid "About &KDE"
-#~ msgstr "O prostředí &KDE"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- oddělovač ---"

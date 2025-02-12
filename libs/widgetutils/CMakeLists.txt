@@ -74,8 +74,6 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/kbugreport.cpp
     xmlgui/kcheckaccelerators.cpp
     xmlgui/kedittoolbar.cpp
-    xmlgui/kgesture.cpp
-    xmlgui/kgesturemap.cpp
     xmlgui/khelpmenu.cpp
     xmlgui/kkeysequencewidget.cpp
     xmlgui/kmainwindow.cpp

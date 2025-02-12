@@ -173,10 +173,10 @@ void KoSvgTextShape::Private::relayout()
     QString plainText;
     Q_FOREACH (const SubChunk &chunk, textChunks) {
         for (int i = 0; i < chunk.newToOldPositions.size(); i++) {
-            QPair pos = chunk.newToOldPositions.at(i);
+            QPair<int, int> pos = chunk.newToOldPositions.at(i);
             int a = pos.second < 0? -1: text.size()+pos.second;
             int b = pos.first < 0? -1: plainText.size()+pos.first;
-            QPair newPos = QPair<int, int> (a, b);
+            QPair<int, int> newPos = QPair<int, int> (a, b);
             clusterToOriginalString.append(newPos);
         }
         text.append(chunk.text);
@@ -225,7 +225,7 @@ void KoSvgTextShape::Private::relayout()
         }
     }
     for (int i=0; i < clusterToOriginalString.size(); i++) {
-        QPair mapping = clusterToOriginalString.at(i);
+        QPair<int, int> mapping = clusterToOriginalString.at(i);
         if (mapping.first < 0) {
             continue;
         } else {

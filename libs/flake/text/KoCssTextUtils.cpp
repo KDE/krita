@@ -20,12 +20,12 @@ QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
         if (textA.size() > textB.size()) {
             for (int j=0; j < textA.size(); j++) {
                 int k = j < textB.size()? countB+j: -1;
-                positions.append(QPair(countA+j, k));
+                positions.append(qMakePair(countA+j, k));
             }
         } else {
             for (int j=0; j < textB.size(); j++) {
                 int k = j < textA.size()? countA+j: -1;
-                positions.append(QPair(k, countB+j));
+                positions.append(qMakePair(k, countB+j));
             }
         }
         countA += textA.size();

@@ -27,7 +27,7 @@ SOFTWARE.
 import sys, math, random, colorsys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
-from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox
+from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox, ManagedColor
 
 
 # Global mutation settings... 
@@ -112,16 +112,33 @@ class Mutator(Extension):
         preRGBA = color_fg.components()
         
         HSV = list(colorsys.rgb_to_hsv(preRGBA[0], preRGBA[1], preRGBA[2]))
+
+        print("=============================================================")
         
+        print("Old PRE: h{}, s{}, v{}".format(HSV[0], HSV[1], HSV[2]))
+
         HSV[0] = (HSV[0] + calculate_mutation(hueMutMax, nHueMut))
         HSV[1] = clamp(0.01, 1, HSV[1] + calculate_mutation(saturationMutMax, nSaturationMut))
         HSV[2] = clamp(0, 1, HSV[2] + calculate_mutation(valueMutMax, nValueMut))
 
-        postRGBA = list(colorsys.hsv_to_rgb(HSV[0], HSV[1], HSV[2]))
-        postRGBA.append(preRGBA[3])
-        
-        color_fg.setComponents(postRGBA)
-        view.setForeGroundColor(color_fg)
+        print("Old POST: h{}, s{}, v{}".format(HSV[0], HSV[1], HSV[2]))
+
+        print("-----")
+
+        managedColorFG = view.foregroundColor()
+        canvasColorFG = managedColorFG.colorForCanvas(view.canvas())
+
+        print("New PRE: h{}, s{}, v{}".format(canvasColorFG.hueF(), canvasColorFG.saturationF(), canvasColorFG.valueF()))
+
+        mutatedNormalizedHue = canvasColorFG.hueF() + calculate_mutation(hueMutMax, nHueMut)
+        mutatedNormalizedSaturation = clamp(0.01, 1, canvasColorFG.saturationF() + calculate_mutation(saturationMutMax, nSaturationMut))
+        mutatedNormalizedValue = clamp(0, 1, canvasColorFG.valueF() + calculate_mutation(valueMutMax, nValueMut))
+
+        canvasColorFG.setHsvF(mutatedNormalizedHue, mutatedNormalizedSaturation, mutatedNormalizedValue)
+        print("New POST: h{}, s{}, v{}".format(canvasColorFG.hueF(), canvasColorFG.saturationF(), canvasColorFG.valueF()))
+        view.setForeGroundColor(ManagedColor.fromQColor(canvasColorFG))
+
+        print("")
 
         # Low-priority canvas-floating message...
         view.showFloatingMessage(i18n("Settings mutated!"), QIcon(), 1000, 2) 

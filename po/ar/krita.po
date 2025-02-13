@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"POT-Creation-Date: 2025-02-13 02:03+0000\n"
 "PO-Revision-Date: 2025-01-18 16:50+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -37592,38 +37592,6 @@ msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "‏%1"
 
-#: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, kde-format
-msgctxt "left mouse button"
-msgid "left button"
-msgstr "الزّرّ الأيسر"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:495
-#, kde-format
-msgctxt "middle mouse button"
-msgid "middle button"
-msgstr "الزّرّ الأوسط"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:498
-#, kde-format
-msgctxt "right mouse button"
-msgid "right button"
-msgstr "الزّرّ الأيمن"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:501
-#, kde-format
-msgctxt "a nonexistent value of mouse button"
-msgid "invalid button"
-msgstr "زرّ غير صالح"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:515
-#, kde-format
-msgctxt ""
-"a kind of mouse gesture: hold down one mouse button, then press another "
-"button"
-msgid "Hold %1, then push %2"
-msgstr "أبقِ %1 مضغوطًا، ثمّ اضغط %2"
-
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
 msgid "Default:"
@@ -37631,7 +37599,7 @@ msgstr "المبدئيّ:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:594
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -37717,7 +37685,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "‏%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:169
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -37729,12 +37697,12 @@ msgstr[3] "تضارب الاختصارات"
 msgstr[4] "تضارب الاختصارات"
 msgstr[5] "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:173
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "الاختصار '%1' للإجراء '%2'\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:178
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -37770,18 +37738,18 @@ msgstr[5] ""
 "هل تريد اسناد اختصار فارغ إلى هذه الإجراءات؟\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:188
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:544
 #, kde-format
 msgid "Reassign"
 msgstr "أعِد الإسناد"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "تضارب الاختصارات"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -37790,7 +37758,7 @@ msgstr ""
 "تجميعة المفاتيح ’%1‘ يستخدمها الإجراء <b>%2</b> بالفعل.<br>رجاءً اختر أخرى "
 "مختلفة."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:228
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -37799,12 +37767,12 @@ msgstr ""
 "انقر الزّرّ ثمّ أدخل الاختصار الذي تريد في البرنامج.\n"
 "فمثلًا ل‍ Ctrl+A: أبقِ مفتاح Ctrl مضغوطًا واضغط A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "تضارب مع اختصار تطبيق قياسيّ"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37815,18 +37783,18 @@ msgstr ""
 "التّطبيقات.\n"
 "أمتأكّد من استخدامه كاختصار عموميّ أيضًا؟"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:587
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "الدّخل"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "المفتاح الذي ضغطته لا تدعمه كيوت."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:839
 #, kde-format
 msgid "Unsupported Key"
 msgstr "مفتاح غير مدعوم"
@@ -63778,6 +63746,28 @@ msgstr "أداة العدسة"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "الصّور المرجع"
+
+#~ msgctxt "left mouse button"
+#~ msgid "left button"
+#~ msgstr "الزّرّ الأيسر"
+
+#~ msgctxt "middle mouse button"
+#~ msgid "middle button"
+#~ msgstr "الزّرّ الأوسط"
+
+#~ msgctxt "right mouse button"
+#~ msgid "right button"
+#~ msgstr "الزّرّ الأيمن"
+
+#~ msgctxt "a nonexistent value of mouse button"
+#~ msgid "invalid button"
+#~ msgstr "زرّ غير صالح"
+
+#~ msgctxt ""
+#~ "a kind of mouse gesture: hold down one mouse button, then press another "
+#~ "button"
+#~ msgid "Hold %1, then push %2"
+#~ msgstr "أبقِ %1 مضغوطًا، ثمّ اضغط %2"
 
 #~ msgid ""
 #~ "<html>KDE software is and will always be available free of charge, "

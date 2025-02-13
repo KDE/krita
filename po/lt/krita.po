@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"POT-Creation-Date: 2025-02-13 02:03+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -36867,38 +36867,6 @@ msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, kde-format
-msgctxt "left mouse button"
-msgid "left button"
-msgstr ""
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:495
-#, kde-format
-msgctxt "middle mouse button"
-msgid "middle button"
-msgstr ""
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:498
-#, kde-format
-msgctxt "right mouse button"
-msgid "right button"
-msgstr ""
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:501
-#, kde-format
-msgctxt "a nonexistent value of mouse button"
-msgid "invalid button"
-msgstr ""
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:515
-#, kde-format
-msgctxt ""
-"a kind of mouse gesture: hold down one mouse button, then press another "
-"button"
-msgid "Hold %1, then push %2"
-msgstr ""
-
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, fuzzy, kde-format
 msgid "Default:"
@@ -36906,7 +36874,7 @@ msgstr "Numatytas"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:594
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36988,7 +36956,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:169
 #, fuzzy, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36998,12 +36966,12 @@ msgstr[1] "Konfigūruoti..."
 msgstr[2] "Konfigūruoti..."
 msgstr[3] "Konfigūruoti..."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:173
 #, fuzzy, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Konfigūruoti..."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:178
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -37019,37 +36987,37 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:188
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:544
 #, fuzzy, kde-format
 msgid "Reassign"
 msgstr "Padėjėjas:"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
 #, fuzzy, kde-format
 msgid "Shortcut conflict"
 msgstr "Konfigūruoti..."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:228
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -37057,18 +37025,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:587
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Įvestis:"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:839
 #, kde-format
 msgid "Unsupported Key"
 msgstr ""

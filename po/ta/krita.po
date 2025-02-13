@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-08 01:52+0000\n"
+"POT-Creation-Date: 2025-02-13 02:03+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -35983,42 +35983,6 @@ msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1%"
 
-#: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, fuzzy, kde-format
-#| msgid "More Green"
-msgctxt "left mouse button"
-msgid "left button"
-msgstr "அதிக பச்சை"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:495
-#, fuzzy, kde-format
-#| msgid "More Green"
-msgctxt "middle mouse button"
-msgid "middle button"
-msgstr "அதிக பச்சை"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:498
-#, fuzzy, kde-format
-#| msgid "More Green"
-msgctxt "right mouse button"
-msgid "right button"
-msgstr "அதிக பச்சை"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:501
-#, fuzzy, kde-format
-#| msgid "More Green"
-msgctxt "a nonexistent value of mouse button"
-msgid "invalid button"
-msgstr "அதிக பச்சை"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:515
-#, kde-format
-msgctxt ""
-"a kind of mouse gesture: hold down one mouse button, then press another "
-"button"
-msgid "Hold %1, then push %2"
-msgstr ""
-
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, fuzzy, kde-format
 msgid "Default:"
@@ -36026,7 +35990,7 @@ msgstr "நிகழ்விலுள்ள அடுக்கை மாற்�
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:594
 #, fuzzy, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36108,7 +36072,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:169
 #, fuzzy, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36116,12 +36080,12 @@ msgid_plural "Shortcut Conflicts"
 msgstr[0] "பெயர்ச்சி "
 msgstr[1] "பெயர்ச்சி "
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:173
 #, fuzzy, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "சேமிப்பதை உறுதிசெய்"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:178
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -36135,37 +36099,37 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:188
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:544
 #, fuzzy, kde-format
 msgid "Reassign"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
 #, fuzzy, kde-format
 msgid "Shortcut conflict"
 msgstr "பெயர்ச்சி "
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:228
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
 "Example for Ctrl+A: hold the Ctrl key and press A."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36173,18 +36137,18 @@ msgid ""
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:587
 #, fuzzy, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "வெளியே"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr ""
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:839
 #, kde-format
 msgid "Unsupported Key"
 msgstr ""
@@ -60888,6 +60852,30 @@ msgstr "பெரிதாக்க கருவி"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "உருவத்திற்கு மறுபெயரிடு"
+
+#, fuzzy
+#~| msgid "More Green"
+#~ msgctxt "left mouse button"
+#~ msgid "left button"
+#~ msgstr "அதிக பச்சை"
+
+#, fuzzy
+#~| msgid "More Green"
+#~ msgctxt "middle mouse button"
+#~ msgid "middle button"
+#~ msgstr "அதிக பச்சை"
+
+#, fuzzy
+#~| msgid "More Green"
+#~ msgctxt "right mouse button"
+#~ msgid "right button"
+#~ msgstr "அதிக பச்சை"
+
+#, fuzzy
+#~| msgid "More Green"
+#~ msgctxt "a nonexistent value of mouse button"
+#~ msgid "invalid button"
+#~ msgstr "அதிக பச்சை"
 
 #, fuzzy
 #~ msgid "Proofing Rendering Intent:"

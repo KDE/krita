@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-08 01:52+0000\n"
-"PO-Revision-Date: 2025-01-03 21:16+0100\n"
+"POT-Creation-Date: 2025-02-13 02:03+0000\n"
+"PO-Revision-Date: 2025-02-12 07:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -14352,7 +14352,7 @@ msgstr "Montri Regulojn"
 #, kde-format
 msgctxt "action"
 msgid "Rulers Track Pointer"
-msgstr "Regantoj Track Montrilo"
+msgstr "Mezuriloj Spuras Montrilon"
 
 #. i18n: context: whatsThis @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:907
@@ -14362,8 +14362,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
-"La regantoj spuros la nunan muspozicion kaj montros ĝin sur ekrano. Ĝi povas "
-"kaŭzi subtilan rendimenton malrapidiĝon"
+"La mezuriloj spuros la nunan muspozicion kaj montros ĝin sur ekrano. Ĝi "
+"povas kaŭzi subtilan rendimenton malrapidiĝon"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -19039,12 +19039,10 @@ msgid "Color Dodge"
 msgstr "Koloro Dodge"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Color Dodge"
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "Koloro Dodge"
+msgstr "Kolor-Evita HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -19083,12 +19081,10 @@ msgid "Vivid Light"
 msgstr "Viva Lumo"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Vivid Light"
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "Viva Lumo"
+msgstr "Vigla-Luma HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -19307,12 +19303,10 @@ msgid "Hard Mix"
 msgstr "Malmola Miksaĵo"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Malmola Miksaĵo"
+msgstr "Malmol-Miksa HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19375,12 +19369,10 @@ msgid "Hard Overlay"
 msgstr "Malmola Overlay"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Overlay"
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Malmola Overlay"
+msgstr "Malmol-Plustavola HR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19877,10 +19869,9 @@ msgid "Could not remove storage %1 from the database"
 msgstr "Ne eblis forigi konservejon %1 el la datumbazo"
 
 #: libs/resources/KisResourceLocator.cpp:979
-#, fuzzy, kde-format
-#| msgid "Could not synchronize %1 with the database"
+#, kde-format
 msgid "Could not synchronize updated font registery with the database"
-msgstr "Ne eblis sinkronigi %1 kun la datumbazo"
+msgstr "Ne eblis sinkronigi ĝisdatigitan tipar-registrejon kun la datumbazo"
 
 #: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
@@ -19916,10 +19907,9 @@ msgstr "Provizoraj Rimedoj"
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Tiparo Stilo"
+msgstr "Tipara Konservejo"
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20183,11 +20173,10 @@ msgid "Layer Styles"
 msgstr "Tavolaj Stiloj"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Tiparofamilio"
+msgstr "Tiparfamilioj"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -22777,58 +22766,52 @@ msgstr "Agordi koloron uzatan por averto"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1155
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Percepta"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1156
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativa Kolorimetria"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1157
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Satureco"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1158
-#, fuzzy, kde-format
-#| msgid "Absolute Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absoluta Kolorimetria"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1161
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "Bildigaj agordoj"
+msgstr "Uzi ĉiean bildigan agordon"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1162
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
-msgstr ""
+msgstr "Simuli paperan blankonigron"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1163
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
-msgstr "Propra"
+msgstr "Tajlorita"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:123
 #, kde-format
@@ -24664,20 +24647,18 @@ msgstr "Gamuta Averto:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxProofingTransform)
 #: libs/ui/forms/wdgcolorsettings.ui:318
-#, fuzzy, kde-format
-#| msgid "Pattern Transform"
+#, kde-format
 msgid "Proofing transform"
-msgstr "Ŝablona Transformo"
+msgstr "Testada transformo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgid "Rendering Intent"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "Reprezentanta Intenco"
+msgstr "Bildiga Intenco:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -24701,10 +24682,9 @@ msgstr "Adaptiĝostato:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "Ekrano:"
+msgstr "Ekranreĝimo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -26200,31 +26180,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
-#, fuzzy, kde-format
-#| msgid "Automatic layer suffixes"
+#, kde-format
 msgid "Automatic layer naming"
-msgstr "Aŭtomataj tavolaj sufiksoj"
+msgstr "Aŭtomata tavolnomumado"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1479
-#, fuzzy, kde-format
-#| msgid "Add \"Merged\" to merged group layers"
+#, kde-format
 msgid "Append \"Merged\" to merged group layers"
-msgstr "Aldoni \"Fanditaj\" al kunfanditaj gruptavoloj"
+msgstr "Aldoni \"Fandita\" al kunfanditaj gruptavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1486
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Append \"(pasted)\" to pasted layers"
 msgstr "Aldoni \"(algluita)\" al algluitaj tavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameDuplicatedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1493
-#, fuzzy, kde-format
-#| msgid "Add \"(pasted)\" to pasted layers"
+#, kde-format
 msgid "Prepend \"Copy of\" to duplicated layers"
-msgstr "Aldoni \"(algluita)\" al algluitaj tavoloj"
+msgstr "Aldoni \"(Kopio de)\" al duplikitaj tavoloj"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518
@@ -30525,10 +30501,9 @@ msgid "Layer styles"
 msgstr "Tavolstiloj"
 
 #: libs/ui/KisApplication.cpp:367
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "Tiparofamilio"
+msgstr "Tiparofamilioj"
 
 #: libs/ui/KisApplication.cpp:379
 #, kde-format
@@ -36620,38 +36595,6 @@ msgctxt "@label Action tooltip in toolbar editor, below the action list"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kgesture.cpp:492
-#, kde-format
-msgctxt "left mouse button"
-msgid "left button"
-msgstr "maldekstra butono"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:495
-#, kde-format
-msgctxt "middle mouse button"
-msgid "middle button"
-msgstr "meza butono"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:498
-#, kde-format
-msgctxt "right mouse button"
-msgid "right button"
-msgstr "dekstra butono"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:501
-#, kde-format
-msgctxt "a nonexistent value of mouse button"
-msgid "invalid button"
-msgstr "nevalida butono"
-
-#: libs/widgetutils/xmlgui/kgesture.cpp:515
-#, kde-format
-msgctxt ""
-"a kind of mouse gesture: hold down one mouse button, then press another "
-"button"
-msgid "Hold %1, then push %2"
-msgstr "Tenu %1, tiam premu %2"
-
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:50
 #, kde-format
 msgid "Default:"
@@ -36659,7 +36602,7 @@ msgstr "Defaŭlta:"
 
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:51
 #: libs/widgetutils/xmlgui/KisShortcutEditWidget.cpp:54
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:595
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:594
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
@@ -36747,7 +36690,7 @@ msgctxt "@item:intable Action name in shortcuts configuration"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:170
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:169
 #, kde-format
 msgctxt "%1 is the number of conflicts"
 msgid "Shortcut Conflict"
@@ -36755,12 +36698,12 @@ msgid_plural "Shortcut Conflicts"
 msgstr[0] "Konflikto de Ŝparvojo"
 msgstr[1] "Konfliktoj de Ŝparvojoj"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:173
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
 msgstr "Ŝparvojo '%1' por ago '%2'\n"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:178
 #, kde-format
 msgctxt "%1 is the number of ambiguous shortcut clashes (hidden)"
 msgid ""
@@ -36780,18 +36723,18 @@ msgstr[1] ""
 "Ĉu vi volas atribui malplenan ŝparvojon al ĉi tiuj agoj?\n"
 "%3"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:545
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:188
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:544
 #, kde-format
 msgid "Reassign"
 msgstr "Reasigni"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:197
 #, kde-format
 msgid "Shortcut conflict"
 msgstr "Konflikto de mallongigo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:199
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:198
 #, kde-format
 msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
@@ -36800,7 +36743,7 @@ msgstr ""
 "<qt>La klavkombinaĵo '%1' jam estas uzata de la ago <b>%2</b>.<br>Bonvolu "
 "elekti alian.</qt>"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:228
 #, kde-format
 msgid ""
 "Click on the button, then enter the shortcut like you would in the program.\n"
@@ -36809,12 +36752,12 @@ msgstr ""
 "Alklaku la butonon, tiam enigu la ŝparvojon kiel vi farus en la programo.\n"
 "Ekzemplo por Ctrl+A: tenu la klavon Ctrl kaj premu A."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:538
 #, kde-format
 msgid "Conflict with Standard Application Shortcut"
 msgstr "Konflikto kun Norma Aplika Ŝparvojo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:540
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:539
 #, kde-format
 msgid ""
 "The '%1' key combination is also used for the standard action \"%2\" that "
@@ -36825,18 +36768,18 @@ msgstr ""
 "aplikaĵoj uzas.\n"
 "Ĉu vi vere volas uzi ĝin ankaŭ kiel ĉiean ŝparvojon?"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:587
 #, kde-format
 msgctxt "What the user inputs now will be taken as the new shortcut"
 msgid "Input"
 msgstr "Enigo"
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:642
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:838
 #, kde-format
 msgid "The key you just pressed is not supported by Qt."
 msgstr "La klavo, kiun vi ĵus premis, ne estas subtenata de Qt."
 
-#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:643
+#: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:839
 #, kde-format
 msgid "Unsupported Key"
 msgstr "Nesubtenata Ŝlosilo"
@@ -37443,7 +37386,7 @@ msgstr "Paralela Ruler-asistanto"
 #: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
-msgstr "Paralela Reganto"
+msgstr "Paralela Mezurilo"
 
 #: plugins/assistants/Assistants/PerspectiveAssistant.cc:31
 #, kde-format
@@ -37472,12 +37415,12 @@ msgstr "Perspektiva Elipso"
 #: plugins/assistants/Assistants/RulerAssistant.cc:25
 #, kde-format
 msgid "Ruler assistant"
-msgstr "Reganto asistanto"
+msgstr "Mezurila asistanto"
 
 #: plugins/assistants/Assistants/RulerAssistant.cc:345
 #, kde-format
 msgid "Ruler"
-msgstr "Reganto"
+msgstr "Mezurilo"
 
 #: plugins/assistants/Assistants/SplineAssistant.cc:75
 #, kde-format
@@ -39406,10 +39349,9 @@ msgstr "Travidebleco de Tavolo"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgid "Move layer or mask up"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "Movi tavolon aŭ maskon supren"
+msgstr "Aldoni novan tavolon aŭ maskon"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -41121,16 +41063,15 @@ msgid "Delete the taskset"
 msgstr "Forigi la taskaron"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optimumigi"
+msgstr "Optika Grandeco"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
 msgid "Text Properties"
-msgstr "Tektstaj Proprecoj"
+msgstr "Tekstaj Proprecoj"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -44754,10 +44695,9 @@ msgstr "Miksa reĝimo:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Grizskalo (sen travidebleco)"
+msgstr "Normal (tavoloj kun travidebleco)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
@@ -45791,10 +45731,9 @@ msgstr "Nivelo:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Grizskalo/Alfa"
+msgstr "Grizskalo"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format
@@ -58453,16 +58392,13 @@ msgstr "Mo&vi tavolon kun enhavo"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Movu la grupon, kiu enhavas la unuan tavolon, kiu enhavas videblan enhavon. "
-"Ŝparvojo: ctrl-shift-klako."
+"Ŝparvojo: ctrl-klako."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77
@@ -61851,32 +61787,24 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
 
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>KDE-programaro estas kaj ĉiam disponeblas senpage, tamen krei ĝin "
-#~ "ne estas senpaga.<br /><br />Por subteni disvolviĝon la KDE-komunumo "
-#~ "formis la KDE e.V., neprofitcela organizaĵo laŭleĝe fondita en Germanujo. "
-#~ "KDE e.V. reprezentas la KDE-komunumon en juraj kaj financaj aferoj. Vidu "
-#~ "<a href=\"%1\">%1</a> por informoj pri KDE e.V.<br /><br />KDE profitas "
-#~ "de multaj specoj de kontribuoj, inkluzive financajn. Ni uzas la financon "
-#~ "por repagi membrojn kaj aliajn por elspezoj, kiujn ili faras kiam ili "
-#~ "kontribuas. Pliaj financoj estas uzataj por jura subteno kaj organizado "
-#~ "de konferencoj kaj renkontiĝoj. <br /> <br />Ni ŝatus instigi vin subteni "
-#~ "niajn klopodojn per financa donaco, uzante unu el la manieroj "
-#~ "priskribitaj ĉe <a href=\"%2\">%2</a>.<br /><br />Antikan dankon pro via "
-#~ "subteno.</html>"
+#~ msgctxt "left mouse button"
+#~ msgid "left button"
+#~ msgstr "maldekstra butono"
 
-#~ msgid "Proofing Rendering Intent:"
-#~ msgstr "Pruva Reprezentanta Intenco:"
+#~ msgctxt "middle mouse button"
+#~ msgid "middle button"
+#~ msgstr "meza butono"
+
+#~ msgctxt "right mouse button"
+#~ msgid "right button"
+#~ msgstr "dekstra butono"
+
+#~ msgctxt "a nonexistent value of mouse button"
+#~ msgid "invalid button"
+#~ msgstr "nevalida butono"
+
+#~ msgctxt ""
+#~ "a kind of mouse gesture: hold down one mouse button, then press another "
+#~ "button"
+#~ msgid "Hold %1, then push %2"
+#~ msgstr "Tenu %1, tiam premu %2"

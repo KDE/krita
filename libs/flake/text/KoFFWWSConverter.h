@@ -77,15 +77,15 @@ public:
     std::optional<KoFontFamilyWWSRepresentation> representationByFamilyName(const QString &familyName) const;
 
     /// Used to find the closest corresponding resource when the family name doesn't match.
-    QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;
+    std::optional<QString> wwsNameByFamilyName(const QString familyName) const;
 
     /**
      * @brief candidatesForCssValues
      * Search the nodes for the most appropriate font for the given css values.
      * We want to give these preferential treatment to whatever fontconfig matches for us.
-     * @return list of file names for candidates.
+     * @return list of QPairs representing the filenames and file indices for the candidates.
      */
-    QStringList candidatesForCssValues(const QStringList &families,
+    QVector<QPair<QString, int>> candidatesForCssValues(const QStringList &families,
                                        const QMap<QString, qreal> &axisSettings,
                                        quint32 xRes = 72,
                                        quint32 yRes = 72,

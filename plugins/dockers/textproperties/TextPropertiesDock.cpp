@@ -254,11 +254,10 @@ void TextPropertiesDock::slotUpdateAxesValues()
 #include <KoFontRegistry.h>
 QString TextPropertiesDock::wwsFontFamilyName(QString familyName)
 {
-    bool found = false;
-    QString name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName, &found);
-    if (!found) {
-        name = familyName;
+    std::optional<QString> name = KoFontRegistry::instance()->wwsNameByFamilyName(familyName);
+    if (!name) {
+        return familyName;
     }
-    return name;
+    return name.value();
 }
 #include "TextPropertiesDock.moc"

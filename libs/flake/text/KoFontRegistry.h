@@ -92,7 +92,7 @@ public:
     std::optional<KoFontFamilyWWSRepresentation> representationByFamilyName(const QString &familyName) const;
 
     // Get the closest font family resource name for a given font family name, used by the selectors.
-    QString wwsNameByFamilyName(const QString familyName, bool *found = nullptr) const;
+    std::optional<QString> wwsNameByFamilyName(const QString familyName) const;
 
     /**
      * @brief slantMode

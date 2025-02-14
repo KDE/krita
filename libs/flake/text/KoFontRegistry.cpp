@@ -62,7 +62,7 @@ private:
         QHash<QString, FcPatternSP> m_patterns;
         QHash<QString, FcFontSetSP> m_fontSets;
         QHash<QString, FT_FaceSP> m_faces;
-        QHash<QString, QStringList> m_suggestedFiles;
+        QHash<QString, QVector<QPair<QString, int>>> m_suggestedFiles;
 
         ThreadData(FT_LibrarySP lib)
             : m_library(std::move(lib))
@@ -195,7 +195,7 @@ public:
         return true;
     }
 
-    QHash<QString, QStringList> &suggestedFileNames()
+    QHash<QString, QVector<QPair<QString, int>>> &suggestedFileNames()
     {
         if (!m_data.hasLocalData())
             initialize();
@@ -271,7 +271,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         }
     }
 
-    QStringList candidates;
+    QVector<QPair<QString, int>> candidates;
     const QString suggestedHash = families.join("+") + ":" + QString::number(slantMode) + ":" + modifications;
     auto entry = d->suggestedFileNames().find(suggestedHash);
     if (entry != d->suggestedFileNames().end()) {
@@ -302,10 +302,12 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
     }
 
-    Q_FOREACH (const QString &file, candidates) {
-        QByteArray utfData = file.toUtf8();
+    for (int i = 0; i < candidates.size(); i++) {
+        const QPair<QString, int> file = candidates.at(i);
+        QByteArray utfData = file.first.toUtf8();
         const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
         FcPatternAddString(p.data(), FC_FILE, vals);
+        FcPatternAddInteger(p.data(), FC_INDEX, file.second);
     }
 
     if (slantMode == 1) {
@@ -350,7 +352,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
             return set.value();
         } else {
             FcCharSet *cs = nullptr;
-            FcFontSetSP avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcTrue, &cs, &result));
+            FcFontSetSP avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcFalse, &cs, &result));
             charSet.reset(cs);
             d->sets().insert(patternHash, avalue);
             return avalue;
@@ -513,7 +515,16 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     std::vector<FT_FaceSP> faces;
 
     for (int i = 0; i < lengths.size(); i++) {
-        const FontEntry &font = fonts.at(i);
+        FontEntry font = fonts.at(i);
+        // For some reason, FontConfig will sometimes return the wrong file index.
+        // We can in this case select the appropriate index, which should work as tcc collections share glyphs.
+        for (int j = 0; j < candidates.size(); j++) {
+            if (font.fileName == candidates.at(j).first) {
+                font.fontIndex = candidates.at(j).second;
+                break;
+            }
+        }
+
         const QString fontCacheEntry = font.fileName + "#" + QString::number(font.fontIndex) + "#" + modifications;
         auto entry = d->typeFaces().find(fontCacheEntry);
         if (entry != d->typeFaces().end()) {
@@ -673,9 +684,9 @@ std::optional<KoFontFamilyWWSRepresentation> KoFontRegistry::representationByFam
     return d->converter()->representationByFamilyName(familyName);
 }
 
-QString KoFontRegistry::wwsNameByFamilyName(const QString familyName, bool *found) const
+std::optional<QString> KoFontRegistry::wwsNameByFamilyName(const QString familyName) const
 {
-    return d->converter()->wwsNameByFamilyName(familyName, found);
+    return d->converter()->wwsNameByFamilyName(familyName);
 }
 
 void KoFontRegistry::updateConfig()

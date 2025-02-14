@@ -985,16 +985,11 @@ std::optional<KoFontFamilyWWSRepresentation> KoFFWWSConverter::representationByF
     return std::nullopt;
 }
 
-QString KoFFWWSConverter::wwsNameByFamilyName(const QString familyName, bool *found) const
+std::optional<QString> KoFFWWSConverter::wwsNameByFamilyName(const QString familyName) const
 {
-    QString name;
-    if (found) {
-        *found = false;
-    }
     auto it = d->fontFamilyCollection.compositionBegin();
     it = searchNodes(it, d->fontFamilyCollection.compositionEnd(), familyName);
     if (it != d->fontFamilyCollection.compositionEnd()) {
-        *found = true;
 
         bool isChild = childBegin(it) == childEnd(it);
         auto wws = siblingCurrent(it);
@@ -1008,9 +1003,9 @@ QString KoFFWWSConverter::wwsNameByFamilyName(const QString familyName, bool *fo
         } else if (hierarchy == hierarchyEnd(wws)) {
             wws = childBegin(it);
         }
-        name = wws->fontFamily;
+        return std::make_optional(wws->fontFamily);
     }
-    return name;
+    return std::nullopt;
 }
 #include <KoCssTextUtils.h>
 QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, const QString axisTag, const qreal &value, const qreal &defaultValue, const qreal &defaultValueUpper) {
@@ -1057,7 +1052,7 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
     return candidates;
 }
 
-QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families,
+QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStringList &families,
                                                      const QMap<QString, qreal> &axisSettings,
                                                      quint32 xRes, quint32 yRes,
                                                      qreal size,
@@ -1065,8 +1060,7 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                                                      int slantMode, int slantValue) const
 {
     Q_UNUSED(axisSettings)
-    Q_UNUSED(slantValue)
-    QStringList candidateFileNames;
+    QVector<QPair<QString, int>> candidateFileNames;
 
     int pixelSize = size * (qMin(xRes, yRes) / 72.0);
 
@@ -1182,12 +1176,11 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                 fileNames.append(node.fileName);
                 fileNames = node.pixelSizes.value(pixelSize, fileNames);
                 Q_FOREACH(const QString &fileName, fileNames) {
-                    candidateFileNames.append(fileName);
+                    candidateFileNames.append(QPair<QString, int>(fileName, node.fileIndex));
                 }
             }
         }
     }
-    // TODO: There's something weird about not returning the file index as well, but am somewhat lost how to use it.
     return candidateFileNames;
 }
 

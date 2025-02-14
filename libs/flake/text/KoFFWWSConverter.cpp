@@ -673,6 +673,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
 
         QVector<qreal> weights;
         QVector<qreal> widths;
+        QVector<int> fileIndices;
         QVector<KoSvgText::FontFormatType> types;
 
         // This takes all of the current children that aren't inside a wws-node already and puts them into a temp list,
@@ -688,6 +689,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             if (!weights.contains(wght)) weights.append(wght);
             qreal wdth = child->axes.value(WIDTH_TAG, KoSvgText::FontFamilyAxis::widthAxis(100)).value;
             if (!widths.contains(wdth)) widths.append(wdth);
+            if (!fileIndices.contains(child->fileIndex)) fileIndices.append(child->fileIndex);
             types.append(child->type);
             deleteList.append(child);
         }
@@ -701,8 +703,10 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             KoSvgText::FontFormatType testType = types.contains(KoSvgText::OpenTypeFontType)? KoSvgText::OpenTypeFontType: types.first();
             QVector<QPair<QString, QString>> existing;
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
-                qreal testWeight = weights.contains(400)? 400: weights.first();
-                qreal testWidth = widths.contains(100)? 100: widths.first();
+                const qreal testWeight = weights.contains(400)? 400: weights.first();
+                const qreal testWidth = widths.contains(100)? 100: widths.first();
+                // We want to select the first file index if possible.
+                const int testFileIndex = fileIndices.contains(0)? 0: fileIndices.first();
 
                 bool widthTested = !font->axes.keys().contains(WIDTH_TAG);
                 widthTested = widthTested? true: qFuzzyCompare(font->axes.value(WIDTH_TAG).value, testWidth);
@@ -711,6 +715,7 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                 if (qFuzzyCompare(font->axes.value(WEIGHT_TAG).value, testWeight) && widthTested
                         && !font->isItalic
                         && !font->isOblique
+                        && ( ( fileIndices.size() > 1 && font->fileIndex == testFileIndex ) || ( fileIndices.size()<=1 ))
                         && font->type == testType
                         && !existing.contains(fontStyle)) {
                     FontFamilyNode wwsFamily = FontFamilyNode::createWWSFamilyNode(*font, *typographic, wwsNames);
@@ -801,6 +806,9 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     FontFamilyNode wwsFamily = FontFamilyNode::createWWSFamilyNode(*font, *typographic, wwsNames);
                     wwsNames.append(wwsFamily.fontFamily);
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
+                    if (wwsFamily.fontFamily != typographic->fontFamily) {
+                        font->localizedTypographicStyle.clear();
+                    }
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
                 }
             }
@@ -809,7 +817,24 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             if (wwsNames.contains(typographic->fontFamily)  && std::distance(childBegin(typographic), childEnd(typographic)) > 1) {
                 for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
                     if (wws->fontFamily == typographic->fontFamily) {
+                        if (wwsNames.contains(childBegin(wws)->fontFamily)) {
+                            const QString otherWWSName = childBegin(wws)->fontFamily;
+                            // Also rename any other wwsfamilies that has been using the second style.
+                            for (auto otherwws = childBegin(typographic); otherwws != childEnd(typographic); otherwws++) {
+                                if (otherwws->fontFamily == otherWWSName) {
+                                    otherwws->fontFamily = childBegin(otherwws)->fontFamily + " " + childBegin(otherwws)->fontStyle;
+                                    QHash<QLocale, QString> families;
+                                    const QHash<QLocale, QString> styles = childBegin(otherwws)->localizedFontStyle;
+                                    Q_FOREACH (const QLocale l, otherwws->localizedFontFamilies.keys()) {
+                                        families.insert(l, otherwws->localizedFontFamilies.value(l)+" "+styles.value(l, childBegin(otherwws)->fontStyle));
+                                    }
+                                    otherwws->localizedFontFamilies = families;
+                                    break;
+                                }
+                            }
+                        }
                         wws->fontFamily = childBegin(wws)->fontFamily;
+                        childBegin(wws)->localizedTypographicStyle.clear();
                         break;
                     }
                 }

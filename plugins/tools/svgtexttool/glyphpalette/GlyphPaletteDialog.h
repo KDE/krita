@@ -31,6 +31,7 @@ public Q_SLOTS:
     void slotInsertRichText(int charRow, int glyphRow = -1, bool replace = false);
 
     void slotChangeFilter(int filterRow);
+    void slotChangeSearchText(QString searchText);
 
     void slotUpdateFilterList();
 private:

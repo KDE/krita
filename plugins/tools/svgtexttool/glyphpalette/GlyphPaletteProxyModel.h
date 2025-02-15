@@ -14,21 +14,31 @@
 class GlyphPaletteProxyModel: public QSortFilterProxyModel
 {
     Q_OBJECT
+
+    Q_PROPERTY(int blockFilter READ blockFilter WRITE setBlockFilter NOTIFY blockFilterChanged)
+    Q_PROPERTY(QString searchText READ searchText() WRITE setSearchText NOTIFY searchTextChanged)
 public:
     GlyphPaletteProxyModel(QObject *parent = nullptr);
     ~GlyphPaletteProxyModel() override;
 
-    int filter() const;
+    int blockFilter() const;
+    QString searchText() const;
 
     QMap<int, QString> filterLabels();
 
 public Q_SLOTS:
-    void setFilter(int filter);
+    void setSearchText(const QString &text);
+    void setBlockFilter(int filter);
+
+Q_SIGNALS:
+    void blockFilterChanged();
+    void searchTextChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 private:
-    int m_filter{0};
+    struct Private;
+    QScopedPointer<Private> d;
 
 };
 

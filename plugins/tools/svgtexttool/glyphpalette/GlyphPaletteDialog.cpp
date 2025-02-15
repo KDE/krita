@@ -36,6 +36,7 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     this->setMainWidget(m_quickWidget);
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
+    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
@@ -153,15 +154,19 @@ void GlyphPaletteDialog::slotChangeFilter(int filterRow)
     QModelIndex idx = m_filters->index(filterRow, 0);
     if (idx.isValid()) {
         const int filter = idx.data(Qt::UserRole+1).toInt();
-        qDebug() << Q_FUNC_INFO << filter;
-        m_charMapModel->setFilter(filter);
+        m_charMapModel->setBlockFilter(filter);
     }
+}
+
+void GlyphPaletteDialog::slotChangeSearchText(QString searchText)
+{
+    m_charMapModel->setSearchText(searchText);
 }
 
 void GlyphPaletteDialog::slotUpdateFilterList()
 {
     m_filters->clear();
-    m_charMapModel->setFilter(0);
+    m_charMapModel->setBlockFilter(0);
     for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
         int key = m_charMapModel->filterLabels().keys().at(i);
         QString label = m_charMapModel->filterLabels().value(key);

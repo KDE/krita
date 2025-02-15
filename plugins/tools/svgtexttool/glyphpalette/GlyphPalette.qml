@@ -33,12 +33,11 @@ Rectangle {
         anchors.left: parent.left;
         anchors.right: parent.right;
 
-        /// How are we going to translate this?
         TabButton {
-            text: "Glyph Alternates"
+            text: i18nc("@title:tab", "Glyph Alternates")
         }
         TabButton {
-            text: "Character Map"
+            text: i18nc("@title:tab", "Character Map")
         }
     }
 
@@ -114,90 +113,107 @@ Rectangle {
                 }
             }
 
-            GridView {
-                id: charMap;
-                model: root.charMapModel;
-                focus: true;
-                clip: true;
+            ColumnLayout {
                 Layout.minimumWidth: 180;
                 Layout.fillHeight: true;
                 Layout.fillWidth: true;
 
-                cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
-                cellHeight: cellWidth;
 
-                delegate: GlyphDelegate {
-                    textColor: sysPalette.text;
-                    fillColor: sysPalette.base;
-                    fontFamilies: root.fontFamilies;
-                    fontSize: root.fontSize;
-                    fontStyle: root.fontStyle;
-                    fontWeight: root.fontWeight;
-                    onGlyphDoubleClicked: (index)=> {mainWindow.slotInsertRichText(index)};
-                    onGlyphClicked: (index)=> {
-                                        if (model.childCount > 1){
-                                            charMapAltGlyphs.open()
+
+                TextField {
+                    id: searchInput;
+                    onTextEdited: {
+                        mainWindow.slotChangeSearchText(text);
+                    }
+                    placeholderText: i18nc("@info:placeholder", "Search...");
+                    Layout.fillWidth: true;
+                    Layout.preferredHeight: implicitHeight;
+                    padding: 5;
+                }
+
+                GridView {
+                    id: charMap;
+                    model: root.charMapModel;
+                    focus: true;
+                    clip: true;
+                    Layout.fillHeight: true;
+                    Layout.fillWidth: true;
+
+                    cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
+                    cellHeight: cellWidth;
+
+                    delegate: GlyphDelegate {
+                        textColor: sysPalette.text;
+                        fillColor: sysPalette.base;
+                        fontFamilies: root.fontFamilies;
+                        fontSize: root.fontSize;
+                        fontStyle: root.fontStyle;
+                        fontWeight: root.fontWeight;
+                        onGlyphDoubleClicked: (index)=> {mainWindow.slotInsertRichText(index)};
+                        onGlyphClicked: (index)=> {
+                                            if (model.childCount > 1){
+                                                charMapAltGlyphs.open()
+                                            }
                                         }
-                                    }
-                }
+                    }
 
-                ScrollBar.vertical: ScrollBar {
-                    id: charMapScroll;
-                }
+                    ScrollBar.vertical: ScrollBar {
+                        id: charMapScroll;
+                    }
 
-                Popup {
-                    id: charMapAltGlyphs
-                    x: 0
-                    y: 0
-                    width: charMap.width
-                    height: charMap.cellHeight*3;
-                    modal: true
-                    focus: true
-                    padding: 2;
-                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                    Popup {
+                        id: charMapAltGlyphs
+                        x: 0
+                        y: 0
+                        width: charMap.width
+                        height: charMap.cellHeight*3;
+                        modal: true
+                        focus: true
+                        padding: 2;
+                        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
-                    palette: TabBar.palette;
-                    GridView {
-                        anchors.fill: parent;
-                        clip: true;
+                        palette: TabBar.palette;
+                        GridView {
+                            anchors.fill: parent;
+                            clip: true;
 
-                        cellWidth: (width - charMapAltGlyphsScroll.implicitBackgroundWidth)/8;
-                        cellHeight: cellWidth;
+                            cellWidth: (width - charMapAltGlyphsScroll.implicitBackgroundWidth)/8;
+                            cellHeight: cellWidth;
 
-                        ScrollBar.vertical: ScrollBar {
-                            id: charMapAltGlyphsScroll;
-                        }
-
-                        model: DelegateModel {
-                            model: charMap.model
-                            property alias rIndex: charMap.currentIndex;
-                            property var defaultIndex: modelIndex(-1);
-                            onRIndexChanged: {
-                                rootIndex = defaultIndex;
-                                rootIndex = modelIndex(rIndex);
+                            ScrollBar.vertical: ScrollBar {
+                                id: charMapAltGlyphsScroll;
                             }
 
-                            delegate: GlyphDelegate {
-                                textColor: sysPalette.text;
-                                fillColor: sysPalette.base;
-                                fontFamilies: root.fontFamilies;
-                                fontSize: root.fontSize;
-                                fontStyle: root.fontStyle;
-                                fontWeight: root.fontWeight;
-                                onGlyphDoubleClicked: (index)=> {
-                                                          mainWindow.slotInsertRichText(charMap.currentIndex, index);
-                                                          charMapAltGlyphs.close()
-                                                      };
-                                onGlyphClicked: (index)=> {
-                                                    mainWindow.slotInsertRichText(charMap.currentIndex, index);
-                                                    charMapAltGlyphs.close()
-                                                };
-                            }
+                            model: DelegateModel {
+                                model: charMap.model
+                                property alias rIndex: charMap.currentIndex;
+                                property var defaultIndex: modelIndex(-1);
+                                onRIndexChanged: {
+                                    rootIndex = defaultIndex;
+                                    rootIndex = modelIndex(rIndex);
+                                }
 
+                                delegate: GlyphDelegate {
+                                    textColor: sysPalette.text;
+                                    fillColor: sysPalette.base;
+                                    fontFamilies: root.fontFamilies;
+                                    fontSize: root.fontSize;
+                                    fontStyle: root.fontStyle;
+                                    fontWeight: root.fontWeight;
+                                    onGlyphDoubleClicked: (index)=> {
+                                                              mainWindow.slotInsertRichText(charMap.currentIndex, index);
+                                                              charMapAltGlyphs.close()
+                                                          };
+                                    onGlyphClicked: (index)=> {
+                                                        mainWindow.slotInsertRichText(charMap.currentIndex, index);
+                                                        charMapAltGlyphs.close()
+                                                    };
+                                }
+
+                            }
                         }
                     }
                 }
-
             }
         }
     }

@@ -46,6 +46,8 @@ linux-build-qt6-nightly:
   - .nightly-job-mixin
   interruptible: false
   variables:
+    # TODO: Gmic still doesn't build for Qt6
+    KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: True
     EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
     EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
     KDECI_EXTRA_CMAKE_ARGS: >

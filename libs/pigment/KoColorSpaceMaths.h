@@ -47,13 +47,13 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint8>
 public:
     typedef qint32 compositetype;
     typedef qint64 mixtype;
-    static const quint8 zeroValue = 0;
-    static const quint8 unitValue = 0x00FF;
-    static const quint8 halfValue = 0x00FF / 2;
-    static const quint8 max = 0x00FF;
-    static const quint8 min = 0;
-    static const quint8 epsilon = 1;
-    static const qint8 bits = 8;
+    static constexpr quint8 zeroValue = 0;
+    static constexpr quint8 unitValue = 0x00FF;
+    static constexpr quint8 halfValue = 0x00FF / 2;
+    static constexpr quint8 max = 0x00FF;
+    static constexpr quint8 min = 0;
+    static constexpr quint8 epsilon = 1;
+    static constexpr qint8 bits = 8;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
@@ -63,13 +63,13 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint16>
 public:
     typedef qint64 compositetype;
     typedef qint64 mixtype;
-    static const quint16 zeroValue = 0;
-    static const quint16 unitValue = 0xFFFF;
-    static const quint16 halfValue = 0xFFFF / 2;
-    static const quint16 max = 0xFFFF;
-    static const quint16 min = 0;
-    static const quint16 epsilon = 1;
-    static const qint8 bits = 16;
+    static constexpr quint16 zeroValue = 0;
+    static constexpr quint16 unitValue = 0xFFFF;
+    static constexpr quint16 halfValue = 0xFFFF / 2;
+    static constexpr quint16 max = 0xFFFF;
+    static constexpr quint16 min = 0;
+    static constexpr quint16 epsilon = 1;
+    static constexpr qint8 bits = 16;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
@@ -79,13 +79,13 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<qint16>
 public:
     typedef qint64 compositetype;
     typedef qint64 mixtype;
-    static const qint16 zeroValue = 0;
-    static const qint16 unitValue = 32767;
-    static const qint16 halfValue = 32767 / 2;
-    static const qint16 max = 32767;
-    static const qint16 min = -32768;
-    static const qint16 epsilon = 1;
-    static const qint8 bits = 16;
+    static constexpr qint16 zeroValue = 0;
+    static constexpr qint16 unitValue = 32767;
+    static constexpr qint16 halfValue = 32767 / 2;
+    static constexpr qint16 max = 32767;
+    static constexpr qint16 min = -32768;
+    static constexpr qint16 epsilon = 1;
+    static constexpr qint8 bits = 16;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
@@ -95,13 +95,13 @@ class KRITAPIGMENT_EXPORT KoColorSpaceMathsTraits<quint32>
 public:
     typedef qint64 compositetype;
     typedef qint64 mixtype;
-    static const quint32 zeroValue = 0;
-    static const quint32 unitValue = 0xFFFFFFFF;
-    static const quint32 halfValue = 0xFFFFFFFF / 2;
-    static const quint32 max = 0xFFFFFFFF;
-    static const quint32 min = 0;
-    static const quint32 epsilon = 1;
-    static const qint8 bits = 32;
+    static constexpr quint32 zeroValue = 0;
+    static constexpr quint32 unitValue = 0xFFFFFFFF;
+    static constexpr quint32 halfValue = 0xFFFFFFFF / 2;
+    static constexpr quint32 max = 0xFFFFFFFF;
+    static constexpr quint32 min = 0;
+    static constexpr quint32 epsilon = 1;
+    static constexpr qint8 bits = 32;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
@@ -122,7 +122,7 @@ public:
     static const half max;
     static const half min;
     static const half epsilon;
-    static const qint8 bits = 16;
+    static constexpr qint8 bits = 16;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 #endif
@@ -139,7 +139,7 @@ public:
     static const float max;
     static const float min;
     static const float epsilon;
-    static const qint8 bits = 32;
+    static constexpr qint8 bits = 32;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 
@@ -155,7 +155,7 @@ public:
     static const double max;
     static const double min;
     static const double epsilon;
-    static const qint8 bits = 64;
+    static constexpr qint8 bits = 64;
     static const KoChannelInfo::enumChannelValueType channelValueType;
 };
 

@@ -489,11 +489,6 @@ if (Mlt7_FOUND)
 endif()
 
 if(WIN32)
-    # Private headers are needed for:
-    #    * KisDlgCustomTabletResolution
-    #    * KisScreenInformationAdapter
-    include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
-
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_win.cpp
@@ -708,12 +703,24 @@ target_link_libraries(kritaui
         kritaresources
 )
 
+if(WIN32)
+    # Private headers are needed for:
+    #    * KisDlgCustomTabletResolution
+    #    * KisScreenInformationAdapter
+    set_source_files_properties(
+        dialogs/KisDlgCustomTabletResolution.cpp
+        opengl/KisScreenInformationAdapter.cpp
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+endif()
+
 if (QT_MAJOR_VERSION STREQUAL "6")
-target_link_libraries(kritaui
-    PRIVATE
-        Qt6::OpenGLWidgets
-        Qt6::SvgWidgets
-)
+    target_link_libraries(kritaui
+        PRIVATE
+            Qt6::OpenGLWidgets
+            Qt6::SvgWidgets
+    )
 endif()
 
 if (Mlt7_FOUND)

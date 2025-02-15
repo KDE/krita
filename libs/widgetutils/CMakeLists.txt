@@ -97,6 +97,14 @@ set(kritawidgetutils_LIB_SRCS
     KisClickableLabel.cpp
 )
 
+# Add QtGui's private headers to KKeySequenceWidget, which are
+# required for the shortcuts translation
+set_source_files_properties(xmlgui/kkeysequencewidget.cpp
+    PROPERTIES
+    INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+    )
+
+
 if (HAVE_DBUS)
     set(kritawidgetutils_LIB_SRCS ${kritawidgetutils_LIB_SRCS}
         xmlgui/kmainwindowiface.cpp
@@ -112,18 +120,10 @@ qt_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
 kis_add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
 
-if (QT_MAJOR_VERSION STREQUAL "6")
-    set (QtGui_PRIVATE_INCLUDE_DIRS ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
-else()
-    set (QtGui_PRIVATE_INCLUDE_DIRS ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
-endif()
-
 target_include_directories(kritawidgetutils
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
-    PRIVATE
-    ${QtGui_PRIVATE_INCLUDE_DIRS}
 )
 
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)

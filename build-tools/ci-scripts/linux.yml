@@ -69,7 +69,7 @@ linux-debug-weekly:
 linux-asan-weekly:
   extends:
   - linux-build
-  - .ci-manual-and-weekly-job-mixin
+  - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:
@@ -85,6 +85,10 @@ linux-asan-weekly:
     KRITACI_ALLOW_NO_PYQT: True
     LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
 
+linux-asan-manual:
+  extends:
+  - linux-asan-weekly
+  - .ci-manual-job-mixin
 
 linux-release:
   extends:

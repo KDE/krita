@@ -2353,6 +2353,8 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         }
     }
 
+    // TODO QT6: check what this code actually does?
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     {
         // HACK ALERT! Remove title widget background, thus making
         // it consistent across all systems
@@ -2364,6 +2366,7 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
             }
         }
     }
+#endif
 }
 
 KisDlgPreferences::~KisDlgPreferences()

@@ -261,9 +261,11 @@ for lib in $PLUGINS/*.so*; do
   patchelf --set-rpath '$ORIGIN/..' $lib;
 done
 
-for lib in $APPDIR/usr/lib/python3.10/site-packages/PyQt5/*.so*; do
-  patchelf --set-rpath '$ORIGIN/../..' $lib;
-done
+if [ -d $APPDIR/usr/lib/python3.10/site-packages/PyQt5/ ] ; then
+  for lib in $APPDIR/usr/lib/python3.10/site-packages/PyQt5/*.so*; do
+    patchelf --set-rpath '$ORIGIN/../..' $lib;
+  done
+fi
 
 for lib in $APPDIR/usr/lib/python3.10/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;

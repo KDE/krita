@@ -9,7 +9,7 @@
 
 #include <boost/optional.hpp>
 
-#include <QtVersionChecks>
+#include <QtGlobal>
 
 #include <QOpenGLContext>
 #include <QOpenGLDebugLogger>

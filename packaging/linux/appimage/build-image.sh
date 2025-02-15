@@ -143,7 +143,11 @@ fi
 
 # Step 1: Copy over all necessary resources required by dependencies or libraries that are missed by linuxdeployqt
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
-cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
+if [ -d $DEPS_INSTALL_PREFIX/share/kf5 ]; then
+    cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
+else
+    cp -r $DEPS_INSTALL_PREFIX/share/kf6 $APPDIR/usr/share
+fi
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/lib/python3.10 $APPDIR/usr/lib
 if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then

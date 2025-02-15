@@ -61057,25 +61057,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "左键"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "中键"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "右键"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "无效按钮"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "按住 %1，然后按 %2"

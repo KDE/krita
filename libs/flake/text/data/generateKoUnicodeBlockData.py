@@ -53,7 +53,7 @@ outFile.writelines(["\nKoUnicodeBlockDataFactory::KoUnicodeBlockDataFactory()", 
 
 outFile.write("\n")
 for block in blocks:
-    outFile.writelines(["\n    d->blockMap.append(KoUnicodeBlockData(i18nc(\"@title\", \"" + block["name"] + "\"), QChar(0x" + block["start"] + "), QChar(0x" + block["end"] + ")));"])
+    outFile.writelines(["\n    d->blockMap.append(KoUnicodeBlockData(i18nc(\"@title\", \"" + block["name"] + "\"), 0x" + block["start"] + ", 0x" + block["end"] + "));"])
 
 outFile.writelines("\n}")
 
@@ -62,7 +62,7 @@ outFile.write("\n")
 outFile.writelines(["\nKoUnicodeBlockDataFactory::~KoUnicodeBlockDataFactory()", "\n{","\n}"])
 
 outFile.write("\n")
-outFile.writelines(["\nKoUnicodeBlockData KoUnicodeBlockDataFactory::blockForUCS(QChar codepoint)", "\n{"])
+outFile.writelines(["\nKoUnicodeBlockData KoUnicodeBlockDataFactory::blockForUCS(const uint &codepoint)", "\n{"])
 outFile.writelines(["\n    for (int i = 0; i < d->blockMap.size(); i++) {","\n        KoUnicodeBlockData block = d->blockMap.at(i);","\n        if (block.match(codepoint)) {","\n                return block;","\n        }","\n    }\n    return noBlock();","\n}"])
 
 outFile.close()

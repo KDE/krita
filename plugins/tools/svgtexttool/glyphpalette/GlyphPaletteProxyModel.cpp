@@ -49,12 +49,14 @@ bool GlyphPaletteProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &
     if (!model) {
         return true;
     }
+    if (m_filter == 0) {
+        return true;
+    }
     const KoUnicodeBlockData block = model->blocks().value(m_filter-1, KoUnicodeBlockDataFactory::noBlock());
     const QModelIndex idx = sourceModel()->index(sourceRow, 0, sourceParent);
     const QString main = sourceModel()->data(idx).toString();
     if (main.isEmpty()) return false;
-    const QChar c = main.front();
 
-    bool scriptMatch = m_filter == 0? true: block.match(c);
+    bool scriptMatch = block.match(main.toUcs4().first());
     return scriptMatch;
 }

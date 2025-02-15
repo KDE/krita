@@ -9,8 +9,6 @@
 #include <hb.h>
 #include <hb-ft.h>
 
-
-
 struct KoFontGlyphModel::Private {
     struct InfoNode {
         virtual ~InfoNode() {}
@@ -60,6 +58,7 @@ struct KoFontGlyphModel::Private {
 
     static QVector<CodePointInfo> charMap(FT_FaceSP face) {
         QVector<CodePointInfo> codePoints;
+
         FT_UInt   gindex;
         FT_ULong  charcode = FT_Get_First_Char(face.data(), &gindex);
 
@@ -73,6 +72,7 @@ struct KoFontGlyphModel::Private {
             codePoints.append(cpi);
             charcode = FT_Get_Next_Char(face.data(), charcode, &gindex);
         }
+
         return codePoints;
     }
 
@@ -455,9 +455,18 @@ void KoFontGlyphModel::setFace(FT_FaceSP face)
 
     for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
         it->glyphs.append(VSData.value(it->ucs));
-        KoUnicodeBlockData block = blockFactory.blockForUCS(QChar(it->ucs));
-        if (!d->blocks.contains(block)) {
-            d->blocks.append(block);
+
+        auto block = d->blocks.begin();
+        for (; block != d->blocks.end(); block++) {
+            if (block->match(it->ucs)) {
+                break;
+            }
+        }
+        if (block == d->blocks.end()) {
+            KoUnicodeBlockData newBlock = blockFactory.blockForUCS(it->ucs);
+            if (newBlock != KoUnicodeBlockDataFactory::noBlock()) {
+                d->blocks.append(newBlock);
+            }
         }
     }
     std::sort(d->blocks.begin(), d->blocks.end(), sortBlocks);

@@ -15,20 +15,20 @@
 #include <klocalizedstring.h>
 
 struct KRITAFLAKE_EXPORT KoUnicodeBlockData : public boost::equality_comparable<KoUnicodeBlockData> {
-    KoUnicodeBlockData(QString name, QChar start, QChar end)
+    KoUnicodeBlockData(QString name, uint start, uint end)
         : name(name)
         , start(start)
         , end(end) {}
     QString name; ///< Name of the block.
-    QChar start; ///< Start char
-    QChar end; ///< End char
+    uint start; ///< Start char
+    uint end; ///< End char
 
     bool operator==(const KoUnicodeBlockData &rhs) const {
         return (start == rhs.start && end == rhs.end);
     }
 
-    bool match (const QChar &codepoint) const {
-        return codepoint.unicode() >= start.unicode() && codepoint.unicode() <= end.unicode();
+    bool match (const uint &codepoint) const {
+        return codepoint >= start && codepoint <= end;
     }
 };
 
@@ -40,11 +40,11 @@ public:
     ~KoUnicodeBlockDataFactory();
 
     // Returns the unicode block for the given code point, if not available, returns noBlock().
-    KoUnicodeBlockData blockForUCS(QChar codepoint);
+    KoUnicodeBlockData blockForUCS(const uint &codepoint);
 
     // Default block when there's no other blocks.
     static KoUnicodeBlockData noBlock() {
-        return KoUnicodeBlockData(i18nc("@title", "No Block"), QChar(0x10FFFF), QChar(0x10FFFF));
+        return KoUnicodeBlockData(i18nc("@title", "No Block"), 0x10FFFF, 0x10FFFF);
     }
 private:
     struct Private;

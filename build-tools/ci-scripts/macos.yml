@@ -10,7 +10,7 @@ macos-build:
     KDECI_CC_CACHE: /Users/gitlab/caches/krita-macos/ccache
     KDECI_CACHE_PATH: /Users/gitlab/caches/krita-macos/artifacts
     KDECI_GITLAB_SERVER: https://invent.kde.org/
-    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-macos-qt5.15
+    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/krita-macos
     EXTERNALS_DOWNLOAD_DIR: /Users/gitlab/caches/krita-macos/downloads
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
     MACOSX_DEPLOYMENT_TARGET: "10.14"
@@ -32,8 +32,8 @@ macos-build:
     KDECI_ONLY_BUILD: True
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_MACOS --depth=1
-    - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_MACOS --depth=1
+    - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
 
     - python3 -m venv venv --upgrade-deps

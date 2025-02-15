@@ -9,6 +9,8 @@
 
 #include <boost/optional.hpp>
 
+#include <QtVersionChecks>
+
 #include <QOpenGLContext>
 #include <QOpenGLDebugLogger>
 #include <QOpenGLFunctions>
@@ -44,6 +46,7 @@
 #  define GL_RENDERER 0x1F01
 #endif
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 /// openGL ES headers use a bit different names in prototypes,
 /// add a workaround for it
 #if !defined APIENTRYP && defined GL_APIENTRYP
@@ -51,6 +54,9 @@
 #endif
 
 typedef void (APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
+#else
+typedef void (QOPENGLF_APIENTRYP PFNGLINVALIDATEBUFFERDATAPROC) (GLuint buffer);
+#endif
 
 namespace
 {

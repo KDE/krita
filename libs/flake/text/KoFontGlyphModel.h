@@ -9,6 +9,7 @@
 #include <QAbstractItemModel>
 #include <QScopedPointer>
 #include "KoFontLibraryResourceUtils.h"
+#include "data/KoUnicodeBlockData.h"
 #include "kritaflake_export.h"
 
 /**
@@ -49,6 +50,8 @@ public:
     void setFace(FT_FaceSP face);
 
     QHash<int, QByteArray> roleNames() const override;
+
+    QVector<KoUnicodeBlockData> blocks() const;
 
 private:
     struct Private;

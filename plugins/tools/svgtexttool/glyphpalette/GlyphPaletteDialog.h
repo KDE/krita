@@ -31,6 +31,8 @@ public Q_SLOTS:
     void slotInsertRichText(int charRow, int glyphRow = -1, bool replace = false);
 
     void slotChangeFilter(int filterRow);
+
+    void slotUpdateFilterList();
 private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextProperties m_lastUsedProperties;

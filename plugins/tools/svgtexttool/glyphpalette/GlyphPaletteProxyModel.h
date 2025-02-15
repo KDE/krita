@@ -20,7 +20,7 @@ public:
 
     int filter() const;
 
-    static QMap<int, QString> filterLabels();
+    QMap<int, QString> filterLabels();
 
 public Q_SLOTS:
     void setFilter(int filter);
@@ -28,7 +28,8 @@ public Q_SLOTS:
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
 private:
-    QChar::Script m_filter{QChar::Script_Unknown};
+    int m_filter{0};
+
 };
 
 #endif // GLYPHPALETTEPROXYMODEL_H

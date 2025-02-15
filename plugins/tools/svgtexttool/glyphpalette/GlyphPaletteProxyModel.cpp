@@ -6,6 +6,7 @@
 #include "GlyphPaletteProxyModel.h"
 #include <KLocalizedString>
 #include <QDebug>
+#include <data/KoUnicodeBlockData.h>
 
 GlyphPaletteProxyModel::GlyphPaletteProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent)
@@ -25,30 +26,35 @@ int GlyphPaletteProxyModel::filter() const
 QMap<int, QString> GlyphPaletteProxyModel::filterLabels()
 {
     QMap<int, QString> labels;
-    labels.insert(QChar::Script_Unknown, i18n("Any Script"));
-    labels.insert(QChar::Script_Latin, i18n("Latin"));
-    labels.insert(QChar::Script_Greek, i18n("Greek"));
-    labels.insert(QChar::Script_Cyrillic, i18n("Cyrillic"));
-    labels.insert(QChar::Script_Armenian, i18n("Armenian"));
-    labels.insert(QChar::Script_Hebrew, i18n("Hebrew"));
-    labels.insert(QChar::Script_Arabic, i18n("Arabic"));
-    labels.insert(QChar::Script_Syriac, i18n("Syriac"));
+    KoFontGlyphModel *model = qobject_cast<KoFontGlyphModel*>(sourceModel());
+    labels.insert(0, i18nc("@title", "All glyphs"));
+    if (model) {
+        for (int i=0; i < model->blocks().size(); i++) {
+            labels.insert(i+1, model->blocks().at(i).name);
+        }
+    }
     return labels;
 }
 
 void GlyphPaletteProxyModel::setFilter(int filter)
 {
-    m_filter = QChar::Script(filter);
+    m_filter = filter;
     invalidateFilter();
 }
 
 bool GlyphPaletteProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
     if (sourceParent.isValid()) return true;
-    QModelIndex idx = sourceModel()->index(sourceRow, 0, sourceParent);
-    QString main = sourceModel()->data(idx).toString();
-    QChar::Script script = main.isEmpty()? QChar::Script_Unknown :main.front().script();
+    KoFontGlyphModel *model = qobject_cast<KoFontGlyphModel*>(sourceModel());
+    if (!model) {
+        return true;
+    }
+    const KoUnicodeBlockData block = model->blocks().value(m_filter-1, KoUnicodeBlockDataFactory::noBlock());
+    const QModelIndex idx = sourceModel()->index(sourceRow, 0, sourceParent);
+    const QString main = sourceModel()->data(idx).toString();
+    if (main.isEmpty()) return false;
+    const QChar c = main.front();
 
-    bool scriptMatch = m_filter == 0 || m_filter == 1? true: script == m_filter;
+    bool scriptMatch = m_filter == 0? true: block.match(c);
     return scriptMatch;
 }

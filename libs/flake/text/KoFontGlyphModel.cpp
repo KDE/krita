@@ -53,6 +53,7 @@ struct KoFontGlyphModel::Private {
     };
     QVector<CodePointInfo> codePoints;
     QMap<QString, KoOpenTypeFeatureInfo> featureData;
+    QVector<KoUnicodeBlockData> blocks;
 
     ~Private() = default;
 
@@ -114,7 +115,6 @@ struct KoFontGlyphModel::Private {
         for (uint script = 0; script < scriptCount; script++) {
             uint languageCount = hb_ot_layout_script_get_language_tags(hbFace.data(), table, script, 0, nullptr, nullptr);
 
-                uint targetLanguage = HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX;
                 for(uint j = 0; j < languageCount; j++) {
                     hb_tag_t langTag;
                     uint count = 1;
@@ -178,17 +178,18 @@ struct KoFontGlyphModel::Private {
 
                 for(auto nameId = nameIds.begin(); nameId != nameIds.end(); nameId++) {
                     uint length = hb_ot_name_get_utf8(hbFace.data(), *nameId, languageTag, nullptr, nullptr)+1;
-                    char buff[length];
-                    hb_ot_name_get_utf8(hbFace.data(), *nameId, languageTag, &length, buff);
+                    std::vector<char> buff(length);
+                    hb_ot_name_get_utf8(hbFace.data(), *nameId, languageTag, &length, buff.data());
                     if (length > 0) {
+                        const QString nameString = QString::fromUtf8(buff.data(), length);
                         if (*nameId == labelId) {
-                            info.name = QString::fromUtf8(buff, length);
+                            info.name = nameString;
                         } else if (*nameId == toolTipId) {
-                            info.description = QString::fromUtf8(buff, length);
+                            info.description = nameString;
                         } else if (*nameId == sampleId) {
-                            info.sample = QString::fromUtf8(buff, length);
+                            info.sample = nameString;
                         } else {
-                            info.namedParameters.append(QString::fromUtf8(buff, length));
+                            info.namedParameters.append(nameString);
                         }
                     }
                 }
@@ -440,14 +441,26 @@ QModelIndex KoFontGlyphModel::indexForString(QString grapheme)
     return QModelIndex();
 }
 
+static bool sortBlocks(const KoUnicodeBlockData &a, const KoUnicodeBlockData &b) {
+    return a.start < b.start;
+}
+
 void KoFontGlyphModel::setFace(FT_FaceSP face)
 {
     beginResetModel();
     d->codePoints = Private::charMap(face);
+    d->blocks.clear();
     QMap<uint, QVector<Private::GlyphInfo>> VSData = Private::getVSData(face);
+    KoUnicodeBlockDataFactory blockFactory;
+
     for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
         it->glyphs.append(VSData.value(it->ucs));
+        KoUnicodeBlockData block = blockFactory.blockForUCS(QChar(it->ucs));
+        if (!d->blocks.contains(block)) {
+            d->blocks.append(block);
+        }
     }
+    std::sort(d->blocks.begin(), d->blocks.end(), sortBlocks);
     d->featureData = Private::getOpenTypeTables(face, d->codePoints);
 
     endResetModel();
@@ -460,4 +473,9 @@ QHash<int, QByteArray> KoFontGlyphModel::roleNames() const
     roles[GlyphLabel] = "glyphLabel";
     roles[ChildCount] = "childCount";
     return roles;
+}
+
+QVector<KoUnicodeBlockData> KoFontGlyphModel::blocks() const
+{
+    return d->blocks;
 }

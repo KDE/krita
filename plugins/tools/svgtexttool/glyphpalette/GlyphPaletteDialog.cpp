@@ -56,13 +56,8 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     this->setWindowTitle(i18nc("@windowTitle", "Glyph Palette"));
 
     m_charMapModel->setSourceModel(m_model);
-    for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
-        int key = m_charMapModel->filterLabels().keys().at(i);
-        QString label = m_charMapModel->filterLabels().value(key);
-        QStandardItem *item = new QStandardItem(label);
-        item->setData(key, Qt::UserRole+1);
-        m_filters->appendRow(item);
-    }
+    slotUpdateFilterList();
+    connect(m_model, SIGNAL(modelReset()), this, SLOT(slotUpdateFilterList()));
 
     if (m_quickWidget->rootObject()) {
         m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(m_model));
@@ -160,5 +155,18 @@ void GlyphPaletteDialog::slotChangeFilter(int filterRow)
         const int filter = idx.data(Qt::UserRole+1).toInt();
         qDebug() << Q_FUNC_INFO << filter;
         m_charMapModel->setFilter(filter);
+    }
+}
+
+void GlyphPaletteDialog::slotUpdateFilterList()
+{
+    m_filters->clear();
+    m_charMapModel->setFilter(0);
+    for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
+        int key = m_charMapModel->filterLabels().keys().at(i);
+        QString label = m_charMapModel->filterLabels().value(key);
+        QStandardItem *item = new QStandardItem(label);
+        item->setData(key, Qt::UserRole+1);
+        m_filters->appendRow(item);
     }
 }

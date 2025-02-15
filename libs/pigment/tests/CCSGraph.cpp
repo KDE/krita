@@ -107,4 +107,6 @@ int main(int argc, char** argv)
         errorPigment << "Unknown output type : " << outputType;
         exit(EXIT_FAILURE);
     }
+
+    return 0;
 }

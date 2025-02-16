@@ -55300,7 +55300,7 @@ msgstr ""
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr ""
-"Si este és una part d'una sèrie, introduïu el nom de la sèrie i el número."
+"Si esta és una part d'una sèrie, introduïu el nom de la sèrie i el número."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:296
 msgid "No. "
@@ -56459,7 +56459,7 @@ msgstr "{input} s'ha exportat a {output}."
 #: plugins/python/photobash_images/photobash_images_docker.py:73
 msgctxt "@title:window"
 msgid "Photobash Images"
-msgstr "Imatge del Photobash"
+msgstr "Imatge de Photobash"
 
 #: plugins/python/photobash_images/photobash_images_docker.py:141
 #: plugins/python/photobash_images/photobash_images_docker.py:471

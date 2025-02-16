@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-02-09 08:40+0100\n"
+"PO-Revision-Date: 2025-02-15 11:29+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -40928,7 +40928,7 @@ msgstr "Usuń zestaw zadań"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Dotyk"
+msgstr "Dok dotyku"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20

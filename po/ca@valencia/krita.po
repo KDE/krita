@@ -56081,7 +56081,7 @@ msgstr ""
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr ""
-"Si este és una part d'una sèrie, introduïu el nom de la sèrie i el número."
+"Si esta és una part d'una sèrie, introduïu el nom de la sèrie i el número."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
 msgid "No. "
@@ -62137,25 +62137,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "botó esquerre"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "botó central"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "botó dret"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "botó no vàlid"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Premeu i aguanteu %1, llavors premeu %2"

@@ -92,7 +92,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-13 02:03+0000\n"
-"PO-Revision-Date: 2025-02-09 08:40+0100\n"
+"PO-Revision-Date: 2025-02-15 11:29+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -19373,11 +19373,10 @@ msgid "Hard Mix"
 msgstr "Twardy mieszany"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "Twarde mieszanie"
+msgstr "Twardy mieszany HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -19440,11 +19439,10 @@ msgid "Hard Overlay"
 msgstr "Twarda nakładka"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Hard Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "Twarda nakładka"
+msgstr "Twarda nakładka HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -19941,10 +19939,10 @@ msgid "Could not remove storage %1 from the database"
 msgstr "Nie można usnąć przechowalni %1 z bazy danych"
 
 #: libs/resources/KisResourceLocator.cpp:979
-#, fuzzy, kde-format
-#| msgid "Could not synchronize %1 with the database"
+#, kde-format
 msgid "Could not synchronize updated font registery with the database"
-msgstr "Nie można zsynchronizować %1 z bazą danych."
+msgstr ""
+"Nie można zsynchronizować uaktualnionego rejestru czcionek z bazą danych"
 
 #: libs/resources/KisResourceLocator.cpp:987
 #, kde-format
@@ -19982,10 +19980,9 @@ msgstr "Zasoby tymczasowe"
 
 #: libs/resources/KisResourceLocator.cpp:1079
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "Krój czcionki"
+msgstr "Pamięć na czcionki"
 
 #: libs/resources/KisResourceLocator.cpp:1212
 #: libs/resources/KisResourceLocator.cpp:1218
@@ -20249,11 +20246,10 @@ msgid "Layer Styles"
 msgstr "Warstwy wyglądów"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "Rodzina czcionek"
+msgstr "Rodziny czcionek"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -36543,6 +36539,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE korzysta z wielu rodzajów pomocy, także finansowej. Używamy naszych "
+"środków na zwracanie członkom wydatków, które ponoszą tworząc dla nas. "
+"Pozostałe środki są wykorzystywane na wsparcie prawne, a także organizowanie "
+"konferencji i spotkań.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36550,6 +36550,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Chcielibyśmy zachęcić cię do wspierania naszego wysiłku wpłatami "
+"pieniężnymi na jeden ze sposobów pisanych na <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
@@ -39562,10 +39564,9 @@ msgstr "Nieprzezroczystość warstwy"
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgid "Move layer or mask up"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "Przesuń warstwę lub maskę wyżej"
+msgstr "Dodaj nową warstwę lub maskę"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -41281,11 +41282,10 @@ msgid "Delete the taskset"
 msgstr "Usuń zestaw zadań"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "Optymalizuj"
+msgstr "Rozmiar optyczny"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
 #, kde-format
@@ -41295,7 +41295,7 @@ msgstr "Właściwości tekstu"
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
 msgid "Touch Docker"
-msgstr "Dotyk"
+msgstr "Dok dotyku"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
@@ -44918,17 +44918,15 @@ msgstr "Tryb mieszania:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "Skala szarości (bez przezroczystości)"
+msgstr "Normalny (warstwy bez przezroczystości)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
-#, fuzzy, kde-format
-#| msgid "To layers"
+#, kde-format
 msgid "Tint  (opaque layers)"
-msgstr "Dla warstw"
+msgstr "Odcień  (nieprzezroczyste warstwy)"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intOpacity)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:125
@@ -45958,10 +45956,9 @@ msgstr "Poziom:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "Grayscale/Alpha"
+#, kde-format
 msgid "Grayscale"
-msgstr "Skala szarości/Alfa"
+msgstr "Skala szarości"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format
@@ -58659,16 +58656,13 @@ msgstr "&Przesuń warstwę z zawartością"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the group containing the first layer that contains visible content. "
-#| "Shortcut: ctrl-shift-click."
+#, kde-format
 msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-click."
 msgstr ""
 "Przesuń grupę zawierającą pierwszą warstwę zawierającą widoczną zawartość. "
-"Skrót: ctrl-shift-kliknięcie."
+"Skrót: ctrl-kliknięcie."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:77

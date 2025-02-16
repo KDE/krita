@@ -14036,7 +14036,7 @@ msgstr "在颜色超出色彩校样目标色域时进行警告，需要先启用
 #, kde-format
 msgctxt "action"
 msgid "Mirror View"
-msgstr "镜像显示"
+msgstr "镜像视图"
 
 #. i18n: context: text @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
@@ -14049,7 +14049,7 @@ msgstr "镜像显示"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr "镜像显示 - 以光标位置为轴"
+msgstr "镜像视图 - 以光标位置为轴"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -14062,7 +14062,7 @@ msgstr "镜像显示 - 以光标位置为轴"
 #, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "镜像显示 - 以画布中线为轴"
+msgstr "镜像视图 - 以画布中线为轴"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
@@ -17361,12 +17361,12 @@ msgstr "统一图层色彩空间"
 #: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
-msgstr "为图层指定特性文件"
+msgstr "分配色彩特性文件到图层"
 
 #: libs/image/kis_image.cc:1468
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
-msgstr "色彩特性文件指定"
+msgstr "分配色彩特性文件"
 
 #: libs/image/kis_image.cc:2504
 msgctxt "(qtundo-format)"
@@ -20230,7 +20230,7 @@ msgstr "选择要添加的文件"
 #: libs/widgets/KisTagSelectionWidget.cpp:122
 #, kde-format
 msgid "Assign to tag"
-msgstr "指定给标签"
+msgstr "分配到标签"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, kde-format
@@ -22212,7 +22212,7 @@ msgstr "无"
 #, kde-format
 msgctxt "floating message about mirroring"
 msgid "Horizontal mirroring: %1 "
-msgstr "画布镜像显示：%1"
+msgstr "水平镜像视图：%1"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #: libs/ui/canvas/kis_canvas_controller.cpp:360
@@ -29575,17 +29575,17 @@ msgstr "滤镜蒙版属性"
 #: libs/ui/kis_mirror_manager.cpp:37
 #, kde-format
 msgid "Mirror View"
-msgstr "镜像显示"
+msgstr "镜像视图"
 
 #: libs/ui/kis_mirror_manager.cpp:43
 #, kde-format
 msgid "Mirror View Around Cursor"
-msgstr "镜像显示 - 以光标位置为轴"
+msgstr "镜像视图 - 以光标位置为轴"
 
 #: libs/ui/kis_mirror_manager.cpp:48
 #, kde-format
 msgid "Mirror View Around Canvas"
-msgstr "镜像显示 - 以画布中心为轴"
+msgstr "镜像视图 - 以画布中线为轴"
 
 #: libs/ui/kis_node_manager.cpp:485
 #, kde-format
@@ -29945,7 +29945,7 @@ msgstr "清除颜色历史"
 #: libs/ui/kis_popup_palette.cpp:176
 #, kde-format
 msgid "Mirror Canvas"
-msgstr "画布镜像显示"
+msgstr "镜像画布视图"
 
 #: libs/ui/kis_popup_palette.cpp:185
 #, kde-format
@@ -54411,7 +54411,7 @@ msgstr "笔画方向/笔身倾角混合比例"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:19
 msgid "Assign Profile"
-msgstr "色彩特性文件指定"
+msgstr "分配色彩特性文件"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:20
 msgid "There is no active document."
@@ -54419,7 +54419,7 @@ msgstr "无活动图像。"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:53
 msgid "Assign Profile to Image"
-msgstr "图像色彩特性文件指定"
+msgstr "分配色彩特性文件到图像"
 
 #: plugins/python/channels2layers/channels2layers.py:58
 #: plugins/python/channels2layers/channels2layers.py:59
@@ -56602,7 +56602,7 @@ msgstr "常用笔刷快捷键"
 
 #: plugins/python/tenbrushes/tenbrushes.py:29
 msgid "Assign ten brush presets to ten shortcuts."
-msgstr "将十种笔刷预设指定给十个快捷键。"
+msgstr "分配十种笔刷预设到十个快捷键。"
 
 #: plugins/python/tenbrushes/tenbrushes.py:81
 #, python-brace-format
@@ -56723,7 +56723,7 @@ msgstr "常用脚本快捷键"
 
 #: plugins/python/tenscripts/tenscripts.py:28
 msgid "Assign ten scripts to ten shortcuts."
-msgstr "将十个脚本指定给十个快捷键。"
+msgstr "分配十个脚本到十个快捷键。"
 
 #: plugins/python/tenscripts/tenscripts.py:54
 #, python-brace-format

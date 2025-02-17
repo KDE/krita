@@ -419,16 +419,16 @@ if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
 # qt.conf -- to specify the location to Qt translations
 shutil.copy(fr"{KRITA_SRC_DIR}\packaging\windows\qt.conf", fr"{pkg_root}\bin")
 # DLLs from bin/
-print("INFO: Copying all DLLs except Qt5 * from bin/")
+print("INFO: Copying all DLLs except Qt5/Qt6 * from bin/")
 files = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.dll")
 pdbs = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.pdb")
 for f in itertools.chain(files, pdbs):
-    if not os.path.basename(f).startswith("Qt5"):
+    if not os.path.basename(f).startswith("Qt5") and not os.path.basename(f).startswith("Qt6"):
         shutil.copy(f, f"{pkg_root}\\bin")
 files = glob.glob(f"{DEPS_INSTALL_DIR}\\bin\\*.dll")
 for f in files:
     pdb = f"{os.path.dirname(f)}\\{os.path.splitext(os.path.basename(f))[0]}.pdb"
-    if not os.path.basename(f).startswith("Qt5"):
+    if not os.path.basename(f).startswith("Qt5") and not os.path.basename(f).startswith("Qt6"):
         shutil.copy(f, f"{pkg_root}\\bin")
         if os.path.isfile(pdb):
             shutil.copy(pdb, f"{pkg_root}\\bin")
@@ -443,13 +443,18 @@ for f in files:
 files = glob.glob(fr"{DEPS_INSTALL_DIR}\bin\libboost_system-*.dll")
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
-# KF5 plugins may be placed at different locations depending on how Qt is built
+# KF5/KF6 plugins may be placed at different locations depending on how Qt is built
 subprocess.run(["xcopy", "/S", "/Y", "/I",
                f"{DEPS_INSTALL_DIR}\\lib\\plugins\\imageformats\\", f"{pkg_root}\\bin\\imageformats\\"])
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\imageformats\\".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\imageformats\\"])
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
+
+if os.path.isdir(os.path.join(DEPS_INSTALL_DIR, "plugins/kf5/")):
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf6\\".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf6\\"])
 
 # Copy the sql drivers explicitly
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\sqldrivers\\".format(
@@ -499,8 +504,14 @@ subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\krita".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\krita"])
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kritaplugins".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\kritaplugins"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
+
+if os.path.isdir(os.path.join(DEPS_INSTALL_DIR, "share/kf5/")):
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf6".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf6"], check=True)
+
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mime".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mime"], check=True)
 # Python libs are copied by share\krita above

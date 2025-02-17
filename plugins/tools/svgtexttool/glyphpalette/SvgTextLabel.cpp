@@ -10,18 +10,31 @@
 #include <QPainter>
 #include <QImage>
 #include <QQuickWindow>
+#include <KoShapePainter.h>
 
 struct Q_DECL_HIDDEN SvgTextLabel::Private {
-    KoSvgTextShape* shape{nullptr};
+
+    Private()
+        : shape(new KoSvgTextShape())
+        , shapePainter(new KoShapePainter())
+    {
+        shape->setResolution(72, 72);
+        // Hack to avoid the textshape having 0 bounds and the KoRTree complaining about it.
+        shape->insertText(0, "a");
+        shape->relayout();
+        shapePainter->setShapes({shape.data()});
+    }
+    ~Private() {}
+
+    QScopedPointer<KoSvgTextShape> shape;
+    QScopedPointer<KoShapePainter> shapePainter;
     int padding = 2;
 };
 
 SvgTextLabel::SvgTextLabel(QQuickItem *parent)
     : QQuickPaintedItem(parent)
-    , d(new Private)
+    , d(new Private())
 {
-    d->shape = new KoSvgTextShape();
-    d->shape->setResolution(72, 72);
     setImplicitSize(10, 10);
     setOpaquePainting(true);
     setAntialiasing(true);
@@ -42,21 +55,11 @@ void SvgTextLabel::paint(QPainter *painter)
     }
 
     QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
-    qreal boxHeight = bbox.isEmpty()? fontSize(): bbox.height();
     bbox = bbox.isEmpty()? d->shape->boundingRect(): bbox;
-    qreal scale = (height()- d->padding*2) / boxHeight;
 
-    painter->translate(boundingRect().center());
-    painter->scale(scale, scale);
-    painter->translate(-bbox.center());
-
-    qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
-    QRectF scaledBounds = QRectF(0, 0, this->boundingRect().width()*pixelRatio, this->boundingRect().height()*pixelRatio);
-
-    painter->setClipRect(painter->transform().inverted().mapRect(scaledBounds));
-    painter->setPen(Qt::transparent);
-    d->shape->paint(*painter);
-
+    d->shapePainter->paint(*painter,
+                           QRectF(d->padding, d->padding, width()-(d->padding*2), height()-(d->padding*2)).toAlignedRect(),
+                           bbox);
     painter->restore();
 }
 
@@ -165,6 +168,10 @@ void SvgTextLabel::setTextColor(QColor textColor)
     }
 
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(textColor)));
+    if (this->window()) {
+        const qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
+        d->shape->setResolution(pixelRatio*72, pixelRatio*72);
+    }
     emit textColorChanged(textColor);
 }
 

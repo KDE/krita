@@ -274,7 +274,7 @@ view_toggledockers=none
 view_toggledockertitlebars=none
 view_toggle_painting_assistants=none
 view_toggle_perspective_grid=none
-view_zoom_in=Ctrl++
+view_zoom_in=Ctrl+=; Ctrl++
 view_zoom_out=Ctrl+-
 vmirror_action=none
 windows_cascade=none

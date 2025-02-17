@@ -35,14 +35,15 @@ QString GlyphPaletteProxyModel::searchText() const
     return d->searchText;
 }
 
-QMap<int, QString> GlyphPaletteProxyModel::filterLabels()
+QVariantList GlyphPaletteProxyModel::blockLabels() const
 {
-    QMap<int, QString> labels;
+    QVariantList labels;
+
     KoFontGlyphModel *model = qobject_cast<KoFontGlyphModel*>(sourceModel());
-    labels.insert(0, i18nc("@title", "All glyphs"));
+    labels.append(QVariantMap({{"name", i18nc("@title", "All glyphs")}, {"value", 0}}));
     if (model) {
         for (int i=0; i < model->blocks().size(); i++) {
-            labels.insert(i+1, model->blocks().at(i).name);
+            labels.append(QVariantMap({{"name", model->blocks().at(i).name}, {"value", i+1}}));
         }
     }
     return labels;
@@ -81,6 +82,11 @@ void GlyphPaletteProxyModel::setBlockFilter(int filter)
             }
         }
     }
+}
+
+void GlyphPaletteProxyModel::emitBlockLabelsChanged()
+{
+    emit blockLabelsChanged();
 }
 
 bool GlyphPaletteProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const

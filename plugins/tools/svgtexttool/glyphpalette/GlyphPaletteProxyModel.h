@@ -15,6 +15,7 @@ class GlyphPaletteProxyModel: public QSortFilterProxyModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(QVariantList blockLabels READ blockLabels NOTIFY blockLabelsChanged)
     Q_PROPERTY(int blockFilter READ blockFilter WRITE setBlockFilter NOTIFY blockFilterChanged)
     Q_PROPERTY(QString searchText READ searchText() WRITE setSearchText NOTIFY searchTextChanged)
 public:
@@ -24,13 +25,16 @@ public:
     int blockFilter() const;
     QString searchText() const;
 
-    QMap<int, QString> filterLabels();
+    QVariantList blockLabels() const;
 
 public Q_SLOTS:
     void setSearchText(const QString &text);
     void setBlockFilter(int filter);
 
+    void emitBlockLabelsChanged();
+
 Q_SIGNALS:
+    void blockLabelsChanged();
     void blockFilterChanged();
     void searchTextChanged();
 

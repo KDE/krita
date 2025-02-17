@@ -22,24 +22,18 @@ class GlyphPaletteDialog: public KoDialog
 public:
     GlyphPaletteDialog(QWidget *parent = nullptr);
 
-    void setGlyphModelFromProperties(KoSvgTextProperties properties, QString text = QString());
+    void setGlyphModelFromProperties(const QPair<KoSvgTextProperties, KoSvgTextProperties> &properties, const QString &text);
 
 Q_SIGNALS:
     void signalInsertRichText(KoSvgTextShape *text, bool replace);
 public Q_SLOTS:
 
     void slotInsertRichText(int charRow, int glyphRow = -1, bool replace = false);
-
-    void slotChangeFilter(int filterRow);
-    void slotChangeSearchText(QString searchText);
-
-    void slotUpdateFilterList();
 private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextProperties m_lastUsedProperties;
     KoFontGlyphModel *m_model;
     GlyphPaletteProxyModel *m_charMapModel;
-    QStandardItemModel *m_filters;
 };
 
 #endif // GLYPHPALETTEDIALOG_H

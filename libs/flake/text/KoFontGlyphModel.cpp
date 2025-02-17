@@ -272,8 +272,8 @@ struct KoFontGlyphModel::Private {
 
 
 
-KoFontGlyphModel::KoFontGlyphModel()
-    : QAbstractItemModel()
+KoFontGlyphModel::KoFontGlyphModel(QObject *parent)
+    : QAbstractItemModel(parent)
     , d(new Private)
 {
 }

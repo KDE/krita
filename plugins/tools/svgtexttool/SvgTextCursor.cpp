@@ -327,12 +327,12 @@ void SvgTextCursor::removeLastCodePoint()
     }
 }
 
-KoSvgTextProperties SvgTextCursor::currentTextProperties() const
+QPair<KoSvgTextProperties, KoSvgTextProperties> SvgTextCursor::currentTextProperties() const
 {
     if (d->shape) {
-        return d->shape->propertiesForPos(d->pos);
+        return QPair<KoSvgTextProperties, KoSvgTextProperties>(d->shape->propertiesForPos(d->pos), d->shape->propertiesForPos(d->pos, true));
     }
-    return KoSvgTextProperties();
+    return QPair<KoSvgTextProperties, KoSvgTextProperties>();
 }
 
 QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const

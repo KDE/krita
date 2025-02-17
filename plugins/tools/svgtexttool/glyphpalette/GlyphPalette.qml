@@ -12,9 +12,8 @@ import org.krita.tools.text 1.0
 Rectangle {
     id: root;
     anchors.fill: parent;
-    property QtObject model;
-    property QtObject charMapModel;
-    property QtObject charMapFilterModel;
+    property QtObject model: glyphModel;
+    property GlyphPaletteProxyModel charMapModel: charMapProxyModel;
 
     property int currentIndex: 0;
     property var fontFamilies: [];
@@ -54,10 +53,11 @@ Rectangle {
             id: glyphAlts;
             model: DelegateModel {
                 id: glyphAltModel
-                model: root.model
+                model: root.model;
                 property alias rIndex: root.currentIndex;
                 property var defaultIndex: modelIndex(-1);
                 onRIndexChanged: {
+                    // This first line is necessary to reset the model to the root index.
                     rootIndex = defaultIndex;
                     rootIndex = modelIndex(root.currentIndex);
                 }
@@ -71,7 +71,6 @@ Rectangle {
                     fontWeight: root.fontWeight;
                     onGlyphDoubleClicked: (index)=> {mainWindow.slotInsertRichText(root.currentIndex, index, true)};
                 }
-
             }
             focus: true;
             clip: true;
@@ -92,24 +91,26 @@ Rectangle {
             spacing: 1;
             ListView {
                 id: charMapFilter
-                model: charMapFilterModel;
+                model: root.charMapModel.blockLabels;
                 Layout.minimumWidth: 100;
                 Layout.maximumWidth: 200;
                 Layout.fillHeight: true;
                 Layout.fillWidth: true;
 
                 onCurrentIndexChanged: {
-                    mainWindow.slotChangeFilter(currentIndex);
+                   root.charMapModel.blockFilter = currentIndex;
                 }
 
                 clip: true;
                 delegate: ItemDelegate {
-                    width: parent.width;
-                    text: model.display;
+                    width: charMapFilter !== undefined? charMapFilter.width: 0;
+                    text: modelData.name;
                     highlighted: ListView.isCurrentItem;
                     onClicked: {
-                        charMapFilter.currentIndex = index;
+                        charMapFilter.currentIndex = modelData.value;
                     }
+                }
+                ScrollBar.vertical: ScrollBar {
                 }
             }
 
@@ -123,7 +124,7 @@ Rectangle {
                 TextField {
                     id: searchInput;
                     onTextEdited: {
-                        mainWindow.slotChangeSearchText(text);
+                        root.charMapModel.searchText = text;
                     }
                     placeholderText: i18nc("@info:placeholder", "Search...");
                     Layout.fillWidth: true;

@@ -17,18 +17,10 @@
 #include <KoFontRegistry.h>
 #include <KoSvgText.h>
 
-#include <KisStaticInitializer.h>
-#include "glyphpalette/SvgTextLabel.h"
-KIS_DECLARE_STATIC_INITIALIZER {
-    qmlRegisterType<SvgTextLabel>("org.krita.tools.text", 1, 0, "SvgTextLabel");
-
-}
-
 GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     : KoDialog(parent)
-    , m_model(new KoFontGlyphModel)
-    , m_charMapModel(new GlyphPaletteProxyModel)
-    , m_filters(new QStandardItemModel)
+    , m_model(new KoFontGlyphModel(this))
+    , m_charMapModel(new GlyphPaletteProxyModel(this))
 {
     setMinimumSize(500, 300);
 
@@ -37,11 +29,6 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     m_quickWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
     m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
-
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
-    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     /*
     // Default to fusion style unless the user forces another style
@@ -49,33 +36,34 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
              QQuickStyle::setStyle(QStringLiteral("Fusion"));
         }
     */
+    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
+    m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
+
+    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
+    m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
     m_quickWidget->setPalette(this->palette());
-    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));
-
-    this->setWindowTitle(i18nc("@windowTitle", "Glyph Palette"));
+    this->setWindowTitle(i18nc("@title:window", "Glyph Palette"));
 
     m_charMapModel->setSourceModel(m_model);
-    slotUpdateFilterList();
-    connect(m_model, SIGNAL(modelReset()), this, SLOT(slotUpdateFilterList()));
+    connect(m_model, SIGNAL(modelReset()), m_charMapModel, SLOT(emitBlockLabelsChanged()));
 
-    if (m_quickWidget->rootObject()) {
-        m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(m_model));
-        m_quickWidget->rootObject()->setProperty("charMapModel", QVariant::fromValue(m_charMapModel));
-        m_quickWidget->rootObject()->setProperty("charMapFilterModel", QVariant::fromValue(m_filters));
-    }
+    m_quickWidget->rootContext()->setContextProperty("glyphModel", QVariant::fromValue(m_model));
+    m_quickWidget->rootContext()->setContextProperty("charMapProxyModel", QVariant::fromValue(m_charMapModel));
+
+    m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
     }
 }
 
-void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties properties, QString text)
+void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProperties, KoSvgTextProperties> &properties, const QString &text)
 {
-    if (m_lastUsedProperties.property(KoSvgTextProperties::FontFamiliesId) == properties.property(KoSvgTextProperties::FontFamiliesId)
-            && m_lastUsedProperties.property(KoSvgTextProperties::FontWeightId) == properties.property(KoSvgTextProperties::FontWeightId)
-            && m_lastUsedProperties.property(KoSvgTextProperties::FontStyleId) == properties.property(KoSvgTextProperties::FontStyleId)
-            && m_lastUsedProperties.property(KoSvgTextProperties::FontStretchId) == properties.property(KoSvgTextProperties::FontStretchId)) {
+    if (m_lastUsedProperties.property(KoSvgTextProperties::FontFamiliesId) == properties.second.property(KoSvgTextProperties::FontFamiliesId)
+            && m_lastUsedProperties.property(KoSvgTextProperties::FontWeightId) == properties.second.property(KoSvgTextProperties::FontWeightId)
+            && m_lastUsedProperties.property(KoSvgTextProperties::FontStyleId) == properties.second.property(KoSvgTextProperties::FontStyleId)
+            && m_lastUsedProperties.property(KoSvgTextProperties::FontStretchId) == properties.second.property(KoSvgTextProperties::FontStretchId)) {
         if (m_model && m_model->rowCount() > 0) {
             QModelIndex idx = m_model->indexForString(text);
             if (idx.isValid() && m_quickWidget->rootObject()) {
@@ -84,32 +72,35 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
             }
         }
     }
-    qreal res = 72.0;
+    const qreal res = 72.0;
     QVector<int> lengths;
-    const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
-    if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
-        fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
+    const KoSvgText::CssFontStyleData style = properties.second.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
+    KoSvgText::AutoValue fontSizeAdjust = properties.second.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
+    if (properties.second.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
+        fontSizeAdjust.isAuto = (properties.second.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
     }
-    QStringList families = properties.property(KoSvgTextProperties::FontFamiliesId).toStringList();
-    qreal size = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-    int weight = properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
+    QStringList families = properties.second.property(KoSvgTextProperties::FontFamiliesId).toStringList();
+    qreal size = properties.second.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    int weight = properties.second.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
     const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
-        properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+        properties.second.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
         lengths,
-        properties.fontAxisSettings(),
+        properties.second.fontAxisSettings(),
         text,
         static_cast<quint32>(res),
         static_cast<quint32>(res),
         size,
         fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-        properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-        properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style != QFont::StyleNormal);
+        properties.second.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+        properties.second.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+        style.style,
+        style.slantValue.isAuto? 14: style.slantValue.customValue);
+
+    if (faces.empty()) return;
     m_model->setFace(faces.front());
+
     QModelIndex idx = m_model->indexForString(text);
     if (m_quickWidget->rootObject()) {
-        QString name = faces.front().data()->family_name;
         m_quickWidget->rootObject()->setProperty("fontFamilies", QVariant::fromValue(families));
         m_quickWidget->rootObject()->setProperty("fontSize", QVariant::fromValue(size));
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));
@@ -118,7 +109,7 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
             m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
         }
     }
-    m_lastUsedProperties = properties;
+    m_lastUsedProperties = properties.first;
 }
 
 void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool replace)
@@ -147,31 +138,4 @@ void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool repl
         emit signalInsertRichText(richText, replace);
     }
 
-}
-
-void GlyphPaletteDialog::slotChangeFilter(int filterRow)
-{
-    QModelIndex idx = m_filters->index(filterRow, 0);
-    if (idx.isValid()) {
-        const int filter = idx.data(Qt::UserRole+1).toInt();
-        m_charMapModel->setBlockFilter(filter);
-    }
-}
-
-void GlyphPaletteDialog::slotChangeSearchText(QString searchText)
-{
-    m_charMapModel->setSearchText(searchText);
-}
-
-void GlyphPaletteDialog::slotUpdateFilterList()
-{
-    m_filters->clear();
-    m_charMapModel->setBlockFilter(0);
-    for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
-        int key = m_charMapModel->filterLabels().keys().at(i);
-        QString label = m_charMapModel->filterLabels().value(key);
-        QStandardItem *item = new QStandardItem(label);
-        item->setData(key, Qt::UserRole+1);
-        m_filters->appendRow(item);
-    }
 }

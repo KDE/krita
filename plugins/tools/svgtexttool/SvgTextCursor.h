@@ -129,7 +129,11 @@ public:
 
     void removeLastCodePoint();
 
-    KoSvgTextProperties currentTextProperties() const;
+    /**
+     * @brief currentTextProperties
+     * @return a qpair, where the first is the properties without inheritance, and the second, with inheritance.
+     */
+    QPair<KoSvgTextProperties, KoSvgTextProperties> currentTextProperties() const;
 
     QList<KoSvgTextProperties> propertiesForRange() const;
 

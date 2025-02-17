@@ -29,7 +29,7 @@ public:
         OpenType
     };
 
-    KoFontGlyphModel();
+    KoFontGlyphModel(QObject *parent = nullptr);
     ~KoFontGlyphModel();
 
     enum Roles {

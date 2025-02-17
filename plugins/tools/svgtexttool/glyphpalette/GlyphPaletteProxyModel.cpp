@@ -51,10 +51,18 @@ QVariantList GlyphPaletteProxyModel::blockLabels() const
 
 void GlyphPaletteProxyModel::setSearchText(const QString &text)
 {
-    if (!d->searchText.isEmpty() && !text.isEmpty() && d->searchText.toUcs4().first() == text.toUcs4().first()) {
+    QString adjustedText = text;
+    if (text.startsWith("U+")) {
+        bool ok = false;
+        const uint code = text.mid(2).toUInt(&ok, 16);
+        if (ok) {
+            adjustedText = QString::fromUcs4(&code, 1);
+        }
+    }
+    if (!d->searchText.isEmpty() && !adjustedText.isEmpty() && d->searchText.toUcs4().first() == adjustedText.toUcs4().first()) {
         return;
     } else {
-        d->searchText = text.isEmpty()? text: QString::fromUcs4(&text.toUcs4().first(), 1);
+        d->searchText = adjustedText.isEmpty()? adjustedText: QString::fromUcs4(&adjustedText.toUcs4().first(), 1);
         emit searchTextChanged();
         invalidateFilter();
     }

@@ -127,9 +127,15 @@ Rectangle {
                         root.charMapModel.searchText = text;
                     }
                     placeholderText: i18nc("@info:placeholder", "Search...");
+                    hoverEnabled: true;
                     Layout.fillWidth: true;
                     Layout.preferredHeight: implicitHeight;
                     padding: 5;
+
+                    ToolTip.text: i18nc("@info:tooltip",
+                                        "Searches for characters that match the first letter of the string. Hex search is possible when prepended with \"U+\", (for example, U+0045 will search for 'E')");
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval
+                    ToolTip.visible: hovered;
                 }
 
                 GridView {

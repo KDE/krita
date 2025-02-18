@@ -35,6 +35,8 @@ private Q_SLOTS:
 
     void testLinePolygonIntersectionsManual();
 
+    void testCalculateConvexHull();
+
 
     void testFindTrianglePoint();
     void testTriangularMotion();

@@ -999,6 +999,52 @@ void KisAlgebra2DTest::testLinePolygonIntersectionsManual()
 
 }
 
+bool fuzzyComparePolygons(const QPolygonF &one, const QPolygonF &other) {
+    if (one.count() != other.count()) {
+        return false;
+    }
+    bool firstWay = true;
+    for (int i = 0; i < one.count(); i++) {
+        if (!KisAlgebra2D::fuzzyPointCompare(one[i], other[i])) {
+            firstWay = false;
+            break;
+        }
+    }
+    if (firstWay) {
+        return true;
+    }
+    for (int i = 0; i < one.count(); i++) {
+        if (!KisAlgebra2D::fuzzyPointCompare(one[one.count() - i - 1], other[i])) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void KisAlgebra2DTest::testCalculateConvexHull()
+{
+    using KisAlgebra2D::calculateConvexHull;
+
+    QPolygonF first;
+    first << QPointF(0, 0) << QPointF(0, 100) << QPointF(100, 100) << QPointF(100, 0) << QPointF(0, 0);
+    QPolygonF firstResult = calculateConvexHull(first);
+    qCritical() << first;
+    qCritical() << firstResult;
+    assert(fuzzyComparePolygons(first, firstResult));
+
+    QPolygonF second;
+    second << QPointF(0, 0) << QPointF(100, 0) << QPointF(100, 10) << QPointF(50, 10) << QPointF(50, 90) << QPointF(100, 90) << QPointF(100, 100) << QPointF(0, 100) << QPointF(0, 0);
+    QPolygonF secondResultExpected;
+    secondResultExpected << QPointF(0, 0) << QPointF(100, 0) << QPointF(100, 100) << QPointF(0, 100) << QPointF(0, 0);
+    QPolygonF secondResult = calculateConvexHull(second);
+
+    qCritical() << "second result was: " << secondResult;
+    qCritical() << "while expected was: " << secondResultExpected;
+    assert(fuzzyComparePolygons(secondResultExpected, secondResult));
+
+
+}
+
 void KisAlgebra2DTest::testFindTrianglePoint()
 {
     using KisAlgebra2D::findTrianglePoint;

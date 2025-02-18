@@ -1304,6 +1304,180 @@ void cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendF
     }
 }
 
+int lineSideForPoint(const QLineF &line, const QPointF &point)
+{
+    if (fuzzyPointCompare(point, line.p1())) {
+        return 0;
+    }
+    if (fuzzyPointCompare(point, line.p2())) {
+        return 0;
+    }
+    if (qFuzzyCompare(line.length(), 0)) {
+        return 0;
+    }
+
+    qreal whichSide = KisAlgebra2D::crossProduct(line.p2() - line.p1(), point - line.p1());
+    return whichSide == 0 ? 0 : (whichSide > 0 ? 1 : -1);
+}
+
+QPolygonF combineConvexHullParts(const QPolygonF &leftPolygon, QPolygonF &rightPolygon, bool triangular) {
+    // resulting polygon should start at p1, go through all the points, go to p2, then to p1 again
+    // triangular: whether the last point of right is equal to the first point in left or not
+
+    QPolygonF left = leftPolygon;
+    QPolygonF right = rightPolygon;
+
+    left.removeLast(); // remove p1 from the end (but not the beginning)
+    left.removeLast(); // remove nextPoint as well, since it's present in rightPolygon (twice)
+
+    right.removeLast(); // remove nextPoint from the end (but not the beginning)
+
+
+    QPolygonF result;
+    Q_FOREACH(QPointF point, left) {
+        result << point;
+    }
+
+    Q_FOREACH(QPointF point, right) {
+        result << point;
+    }
+
+    if (triangular) {
+        result << left[0];
+    }
+
+    return result;
+}
+
+QPolygonF calculateConvexHullFromPointsOverTheLine(const QPolygonF &points, const QLineF &line)
+{
+    // all the points should be on the correct side already, no need to check it
+    if (points.count() < 1) {
+        QPolygonF result;
+        result << line.p1() << line.p2() << line.p1();
+        return result;
+    }
+    if (points.count() == 1) {
+        QList<QPointF> list = points.toList();
+        qCritical() << list.length() << list.count() << list.empty() << list.first();
+        //qCritical() << points << points.count() << points.length();
+        //qCritical() << points[0];
+        //QPointF p = points[0];
+
+        QPolygonF result;
+        result << line.p1();
+        result << list[0];
+        result << line.p2();
+        result << line.p1();
+
+        //result << line.p1() << points[0] << line.p2() << line.p1();
+        return result;
+    }
+
+    double maxDistance = 0;
+    QPointF nextPoint = points[0];
+    Q_FOREACH(QPointF point, points) {
+        double distance = kisSquareDistanceToLine(point, line);
+        if (distance > maxDistance) {
+            maxDistance = distance;
+            nextPoint = point;
+        }
+    }
+
+    QPolygonF left;
+    QLineF lineForLeft = QLineF(line.p1(), nextPoint);
+    QPolygonF right;
+    QLineF lineForRight = QLineF(nextPoint, line.p2());
+    QPolygonF triangle;
+    triangle << line.p1() << line.p2() << nextPoint << line.p1();
+    Q_FOREACH(QPointF point, points) {
+        if (triangle.containsPoint(point, Qt::WindingFill)) {
+            continue;
+        }
+        if (lineSideForPoint(lineForLeft, point) > 0) {
+            left << point;
+        } else if (lineSideForPoint(lineForRight, point) < 0) {
+            right << point;
+        }
+    }
+
+    QPolygonF leftPolygon = calculateConvexHullFromPointsOverTheLine(left, lineForLeft);
+    QPolygonF rightPolygon = calculateConvexHullFromPointsOverTheLine(right, lineForRight);
+
+    QPolygonF result = combineConvexHullParts(leftPolygon, rightPolygon, true);
+
+    return result;
+}
+
+
+QPolygonF calculateConvexHull(const QPolygonF &polygon)
+{
+    if (polygon.count() < 4) {
+        return polygon;
+    }
+    QPointF leftPoint = polygon[0];
+    QPointF rightPoint = polygon[1];
+    if (leftPoint.x() > rightPoint.x()) { // swap them around
+        leftPoint = polygon[1];
+        rightPoint = polygon[0];
+    }
+
+    Q_FOREACH(QPointF point, polygon) {
+        if (point.x() < leftPoint.x()) {
+            leftPoint = point;
+        } else if (point.x() > rightPoint.x()) {
+            rightPoint = point;
+        }
+    }
+    QLineF line(leftPoint, rightPoint);
+    QLineF lineOther(rightPoint, leftPoint);
+    QPolygonF left;
+    QPolygonF right;
+
+    Q_FOREACH(QPointF point, polygon) {
+        qCritical() << "Checking point " << point << "and line" << line << ": " << lineSideForPoint(line, point);
+        if (lineSideForPoint(line, point) > 0) {
+            left << point;
+        } else if (lineSideForPoint(line, point) < 0) {
+            right << point;
+        }
+    }
+
+    qCritical() << "Using line: " << line << "for points: " << left;
+    qCritical() << "Using line: " << lineOther << "for points: " << right;
+
+    left = calculateConvexHullFromPointsOverTheLine(left, line);
+    right = calculateConvexHullFromPointsOverTheLine(right, lineOther);
+
+    qCritical() << "Then the result: " << left << right;
+
+    QPolygonF result = combineConvexHullParts(left, right, false);
+
+    return result;
+
+}
+
+QList<QLineF> intersectLineConcavePolygon(const QPolygonF polygon, const QLineF& line, bool extendFirst, bool extendSecond) {
+
+    QPolygonF convexHull = calculateConvexHull(polygon);
+    if (convexHull.count() == polygon.count()) {
+        QLineF resultLine = line;
+        bool result = intersectLineConvexPolygon(resultLine, polygon, extendFirst, extendSecond);
+        if (result) {
+            return QList<QLineF>() << resultLine;
+        } else {
+            return QList<QLineF>();
+        }
+    }
+
+    // it was a concave polygon
+    // intersectLines
+
+    KIS_ASSERT(false && "Not implemented yet");
+
+    return QList<QLineF>();
+}
+
 
 qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter = 100)
 {

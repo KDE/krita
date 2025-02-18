@@ -417,8 +417,10 @@ bool KRITAGLOBAL_EXPORT intersectLineRect(QLineF &line, const QRect rect, bool e
 // the same but with a convex polygon; uses Cyrus-Beck algorithm
 bool KRITAGLOBAL_EXPORT intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond);
 
+//QList<QLineF> KRITAGLOBAL_EXPORT intersectLineConcavePolygon(const QPolygonF polygon, const QLineF& line, bool extendFirst, bool extendSecond);
+
 /**
- * Crop line to rect; if it doesn't intersect, just return an empty line (QLineF()).
+ * @brief Crop line to rect; if it doesn't intersect, just return an empty line (QLineF()).
  *
  * This is using intersectLineRect, but with the difference that it doesn't require the user to check the return value.
  * It's useful for drawing code, since it let the developer not use `if` before drawing.
@@ -439,7 +441,12 @@ void KRITAGLOBAL_EXPORT cropLineToRect(QLineF &line, const QRect rect, bool exte
 
 void KRITAGLOBAL_EXPORT cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendFirst, bool extendSecond);
 
-
+/**
+ * @brief calculateConvexHull Calculate the convex hull of the polygon using the QuickHull
+ * @param polygon to find the convex hull of
+ * @return
+ */
+QPolygonF KRITAGLOBAL_EXPORT calculateConvexHull(const QPolygonF &polygon);
 
 
 template <class Point>

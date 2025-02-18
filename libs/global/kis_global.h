@@ -253,6 +253,30 @@ inline qreal kisDistanceToLine(const QPointF &m, const QLineF &line)
     return distance;
 }
 
+inline qreal kisSquareDistanceToLine(const QPointF &m, const QLineF &line)
+{
+    const QPointF &p1 = line.p1();
+    const QPointF &p2 = line.p2();
+
+    qreal distance = 0;
+
+    if (qFuzzyCompare(p1.x(), p2.x())) {
+        distance = pow2(m.x() - p2.x());
+    } else if (qFuzzyCompare(p1.y(), p2.y())) {
+        distance = pow2(m.y() - p2.y());
+    } else {
+        qreal A = 1;
+        qreal B = - (p1.x() - p2.x()) / (p1.y() - p2.y());
+        qreal C = - p1.x() - B * p1.y();
+
+        distance = pow2(A * m.x() + B * m.y() + C) / (pow2(A) + pow2(B));
+    }
+
+    return distance;
+
+}
+
+
 inline QPointF kisProjectOnVector(const QPointF &base, const QPointF &v)
 {
     const qreal prod = base.x() * v.x() + base.y() * v.y();

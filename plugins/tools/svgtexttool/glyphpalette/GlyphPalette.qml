@@ -139,8 +139,10 @@ Rectangle {
                         fontSize: root.fontSize;
                         fontStyle: root.fontStyle;
                         fontWeight: root.fontWeight;
-                        onGlyphDoubleClicked: (index, posX, posY)=> {mainWindow.slotInsertRichText(index)};
-                        onGlyphClicked: (index, posX, posY)=> {
+                        onGlyphDoubleClicked: (index, mouse)=> {
+                                                  mainWindow.slotInsertRichText(index)
+                                              };
+                        onGlyphClicked: (index, mouse)=> {
                                             if (model.childCount > 1){
                                                 var entryPos = mapToItem(root, 0+width, 0);
                                                 mainWindow.slotShowPopupPalette(index, entryPos.x, entryPos.y, width, height)

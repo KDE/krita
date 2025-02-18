@@ -44,12 +44,12 @@ Rectangle {
                 fontSize: root.fontSize;
                 fontStyle: root.fontStyle;
                 fontWeight: root.fontWeight;
-                onGlyphClicked: (index, posX, posY)=> {
+                onGlyphClicked: (index, mouse)=> {
                                     if (!root.replace) {
                                         mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)
                                     }
                                 };
-                onGlyphDoubleClicked: (index, posX, posY)=> {mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)};
+                onGlyphDoubleClicked: (index, mouse)=> {mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)};
             }
         }
         focus: true;

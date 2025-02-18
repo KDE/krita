@@ -21,8 +21,8 @@ SvgTextLabel {
 
     property bool currentItem: GridView.isCurrentItem;
 
-    signal glyphClicked(int index, int posX, int posY);
-    signal glyphDoubleClicked(int index, int posX, int posY);
+    signal glyphClicked(int index, QtObject mouse);
+    signal glyphDoubleClicked(int index, QtObject mouse);
 
     Rectangle {
         anchors.fill: parent;
@@ -34,7 +34,7 @@ SvgTextLabel {
         anchors.top: parent.top;
         anchors.left: parent.left;
         color: sysPalette.text;
-        opacity: 0.3;
+        opacity: 0.6;
         layer.enabled: true
         width: childrenRect.width;
         height: childrenRect.height;
@@ -60,13 +60,13 @@ SvgTextLabel {
     MouseArea {
         anchors.fill: parent;
         id: glyphMouseArea
-        onClicked: {
+        onClicked: (mouse)=>{
             parent.GridView.view.currentIndex = index;
-            glyphClicked(index, mouseX, mouseY);
+            glyphClicked(index, mouse);
         }
-        onDoubleClicked: {
+        onDoubleClicked: (mouse)=>{
             parent.GridView.view.currentIndex = index;
-            glyphDoubleClicked(index, mouseX, mouseY);
+            glyphDoubleClicked(index, mouse);
         }
         hoverEnabled: true;
         ToolTip.text: model.toolTip;

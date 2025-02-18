@@ -320,6 +320,13 @@ except subprocess.CalledProcessError:
     warnings.warn("ERROR: strip is not working.")
     sys.exit(1)
 
+print("\nTrying to guess Qt version...", end = "")
+useQt6Build = False
+if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\Qt6Core.dll"):
+    print(" Found Qt6")
+    useQt6Build = True
+else:
+    print(" Found Qt5")
 
 print("\nCreating base directories...")
 
@@ -449,12 +456,12 @@ subprocess.run(["xcopy", "/S", "/Y", "/I",
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\imageformats\\".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\imageformats\\"])
 
-if os.path.isdir(os.path.join(DEPS_INSTALL_DIR, "plugins/kf5/")):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
-else:
+if useQt6Build:
     subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf6\\".format(
         DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf6\\"])
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
 
 # Copy the sql drivers explicitly
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\sqldrivers\\".format(
@@ -505,12 +512,12 @@ subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\krita".format(
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kritaplugins".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\kritaplugins"], check=True)
 
-if os.path.isdir(os.path.join(DEPS_INSTALL_DIR, "share/kf5/")):
-    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
-        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
-else:
+if useQt6Build:
     subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf6".format(
         DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf6"], check=True)
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
 
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mime".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mime"], check=True)
@@ -543,13 +550,17 @@ if os.path.isdir(fr"{DEPS_INSTALL_DIR}\qml\QtQuick\Layouts"):
 
 
 # windeployqt
-# NOTE: we don't pass `--release` option to activate autodetection of the build type
-#       (which will effectively accept any kind of the binaries unless on MSVC)
-subprocess.run(["windeployqt.exe", *QMLDIR_ARGS,
-                "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
-                "-concurrent", "-network", "-printsupport", "-svg",
-                "-xml", "-sql", "-qml", "-quick", "-quickwidgets", "-verbose", "2",
-                f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+if useQt6Build:
+    # NOTE: we don't pass `--release` option to activate autodetection of the build type
+    #       (which will effectively accept any kind of the binaries unless on MSVC)
+    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS,
+                    "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
+                    "-concurrent", "-network", "-printsupport", "-svg",
+                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", "-verbose", "2",
+                    f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+else:
+    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
+                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

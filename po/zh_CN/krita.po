@@ -15895,7 +15895,7 @@ msgstr "笔刷数值滑动条 5"
 #, kde-format
 msgctxt "action"
 msgid "Mirror"
-msgstr "镜像绘画"
+msgstr "镜像对称绘画模式"
 
 #. i18n: context: text @ Action (select_layout), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2051
@@ -54419,7 +54419,7 @@ msgstr "无活动图像。"
 
 #: plugins/python/assignprofiledialog/assignprofiledialog.py:53
 msgid "Assign Profile to Image"
-msgstr "分配色彩特性文件到图像"
+msgstr "图像色彩特性文件分配对话框"
 
 #: plugins/python/channels2layers/channels2layers.py:58
 #: plugins/python/channels2layers/channels2layers.py:59

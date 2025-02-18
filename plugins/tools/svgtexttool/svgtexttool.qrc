@@ -13,5 +13,6 @@
         <file>tool_text_i_beam_horizontal_done.xpm</file>
         <file alias="GlyphPalette.qml">glyphpalette/GlyphPalette.qml</file>
         <file alias="GlyphDelegate.qml">glyphpalette/GlyphDelegate.qml</file>
+        <file alias="GlyphPaletteAlts.qml">glyphpalette/GlyphPaletteAlts.qml</file>
     </qresource>
 </RCC>

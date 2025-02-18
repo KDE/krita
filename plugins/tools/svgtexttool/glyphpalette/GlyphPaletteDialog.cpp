@@ -19,6 +19,7 @@
 
 GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     : KoDialog(parent)
+    , m_altPopup(new GlyphPaletteAltPopup(this))
     , m_model(new KoFontGlyphModel(this))
     , m_charMapModel(new GlyphPaletteProxyModel(this))
 {
@@ -46,6 +47,7 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     this->setWindowTitle(i18nc("@title:window", "Glyph Palette"));
 
     m_charMapModel->setSourceModel(m_model);
+    m_altPopup->setModel(m_charMapModel);
     connect(m_model, SIGNAL(modelReset()), m_charMapModel, SLOT(emitBlockLabelsChanged()));
 
     m_quickWidget->rootContext()->setContextProperty("glyphModel", QVariant::fromValue(m_model));
@@ -56,6 +58,19 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
     }
+    connect(m_altPopup, SIGNAL(sigInsertRichText(int,int,bool)), this, SLOT(slotInsertRichText(int,int,bool)));
+}
+
+GlyphPaletteDialog::~GlyphPaletteDialog()
+{
+
+    /// Prevent accessing destroyed objects in QML engine
+    /// See:
+    ///   * https://invent.kde.org/graphics/krita/-/commit/d8676f4e9cac1a8728e73fec3ff1df1763c713b7
+    ///   * https://bugreports.qt.io/browse/QTBUG-81247
+    m_quickWidget->setParent(nullptr);
+    delete m_quickWidget;
+
 }
 
 void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProperties, KoSvgTextProperties> &properties, const QString &text)
@@ -81,7 +96,8 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
     }
     QStringList families = properties.second.property(KoSvgTextProperties::FontFamiliesId).toStringList();
     qreal size = properties.second.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-    int weight = properties.second.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
+    const int weight = properties.second.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
+    const int width = properties.second.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt();
     const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
         properties.second.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
         lengths,
@@ -91,8 +107,8 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
         static_cast<quint32>(res),
         size,
         fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-        properties.second.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-        properties.second.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+        width,
+        weight,
         style.style,
         style.slantValue.isAuto? 14: style.slantValue.customValue);
 
@@ -104,15 +120,19 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
         m_quickWidget->rootObject()->setProperty("fontFamilies", QVariant::fromValue(families));
         m_quickWidget->rootObject()->setProperty("fontSize", QVariant::fromValue(size));
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));
-        m_quickWidget->rootObject()->setProperty("fontStyle", QVariant::fromValue(style));
+        m_quickWidget->rootObject()->setProperty("fontWidth", QVariant::fromValue(width));
+        m_quickWidget->rootObject()->setProperty("fontStyle", QVariant::fromValue(style.style));
         if (idx.isValid()) {
             m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
         }
     }
+    if (m_altPopup) {
+        m_altPopup->setMarkup(families, size, weight, width, style.style);
+    }
     m_lastUsedProperties = properties.first;
 }
 
-void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool replace)
+void GlyphPaletteDialog::slotInsertRichText(const int charRow, const int glyphRow, const bool replace)
 {
     if (m_quickWidget->rootObject()) {
         QModelIndex idx = replace? m_model->index(charRow, 0): m_charMapModel->index(charRow, 0);
@@ -136,6 +156,24 @@ void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool repl
         richText->setPropertiesAtPos(-1, props);
         richText->insertText(0, text);
         emit signalInsertRichText(richText, replace);
+        if (m_altPopup->isVisible()) {
+            slotHidePopupPalette();
+        }
     }
 
+}
+
+void GlyphPaletteDialog::slotShowPopupPalette(const int charRow, const int x, const int y, const int cellWidth, const int cellHeight)
+{
+    m_altPopup->setRootIndex(charRow);
+    m_altPopup->setCellSize(cellWidth, cellHeight);
+    m_altPopup->raise();
+    m_altPopup->show();
+    m_altPopup->move(this->mapToGlobal(QPoint(x, y)+m_quickWidget->pos()));
+    m_altPopup->activateWindow();
+}
+
+void GlyphPaletteDialog::slotHidePopupPalette()
+{
+    m_altPopup->hide();
 }

@@ -27,6 +27,7 @@ set (SvgTextTool_SRCS
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp
     glyphpalette/SvgTextLabel.cpp
+    glyphpalette/GlyphPaletteAltPopup.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

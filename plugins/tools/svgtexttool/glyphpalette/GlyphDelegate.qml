@@ -14,13 +14,15 @@ SvgTextLabel {
     padding: height/8;
     clip: true;
 
+    property alias hovered: glyphMouseArea.containsMouse;
+
     width: GridView.view.cellWidth;
     height: GridView.view.cellHeight;
 
     property bool currentItem: GridView.isCurrentItem;
 
-    signal glyphClicked(int index);
-    signal glyphDoubleClicked(int index);
+    signal glyphClicked(int index, int posX, int posY);
+    signal glyphDoubleClicked(int index, int posX, int posY);
 
     Rectangle {
         anchors.fill: parent;
@@ -42,7 +44,7 @@ SvgTextLabel {
             color: sysPalette.base;
             font.pointSize: 9;
         }
-        visible: glyphMouseArea.containsMouse;
+        visible: parent.hovered;
     }
     Rectangle {
         anchors.top: parent.top;
@@ -50,7 +52,7 @@ SvgTextLabel {
         width: 8;
         height: 8;
         radius: 4;
-        color: sysPalette.text;
+        color: parent.textColor;
         opacity: 0.3;
         visible: model.childCount > 1;
     }
@@ -60,11 +62,11 @@ SvgTextLabel {
         id: glyphMouseArea
         onClicked: {
             parent.GridView.view.currentIndex = index;
-            glyphClicked(index);
+            glyphClicked(index, mouseX, mouseY);
         }
         onDoubleClicked: {
             parent.GridView.view.currentIndex = index;
-            glyphDoubleClicked(index);
+            glyphDoubleClicked(index, mouseX, mouseY);
         }
         hoverEnabled: true;
         ToolTip.text: model.toolTip;

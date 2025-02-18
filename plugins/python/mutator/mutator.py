@@ -230,6 +230,7 @@ class MutatorDocker(DockWidget):
 
         # Create mutate button...
         mutateButton = QPushButton(i18n("Mutate"))
+        mutateButton.setToolTip(i18n("Invokes the \"Mutate\" action, which randomly mutates various global brush and color settings based on the mutation settings configured above."))
         mutateButton.clicked.connect(self.trigger_mutate)
         body.layout().addWidget(mutateButton)
     

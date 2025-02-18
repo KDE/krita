@@ -543,8 +543,13 @@ if os.path.isdir(fr"{DEPS_INSTALL_DIR}\qml\QtQuick\Layouts"):
 
 
 # windeployqt
-subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+# NOTE: we don't pass `--release` option to activate autodetection of the build type
+#       (which will effectively accept any kind of the binaries unless on MSVC)
+subprocess.run(["windeployqt.exe", *QMLDIR_ARGS,
+                "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
+                "-concurrent", "-network", "-printsupport", "-svg",
+                "-xml", "-sql", "-qml", "-quick", "-quickwidgets", "-verbose", "2",
+                f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

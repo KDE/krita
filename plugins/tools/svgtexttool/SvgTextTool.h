@@ -112,8 +112,22 @@ private Q_SLOTS:
     void slotTextEditorClosed();
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
 
+    /**
+     * @brief showGlyphPalette
+     * Shows the glyph palette dialog.
+     */
     void showGlyphPalette();
+    /**
+     * @brief updateGlyphPalette
+     * update the glyph palette dialog from the current selection.
+     */
     void updateGlyphPalette();
+    /**
+     * @brief insertRichText
+     * Insert a rich text shape, used by the glyph palette..
+     * @param richText -- rich text shape.
+     * @param replaceLastGlyph -- whether to replace the last glyph or to fully insert.
+     */
     void insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph = false);
 
     /**

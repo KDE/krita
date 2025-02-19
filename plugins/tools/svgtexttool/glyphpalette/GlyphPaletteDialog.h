@@ -17,6 +17,13 @@
 #include "GlyphPaletteProxyModel.h"
 #include "GlyphPaletteAltPopup.h"
 
+/**
+ * @brief The GlyphPaletteDialog class
+ *
+ * This dialog holds the glyph palette/character map for a given
+ * font. It can show both the alternate glyphs for the current text,
+ * and show a character map with selectable glyph alternates.
+ */
 class GlyphPaletteDialog: public KoDialog
 {
     Q_OBJECT
@@ -24,6 +31,12 @@ public:
     GlyphPaletteDialog(QWidget *parent = nullptr);
     ~GlyphPaletteDialog();
 
+    /**
+     * @brief setGlyphModelFromProperties
+     * This updates the glyph model.
+     * @param properties -- text properties, first is non-inherited, second is inherited.
+     * @param text -- the current text to display alternate glyphs for.
+     */
     void setGlyphModelFromProperties(const QPair<KoSvgTextProperties, KoSvgTextProperties> &properties, const QString &text);
 
 Q_SIGNALS:

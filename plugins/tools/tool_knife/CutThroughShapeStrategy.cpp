@@ -164,31 +164,31 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     for (int i = 0; i < srcOutlines.size(); i++) {
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;
+        bool nonEmptyShapeExists = false;
 
-        // there is a bug in Qt, sometimes it leaves the resulting
-        // outline open, so just close it explicitly.
+        QList<QPainterPath> paths;
+        paths << leftPath << rightPath;
 
-        leftPath.closeSubpath();
-        rightPath.closeSubpath();
-
-        leftPath = booleanWorkaroundTransform.inverted().map(leftPath);
-        rightPath = booleanWorkaroundTransform.inverted().map(rightPath);
-
-        //qCritical() << "Path 1 = " << leftPath << leftPath.length();
-        //qCritical() << "Path 2 = " << rightPath << rightPath.length();
-
-
-        KoPathShape* leftShape = KoPathShape::createShapeFromPainterPath(leftPath);
-        KoPathShape* rightShape = KoPathShape::createShapeFromPainterPath(rightPath);
-
-        if (!leftPath.isEmpty() || !rightPath.isEmpty()) {
-            shapesToRemove << m_selectedShapes[i];
-        }
-
-        QList<KoPathShape*> shapes;
-        shapes << leftShape << rightShape;
         KoShape* referenceShape = m_selectedShapes[i];
-        Q_FOREACH(KoShape* shape, shapes) {
+
+        Q_FOREACH(QPainterPath path, paths) {
+            if (path.isEmpty()) {
+                continue;
+            }
+
+            // comment copied from another place:
+            // there is a bug in Qt, sometimes it leaves the resulting
+            // outline open, so just close it explicitly.
+            path.closeSubpath();
+            // this is needed because Qt linearize curves; this allows for a
+            // "sane" linearization instead of a very blocky appearance
+            path = booleanWorkaroundTransform.inverted().map(path);
+            KoPathShape* shape = KoPathShape::createShapeFromPainterPath(path);
+
+            if (shape->boundingRect().isEmpty()) {
+                continue;
+            }
+
             shape->setBackground(referenceShape->background());
             shape->setStroke(referenceShape->stroke());
             shape->setZIndex(referenceShape->zIndex());
@@ -197,7 +197,12 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             tool()->canvas()->shapeController()->addShapeDirect(shape, parent, cmd);
 
             newSelectedShapes << shape;
+            nonEmptyShapeExists = true;
 
+        }
+
+        if (nonEmptyShapeExists) {
+            shapesToRemove << m_selectedShapes[i];
         }
 
     }
@@ -207,12 +212,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
     tool()->canvas()->addCommand(cmd);
-
-
-
-
-
-
 
 
 

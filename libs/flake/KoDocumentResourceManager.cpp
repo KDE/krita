@@ -142,18 +142,3 @@ QRectF KoDocumentResourceManager::documentRectInPixels() const
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(hasResource(DocumentRectInPixels), QRectF(0,0, 777, 666));
     return resource(DocumentRectInPixels).toRectF();
 }
-
-KoShapeController *KoDocumentResourceManager::globalShapeController() const
-{
-    if (!hasResource(GlobalShapeController))
-        return 0;
-
-    return resource(GlobalShapeController).value<KoShapeController *>();
-}
-
-void KoDocumentResourceManager::setGlobalShapeController(KoShapeController *shapeController)
-{
-    QVariant variant;
-    variant.setValue(shapeController);
-    setResource(GlobalShapeController, variant);
-}

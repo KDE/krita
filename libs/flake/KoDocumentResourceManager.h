@@ -59,7 +59,6 @@ enum DocumentResource {
     OdfDocument,            ///< OBSOLETE The document this canvas shows
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
     MarkerCollection,       ///< The collection holding all markers
-    GlobalShapeController,  ///< The KoShapeController for the document
     DocumentResolution,     ///< Pixels-per-inch resoluton of the document
     DocumentRectInPixels,   ///< Bounds of the document in pixels
 
@@ -203,14 +202,6 @@ enum DocumentResource {
 
     qreal documentResolution() const;
     QRectF documentRectInPixels() const;
-
-    /**
-     * TODO: remove these methods after legacy ODF text shape is removed.
-     * New code must use documentResolution() and documentRectInPixels()
-     * instead.
-     */
-    Q_DECL_DEPRECATED KoShapeController *globalShapeController() const;
-    Q_DECL_DEPRECATED void setGlobalShapeController(KoShapeController *globalShapeController);
 
 Q_SIGNALS:
     /**

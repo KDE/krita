@@ -631,7 +631,6 @@ KisDocument::KisDocument(bool addStorage)
 
     d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
     d->koShapeController = new KoShapeController(0, d->shapeController);
-    d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
 
     slotConfigChanged();
 }
@@ -1209,7 +1208,6 @@ void KisDocument::copyFromDocumentImpl(const KisDocument &rhs, CopyPolicy policy
 
         d->shapeController = new KisShapeController(d->nserver, d->undoStack, this);
         d->koShapeController = new KoShapeController(0, d->shapeController);
-        d->shapeController->resourceManager()->setGlobalShapeController(d->koShapeController);
     }
 
     setObjectName(rhs.objectName());

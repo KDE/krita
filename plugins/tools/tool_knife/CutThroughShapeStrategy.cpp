@@ -114,13 +114,10 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
     QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width));
-    QLineF helperGapWidthLineTransformed = canvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
+    QLineF helperGapWidthLineTransformed = kisCanvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
     qreal gapWidth = helperGapWidthLineTransformed.length();
 
-    //tool()->canvas()->viewConverter()
-    //coo
 
     QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gapWidth/2);
 
@@ -145,6 +142,10 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes"));
 
+
+    new KoKeepShapesSelectedCommand(m_selectedShapes, {}, kisCanvas->selectedShapesProxy(), false, cmd);
+
+
     if (leftLine.length() == 0 || rightLine.length() == 0) {
         qCritical() << "No cutting at all, because one of the lines has length 0. Line is: " << leftLine << rightLine << " and the outline rect is: " << outlineRect << ppVar(outlineRectBigger);
         qCritical() << "^ No cutting at all... line was: " << gapLine << "and the other were: " << gapLines[0] << gapLines[1];
@@ -154,7 +155,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
         tool()->canvas()->shapeController()->removeShapes(m_selectedShapes, cmd);
         tool()->canvas()->addCommand(cmd);
-
+        return;
     }
 
 

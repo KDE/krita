@@ -164,7 +164,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     for (int i = 0; i < srcOutlines.size(); i++) {
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;
-        bool nonEmptyShapeExists = false;
 
         QList<QPainterPath> paths;
         paths << leftPath << rightPath;
@@ -197,13 +196,12 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             tool()->canvas()->shapeController()->addShapeDirect(shape, parent, cmd);
 
             newSelectedShapes << shape;
-            nonEmptyShapeExists = true;
 
         }
 
-        if (nonEmptyShapeExists) {
-            shapesToRemove << m_selectedShapes[i];
-        }
+        // that happens no matter if there was any non-empty shape
+        // because if there is none, maybe they just were underneath the gap
+        shapesToRemove << m_selectedShapes[i];
 
     }
 

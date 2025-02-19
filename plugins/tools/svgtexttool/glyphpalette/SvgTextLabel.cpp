@@ -21,13 +21,13 @@ struct Q_DECL_HIDDEN SvgTextLabel::Private {
         shape->setResolution(72, 72);
         // Hack to avoid the textshape having 0 bounds and the KoRTree complaining about it.
         shape->insertText(0, "a");
-        shape->relayout();
         shapePainter->setShapes({shape.data()});
     }
     ~Private() {}
 
     QScopedPointer<KoSvgTextShape> shape;
     QScopedPointer<KoShapePainter> shapePainter;
+    KoSvgTextProperties props;
     int padding = 2;
 };
 
@@ -46,6 +46,9 @@ SvgTextLabel::~SvgTextLabel()
 
 void SvgTextLabel::paint(QPainter *painter)
 {
+    if (d->shape->textProperties() != d->props) {
+        updateShape();
+    }
     if (!painter->isActive()) return;
     painter->save();
     painter->fillRect(0, 0, width(), height(), fillColor());
@@ -68,14 +71,35 @@ QStringList SvgTextLabel::fontFamilies() const
     return d->shape->textProperties().property(KoSvgTextProperties::FontFamiliesId).value<QStringList>();
 }
 
-int SvgTextLabel::fontWeight() const
+qreal SvgTextLabel::fontWeight() const
 {
-    return d->shape->textProperties().property(KoSvgTextProperties::FontWeightId).toInt();
+    return d->shape->textProperties().property(KoSvgTextProperties::FontWeightId).toReal();
+}
+
+qreal SvgTextLabel::fontWidth() const
+{
+    return d->shape->textProperties().property(KoSvgTextProperties::FontStretchId).toReal();
 }
 
 QFont::Style SvgTextLabel::fontStyle() const
 {
-    return d->shape->textProperties().property(KoSvgTextProperties::FontStyleId).value<QFont::Style>();
+    return d->shape->textProperties().property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>().style;
+}
+
+qreal SvgTextLabel::fontSlant() const
+{
+    KoSvgText::CssFontStyleData style = d->shape->textProperties().property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
+    return style.slantValue.isAuto? 14.0: style.slantValue.customValue;
+}
+
+QVariantMap SvgTextLabel::fontAxesValues() const
+{
+    QVariantMap map;
+    QVariantHash axes = d->props.propertyOrDefault(KoSvgTextProperties::FontVariationSettingsId).toHash();
+    Q_FOREACH(const QString key, axes.keys()) {
+        map.insert(key, axes.value(key));
+    }
+    return map;
 }
 
 qreal SvgTextLabel::fontSize() const
@@ -114,57 +138,86 @@ QString SvgTextLabel::language() const
 
 void SvgTextLabel::setFontFamilies(QStringList fontFamilies)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    QStringList current = props.property(KoSvgTextProperties::FontFamiliesId).value<QStringList>();
+    QStringList current = d->props.property(KoSvgTextProperties::FontFamiliesId).value<QStringList>();
     if (current == fontFamilies)
         return;
 
-    props.setProperty(KoSvgTextProperties::FontFamiliesId, fontFamilies);
-    d->shape->setPropertiesAtPos(-1, props);
+    d->props.setProperty(KoSvgTextProperties::FontFamiliesId, fontFamilies);
     emit fontFamiliesChanged(fontFamilies);
 }
 
-void SvgTextLabel::setFontWeight(int fontWeight)
+void SvgTextLabel::setFontWeight(qreal fontWeight)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    int current = props.property(KoSvgTextProperties::FontWeightId).toInt();
-    if (current == fontWeight)
+    qreal current = d->props.property(KoSvgTextProperties::FontWeightId).toReal();
+    if (qFuzzyCompare(current, fontWeight))
         return;
 
-    props.setProperty(KoSvgTextProperties::FontWeightId, fontWeight);
-    d->shape->setPropertiesAtPos(-1, props);
+    d->props.setProperty(KoSvgTextProperties::FontWeightId, fontWeight);
     emit fontWeightChanged(fontWeight);
+}
+
+void SvgTextLabel::setFontWidth(qreal fontWidth)
+{
+    qreal current = d->props.property(KoSvgTextProperties::FontStretchId).toReal();
+    if (qFuzzyCompare(current, fontWidth))
+        return;
+
+    d->props.setProperty(KoSvgTextProperties::FontStretchId, fontWidth);
+    emit fontWidthChanged(fontWidth);
 }
 
 void SvgTextLabel::setFontStyle(QFont::Style fontStyle)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    QFont::Style current = props.property(KoSvgTextProperties::FontStyleId).value<QFont::Style>();
-    if (current == fontStyle)
+    KoSvgText::CssFontStyleData current = d->props.property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
+    if (current.style == fontStyle)
         return;
 
-    props.setProperty(KoSvgTextProperties::FontStyleId, fontStyle);
-    d->shape->setPropertiesAtPos(-1, props);
-    updateShape();
+    current.style = fontStyle;
+    d->props.setProperty(KoSvgTextProperties::FontStyleId, QVariant::fromValue(current));
     emit fontStyleChanged(fontStyle);
+}
+
+void SvgTextLabel::setFontSlant(qreal fontSlant)
+{
+    KoSvgText::CssFontStyleData current = d->props.property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
+    if (current.slantValue.isAuto && qFuzzyCompare(fontSlant, 14))
+        return;
+    if (!current.slantValue.isAuto && qFuzzyCompare(fontSlant, current.slantValue.customValue))
+        return;
+
+    current.slantValue.customValue = fontSlant;
+    current.slantValue.isAuto = false;
+    d->props.setProperty(KoSvgTextProperties::FontStyleId, QVariant::fromValue(current));
+    emit fontSlantChanged(fontSlant);
+}
+
+void SvgTextLabel::setFontAxesValues(QVariantMap fontAxesValues)
+{
+    QVariantHash compare;
+    Q_FOREACH (const QString key, fontAxesValues.keys()) {
+        compare.insert(key, fontAxesValues.value(key));
+    }
+    QVariantHash current = d->props.property(KoSvgTextProperties::FontVariationSettingsId).toHash();
+    if (current == compare)
+        return;
+
+    d->props.setProperty(KoSvgTextProperties::FontVariationSettingsId, QVariant::fromValue(compare));
+    emit fontAxesValuesChanged(fontAxesValues);
 }
 
 void SvgTextLabel::setFontSize(qreal fontSize)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    qreal current = props.property(KoSvgTextProperties::FontSizeId).toReal();
+    qreal current = d->props.property(KoSvgTextProperties::FontSizeId).toReal();
     if (qFuzzyCompare(current, fontSize))
         return;
 
-    props.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
-    d->shape->setPropertiesAtPos(-1, props);
+    d->props.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
     emit fontSizeChanged(fontSize);
 }
 
 void SvgTextLabel::setTextColor(QColor textColor)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    if (props.hasProperty(KoSvgTextProperties::FillId)) {
+    if (d->props.hasProperty(KoSvgTextProperties::FillId)) {
         KoColorBackground *bg = dynamic_cast<KoColorBackground*>(d->shape->background().data());
         if (bg) {
             if (bg->color() == textColor)
@@ -173,6 +226,7 @@ void SvgTextLabel::setTextColor(QColor textColor)
     }
 
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(textColor)));
+    d->props.setProperty(KoSvgTextProperties::FillId, d->shape->textProperties().property(KoSvgTextProperties::FillId));
     if (this->window()) {
         const qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
         d->shape->setResolution(pixelRatio*72, pixelRatio*72);
@@ -182,13 +236,11 @@ void SvgTextLabel::setTextColor(QColor textColor)
 
 void SvgTextLabel::setOpenTypeFeatures(QStringList openTypeFeatures)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    QStringList otf = props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
+    QStringList otf = d->props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
     if (otf == openTypeFeatures)
         return;
 
-    props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, openTypeFeatures);
-    d->shape->setPropertiesAtPos(-1, props);
+    d->props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, openTypeFeatures);
     emit openTypeFeaturesChanged(openTypeFeatures);
 }
 
@@ -201,7 +253,6 @@ void SvgTextLabel::setText(QString text)
     int start = 0;
     d->shape->removeText(start, length);
     d->shape->insertText(0, text);
-    updateShape();
     emit textChanged(d->shape->plainText());
 }
 
@@ -216,19 +267,23 @@ void SvgTextLabel::setPadding(int padding)
 
 void SvgTextLabel::setLanguage(QString language)
 {
-    KoSvgTextProperties props = d->shape->textProperties();
-    const QString lang = props.property(KoSvgTextProperties::TextLanguage).toString();
+    const QString lang = d->props.property(KoSvgTextProperties::TextLanguage).toString();
     if (lang == language) {
         return;
     }
-    props.setProperty(KoSvgTextProperties::TextLanguage, language);
-    d->shape->setPropertiesAtPos(-1, props);
+    d->props.setProperty(KoSvgTextProperties::TextLanguage, language);
     emit languageChanged(language);
+}
+
+void SvgTextLabel::componentComplete()
+{
+    QQuickPaintedItem::componentComplete();
+    updateShape();
 }
 
 void SvgTextLabel::updateShape()
 {
+    d->shape->setPropertiesAtPos(-1, d->props);
     d->shape->relayout();
     setImplicitSize(d->shape->boundingRect().width(), d->shape->boundingRect().height());
-    update();
 }

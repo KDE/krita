@@ -22,6 +22,7 @@ Rectangle {
     property double fontWidth : 100;
     property int fontStyle: 0;
     property double fontSlant: 0.0;
+    property var fontAxesValues: ({});
     property string language: "";
     SystemPalette {
         id: sysPalette;
@@ -61,6 +62,7 @@ Rectangle {
             fontStyle: root.fontStyle;
             fontWidth: root.fontWidth;
             fontSlant: root.fontSlant;
+            fontAxesValues: root.fontAxesValues;
             language: root.language;
             replace: true;
             Layout.fillHeight: true;
@@ -142,6 +144,9 @@ Rectangle {
                         fontStyle: root.fontStyle;
                         fontWeight: root.fontWeight;
                         language: root.language;
+                        fontWidth: root.fontWidth;
+                        fontSlant: root.fontSlant;
+                        fontAxesValues: root.fontAxesValues === undefined? {}: root.fontAxesValues;
                         onGlyphDoubleClicked: (index, mouse)=> {
                                                   mainWindow.slotInsertRichText(index)
                                               };

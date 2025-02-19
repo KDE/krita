@@ -22,8 +22,11 @@ class SvgTextLabel : public QQuickPaintedItem
 {
     Q_OBJECT
     Q_PROPERTY(QStringList fontFamilies READ fontFamilies WRITE setFontFamilies NOTIFY fontFamiliesChanged)
-    Q_PROPERTY(int fontWeight READ fontWeight WRITE setFontWeight NOTIFY fontWeightChanged)
+    Q_PROPERTY(qreal fontWeight READ fontWeight WRITE setFontWeight NOTIFY fontWeightChanged)
+    Q_PROPERTY(qreal fontWidth READ fontWidth WRITE setFontWidth NOTIFY fontWidthChanged)
     Q_PROPERTY(QFont::Style fontStyle READ fontStyle WRITE setFontStyle NOTIFY fontStyleChanged)
+    Q_PROPERTY(qreal fontSlant READ fontSlant WRITE setFontSlant NOTIFY fontSlantChanged)
+    Q_PROPERTY(QVariantMap fontAxesValues READ fontAxesValues WRITE setFontAxesValues NOTIFY fontAxesValuesChanged)
     Q_PROPERTY(qreal fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
     Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
     Q_PROPERTY(QStringList openTypeFeatures READ openTypeFeatures WRITE setOpenTypeFeatures NOTIFY openTypeFeaturesChanged)
@@ -39,9 +42,15 @@ public:
 
     QStringList fontFamilies() const;
 
-    int fontWeight() const;
+    qreal fontWeight() const;
+
+    qreal fontWidth() const;
 
     QFont::Style fontStyle() const;
+
+    qreal fontSlant() const;
+
+    QVariantMap fontAxesValues() const;
 
     qreal fontSize() const;
 
@@ -58,9 +67,15 @@ public:
 public Q_SLOTS:
     void setFontFamilies(QStringList fontFamilies);
 
-    void setFontWeight(int fontWeight);
+    void setFontWeight(qreal fontWeight);
+
+    void setFontWidth(qreal fontWidth);
 
     void setFontStyle(QFont::Style fontStyle);
+
+    void setFontSlant(qreal fontSlant);
+
+    void setFontAxesValues(QVariantMap fontAxesValues);
 
     void setFontSize(qreal fontSize);
 
@@ -77,9 +92,15 @@ public Q_SLOTS:
 Q_SIGNALS:
     void fontFamiliesChanged(QStringList);
 
-    void fontWeightChanged(int fontWeight);
+    void fontWeightChanged(qreal fontWeight);
+
+    void fontWidthChanged(qreal fontWidth);
 
     void fontStyleChanged(QFont::Style fontStyle);
+
+    void fontSlantChanged(qreal fontSlant);
+
+    void fontAxesValuesChanged(QVariantMap fontAxesValues);
 
     void fontSizeChanged(qreal fontSize);
 
@@ -92,6 +113,13 @@ Q_SIGNALS:
     void paddingChanged(int padding);
 
     void languageChanged(QString language);
+protected:
+    /**
+     * @brief componentComplete
+     * called when all properties have been set.
+     * used to avoid relayout being called time and time again when the properties change.
+     */
+    void componentComplete() override;
 
 private:
 

@@ -16,6 +16,7 @@ Rectangle {
     property double fontWidth: 100;
     property int fontStyle: 0;
     property double fontSlant: 0.0;
+    property var fontAxesValues;
     property string language: "";
     SystemPalette {
         id: sysPalette;
@@ -45,6 +46,9 @@ Rectangle {
                 fontSize: root.fontSize;
                 fontStyle: root.fontStyle;
                 fontWeight: root.fontWeight;
+                fontWidth: root.fontWidth;
+                fontSlant: root.fontSlant;
+                fontAxesValues: root.fontAxesValues === undefined? {}: root.fontAxesValues;
                 language: root.language;
                 onGlyphClicked: (index, mouse)=> {
                                     if (!root.replace) {

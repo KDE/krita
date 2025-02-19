@@ -70,224 +70,6 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 
 }
 
-
-QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
-    if (line.length() == 0) {
-        return QList<QLineF>();
-    }
-    QPointF lineVector = line.p2() - line.p1();
-    // dist(P, l) = |Ax + By + C|/(sqrt(A^2 + B^2))
-    // dist(P, l) = |Vy*x - Vx*y + (p2x*p1y - p2y*p1x)|/(sqrt(line.length()))
-    // |Vy*x - Vx*y + M| = distance*sqrt(line.length())
-    // // that gives us two line equations:
-    // Vy*x - Vx*y + M +/- distance*sqrt(line.length()) = 0
-    // if Vy != 0:
-    // x = (Vx*y + N)/Vy // where N = M +/- distance*sqrt(line.length())
-    // else:
-    // y = (Vy*x + N)/Vx // where N = M +/- distance*sqrt(line.length())
-
-    qreal M = line.p2().x()*line.p1().y() - line.p2().y()*line.p1().x();
-    qreal N1 = M - distance*sqrt(line.length());
-    qreal N2 = M + distance*sqrt(line.length());
-
-    qreal Vx = lineVector.x();
-    qreal Vy = lineVector.y();
-
-
-    auto calculateSecondDimension = [](qreal dim1, qreal N, qreal V1, qreal V2) {
-        //(Vx*y + N)/Vy
-        return (dim1*V2 + N)/V1;
-    };
-
-    QList<QLineF> responses;
-
-    if (lineVector.x() != 0) {
-        // y = (Vx*y + N)/Vx // where N = M +/- distance*sqrt(line.length())
-
-        qreal x1 = line.p1().x();
-        qreal x2 = line.p2().x();
-        //qreal y1 = (lineVector.y()*x1 + N1
-        responses << QLineF(x1, calculateSecondDimension(x1, N1, Vx, Vy), x2, calculateSecondDimension(x2, N1, Vx, Vy));
-        responses << QLineF(x1, calculateSecondDimension(x1, N2, Vx, Vy), x2, calculateSecondDimension(x2, N2, Vx, Vy));
-
-    } else {
-
-        qreal y1 = line.p1().y();
-        qreal y2 = line.p2().y();
-        //qreal y1 = (lineVector.y()*x1 + N1
-        responses << QLineF(calculateSecondDimension(y1, N1, Vy, Vx), y1, calculateSecondDimension(y2, N1, Vy, Vx), y2);
-        responses << QLineF(calculateSecondDimension(y1, N2, Vy, Vx), y1, calculateSecondDimension(y2, N2, Vy, Vx), y2);
-    }
-
-    return responses;
-}
-
-
-
-QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, const QLineF &line, bool left) {
-
-    qCritical() << "~~~ ONE PATH at a time ~~~" << left;
-    qCritical() << "line: " << line << ", left: " << left << ", points:" << points[0] << points[1] << points[2] << points[3];
-
-    auto onTheLine = [](QPointF first, QPointF second) {
-        //qCritical() << "Fuzzy compating " << first << " and " << second << "more precisely: " << first.y() << second.y();
-        //qCritical() << "X: " << qFuzzyCompare(first.x(), second.x()) << " Y: " << qFuzzyCompare(first.y(), second.y());
-        qCritical() << "(inside) on the line? " << first << second << ":" << qAbs(first.x() - second.x()) << qAbs(first.y() - second.y());
-        //return qFuzzyCompare(first.x(), second.x()) || qFuzzyCompare(first.y(), second.y());
-        //return KisAlgebra2D::fuzzyPointCompare(first, second, 0.5f);
-        float delta = 0.1f;
-        qCritical() << (qAbs(first.x() - second.x()) < delta || qAbs(first.y() - second.y()) < delta);
-        return qAbs(first.x() - second.x()) < delta || qAbs(first.y() - second.y()) < delta;
-    };
-
-
-    bool started = false;
-    QPainterPath path;
-
-    path.moveTo(line.p1());
-    path.lineTo(line.p2());
-
-    qCritical() << "path after initialization: " << path;
-
-
-
-
-
-    qCritical() << "Number of points is: " << points.length();
-
-    QList<QPointF> availablePoints;
-    int maxRectPointsNumber = 4; // in case the list has five points to count the first one twice
-    for(int i = 0; i < maxRectPointsNumber; i++) {
-        qreal whichSide = KisAlgebra2D::crossProduct(line.p2() - line.p1(), line.p2() - points[i]);
-        qCritical() << "Point " << points[i] << " has which side: " << whichSide;
-        if (whichSide*(left ? 1 : -1) >= 0) {
-            availablePoints << points[i];
-            qCritical() << "Available point:" << points[i];
-        }
-    }
-    qCritical() << "That's the end of the available points.";
-
-    int startValue, increment;
-    if (!left) {
-        startValue = 2*availablePoints.length();
-        increment = -1;
-    } else {
-        startValue = 0;
-        increment = 1;
-    }
-
-    auto stopFor = [](int index, int max, bool left) {
-        if (!left) {
-            return index <= 0;
-        } else {
-            return index >= max;
-        }
-    };
-
-    for (int i = startValue; !stopFor(i, 2*availablePoints.length(), left); i += increment) {
-        int index = KisAlgebra2D::wrapValue(i, 0, availablePoints.length());
-        qCritical() << "Index is: " << index << "started: " << started <<  "on the line: " << onTheLine(availablePoints[index], path.currentPosition());
-        qCritical() << "...And previous position was: " << path.currentPosition() << "while the point at index is: " << availablePoints[index];
-
-        if (onTheLine(availablePoints[index], path.currentPosition())) {
-            qCritical() << "It is on the line with the previous point.";
-            if (!started) {
-                qCritical() << "It starts now, at" << availablePoints[index];
-                started = true;
-
-                // TODO: if it's not the same point?
-                path.lineTo(availablePoints[index]);
-                if (onTheLine(availablePoints[index], line.p1())) {
-                    qCritical() << "Despite already starting, we're on the line with p1, so ending the path: " << path;
-                    break;
-                }
-
-            } else {
-                // usually would add, unless it's the ending
-                qCritical() << "It started already, we're at" << availablePoints[index] << "now checking whether the currently checked point from points it's on the line with the end";
-                if (onTheLine(availablePoints[index], line.p1())) {
-                    path.lineTo(availablePoints[index]);
-                    qCritical() << "We're on the line with p1, so ending the path: " << path;
-                    //path.lineTo();
-                    break;
-                }
-                qCritical() << "It wasn't on the line with the end, we're adding the current point: " << availablePoints[index];
-                path.lineTo(availablePoints[index]);
-                qCritical() << "Path after adding a new point with a line:" << path;
-            }
-        }
-    }
-
-
-    qCritical() << "Adding the p1 point to the line at the end of the function, path before that: " << path;
-    path.lineTo(line.p1());
-    qCritical() << "Adding the p1 point to the line at the end of the function, now path: " << path;
-
-
-    return path;
-
-    for (int i = startValue; !stopFor(i, 2*points.length(), left); i += increment) {
-        int index = KisAlgebra2D::wrapValue(i, 0, points.length());
-        qCritical() << "Index is: " << index << "started: " << started <<  "on the line: " << onTheLine(points[index], path.currentPosition());
-        qCritical() << "...And current position is: " << path.currentPosition() << "while the point at index is: " << points[index];
-        qreal whichSide = KisAlgebra2D::dotProduct(line.p2() - line.p1(), line.p2() - points[index]);
-        if (whichSide*(left ? 1 : -1) >= 0) {
-            continue;
-        }
-
-        if (onTheLine(points[index], path.currentPosition())) {
-            qCritical() << "it is on the line";
-            if (!started) {
-                qCritical() << "it Starts now, at" << points[index] << "but without it";
-                started = true;
-
-                // TODO: if it's not the same point?
-                path.lineTo(points[index]);
-
-            } else {
-                // usually would add, unless it's the ending
-                qCritical() << "it started already, we're at" << points[index];
-                if (onTheLine(points[index], line.p1())) {
-                    qCritical() << "We're on the line with p1, so ending the path: " << path;
-                    break;
-                }
-                path.lineTo(points[index]);
-                qCritical() << "Path after adding a new point with a line:" << path;
-            }
-        }
-    }
-
-    qCritical() << "~~~ ONE PATH ^^^ ~~~" << left;
-    return path;
-}
-
-QList<QPainterPath> getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine) {
-
-    qCritical() << "~~~ BOTH PATHS ~~~";
-
-    QPainterPath left;
-    QPainterPath right;
-
-    left.moveTo(leftLine.p1());
-    left.lineTo(leftLine.p2());
-
-    right.moveTo(rightLine.p1());
-    right.lineTo(rightLine.p2());
-
-    QList<QPointF> rectPoints;
-    rectPoints << rect.topLeft() << rect.bottomLeft() << rect.bottomRight() << rect.topRight();
-
-    left = getOnePathFromRectangleCutThrough(rectPoints, leftLine, true);
-    right = getOnePathFromRectangleCutThrough(rectPoints, rightLine, false);
-
-    QList<QPainterPath> paths;
-    paths << left << right;
-
-     qCritical() << "~~~ BOTH PATHS ^^^ ~~~";
-
-    return paths;
-}
-
 void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
     tool()->canvas()->updateCanvas(m_previousLineDirtyRect);
@@ -328,7 +110,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     // TODO: two lines, for both sides of the gap
     QLineF gapLine = QLineF(m_startPoint, m_endPoint);
 
-    QList<QLineF> gapLines = getParallelLines(gapLine, m_width);
+    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, 2*m_width);
+
+    qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1]) << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
 
     gapLine = booleanWorkaroundTransform.map(gapLine);
     gapLines[0] = booleanWorkaroundTransform.map(gapLines[0]);
@@ -348,7 +132,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
 
-    QList<QPainterPath> paths = getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLine, rightLine);
+    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLine, rightLine);
     QPainterPath left = paths[0];
     QPainterPath right = paths[1];
 
@@ -390,8 +174,8 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         leftPath = booleanWorkaroundTransform.inverted().map(leftPath);
         rightPath = booleanWorkaroundTransform.inverted().map(rightPath);
 
-        qCritical() << "Path 1 = " << leftPath << leftPath.length();
-        qCritical() << "Path 2 = " << rightPath << rightPath.length();
+        //qCritical() << "Path 1 = " << leftPath << leftPath.length();
+        //qCritical() << "Path 2 = " << rightPath << rightPath.length();
 
 
         KoPathShape* leftShape = KoPathShape::createShapeFromPainterPath(leftPath);

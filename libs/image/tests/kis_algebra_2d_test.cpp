@@ -1045,6 +1045,24 @@ void KisAlgebra2DTest::testCalculateConvexHull()
 
 }
 
+void KisAlgebra2DTest::testGetPathsFromRectangleCutThrough()
+{
+    QRectF rect = QRectF(QPointF(0, 0), QPointF(200, 100));
+    QLineF left = QLineF(QPointF(0, 50), QPointF(50, 0));
+    QLineF right = QLineF(QPointF(0, 80), QPointF(80, 0));
+
+    QList<QPointF> points = QPolygonF(rect).toList();
+    //QPainterPath path = KisAlgebra2D::getOnePathFromRectangleCutThrough(points, left, true);
+    //qCritical() << path;
+
+    //path = KisAlgebra2D::getOnePathFromRectangleCutThrough(points, right, false);
+    //qCritical() << path;
+
+    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(rect, left, right);
+    qCritical() << paths;
+
+}
+
 void KisAlgebra2DTest::testFindTrianglePoint()
 {
     using KisAlgebra2D::findTrianglePoint;

@@ -925,16 +925,30 @@ private:
 // requirements: only one local minimum between xA and xB
 // Golden Section is supposed to be usually faster than Ternary Section
 // NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
-qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
+qreal KRITAGLOBAL_EXPORT findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
 
 // find minimum of the function f(x) between points xA and xB, with eps precision, using Ternary Section
 // requirements: only one local minimum between xA and xB
 // Golden Section is supposed to be usually faster than Ternary Section
 // NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
-qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
+qreal KRITAGLOBAL_EXPORT findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
 
 qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
 
+QList<QLineF> KRITAGLOBAL_EXPORT getParallelLines(const QLineF& line, const qreal distance);
+
+QPainterPath KRITAGLOBAL_EXPORT getOnePathFromRectangleCutThrough(const QList<QPointF> &points, const QLineF &line, bool left);
+
+///
+/// \brief getPathsFromRectangleCutThrough get paths defining both sides of a rectangle cut through using two (supposedly parallel) lines
+/// It is used in the Knife Tool
+/// If you just want to cut a rectangle, you can use the same line in both
+/// \param rect rectangle to cut
+/// \param leftLine left line of the rectangle (used for the left-(top) side of the rectangle
+/// \param rightLine right line of the rectangle (used for the right-(bottom) side of the rectangle
+/// \return
+///
+QList<QPainterPath> KRITAGLOBAL_EXPORT getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine);
 
 }
 

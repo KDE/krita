@@ -109,8 +109,21 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     // TODO: two lines, for both sides of the gap
     QLineF gapLine = QLineF(m_startPoint, m_endPoint);
+    qreal eps = 0.0000001;
+    if (gapLine.length() < eps) {
+        return;
+    }
 
-    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, 2*m_width);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
+    QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width));
+    QLineF helperGapWidthLineTransformed = canvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
+    qreal gapWidth = helperGapWidthLineTransformed.length();
+
+    //tool()->canvas()->viewConverter()
+    //coo
+
+    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gapWidth/2);
+
     qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1])
             << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
     //qCritical() << "Should be: " << pow2(gapWidth/2) << "or" << pow2(gapWidth);

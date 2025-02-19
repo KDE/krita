@@ -107,6 +107,11 @@ int SvgTextLabel::padding() const
     return d->padding;
 }
 
+QString SvgTextLabel::language() const
+{
+    return d->shape->textProperties().property(KoSvgTextProperties::TextLanguage).toString();
+}
+
 void SvgTextLabel::setFontFamilies(QStringList fontFamilies)
 {
     KoSvgTextProperties props = d->shape->textProperties();
@@ -207,6 +212,18 @@ void SvgTextLabel::setPadding(int padding)
 
     d->padding = padding;
     emit paddingChanged(d->padding);
+}
+
+void SvgTextLabel::setLanguage(QString language)
+{
+    KoSvgTextProperties props = d->shape->textProperties();
+    const QString lang = props.property(KoSvgTextProperties::TextLanguage).toString();
+    if (lang == language) {
+        return;
+    }
+    props.setProperty(KoSvgTextProperties::TextLanguage, language);
+    d->shape->setPropertiesAtPos(-1, props);
+    emit languageChanged(language);
 }
 
 void SvgTextLabel::updateShape()

@@ -113,8 +113,9 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
         style.style,
         style.slantValue.isAuto? 14: style.slantValue.customValue);
 
+    QString language = properties.second.propertyOrDefault(KoSvgTextProperties::TextLanguage).toString();
     if (faces.empty()) return;
-    m_model->setFace(faces.front());
+    m_model->setFace(faces.front(), QLatin1String(language.toLatin1()));
 
     QModelIndex idx = m_model->indexForString(text);
     if (m_quickWidget->rootObject()) {
@@ -123,12 +124,13 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(const QPair<KoSvgTextProper
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));
         m_quickWidget->rootObject()->setProperty("fontWidth", QVariant::fromValue(width));
         m_quickWidget->rootObject()->setProperty("fontStyle", QVariant::fromValue(style.style));
+        m_quickWidget->rootObject()->setProperty("language", QVariant::fromValue(language));
         if (idx.isValid()) {
             m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
         }
     }
     if (m_altPopup) {
-        m_altPopup->setMarkup(families, size, weight, width, style.style);
+        m_altPopup->setMarkup(families, size, weight, width, style.style, language);
     }
     m_lastUsedProperties = properties.first;
 }

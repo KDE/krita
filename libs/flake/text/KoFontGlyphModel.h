@@ -47,7 +47,7 @@ public:
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
     QModelIndex indexForString(QString grapheme);
-    void setFace(FT_FaceSP face);
+    void setFace(FT_FaceSP face, QLatin1String language = QLatin1String());
 
     QHash<int, QByteArray> roleNames() const override;
 

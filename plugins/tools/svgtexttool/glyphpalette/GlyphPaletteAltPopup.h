@@ -46,7 +46,7 @@ public:
      * @brief setMarkup
      * Set the css font markup to be used inside the palette.
      */
-    void setMarkup(const QStringList &families, const int size, const int weight, const int width, const QFont::Style style);
+    void setMarkup(const QStringList &families, const int size, const int weight, const int width, const QFont::Style style, const QString &language);
 
 public Q_SLOTS:
 

@@ -29,6 +29,7 @@ class SvgTextLabel : public QQuickPaintedItem
     Q_PROPERTY(QStringList openTypeFeatures READ openTypeFeatures WRITE setOpenTypeFeatures NOTIFY openTypeFeaturesChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
+    Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
 
 public:
     SvgTextLabel(QQuickItem *parent = nullptr);
@@ -52,6 +53,8 @@ public:
 
     int padding() const;
 
+    QString language() const;
+
 public Q_SLOTS:
     void setFontFamilies(QStringList fontFamilies);
 
@@ -69,6 +72,8 @@ public Q_SLOTS:
 
     void setPadding(int padding);
 
+    void setLanguage(QString language);
+
 Q_SIGNALS:
     void fontFamiliesChanged(QStringList);
 
@@ -85,6 +90,8 @@ Q_SIGNALS:
     void textChanged(QString text);
 
     void paddingChanged(int padding);
+
+    void languageChanged(QString language);
 
 private:
 

@@ -147,7 +147,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
                       {KoOpenTypeFeatureInfo::GSUB1}, true));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("flac"),
                       i18nc("@title", "Flattened accent forms"),
-                      i18nc("@tooltip", "Replaces accents on capital letters with flattened forms. Does nothing in Krita, as this is not a math engine."),
+                      i18nc("@tooltip", "Replaces accents on capital letters with flattened forms."),
                       {KoOpenTypeFeatureInfo::GSUB1}));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("frac"),
                       i18nc("@title", "Fractions"),
@@ -187,7 +187,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
                       {KoOpenTypeFeatureInfo::GSUB1}, true));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("ssty"),
                       i18nc("@title", "Math script style alternates"),
-                      i18nc("@tooltip", "Replaces glyphs with ones more suited for super- and subscripts. Does nothing in Krita."),
+                      i18nc("@tooltip", "Replaces glyphs with ones more suited for super- and subscripts."),
                       {KoOpenTypeFeatureInfo::GSUB3}));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("subs"),
                       i18nc("@title", "Subscript"),
@@ -540,7 +540,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
 
 
     //character variants
-    for (int i = 1; i <= 20; i++) {
+    for (int i = 1; i <= 99; i++) {
         char *tag{new char[4]{'c', 'v', '0', '0'}};
         tag[2] = (i/10) + '0';
         tag[3] = (i%10) + '0';

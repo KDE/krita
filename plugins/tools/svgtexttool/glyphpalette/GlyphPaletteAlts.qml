@@ -16,6 +16,7 @@ Rectangle {
     property double fontWidth: 100;
     property int fontStyle: 0;
     property double fontSlant: 0.0;
+    property string language: "";
     SystemPalette {
         id: sysPalette;
         colorGroup: SystemPalette.Active
@@ -44,6 +45,7 @@ Rectangle {
                 fontSize: root.fontSize;
                 fontStyle: root.fontStyle;
                 fontWeight: root.fontWeight;
+                language: root.language;
                 onGlyphClicked: (index, mouse)=> {
                                     if (!root.replace) {
                                         mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)

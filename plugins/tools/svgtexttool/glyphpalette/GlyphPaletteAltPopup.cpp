@@ -82,7 +82,7 @@ void GlyphPaletteAltPopup::setModel(QAbstractItemModel *model)
     }
 }
 
-void GlyphPaletteAltPopup::setMarkup(const QStringList &families, const int size, const int weight, const int width, const QFont::Style style)
+void GlyphPaletteAltPopup::setMarkup(const QStringList &families, const int size, const int weight, const int width, const QFont::Style style, const QString &language)
 {
     if (m_quickWidget->rootObject()) {
         m_quickWidget->rootObject()->setProperty("fontFamilies", QVariant::fromValue(families));
@@ -90,6 +90,7 @@ void GlyphPaletteAltPopup::setMarkup(const QStringList &families, const int size
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));
         m_quickWidget->rootObject()->setProperty("fontWidth", QVariant::fromValue(width));
         m_quickWidget->rootObject()->setProperty("fontStyle", QVariant::fromValue(style));
+        m_quickWidget->rootObject()->setProperty("language", QVariant::fromValue(language));
     }
 }
 

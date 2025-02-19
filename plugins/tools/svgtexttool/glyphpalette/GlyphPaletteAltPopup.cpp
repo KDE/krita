@@ -79,6 +79,7 @@ void GlyphPaletteAltPopup::setModel(QAbstractItemModel *model)
     m_charMapModel = model;
     if (m_quickWidget->rootObject() && m_charMapModel) {
         m_quickWidget->rootObject()->setProperty("glyphModel", QVariant::fromValue(m_charMapModel));
+        m_quickWidget->rootObject()->setProperty("useCharMap", QVariant::fromValue(true));
     }
 }
 
@@ -95,7 +96,7 @@ void GlyphPaletteAltPopup::setMarkup(const QStringList &families, const int size
     }
 }
 
-void GlyphPaletteAltPopup::slotInsertRichText(const int charRow, const int glyphRow, const bool replace)
+void GlyphPaletteAltPopup::slotInsertRichText(const int charRow, const int glyphRow, const bool replace, const bool useCharMap)
 {
-    emit sigInsertRichText(charRow, glyphRow, replace);
+    emit sigInsertRichText(charRow, glyphRow, replace, useCharMap);
 }

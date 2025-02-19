@@ -43,7 +43,7 @@ Q_SIGNALS:
     void signalInsertRichText(KoSvgTextShape *text, bool replace);
 public Q_SLOTS:
 
-    void slotInsertRichText(const int charRow, const int glyphRow = -1, const bool replace = false);
+    void slotInsertRichText(const int charRow, const int glyphRow = -1, const bool replace = false, const bool useCharMap = false);
     // Show the glyphalts for charRow in a pop-up located at x, y. Make sure to adjust cell-size.
     void slotShowPopupPalette(const int charRow, const int x = 0, const int y = 0, const int cellWidth = 100, const int cellHeight = 100);
     void slotHidePopupPalette();
@@ -51,7 +51,7 @@ public Q_SLOTS:
 private:
     QQuickWidget *m_quickWidget {0};
     GlyphPaletteAltPopup *m_altPopup {0};
-    KoSvgTextProperties m_lastUsedProperties;
+    QPair<KoSvgTextProperties, KoSvgTextProperties> m_lastUsedProperties;
     KoFontGlyphModel *m_model;
     GlyphPaletteProxyModel *m_charMapModel;
 };

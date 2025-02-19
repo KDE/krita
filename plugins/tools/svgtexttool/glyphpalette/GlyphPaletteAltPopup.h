@@ -50,9 +50,9 @@ public:
 
 public Q_SLOTS:
 
-    void slotInsertRichText(const int charRow, const int glyphRow = -1, const bool replace = false);
+    void slotInsertRichText(const int charRow, const int glyphRow = -1, const bool replace = false, const bool useCharMap = false);
 Q_SIGNALS:
-    void sigInsertRichText(int charRow, int glyphRow, bool replace);
+    void sigInsertRichText(int charRow, int glyphRow, bool replace, bool useCharMap);
 private:
     QQuickWidget *m_quickWidget {0};
     QAbstractItemModel *m_charMapModel {0};

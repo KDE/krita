@@ -9,6 +9,7 @@ Rectangle {
     property int parentIndex: 0;
     property int columns: 8;
     property bool replace: false;
+    property bool useCharMap: true;
 
     property var fontFamilies: [];
     property double fontSize: 10.0;
@@ -52,10 +53,10 @@ Rectangle {
                 language: root.language;
                 onGlyphClicked: (index, mouse)=> {
                                     if (!root.replace) {
-                                        mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)
+                                        mainWindow.slotInsertRichText(root.parentIndex, index, root.replace, root.useCharMap)
                                     }
                                 };
-                onGlyphDoubleClicked: (index, mouse)=> {mainWindow.slotInsertRichText(root.parentIndex, index, root.replace)};
+                onGlyphDoubleClicked: (index, mouse)=> {mainWindow.slotInsertRichText(root.parentIndex, index, root.replace, root.useCharMap)};
             }
         }
         focus: true;

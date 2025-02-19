@@ -56,6 +56,7 @@ Rectangle {
         GlyphPaletteAlts {
             id: glyphAlts;
             glyphModel: root.model;
+            useCharMap: false;
             fontFamilies: root.fontFamilies;
             fontSize: root.fontSize;
             fontWeight: root.fontWeight;
@@ -148,7 +149,7 @@ Rectangle {
                         fontSlant: root.fontSlant;
                         fontAxesValues: root.fontAxesValues === undefined? {}: root.fontAxesValues;
                         onGlyphDoubleClicked: (index, mouse)=> {
-                                                  mainWindow.slotInsertRichText(index)
+                                                  mainWindow.slotInsertRichText(index, -1, false, true)
                                               };
                         onGlyphClicked: (index, mouse)=> {
                                             if (model.childCount > 1){

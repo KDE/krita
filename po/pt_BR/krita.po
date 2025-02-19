@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-13 02:03+0000\n"
+"POT-Creation-Date: 2025-02-19 01:56+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -57721,6 +57721,126 @@ msgstr "Docker do misturador de barras"
 msgid "Number of slider lines: "
 msgstr "Número de linhas da barra:"
 
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:4
+#, fuzzy, kde-format
+#| msgid "Curator"
+msgctxt "action"
+msgid "Mutator"
+msgstr "Curador"
+
+#. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:8
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgctxt "action"
+msgid "Mutate"
+msgstr "Girar"
+
+#: plugins/python/mutator/mutator.py:122
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Settings mutated!"
+msgstr "Começando"
+
+#: plugins/python/mutator/mutator.py:152
+#, fuzzy
+#| msgid "Curator"
+msgid "Mutator"
+msgstr "Curador"
+
+#: plugins/python/mutator/mutator.py:166
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush size."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:168
+#, fuzzy
+#| msgid "Saturation: "
+msgid "Size Mutation: "
+msgstr "Saturação: "
+
+#: plugins/python/mutator/mutator.py:175
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush rotation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:177
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Rotation Mutation: "
+msgstr "Rotação:"
+
+#: plugins/python/mutator/mutator.py:184
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush opacity."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:186
+#, fuzzy
+#| msgid "Opacity: "
+msgid "Opacity Mutation: "
+msgstr "Opacidade: "
+
+#: plugins/python/mutator/mutator.py:193
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush flow."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:195
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Flow Mutation: "
+msgstr "Rotação:"
+
+#: plugins/python/mutator/mutator.py:202
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color hue."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:204
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Hue Mutation: "
+msgstr "Rotação:"
+
+#: plugins/python/mutator/mutator.py:211
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color saturation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:213
+#, fuzzy
+#| msgid "Saturation Rings:"
+msgid "Saturation Mutation: "
+msgstr "Anéis de saturação:"
+
+#: plugins/python/mutator/mutator.py:220
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color value."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:222
+#, fuzzy
+#| msgid "Video duration:"
+msgid "Value Mutation: "
+msgstr "Duração do vídeo:"
+
+#: plugins/python/mutator/mutator.py:232
+#, fuzzy
+#| msgid "Rotate"
+msgid "Mutate"
+msgstr "Girar"
+
+#: plugins/python/mutator/mutator.py:233
+msgid ""
+"Invokes the \"Mutate\" action, which randomly mutates various global brush "
+"and color settings based on the mutation settings configured above."
+msgstr ""
+
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
 msgstr "Área acoplável de Paletas Python"
@@ -65698,9 +65818,6 @@ msgstr "Ferramenta Imagens de Referência"
 
 #~ msgid "˚"
 #~ msgstr "˚"
-
-#~ msgid "Rotation: "
-#~ msgstr "Rotação:"
 
 #~ msgid "Azimuth"
 #~ msgstr "Azimute"
@@ -76562,12 +76679,6 @@ msgstr "Ferramenta Imagens de Referência"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hue Pieces:"
 #~ msgstr "Peças da matiz:"
-
-#, fuzzy
-#~| msgid "Saturation Rings:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saturation Rings:"
-#~ msgstr "Anéis de saturação:"
 
 #, fuzzy
 #~| msgid "Light Pieces"

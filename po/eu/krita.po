@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-13 02:03+0000\n"
+"POT-Creation-Date: 2025-02-19 01:56+0000\n"
 "PO-Revision-Date: 2025-01-22 12:45+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -56799,6 +56799,126 @@ msgstr "Nahaste graduatzailearen zamaketaria"
 msgid "Number of slider lines: "
 msgstr "Lerro-graduatzaile kopurua: "
 
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:4
+#, fuzzy, kde-format
+#| msgid "Curator"
+msgctxt "action"
+msgid "Mutator"
+msgstr "Ontzailea"
+
+#. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:8
+#, fuzzy, kde-format
+#| msgid "Rotate"
+msgctxt "action"
+msgid "Mutate"
+msgstr "Biratu"
+
+#: plugins/python/mutator/mutator.py:122
+#, fuzzy
+#| msgid "Getting Started"
+msgid "Settings mutated!"
+msgstr "Hastapenak"
+
+#: plugins/python/mutator/mutator.py:152
+#, fuzzy
+#| msgid "Curator"
+msgid "Mutator"
+msgstr "Ontzailea"
+
+#: plugins/python/mutator/mutator.py:166
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush size."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:168
+#, fuzzy
+#| msgid "Saturation: "
+msgid "Size Mutation: "
+msgstr "Asetasuna: "
+
+#: plugins/python/mutator/mutator.py:175
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush rotation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:177
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Rotation Mutation: "
+msgstr "Biraketa: "
+
+#: plugins/python/mutator/mutator.py:184
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush opacity."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:186
+#, fuzzy
+#| msgid "Opacity: "
+msgid "Opacity Mutation: "
+msgstr "Opakutasuna: "
+
+#: plugins/python/mutator/mutator.py:193
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush flow."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:195
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Flow Mutation: "
+msgstr "Biraketa: "
+
+#: plugins/python/mutator/mutator.py:202
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color hue."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:204
+#, fuzzy
+#| msgid "Rotation: "
+msgid "Hue Mutation: "
+msgstr "Biraketa: "
+
+#: plugins/python/mutator/mutator.py:211
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color saturation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:213
+#, fuzzy
+#| msgid "Saturation Rings:"
+msgid "Saturation Mutation: "
+msgstr "Saturazio-eraztunak:"
+
+#: plugins/python/mutator/mutator.py:220
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color value."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:222
+#, fuzzy
+#| msgid "Video duration:"
+msgid "Value Mutation: "
+msgstr "Bideoaren iraupena:"
+
+#: plugins/python/mutator/mutator.py:232
+#, fuzzy
+#| msgid "Rotate"
+msgid "Mutate"
+msgstr "Biratu"
+
+#: plugins/python/mutator/mutator.py:233
+msgid ""
+"Invokes the \"Mutate\" action, which randomly mutates various global brush "
+"and color settings based on the mutation settings configured above."
+msgstr ""
+
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
 msgstr "Python paleta-zamaketaria"
@@ -64456,9 +64576,6 @@ msgstr "Erreferentziazko irudien tresna"
 
 #~ msgid "˚"
 #~ msgstr "˚"
-
-#~ msgid "Rotation: "
-#~ msgstr "Biraketa: "
 
 #~ msgid "Azimuth"
 #~ msgstr "Azimuta"
@@ -73291,12 +73408,6 @@ msgstr "Erreferentziazko irudien tresna"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hue Pieces:"
 #~ msgstr "Ñabardura zatiak:"
-
-#, fuzzy
-#~| msgid "Saturation Rings:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saturation Rings:"
-#~ msgstr "Saturazio-eraztunak:"
 
 #, fuzzy
 #~| msgid "Light Pieces"

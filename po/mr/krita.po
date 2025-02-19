@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-13 02:03+0000\n"
+"POT-Creation-Date: 2025-02-19 01:56+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -57869,6 +57869,122 @@ msgstr ""
 msgid "Number of slider lines: "
 msgstr "फरशांची संख्या"
 
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:4
+#, fuzzy, kde-format
+#| msgid "&Create"
+msgctxt "action"
+msgid "Mutator"
+msgstr "निर्माण करा (&C)"
+
+#. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:8
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Mutate"
+msgstr "फिरवा (&R)"
+
+#: plugins/python/mutator/mutator.py:122
+#, fuzzy
+msgid "Settings mutated!"
+msgstr "टीप :"
+
+#: plugins/python/mutator/mutator.py:152
+#, fuzzy
+#| msgid "&Create"
+msgid "Mutator"
+msgstr "निर्माण करा (&C)"
+
+#: plugins/python/mutator/mutator.py:166
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush size."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:168
+#, fuzzy
+msgid "Size Mutation: "
+msgstr "गडदपणा :"
+
+#: plugins/python/mutator/mutator.py:175
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush rotation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:177
+#, fuzzy
+#| msgid "Rotation:"
+msgid "Rotation Mutation: "
+msgstr "फिरवणे :"
+
+#: plugins/python/mutator/mutator.py:184
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush opacity."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:186
+#, fuzzy
+#| msgid "Opacity:"
+msgid "Opacity Mutation: "
+msgstr "अपारदर्शकता :"
+
+#: plugins/python/mutator/mutator.py:193
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush flow."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:195
+#, fuzzy
+#| msgid "Rotation:"
+msgid "Flow Mutation: "
+msgstr "फिरवणे :"
+
+#: plugins/python/mutator/mutator.py:202
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color hue."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:204
+#, fuzzy
+#| msgid "Rotation:"
+msgid "Hue Mutation: "
+msgstr "फिरवणे :"
+
+#: plugins/python/mutator/mutator.py:211
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color saturation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:213
+#, fuzzy
+#| msgid "Saturation Rings:"
+msgid "Saturation Mutation: "
+msgstr "गडद रिंग :"
+
+#: plugins/python/mutator/mutator.py:220
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color value."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:222
+#, fuzzy
+#| msgid "Rotation:"
+msgid "Value Mutation: "
+msgstr "फिरवणे :"
+
+#: plugins/python/mutator/mutator.py:232
+#, fuzzy
+msgid "Mutate"
+msgstr "फिरवा (&R)"
+
+#: plugins/python/mutator/mutator.py:233
+msgid ""
+"Invokes the \"Mutate\" action, which randomly mutates various global brush "
+"and color settings based on the mutation settings configured above."
+msgstr ""
+
 #: plugins/python/palette_docker/palette_docker.py:37
 #, fuzzy
 msgid "Python Palette Docker"
@@ -65558,11 +65674,6 @@ msgstr "25%"
 #~ msgctxt "action"
 #~ msgid "Gradient editing"
 #~ msgstr "ग्रेडियंटस्"
-
-#, fuzzy
-#~| msgid "Rotation:"
-#~ msgid "Rotation: "
-#~ msgstr "फिरवणे :"
 
 #~ msgid "Azimuth"
 #~ msgstr "अझिमुथ"
@@ -74559,12 +74670,6 @@ msgstr "25%"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Hue Pieces:"
 #~ msgstr "शुध्दता नमुने :"
-
-#, fuzzy
-#~| msgid "Saturation Rings:"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Saturation Rings:"
-#~ msgstr "गडद रिंग :"
 
 #, fuzzy
 #~| msgid "Light Pieces"

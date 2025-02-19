@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-13 02:03+0000\n"
+"POT-Creation-Date: 2025-02-19 01:56+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -56384,6 +56384,115 @@ msgstr ""
 msgid "Number of slider lines: "
 msgstr "Số miếng"
 
+#. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:4
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Mutator"
+msgstr "Tạo"
+
+#. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
+#: plugins/python/mutator/mutator.action:8
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Mutate"
+msgstr "&Xoay"
+
+#: plugins/python/mutator/mutator.py:122
+#, fuzzy
+msgid "Settings mutated!"
+msgstr "Hình kết nối"
+
+#: plugins/python/mutator/mutator.py:152
+#, fuzzy
+msgid "Mutator"
+msgstr "Tạo"
+
+#: plugins/python/mutator/mutator.py:166
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush size."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:168
+#, fuzzy
+msgid "Size Mutation: "
+msgstr "Bão hoà:"
+
+#: plugins/python/mutator/mutator.py:175
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush rotation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:177
+#, fuzzy
+msgid "Rotation Mutation: "
+msgstr "Xoay"
+
+#: plugins/python/mutator/mutator.py:184
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush opacity."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:186
+#, fuzzy
+msgid "Opacity Mutation: "
+msgstr "Độ đậm đặc:"
+
+#: plugins/python/mutator/mutator.py:193
+msgid ""
+"Controls the degree to which mutation affects Krita's global brush flow."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:195
+#, fuzzy
+msgid "Flow Mutation: "
+msgstr "Xoay"
+
+#: plugins/python/mutator/mutator.py:202
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color hue."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:204
+#, fuzzy
+msgid "Hue Mutation: "
+msgstr "Xoay"
+
+#: plugins/python/mutator/mutator.py:211
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color saturation."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:213
+#, fuzzy
+msgid "Saturation Mutation: "
+msgstr "Bão hoà:"
+
+#: plugins/python/mutator/mutator.py:220
+msgid ""
+"Controls the degree to which mutation affects Krita's global foreground "
+"color value."
+msgstr ""
+
+#: plugins/python/mutator/mutator.py:222
+#, fuzzy
+#| msgid "Rotation"
+msgid "Value Mutation: "
+msgstr "Xoay"
+
+#: plugins/python/mutator/mutator.py:232
+#, fuzzy
+msgid "Mutate"
+msgstr "&Xoay"
+
+#: plugins/python/mutator/mutator.py:233
+msgid ""
+"Invokes the \"Mutate\" action, which randomly mutates various global brush "
+"and color settings based on the mutation settings configured above."
+msgstr ""
+
 #: plugins/python/palette_docker/palette_docker.py:37
 #, fuzzy
 #| msgid "Palette"
@@ -63672,10 +63781,6 @@ msgstr "Ảnh tham chiếu:"
 #~ msgctxt "action"
 #~ msgid "Gradient Editing Tool"
 #~ msgstr "Các đổ dốc màu"
-
-#, fuzzy
-#~ msgid "Rotation: "
-#~ msgstr "Xoay"
 
 #, fuzzy
 #~| msgid "Angle:"

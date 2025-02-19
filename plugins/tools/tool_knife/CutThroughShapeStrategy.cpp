@@ -70,6 +70,7 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
 
 }
 
+
 QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
     if (line.length() == 0) {
         return QList<QLineF>();
@@ -119,22 +120,23 @@ QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
     }
 
     return responses;
-
-
 }
+
+
 
 QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, const QLineF &line, bool left) {
 
     qCritical() << "~~~ ONE PATH at a time ~~~" << left;
-    qCritical() << "line: " << line << "left: " << left << "points:" << points[0] << points[1] << points[2] << points[3];
+    qCritical() << "line: " << line << ", left: " << left << ", points:" << points[0] << points[1] << points[2] << points[3];
 
     auto onTheLine = [](QPointF first, QPointF second) {
         //qCritical() << "Fuzzy compating " << first << " and " << second << "more precisely: " << first.y() << second.y();
         //qCritical() << "X: " << qFuzzyCompare(first.x(), second.x()) << " Y: " << qFuzzyCompare(first.y(), second.y());
-        //qCritical() << qAbs(first.x() - second.x()) << qAbs(first.y() - second.y());
+        qCritical() << "(inside) on the line? " << first << second << ":" << qAbs(first.x() - second.x()) << qAbs(first.y() - second.y());
         //return qFuzzyCompare(first.x(), second.x()) || qFuzzyCompare(first.y(), second.y());
         //return KisAlgebra2D::fuzzyPointCompare(first, second, 0.5f);
         float delta = 0.1f;
+        qCritical() << (qAbs(first.x() - second.x()) < delta || qAbs(first.y() - second.y()) < delta);
         return qAbs(first.x() - second.x()) < delta || qAbs(first.y() - second.y()) < delta;
     };
 
@@ -147,60 +149,79 @@ QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, con
 
     qCritical() << "path after initialization: " << path;
 
-    auto stopFor = [](int index, int max, bool left) {
-        if (left) {
-            return index <= 0;
-        } else {
-            return index >= max;
+
+
+
+
+    qCritical() << "Number of points is: " << points.length();
+
+    QList<QPointF> availablePoints;
+    int maxRectPointsNumber = 4; // in case the list has five points to count the first one twice
+    for(int i = 0; i < maxRectPointsNumber; i++) {
+        qreal whichSide = KisAlgebra2D::crossProduct(line.p2() - line.p1(), line.p2() - points[i]);
+        qCritical() << "Point " << points[i] << " has which side: " << whichSide;
+        if (whichSide*(left ? 1 : -1) >= 0) {
+            availablePoints << points[i];
+            qCritical() << "Available point:" << points[i];
         }
-    };
+    }
+    qCritical() << "That's the end of the available points.";
 
     int startValue, increment;
-    if (left) {
-        startValue = 2*points.length();
+    if (!left) {
+        startValue = 2*availablePoints.length();
         increment = -1;
     } else {
         startValue = 0;
         increment = 1;
     }
 
-    QList<QPointF> availablePoints;
-    Q_FOREACH(QPointF point, points) {
-        qreal whichSide = KisAlgebra2D::crossProduct(line.p2() - line.p1(), line.p2() - point);
-        if (whichSide*(left ? 1 : -1) >= 0) {
-            availablePoints << point;
-            qCritical() << "Available point:" << point;
+    auto stopFor = [](int index, int max, bool left) {
+        if (!left) {
+            return index <= 0;
+        } else {
+            return index >= max;
         }
-    }
+    };
 
     for (int i = startValue; !stopFor(i, 2*availablePoints.length(), left); i += increment) {
         int index = KisAlgebra2D::wrapValue(i, 0, availablePoints.length());
         qCritical() << "Index is: " << index << "started: " << started <<  "on the line: " << onTheLine(availablePoints[index], path.currentPosition());
-        qCritical() << "...And current position is: " << path.currentPosition() << "while the point at index is: " << availablePoints[index];
+        qCritical() << "...And previous position was: " << path.currentPosition() << "while the point at index is: " << availablePoints[index];
 
         if (onTheLine(availablePoints[index], path.currentPosition())) {
-            qCritical() << "it is on the line";
+            qCritical() << "It is on the line with the previous point.";
             if (!started) {
-                qCritical() << "it Starts now, at" << availablePoints[index] << "but without it";
+                qCritical() << "It starts now, at" << availablePoints[index];
                 started = true;
 
                 // TODO: if it's not the same point?
                 path.lineTo(availablePoints[index]);
+                if (onTheLine(availablePoints[index], line.p1())) {
+                    qCritical() << "Despite already starting, we're on the line with p1, so ending the path: " << path;
+                    break;
+                }
 
             } else {
                 // usually would add, unless it's the ending
-                qCritical() << "it started already, we're at" << availablePoints[index];
+                qCritical() << "It started already, we're at" << availablePoints[index] << "now checking whether the currently checked point from points it's on the line with the end";
                 if (onTheLine(availablePoints[index], line.p1())) {
                     path.lineTo(availablePoints[index]);
                     qCritical() << "We're on the line with p1, so ending the path: " << path;
+                    //path.lineTo();
                     break;
                 }
+                qCritical() << "It wasn't on the line with the end, we're adding the current point: " << availablePoints[index];
                 path.lineTo(availablePoints[index]);
                 qCritical() << "Path after adding a new point with a line:" << path;
             }
         }
     }
 
+
+    qCritical() << "Adding the p1 point to the line at the end of the function, path before that: " << path;
+    path.lineTo(line.p1());
+    qCritical() << "Adding the p1 point to the line at the end of the function, now path: " << path;
 
 
     return path;
@@ -240,24 +261,24 @@ QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, con
     return path;
 }
 
-QList<QPainterPath> getPathsFromRectangleCutThrough(QRectF rect, QLineF line1, QLineF line2) {
+QList<QPainterPath> getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine) {
 
     qCritical() << "~~~ BOTH PATHS ~~~";
 
     QPainterPath left;
     QPainterPath right;
 
-    left.moveTo(line1.p1());
-    left.lineTo(line1.p2());
+    left.moveTo(leftLine.p1());
+    left.lineTo(leftLine.p2());
 
-    right.moveTo(line2.p1());
-    right.lineTo(line2.p2());
+    right.moveTo(rightLine.p1());
+    right.lineTo(rightLine.p2());
 
     QList<QPointF> rectPoints;
     rectPoints << rect.topLeft() << rect.bottomLeft() << rect.bottomRight() << rect.topRight();
 
-    left = getOnePathFromRectangleCutThrough(rectPoints, line1, true);
-    right = getOnePathFromRectangleCutThrough(rectPoints, line2, false);
+    left = getOnePathFromRectangleCutThrough(rectPoints, leftLine, true);
+    right = getOnePathFromRectangleCutThrough(rectPoints, rightLine, false);
 
     QList<QPainterPath> paths;
     paths << left << right;

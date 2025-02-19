@@ -18,7 +18,10 @@
    <item>
     <widget class="QRadioButton" name="thickGapWidthRadioButton">
      <property name="text">
-      <string>Thin gap:</string>
+      <string>Thick gap:</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -55,7 +58,7 @@
         <string> px</string>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>4000</number>
@@ -64,7 +67,7 @@
         <number>50</number>
        </property>
        <property name="value">
-        <number>100</number>
+        <number>40</number>
        </property>
       </widget>
      </item>
@@ -73,7 +76,7 @@
    <item>
     <widget class="QRadioButton" name="thinGapWidthRadioButton">
      <property name="text">
-      <string>Thick gap:</string>
+      <string>Thin gap:</string>
      </property>
     </widget>
    </item>
@@ -110,7 +113,7 @@
         <string> px</string>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>4000</number>
@@ -119,7 +122,7 @@
         <number>50</number>
        </property>
        <property name="value">
-        <number>100</number>
+        <number>15</number>
        </property>
       </widget>
      </item>
@@ -165,7 +168,7 @@
         <string> px</string>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>4000</number>
@@ -174,7 +177,7 @@
         <number>50</number>
        </property>
        <property name="value">
-        <number>100</number>
+        <number>70</number>
        </property>
       </widget>
      </item>

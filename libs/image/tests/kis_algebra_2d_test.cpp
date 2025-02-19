@@ -1060,6 +1060,32 @@ void KisAlgebra2DTest::testGetPathsFromRectangleCutThrough()
 
     QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(rect, left, right);
     qCritical() << paths;
+    assert(paths.length() == 2 && "Must be two paths returned");
+    assert(paths[0].elementCount() == 4 && "First path must have 4 elements (it's a closed triangle)");
+    assert(paths[1].elementCount() == 6 && "First path must have 6 elements");
+
+
+}
+
+void KisAlgebra2DTest::testGetParallelLines()
+{
+    QList<QLineF> lines = KisAlgebra2D::getParallelLines(QLineF(QPointF(100, 200), QPointF(200, 200)), 100);
+    qCritical() << lines;
+    lines = KisAlgebra2D::getParallelLines(QLineF(QPointF(100, 200), QPointF(500, 200)), 100);
+    qCritical() << lines;
+
+    lines = KisAlgebra2D::getParallelLines(QLineF(QPointF(100, 200), QPointF(100, 400)), 100);
+    qCritical() << lines;
+
+    lines = KisAlgebra2D::getParallelLines(QLineF(QPointF(347.16,190.8),QPointF(366.72,190.8)), 50);
+    qCritical() << lines;
+
+
+    // QLineF(QPointF(356.64,90.72),QPointF(356.64,104.64)
+
+    lines = KisAlgebra2D::getParallelLines(QLineF(QPointF(356.64,90.72),QPointF(356.64,104.64)), 50);
+    qCritical() << lines;
+    qCritical() << "distances: " << sqrt(KisAlgebra2D::pointToLineDistSquared(QPointF(356.64,90.72), lines[0])) << sqrt(KisAlgebra2D::pointToLineDistSquared(QPointF(356.64,90.72), lines[1]));
 
 }
 

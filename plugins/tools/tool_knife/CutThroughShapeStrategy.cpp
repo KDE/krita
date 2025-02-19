@@ -111,8 +111,13 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QLineF gapLine = QLineF(m_startPoint, m_endPoint);
 
     QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, 2*m_width);
+    qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1])
+            << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
+    //qCritical() << "Should be: " << pow2(gapWidth/2) << "or" << pow2(gapWidth);
 
-    qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1]) << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
+
+
+    //KIS_ASSERT(qFuzzyCompare(KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1]), pow2(m_width)) && "Distance doesn't match");
 
     gapLine = booleanWorkaroundTransform.map(gapLine);
     gapLines[0] = booleanWorkaroundTransform.map(gapLines[0]);
@@ -125,10 +130,18 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     KisAlgebra2D::cropLineToRect(leftLine, outlineRectBiggerInt, true, true);
     KisAlgebra2D::cropLineToRect(rightLine, outlineRectBiggerInt, true, true);
 
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes"));
 
     if (leftLine.length() == 0 || rightLine.length() == 0) {
-        qCritical() << "Line is: " << leftLine << rightLine << " and the outline rect is: " << outlineRect << ppVar(outlineRectBigger);
-        return; // there would be no cutting
+        qCritical() << "No cutting at all, because one of the lines has length 0. Line is: " << leftLine << rightLine << " and the outline rect is: " << outlineRect << ppVar(outlineRectBigger);
+        qCritical() << "^ No cutting at all... line was: " << gapLine << "and the other were: " << gapLines[0] << gapLines[1];
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(gapLine.length() != 0 && gapLines[0].length() != 0 && gapLines[1].length() != 0 && "Original gap lines shouldn't be empty at this point");
+        // looks like *all* shapes need to be cut out
+
+        tool()->canvas()->shapeController()->removeShapes(m_selectedShapes, cmd);
+        tool()->canvas()->addCommand(cmd);
+
     }
 
 
@@ -136,27 +149,9 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QPainterPath left = paths[0];
     QPainterPath right = paths[1];
 
-
-
-
-
-
-
-
-    Q_FOREACH(KoShape* shape, m_selectedShapes) {
-        KoPathShape* pathShape = dynamic_cast<KoPathShape*>(shape);
-        if (pathShape) {
-            QPainterPath path = pathShape->outline();
-            QRectF rect = pathShape->absoluteOutlineRect();
-
-        }
-    }
-
-
     //QPainterPath dstOutline;
     //QList<QPainterPath> dstOutlines;
 
-    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool"));
     QList<KoShape*> newSelectedShapes;
 
     QList<KoShape*> shapesToRemove;
@@ -209,6 +204,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
 
 
+    // this line sometimes causes a segfault for some reason???
     tool()->canvas()->addCommand(cmd);
 
 
@@ -222,6 +218,14 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
 
     painter.setBrush(Qt::darkGray);
     painter.drawLine(converter.documentToView(m_startPoint), converter.documentToView(m_endPoint));
+    //painter.drawLine(converter.documentToView(m_startPoint), converter.documentToView(m_endPoint));
+
+    //QString str;
+    //str << m_startPoint;
+    //painter.drawText(QRectF(converter.documentToView(m_startPoint), QPointF(1000, 100)).toRect(), m_startPoint);
+    //painter.drawText(QRectF(converter.documentToView(m_endPoint), QPointF(1000, 100)).toRect(), m_endPoint);
+
+
     //painter.drawEllipse(converter.documentToView(m_d->mousePoint), 4, 4);
     //QPointF topLeft = QPointF(min(m_d->startPoint.x(), m_d->endPoint.x()), min(min(m_d->startPoint.x(), m_d->endPoint.x())));
     //QRectF dirtyRect;

@@ -55,6 +55,7 @@
 #  define QTEST_DISABLE_KEYPAD_NAVIGATION
 #endif
 
+
 #if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTBRUSH) || defined(TESTIMAGE) || defined(TESTUI)
 #include <QImageReader>
 #include <QList>
@@ -74,19 +75,16 @@
 #include <KisResourceLocator.h>
 #include <KoResourcePaths.h>
 
-
-
-#if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
 #include <resources/KoSegmentGradient.h>
 #include <resources/KoStopGradient.h>
 #include <resources/KoColorSet.h>
 #include <resources/KoPattern.h>
-#endif
 
 #if defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
 #if defined HAVE_SEEXPR
 #include <KisSeExprScript.h>
 #endif
+#include <resources/KoFontFamily.h>
 #include <resources/KoGamutMask.h>
 #include <resources/KoSvgSymbolCollectionResource.h>
 #endif
@@ -204,6 +202,7 @@ void registerResources()
                                                << KisMimeDatabase::mimeTypeForSuffix("colors")
                                                << KisMimeDatabase::mimeTypeForSuffix("xml")
                                                << KisMimeDatabase::mimeTypeForSuffix("sbz")));
+
 #endif
 
 #if defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
@@ -212,6 +211,7 @@ void registerResources()
 #endif
     reg->add(new KisResourceLoader<KoGamutMask>(ResourceType::GamutMasks, ResourceType::GamutMasks, i18n("Gamut masks"), QStringList() << "application/x-krita-gamutmasks"));
     reg->add(new KisResourceLoader<KoSvgSymbolCollectionResource>(ResourceType::Symbols, ResourceType::Symbols, i18n("SVG symbol libraries"), QStringList() << "image/svg+xml"));
+    reg->add(new KisResourceLoader<KoFontFamily>(ResourceType::FontFamilies, ResourceType::FontFamilies, i18n("Font Families"), QStringList() << "application/x-font-ttf" << "application/x-font-otf"));
 #endif
 
 

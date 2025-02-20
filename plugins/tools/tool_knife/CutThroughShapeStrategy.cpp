@@ -185,6 +185,12 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QPainterPath left = paths[0];
     QPainterPath right = paths[1];
 
+    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLine, leftLine);
+    QPainterPath leftOpposite = pathsOpposite[0];
+    QPainterPath rightOpposite = pathsOpposite[1];
+
+
+
     //QPainterPath dstOutline;
     //QList<QPainterPath> dstOutlines;
 
@@ -193,13 +199,25 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QList<KoShape*> shapesToRemove;
 
     for (int i = 0; i < srcOutlines.size(); i++) {
+
+        KoShape* referenceShape = m_selectedShapes[i];
+
+        if ((srcOutlines[i].boundingRect() & leftOpposite.boundingRect()).isEmpty()
+                || (srcOutlines[i].boundingRect() & rightOpposite.boundingRect()).isEmpty()) {
+            // there is nothing on one side
+            // everything is on the other, far away from the gap line
+            // it just makes it a bit fast when there is a whole lot of shapes
+
+            newSelectedShapes << referenceShape;
+            continue;
+        }
+
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;
 
         QList<QPainterPath> paths;
         paths << leftPath << rightPath;
 
-        KoShape* referenceShape = m_selectedShapes[i];
 
         Q_FOREACH(QPainterPath path, paths) {
             if (path.isEmpty()) {

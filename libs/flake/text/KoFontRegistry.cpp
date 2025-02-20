@@ -241,7 +241,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          int weight,
                                                          int width,
                                                          int slantMode,
-                                                         int slantValue,
+                                                         int slantValue, bool disableFontMatching,
                                                          const QString &language)
 {
     // Generate a hash for the cache.
@@ -285,80 +285,6 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         d->suggestedFileNames().insert(suggestedHash, candidates);
     }
 
-
-
-    FcPatternSP p(FcPatternCreate());
-    Q_FOREACH (const QString &family, families) {
-        QByteArray utfData = family.toUtf8();
-        const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
-        FcPatternAddString(p.data(), FC_FAMILY, vals);
-    }
-
-    {
-        QByteArray fallbackBuf = QString("sans-serif").toUtf8();
-        FcValue fallback;
-        fallback.type = FcTypeString;
-        fallback.u.s = reinterpret_cast<FcChar8 *>(fallbackBuf.data());
-        FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
-    }
-
-    for (int i = 0; i < candidates.size(); i++) {
-        const QPair<QString, int> file = candidates.at(i);
-        QByteArray utfData = file.first.toUtf8();
-        const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
-        FcPatternAddString(p.data(), FC_FILE, vals);
-        FcPatternAddInteger(p.data(), FC_INDEX, file.second);
-    }
-
-    if (slantMode == 1) {
-        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
-    } else if (slantMode == 2) {
-        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_OBLIQUE);
-    } else {
-        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ROMAN);
-    }
-    FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
-    FcPatternAddInteger(p.data(), FC_WIDTH, width);
-
-    double pixelSize = size*(qMin(xRes, yRes)/72.0);
-    FcPatternAddDouble(p.data(), FC_PIXEL_SIZE, pixelSize);
-
-    FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
-    FcDefaultSubstitute(p.data());
-
-
-    p = [&]() {
-        const FcChar32 hash = FcPatternHash(p.data());
-        QString patternHash = families.join("+")+QString::number(hash);
-        // FCPatternHash breaks down when there's mutliple family names that start
-        // with the same letter and are the same length (Butcherman and Babylonica, Eater and Elsie, all 4 on google fonts).
-        const auto oldPattern = d->patterns().find(patternHash);
-        if (oldPattern != d->patterns().end()) {
-            return oldPattern.value();
-        } else {
-            d->patterns().insert(patternHash, p);
-            return p;
-        }
-    }();
-
-    FcResult result = FcResultNoMatch;
-    FcCharSetSP charSet;
-    FcFontSetSP fontSet = [&]() -> FcFontSetSP {
-        const FcChar32 hash = FcPatternHash(p.data());
-        QString patternHash = families.join("+")+QString::number(hash);
-        const auto set = d->sets().find(patternHash);
-
-        if (set != d->sets().end()) {
-            return set.value();
-        } else {
-            FcCharSet *cs = nullptr;
-            FcFontSetSP avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcFalse, &cs, &result));
-            charSet.reset(cs);
-            d->sets().insert(patternHash, avalue);
-            return avalue;
-        }
-    }();
-
     struct FontEntry {
         QString fileName;
         int fontIndex;
@@ -386,129 +312,211 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     QVector<FontEntry> fonts;
     lengths.clear();
 
-    if (text.isEmpty()) {
-        for (int j = 0; j < fontSet->nfont; j++) {
-            if (std::optional<FontEntry> font = FontEntry::get(fontSet->fonts[j])) {
-                fonts.append(std::move(*font));
-                lengths.append(0);
-                break;
-            }
-        }
+    if (disableFontMatching && !candidates.isEmpty()) {
+        FontEntry entry;
+        entry.fileName = candidates.first().first;
+        entry.fontIndex = candidates.first().second;
+        fonts.append(entry);
+        lengths.append(text.size());
     } else {
-        FcCharSet *set = nullptr;
-        QVector<int> familyValues(text.size());
-        QVector<int> fallbackMatchValues(text.size());
-        familyValues.fill(-1);
-        fallbackMatchValues.fill(-1);
 
-        // First, we're going to split up the text into graphemes. This is both
-        // because the css spec requires it, but also because of why the css
-        // spec requires it: graphemes' parts should not end up in seperate
-        // runs, which they will if they get assigned different fonts,
-        // potentially breaking ligatures and emoji sequences.
-        QStringList graphemes = KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
+        FcPatternSP p(FcPatternCreate());
+        Q_FOREACH (const QString &family, families) {
+            QByteArray utfData = family.toUtf8();
+            const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+            FcPatternAddString(p.data(), FC_FAMILY, vals);
+        }
 
-        // Parse over the fonts and graphemes and try to see if we can get the
-        // best match for a given grapheme.
-        for (int i = 0; i < fontSet->nfont; i++) {
+        {
+            QByteArray fallbackBuf = QString("sans-serif").toUtf8();
+            FcValue fallback;
+            fallback.type = FcTypeString;
+            fallback.u.s = reinterpret_cast<FcChar8 *>(fallbackBuf.data());
+            FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
+        }
 
-            double fontsize = 0.0;
-            FcBool isScalable = false;
-            FcPatternGetBool(fontSet->fonts[i], FC_SCALABLE, 0, &isScalable);
-            FcPatternGetDouble(fontSet->fonts[i], FC_PIXEL_SIZE, 0, &fontsize);
-            if (!isScalable && pixelSize != fontsize) {
-                // For some reason, FC will sometimes consider a smaller font pixel-size
-                // to be more relevant to the requested pattern than a bigger one. This
-                // skips those fonts, but it does mean that such pixel fonts would not
-                // be used for fallback.
-                continue;
+        for (int i = 0; i < candidates.size(); i++) {
+            const QPair<QString, int> file = candidates.at(i);
+            QByteArray utfData = file.first.toUtf8();
+            const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+            FcPatternAddString(p.data(), FC_FILE, vals);
+            FcPatternAddInteger(p.data(), FC_INDEX, file.second);
+        }
+
+        if (slantMode == 1) {
+            FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
+        } else if (slantMode == 2) {
+            FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_OBLIQUE);
+        } else {
+            FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ROMAN);
+        }
+        FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
+        FcPatternAddInteger(p.data(), FC_WIDTH, width);
+
+        double pixelSize = size*(qMin(xRes, yRes)/72.0);
+        FcPatternAddDouble(p.data(), FC_PIXEL_SIZE, pixelSize);
+
+        FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
+        FcDefaultSubstitute(p.data());
+
+
+        p = [&]() {
+            const FcChar32 hash = FcPatternHash(p.data());
+            QString patternHash = families.join("+")+QString::number(hash);
+            // FCPatternHash breaks down when there's mutliple family names that start
+            // with the same letter and are the same length (Butcherman and Babylonica, Eater and Elsie, all 4 on google fonts).
+            const auto oldPattern = d->patterns().find(patternHash);
+            if (oldPattern != d->patterns().end()) {
+                return oldPattern.value();
+            } else {
+                d->patterns().insert(patternHash, p);
+                return p;
             }
-            if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
-                int index = 0;
-                Q_FOREACH (const QString &grapheme, graphemes) {
+        }();
 
-                    // Don't worry about matching controls directly,
-                    // as they are not important to font-selection (and many
-                    // fonts have no glyph entry for these)
-                    if (const uint first = firstCharUcs4(grapheme); QChar::category(first) == QChar::Other_Control
-                        || QChar::category(first) == QChar::Other_Format) {
-                        index += grapheme.size();
-                        continue;
-                    }
-                    int familyIndex = -1;
-                    if (familyValues.at(index) == -1) {
-                        int fallbackMatch = fallbackMatchValues.at(index);
-                        Q_FOREACH (uint unicode, grapheme.toUcs4()) {
-                            if (FcCharSetHasChar(set, unicode)) {
-                                familyIndex = i;
-                                if (fallbackMatch < 0) {
-                                    fallbackMatch = i;
+        FcResult result = FcResultNoMatch;
+        FcCharSetSP charSet;
+        FcFontSetSP fontSet = [&]() -> FcFontSetSP {
+            const FcChar32 hash = FcPatternHash(p.data());
+            QString patternHash = families.join("+")+QString::number(hash);
+            const auto set = d->sets().find(patternHash);
+
+            if (set != d->sets().end()) {
+                return set.value();
+            } else {
+                FcCharSet *cs = nullptr;
+                FcFontSetSP avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcFalse, &cs, &result));
+                charSet.reset(cs);
+                d->sets().insert(patternHash, avalue);
+                return avalue;
+            }
+        }();
+
+        if (text.isEmpty()) {
+            for (int j = 0; j < fontSet->nfont; j++) {
+                if (std::optional<FontEntry> font = FontEntry::get(fontSet->fonts[j])) {
+                    fonts.append(std::move(*font));
+                    lengths.append(0);
+                    break;
+                }
+            }
+        } else {
+            FcCharSet *set = nullptr;
+            QVector<int> familyValues(text.size());
+            QVector<int> fallbackMatchValues(text.size());
+            familyValues.fill(-1);
+            fallbackMatchValues.fill(-1);
+
+            // First, we're going to split up the text into graphemes. This is both
+            // because the css spec requires it, but also because of why the css
+            // spec requires it: graphemes' parts should not end up in seperate
+            // runs, which they will if they get assigned different fonts,
+            // potentially breaking ligatures and emoji sequences.
+            QStringList graphemes = KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
+
+            // Parse over the fonts and graphemes and try to see if we can get the
+            // best match for a given grapheme.
+            for (int i = 0; i < fontSet->nfont; i++) {
+
+                double fontsize = 0.0;
+                FcBool isScalable = false;
+                FcPatternGetBool(fontSet->fonts[i], FC_SCALABLE, 0, &isScalable);
+                FcPatternGetDouble(fontSet->fonts[i], FC_PIXEL_SIZE, 0, &fontsize);
+                if (!isScalable && pixelSize != fontsize) {
+                    // For some reason, FC will sometimes consider a smaller font pixel-size
+                    // to be more relevant to the requested pattern than a bigger one. This
+                    // skips those fonts, but it does mean that such pixel fonts would not
+                    // be used for fallback.
+                    continue;
+                }
+                if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
+                    int index = 0;
+                    Q_FOREACH (const QString &grapheme, graphemes) {
+
+                        // Don't worry about matching controls directly,
+                        // as they are not important to font-selection (and many
+                        // fonts have no glyph entry for these)
+                        if (const uint first = firstCharUcs4(grapheme); QChar::category(first) == QChar::Other_Control
+                                || QChar::category(first) == QChar::Other_Format) {
+                            index += grapheme.size();
+                            continue;
+                        }
+                        int familyIndex = -1;
+                        if (familyValues.at(index) == -1) {
+                            int fallbackMatch = fallbackMatchValues.at(index);
+                            Q_FOREACH (uint unicode, grapheme.toUcs4()) {
+                                if (FcCharSetHasChar(set, unicode)) {
+                                    familyIndex = i;
+                                    if (fallbackMatch < 0) {
+                                        fallbackMatch = i;
+                                    }
+                                } else {
+                                    familyIndex = -1;
+                                    break;
                                 }
-                            } else {
-                                familyIndex = -1;
-                                break;
+                            }
+                            for (int k = 0; k < grapheme.size(); k++) {
+                                familyValues[index + k] = familyIndex;
+                                fallbackMatchValues[index + k] = fallbackMatch;
                             }
                         }
-                        for (int k = 0; k < grapheme.size(); k++) {
-                            familyValues[index + k] = familyIndex;
-                            fallbackMatchValues[index + k] = fallbackMatch;
+                        index += grapheme.size();
+                    }
+                    if (!familyValues.contains(-1)) {
+                        break;
+                    }
+                }
+            }
+
+            // Remove the -1 entries.
+            if (familyValues.contains(-1)) {
+                int value = -1;
+                Q_FOREACH (const int currentValue, familyValues) {
+                    if (currentValue != value) {
+                        value = currentValue;
+                        break;
+                    }
+                }
+                value = qMax(0, value);
+                for (int i = 0; i < familyValues.size(); i++) {
+                    if (familyValues.at(i) < 0) {
+                        if (fallbackMatchValues.at(i) < 0) {
+                            familyValues[i] = value;
+                        } else {
+                            familyValues[i] = fallbackMatchValues.at(i);
                         }
-                    }
-                    index += grapheme.size();
-                }
-                if (!familyValues.contains(-1)) {
-                    break;
-                }
-            }
-        }
-
-        // Remove the -1 entries.
-        if (familyValues.contains(-1)) {
-            int value = -1;
-            Q_FOREACH (const int currentValue, familyValues) {
-                if (currentValue != value) {
-                    value = currentValue;
-                    break;
-                }
-            }
-            value = qMax(0, value);
-            for (int i = 0; i < familyValues.size(); i++) {
-                if (familyValues.at(i) < 0) {
-                    if (fallbackMatchValues.at(i) < 0) {
-                        familyValues[i] = value;
                     } else {
-                        familyValues[i] = fallbackMatchValues.at(i);
+                        value = familyValues.at(i);
                     }
-                } else {
-                    value = familyValues.at(i);
                 }
             }
-        }
 
-        // Get the filenames and lengths for the entries.
-        int length = 0;
-        int startIndex = 0;
-        int lastIndex = familyValues.at(0);
-        FontEntry font{};
-        if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
-            font = std::move(*f);
-        }
-        for (int i = 0; i < familyValues.size(); i++) {
-            if (lastIndex != familyValues.at(i)) {
+
+            // Get the filenames and lengths for the entries.
+            int length = 0;
+            int startIndex = 0;
+            int lastIndex = familyValues.at(0);
+            FontEntry font{};
+            if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
+                font = std::move(*f);
+            }
+            for (int i = 0; i < familyValues.size(); i++) {
+                if (lastIndex != familyValues.at(i)) {
+                    lengths.append(text.mid(startIndex, length).size());
+                    fonts.append(font);
+                    startIndex = i;
+                    length = 0;
+                    lastIndex = familyValues.at(i);
+                    if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
+                        font = std::move(*f);
+                    }
+                }
+                length += 1;
+            }
+            if (length > 0) {
                 lengths.append(text.mid(startIndex, length).size());
                 fonts.append(font);
-                startIndex = i;
-                length = 0;
-                lastIndex = familyValues.at(i);
-                if (std::optional<FontEntry> f = FontEntry::get(fontSet->fonts[lastIndex])) {
-                    font = std::move(*f);
-                }
             }
-            length += 1;
-        }
-        if (length > 0) {
-            lengths.append(text.mid(startIndex, length).size());
-            fonts.append(font);
         }
     }
 

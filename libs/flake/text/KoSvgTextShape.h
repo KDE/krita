@@ -435,6 +435,37 @@ public:
     /// Outputs debug with the current textData tree.
     void debugParsing();
 
+    /***
+     * This blocks the shape from automatically calling relayout
+     * when the text or properties change. Relayout needs to be called
+     * in this mode.
+     * Used in the SVGTextLabel.
+     */
+    void setRelayoutBlocked(const bool disable);
+
+    /**
+     * @brief relayoutIsBlocked
+     * @return whether automatic relayout is blocked,
+     * as are updates to shape listeners.
+     */
+    bool relayoutIsBlocked() const;
+
+    /**
+     * @brief setDisableFontMatching
+     * @param disable font matching when retrieving fonts
+     * for text layout (if possible).
+     * This speeds up text layout, but should only be done
+     * if there's only one font necessary and it can be
+     * found with the KoFFWWSconverter.
+     */
+    void setFontMatchingDisabled(const bool disable);
+
+    /**
+     * @brief fontMatchingDisabled
+     * @return whether font matching is disabled for this shape.
+     */
+    bool fontMatchingDisabled() const;
+
 protected:
 
     void shapeChanged(ChangeType type, KoShape *shape) override;

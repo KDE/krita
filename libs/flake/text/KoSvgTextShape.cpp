@@ -1379,6 +1379,26 @@ void KoSvgTextShape::debugParsing()
     }
 }
 
+void KoSvgTextShape::setRelayoutBlocked(const bool disable)
+{
+    d->isLoading = disable;
+}
+
+bool KoSvgTextShape::relayoutIsBlocked() const
+{
+    return d->isLoading;
+}
+
+void KoSvgTextShape::setFontMatchingDisabled(const bool disable)
+{
+    d->disableFontMatching = disable;
+}
+
+bool KoSvgTextShape::fontMatchingDisabled() const
+{
+    return d->disableFontMatching;
+}
+
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();

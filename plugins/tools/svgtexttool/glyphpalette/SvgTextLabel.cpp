@@ -19,6 +19,8 @@ struct Q_DECL_HIDDEN SvgTextLabel::Private {
         : shape(new KoSvgTextShape())
     {
         shape->setResolution(72, 72);
+        shape->setRelayoutBlocked(true);
+        shape->setFontMatchingDisabled(true);
     }
     ~Private() {}
 
@@ -31,6 +33,7 @@ struct Q_DECL_HIDDEN SvgTextLabel::Private {
     QScopedPointer<KoShapePainter> shapePainter;
 
     KoSvgTextProperties props;
+    bool textHasChanged = false;
     int padding = 2;
 };
 
@@ -290,6 +293,7 @@ void SvgTextLabel::componentComplete()
         d->shapePainter.reset(new KoShapePainter());
         d->shapePainter->setShapes({d->shape.data()});
     }
+    //d->shape->setRelayoutBlocked(false);
 
 }
 

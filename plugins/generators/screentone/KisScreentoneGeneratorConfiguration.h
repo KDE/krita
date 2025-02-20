@@ -88,7 +88,7 @@ public:
 
     static constexpr int defaultPattern() { return KisScreentonePatternType_Dots; }
     static constexpr int defaultShape() { return KisScreentoneShapeType_RoundDots; }
-    static constexpr int defaultInterpolation() { return KisScreentoneInterpolationType_Linear; }
+    static constexpr int defaultInterpolation() { return KisScreentoneInterpolationType_Sinusoidal; }
     static constexpr int defaultEqualizationMode() { return KisScreentoneEqualizationMode_TemplateBased; }
 
     static inline const KoColor& defaultForegroundColor()

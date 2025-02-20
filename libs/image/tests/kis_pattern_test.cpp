@@ -6,6 +6,7 @@
 
 #include "kis_pattern_test.h"
 
+#include <QColorSpace>
 
 #include <simpletest.h>
 #include <resources/KoPattern.h>
@@ -50,12 +51,26 @@ void KoPatternTest::testRoundTripMd5()
     qDebug() << "PAT Name:" << patPattern.name();
     qDebug() << "PAT Filename:" << patPattern.filename();
 
-    dbgKrita << pngPattern.pattern().format();
-    dbgKrita << patPattern.pattern().format();
+    qDebug() << "PNG format" << pngPattern.pattern().format();
+    qDebug() << "PNG colorspace"  << pngPattern.pattern().colorSpace();
+
+    qDebug() << "PAT format" << patPattern.pattern().format();
+    qDebug() << "PAT colorspace"  << patPattern.pattern().colorSpace();
 
     QImage im1 = pngPattern.pattern().convertToFormat(QImage::Format_ARGB32);
     QImage im2 = patPattern.pattern().convertToFormat(QImage::Format_ARGB32);
 
+    // QImages loaded from a png file get a colorspace set, but
+    // we don't create a colorspace for images loaded from .pat,
+    // so make sure both im1 and im2 have a colorspace.
+    im2.setColorSpace(im1.colorSpace());
+
+    QCOMPARE(im1.sizeInBytes(), im2.sizeInBytes());
+    QCOMPARE(im1.colorCount(), im2.colorCount());
+    QCOMPARE(im1.colorSpace(), im2.colorSpace());
+    QCOMPARE(im1.format(), im2.format());
+    QCOMPARE(QByteArray::fromRawData((const char*)im1.constBits(), im1.sizeInBytes()),
+             QByteArray::fromRawData((const char*)im2.constBits(), im1.sizeInBytes()));
     QCOMPARE(im1, im2);
 
     QCryptographicHash h1(QCryptographicHash::Md5);

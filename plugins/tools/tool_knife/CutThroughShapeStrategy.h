@@ -31,6 +31,12 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 private:
+
+    qreal gutterWidthInDocumentCoordinates();
+
+
+private:
+
     QPointF m_startPoint = QPointF();
     QPointF m_endPoint = QPointF();
     QRectF m_previousLineDirtyRect = QRectF();

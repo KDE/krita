@@ -28,6 +28,7 @@
 CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, qreal width)
     : KoInteractionStrategy(tool)
     , m_startPoint(startPoint)
+    , m_endPoint(startPoint)
     , m_width(width)
 {
     qCritical() << "Creating a strategy";
@@ -76,6 +77,7 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
+    dirtyRect = kisGrowRect(dirtyRect, gutterWidthInDocumentCoordinates()); // twice as much as it should need to account for lines showing the effect
     //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
     //qCritical() << "And the dirty rect is: " << dirtyRect;
 
@@ -136,12 +138,10 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width));
-    QLineF helperGapWidthLineTransformed = kisCanvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
-    qreal gapWidth = helperGapWidthLineTransformed.length();
+    qreal gutterWidth = gutterWidthInDocumentCoordinates();
 
 
-    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gapWidth/2);
+    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gutterWidth/2);
 
     qCritical() << "############ Are those lines correct? " << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLines[1])
             << KisAlgebra2D::pointToLineDistSquared(gapLines[1].p1(), gapLines[0]) << KisAlgebra2D::pointToLineDistSquared(gapLines[0].p1(), gapLine);
@@ -267,31 +267,53 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    qCritical() << "Cut shape strategy :: paint";
     painter.save();
 
-    painter.setBrush(Qt::darkGray);
-    painter.drawLine(converter.documentToView(m_startPoint), converter.documentToView(m_endPoint));
-    //painter.drawLine(converter.documentToView(m_startPoint), converter.documentToView(m_endPoint));
+    QColor semitransparentGray = QColor(Qt::darkGray);
+    semitransparentGray.setAlphaF(0.6);
+    QPen pen = QPen(QBrush(semitransparentGray), 2);
+    painter.setPen(pen);
 
-    //QString str;
-    //str << m_startPoint;
-    //painter.drawText(QRectF(converter.documentToView(m_startPoint), QPointF(1000, 100)).toRect(), m_startPoint);
-    //painter.drawText(QRectF(converter.documentToView(m_endPoint), QPointF(1000, 100)).toRect(), m_endPoint);
+    painter.setRenderHint(QPainter::RenderHint::Antialiasing, true);
 
+    qreal gutterWidth = gutterWidthInDocumentCoordinates();
 
-    //painter.drawEllipse(converter.documentToView(m_d->mousePoint), 4, 4);
-    //QPointF topLeft = QPointF(min(m_d->startPoint.x(), m_d->endPoint.x()), min(min(m_d->startPoint.x(), m_d->endPoint.x())));
-    //QRectF dirtyRect;
-    //KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
-    //KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
-    //KisAlgebra2D::accumulateBounds(m_mousePoint + QPointF(-2, -2), &dirtyRect);
-    //KisAlgebra2D::accumulateBounds(m_mousePoint + QPointF(2, 2), &dirtyRect);
-    //dirtyRect = converter.viewToDocument(dirtyRect);
+    QLineF gutterCenterLine = QLineF(m_startPoint, m_endPoint);
+    gutterCenterLine = converter.documentToView().map(gutterCenterLine);
+    QLineF gutterWidthHelperLine = QLineF(QPointF(0, 0), QPointF(gutterWidth, 0));
+    gutterWidthHelperLine = converter.documentToView().map(gutterWidthHelperLine);
 
-    //drawCoordsStart(painter, converter);
+    gutterWidth = gutterWidthHelperLine.length();
 
 
+    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gutterCenterLine, gutterWidth/2);
+
+
+    QPointF gutterLineNormalVector = QPointF(-gutterCenterLine.dy(), gutterCenterLine.dx());
+
+
+    QLineF gutterLine1 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), gutterLineNormalVector, gutterWidth/2));
+    QLineF gutterLine2 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), -gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), -gutterLineNormalVector, gutterWidth/2));
+
+
+
+    painter.drawLine(gutterLine1);
+    painter.drawLine(gutterLine2);
+
+    QRectF arcRect1 = QRectF(gutterCenterLine.p1() - QPointF(gutterWidth/2, gutterWidth/2), gutterCenterLine.p1() + QPointF(gutterWidth/2, gutterWidth/2));
+    QRectF arcRect2 = QRectF(gutterCenterLine.p2() - QPointF(gutterWidth/2, gutterWidth/2), gutterCenterLine.p2() + QPointF(gutterWidth/2, gutterWidth/2));
+
+    painter.drawArc(arcRect1, -16*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p1(), gutterLine1.p1(), 0)), -16*180);
+    painter.drawArc(arcRect2, -16*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p2(), gutterLine1.p2(), 0)), 16*180);
 
     painter.restore();
+}
+
+qreal CutThroughShapeStrategy::gutterWidthInDocumentCoordinates()
+{
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(tool()->canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, m_width);
+    QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width));
+    QLineF helperGapWidthLineTransformed = kisCanvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
+    return helperGapWidthLineTransformed.length();
 }

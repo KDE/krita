@@ -29,6 +29,8 @@ void TestNotifier::testNotifier()
 
     QVERIFY(m_document);
 
+    part->removeDocument(doc);
+
 }
 
 void TestNotifier::documentAdded(Document *image)

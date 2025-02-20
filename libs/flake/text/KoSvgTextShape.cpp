@@ -122,7 +122,7 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
     KoShape::shapeChanged(type, shape);
 
-    if (type == StrokeChanged || type == BackgroundChanged || type == ContentChanged) {
+    if (type == ContentChanged) {
         relayout();
     }
 }

@@ -1087,6 +1087,25 @@ void KisAlgebra2DTest::testGetParallelLines()
     qCritical() << lines;
     qCritical() << "distances: " << sqrt(KisAlgebra2D::pointToLineDistSquared(QPointF(356.64,90.72), lines[0])) << sqrt(KisAlgebra2D::pointToLineDistSquared(QPointF(356.64,90.72), lines[1]));
 
+    QPointF intersection;
+    auto type = QLineF(QPointF(0, 0), QPointF(100, 0)).intersects(QLineF(QPointF(50, -50), QPointF(50, 100)), &intersection);
+    qCritical() << "Intersecting lines: " << intersection << type;
+
+}
+
+void KisAlgebra2DTest::testGetParallelLines2()
+{
+    qreal gutterWidth = 20;
+
+    QLineF gutterCenterLine = QLineF(QPointF(0, 0), QPointF(100, 1));
+
+    QPointF gutterLineNormalVector = QPointF(-gutterCenterLine.dy(), gutterCenterLine.dx());
+    QLineF line1 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), gutterLineNormalVector, gutterWidth/2));
+    QLineF line2 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), -gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), -gutterLineNormalVector, gutterWidth/2));
+
+    qCritical() << line1 << line2;
+
+
 }
 
 void KisAlgebra2DTest::testFindTrianglePoint()

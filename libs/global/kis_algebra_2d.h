@@ -859,6 +859,29 @@ QPointF KRITAGLOBAL_EXPORT moveElasticPoint(const QPointF &pt,
                                             const QVector<QPointF> &anchorPoints);
 
 
+QPointF KRITAGLOBAL_EXPORT findNearestPointOnLine(const QPointF &point, const QLineF &line, bool unbounded = true);
+
+/**
+ * @brief movePointAlongTheLine moves the point a particular distance in the specified direction
+ * @param point the point to move
+ * @param direction the direction to move the point along
+ * @param distance distance to move the point
+ * @return the new position of the moved point
+ */
+QPointF KRITAGLOBAL_EXPORT movePointInTheDirection(const QPointF& point, const QPointF& direction, qreal distance);
+
+
+/**
+ * @brief movePointAlongTheLine moves the point a particular distance in the specified direction
+ * @param point the point to move
+ * @param direction the direction to move the point along
+ * @param distance distance to move the point
+ * @param ensureOnLine if true, the algorithm will first change the point to the nearest point on the line, and then move it along the line
+ *                     (if not true, it's an equivalent of movePointInTheDirection, with QPointF being a vector of direction)
+ * @return the new position of the moved point
+ */
+QPointF KRITAGLOBAL_EXPORT movePointAlongTheLine(const QPointF& point, const QLineF& direction, qreal distance, bool ensureOnLine);
+
 /**
  * @brief a simple class to generate Halton sequence
  *
@@ -933,6 +956,7 @@ qreal KRITAGLOBAL_EXPORT findMinimumGoldenSection(std::function<qreal(qreal)> f,
 // NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
 qreal KRITAGLOBAL_EXPORT findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
 
+// kis_global has the same function, this needs to be removed
 qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
 
 QList<QLineF> KRITAGLOBAL_EXPORT getParallelLines(const QLineF& line, const qreal distance);

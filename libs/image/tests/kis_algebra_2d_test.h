@@ -38,6 +38,8 @@ private Q_SLOTS:
     void testCalculateConvexHull();
     void testGetPathsFromRectangleCutThrough();
     void testGetParallelLines();
+    void testGetParallelLines2();
+
 
 
     void testFindTrianglePoint();

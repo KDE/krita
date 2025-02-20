@@ -122,6 +122,7 @@ qreal directionBetweenPoints(const QPointF &p1, const QPointF &p2, qreal default
     }
 
     const QVector2D diff(p2 - p1);
+    //qCritical() << ""
     return std::atan2(diff.y(), diff.x());
 }
 
@@ -1795,9 +1796,51 @@ QList<QPainterPath> getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine
     QList<QPainterPath> paths;
     paths << left << right;
 
-     qCritical() << "~~~ BOTH PATHS ^^^ ~~~";
+    qCritical() << "~~~ BOTH PATHS ^^^ ~~~";
 
     return paths;
+}
+
+QPointF findNearestPointOnLine(const QPointF &point, const QLineF &line, bool unbounded)
+{
+    if (line.length() == 0) {
+        return point;
+    }
+
+    QPointF lineVector = line.p2() - line.p1();
+    QPointF lineNormalVector = QPointF(-lineVector.y(), lineVector.x());
+
+    QLineF pointToLineNormalLine = QLineF(point, point + lineNormalVector);
+    QPointF result;
+    QLineF::IntersectionType intersectionType = pointToLineNormalLine.intersects(line, &result);
+    if (unbounded || intersectionType == QLineF::IntersectionType::BoundedIntersection) {
+        return result;
+    }
+    qreal distance1 = kisDistance(line.p1(), result);
+    qreal distance2 = kisDistance(line.p2(), result);
+    if (distance1 + distance2 <= line.length() || qFuzzyCompare(distance1 + distance2, line.length())) {
+        return result; // it's still on the line
+    }
+    if (distance1 < distance2) {
+        return line.p1();
+    }
+    return line.p2();
+}
+
+QPointF movePointInTheDirection(const QPointF &point, const QPointF &direction, qreal distance)
+{
+    QPointF response = point;
+    QLineF line = QLineF(QPointF(0, 0), direction);
+    return response + distance*direction/line.length();
+}
+
+QPointF movePointAlongTheLine(const QPointF &point, const QLineF &direction, qreal distance, bool ensureOnLine)
+{
+    QPointF response = point;
+    if (ensureOnLine) {
+        response = findNearestPointOnLine(point, direction);
+    }
+    return movePointInTheDirection(response, direction.p2() - direction.p1(), distance);
 }
 
 

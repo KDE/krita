@@ -149,17 +149,20 @@ if (NOT ANDROID)
         kritaversion
   )
 
-
-  install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
-
   if(APPLE)
       set_target_properties(krita_version PROPERTIES INSTALL_RPATH "@loader_path/../Frameworks;@executable_path/../lib;@executable_path/../Frameworks")
       set_property(TARGET krita_version PROPERTY MACOSX_BUNDLE OFF)
   endif ()
+
+  install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif()
 
 
-install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
+if(APPLE)
+    install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS} BUNDLE DESTINATION bin)
+else()
+    install(TARGETS krita ${INSTALL_TARGETS_DEFAULT_ARGS})
+endif()
 install(FILES org.kde.krita.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install(FILES  krita.action kritamenu.action DESTINATION ${KDE_INSTALL_DATADIR}/krita/actions)
 install(FILES  org.kde.krita.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )

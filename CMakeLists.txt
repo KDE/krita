@@ -409,14 +409,18 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 
 if (WIN32)
-# KDECompilerSettings sets Windows Vista as the default,
-# while MSVC's default is 0x0A00 (_WIN32_WINNT_WIN10, sdkddkver.h) and
-# MinGW's is 0x0601 (_WIN32_WINNT_WIN7, _mingw.h).
-# Both are enough to supply the APIs we need in main.cc, but since we
-# need the Windows 8 APIs anyway for the surface orientation and Store API,
-# we set the minimum here.
-remove_definitions(-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_WIN32_IE=0x0600)
-add_definitions(-D_WIN32_WINNT=0x0602 -DWINVER=0x0602  -D_WIN32_IE=0x0602)
+
+# Qt6 targets Windows10, so we shouldn't change it in any way
+if (QT_MAJOR_VERSION STREQUAL "5")
+    # KDECompilerSettings sets Windows Vista as the default,
+    # while MSVC's default is 0x0A00 (_WIN32_WINNT_WIN10, sdkddkver.h) and
+    # MinGW's is 0x0601 (_WIN32_WINNT_WIN7, _mingw.h).
+    # Both are enough to supply the APIs we need in main.cc, but since we
+    # need the Windows 8 APIs anyway for the surface orientation and Store API,
+    # we set the minimum here.
+    remove_definitions(-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_WIN32_IE=0x0600)
+    add_definitions(-D_WIN32_WINNT=0x0602 -DWINVER=0x0602  -D_WIN32_IE=0x0602)
+endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
     if (MSVC) # or CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"

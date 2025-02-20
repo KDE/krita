@@ -18,9 +18,11 @@ linux-build:
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
     KRITACI_LINUX_PUBLISH_PLATFORM: linux
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_LINUX
+    EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_LINUX
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_LINUX --depth=1
+    - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $EFFECTIVE_DEPS_REPO_BRANCH_NAME --depth=1
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
@@ -31,12 +33,33 @@ linux-build:
     # just silently hangs up. For this reason we don't use extra logging on Linux.
 
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $DEPS_BRANCH_NAME_LINUX
+    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $EFFECTIVE_DEPS_BRANCH_NAME
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
     - python3 -u build-tools/ci-scripts/build-appimage.py
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $KRITACI_LINUX_PUBLISH_PLATFORM --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+linux-build-qt6-nightly:
+  extends:
+  - linux-build
+  - .nightly-job-mixin
+  interruptible: false
+  variables:
+    # TODO: Gmic still doesn't build for Qt6
+    KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: True
+    KRITACI_ALLOW_NO_PYQT: True
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DBUILD_WITH_QT6=ON
+
+linux-build-qt6-manual:
+  extends:
+  - linux-build-qt6-nightly
+  - .ci-manual-job-mixin
 
 linux-nightly:
   extends:
@@ -69,7 +92,7 @@ linux-debug-weekly:
 linux-asan-weekly:
   extends:
   - linux-build
-  - .ci-manual-and-weekly-job-mixin
+  - .weekly-job-mixin
   - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:
@@ -85,6 +108,10 @@ linux-asan-weekly:
     KRITACI_ALLOW_NO_PYQT: True
     LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
 
+linux-asan-manual:
+  extends:
+  - linux-asan-weekly
+  - .ci-manual-job-mixin
 
 linux-release:
   extends:

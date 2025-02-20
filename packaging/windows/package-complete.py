@@ -320,6 +320,13 @@ except subprocess.CalledProcessError:
     warnings.warn("ERROR: strip is not working.")
     sys.exit(1)
 
+print("\nTrying to guess Qt version...", end = "")
+useQt6Build = False
+if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\Qt6Core.dll"):
+    print(" Found Qt6")
+    useQt6Build = True
+else:
+    print(" Found Qt5")
 
 print("\nCreating base directories...")
 
@@ -419,16 +426,16 @@ if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\FreehandStrokeBenchmark.exe"):
 # qt.conf -- to specify the location to Qt translations
 shutil.copy(fr"{KRITA_SRC_DIR}\packaging\windows\qt.conf", fr"{pkg_root}\bin")
 # DLLs from bin/
-print("INFO: Copying all DLLs except Qt5 * from bin/")
+print("INFO: Copying all DLLs except Qt5/Qt6 * from bin/")
 files = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.dll")
 pdbs = glob.glob(f"{KRITA_INSTALL_DIR}\\bin\\*.pdb")
 for f in itertools.chain(files, pdbs):
-    if not os.path.basename(f).startswith("Qt5"):
+    if not os.path.basename(f).startswith("Qt5") and not os.path.basename(f).startswith("Qt6"):
         shutil.copy(f, f"{pkg_root}\\bin")
 files = glob.glob(f"{DEPS_INSTALL_DIR}\\bin\\*.dll")
 for f in files:
     pdb = f"{os.path.dirname(f)}\\{os.path.splitext(os.path.basename(f))[0]}.pdb"
-    if not os.path.basename(f).startswith("Qt5"):
+    if not os.path.basename(f).startswith("Qt5") and not os.path.basename(f).startswith("Qt6"):
         shutil.copy(f, f"{pkg_root}\\bin")
         if os.path.isfile(pdb):
             shutil.copy(pdb, f"{pkg_root}\\bin")
@@ -443,13 +450,18 @@ for f in files:
 files = glob.glob(fr"{DEPS_INSTALL_DIR}\bin\libboost_system-*.dll")
 for f in files:
     shutil.copy(f, fr"{pkg_root}\bin")
-# KF5 plugins may be placed at different locations depending on how Qt is built
+# KF5/KF6 plugins may be placed at different locations depending on how Qt is built
 subprocess.run(["xcopy", "/S", "/Y", "/I",
                f"{DEPS_INSTALL_DIR}\\lib\\plugins\\imageformats\\", f"{pkg_root}\\bin\\imageformats\\"])
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\imageformats\\".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\imageformats\\"])
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
+
+if useQt6Build:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf6\\".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf6\\"])
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\kf5\\".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\bin\\kf5\\"])
 
 # Copy the sql drivers explicitly
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\plugins\\sqldrivers\\".format(
@@ -499,8 +511,14 @@ subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\krita".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\krita"])
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kritaplugins".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\kritaplugins"], check=True)
-subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
-    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
+
+if useQt6Build:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf6".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf6"], check=True)
+else:
+    subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\kf5".format(
+        DEPS_INSTALL_DIR), f"{pkg_root}\\share\\kf5"], check=True)
+
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mime".format(
     DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mime"], check=True)
 # Python libs are copied by share\krita above
@@ -532,8 +550,17 @@ if os.path.isdir(fr"{DEPS_INSTALL_DIR}\qml\QtQuick\Layouts"):
 
 
 # windeployqt
-subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+if useQt6Build:
+    # NOTE: we don't pass `--release` option to activate autodetection of the build type
+    #       (which will effectively accept any kind of the binaries unless on MSVC)
+    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS,
+                    "-gui", "-core", "-core5compat", "-openglwidgets", "-svgwidgets", "-opengl",
+                    "-concurrent", "-network", "-printsupport", "-svg",
+                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", "-verbose", "2",
+                    f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+else:
+    subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
+                    "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):

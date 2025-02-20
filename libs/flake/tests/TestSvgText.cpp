@@ -2358,10 +2358,10 @@ void TestSvgText::testCssTextTransform()
     // This particular transformation also has a difference in characters between the before and after,
     // so let's test the positions too.
     QVector<QPair<int, int>> refPositions;
-    refPositions << QPair(0,0) << QPair(1,1) << QPair(2,2) << QPair(3,3) << QPair(4,4) << QPair(5,5)
-                 << QPair(6,6) << QPair(-1,7) << QPair(7,8) << QPair(8,9) << QPair(9,10)
-                 << QPair(10,11) << QPair(11,12) << QPair(12,13) << QPair(-1,14) << QPair(13,15)
-                 << QPair(14,16) << QPair(15,17) <<  QPair(16,18);
+    refPositions << qMakePair(0,0) << qMakePair(1,1) << qMakePair(2,2) << qMakePair(3,3) << qMakePair(4,4) << qMakePair(5,5)
+                 << qMakePair(6,6) << qMakePair(-1,7) << qMakePair(7,8) << qMakePair(8,9) << qMakePair(9,10)
+                 << qMakePair(10,11) << qMakePair(11,12) << qMakePair(12,13) << qMakePair(-1,14) << qMakePair(13,15)
+                 << qMakePair(14,16) << qMakePair(15,17) <<  qMakePair(16,18);
     QVERIFY2(positions == refPositions,
              QString("positions returned by Greek Tonos test number 5 are incorrect.").toLatin1());
 }

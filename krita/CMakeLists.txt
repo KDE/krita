@@ -174,7 +174,12 @@ if (WIN32)
         ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
         ${KRITA_MANIFEST_SRC}
     )
-    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt${QT_MAJOR_VERSION}::WinMain)
+    target_link_libraries(krita_windows_stub_exe PRIVATE krita)
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        target_link_libraries(krita_windows_stub_exe PRIVATE Qt6::EntryPointPrivate)
+    else()
+        target_link_libraries(krita_windows_stub_exe PRIVATE Qt5::WinMain)
+    endif()
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
             OUTPUT_NAME "krita"

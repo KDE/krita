@@ -90,6 +90,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
 {
     d->location = location;
     d->name = QFileInfo(d->location).fileName();
+
     QFileInfo fi(d->location);
     if (fi.isDir()) {
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Folder]->create(location));
@@ -101,20 +102,33 @@ KisResourceStorage::KisResourceStorage(const QString &location)
             d->storageType = StorageType::Bundle;
             // XXX: should we also check whether there's a valid metadata entry? Or is this enough?
             d->valid = (fi.isReadable() && QuaZip(d->location).open(QuaZip::mdUnzip));
-    } else if (d->name.endsWith(".abr", Qt::CaseInsensitive)) {
+    }
+    else if (d->name.endsWith(".abr", Qt::CaseInsensitive)) {
             d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeBrushLibrary]->create(location));
             d->storageType = StorageType::AdobeBrushLibrary;
             d->valid = fi.isReadable();
-    } else if (d->name.endsWith(".asl", Qt::CaseInsensitive)) {
+    }
+    else if (d->name.endsWith(".asl", Qt::CaseInsensitive)) {
             d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = d->storagePlugin->isValid();
-    } else if (d->location == "fontregistery") {
-        d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage]->create(location));
+    }
+
+    else if (d->location == "fontregistry") {
+        auto factory = KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage];
+        if (factory) {
+            auto storage = factory->create(location);
+            d->storagePlugin.reset(storage);
+            d->valid = true;
+        }
+        else {
+            d->valid = false;
+        }
         d->name = location;
         d->storageType = StorageType::FontStorage;
-        d->valid = true;
-    } else if (d->location == "memory" || !QUuid::fromString(d->location).isNull() || (!d->location.isEmpty() && !fi.exists())) {
+
+    }
+    else if (d->location == "memory" || !QUuid::fromString(d->location).isNull() || (!d->location.isEmpty() && !fi.exists())) {
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->name = location;
         d->storageType = StorageType::Memory;

@@ -15,7 +15,6 @@ KIS_DECLARE_STATIC_INITIALIZER {
     KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeStyleLibrary, new KisStoragePluginFactory<KisAslStorage>());
 }
 
-
 class AslTagIterator : public KisResourceStorage::TagIterator
 {
 public:

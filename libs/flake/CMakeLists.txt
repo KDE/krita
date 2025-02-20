@@ -6,6 +6,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
     ${CMAKE_SOURCE_DIR}/libs/flake/text
     ${CMAKE_SOURCE_DIR}/libs/flake/xsimd
+    ${CMAKE_SOURCE_DIR}/libs/flake/resources
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
@@ -268,6 +269,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/tools>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/svg>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/resources>
 )
 
 set_target_properties(libraqm PROPERTIES POSITION_INDEPENDENT_CODE ON)

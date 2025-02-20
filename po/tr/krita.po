@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-19 01:56+0000\n"
-"PO-Revision-Date: 2025-02-07 22:52+0300\n"
+"POT-Creation-Date: 2025-02-20 01:54+0000\n"
+"PO-Revision-Date: 2025-02-19 11:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -17314,7 +17314,7 @@ msgstr "İçe Aktarılmış Görsel"
 
 #. i18n.
 #: libs/image/kis_image.cc:723 libs/ui/kis_import_catcher.cc:50
-#: libs/ui/KisDocument.cpp:2636 plugins/impex/psd/psd_loader.cpp:193
+#: libs/ui/KisDocument.cpp:2634 plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
@@ -19763,9 +19763,9 @@ msgstr "Yerel Özkaynaklar"
 #: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1069
 #: libs/ui/KisApplication.cpp:1072 libs/ui/KisApplication.cpp:1088
 #: libs/ui/KisApplication.cpp:1120 libs/ui/KisApplication.cpp:1134
-#: libs/ui/KisApplication.cpp:1162 libs/ui/KisDocument.cpp:1004
-#: libs/ui/KisDocument.cpp:1019 libs/ui/KisDocument.cpp:1964
-#: libs/ui/KisDocument.cpp:2007 libs/ui/KisDocument.cpp:2018
+#: libs/ui/KisApplication.cpp:1162 libs/ui/KisDocument.cpp:1003
+#: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
+#: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
 #: libs/ui/KisMainWindow.cpp:1173 libs/ui/KisMainWindow.cpp:1270
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
@@ -30843,34 +30843,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Belgeyi Klonla"
 
-#: libs/ui/KisDocument.cpp:743
+#: libs/ui/KisDocument.cpp:742
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 yazılamadı. Lütfen başka bir adla kaydedin."
 
-#: libs/ui/KisDocument.cpp:793
+#: libs/ui/KisDocument.cpp:792
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:810
+#: libs/ui/KisDocument.cpp:809
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Numaralandırılmış bir yedek dosyası oluşturulamadı"
 
-#: libs/ui/KisDocument.cpp:832
+#: libs/ui/KisDocument.cpp:831
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Belge Dışa Aktarılıyor…"
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Saving Document..."
 msgstr "Belge Kaydediliyor…"
 
-#: libs/ui/KisDocument.cpp:848
+#: libs/ui/KisDocument.cpp:847
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30879,28 +30879,28 @@ msgstr ""
 "%1 kaydedilmeye başlanamadı. Geçerli kaydetme işlemi bitinceye değin "
 "bekleyin."
 
-#: libs/ui/KisDocument.cpp:853
+#: libs/ui/KisDocument.cpp:852
 #, kde-format
 msgid "Could not start saving %1. Image is busy"
 msgstr "%1 kaydedilmeye başlanamadı. Görsel meşgul."
 
-#: libs/ui/KisDocument.cpp:858
+#: libs/ui/KisDocument.cpp:857
 #, kde-format
 msgid "Could not start saving %1. Unknown failure has happened"
 msgstr "%1 kaydedilmeye başlanamadı. Bilinmeyen bir hata oluştu."
 
-#: libs/ui/KisDocument.cpp:998
+#: libs/ui/KisDocument.cpp:997
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "%1 dosyası kaydedilirken hata: %2"
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1004
 #, kde-format
 msgid "Could not save %1."
 msgstr "%1 kaydedilemedi."
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1021
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30908,45 +30908,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 kaydedildi; ancak tamamlanmamış"
 
-#: libs/ui/KisDocument.cpp:1028
+#: libs/ui/KisDocument.cpp:1027
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Kaydetme sırasında sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:1045
+#: libs/ui/KisDocument.cpp:1044
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1470
+#: libs/ui/KisDocument.cpp:1468
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Kendiliğinden kaydediliyor… %1"
 
-#: libs/ui/KisDocument.cpp:1478
+#: libs/ui/KisDocument.cpp:1476
 #, kde-format
 msgid "Autosaving..."
 msgstr "Kendiliğinden kaydediliyor…"
 
-#: libs/ui/KisDocument.cpp:1484
+#: libs/ui/KisDocument.cpp:1482
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Kendiliğinden kaydetme ertelendi: Belge meşgul…"
 
-#: libs/ui/KisDocument.cpp:1627
+#: libs/ui/KisDocument.cpp:1625
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "%1 kendiliğinden kaydedilirken hata: %2"
 
-#: libs/ui/KisDocument.cpp:1641
+#: libs/ui/KisDocument.cpp:1639
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 kendiliğinden kaydedildi"
 
-#: libs/ui/KisDocument.cpp:1898
+#: libs/ui/KisDocument.cpp:1896
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30955,38 +30955,38 @@ msgstr ""
 "Hatalı Oluşturulmuş Yol\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1964
+#: libs/ui/KisDocument.cpp:1962
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 dosyası yok."
 
-#: libs/ui/KisDocument.cpp:1993
+#: libs/ui/KisDocument.cpp:1991
 #, kde-format
 msgid "Opening document"
 msgstr "Belge açılıyor"
 
-#: libs/ui/KisDocument.cpp:2008
+#: libs/ui/KisDocument.cpp:2006
 #, kde-format
 msgid "Could not open %1."
 msgstr "%1 açılamadı."
 
-#: libs/ui/KisDocument.cpp:2019
+#: libs/ui/KisDocument.cpp:2017
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 açılırken sorunlarla karşılaşıldı."
 
-#: libs/ui/KisDocument.cpp:2157
+#: libs/ui/KisDocument.cpp:2155
 #, kde-format
 msgid "Not Saved"
 msgstr "Kaydedilmemiş"
 
-#: libs/ui/KisDocument.cpp:2643
+#: libs/ui/KisDocument.cpp:2641
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Arka Plan Dolgusu"
 
-#: libs/ui/KisDocument.cpp:2705
+#: libs/ui/KisDocument.cpp:2703
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -56894,123 +56894,118 @@ msgstr "Sürgü çizgilerinin sayısı: "
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Kuratör"
+msgstr "Mutasyoncu"
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Çevir"
+msgstr "Mutasyona Uğrat"
 
 #: plugins/python/mutator/mutator.py:122
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "Başlangıç"
+msgstr "Ayarlar mutasyona uğratıldı!"
 
 #: plugins/python/mutator/mutator.py:152
-#, fuzzy
-#| msgid "Curator"
 msgid "Mutator"
-msgstr "Kuratör"
+msgstr "Mutasyoncu"
 
 #: plugins/python/mutator/mutator.py:166
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr ""
+"Mutasyonun, Krita’nın global fırça boyutunu hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:168
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "Doygunluk: "
+msgstr "Boyut mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:175
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr ""
+"Mutasyonun, Krita’nın global fırça döndürmesini hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:177
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Rotation Mutation: "
-msgstr "Doygunluk: "
+msgstr "Döndürme mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:184
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr ""
+"Mutasyonun, Krita’nın global fırça matlığını hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:186
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "Matlık: "
+msgstr "Matlık mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:193
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr ""
+"Mutasyonun, Krita’nın global fırça akışını hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:195
-#, fuzzy
-#| msgid "Rotation:"
 msgid "Flow Mutation: "
-msgstr "Döndürme:"
+msgstr "Akış mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:202
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
 msgstr ""
+"Mutasyonun, Krita’nın global ön plan renk tonunu hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:204
-#, fuzzy
-#| msgid "Fixed rotation:"
 msgid "Hue Mutation: "
-msgstr "Sabit döndürme:"
+msgstr "Ton mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:211
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr ""
+"Mutasyonun, Krita’nın global ön plan renk doygunluğunu hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:213
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Saturation Mutation: "
-msgstr "Doygunluk: "
+msgstr "Doygunluk mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:220
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
 msgstr ""
+"Mutasyonun, Krita’nın global ön plan renk değerini hangi dereceye kadar "
+"etkileyeceğini denetler."
 
 #: plugins/python/mutator/mutator.py:222
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "Video süresi:"
+msgstr "Değer mutasyonu: "
 
 #: plugins/python/mutator/mutator.py:232
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "Çevir"
+msgstr "Mutasyona Uğrat"
 
 #: plugins/python/mutator/mutator.py:233
 msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
+"Yukarıda yapılandırılan mutasyon ayarlarına göre çeşitli global fırça ve "
+"renk ayarlarını rastgele mutasyona uğratan “Mutasyona Uğrat” eylemini "
+"çağırır."
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"

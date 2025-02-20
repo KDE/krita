@@ -11,22 +11,25 @@
 #include <QImage>
 #include <QQuickWindow>
 #include <KoShapePainter.h>
+#include <kis_assert.h>
 
 struct Q_DECL_HIDDEN SvgTextLabel::Private {
 
     Private()
         : shape(new KoSvgTextShape())
-        , shapePainter(new KoShapePainter())
     {
         shape->setResolution(72, 72);
-        // Hack to avoid the textshape having 0 bounds and the KoRTree complaining about it.
-        shape->insertText(0, "a");
-        shapePainter->setShapes({shape.data()});
     }
     ~Private() {}
 
     QScopedPointer<KoSvgTextShape> shape;
+
+    /**
+     * The shape painter is initialized only after QML item loading
+     * is completed
+     */
     QScopedPointer<KoShapePainter> shapePainter;
+
     KoSvgTextProperties props;
     int padding = 2;
 };
@@ -46,6 +49,9 @@ SvgTextLabel::~SvgTextLabel()
 
 void SvgTextLabel::paint(QPainter *painter)
 {
+    // the QML item must be finalized before paint() is called
+    KIS_SAFE_ASSERT_RECOVER_RETURN(d->shapePainter);
+
     if (d->shape->textProperties() != d->props) {
         updateShape();
     }
@@ -278,7 +284,13 @@ void SvgTextLabel::setLanguage(QString language)
 void SvgTextLabel::componentComplete()
 {
     QQuickPaintedItem::componentComplete();
+
     updateShape();
+    if (!d->shapePainter) {
+        d->shapePainter.reset(new KoShapePainter());
+        d->shapePainter->setShapes({d->shape.data()});
+    }
+
 }
 
 void SvgTextLabel::updateShape()

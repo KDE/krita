@@ -293,7 +293,6 @@ void SvgTextLabel::componentComplete()
         d->shapePainter.reset(new KoShapePainter());
         d->shapePainter->setShapes({d->shape.data()});
     }
-    //d->shape->setRelayoutBlocked(false);
 
 }
 

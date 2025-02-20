@@ -47,9 +47,31 @@ KUndo2Command *CutThroughShapeStrategy::createCommand()
     return 0;
 }
 
+QPointF snapEndPoint(const QPointF &startPoint, const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) {
+
+    QPointF nicePoint = snapToClosestNiceAngle(mouseLocation, startPoint); // by default the function gives you 15 degrees increments
+
+    if (modifiers & Qt::KeyboardModifier::ShiftModifier) {
+        return nicePoint;
+        if (qAbs(mouseLocation.x() - startPoint.x()) >= qAbs(mouseLocation.y() - startPoint.y())) {
+            // do horizontal line
+            return QPointF(mouseLocation.x(), startPoint.y());
+        } else {
+            return QPointF(startPoint.x(), mouseLocation.y());
+        }
+    }
+    QLineF line = QLineF(startPoint, mouseLocation);
+    qreal angle = line.angleTo(QLineF(startPoint, nicePoint));
+    qreal eps = kisDegreesToRadians(2.0f);
+    if (angle < eps) {
+        return nicePoint;
+    }
+    return mouseLocation;
+}
+
 void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    m_endPoint = mouseLocation;
+    m_endPoint = snapEndPoint(m_startPoint, mouseLocation, modifiers);
     //qCritical() << "Now supposedly drawing a line between " << m_d->startPoint << " to " << m_d->endPoint;
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);

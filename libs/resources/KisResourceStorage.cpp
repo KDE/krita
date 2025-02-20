@@ -109,7 +109,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
             d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = d->storagePlugin->isValid();
-    } else if (d->location == "fontregistery") {
+    } else if (d->location == "fontregistry") {
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage]->create(location));
         d->name = location;
         d->storageType = StorageType::FontStorage;

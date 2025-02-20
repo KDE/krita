@@ -119,7 +119,7 @@ public:
      */
     QString filePathForResource(KoResourceSP resource);
 
-    /// This updates the "fontregistery" storage. Called when the font directories change;
+    /// This updates the "fontregistry" storage. Called when the font directories change;
     void updateFontStorage();
 
 Q_SIGNALS:

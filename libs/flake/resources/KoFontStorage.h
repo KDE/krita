@@ -13,7 +13,7 @@
 class KRITAFLAKE_EXPORT KoFontStorage: public KisStoragePlugin
 {
 public:
-    KoFontStorage(const QString &location = "fontregistery");
+    KoFontStorage(const QString &location = "fontregistry");
     virtual ~KoFontStorage();
 
     KisResourceStorage::ResourceItem resourceItem(const QString &url) override;

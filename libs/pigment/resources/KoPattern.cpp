@@ -117,7 +117,7 @@ bool KoPattern::loadPatFromDevice(QIODevice *dev)
     }
 
     // size -1 so we don't add the end 0 to the QString...
-    QString newName = QString::fromLatin1(name, size -1);
+    QString newName = QString::fromUtf8(name, size - 1);
     if (!newName.isEmpty()) { // if it's empty, it's better to leave the name that was there before (based on filename)
         setName(newName);
     }

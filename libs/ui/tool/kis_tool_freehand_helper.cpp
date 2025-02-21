@@ -108,7 +108,7 @@ struct KisToolFreehandHelper::Private
     KisStabilizedEventsSampler stabilizedSampler;
     KisStabilizerDelayedPaintHelper stabilizerDelayedPaintHelper;
 
-    qreal effectiveSmoothnessDistance() const;
+    qreal effectiveSmoothnessDistance(qreal speed) const;
 };
 
 
@@ -430,7 +430,7 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
                      pi2);
 }
 
-qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance() const
+qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance(qreal speed) const
 {
     qreal zoomingCoeff = 1.0;
 
@@ -443,7 +443,7 @@ qreal KisToolFreehandHelper::Private::effectiveSmoothnessDistance() const
         zoomingCoeff = 1.0 / resources->effectiveZoom();
     }
 
-    return smoothingOptions->smoothnessDistance() * zoomingCoeff;
+    return zoomingCoeff * ((1.0 - speed) * smoothingOptions->smoothnessDistanceMax() + speed * smoothingOptions->smoothnessDistanceMin());
 }
 
 void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
@@ -485,9 +485,10 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
    
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
-        && m_d->smoothingOptions->smoothnessDistance() > 0.0) {
-        { 
-            // initialize current distance
+        && (m_d->smoothingOptions->smoothnessDistanceMin() > 0.0
+            || m_d->smoothingOptions->smoothnessDistanceMax() > 0.0)) {
+
+        { // initialize current distance
             QPointF prevPos;
 
             if (!m_d->history.isEmpty()) {
@@ -507,7 +508,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
         qreal y = 0.0;
 
         if (m_d->history.size() > 3) {
-            const qreal sigma = m_d->effectiveSmoothnessDistance() / 3.0; // '3.0' for (3 * sigma) range
+            const qreal sigma = m_d->effectiveSmoothnessDistance(m_d->previousPaintInformation.drawingSpeed()) / 3.0; // '3.0' for (3 * sigma) range
 
             qreal gaussianWeight = 1 / (sqrt(2 * M_PI) * sigma);
             qreal gaussianWeight2 = sigma * sigma;
@@ -742,7 +743,7 @@ void KisToolFreehandHelper::stabilizerStart(KisPaintInformation firstPaintInfo)
 {
     m_d->usingStabilizer = true;
     // FIXME: Ugly hack, this is no a "distance" in any way
-    int sampleSize = qRound(m_d->effectiveSmoothnessDistance());
+    int sampleSize = qRound(m_d->effectiveSmoothnessDistance(firstPaintInfo.drawingSpeed()));
     sampleSize = qMax(3, sampleSize);
 
     // Fill the deque with the current value repeated until filling the sample

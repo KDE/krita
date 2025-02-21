@@ -33,8 +33,14 @@ public:
     SmoothingType smoothingType() const;
     void setSmoothingType(SmoothingType value);
 
-    qreal smoothnessDistance() const;
-    void setSmoothnessDistance(qreal value);
+    qreal smoothnessDistanceMin() const;
+    void setSmoothnessDistanceMin(qreal value);
+
+    qreal smoothnessDistanceMax() const;
+    void setSmoothnessDistanceMax(qreal value);
+
+    bool smoothnessDistanceKeepAspectRatio() const;
+    void setSmoothnessDistanceKeepAspectRatio(bool value);
 
     qreal tailAggressiveness() const;
     void setTailAggressiveness(qreal value);

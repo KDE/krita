@@ -13,6 +13,8 @@
 
 #include "KisToolPaintFactoryBase.h"
 
+#include "KoAspectButton.h"
+
 #include <flake/kis_node_shape.h>
 #include <kis_icon.h>
 #include <QKeySequence>
@@ -34,7 +36,8 @@ class KisDoubleSliderSpinBox;
 class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
-    Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessDistance NOTIFY smoothnessQualityChanged)
+    Q_PROPERTY(int smoothnessQualityMin READ smoothnessQualityMin WRITE slotSetSmoothnessDistanceMin NOTIFY smoothnessQualityChanged)
+    Q_PROPERTY(int smoothnessQualityMax READ smoothnessQualityMax WRITE slotSetSmoothnessDistanceMax NOTIFY smoothnessQualityChanged)
     Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAggressiveness NOTIFY smoothnessFactorChanged)
     Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
@@ -53,7 +56,8 @@ public:
 
     QWidget * createOptionWidget() override;
 
-    int smoothnessQuality() const;
+    int smoothnessQualityMin() const;
+    int smoothnessQualityMax() const;
     qreal smoothnessFactor() const;
     bool smoothPressure() const;
     int smoothingType() const;
@@ -74,7 +78,9 @@ protected Q_SLOTS:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    void slotSetSmoothnessDistance(qreal distance);
+    void slotSetSmoothnessDistanceMin(qreal distance);
+    void slotSetSmoothnessDistanceMax(qreal distance);
+    void slotSetSmoothnessDistanceKeepAspectRatio(bool value);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
     void slotSetTailAggressiveness(qreal argh_rhhrr);
@@ -112,8 +118,11 @@ private:
     KisSliderSpinBox *m_sliderMagnetism {0};
     QCheckBox *m_chkOnlyOneAssistant {0};
     QCheckBox *m_chkSnapEraser {0};
-    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance {0};
-    QLabel *m_lblSmoothnessDistance {0};
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistanceMin {0};
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistanceMax {0};
+    KoAspectButton *m_distanceAspectButton {0};
+    QLabel *m_lblSmoothnessDistanceMin {0};
+    QLabel *m_lblSmoothnessDistanceMax {0};
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness {0};
     QCheckBox *m_chkSmoothPressure {0};
     QCheckBox *m_chkUseScalableDistance {0};

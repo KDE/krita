@@ -1894,14 +1894,34 @@ void KisConfig::setLineSmoothingType(int value)
     m_cfg.writeEntry("LineSmoothingType", value);
 }
 
-qreal KisConfig::lineSmoothingDistance(bool defaultValue) const
+qreal KisConfig::lineSmoothingDistanceMin(bool defaultValue) const
 {
-    return (defaultValue ? 50.0 : m_cfg.readEntry("LineSmoothingDistance", 50.0));
+    return (defaultValue ? 50.0 : m_cfg.readEntry("LineSmoothingDistanceMin", 50.0));
 }
 
-void KisConfig::setLineSmoothingDistance(qreal value)
+void KisConfig::setLineSmoothingDistanceMin(qreal value)
 {
-    m_cfg.writeEntry("LineSmoothingDistance", value);
+    m_cfg.writeEntry("LineSmoothingDistanceMin", value);
+}
+
+qreal KisConfig::lineSmoothingDistanceMax(bool defaultValue) const
+{
+    return (defaultValue ? 50.0 : m_cfg.readEntry("LineSmoothingDistanceMax", 50.0));
+}
+
+void KisConfig::setLineSmoothingDistanceMax(qreal value)
+{
+    m_cfg.writeEntry("LineSmoothingDistanceMax", value);
+}
+
+bool KisConfig::lineSmoothingDistanceKeepAspectRatio(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("LineSmoothingDistanceKeepAspectRatio", true));
+}
+
+void KisConfig::setLineSmoothingDistanceKeepAspectRatio(bool value)
+{
+    m_cfg.writeEntry("LineSmoothingDistanceKeepAspectRatio", value);
 }
 
 qreal KisConfig::lineSmoothingTailAggressiveness(bool defaultValue) const

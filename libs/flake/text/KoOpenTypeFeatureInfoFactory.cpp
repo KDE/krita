@@ -113,7 +113,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
                       {KoOpenTypeFeatureInfo::GPOS6}));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("rclt"),
                       i18nc("@title", "Required Contextual Alternates"),
-                      i18nc("@tooltip", "Replaces glyphs contextually wth alternates, required to make the font work."),
+                      i18nc("@tooltip", "Replaces glyphs contextually with alternates, required to make the font work."),
                       {KoOpenTypeFeatureInfo::GSUB6}));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("rlig"),
                       i18nc("@title", "Required Ligatures"),
@@ -209,7 +209,7 @@ KoOpenTypeFeatureInfoFactory::KoOpenTypeFeatureInfoFactory()
     // LGC and other bicarmel features.
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("case"),
                       i18nc("@title", "Case-Sensitive Forms"),
-                      i18nc("@tooltip", "Adjusts glyphs to work beter with text that consists of only capitals or lining figures."),
+                      i18nc("@tooltip", "Adjusts glyphs to work better with text that consists of only capitals or lining figures."),
                       {KoOpenTypeFeatureInfo::GSUB1, KoOpenTypeFeatureInfo::GPOS1}));
     initialMap.append(KoOpenTypeFeatureInfo(QLatin1String("cpsp"),
                       i18nc("@title", "Capital Spacing"),

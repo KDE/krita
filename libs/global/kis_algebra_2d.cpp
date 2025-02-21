@@ -1318,7 +1318,7 @@ int lineSideForPoint(const QLineF &line, const QPointF &point)
     }
 
     qreal whichSide = KisAlgebra2D::crossProduct(line.p2() - line.p1(), point - line.p1());
-    return whichSide == 0 ? 0 : (whichSide > 0 ? 1 : -1);
+    return qFuzzyIsNull(whichSide) ? 0 : (whichSide > 0 ? 1 : -1);
 }
 
 QPolygonF combineConvexHullParts(const QPolygonF &leftPolygon, QPolygonF &rightPolygon, bool triangular) {
@@ -1562,10 +1562,10 @@ qreal pointToLineDistSquared(const QPointF &pt, const QLineF &line)
 }
 
 QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
-    if (line.length() == 0) {
+    if (qFuzzyIsNull(line.length())) {
         return QList<QLineF>();
     }
-    if (qFuzzyCompare(distance, 0)) {
+    if (qFuzzyIsNull(distance)) {
         return QList<QLineF>() << line << line;
     }
     QPointF lineVector = line.p2() - line.p1();

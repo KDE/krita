@@ -117,7 +117,7 @@ QVector<ShadeLine> WGConfig::shadeSelectorLines(bool defaultValue) const
     }
     QVector<ShadeLine> shadeLines;
     QStringList shadeLineList(configString.split('|'));
-    for (const QString &line: qAsConst(shadeLineList)) {
+    for (const QString &line: std::as_const(shadeLineList)) {
         QVector4D gradient, offset;
         int patchCount = -1;
         QStringList values = line.split(';');

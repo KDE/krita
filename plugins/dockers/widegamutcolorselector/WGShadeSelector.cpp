@@ -31,7 +31,7 @@ void WGShadeSelector::setModel(KisVisualColorModelSP colorModel)
         disconnect(m_model.data());
     }
     m_model = colorModel;
-    for (WGShadeSlider *slider : qAsConst(m_sliders)) {
+    for (WGShadeSlider *slider : std::as_const(m_sliders)) {
         slider->setModel(m_model);
     }
     connectToModel();
@@ -76,7 +76,7 @@ void WGShadeSelector::updateSettings()
 void WGShadeSelector::mousePressEvent(QMouseEvent *event)
 {
     if (m_resetOnRightClick && event->button() == Qt::RightButton) {
-        for (WGShadeSlider* slider : qAsConst(m_sliders)) {
+        for (WGShadeSlider* slider : std::as_const(m_sliders)) {
             slider->slotSetChannelValues(m_model->channelValues());
         }
     }
@@ -95,7 +95,7 @@ void WGShadeSelector::connectToModel()
 void WGShadeSelector::slotChannelValuesChanged(const QVector4D &values)
 {
     if (m_allowUpdates && (m_resetOnExternalUpdate || !m_initialized)) {
-        for (WGShadeSlider* slider : qAsConst(m_sliders)) {
+        for (WGShadeSlider* slider : std::as_const(m_sliders)) {
             slider->slotSetChannelValues(values);
         }
         m_initialized = true;
@@ -113,7 +113,7 @@ void WGShadeSelector::slotSliderInteraction(bool active)
 {
     if (active) {
         const WGShadeSlider* activeLine = qobject_cast<WGShadeSlider*>(sender());
-        for (WGShadeSlider* slider : qAsConst(m_sliders)) {
+        for (WGShadeSlider* slider : std::as_const(m_sliders)) {
             if (slider != activeLine) {
                 slider->resetHandle();
             }
@@ -129,7 +129,7 @@ void WGShadeSelector::slotSliderInteraction(bool active)
     else {
         // reset slider base values if configured for automatic reset
         if (m_resetOnInteractions) {
-            for (WGShadeSlider* slider : qAsConst(m_sliders)) {
+            for (WGShadeSlider* slider : std::as_const(m_sliders)) {
                 slider->slotSetChannelValues(m_model->channelValues());
             }
         }

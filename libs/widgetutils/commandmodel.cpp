@@ -18,7 +18,7 @@ void CommandModel::refresh(QVector<QPair<QString, QAction *>> actionList)
 {
     QVector<Item> temp;
     temp.reserve(actionList.size());
-    for (const auto &action : qAsConst(actionList)) {
+    for (const auto &action : std::as_const(actionList)) {
         temp.push_back({action.first, action.second, 0});
     }
 

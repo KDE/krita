@@ -45,7 +45,7 @@ QSize KisWrappableHBoxLayout::minimumSize() const
     const QSize marginsSize = QSize(margins.left() + margins.right(), margins.top() + margins.bottom());
 
     QSize size;
-    for (const QLayoutItem *item : qAsConst(m_items))
+    for (const QLayoutItem *item : std::as_const(m_items))
         size = size.expandedTo(item->minimumSize());
 
     if (!geometry().isEmpty()) {
@@ -104,7 +104,7 @@ int KisWrappableHBoxLayout::doLayout(const QRect &rect, bool testOnly) const
     int y = effectiveRect.y();
     int lineHeight = 0;
 
-    for (QLayoutItem *item : qAsConst(m_items)) {
+    for (QLayoutItem *item : std::as_const(m_items)) {
         int nextX = x + item->sizeHint().width() + spacing();
         if (nextX - spacing() > effectiveRect.right() && lineHeight > 0) {
             x = effectiveRect.x();

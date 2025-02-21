@@ -137,7 +137,7 @@ void KisVisualColorSelector::setConfiguration(const KisColorSelectorConfiguratio
 void KisVisualColorSelector::setAcceptTabletEvents(bool on)
 {
     m_d->acceptTabletEvents = on;
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(on);
     }
 }
@@ -173,7 +173,7 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
 {
     if (mode != m_d->renderMode) {
         m_d->renderMode = mode;
-        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
             shape->forceImageUpdate();
             shape->update();
         }
@@ -199,7 +199,7 @@ void KisVisualColorSelector::setProofColors(bool enabled)
 {
     if (enabled != m_d->proofColors) {
         m_d->proofColors = enabled;
-        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
             shape->forceImageUpdate();
             shape->update();
         }
@@ -262,7 +262,7 @@ void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
     // Note: KisCanvasResourceProvider currently does not distinguish
     // between activating, switching and property changes of a gamut mask
     m_d->gamutMask = mask;
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -270,7 +270,7 @@ void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
 void KisVisualColorSelector::slotGamutMaskUnset()
 {
     m_d->gamutMask.clear();
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -278,7 +278,7 @@ void KisVisualColorSelector::slotGamutMaskUnset()
 void KisVisualColorSelector::slotGamutMaskPreviewUpdate()
 {
     // Shapes currently always requests preview shapes if available, so more of the same...
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -290,7 +290,7 @@ void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values, q
         return;
     }
     m_d->channelValues = values;
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->setChannelValues(m_d->channelValues, channelFlags);
     }
 }
@@ -325,7 +325,7 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
         m_d->channelValues[shape->channel(1)] = pos.y();
     }
 
-    for (KisVisualColorSelectorShape *widget : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *widget : std::as_const(m_d->widgetlist)) {
         if (widget != shape){
             widget->setChannelValues(m_d->channelValues, shape->channelMask());
         }
@@ -339,7 +339,7 @@ void KisVisualColorSelector::slotDisplayConfigurationChanged()
         m_d->selectorModel->setMaxChannelValues(calculateMaxChannelValues());
     }
     // TODO: can we be smarter about forced updates?
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->forceImageUpdate();
         shape->update();
     }
@@ -495,7 +495,7 @@ void KisVisualColorSelector::rebuildSelector()
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 
-    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+    for (KisVisualColorSelectorShape *shape : std::as_const(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(m_d->acceptTabletEvents);
         // if this widget is currently visible, new children are hidden by default
         shape->show();

@@ -387,7 +387,7 @@ void KateCommandBar::slotReturnPressed()
                 menuActions = menu->actions();
             }
 
-            for (auto menuAction : qAsConst(menuActions)) {
+            for (auto menuAction : std::as_const(menuActions)) {
                 if (menuAction) {
                     list.append({KLocalizedString::removeAcceleratorMarker(act->text()), menuAction});
                 }

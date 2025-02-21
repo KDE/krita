@@ -6,27 +6,69 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label", "Glyphs: Ligatures");
+    propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Enable or disable ligatures and contextual alternates on the text.");
+    searchTerms: i18nc("comma separated search terms for the font-variant-ligatures property, matching is case-insensitive",
+                       "font-variant-ligatures, common-ligatures, discretionary-ligatures, historical-ligatures, contextual-alts");
+
+    property alias commonLigatures: commonLigaCbx.checked;
+    property alias discretionaryLigatures: discretionaryLigaCbx.checked;
+    property alias historicalLigatures: historicalLigaCbx.checked;
+    property alias contextualAlternates: contextualLigaCbx.checked;
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        commonLigatures = properties.fontVariantLigatures.commonLigatures;
+        discretionaryLigatures = properties.fontVariantLigatures.discretionaryLigatures;
+        historicalLigatures = properties.fontVariantLigatures.historicalLigatures;
+        contextualAlternates = properties.fontVariantLigatures.contextualAlternates;
+        visible = properties.fontVariantLigaturesState !== KoSvgTextPropertiesModel.PropertyUnset;
+        blockSignals = false;
+    }
+
+    onCommonLigaturesChanged: {
+        if (!blockSignals) {
+            properties.fontVariantLigatures.commonLigatures = commonLigatures;
+        }
+    }
+
+    onDiscretionaryLigaturesChanged: {
+        if (!blockSignals) {
+            properties.fontVariantLigatures.discretionaryLigatures = discretionaryLigatures;
+        }
+    }
+
+    onHistoricalLigaturesChanged: {
+        if (!blockSignals) {
+            properties.fontVariantLigatures.historicalLigatures = historicalLigatures;
+        }
+    }
+
+    onContextualAlternatesChanged: {
+        if (!blockSignals) {
+            properties.fontVariantLigatures.contextualAlternates = contextualAlternates;
+        }
+    }
+
+    onEnableProperty: properties.fontVariantLigaturesState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
         width: parent.width;
 
-        Item {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            ToolButton {
-                id: revert;
-                icon.width: 22;
-                icon.height: 22;
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///light_view-refresh.svg"
-            }
+        RevertPropertyButton {
+            revertState: properties.fontVariantLigaturesState;
+            onClicked: properties.fontVariantLigaturesState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {
-            text: i18nc("@title:group", "Glyphs: Ligatures:")
+            text: propertyName;
             Layout.fillWidth: true;
         }
 

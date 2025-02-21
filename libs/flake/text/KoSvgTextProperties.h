@@ -66,21 +66,11 @@ public:
         FontSizeAdjustId, ///< KoSvgText::AutoValue
 
         /// KoSvgText::FontVariantFeature
-        FontVariantCommonLigId,
-        FontVariantDiscretionaryLigId,
-        FontVariantHistoricalLigId,
-        FontVariantContextualAltId,
+        FontVariantLigatureId,
         FontVariantPositionId,
         FontVariantCapsId,
-        FontVariantNumFigureId,
-        FontVariantNumSpacingId,
-        FontVariantNumFractId,
-        FontVariantNumOrdinalId,
-        FontVariantNumSlashedZeroId,
-        FontVariantHistoricalFormsId,
-        FontVariantEastAsianVarId,
-        FontVariantEastAsianWidthId,
-        FontVariantRubyId,
+        FontVariantNumericId,
+        FontVariantEastAsianId,
 
         FontFeatureSettingsId, ///< QStringList
         FontOpticalSizingId, ///< Bool

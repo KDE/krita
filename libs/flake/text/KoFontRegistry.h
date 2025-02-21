@@ -57,6 +57,7 @@ public:
                                              int width = 100,
                                              int slantMode = false,
                                              int slantValue = 0,
+                                             bool disableFontMatching = false,
                                              const QString &language = QString());
 
     /**

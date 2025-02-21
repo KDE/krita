@@ -113,7 +113,6 @@ KisResourceStorage::KisResourceStorage(const QString &location)
             d->storageType = StorageType::AdobeStyleLibrary;
             d->valid = d->storagePlugin->isValid();
     }
-
     else if (d->location == "fontregistry") {
         auto factory = KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::FontStorage];
         if (factory) {

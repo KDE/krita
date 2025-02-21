@@ -327,12 +327,12 @@ void SvgTextCursor::removeLastCodePoint()
     }
 }
 
-KoSvgTextProperties SvgTextCursor::currentTextProperties() const
+QPair<KoSvgTextProperties, KoSvgTextProperties> SvgTextCursor::currentTextProperties() const
 {
     if (d->shape) {
-        return d->shape->propertiesForPos(d->pos);
+        return QPair<KoSvgTextProperties, KoSvgTextProperties>(d->shape->propertiesForPos(d->pos), d->shape->propertiesForPos(d->pos, true));
     }
-    return KoSvgTextProperties();
+    return QPair<KoSvgTextProperties, KoSvgTextProperties>();
 }
 
 QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
@@ -1224,6 +1224,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
         d->oldCursorRect = d->shape->shapeToDocument(d->cursorShape.boundingRect());
         d->posIndex = d->shape->indexForPos(d->pos);
         d->anchorIndex = d->shape->indexForPos(d->anchor);
+        emit selectionChanged();
     }
     d->cursorColor = QColor();
     d->cursorShape = d->shape? d->shape->cursorForPos(d->pos, d->cursorCaret, d->cursorColor): QPainterPath();

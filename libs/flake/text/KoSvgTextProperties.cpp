@@ -235,7 +235,6 @@ QVariantHash parseVariantStringList(const QStringList features) {
 
 void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context, const QString &command, const QString &value)
 {
-    const QMap<QString, KoSvgText::FontVariantFeature> featureMap = KoSvgText::fontVariantStrings();
     if (command == "writing-mode") {
         setProperty(WritingModeId, KoSvgText::parseWritingMode(value));
     } else if (command == "glyph-orientation-vertical") {
@@ -325,91 +324,31 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-alternates") {
         const QStringList features = value.split(" ");
         Q_FOREACH (const QString f, features) {
-            KoSvgText::FontVariantFeature feature = featureMap.value(f.split("(").first());
-
-            if (feature == KoSvgText::CommonLigatures || feature == KoSvgText::NoCommonLigatures) {
-                setProperty(FontVariantCommonLigId, feature);
-            } else if (feature == KoSvgText::DiscretionaryLigatures || feature == KoSvgText::NoDiscretionaryLigatures) {
-                setProperty(FontVariantDiscretionaryLigId, feature);
-            } else if (feature == KoSvgText::HistoricalLigatures || feature == KoSvgText::NoHistoricalLigatures) {
-                setProperty(FontVariantHistoricalLigId, feature);
-            } else if (feature == KoSvgText::ContextualAlternates || feature == KoSvgText::NoContextualAlternates) {
-                setProperty(FontVariantContextualAltId, feature);
-            }
-
-            if (feature == KoSvgText::PositionSub || feature == KoSvgText::PositionSuper) {
-                setProperty(FontVariantPositionId, feature);
-            }
-
-            if (feature >= KoSvgText::SmallCaps && feature <= KoSvgText::TitlingCaps) {
-                setProperty(FontVariantCapsId, feature);
-            }
-
-            if (feature == KoSvgText::LiningNums || feature == KoSvgText::OldStyleNums) {
-                setProperty(FontVariantNumFigureId, feature);
-            }
-            if (feature == KoSvgText::ProportionalNums || feature == KoSvgText::TabularNums) {
-                setProperty(FontVariantNumSpacingId, feature);
-            }
-            if (feature == KoSvgText::DiagonalFractions || feature == KoSvgText::StackedFractions) {
-                setProperty(FontVariantNumFractId, feature);
-            }
-            if (feature == KoSvgText::Ordinal) {
-                setProperty(FontVariantNumOrdinalId, feature);
-            }
-            if (feature == KoSvgText::SlashedZero) {
-                setProperty(FontVariantNumSlashedZeroId, feature);
-            }
-
-            if (feature >= KoSvgText::EastAsianJis78 && feature <= KoSvgText::EastAsianTraditional) {
-                setProperty(FontVariantEastAsianVarId, feature);
-            }
-            if (feature == KoSvgText::EastAsianFullWidth || feature == KoSvgText::EastAsianProportionalWidth) {
-                setProperty(FontVariantEastAsianWidthId, feature);
-            }
-            if (feature == KoSvgText::EastAsianRuby) {
-                setProperty(FontVariantRubyId, feature);
-            }
-
-            if (feature == KoSvgText::HistoricalForms) {
-                setProperty(FontVariantHistoricalFormsId, feature);
-            }
-
             bool commandFontVariant = (command == "font-variant");
-            if (feature == KoSvgText::FontVariantNone || feature == KoSvgText::FontVariantNormal) {
-                if (commandFontVariant || command == "font-variant-ligatures") {
-                    if (feature == KoSvgText::FontVariantNone) {
-                        setProperty(FontVariantCommonLigId, KoSvgText::NoCommonLigatures);
-                        setProperty(FontVariantContextualAltId, KoSvgText::NoContextualAlternates);
-                    } else {
-                        setProperty(FontVariantCommonLigId, KoSvgText::CommonLigatures);
-                        setProperty(FontVariantContextualAltId, KoSvgText::ContextualAlternates);
-                    }
-                    setProperty(FontVariantDiscretionaryLigId, KoSvgText::NoDiscretionaryLigatures);
-                    setProperty(FontVariantHistoricalLigId, KoSvgText::NoHistoricalLigatures);
-                }
-                if (commandFontVariant || command == "font-variant-position") {
-                    setProperty(FontVariantPositionId, feature);
-                }
-                if (commandFontVariant || command == "font-variant-caps") {
-                    setProperty(FontVariantCapsId, feature);
-                }
-                if (commandFontVariant || command == "font-variant-numeric") {
-                    setProperty(FontVariantNumFigureId, feature);
-                    setProperty(FontVariantNumSpacingId, feature);
-                    setProperty(FontVariantNumFractId, feature);
-                    setProperty(FontVariantNumOrdinalId, feature);
-                    setProperty(FontVariantNumSlashedZeroId, feature);
-                }
-
-                if (commandFontVariant || command == "font-variant-east-asian") {
-                    setProperty(FontVariantEastAsianVarId, feature);
-                    setProperty(FontVariantEastAsianWidthId, feature);
-                    setProperty(FontVariantRubyId, feature);
-                }
-                if (commandFontVariant || command == "font-variant-alternates") {
-                    setProperty(FontVariantHistoricalFormsId, feature);
-                }
+            if (commandFontVariant || command == "font-variant-ligatures") {
+                KoSvgText::FontFeatureLigatures liga = property(FontVariantLigatureId).value<KoSvgText::FontFeatureLigatures>();
+                liga = KoSvgText::parseFontFeatureLigatures(f, liga);
+                setProperty(FontVariantLigatureId, QVariant::fromValue(liga));
+            }
+            if (commandFontVariant || command == "font-variant-position") {
+                KoSvgText::FontFeaturePosition pos = KoSvgText::FontFeaturePosition(property(FontVariantPositionId).toInt());
+                pos = KoSvgText::parseFontFeaturePosition(f, pos);
+                setProperty(FontVariantPositionId, QVariant::fromValue(pos));
+            }
+            if (commandFontVariant || command == "font-variant-caps") {
+                KoSvgText::FontFeatureCaps caps = KoSvgText::FontFeatureCaps(property(FontVariantCapsId).toInt());
+                caps = KoSvgText::parseFontFeatureCaps(f, caps);
+                setProperty(FontVariantCapsId, QVariant::fromValue(caps));
+            }
+            if (commandFontVariant || command == "font-variant-numeric") {
+                KoSvgText::FontFeatureNumeric num = property(FontVariantNumericId).value<KoSvgText::FontFeatureNumeric>();
+                num = KoSvgText::parseFontFeatureNumeric(f, num);
+                setProperty(FontVariantNumericId, QVariant::fromValue(num));
+            }
+            if (commandFontVariant || command == "font-variant-east-asian") {
+                KoSvgText::FontFeatureEastAsian ea = property(FontVariantEastAsianId).value<KoSvgText::FontFeatureEastAsian>();
+                ea = KoSvgText::parseFontFeatureEastAsian(f, ea);
+                setProperty(FontVariantEastAsianId, QVariant::fromValue(ea));
             }
         }
 
@@ -714,31 +653,25 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         result.insert("font-style", KoSvgText::writeFontStyle(style));
     }
 
-    QStringList features;
-    const QMap<QString, KoSvgText::FontVariantFeature> featureMap = KoSvgText::fontVariantStrings();
-
-    QVector<PropertyId> liga = {FontVariantCommonLigId,
-                                FontVariantDiscretionaryLigId,
-                                FontVariantHistoricalLigId,
-                                FontVariantContextualAltId,
-                                FontVariantNumFigureId,
-                                FontVariantNumSpacingId,
-                                FontVariantNumFractId,
-                                FontVariantNumSlashedZeroId,
-                                FontVariantNumOrdinalId,
-                                FontVariantEastAsianVarId,
-                                FontVariantEastAsianWidthId,
-                                FontVariantRubyId,
-                                FontVariantHistoricalFormsId,
-                                FontVariantPositionId,
-                                FontVariantCapsId};
-    Q_FOREACH (PropertyId id, liga) {
-        if (hasProperty(id)) {
-            features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
-        }
+    if (hasProperty(FontVariantLigatureId)) {
+        FontFeatureLigatures feat = property(FontVariantLigatureId).value<FontFeatureLigatures>();
+        result.insert("font-variant-ligatures", writeFontFeatureLigatures(feat));
     }
-    if (!features.isEmpty()) {
-        result.insert("font-variant", features.join(" "));
+    if (hasProperty(FontVariantPositionId)) {
+        FontFeaturePosition feat = FontFeaturePosition(property(FontVariantPositionId).toInt());
+        result.insert("font-variant-position", writeFontFeaturePosition(feat));
+    }
+    if (hasProperty(FontVariantCapsId)) {
+        FontFeatureCaps feat = FontFeatureCaps(property(FontVariantCapsId).toInt());
+        result.insert("font-variant-caps", writeFontFeatureCaps(feat));
+    }
+    if (hasProperty(FontVariantNumericId)) {
+        FontFeatureNumeric feat = property(FontVariantNumericId).value<FontFeatureNumeric>();
+        result.insert("font-variant-numeric", writeFontFeatureNumeric(feat));
+    }
+    if (hasProperty(FontVariantEastAsianId)) {
+        FontFeatureEastAsian feat = property(FontVariantEastAsianId).value<FontFeatureEastAsian>();
+        result.insert("font-variant-east-asian", writeFontFeatureEastAsian(feat));
     }
     if (hasProperty(FontFeatureSettingsId)) {
         result.insert("font-feature-settings", property(FontFeatureSettingsId).toStringList().join(", "));
@@ -1064,41 +997,17 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
 {
     using namespace KoSvgText;
     QStringList fontFeatures;
-    QVector<PropertyId> list = {FontVariantCommonLigId,
-                                FontVariantDiscretionaryLigId,
-                                FontVariantHistoricalLigId,
-                                FontVariantContextualAltId,
-                                FontVariantHistoricalFormsId,
-                                FontVariantPositionId,
-                                FontVariantCapsId,
-                                FontVariantNumFractId,
-                                FontVariantNumFigureId,
-                                FontVariantNumOrdinalId,
-                                FontVariantNumSpacingId,
-                                FontVariantNumSlashedZeroId,
-                                FontVariantEastAsianVarId,
-                                FontVariantEastAsianWidthId,
-                                FontVariantRubyId};
 
-    Q_FOREACH (PropertyId id, list) {
-        if (hasProperty(id)) {
-            FontVariantFeature feature = FontVariantFeature(property(id).toInt());
-            if (feature != FontVariantNormal) {
-                const QStringList openTypeTags = fontVariantOpentypeTags(feature);
-                Q_FOREACH (const QString &tag, openTypeTags) {
-                    QString openTypeTag = tag;
-                    openTypeTag += QString("[%1:%2]").arg(start).arg(start + length);
-                    if (feature == NoCommonLigatures || feature == NoDiscretionaryLigatures || feature == NoHistoricalLigatures
-                        || feature == NoContextualAlternates) {
-                        openTypeTag += "=0";
-                    } else {
-                        openTypeTag += "=1";
-                    }
-                    fontFeatures.append(openTypeTag);
-                }
-            }
-        }
-    }
+    FontFeatureLigatures liga = property(FontVariantLigatureId).value<FontFeatureLigatures>();
+    fontFeatures.append(liga.fontFeatures(start, start+length));
+    FontFeaturePosition pos = FontFeaturePosition(property(FontVariantPositionId).toInt());
+    fontFeatures.append(KoSvgText::fontFeaturesPosition(pos, start, start+length));
+    FontFeatureCaps caps = FontFeatureCaps(property(FontVariantCapsId).toInt());
+    fontFeatures.append(KoSvgText::fontFeaturesCaps(caps, start, start+length));
+    FontFeatureNumeric numeric = property(FontVariantNumericId).value<FontFeatureNumeric>();
+    fontFeatures.append(numeric.fontFeatures(start, start+length));
+    FontFeatureEastAsian eastasian = property(FontVariantEastAsianId).value<FontFeatureEastAsian>();
+    fontFeatures.append(eastasian.fontFeatures(start, start+length));
 
     if (!property(KerningId).value<AutoValue>().isAuto && property(KerningId).value<AutoValue>().customValue == 0) {
         QString openTypeTag = "kern";

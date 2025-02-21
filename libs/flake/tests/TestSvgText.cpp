@@ -277,7 +277,7 @@ void TestSvgText::testParseFontStyles()
     QCOMPARE(getFont().fontSize().value, 15.0);
 
     QCOMPARE(getFont().property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>(), KoSvgText::CssFontStyleData(QFont::StyleOblique));
-    QCOMPARE(getFont().property(KoSvgTextProperties::FontVariantCapsId).toInt(), KoSvgText::SmallCaps);
+    QCOMPARE(getFont().property(KoSvgTextProperties::FontVariantCapsId).toInt(), KoSvgText::CapsSmall);
     QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 600);
 
     {

@@ -101,6 +101,8 @@ void KoSvgTextShape::Private::relayout()
     this->cursorPos.clear();
     this->logicalToVisualCursorPos.clear();
 
+    bool disableFontMatching = this->disableFontMatching;
+
     if (KisForestDetail::size(textData) == 0) {
         return;
     }
@@ -407,7 +409,8 @@ void KoSvgTextShape::Private::relayout()
                 fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
                 properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
                 properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                style.style, style.slantValue.isAuto? 14: style.slantValue.customValue);
+                style.style, style.slantValue.isAuto? 14: style.slantValue.customValue,
+                disableFontMatching);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(),
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
@@ -721,7 +724,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
@@ -1137,7 +1140,8 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     QVector<CharacterResult> &result,
     int &currentIndex,
     qreal res,
-    bool isHorizontal)
+    bool isHorizontal,
+    bool disableFontMatching)
 {
 
     QMap<int, int> baselineTable;
@@ -1178,7 +1182,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
         properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
         properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style.style, style.slantValue.isAuto? 14: style.slantValue.customValue);
+        style.style, style.slantValue.isAuto? 14: style.slantValue.customValue, disableFontMatching);
 
     hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
@@ -1346,7 +1350,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
+        computeFontMetrics(child, properties, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());

@@ -14,7 +14,9 @@ struct KisSmoothingOptions::Private {
     {
         KisConfig cfg(true);
         smoothingType = (SmoothingType)cfg.lineSmoothingType(!useSavedSmoothing);
-        smoothnessDistance = cfg.lineSmoothingDistance(!useSavedSmoothing);
+        smoothnessDistanceMin = cfg.lineSmoothingDistanceMin(!useSavedSmoothing);
+        smoothnessDistanceMax = cfg.lineSmoothingDistanceMax(!useSavedSmoothing);
+        smoothnessDistanceKeepAspectRatio = cfg.lineSmoothingDistanceKeepAspectRatio(!useSavedSmoothing);
         tailAggressiveness = cfg.lineSmoothingTailAggressiveness(!useSavedSmoothing);
         smoothPressure = cfg.lineSmoothingSmoothPressure(!useSavedSmoothing);
         useScalableDistance = cfg.lineSmoothingScalableDistance(!useSavedSmoothing);
@@ -27,7 +29,9 @@ struct KisSmoothingOptions::Private {
     KisSignalCompressor writeCompressor;
 
     SmoothingType smoothingType;
-    qreal smoothnessDistance;
+    qreal smoothnessDistanceMin;
+    qreal smoothnessDistanceMax;
+    bool smoothnessDistanceKeepAspectRatio;
     qreal tailAggressiveness;
     bool smoothPressure;
     bool useScalableDistance;
@@ -60,14 +64,37 @@ void KisSmoothingOptions::setSmoothingType(KisSmoothingOptions::SmoothingType va
     m_d->writeCompressor.start();
 }
 
-qreal KisSmoothingOptions::smoothnessDistance() const
+qreal KisSmoothingOptions::smoothnessDistanceMin() const
 {
-    return m_d->smoothnessDistance;
+    return m_d->smoothnessDistanceMin;
 }
 
-void KisSmoothingOptions::setSmoothnessDistance(qreal value)
+
+void KisSmoothingOptions::setSmoothnessDistanceMin(qreal value)
 {
-    m_d->smoothnessDistance = value;
+    m_d->smoothnessDistanceMin = value;
+    m_d->writeCompressor.start();
+}
+
+qreal KisSmoothingOptions::smoothnessDistanceMax() const
+{
+    return m_d->smoothnessDistanceMax;
+}
+
+void KisSmoothingOptions::setSmoothnessDistanceMax(qreal value)
+{
+    m_d->smoothnessDistanceMax = value;
+    m_d->writeCompressor.start();
+}
+
+bool KisSmoothingOptions::smoothnessDistanceKeepAspectRatio() const
+{
+    return m_d->smoothnessDistanceKeepAspectRatio;
+}
+
+void KisSmoothingOptions::setSmoothnessDistanceKeepAspectRatio(bool value)
+{
+    m_d->smoothnessDistanceKeepAspectRatio = value;
     m_d->writeCompressor.start();
 }
 
@@ -156,7 +183,9 @@ void KisSmoothingOptions::slotWriteConfig()
 {
     KisConfig cfg(false);
     cfg.setLineSmoothingType(m_d->smoothingType);
-    cfg.setLineSmoothingDistance(m_d->smoothnessDistance);
+    cfg.setLineSmoothingDistanceMin(m_d->smoothnessDistanceMin);
+    cfg.setLineSmoothingDistanceMax(m_d->smoothnessDistanceMax);
+    cfg.setLineSmoothingDistanceKeepAspectRatio(m_d->smoothnessDistanceKeepAspectRatio);
     cfg.setLineSmoothingTailAggressiveness(m_d->tailAggressiveness);
     cfg.setLineSmoothingSmoothPressure(m_d->smoothPressure);
     cfg.setLineSmoothingScalableDistance(m_d->useScalableDistance);

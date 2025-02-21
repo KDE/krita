@@ -129,7 +129,11 @@ public:
 
     void removeLastCodePoint();
 
-    KoSvgTextProperties currentTextProperties() const;
+    /**
+     * @brief currentTextProperties
+     * @return a qpair, where the first is the properties without inheritance, and the second, with inheritance.
+     */
+    QPair<KoSvgTextProperties, KoSvgTextProperties> currentTextProperties() const;
 
     QList<KoSvgTextProperties> propertiesForRange() const;
 
@@ -191,6 +195,7 @@ public:
 Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);
+    void selectionChanged();
 private Q_SLOTS:
     void blinkCursor();
     void stopBlinkCursor();

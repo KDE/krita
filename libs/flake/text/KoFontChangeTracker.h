@@ -20,7 +20,7 @@ public:
     explicit KoFontChangeTracker(QStringList paths, QObject *parent = nullptr);
     ~KoFontChangeTracker();
 
-    /// This should be called after fontregistery initialization is done to start the signal compressor.
+    /// This should be called after fontregistry initialization is done to start the signal compressor.
     void resetChangeTracker();
 Q_SIGNALS:
     void sigUpdateConfig();

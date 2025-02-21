@@ -21,6 +21,7 @@
 #include <kis_signal_auto_connection.h>
 
 #include "SvgTextCursor.h"
+#include "glyphpalette/GlyphPaletteDialog.h"
 
 #include <memory>
 
@@ -112,6 +113,24 @@ private Q_SLOTS:
     void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
 
     /**
+     * @brief showGlyphPalette
+     * Shows the glyph palette dialog.
+     */
+    void showGlyphPalette();
+    /**
+     * @brief updateGlyphPalette
+     * update the glyph palette dialog from the current selection.
+     */
+    void updateGlyphPalette();
+    /**
+     * @brief insertRichText
+     * Insert a rich text shape, used by the glyph palette..
+     * @param richText -- rich text shape.
+     * @param replaceLastGlyph -- whether to replace the last glyph or to fully insert.
+     */
+    void insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph = false);
+
+    /**
      * @brief generateDefs
      * This generates a defs section with the appropriate
      * css and css strings assigned. This allows the artist
@@ -156,6 +175,7 @@ private:
     };
 
     QPointer<SvgTextEditor> m_editor;
+    QPointer<GlyphPaletteDialog> m_glyphPalette;
     QPointF m_lastMousePos;
     DragMode m_dragging {DragMode::None};
     std::unique_ptr<KoInteractionStrategy> m_interactionStrategy;

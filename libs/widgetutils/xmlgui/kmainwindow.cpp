@@ -493,7 +493,7 @@ void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
     }
 
     QMenuBar *mb = internalMenuBar(this);
-    if (mb) {
+    if (mb && !mb->isNativeMenuBar()) {
         if (!cg.hasDefault("MenuBar") && !mb->isHidden()) {
             cg.revertToDefault("MenuBar");
         } else {
@@ -586,7 +586,7 @@ void KisKMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
     }
 
     QMenuBar *mb = internalMenuBar(this);
-    if (mb) {
+    if (mb && !mb->isNativeMenuBar()) {
         QString entry = cg.readEntry("MenuBar", "Enabled");
 #ifdef Q_OS_ANDROID
         // HACK: Previously, since the native menubar was enabled, this made the

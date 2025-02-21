@@ -328,6 +328,9 @@ public:
         plainText = rhs.plainText;
         isBidi = rhs.isBidi;
         initialTextPosition = rhs.initialTextPosition;
+
+        isLoading = rhs.isLoading;
+        disableFontMatching = rhs.disableFontMatching;
     }
 
     TextRendering textRendering = Auto;
@@ -339,6 +342,7 @@ public:
     KisForest<KoSvgTextContentElement> textData;
     bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
 
+    bool disableFontMatching = false; ///< Turn off font matching, which should speed up relayout slightly.
 
     QVector<CharacterResult> result;
     QVector<LineBox> lineBoxes;
@@ -388,7 +392,8 @@ public:
                             QVector<CharacterResult> &result,
                             int &currentIndex,
                             qreal res,
-                            bool isHorizontal);
+                            bool isHorizontal,
+                            bool disableFontMatching);
     void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
                             QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
                             int &currentIndex,

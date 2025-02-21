@@ -105,6 +105,9 @@ SvgTextTool::~SvgTextTool()
     if(m_editor) {
         m_editor->close();
     }
+    if(m_glyphPalette) {
+        m_glyphPalette->close();
+    }
     delete m_defAlignment;
 }
 
@@ -266,6 +269,7 @@ QWidget *SvgTextTool::createOptionWidget()
 
     connect(optionUi.btnEdit, SIGNAL(clicked(bool)), SLOT(showEditor()));
     connect(optionUi.btnEditSvg, SIGNAL(clicked(bool)), SLOT(showEditorSvgSource()));
+    connect(optionUi.btnGlyphPalette, SIGNAL(clicked(bool)), SLOT(showGlyphPalette()));
 
     return optionWidget;
 }
@@ -331,6 +335,47 @@ void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const Q
 {
     SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs);
     canvas()->addCommand(cmd);
+}
+
+void SvgTextTool::showGlyphPalette()
+{
+    if (!m_glyphPalette) {
+        m_glyphPalette = new GlyphPaletteDialog(QApplication::activeWindow());
+        m_glyphPalette->setAttribute( Qt::WA_QuitOnClose, false );
+
+        connect(&m_textCursor, SIGNAL(selectionChanged()), this, SLOT(updateGlyphPalette()));
+        connect(m_glyphPalette, SIGNAL(signalInsertRichText(KoSvgTextShape*, bool)), this, SLOT(insertRichText(KoSvgTextShape*, bool)));
+
+        m_glyphPalette->activateWindow();
+    }
+    if (!m_glyphPalette->isVisible()) {
+        m_glyphPalette->show();
+        updateGlyphPalette();
+    }
+}
+
+void SvgTextTool::updateGlyphPalette()
+{
+    if (m_glyphPalette && m_glyphPalette->isVisible()) {
+        QString grapheme = QString();
+        if (m_textCursor.shape()) {
+            int pos = m_textCursor.getPos();
+            int pos2 = pos > 0? m_textCursor.shape()->posLeft(pos, false): m_textCursor.shape()->posRight(pos, false);
+            int start = m_textCursor.shape()->indexForPos(qMin(pos, pos2));
+            int end   = m_textCursor.shape()->indexForPos(qMax(pos, pos2));
+            grapheme = m_textCursor.shape()->plainText().mid(start, end-start);
+        }
+        m_glyphPalette->setGlyphModelFromProperties(m_textCursor.currentTextProperties(), grapheme);
+    }
+}
+
+void SvgTextTool::insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph)
+{
+    if (replaceLastGlyph) {
+        m_textCursor.setPos(m_textCursor.getPos(), m_textCursor.getPos());
+        m_textCursor.moveCursor(m_textCursor.getPos() == 0? SvgTextCursor::MoveNextChar : SvgTextCursor::MovePreviousChar, false);
+    }
+    m_textCursor.insertRichText(richText);
 }
 
 void SvgTextTool::slotTextEditorClosed()

@@ -32,6 +32,7 @@
 #include "kis_tool.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
+#include "kis_aspect_ratio_locker.h"
 #include "kis_floating_message.h"
 #include "canvas/kis_canvas2.h"
 #include "KisViewManager.h"
@@ -101,9 +102,14 @@ bool KisToolBrush::smoothPressure() const
     return smoothingOptions()->smoothPressure();
 }
 
-int KisToolBrush::smoothnessQuality() const
+int KisToolBrush::smoothnessQualityMin() const
 {
-    return smoothingOptions()->smoothnessDistance();
+    return smoothingOptions()->smoothnessDistanceMin();
+}
+
+int KisToolBrush::smoothnessQualityMax() const
+{
+    return smoothingOptions()->smoothnessDistanceMax();
 }
 
 qreal KisToolBrush::smoothnessFactor() const
@@ -121,18 +127,80 @@ void KisToolBrush::slotSetSmoothingType(int index)
         m_cmbSmoothingType->setCurrentIndex(index);
     }
 
-    smoothingOptions()->setSmoothingType((KisSmoothingOptions::SmoothingType) index);
+    switch (index) {
+    case KisSmoothingOptions::NO_SMOOTHING:
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::NO_SMOOTHING);
+        m_lblSmoothnessDistanceMin->setVisible(false);
+        m_sliderSmoothnessDistanceMin->setVisible(false);
+        m_lblSmoothnessDistanceMax->setVisible(false);
+        m_sliderSmoothnessDistanceMax->setVisible(false);
+        m_distanceAspectButton->setVisible(false);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
+        break;
+    case KisSmoothingOptions::SIMPLE_SMOOTHING:
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::SIMPLE_SMOOTHING);
+        m_lblSmoothnessDistanceMin->setVisible(false);
+        m_sliderSmoothnessDistanceMin->setVisible(false);
+        m_lblSmoothnessDistanceMax->setVisible(false);
+        m_sliderSmoothnessDistanceMax->setVisible(false);
+        m_distanceAspectButton->setVisible(false);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
+        break;
+    case KisSmoothingOptions::WEIGHTED_SMOOTHING:
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::WEIGHTED_SMOOTHING);
+        m_lblSmoothnessDistanceMin->setVisible(true);
+        m_sliderSmoothnessDistanceMin->setVisible(true);
+        m_lblSmoothnessDistanceMax->setVisible(true);
+        m_sliderSmoothnessDistanceMax->setVisible(true);
+        m_distanceAspectButton->setVisible(true);
+        showControl(m_sliderTailAggressiveness, true);
+        showControl(m_chkSmoothPressure, true);
+        showControl(m_chkUseScalableDistance, true);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
+        break;
+    case KisSmoothingOptions::STABILIZER:
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::STABILIZER);
+        m_lblSmoothnessDistanceMin->setVisible(true);
+        m_sliderSmoothnessDistanceMin->setVisible(true);
+        m_lblSmoothnessDistanceMax->setVisible(true);
+        m_sliderSmoothnessDistanceMax->setVisible(true);
+        m_distanceAspectButton->setVisible(true);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_sliderDelayDistance, true);
+        showControl(m_chkFinishStabilizedCurve, true);
+        showControl(m_chkStabilizeSensors, true);
 
-    showControl(m_sliderSmoothnessDistance, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType()||
-                                             KisSmoothingOptions::STABILIZER  == smoothingOptions()->smoothingType()));
-    showControl(m_sliderTailAggressiveness, (KisSmoothingOptions::WEIGHTED_SMOOTHING  == smoothingOptions()->smoothingType()));
-    showControl(m_chkSmoothPressure, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType()));
-    showControl(m_chkUseScalableDistance, (KisSmoothingOptions::WEIGHTED_SMOOTHING == smoothingOptions()->smoothingType() /*||
-                                           KisSmoothingOptions::STABILIZER  == smoothingOptions()->smoothingType()*/)); // scalable distance option is disabled due to bug 421314
-    showControl(m_sliderDelayDistance, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
-    showControl(m_chkFinishStabilizedCurve, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
-    showControl(m_chkStabilizeSensors, (KisSmoothingOptions::STABILIZER == smoothingOptions()->smoothingType()));
-
+        // scalable distance option is disabled due to bug 421314
+        showControl(m_chkUseScalableDistance, false);
+        break;
+    case KisSmoothingOptions::PIXEL_PERFECT:
+    default:
+        smoothingOptions()->setSmoothingType(KisSmoothingOptions::PIXEL_PERFECT);
+        m_lblSmoothnessDistanceMin->setVisible(false);
+        m_sliderSmoothnessDistanceMin->setVisible(false);
+        m_lblSmoothnessDistanceMax->setVisible(false);
+        m_sliderSmoothnessDistanceMax->setVisible(false);
+        m_distanceAspectButton->setVisible(false);
+        showControl(m_sliderTailAggressiveness, false);
+        showControl(m_chkSmoothPressure, false);
+        showControl(m_chkUseScalableDistance, false);
+        showControl(m_sliderDelayDistance, false);
+        showControl(m_chkFinishStabilizedCurve, false);
+        showControl(m_chkStabilizeSensors, false);
+    }
     updateSmoothnessDistanceLabel();
 
     Q_EMIT smoothingTypeChanged();
@@ -140,36 +208,67 @@ void KisToolBrush::slotSetSmoothingType(int index)
 
 void KisToolBrush::updateSmoothnessDistanceLabel()
 {
-    const qreal oldValue = m_sliderSmoothnessDistance->value();
+    const qreal oldValueMin = m_sliderSmoothnessDistanceMin->value();
+    const qreal oldValueMax = m_sliderSmoothnessDistanceMax->value();
 
     if (smoothingType() == KisSmoothingOptions::STABILIZER) {
-        m_lblSmoothnessDistance->setText(i18n("Sample count:"));
-        m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 0);
-        m_sliderSmoothnessDistance->setSingleStep(1);
-        m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+        m_lblSmoothnessDistanceMin->setText(i18n("Sample Count at Max Speed:"));
+        m_sliderSmoothnessDistanceMin->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 0);
+        m_sliderSmoothnessDistanceMin->setSingleStep(1);
+        m_sliderSmoothnessDistanceMin->setExponentRatio(3.0); // help pick smaller values
 
-        if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
-            // the slider will Q_EMIT the change signal automatically
-            m_sliderSmoothnessDistance->setValue(qRound(oldValue));
+        if (!qFuzzyCompare(m_sliderSmoothnessDistanceMin->value(), oldValueMin)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistanceMin->setValue(qRound(oldValueMin));
         }
 
-    } else {
-        m_lblSmoothnessDistance->setText(i18nc("Label of Distance value in Freehand brush tool's Weighted Smoothing mode", "Distance:"));
-        m_sliderSmoothnessDistance->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
-        m_sliderSmoothnessDistance->setSingleStep(0.1);
-        m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
+        m_lblSmoothnessDistanceMax->setText(i18n("Sample Count at Min Speed:"));
+        m_sliderSmoothnessDistanceMax->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 0);
+        m_sliderSmoothnessDistanceMax->setSingleStep(1);
+        m_sliderSmoothnessDistanceMax->setExponentRatio(3.0); // help pick smaller values
 
-        if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
-            // the slider will Q_EMIT the change signal automatically
-            m_sliderSmoothnessDistance->setValue(oldValue);
+        if (!qFuzzyCompare(m_sliderSmoothnessDistanceMax->value(), oldValueMax)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistanceMax->setValue(qRound(oldValueMax));
+        }
+    } else {
+        m_lblSmoothnessDistanceMin->setText(i18n("Distance at Max Speed:"));
+        m_sliderSmoothnessDistanceMin->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+        m_sliderSmoothnessDistanceMin->setSingleStep(1);
+        m_sliderSmoothnessDistanceMin->setExponentRatio(3.0); // help pick smaller values
+
+        if (!qFuzzyCompare(m_sliderSmoothnessDistanceMin->value(), oldValueMin)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistanceMin->setValue(oldValueMin);
+        }
+
+        m_lblSmoothnessDistanceMax->setText(i18n("Distance at Min Speed:"));
+        m_sliderSmoothnessDistanceMax->setRange(3.0, MAXIMUM_SMOOTHNESS_DISTANCE, 1);
+        m_sliderSmoothnessDistanceMax->setSingleStep(1);
+        m_sliderSmoothnessDistanceMax->setExponentRatio(3.0); // help pick smaller values
+
+        if (!qFuzzyCompare(m_sliderSmoothnessDistanceMax->value(), oldValueMax)) {
+            // the slider will emit the change signal automatically
+            m_sliderSmoothnessDistanceMax->setValue(oldValueMax);
         }
     }
 }
 
-void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
+void KisToolBrush::slotSetSmoothnessDistanceMin(qreal distance)
 {
-    smoothingOptions()->setSmoothnessDistance(distance);
+    smoothingOptions()->setSmoothnessDistanceMin(distance);
     Q_EMIT smoothnessQualityChanged();
+}
+
+void KisToolBrush::slotSetSmoothnessDistanceMax(qreal distance)
+{
+    smoothingOptions()->setSmoothnessDistanceMax(distance);
+    Q_EMIT smoothnessQualityChanged();
+}
+
+void KisToolBrush::slotSetSmoothnessDistanceKeepAspectRatio(bool value)
+{
+    smoothingOptions()->setSmoothnessDistanceKeepAspectRatio(value);
 }
 
 void KisToolBrush::slotSetTailAggressiveness(qreal argh_rhhrr)
@@ -275,7 +374,8 @@ void KisToolBrush::updateSettingsViews()
 {
     m_cmbSmoothingType->setCurrentIndex(smoothingOptions()->smoothingType());
 
-    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
+    m_sliderSmoothnessDistanceMin->setValue(smoothingOptions()->smoothnessDistanceMin());
+    m_sliderSmoothnessDistanceMax->setValue(smoothingOptions()->smoothnessDistanceMax());
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
     m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
@@ -319,24 +419,59 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:"), optionsWidget));
 
-    m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
-    m_sliderSmoothnessDistance->setEnabled(true);
-    m_lblSmoothnessDistance = new QLabel(optionsWidget);
-    updateSmoothnessDistanceLabel();
+    // Smoothness Distance
+    m_sliderSmoothnessDistanceMin = new KisDoubleSliderSpinBox(optionsWidget);
+    m_sliderSmoothnessDistanceMin->setEnabled(true);
+    m_lblSmoothnessDistanceMin = new QLabel(optionsWidget);
 
+    m_sliderSmoothnessDistanceMax = new KisDoubleSliderSpinBox(optionsWidget);
+    m_sliderSmoothnessDistanceMax->setEnabled(true);
+    m_lblSmoothnessDistanceMax = new QLabel(optionsWidget);
+
+    updateSmoothnessDistanceLabel();
     // make sure that initialization of the value happens **after** we
     // have configured the slider's range in updateSmoothnessDistanceLabel()
-    connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
-    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
+    connect(m_sliderSmoothnessDistanceMin, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistanceMin(qreal)));
+    m_sliderSmoothnessDistanceMin->setValue(smoothingOptions()->smoothnessDistanceMin());
 
-    addOptionWidgetOption(m_sliderSmoothnessDistance, m_lblSmoothnessDistance);
+    connect(m_sliderSmoothnessDistanceMax, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistanceMax(qreal)));
+    m_sliderSmoothnessDistanceMax->setValue(smoothingOptions()->smoothnessDistanceMax());
+
+    // Create KoAspectButton
+    m_distanceAspectButton = new KoAspectButton(optionsWidget);
+    m_distanceAspectButton->setKeepAspectRatio(smoothingOptions()->smoothnessDistanceKeepAspectRatio());
+    m_distanceAspectButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    m_distanceAspectButton->setMinimumSize(QSize(24, 24));
+    connect(m_distanceAspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotSetSmoothnessDistanceKeepAspectRatio(bool)));
+
+    // Add distanceLabels
+    QWidget* distanceLabelWidget = new QWidget(optionsWidget);
+    QVBoxLayout* distanceLabelLayout = new QVBoxLayout(distanceLabelWidget);
+    distanceLabelLayout->setContentsMargins(0,0,0,0);
+    distanceLabelLayout->setSpacing(5);
+    distanceLabelLayout->addWidget(m_lblSmoothnessDistanceMin);
+    distanceLabelLayout->addWidget(m_lblSmoothnessDistanceMax);
+
+    // Add distanceSliders
+    QWidget* distanceSliderWidget = new QWidget(optionsWidget);
+    QGridLayout* distanceSliderLayout = new QGridLayout(distanceSliderWidget);
+    distanceSliderLayout->setContentsMargins(0,0,0,0);
+    distanceSliderLayout->setHorizontalSpacing(0);
+    distanceSliderLayout->setVerticalSpacing(5);
+    distanceSliderLayout->addWidget(m_sliderSmoothnessDistanceMin, 0, 0, 1, 1);
+    distanceSliderLayout->addWidget(m_sliderSmoothnessDistanceMax, 1, 0, 1, 1);
+    distanceSliderLayout->addWidget(m_distanceAspectButton, 0, 1, 2, 1);
+
+    addOptionWidgetOption(distanceSliderWidget, distanceLabelWidget);
+
+    KisAspectRatioLocker *distanceAspectLocker = new KisAspectRatioLocker(this);
+    distanceAspectLocker->connectSpinBoxes(m_sliderSmoothnessDistanceMin, m_sliderSmoothnessDistanceMax, m_distanceAspectButton);
 
     // Finish stabilizer curve
     m_chkFinishStabilizedCurve = new QCheckBox(optionsWidget);
-    m_chkFinishStabilizedCurve->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
-                                                      m_chkFinishStabilizedCurve->sizeHint().height()));
     connect(m_chkFinishStabilizedCurve, SIGNAL(toggled(bool)), this, SLOT(setFinishStabilizedCurve(bool)));
     m_chkFinishStabilizedCurve->setChecked(smoothingOptions()->finishStabilizedCurve());
+    m_chkFinishStabilizedCurve->setMinimumHeight(m_cmbSmoothingType->sizeHint().height()-3);
 
     // Delay Distance for Stabilizer
     QWidget* delayWidget = new QWidget(optionsWidget);
@@ -368,12 +503,10 @@ QWidget * KisToolBrush::createOptionWidget()
 
     // Stabilize sensors
     m_chkStabilizeSensors = new QCheckBox(optionsWidget);
-    m_chkStabilizeSensors->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
-                                                 m_chkStabilizeSensors->sizeHint().height()));
     connect(m_chkStabilizeSensors, SIGNAL(toggled(bool)), this, SLOT(setStabilizeSensors(bool)));
     m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
+    m_chkStabilizeSensors->setMinimumHeight(m_cmbSmoothingType->sizeHint().height()-3);
     addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:"), optionsWidget));
-
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
@@ -384,16 +517,14 @@ QWidget * KisToolBrush::createOptionWidget()
     addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:"), optionsWidget));
 
     m_chkSmoothPressure = new QCheckBox(optionsWidget);
-    m_chkSmoothPressure->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
-                                               m_chkSmoothPressure->sizeHint().height()));
+    m_chkSmoothPressure->setMinimumHeight(m_cmbSmoothingType->sizeHint().height()-3);
     m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
     addOptionWidgetOption(m_chkSmoothPressure, new QLabel(QString("%1:").arg(i18n("Smooth Pressure")), optionsWidget));
 
     m_chkUseScalableDistance = new QCheckBox(optionsWidget);
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
-    m_chkUseScalableDistance->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
-                                                    m_chkUseScalableDistance->sizeHint().height()));
+    m_chkUseScalableDistance->setMinimumHeight(m_cmbSmoothingType->sizeHint().height()-3);
     m_chkUseScalableDistance->setToolTip(i18nc("@info:tooltip",
                                                "Scalable distance takes zoom level "
                                                "into account and makes the distance "
@@ -401,7 +532,6 @@ QWidget * KisToolBrush::createOptionWidget()
                                                "level is chosen"));
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
     addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance")), optionsWidget));
-
 
     // add a line spacer so we know that the next set of options are for different settings
     QFrame* line = new QFrame(optionsWidget);

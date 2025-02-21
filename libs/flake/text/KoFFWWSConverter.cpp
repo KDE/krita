@@ -1053,10 +1053,10 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
     return candidates;
 }
 
-QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const KoCSSFontInfo info,
+QVector<KoFFWWSConverter::FontFileEntry> KoFFWWSConverter::candidatesForCssValues(const KoCSSFontInfo info,
                                                      quint32 xRes, quint32 yRes) const
 {
-    QVector<QPair<QString, int>> candidateFileNames;
+    QVector<FontFileEntry> candidateFileNames;
 
     int pixelSize = info.size * (qMin(xRes, yRes) / 72.0);
 
@@ -1172,7 +1172,10 @@ QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const KoCS
                 fileNames.append(node.fileName);
                 fileNames = node.pixelSizes.value(pixelSize, fileNames);
                 Q_FOREACH(const QString &fileName, fileNames) {
-                    candidateFileNames.append(QPair<QString, int>(fileName, node.fileIndex));
+                    FontFileEntry entry;
+                    entry.fileName = fileName;
+                    entry.fontIndex = node.fileIndex;
+                    candidateFileNames.append(entry);
                 }
             }
         }
@@ -1202,5 +1205,4 @@ void KoFFWWSConverter::debugInfo() const
         }
     }
 }
-
 

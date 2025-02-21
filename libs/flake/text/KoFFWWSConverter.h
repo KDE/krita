@@ -42,6 +42,8 @@ struct KoFontFamilyWWSRepresentation {
     bool colorSVG = false;
     bool colorBitMap = false;
 };
+
+
 /**
  * @brief The KoFFWWSConverter class
  * This class takes fontconfig patterns and tries to sort them into
@@ -57,6 +59,11 @@ class KRITAFLAKE_EXPORT KoFFWWSConverter
 public:
     KoFFWWSConverter();
     ~KoFFWWSConverter();
+
+    struct FontFileEntry {
+        QString fileName;
+        int fontIndex;
+    };
 
     /// Add a font from a fontconfig pattern.
     bool addFontFromPattern(const FcPattern *pattern, FT_LibrarySP freeTypeLibrary);
@@ -86,7 +93,7 @@ public:
      * We want to give these preferential treatment to whatever fontconfig matches for us.
      * @return list of QPairs representing the filenames and file indices for the candidates.
      */
-    QVector<QPair<QString, int>> candidatesForCssValues(const KoCSSFontInfo info,
+    QVector<FontFileEntry> candidatesForCssValues(const KoCSSFontInfo info,
                                        quint32 xRes = 72,
                                        quint32 yRes = 72) const;
 

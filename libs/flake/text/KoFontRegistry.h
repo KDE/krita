@@ -39,8 +39,8 @@ public:
     /**
      * @brief facesForCSSValues
      * This selects a font with fontconfig using the given
-     * values. If "text" is not empty, it will try to select
-     * fallback fonts as well.
+     * values. If "text" is not empty and disableFontMatching is false,
+     * it will try to select fallback fonts as well.
      *
      * @returns a vector of loaded FT_Faces, the "lengths" vector
      * will be filled with the lengths of consequetive characters

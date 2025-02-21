@@ -1389,7 +1389,7 @@ void TabletSettingsTab::setDefault()
     m_page->chkUseTimestampsForBrushSpeed->setChecked(false);
     m_page->intMaxAllowedBrushSpeed->setValue(30);
     m_page->intBrushSpeedSmoothing->setValue(3);
-
+    m_page->intTiltDirectionOffset->setValue(0);
 }
 
 TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget(parent)
@@ -1461,6 +1461,12 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
         //       and it will be substituted by the number. The text before will be
         //       used as the prefix and the text after as the suffix
         return i18np("Brush speed smoothing: {n} sample", "Brush speed smoothing: {n} samples", value);
+    });
+
+    m_page->intTiltDirectionOffset->setRange(-180, 180);
+    m_page->intTiltDirectionOffset->setValue(cfg.readEntry("tiltDirectionOffset", 0));
+    KisSpinBoxI18nHelper::install(m_page->intTiltDirectionOffset, [](int value) {
+        return i18np("Pen tilt direction offset: {n}°", "Pen tilt direction offset: {n}°", value);
     });
 }
 
@@ -2589,6 +2595,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_tabletSettings->m_page->chkUseTimestampsForBrushSpeed->isChecked());
         cfg.writeEntry<int>("maxAllowedSpeedValue", m_tabletSettings->m_page->intMaxAllowedBrushSpeed->value());
         cfg.writeEntry<int>("speedValueSmoothing", m_tabletSettings->m_page->intBrushSpeedSmoothing->value());
+        cfg.writeEntry<int>("tiltDirectionOffset", m_tabletSettings->m_page->intTiltDirectionOffset->value());
 
         m_performanceSettings->save();
 

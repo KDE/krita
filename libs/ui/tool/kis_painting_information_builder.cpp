@@ -47,6 +47,14 @@ void KisPaintingInformationBuilder::updateSettings()
     const KisCubicCurve curve(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
     m_maxAllowedSpeedValue = cfg.readEntry("maxAllowedSpeedValue", 30);
+
+    // The setting is stored in [-180, 180] degrees range to match the UI.
+    // We now need to convert it to [0, 360) range.
+    m_tiltDirectionOffset = cfg.readEntry("tiltDirectionOffset", 0);
+    if (m_tiltDirectionOffset < 0.0) {
+        m_tiltDirectionOffset += 360.0;
+    }
+
     m_speedSmoother->updateSettings();
 }
 
@@ -131,6 +139,7 @@ KisPaintInformation KisPaintingInformationBuilder::createPaintingInformation(KoP
     pi.setCanvasRotation(canvasRotation());
     pi.setCanvasMirroredH(canvasMirroredX());
     pi.setCanvasMirroredV(canvasMirroredY());
+    pi.setTiltDirectionOffset(m_tiltDirectionOffset);
 
     return pi;
 }
@@ -155,12 +164,14 @@ KisPaintInformation KisPaintingInformationBuilder::hover(const QPointF &imagePoi
                                                            qMin(1.0, speed / qreal(m_maxAllowedSpeedValue)),
                                                            canvasRotation(),
                                                            canvasMirroredX(),
-                                                           canvasMirroredY());
+                                                           canvasMirroredY(),
+                                                           m_tiltDirectionOffset);
     } else {
         KisPaintInformation pi = KisPaintInformation::createHoveringModeInfo(imagePoint);
         pi.setCanvasRotation(canvasRotation());
         pi.setCanvasMirroredH(canvasMirroredX());
         pi.setCanvasMirroredV(canvasMirroredY());
+        pi.setTiltDirectionOffset(m_tiltDirectionOffset);
         return pi;
     }
 }

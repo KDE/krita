@@ -250,9 +250,10 @@ public:
             qreal tangentialPressure = 0.0,
             qreal perspective = 1.0,
 	        qreal speed = 0.0,
-            qreal canvasrotation = 0,
+            qreal canvasrotation = 0.0,
             bool canvasMirroredH = false,
-            bool canvasMirroredV = false);
+            bool canvasMirroredV = false,
+            qreal tiltDirectionOffset = 0.0);
 
     /**
      * Returns the canvas rotation if that has been given to the kispaintinformation.
@@ -283,6 +284,16 @@ public:
      * Set whether the canvas is vertically mirrored for the paint-operation.
      */
     void setCanvasMirroredV(bool value);
+
+    /**
+     * Constant offset added to the reported pen tilt direction. [0, 360) degrees.
+     */
+    qreal tiltDirectionOffset() const;
+
+    /**
+     * Set the tilt direction offset. Will be clamped to [0, 360) degrees.
+     */
+    void setTiltDirectionOffset(qreal angle);
 
     void toXML(QDomDocument&, QDomElement&) const;
 

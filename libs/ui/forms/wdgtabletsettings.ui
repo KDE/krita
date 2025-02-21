@@ -215,6 +215,19 @@
     </widget>
    </item>
    <item>
+    <widget class="KisSliderSpinBox" name="intTiltDirectionOffset" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Angle offset added to the reported pen tilt direction.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="btnTabletTest">
      <property name="text">
       <string>Open Tablet Tester...</string>
@@ -224,7 +237,7 @@
    <item>
     <spacer name="verticalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Orientation::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

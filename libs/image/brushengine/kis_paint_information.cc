@@ -74,6 +74,7 @@ struct KisPaintInformation::Private {
         canvasRotation = rhs.canvasRotation;
         canvasMirroredH = rhs.canvasMirroredH;
         canvasMirroredV = rhs.canvasMirroredV;
+        tiltDirectionOffset = rhs.tiltDirectionOffset;
 
         if (rhs.drawingAngleOverride) {
             drawingAngleOverride = *rhs.drawingAngleOverride;
@@ -98,6 +99,7 @@ struct KisPaintInformation::Private {
     qreal canvasRotation {0};
     bool canvasMirroredH {false};
     bool canvasMirroredV {false};
+    qreal tiltDirectionOffset {0};    // [0.0, 360.0) degrees
 
     boost::optional<qreal> drawingAngleOverride;
     bool sanityIsRegistered = false;
@@ -252,7 +254,8 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
         qreal speed,
         qreal canvasrotation,
         bool canvasMirroredH,
-        bool canvasMirroredV)
+        bool canvasMirroredV,
+        qreal tiltDirectionOffset)
 {
     KisPaintInformation info(pos,
                              pressure,
@@ -264,6 +267,7 @@ KisPaintInformation::createHoveringModeInfo(const QPointF &pos,
     info.d->canvasRotation = canvasrotation;
     info.d->canvasMirroredH = canvasMirroredH;
     info.d->canvasMirroredV = canvasMirroredV;
+    info.d->tiltDirectionOffset = tiltDirectionOffset;
     return info;
 }
 
@@ -296,6 +300,16 @@ bool KisPaintInformation::canvasMirroredV() const
 void KisPaintInformation::setCanvasMirroredV(bool value)
 {
     d->canvasMirroredV = value;
+}
+
+qreal KisPaintInformation::tiltDirectionOffset() const
+{
+    return d->tiltDirectionOffset;
+}
+
+void KisPaintInformation::setTiltDirectionOffset(qreal value)
+{
+    d->tiltDirectionOffset = normalizeAngleDegrees(value);
 }
 
 void KisPaintInformation::toXML(QDomDocument&, QDomElement& e) const
@@ -630,6 +644,7 @@ void KisPaintInformation::mixOtherImpl(const QPointF &p, qreal t, const KisPaint
         this->d->perStrokeRandomSource = other.d->perStrokeRandomSource;
         // this->d->isHoveringMode = other.isHoveringMode();
         this->d->levelOfDetail = other.d->levelOfDetail;
+        this->d->tiltDirectionOffset = other.d->tiltDirectionOffset;
     }
 }
 
@@ -639,6 +654,17 @@ qreal KisPaintInformation::tiltDirection(const KisPaintInformation& info, bool n
     qreal yTilt = info.yTilt();
     // radians -PI, PI
     qreal tiltDirection = atan2(-xTilt, yTilt);
+
+    if (!qFuzzyIsNull(info.d->tiltDirectionOffset)) {
+        tiltDirection += kisDegreesToRadians(info.d->tiltDirectionOffset);
+        // ensure we stay in the -PI, PI range
+        if (tiltDirection < -M_PI) {
+            tiltDirection += 2 * M_PI;
+        } else if (tiltDirection > M_PI) {
+            tiltDirection -= 2 * M_PI;
+        }
+    }
+
     // if normalize is true map to 0.0..1.0
     return normalize ? (tiltDirection / (2 * M_PI) + 0.5) : tiltDirection;
 }

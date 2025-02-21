@@ -72,6 +72,7 @@ private:
     QScopedPointer<KisSpeedSmoother> m_speedSmoother;
     bool m_pressureDisabled;
     int m_maxAllowedSpeedValue = 30;
+    qreal m_tiltDirectionOffset = 0;  // [0, 360) degrees
 };
 
 class KRITAUI_EXPORT KisConverterPaintingInformationBuilder : public KisPaintingInformationBuilder

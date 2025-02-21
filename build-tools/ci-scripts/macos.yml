@@ -31,9 +31,12 @@ macos-build:
     # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
     KDECI_ONLY_BUILD: True
 
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: $DEPS_REPO_BRANCH_NAME_MACOS
+    EFFECTIVE_DEPS_BRANCH_NAME: $DEPS_BRANCH_NAME_MACOS
+
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $DEPS_REPO_BRANCH_NAME_MACOS --depth=1
+    - git clone https://invent.kde.org/packaging/krita-deps-management.git -b $EFFECTIVE_DEPS_REPO_BRANCH_NAME --depth=1
     - git clone https://invent.kde.org/packaging/krita-ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
 
@@ -51,7 +54,7 @@ macos-build:
     - git config --global --add safe.directory $CI_PROJECT_DIR
 
   script:
-    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $DEPS_BRANCH_NAME_MACOS
+    - python3 -u krita-deps-management/tools/replace-branch-in-seed-file.py krita-deps-management/latest/krita-deps.yml -p -o branch-corrected-deps.yml -d $EFFECTIVE_DEPS_BRANCH_NAME
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s branch-corrected-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log
 
@@ -73,6 +76,27 @@ macos-build:
     # try to fetch signing errors from the task log
     - if [[ -e /tmp/task-debug.log ]]; then mv /tmp/task-debug.log $CI_PROJECT_DIR/; fi
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+macos-build-qt6-nightly:
+  extends:
+  - macos-build
+  - .nightly-job-mixin
+  interruptible: false
+  variables:
+    # TODO: Gmic still doesn't build for Qt6
+    KRITACI_SKIP_BUILD_3RDPARTY_PLUGINS: True
+    KRITACI_ALLOW_NO_PYQT: True
+    EFFECTIVE_DEPS_REPO_BRANCH_NAME: transition.now/qt6
+    EFFECTIVE_DEPS_BRANCH_NAME: transition.now/qt6
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DBUILD_WITH_QT6=ON
+
+macos-build-qt6-manual:
+  extends:
+  - macos-build-qt6-nightly
+  - .ci-manual-job-mixin
 
 macos-nightly:
   extends:

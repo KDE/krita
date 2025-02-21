@@ -37,6 +37,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::FontFeatureLigatures>("KoSvgText::FontFeatureLigatures");
     qRegisterMetaType<KoSvgText::FontFeatureNumeric>("KoSvgText::FontFeatureNumeric");
     qRegisterMetaType<KoSvgText::FontFeatureEastAsian>("KoSvgText::FontFeatureEastAsian");
+    qRegisterMetaType<KoSvgText::FontMetrics>("KoSvgText::FontMetrics");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
@@ -91,6 +92,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     QMetaType::registerEqualsComparator<KoSvgText::FontFeatureEastAsian>();
     QMetaType::registerDebugStreamOperator<KoSvgText::FontFeatureEastAsian>();
+
+    QMetaType::registerEqualsComparator<KoSvgText::FontMetrics>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontMetrics>();
 #endif
 }
 
@@ -1346,6 +1350,87 @@ QStringList fontFeaturesCaps(const FontFeatureCaps &feature, const int start, co
     }
 
     return list;
+}
+
+void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {
+    if (tag == "romn") {
+        alphabeticBaseline = value;
+    } else if (tag == "hang") {
+        hangingBaseline = value;
+    } else if (tag == "icfb") {
+        ideographicFaceUnderBaseline = value;
+    } else if (tag == "icft") {
+        ideographicFaceOverBaseline = value;
+    } else if (tag == "ideo") {
+        ideographicUnderBaseline = value;
+    } else if (tag == "idtp") {
+        ideographicOverBaseline = value;
+    } else if (tag == "Idce") {
+        ideographicCenterBaseline = value;
+    } else if (tag == "math") {
+        mathematicalBaseline = value;
+    }
+}
+
+void FontMetrics::setMetricsValueByTag(const QLatin1String &tag, int32_t value) {
+    if (tag == "xhgt") {
+        xHeight = value;
+    } else if (tag == "cpht") {
+        xHeight = value;
+    } else if (tag == "sbxo") {
+        subScriptOffset.first = value;
+    } else if (tag == "sbyo") {
+        subScriptOffset.second = value;
+    } else if (tag == "spxo") {
+        superScriptOffset.first = value;
+    } else if (tag == "spyo") {
+        superScriptOffset.second = value;
+    }
+}
+
+void FontMetrics::scaleBaselines(const qreal multiplier)
+{
+    alphabeticBaseline *= multiplier;
+    hangingBaseline *= multiplier;
+    mathematicalBaseline *= multiplier;
+    ideographicFaceUnderBaseline *= multiplier;
+    ideographicFaceOverBaseline *= multiplier;
+    ideographicOverBaseline *= multiplier;
+    ideographicCenterBaseline *= multiplier;
+    ideographicUnderBaseline *= multiplier;
+}
+
+QDebug operator<<(QDebug dbg, const FontMetrics &metrics)
+{
+    const double ftPixel = 1.0/64.0;
+    dbg.nospace() << "FontMetrics(";
+    dbg.nospace() << "Direction: " << (metrics.isVertical? "Top to bottom. ": "Left to right. ");
+    dbg.nospace() << "FontSize: " << QString::number(metrics.fontSize*ftPixel) << "px. ";
+    dbg.nospace() << "Number width: " << QString::number(metrics.zeroAdvance*ftPixel) << "px. ";
+    dbg.nospace() << "Space width: " << QString::number(metrics.spaceAdvance*ftPixel) << "px. ";
+    dbg.nospace() << "Ideographic width: " << QString::number(metrics.ideographicAdvance*ftPixel) << "px. ";
+
+    dbg.nospace() << "xHeight: " << QString::number(metrics.xHeight*ftPixel) << "px. ";
+    dbg.nospace() << "cap height: " << QString::number(metrics.capHeight*ftPixel) << "px. ";
+    dbg.nospace() << "Subscripts: " << QString::number(metrics.subScriptOffset.second*ftPixel) << "px. ";
+    dbg.nospace() << "Superscripts: " << QString::number(metrics.superScriptOffset.second*ftPixel) << "px. ";
+    dbg.nospace() << "Ascender: " << QString::number(metrics.ascender*ftPixel) << "px. ";
+    dbg.nospace() << "Descender: " << QString::number(metrics.descender*ftPixel) << "px. ";
+    dbg.nospace() << "Linegap: " << QString::number(metrics.lineGap*ftPixel) << "px. ";
+
+    dbg.nospace() << "Alphabetic: " << QString::number(metrics.alphabeticBaseline*ftPixel) << "px. ";
+    dbg.nospace() << "Middle: " << QString::number((metrics.xHeight/2)*ftPixel) << "px. ";
+    dbg.nospace() << "Mathematical: " << QString::number(metrics.mathematicalBaseline*ftPixel) << "px. ";
+
+    dbg.nospace() << "Ideo Over: " << QString::number(metrics.ideographicOverBaseline*ftPixel) << "px. ";
+    dbg.nospace() << "Central: " << QString::number(metrics.ideographicCenterBaseline*ftPixel) << "px. ";
+    dbg.nospace() << "Ideo Under: " << QString::number(metrics.ideographicUnderBaseline*ftPixel) << "px. ";
+
+    dbg.nospace() << "Ideo Face Over: " << QString::number(metrics.ideographicFaceOverBaseline*ftPixel) << "px. ";
+    dbg.nospace() << "Ideo Face Under: " << QString::number(metrics.ideographicFaceUnderBaseline*ftPixel) << "px. ";
+    dbg.nospace() << "Hanging: " << QString::number(metrics.hangingBaseline*ftPixel) << "px. ";
+    dbg.nospace() << ")";
+    return dbg.space();
 }
 
 } // namespace KoSvgText

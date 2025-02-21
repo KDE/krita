@@ -96,6 +96,18 @@ public:
      * @return the slant mode, can be normal, italic or oblique.
      */
     static QFont::Style slantMode(FT_FaceSP face);
+
+    KoSvgText::FontMetrics fontMetricsForCSSValues(KoCSSFontInfo info = KoCSSFontInfo(),
+                                                   const bool isHorizontal = true,
+                                                   const QString &text = "",
+                                                   quint32 xRes = 72,
+                                                   quint32 yRes = 72,
+                                                   bool disableFontMatching = false,
+                                                   const QString &language = QString());
+
+    static KoSvgText::FontMetrics generateFontMetrics(FT_FaceSP face, bool isHorizontal = true);
+
+    static int32_t loadFlagsForFace(FT_Face face, bool isHorizontal = true, int32_t loadFlags = 0);
 private Q_SLOTS:
     /**
      * Update the config and reset the FontChangeListener.

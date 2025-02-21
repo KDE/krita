@@ -63,6 +63,7 @@ private:
         QHash<QString, FcFontSetSP> m_fontSets;
         QHash<QString, FT_FaceSP> m_faces;
         QHash<QString, QVector<QPair<QString, int>>> m_suggestedFiles;
+        QHash<QString, KoSvgText::FontMetrics> m_fontMetrics;
 
         ThreadData(FT_LibrarySP lib)
             : m_library(std::move(lib))
@@ -202,6 +203,12 @@ public:
         return m_data.localData()->m_suggestedFiles;
     }
 
+    QHash<QString, KoSvgText::FontMetrics> &fontMetrics() {
+        if (!m_data.hasLocalData())
+            initialize();
+        return m_data.localData()->m_fontMetrics;
+    }
+
     void debugConverter() {
         fontFamilyConverter->debugInfo();
     }
@@ -230,15 +237,7 @@ KoFontRegistry *KoFontRegistry::instance()
     return s_instance;
 }
 
-std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
-                                                         KoCSSFontInfo info,
-                                                         const QString &text,
-                                                         quint32 xRes,
-                                                         quint32 yRes, bool disableFontMatching,
-                                                         const QString &language)
-{
-    // Generate a hash for the cache.
-    // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
+QString modificationsString(KoCSSFontInfo info, quint32 xRes, quint32 yRes) {
     QString modifications;
     if (info.size > -1) {
         modifications += QString::number(info.size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
@@ -263,6 +262,17 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
             modifications += "|" + key + QString::number(info.axisSettings.value(key));
         }
     }
+    return modifications;
+}
+
+std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
+                                                         KoCSSFontInfo info,
+                                                         const QString &text,
+                                                         quint32 xRes,
+                                                         quint32 yRes, bool disableFontMatching,
+                                                         const QString &language)
+{
+    QString modifications = modificationsString(info, xRes, yRes);
 
     QVector<QPair<QString, int>> candidates;
     const QString suggestedHash = info.families.join("+") + ":" + modifications;
@@ -722,6 +732,219 @@ QFont::Style KoFontRegistry::slantMode(FT_FaceSP face)
     } else {
         return face->style_flags & FT_STYLE_FLAG_ITALIC? QFont::StyleItalic: QFont::StyleNormal;
     }
+}
+
+KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo info, const bool isHorizontal, const QString &text, quint32 xRes, quint32 yRes, bool disableFontMatching, const QString &language)
+{
+    const QString suggestedHash = info.families.join(",")+":"+modificationsString(info, xRes, yRes);
+    KoSvgText::FontMetrics metrics;
+    auto entry = d->fontMetrics().find(suggestedHash);
+    if (entry != d->fontMetrics().end()) {
+        metrics = entry.value();
+    } else {
+        QVector<int> lengths;
+        const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
+            lengths,
+            info,
+            text,
+            xRes,
+            yRes,
+            disableFontMatching,
+            language);
+        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
+        d->fontMetrics().insert(suggestedHash, metrics);
+    }
+    return metrics;
+}
+
+KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool isHorizontal)
+{
+    KoSvgText::FontMetrics metrics;
+    hb_direction_t dir = isHorizontal? HB_DIRECTION_LTR: HB_DIRECTION_TTB;
+    hb_script_t script = HB_SCRIPT_UNKNOWN;
+    hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
+
+    FT_Int32 faceLoadFlags = loadFlagsForFace(face.data(), isHorizontal);
+
+    metrics.isVertical = !isHorizontal;
+    // Fontsize and advances.
+    metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem: face.data()->size->metrics.x_ppem;
+
+    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags)) {
+        metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+    } else {
+        metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
+    }
+
+    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags)) {
+        metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+    } else {
+        metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
+    }
+
+    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags)) {
+        metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+    } else {
+        metrics.ideographicAdvance = metrics.fontSize;
+    }
+
+    const bool useFallback = hb_version_atleast(4, 0, 0);
+
+    QVector<hb_ot_metrics_tag_t> metricTags ({
+                                              HB_OT_METRICS_TAG_X_HEIGHT,
+                                              HB_OT_METRICS_TAG_CAP_HEIGHT,
+                                              HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
+                                              HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
+                                              HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
+                                              HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET
+                                          });
+
+    // metrics
+    for (auto it = metricTags.begin(); it!= metricTags.end(); it++) {
+        char c[4];
+        hb_tag_to_string(*it, c);
+        QLatin1String tagName(c);
+        hb_position_t origin = 0;
+        if (useFallback) {
+            hb_ot_metrics_get_position_with_fallback(font.data(), *it, &origin);
+        } else {
+            hb_ot_metrics_get_position(font.data(), *it, &origin);
+        }
+        metrics.setMetricsValueByTag(tagName, origin);
+    }
+
+    // Baselines.
+
+    const QVector<hb_ot_layout_baseline_tag_t> baselines ({
+                HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+                HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_BOTTOM_OR_LEFT,
+                HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_TOP_OR_RIGHT,
+                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_TOP_OR_RIGHT,
+                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_CENTRAL,
+                HB_OT_LAYOUT_BASELINE_TAG_MATH
+    });
+
+
+    for (auto it = baselines.begin(); it!= baselines.end(); it++) {
+        char c[4];
+        hb_tag_to_string(*it, c);
+        QLatin1String tagName(c);
+        hb_position_t origin = 0;
+        if (useFallback) {
+            hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, script, HB_TAG_NONE, &origin);
+        } else {
+            hb_ot_layout_get_baseline(font.data(), *it, dir, script, HB_TAG_NONE, &origin);
+        }
+        metrics.setBaselineValueByTag(tagName, origin);
+    }
+
+    // Ascender line gap, descender.
+
+    hb_position_t ascender = 0;
+    hb_position_t descender = 0;
+    hb_position_t lineGap = 0;
+
+    if (isHorizontal) {
+        /**
+         * There's 3 different definitions of the so-called vertical metrics, that is,
+         * the ascender and descender for horizontally laid out script. WinAsc & Desc,
+         * HHAE asc&desc, and OS/2... we need the last one, but harfbuzz doesn't return
+         * it unless there's a flag set in the font, which is missing in a lot of fonts
+         * that were from the transitional period, like Deja Vu Sans. Hence we need to get
+         * the OS/2 table and calculate the values manually (and fall back in various ways).
+         *
+         * https://www.w3.org/TR/css-inline-3/#ascent-descent
+         * https://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
+         * https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
+         *
+         * Related HB issue: https://github.com/harfbuzz/harfbuzz/issues/1920
+         */
+        TT_OS2 *os2Table = nullptr;
+        os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
+        if (os2Table) {
+            int yscale = face.data()->size->metrics.y_scale;
+
+            ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
+            descender = FT_MulFix(os2Table->sTypoDescender, yscale);
+            lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
+        }
+
+        constexpr unsigned USE_TYPO_METRICS = 1u << 7;
+        if (!os2Table || os2Table->version == 0xFFFFU || !(os2Table->fsSelection & USE_TYPO_METRICS)) {
+            hb_position_t altAscender = 0;
+            hb_position_t altDescender = 0;
+            hb_position_t altLineGap = 0;
+            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &altAscender)) {
+                altAscender = face.data()->ascender;
+            }
+            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &altDescender)) {
+                altDescender = face.data()->descender;
+            }
+            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &altLineGap)) {
+                altLineGap = face.data()->height - (altAscender-altDescender);
+            }
+
+            // Some fonts have sTypo metrics that are too small compared
+            // to the HHEA values which make the default line height too
+            // tight (e.g. Microsoft JhengHei, Source Han Sans), so we
+            // compare them and take the ones that are larger.
+            if (!os2Table || (altAscender - altDescender + altLineGap) > (ascender - descender + lineGap)) {
+                ascender = altAscender;
+                descender = altDescender;
+                lineGap = altLineGap;
+            }
+        }
+    } else {
+        hb_font_extents_t fontExtends;
+        hb_font_get_extents_for_direction (font.data(), HB_DIRECTION_TTB, &fontExtends);
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender)) {
+            ascender = fontExtends.ascender;
+        }
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender)) {
+            descender = fontExtends.descender;
+        }
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_LINE_GAP, &lineGap)) {
+            lineGap = 0;
+        }
+        // Default microsoft CJK fonts have the vertical ascent and descent be the same as the horizontal
+        // ascent and descent, so we 'normalize' the ascender and descender to be half the total height.
+        qreal height = ascender - fontExtends.descender;
+        ascender = height*0.5;
+        descender = -ascender;
+    }
+    if (ascender == 0 && descender == 0) {
+        ascender = face->size->metrics.ascender;
+        descender = face->size->metrics.descender;
+        qreal height = ascender - descender;
+        lineGap = face->size->metrics.height - height;
+        if (!isHorizontal) {
+            ascender = height * 0.5;
+            descender = -ascender;
+        }
+    }
+    metrics.ascender = ascender;
+    metrics.descender = descender;
+    metrics.lineGap = lineGap;
+
+    return metrics;
+}
+
+int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_t loadFlags)
+{
+    FT_Int32 faceLoadFlags = loadFlags;
+    if (FT_HAS_COLOR(face)) {
+        faceLoadFlags |= FT_LOAD_COLOR;
+    }
+    if (!isHorizontal && FT_HAS_VERTICAL(face)) {
+        faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+    }
+    if (!FT_IS_SCALABLE(face)) {
+        // This is needed for the CBDT version of Noto Color Emoji
+        faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
+    }
+    return faceLoadFlags;
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)

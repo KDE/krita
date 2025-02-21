@@ -980,6 +980,94 @@ FontFeatureEastAsian parseFontFeatureEastAsian(const QString &value, FontFeature
 QString writeFontFeatureEastAsian(const FontFeatureEastAsian &feature);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureEastAsian &feature);
 
+/**
+ * @brief The FontMetrics class
+ * A class to keep track of a variety of font metrics.
+ * Note that values are in Freetype pixels and coordinates! (that is 64 times bigger than a regular pixel, and Y is swapped.)
+ */
+struct FontMetrics : public boost::equality_comparable<FontMetrics> {
+    bool isVertical = false; ///< Different fontMetrics count between vertical and horizontal.
+    int32_t fontSize; ///< Currently set size, CSS unit 'em'
+    int32_t zeroAdvance; ///< Advance of the character '0', CSS Unit 'ch', defaults to 0.5 em in horizontal and 1.0 em in vertical.
+    int32_t spaceAdvance;///< Advance of the character ' ', used by tabs.
+    int32_t ideographicAdvance; ///< Advance of the character '水' (U+6C34), CSS Unit ic, defaults to 1 em.
+
+    int32_t xHeight; ///< height of X, defaults to 0.5 fontsize.
+    int32_t capHeight; ///< Height of capital letters, defaults to ascender.
+    QPair<int32_t, int32_t> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
+    QPair<int32_t, int32_t> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd about alphabetic.
+
+    int32_t ascender; ///< distance from origin to top.
+    int32_t descender; ///< distance for origin to bottom.
+    int32_t lineGap; ///< additional linegap between consequetive lines.
+
+    int32_t alphabeticBaseline; ///< location of alphabetic baseline from origin.
+    int32_t mathematicalBaseline; ///< location of mathematical baseline from origin.
+
+    int32_t ideographicUnderBaseline; ///< location of ideographic under baseline from origin, may fall back to descender.
+    int32_t ideographicCenterBaseline; ///< location of ideographic center baseline from origin,
+                                   ///< default baseline for vertical, centered between over and under.
+    int32_t ideographicOverBaseline; ///< location of ideographic over baseline from origin.
+
+    int32_t ideographicFaceUnderBaseline; ///< location of ideographic face under baseline, that is, the bottom of the glyphs.
+    int32_t ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
+
+    int32_t hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
+
+    bool operator==(const FontMetrics & other) const {
+        return isVertical == other.isVertical
+                && fontSize == other.fontSize
+                && zeroAdvance == other.zeroAdvance
+                && spaceAdvance == other.spaceAdvance
+                && ideographicAdvance == other.ideographicAdvance
+                && xHeight == other.xHeight
+                && capHeight == other.capHeight
+                && subScriptOffset == other.subScriptOffset
+                && superScriptOffset == other.superScriptOffset
+                && ascender == other.ascender
+                && descender == other.descender
+                && lineGap == other.lineGap
+                && alphabeticBaseline == other.alphabeticBaseline
+                && ideographicUnderBaseline == other.ideographicUnderBaseline
+                && ideographicCenterBaseline == other.ideographicCenterBaseline
+                && ideographicOverBaseline == other.ideographicOverBaseline
+                && ideographicFaceUnderBaseline == other.ideographicFaceUnderBaseline
+                && ideographicFaceOverBaseline == other.ideographicFaceOverBaseline
+                && hangingBaseline == other.hangingBaseline;
+    }
+
+    int valueForBaselineValue(Baseline baseline) const {
+        switch(baseline) {
+        case BaselineIdeographic:
+            return ideographicUnderBaseline;
+        case BaselineAlphabetic:
+            return alphabeticBaseline;
+        case BaselineHanging:
+            return hangingBaseline;
+        case BaselineMathematical:
+            return mathematicalBaseline;
+        case BaselineCentral:
+            return ideographicCenterBaseline;
+        case BaselineMiddle:
+            return xHeight/2;
+        case BaselineTextBottom:
+            return descender;
+        case BaselineTextTop:
+            return ascender;
+        default:
+            break;
+        }
+        return 0;
+    }
+
+    void setBaselineValueByTag(const QLatin1String &tag, int32_t value);
+
+    void setMetricsValueByTag(const QLatin1String &tag, int32_t value);
+
+    void scaleBaselines(const qreal multiplier);
+};
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontMetrics &metrics);
+
 } // namespace KoSvgText
 
 Q_DECLARE_METATYPE(KoSvgText::CssLengthPercentage)
@@ -1002,5 +1090,7 @@ Q_DECLARE_METATYPE(KoSvgText::FontFamilyStyleInfo)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureLigatures)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureNumeric)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureEastAsian)
+
+Q_DECLARE_METATYPE(KoSvgText::FontMetrics)
 
 #endif // KOSVGTEXT_H

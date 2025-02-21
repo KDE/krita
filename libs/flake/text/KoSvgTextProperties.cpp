@@ -20,6 +20,7 @@
 #include <kis_global.h>
 
 #include "KoSvgText.h"
+#include "KoFontRegistry.h"
 
 struct KoSvgTextProperties::Private
 {
@@ -989,8 +990,11 @@ QFont KoSvgTextProperties::generateFont() const
 
 qreal KoSvgTextProperties::xHeight() const
 {
-    QFontMetrics metrics(this->generateFont());
-    return metrics.xHeight();
+    const KoCSSFontInfo info = cssFontInfo();
+    const qreal fontSizeVal = fontSize().value;
+    const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
+    const KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
+    return double((metrics.xHeight*-1)/metrics.fontSize) * fontSizeVal;
 }
 
 QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) const

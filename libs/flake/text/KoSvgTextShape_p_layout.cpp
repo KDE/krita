@@ -136,20 +136,6 @@ void KoSvgTextShape::Private::relayout()
             loadFlags |= FT_LOAD_TARGET_LIGHT;
         }
     }
-    const auto loadFlagsForFace = [loadFlags, isHorizontal](FT_Face face) -> FT_Int32 {
-        FT_Int32 faceLoadFlags = loadFlags;
-        if (FT_HAS_COLOR(face)) {
-            faceLoadFlags |= FT_LOAD_COLOR;
-        }
-        if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-            faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-        }
-        if (!FT_IS_SCALABLE(face)) {
-            // This is needed for the CBDT version of Noto Color Emoji
-            faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
-        }
-        return faceLoadFlags;
-    };
 
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
@@ -430,7 +416,7 @@ void KoSvgTextShape::Private::relayout()
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
                 const FT_FaceSP &face = faces.at(static_cast<size_t>(i));
-                const FT_Int32 faceLoadFlags = loadFlagsForFace(face.data());
+                const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(face.data(), isHorizontal, loadFlags);
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
@@ -446,103 +432,21 @@ void KoSvgTextShape::Private::relayout()
                                                        static_cast<size_t>(length));
                 }
 
-                hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
-                hb_position_t ascender = 0;
-                hb_position_t descender = 0;
-                hb_position_t lineGap = 0;
-
-                if (isHorizontal) {
-                    /**
-                     * There's 3 different definitions of the so-called vertical metrics, that is,
-                     * the ascender and descender for horizontally laid out script. WinAsc & Desc,
-                     * HHAE asc&desc, and OS/2... we need the last one, but harfbuzz doesn't return
-                     * it unless there's a flag set in the font, which is missing in a lot of fonts
-                     * that were from the transitional period, like Deja Vu Sans. Hence we need to get
-                     * the OS/2 table and calculate the values manually (and fall back in various ways).
-                     *
-                     * https://www.w3.org/TR/css-inline-3/#ascent-descent
-                     * https://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
-                     * https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
-                     *
-                     * Related HB issue: https://github.com/harfbuzz/harfbuzz/issues/1920
-                     */
-                    TT_OS2 *os2Table = nullptr;
-                    os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
-                    if (os2Table) {
-                        int yscale = face.data()->size->metrics.y_scale;
-
-                        ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
-                        descender = FT_MulFix(os2Table->sTypoDescender, yscale);
-                        lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
-                    }
-
-                    constexpr unsigned USE_TYPO_METRICS = 1u << 7;
-                    if (!os2Table || os2Table->version == 0xFFFFU || !(os2Table->fsSelection & USE_TYPO_METRICS)) {
-                        hb_position_t altAscender = 0;
-                        hb_position_t altDescender = 0;
-                        hb_position_t altLineGap = 0;
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &altAscender)) {
-                            altAscender = face.data()->ascender;
-                        }
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &altDescender)) {
-                            altDescender = face.data()->descender;
-                        }
-                        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &altLineGap)) {
-                            altLineGap = face.data()->height - (altAscender-altDescender);
-                        }
-
-                        // Some fonts have sTypo metrics that are too small compared
-                        // to the HHEA values which make the default line height too
-                        // tight (e.g. Microsoft JhengHei, Source Han Sans), so we
-                        // compare them and take the ones that are larger.
-                        if (!os2Table || (altAscender - altDescender + altLineGap) > (ascender - descender + lineGap)) {
-                            ascender = altAscender;
-                            descender = altDescender;
-                            lineGap = altLineGap;
-                        }
-                    }
-                } else {
-                    hb_font_extents_t fontExtends;
-                    hb_font_get_extents_for_direction (font.data(), HB_DIRECTION_TTB, &fontExtends);
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender)) {
-                        ascender = fontExtends.ascender;
-                    }
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender)) {
-                        descender = fontExtends.descender;
-                    }
-                    if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_LINE_GAP, &lineGap)) {
-                        lineGap = 0;
-                    }
-                    // Default microsoft CJK fonts have the vertical ascent and descent be the same as the horizontal
-                    // ascent and descent, so we 'normalize' the ascender and descender to be half the total height.
-                    qreal height = ascender - fontExtends.descender;
-                    ascender = height*0.5;
-                    descender = -ascender;
-                }
-                if (ascender == 0 && descender == 0) {
-                    ascender = face->size->metrics.ascender;
-                    descender = face->size->metrics.descender;
-                    qreal height = ascender - descender;
-                    lineGap = face->size->metrics.height - height;
-                    if (!isHorizontal) {
-                        ascender = height * 0.5;
-                        descender = -ascender;
-                    }
-                }
+                KoSvgText::FontMetrics metrics = KoFontRegistry::generateFontMetrics(face, isHorizontal);
 
                 for (int j=start; j<start+length; j++) {
-                    result[j].fontAscent = ascender;
-                    result[j].fontDescent = descender;
-                    qreal leading = lineGap;
+                    result[j].fontAscent = metrics.ascender;
+                    result[j].fontDescent = metrics.descender;
+                    qreal leading = metrics.lineGap;
 
                     if (!lineHeight.isNormal) {
                         if (lineHeight.isNumber) {
                             leading = (fontSize*scaleToPixel*ftFontUnit)*lineHeight.value;
-                            leading -= (ascender-descender);
+                            leading -= (metrics.ascender-metrics.descender);
                         } else {
                             QPointF val = ftTF.inverted().map(QPointF(lineHeight.length.value, lineHeight.length.value));
                             leading = isHorizontal? val.x(): val.y();
-                            leading -= (ascender-descender);
+                            leading -= (metrics.ascender-metrics.descender);
                         }
                     }
                     result[j].fontHalfLeading = leading * 0.5;
@@ -588,7 +492,7 @@ void KoSvgTextShape::Private::relayout()
         }
         CharacterResult charResult = result[cluster];
 
-        const FT_Int32 faceLoadFlags = loadFlagsForFace(currentGlyph.ftface);
+        const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(currentGlyph.ftface, isHorizontal, loadFlags);
 
         const auto getUcs4At = [](const QString &s, int i) -> char32_t {
             const QChar high = s.at(i);
@@ -715,7 +619,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
@@ -1124,7 +1028,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
 void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
     KisForest<KoSvgTextContentElement>::child_iterator parent,
     const KoSvgTextProperties &parentProps,
-    const QMap<int, int> &parentBaselineTable,
+    const KoSvgText::FontMetrics &parentBaselineTable,
     qreal parentFontSize,
     QPointF superScript,
     QPointF subScript,
@@ -1134,8 +1038,6 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     bool isHorizontal,
     bool disableFontMatching)
 {
-
-    QMap<int, int> baselineTable;
     const int i = currentIndex;
     const int j = qMin(i + numChars(parent, true), result.size());
 
@@ -1165,173 +1067,52 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         static_cast<quint32>(res),
         disableFontMatching);
 
-    hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
 
-    hb_direction_t dir = HB_DIRECTION_LTR;
-    if (!isHorizontal) {
-        dir = HB_DIRECTION_TTB;
-    }
-    hb_script_t script = HB_SCRIPT_UNKNOWN;
     KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
 
     hb_position_t baseline = 0;
+    hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     KoSvgText::Baseline defaultBaseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
+    KoSvgText::FontMetrics metrics;
     if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
-        baselineTable = parentBaselineTable;
-        qreal multiplier = 1.0 / parentFontSize * fontSize;
-        Q_FOREACH (int key, baselineTable.keys()) {
-            baselineTable.insert(key, static_cast<int>(baselineTable.value(key) * multiplier));
-        }
+        metrics = parentBaselineTable;
+        metrics.scaleBaselines(1.0 / parentFontSize * fontSize);
         dominantBaseline = KoSvgText::BaselineAuto;
     } else if (dominantBaseline == KoSvgText::BaselineNoChange) {
-        baselineTable = parentBaselineTable;
+        metrics = parentBaselineTable;
         dominantBaseline = KoSvgText::BaselineAuto;
     } else {
-        QMap<hb_ot_layout_baseline_tag_t, KoSvgText::Baseline> baselineList;
-        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_ROMAN, KoSvgText::BaselineAlphabetic);
-        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_MATH, KoSvgText::BaselineMathematical);
-        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_HANGING, KoSvgText::BaselineHanging);
-        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_CENTRAL, KoSvgText::BaselineCentral);
-        baselineList.insert(HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, KoSvgText::BaselineIdeographic);
-
-        if (hb_version_atleast(4, 0, 0)) {
-            hb_position_t origin = 0;
-            hb_ot_layout_get_baseline_with_fallback(font.data(), baselineList.key(defaultBaseline), dir, script, HB_TAG_NONE, &origin);
-            Q_FOREACH(hb_ot_layout_baseline_tag_t tag, baselineList.keys()) {
-                hb_ot_layout_get_baseline_with_fallback(font.data(), tag, dir, script, HB_TAG_NONE, &baseline);
-                baselineTable.insert(baselineList.value(tag), baseline - origin);
-            }
-
-            if (isHorizontal) {
-                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-                baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
-            } else {
-                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-            }
-        } else {
-            hb_position_t origin = 0;
-            if (!isHorizontal) {
-                // we'll need to calculate the central baseline manually, because there's no opentype tag associated with it, and
-                // the harfbuzz tag is specific to HB 4.0 and up.
-
-                hb_position_t over = 0.0;
-                hb_position_t under = 0.0;
-                bool hasOver = hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_TOP_OR_RIGHT, dir, script, HB_TAG_NONE, &over);
-                bool hasUnder = hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &under);
-                if (!hasOver || !hasUnder) {
-                    hb_font_extents_t font_extents;
-                    hb_font_get_extents_for_direction (font.data(), dir, &font_extents);
-                    if (!hasOver) { over = font_extents.ascender;}
-                    if (!hasUnder) { under = font_extents.descender;}
-                }
-                origin = (over + under) / 2;
-            }
-
-            Q_FOREACH(hb_ot_layout_baseline_tag_t tag, baselineList.keys()) {
-                if (baselineList.value(tag) == defaultBaseline) {
-                    baselineTable.insert(defaultBaseline, 0);
-                } else {
-                    baseline = 0;
-                    hb_ot_layout_get_baseline(font.data(), tag, dir, script, HB_TAG_NONE, &baseline);
-                    baselineTable.insert(baselineList.value(tag), baseline-origin);
-                }
-            }
-
-            if (isHorizontal) {
-                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-                baselineTable.insert(KoSvgText::BaselineMiddle, static_cast<int>((baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5));
-            } else {
-                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-            }
-        }
+        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
     }
 
     // Get underline and super/subscripts.
-    QPointF newSuperScript;
-    QPointF newSubScript;
-    if (hb_version_atleast(4, 0, 0)) {
-        hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
-        newSuperScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
-        newSubScript = QPointF(baseline * freetypePixelsToPt, baseline2 * freetypePixelsToPt);
+    QPointF newSuperScript = QPointF(metrics.superScriptOffset.first * freetypePixelsToPt, metrics.superScriptOffset.second * -freetypePixelsToPt);;
+    QPointF newSubScript = QPointF(metrics.subScriptOffset.first * freetypePixelsToPt, metrics.subScriptOffset.second * -freetypePixelsToPt);
 
-        qreal width = 0;
-        qreal offset = 0;
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
-        width = baseline;
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
-        offset = baseline;
-        offset *= -freetypePixelsToPt;
-        width *= freetypePixelsToPt;
+    hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
+    qreal width = baseline;
+    hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
+    qreal lineOffset = baseline;
+    lineOffset *= -freetypePixelsToPt;
+    width *= freetypePixelsToPt;
 
-        parent->textDecorationWidths.insert(KoSvgText::DecorationUnderline, width);
-        parent->textDecorationOffsets.insert(KoSvgText::DecorationUnderline, offset);
-        parent->textDecorationWidths.insert(KoSvgText::DecorationOverline, width);
+    parent->textDecorationWidths.insert(KoSvgText::DecorationUnderline, width);
+    parent->textDecorationOffsets.insert(KoSvgText::DecorationUnderline, lineOffset);
+    parent->textDecorationWidths.insert(KoSvgText::DecorationOverline, width);
 
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
-        width = baseline;
-        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
-        width *= freetypePixelsToPt;
-        offset *= -freetypePixelsToPt;
+    hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
+    width = baseline;
+    hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
+    width *= freetypePixelsToPt;
+    lineOffset *= -freetypePixelsToPt;
 
-        parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
-        parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, offset);
-    } else {
-        baseline = 0;
-        hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
-        if (baseline2 == 0) {
-            newSuperScript = QPointF(0, 0.6 * -fontSize);
-        } else {
-            newSuperScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
-        }
-        baseline = 0;
-        baseline2 = 0;
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
-        // Subscript should be 'added' onto the baseline'.
-        if (baseline2 == 0) {
-            newSubScript = QPointF(0, 0.2 * fontSize);
-        } else {
-            newSubScript = QPointF(baseline * freetypePixelsToPt, baseline2 * freetypePixelsToPt);
-        }
+    parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
+    parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, lineOffset);
 
-        qreal width = 0;
-        qreal offset = 0;
-        const double fallbackThickness =
-            faces.front()->underline_thickness * (faces.front()->size->metrics.y_scale / 65535.0);
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
-        width = qMax<double>(baseline, fallbackThickness);
-
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
-        offset = baseline;
-        offset *= -freetypePixelsToPt;
-        width *= freetypePixelsToPt;
-
-        parent->textDecorationWidths.insert(KoSvgText::DecorationUnderline, width);
-        parent->textDecorationOffsets.insert(KoSvgText::DecorationUnderline, offset);
-        parent->textDecorationWidths.insert(KoSvgText::DecorationOverline, width);
-
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
-        width = qMax<double>(baseline, fallbackThickness);
-        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
-        if (baseline == 0) {
-            offset = baselineTable.value(KoSvgText::BaselineCentral);
-        }
-        width *= freetypePixelsToPt;
-        offset *= -freetypePixelsToPt;
-
-        parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
-        parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, offset);
-    }
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
+        computeFontMetrics(child, properties, metrics, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
@@ -1353,7 +1134,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         }
     }
 
-    const int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
+    const int offset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
     QPointF shift = QPointF();
 
     if (baselineAdjust != KoSvgText::BaselineTextTop && baselineAdjust != KoSvgText::BaselineTextBottom) {

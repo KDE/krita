@@ -1088,7 +1088,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     // Get underline and super/subscripts.
     QPointF newSuperScript = QPointF(metrics.superScriptOffset.first * freetypePixelsToPt, metrics.superScriptOffset.second * -freetypePixelsToPt);;
-    QPointF newSubScript = QPointF(metrics.subScriptOffset.first * freetypePixelsToPt, metrics.subScriptOffset.second * -freetypePixelsToPt);
+    QPointF newSubScript = QPointF(metrics.subScriptOffset.first * freetypePixelsToPt, metrics.subScriptOffset.second * freetypePixelsToPt);
 
     hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
     qreal width = baseline;

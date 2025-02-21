@@ -768,7 +768,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
 
     metrics.isVertical = !isHorizontal;
     // Fontsize and advances.
-    metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem: face.data()->size->metrics.x_ppem;
+    metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem*64.0: face.data()->size->metrics.x_ppem*64.0;
 
     if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags)) {
         metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;

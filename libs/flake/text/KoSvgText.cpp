@@ -1376,7 +1376,7 @@ void FontMetrics::setMetricsValueByTag(const QLatin1String &tag, int32_t value) 
     if (tag == "xhgt") {
         xHeight = value;
     } else if (tag == "cpht") {
-        xHeight = value;
+        capHeight = value;
     } else if (tag == "sbxo") {
         subScriptOffset.first = value;
     } else if (tag == "sbyo") {
@@ -1402,7 +1402,7 @@ void FontMetrics::scaleBaselines(const qreal multiplier)
 
 QDebug operator<<(QDebug dbg, const FontMetrics &metrics)
 {
-    const double ftPixel = 1.0/64.0;
+    const double ftPixel = 1.0;
     dbg.nospace() << "FontMetrics(";
     dbg.nospace() << "Direction: " << (metrics.isVertical? "Top to bottom. ": "Left to right. ");
     dbg.nospace() << "FontSize: " << QString::number(metrics.fontSize*ftPixel) << "px. ";

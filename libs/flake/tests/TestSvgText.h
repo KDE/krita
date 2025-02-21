@@ -95,6 +95,9 @@ private Q_SLOTS:
 
     void testTextBaselineAlignment();
 
+    void testFontMetrics_data();
+    void testFontMetrics();
+
     void testCssShapeParsing();
     void testShapeInsideRender();
 

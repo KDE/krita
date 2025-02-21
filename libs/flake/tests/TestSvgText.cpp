@@ -2471,6 +2471,114 @@ void TestSvgText::testTextBaselineAlignment()
     t.test_standard("test-text-baseline-alignment", QSize(90, 51), 72.0);
 }
 
+void TestSvgText::testFontMetrics_data()
+{
+    QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<qreal>("fontSize");
+    QTest::addColumn<bool>("isHorizontal");
+    QTest::addColumn<qint32>("expectedFontSize");
+    QTest::addColumn<qint32>("expectedXHeight");
+    QTest::addColumn<qint32>("expectedCapHeight");
+    QTest::addColumn<qint32>("expectedSpace");
+    QTest::addColumn<qint32>("expectedAscender");
+    QTest::addColumn<qint32>("expectedDescender");
+    QTest::addColumn<qint32>("expectedIdeographic");
+    QTest::addColumn<qint32>("expectedHanging");
+    QTest::addColumn<qint32>("expectedSubscript");
+    QTest::addColumn<qint32>("expectedSuperscript");
+
+    QTest::addRow("test Deja Vu Sans") << QString("Deja Vu Sans") << 12.0 << true << 768 << 420 << 559 << 256 << 584 << -185 << -181 << 460 << 107 << 369;
+    QTest::addRow("test Baseline test font") << QString("Baseline Test") << 12.0 << true << 768 << 384 << 538 << 448 << 614 << -154 << -154 << 460 << 58 << 269;
+    QTest::addRow("test Baseline test font vertical") << QString("Baseline Test") << 12.0 << false << 768 << 384 << 538 << 448 << 614 << -154 << -154 << 460 << 58 << 269;
+}
+
+/**
+ * @brief TestSvgText::testFontMetrics
+ * This tests if we're able to retrieve or fall back on correct fontsize metrics.
+ */
+void TestSvgText::testFontMetrics()
+{
+    QFETCH(QString, fontFamily);
+    QFETCH(qreal, fontSize);
+    QFETCH(bool, isHorizontal);
+
+    KoCSSFontInfo info;
+    info.families = QStringList({fontFamily});
+    info.size = fontSize;
+
+    KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
+
+    QFETCH(qint32, expectedFontSize);
+    QVERIFY2(expectedFontSize == metrics.fontSize,
+             QString("Font Size not returning as %1, instead %2")
+             .arg(QString::number(expectedFontSize))
+             .arg(QString::number(metrics.fontSize))
+             .toLatin1());
+
+    QFETCH(qint32, expectedXHeight);
+    QVERIFY2(expectedXHeight == metrics.xHeight,
+             QString("XHeight not returning as %1, instead %2")
+             .arg(QString::number(expectedXHeight))
+             .arg(QString::number(metrics.xHeight))
+             .toLatin1());
+
+    QFETCH(qint32, expectedCapHeight);
+    QVERIFY2(expectedCapHeight == metrics.capHeight,
+             QString("CapHeight not returning as %1, instead %2")
+             .arg(QString::number(expectedCapHeight))
+             .arg(QString::number(metrics.capHeight))
+             .toLatin1());
+
+    QFETCH(qint32, expectedSpace);
+    QVERIFY2(expectedSpace == metrics.spaceAdvance,
+             QString("Space advance not returning as %1, instead %2")
+             .arg(QString::number(expectedSpace))
+             .arg(QString::number(metrics.spaceAdvance))
+             .toLatin1());
+
+    QFETCH(qint32, expectedAscender);
+    QVERIFY2(expectedAscender == metrics.ascender,
+             QString("Ascender not returning as %1, instead %2")
+             .arg(QString::number(expectedAscender))
+             .arg(QString::number(metrics.ascender))
+             .toLatin1());
+
+    QFETCH(qint32, expectedDescender);
+    QVERIFY2(expectedDescender == metrics.descender,
+             QString("Descender not returning as %1, instead %2")
+             .arg(QString::number(expectedDescender))
+             .arg(QString::number(metrics.descender))
+             .toLatin1());
+
+    QFETCH(qint32, expectedIdeographic);
+    QVERIFY2(expectedIdeographic == metrics.ideographicUnderBaseline,
+             QString("Ideographic not returning as %1, instead %2")
+             .arg(QString::number(expectedIdeographic))
+             .arg(QString::number(metrics.ideographicUnderBaseline))
+             .toLatin1());
+
+    QFETCH(qint32, expectedHanging);
+    QVERIFY2(expectedHanging == metrics.hangingBaseline,
+             QString("Hanging not returning as %1, instead %2")
+             .arg(QString::number(expectedHanging))
+             .arg(QString::number(metrics.hangingBaseline))
+             .toLatin1());
+
+    QFETCH(qint32, expectedSubscript);
+    QVERIFY2(expectedSubscript == metrics.subScriptOffset.second,
+             QString("Subscript not returning as %1, instead %2")
+             .arg(QString::number(expectedSubscript))
+             .arg(QString::number(metrics.subScriptOffset.second))
+             .toLatin1());
+
+    QFETCH(qint32, expectedSuperscript);
+    QVERIFY2(expectedSuperscript == metrics.superScriptOffset.second,
+             QString("Superscript not returning as %1, instead %2")
+             .arg(QString::number(expectedSuperscript))
+             .arg(QString::number(metrics.superScriptOffset.second))
+             .toLatin1());
+}
+
 /**
  * Tests the loading of CSS shapes by comparing the loaded shapes with their reference shapes.
  */

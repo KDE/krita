@@ -987,32 +987,32 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureEast
  */
 struct FontMetrics : public boost::equality_comparable<FontMetrics> {
     bool isVertical = false; ///< Different fontMetrics count between vertical and horizontal.
-    int32_t fontSize; ///< Currently set size, CSS unit 'em'
-    int32_t zeroAdvance; ///< Advance of the character '0', CSS Unit 'ch', defaults to 0.5 em in horizontal and 1.0 em in vertical.
-    int32_t spaceAdvance;///< Advance of the character ' ', used by tabs.
-    int32_t ideographicAdvance; ///< Advance of the character '水' (U+6C34), CSS Unit ic, defaults to 1 em.
+    qint32 fontSize; ///< Currently set size, CSS unit 'em'
+    qint32 zeroAdvance; ///< Advance of the character '0', CSS Unit 'ch', defaults to 0.5 em in horizontal and 1.0 em in vertical.
+    qint32 spaceAdvance;///< Advance of the character ' ', used by tabs.
+    qint32 ideographicAdvance; ///< Advance of the character '水' (U+6C34), CSS Unit ic, defaults to 1 em.
 
-    int32_t xHeight; ///< height of X, defaults to 0.5 fontsize.
-    int32_t capHeight; ///< Height of capital letters, defaults to ascender.
-    QPair<int32_t, int32_t> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
-    QPair<int32_t, int32_t> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd about alphabetic.
+    qint32 xHeight; ///< height of X, defaults to 0.5 fontsize.
+    qint32 capHeight; ///< Height of capital letters, defaults to ascender.
+    QPair<qint32, qint32> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
+    QPair<qint32, qint32> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd about alphabetic.
 
-    int32_t ascender; ///< distance from origin to top.
-    int32_t descender; ///< distance for origin to bottom.
-    int32_t lineGap; ///< additional linegap between consequetive lines.
+    qint32 ascender; ///< distance from origin to top.
+    qint32 descender; ///< distance for origin to bottom.
+    qint32 lineGap; ///< additional linegap between consequetive lines.
 
-    int32_t alphabeticBaseline; ///< location of alphabetic baseline from origin.
-    int32_t mathematicalBaseline; ///< location of mathematical baseline from origin.
+    qint32 alphabeticBaseline; ///< location of alphabetic baseline from origin.
+    qint32 mathematicalBaseline; ///< location of mathematical baseline from origin.
 
-    int32_t ideographicUnderBaseline; ///< location of ideographic under baseline from origin, may fall back to descender.
-    int32_t ideographicCenterBaseline; ///< location of ideographic center baseline from origin,
+    qint32 ideographicUnderBaseline; ///< location of ideographic under baseline from origin, may fall back to descender.
+    qint32 ideographicCenterBaseline; ///< location of ideographic center baseline from origin,
                                    ///< default baseline for vertical, centered between over and under.
-    int32_t ideographicOverBaseline; ///< location of ideographic over baseline from origin.
+    qint32 ideographicOverBaseline; ///< location of ideographic over baseline from origin.
 
-    int32_t ideographicFaceUnderBaseline; ///< location of ideographic face under baseline, that is, the bottom of the glyphs.
-    int32_t ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
+    qint32 ideographicFaceUnderBaseline; ///< location of ideographic face under baseline, that is, the bottom of the glyphs.
+    qint32 ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
 
-    int32_t hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
+    qint32 hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
 
     bool operator==(const FontMetrics & other) const {
         return isVertical == other.isVertical

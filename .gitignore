@@ -42,6 +42,7 @@ cmake-build-release-mingw/
 cmake-build-release-mingw64/
 
 .vscode/
+CMakeUserPresets.json
 
 _build
 _install

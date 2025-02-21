@@ -230,58 +230,49 @@ KoFontRegistry *KoFontRegistry::instance()
     return s_instance;
 }
 
-std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &families,
-                                                         QVector<int> &lengths,
-                                                         const QMap<QString, qreal> &axisSettings,
+std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(QVector<int> &lengths,
+                                                         KoCSSFontInfo info,
                                                          const QString &text,
                                                          quint32 xRes,
-                                                         quint32 yRes,
-                                                         qreal size,
-                                                         qreal fontSizeAdjust,
-                                                         int weight,
-                                                         int width,
-                                                         int slantMode,
-                                                         int slantValue, bool disableFontMatching,
+                                                         quint32 yRes, bool disableFontMatching,
                                                          const QString &language)
 {
     // Generate a hash for the cache.
     // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
     QString modifications;
-    if (size > -1) {
-        modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
+    if (info.size > -1) {
+        modifications += QString::number(info.size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
     }
-    if (fontSizeAdjust != 1.0) {
-        modifications += QString::number(fontSizeAdjust);
+    if (info.fontSizeAdjust != 1.0) {
+        modifications += QString::number(info.fontSizeAdjust);
     }
-    if (weight != 400) {
-        modifications += "weight:"+QString::number(weight);
+    if (info.weight != 400) {
+        modifications += "weight:"+QString::number(info.weight);
     }
-    if (width != 100) {
-        modifications += "width:"+QString::number(width);
+    if (info.width != 100) {
+        modifications += "width:"+QString::number(info.width);
     }
-    if (slantMode != 0) {
-        modifications += "slantMode:"+QString::number(slantMode);
-        if (slantValue != 0) {
-            modifications += "val:"+QString::number(slantValue);
+    if (info.slantMode != 0) {
+        modifications += "slantMode:"+QString::number(info.slantMode);
+        if (info.slantValue != 0) {
+            modifications += "val:"+QString::number(info.slantValue);
         }
     }
-    if (!axisSettings.isEmpty()) {
-        Q_FOREACH (const QString &key, axisSettings.keys()) {
-            modifications += "|" + key + QString::number(axisSettings.value(key));
+    if (!info.axisSettings.isEmpty()) {
+        Q_FOREACH (const QString &key, info.axisSettings.keys()) {
+            modifications += "|" + key + QString::number(info.axisSettings.value(key));
         }
     }
 
     QVector<QPair<QString, int>> candidates;
-    const QString suggestedHash = families.join("+") + ":" + QString::number(slantMode) + ":" + modifications;
+    const QString suggestedHash = info.families.join("+") + ":" + modifications;
     auto entry = d->suggestedFileNames().find(suggestedHash);
     if (entry != d->suggestedFileNames().end()) {
         candidates = entry.value();
     } else {
-        candidates = d->converter()->candidatesForCssValues(families,
-                                                            axisSettings,
-                                                            xRes, yRes, size,
-                                                            weight, width,
-                                                            slantMode, slantValue);
+        candidates = d->converter()->candidatesForCssValues(info,
+                                                            xRes,
+                                                            yRes);
         d->suggestedFileNames().insert(suggestedHash, candidates);
     }
 
@@ -321,7 +312,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     } else {
 
         FcPatternSP p(FcPatternCreate());
-        Q_FOREACH (const QString &family, families) {
+        Q_FOREACH (const QString &family, info.families) {
             QByteArray utfData = family.toUtf8();
             const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
             FcPatternAddString(p.data(), FC_FAMILY, vals);
@@ -343,17 +334,17 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
             FcPatternAddInteger(p.data(), FC_INDEX, file.second);
         }
 
-        if (slantMode == 1) {
+        if (info.slantMode == QFont::StyleItalic) {
             FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
-        } else if (slantMode == 2) {
+        } else if (info.slantMode == QFont::StyleOblique) {
             FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_OBLIQUE);
         } else {
             FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ROMAN);
         }
-        FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
-        FcPatternAddInteger(p.data(), FC_WIDTH, width);
+        FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(info.weight));
+        FcPatternAddInteger(p.data(), FC_WIDTH, info.width);
 
-        double pixelSize = size*(qMin(xRes, yRes)/72.0);
+        double pixelSize = info.size*(qMin(xRes, yRes)/72.0);
         FcPatternAddDouble(p.data(), FC_PIXEL_SIZE, pixelSize);
 
         FcConfigSubstitute(nullptr, p.data(), FcMatchPattern);
@@ -362,7 +353,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
 
         p = [&]() {
             const FcChar32 hash = FcPatternHash(p.data());
-            QString patternHash = families.join("+")+QString::number(hash);
+            QString patternHash = info.families.join("+")+QString::number(hash);
             // FCPatternHash breaks down when there's mutliple family names that start
             // with the same letter and are the same length (Butcherman and Babylonica, Eater and Elsie, all 4 on google fonts).
             const auto oldPattern = d->patterns().find(patternHash);
@@ -378,7 +369,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         FcCharSetSP charSet;
         FcFontSetSP fontSet = [&]() -> FcFontSetSP {
             const FcChar32 hash = FcPatternHash(p.data());
-            QString patternHash = families.join("+")+QString::number(hash);
+            QString patternHash = info.families.join("+")+QString::number(hash);
             const auto set = d->sets().find(patternHash);
 
             if (set != d->sets().end()) {
@@ -542,7 +533,7 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
             QByteArray utfData = font.fileName.toUtf8();
             if (FT_New_Face(d->library().data(), utfData.data(), font.fontIndex, &f) == 0) {
                 FT_FaceSP face(f);
-                configureFaces({face}, size, fontSizeAdjust, xRes, yRes, axisSettings);
+                configureFaces({face}, info.size, info.fontSizeAdjust, xRes, yRes, info.computedAxisSettings());
                 faces.emplace_back(face);
                 d->typeFaces().insert(fontCacheEntry, face);
             }

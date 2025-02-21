@@ -17,7 +17,7 @@ struct FontAxesModel::Private {
     QList<KoSvgText::FontFamilyAxis> axes;
     QList<QLocale> locales;
     bool opticalSizeDisabled = false;
-    QVariantHash axisValues;
+    QVariantMap axisValues;
 
     bool blockAxesValuesUpdate = false;
 };
@@ -167,12 +167,12 @@ QHash<int, QByteArray> FontAxesModel::roleNames() const
     return roles;
 }
 
-QVariantHash FontAxesModel::axisValues() const
+QVariantMap FontAxesModel::axisValues() const
 {
     return d->axisValues;
 }
 
-void FontAxesModel::setAxisValues(const QVariantHash &newAxisValues)
+void FontAxesModel::setAxisValues(const QVariantMap &newAxisValues)
 {
     if (d->axisValues == newAxisValues)
         return;

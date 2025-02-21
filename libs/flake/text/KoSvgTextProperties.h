@@ -17,6 +17,8 @@
 
 #include <boost/operators.hpp>
 
+#include "KoCSSFontInfo.h"
+
 class SvgLoadingContext;
 class KoShapeBackground;
 
@@ -247,13 +249,11 @@ public:
     QStringList fontFeaturesForText(int start, int length) const;
 
     /**
-     * @brief fontAxisSettings
-     * This is used to configure variable fonts. It gets the appropriate values
-     * from font width, stretch, style, size, if font-optical-sizing is not set
-     * to 'none, and finally the font-variation-settings property.
-     * @return a map of axis-tags and their values.
+     * @brief cssFontInfo
+     * @return this collects all the CSS Font properties into
+     * a KoCSSFontInfo struct for usage with the KoFontRegistery.
      */
-    QMap<QString, qreal> fontAxisSettings() const;
+    KoCSSFontInfo cssFontInfo() const;
 
     QSharedPointer<KoShapeBackground> background() const;
     KoShapeStrokeModelSP stroke() const;

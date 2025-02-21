@@ -195,7 +195,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontOpticalSizeLinkState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontOpticalSizingId))}
     , LAGER_QT(fontFamilies) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(variant_to<QStringList>)}
     , LAGER_QT(fontFamiliesState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontFamiliesId))}
-    , LAGER_QT(axisValues) {textData.zoom(createTextProperty(KoSvgTextProperties::FontVariationSettingsId)).zoom(variant_to<QVariantHash>)}
+    , LAGER_QT(axisValues) {textData.zoom(createTextProperty(KoSvgTextProperties::FontVariationSettingsId)).zoom(variant_to<QVariantMap>)}
     , LAGER_QT(axisValueState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontVariationSettingsId))}
     , LAGER_QT(textDecorationUnderline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationUnderline))}
     , LAGER_QT(textDecorationOverline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationOverline))}

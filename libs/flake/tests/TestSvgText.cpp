@@ -1363,7 +1363,9 @@ void TestSvgText::testAddingTestFont()
 
     QVector<int> lengths;
     QMap<QString, qreal> axisSettings;
-    const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues({fontName}, lengths, axisSettings);
+    KoCSSFontInfo  info;
+    info.families.append(fontName);
+    const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(lengths, info);
 
     bool res = false;
     for (const FT_FaceSP &face : faces) {
@@ -1499,12 +1501,13 @@ void TestSvgText::testFontSelectionForText()
     // Test the letter a.
 
     QString test = "a";
-    QMap<QString, qreal> axisSettings;
+    KoCSSFontInfo info;
 
     // First we verify that we can find the test fonts.
 
     QVector<int> lengths;
-    const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues({"CSSTest Verify"}, lengths, axisSettings, test);
+    info.families = QStringList({"CSSTest Verify"});
+    const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
 
     QVERIFY2(lengths.size() == 1, QString("KoFontRegistry selected the wrong amount of fonts for the following text: %1").arg(test).toLatin1());
 
@@ -1521,7 +1524,8 @@ void TestSvgText::testFontSelectionForText()
     QVector<int> expectedLengths;
     expectedLengths << 4 << 3;
     
-    const std::vector<FT_FaceSP> faces2 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    info.families = fontFamilies;
+    const std::vector<FT_FaceSP> faces2 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     QVERIFY2(lengths == expectedLengths, QString("KoFontRegistry returns the wrong lengths for string %1").arg(test).toLatin1());
     for (const FT_FaceSP &face : faces2) {
         // qDebug() << face->family_name;
@@ -1539,7 +1543,7 @@ void TestSvgText::testFontSelectionForText()
 
     test = "Hand:\u270d\U0001F3FF etc.";
     
-    const std::vector<FT_FaceSP> faces3 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    const std::vector<FT_FaceSP> faces3 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     expectedLengths.clear();
     expectedLengths << 5 << 3 << 5;
     // we can only test the lengths here because dejavu sans doesn't
@@ -1563,7 +1567,8 @@ void TestSvgText::testFontSelectionForText()
                   << "Krita_Test_Unicode_Variation_A"
                   << "CSSTest Verify"
                   << "Krita_Test_Unicode_Variation_A";
-    const std::vector<FT_FaceSP> faces4 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    info.families = fontFamilies;
+    const std::vector<FT_FaceSP> faces4 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     QVERIFY2(lengths == expectedLengths, QString("KoFontRegistry returns the wrong lengths for string %1").arg(test).toLatin1());
     for (const FT_FaceSP &face : faces4) {
         foundFonts.append(face->family_name);
@@ -1590,7 +1595,8 @@ void TestSvgText::testFontSelectionForText()
                  << "Krita_Test_Unicode_Variation_B"
                  << "Krita_Test_Unicode_Variation_A";
     
-    const std::vector<FT_FaceSP> faces5 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    info.families = fontFamilies;
+    const std::vector<FT_FaceSP> faces5 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     QVERIFY2(lengths == expectedLengths, QString("KoFontRegistry returns the wrong lengths for string %1").arg(test).toLatin1());
     for (const FT_FaceSP &face : faces5) {
         // qDebug() << face->family_name;
@@ -1624,7 +1630,8 @@ void TestSvgText::testFontSelectionForText()
                   << "CSSTest Verify"
                   << "Krita_Test_Unicode_Variation_B"
                   << "CSSTest Verify";
-    const std::vector<FT_FaceSP> faces6 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    info.families = fontFamilies;
+    const std::vector<FT_FaceSP> faces6 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     QVERIFY2(lengths == expectedLengths, QString("KoFontRegistry returns the wrong lengths for string %1").arg(test).toLatin1());
     for (const FT_FaceSP &face : faces6) {
         // qDebug() << face->family_name;
@@ -1642,7 +1649,7 @@ void TestSvgText::testFontSelectionForText()
 
     // Jack of diamonds is U+1f0cb and is part of DejaVu Sans
     test = "Jack:🃋";
-    const std::vector<FT_FaceSP> faces7 = KoFontRegistry::instance()->facesForCSSValues(fontFamilies, lengths, axisSettings, test);
+    const std::vector<FT_FaceSP> faces7 = KoFontRegistry::instance()->facesForCSSValues(lengths, info, test);
     foundFonts.clear();
     expectedLengths.clear();
     expectedLengths << 5 << 2;
@@ -1766,11 +1773,13 @@ void TestSvgText::testWWSConverterWeight() {
     QFETCH(QString, testString);
     QFETCH(int, requestedWeight);
     QFETCH(int, expectedWeight);
-    QMap<QString, qreal> axisSettings;
-    axisSettings.insert("wght", requestedWeight);
+
+    KoCSSFontInfo info;
+    info.families = QStringList({fontFamily});
+    info.weight = requestedWeight;
 
     const std::vector<FT_FaceSP> faces =
-        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, requestedWeight);
+        KoFontRegistry::instance()->facesForCSSValues(lengths, info, testString);
 
     QVERIFY(!faces.empty());
 
@@ -1816,7 +1825,6 @@ void TestSvgText::testWWSConverterSlant_data() {
 }
 
 void TestSvgText::testWWSConverterSlant() {
-    QMap<QString, qreal> axisSettings;
     QVector<int> lengths;
     QFETCH(QString, fontFamily);
     QFETCH(QString, testString);
@@ -1825,14 +1833,14 @@ void TestSvgText::testWWSConverterSlant() {
     QFETCH(int, requestedSlant);
     QFETCH(int, expectedSlant);
 
-    if (requestedMode == QFont::StyleOblique) {
-        axisSettings.insert("slnt", requestedSlant);
-    } else if (requestedMode == QFont::StyleItalic) {
-        axisSettings.insert("ital", 1.0);
-    }
+    KoCSSFontInfo info;
+    info.families = QStringList({fontFamily});
+    info.slantMode = requestedMode;
+    info.slantValue = -requestedSlant;
+    info.autoSlant = false;
 
     const std::vector<FT_FaceSP> faces =
-        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, 100, requestedMode, requestedSlant);
+        KoFontRegistry::instance()->facesForCSSValues(lengths, info, testString);
 
     QVERIFY(!faces.empty());
 
@@ -1885,11 +1893,13 @@ void TestSvgText::testWWSConverterWidth()
     QFETCH(QString, fontFamily);
     QFETCH(int, requestedWidth);
     QFETCH(int, expectedWidth);
-    QMap<QString, qreal> axisSettings;
-    axisSettings.insert("wdth", requestedWidth);
+
+    KoCSSFontInfo info;
+    info.families = QStringList({fontFamily});
+    info.width = requestedWidth;
 
     const std::vector<FT_FaceSP> faces =
-        KoFontRegistry::instance()->facesForCSSValues({fontFamily}, lengths, axisSettings, testString, 72, 72, 1, 1.0, 400, requestedWidth);
+        KoFontRegistry::instance()->facesForCSSValues(lengths, info, testString);
 
     QVERIFY(!faces.empty());
 
@@ -1950,8 +1960,11 @@ void TestSvgText::testWWSConverterFamilyNames()
     QFETCH(QString, expectedFamily);
     QFETCH(QString, expectedStyle);
 
+    KoCSSFontInfo info;
+    info.families.append(requestedFamily);
+
     const std::vector<FT_FaceSP> faces =
-        KoFontRegistry::instance()->facesForCSSValues({requestedFamily}, lengths, axisSettings);
+        KoFontRegistry::instance()->facesForCSSValues(lengths, info);
 
     QVERIFY(!faces.empty());
 
@@ -1974,18 +1987,19 @@ void TestSvgText::testWWSConverterFamilyNames()
 void TestSvgText::testFontSizeConfiguration()
 {
     QString fontName = "Ahem";
+    KoCSSFontInfo info;
     qreal freetypefontfactor = 64.0;
-    QMap<QString, qreal> axisSettings;
 
     {
         QVector<int> lengths;
-        qreal sizePt = 15.0;
-        const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues({fontName}, lengths, axisSettings, QString(), 72, 72, sizePt);
+        info.size = 15.0;
+        info.families = QStringList({fontName});
+        const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(lengths, info);
 
         int size = faces.front()->size->metrics.height;
-        QVERIFY2(size == (sizePt * freetypefontfactor),
+        QVERIFY2(size == (info.size * freetypefontfactor),
                  QString("Configured value for Ahem at 15 pt is not returning as %1, instead %2")
-                     .arg(QString::number(sizePt * freetypefontfactor))
+                     .arg(QString::number(info.size * freetypefontfactor))
                      .arg(QString::number(size))
                      .toLatin1());
     }
@@ -1998,10 +2012,11 @@ void TestSvgText::testFontSizeConfiguration()
     {
         QVector<qreal> testSizes;
         testSizes << 4.0 << 8.0 << 10.0 << 12.0;
-
+        info.families = QStringList({fontName});
         for (qreal sizePt : testSizes) {
             QVector<int> lengths;
-            const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues({fontName}, lengths, axisSettings, QString(), 72, 72, sizePt);
+            info.size = sizePt;
+            const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(lengths, info, QString());
 
             // With 10.0, we mostly want to test that it returns a valid value.
             if (sizePt == 10.0) {
@@ -2023,10 +2038,11 @@ void TestSvgText::testFontSizeConfiguration()
 
     {
         QVector<int> lengths;
-        qreal sizePt = 15.0;
-        qreal fontSizeAdjust = 0.8;
+        info.size = 15.0;
+        info.fontSizeAdjust = 0.8;
+        info.families = QStringList({fontName});
         const std::vector<FT_FaceSP> faces =
-            KoFontRegistry::instance()->facesForCSSValues({fontName}, lengths, axisSettings, QString(), 72, 72, sizePt, fontSizeAdjust);
+            KoFontRegistry::instance()->facesForCSSValues(lengths, info);
 
         int size = faces.front()->size->metrics.height;
         QVERIFY2(size == 768,

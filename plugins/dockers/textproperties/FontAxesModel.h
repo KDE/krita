@@ -21,7 +21,7 @@
 class FontAxesModel: public QAbstractItemModel
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantHash axisValues READ axisValues WRITE setAxisValues NOTIFY axisValuesChanged)
+    Q_PROPERTY(QVariantMap axisValues READ axisValues WRITE setAxisValues NOTIFY axisValuesChanged)
 public:
     enum Roles {
         Min = Qt::UserRole + 1, ///< double, represents lower end
@@ -42,9 +42,9 @@ public:
     void setBlockAxesValuesSignal(bool block);
     bool axesValueSignalBlocked() const;
 
-    QVariantHash axisValues() const;
+    QVariantMap axisValues() const;
 public Q_SLOTS:
-    void setAxisValues(const QVariantHash &newAxisValues);
+    void setAxisValues(const QVariantMap &newAxisValues);
 
     // QAbstractItemModel interface
 public:

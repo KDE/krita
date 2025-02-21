@@ -8,6 +8,7 @@
 
 #include <QHash>
 #include <KoFontLibraryResourceUtils.h>
+#include "KoCSSFontInfo.h"
 #include <kritaflake_export.h>
 
 #include <KoSvgText.h>
@@ -85,15 +86,9 @@ public:
      * We want to give these preferential treatment to whatever fontconfig matches for us.
      * @return list of QPairs representing the filenames and file indices for the candidates.
      */
-    QVector<QPair<QString, int>> candidatesForCssValues(const QStringList &families,
-                                       const QMap<QString, qreal> &axisSettings,
+    QVector<QPair<QString, int>> candidatesForCssValues(const KoCSSFontInfo info,
                                        quint32 xRes = 72,
-                                       quint32 yRes = 72,
-                                       qreal size = -1,
-                                       int weight = 400,
-                                       int width = 100,
-                                       int slantMode = 0,
-                                       int slantValue = 0) const;
+                                       quint32 yRes = 72) const;
 
     /// Print out the font family hierarchy into the debug output.
     void debugInfo() const;

@@ -135,7 +135,7 @@ public:
     LAGER_QT_CURSOR(bool, fontOpticalSizeLink);
     LAGER_QT_CURSOR(PropertyState, fontOpticalSizeLinkState);
 
-    LAGER_QT_CURSOR(QVariantHash, axisValues);
+    LAGER_QT_CURSOR(QVariantMap, axisValues);
     LAGER_QT_CURSOR(PropertyState, axisValueState);
 
     LAGER_QT_CURSOR(QStringList, fontFamilies);

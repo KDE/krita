@@ -392,24 +392,15 @@ void KoSvgTextShape::Private::relayout()
 
             qreal fontSize = properties.fontSize().value;
             const KoSvgText::CssFontStyleData style = properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
-            KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
             bool synthesizeWeight = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisBoldId).toBool();
             bool synthesizeStyle = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisItalicId).toBool();
-            if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
-                fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
-            }
+
             const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
-                properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
                 lengths,
-                properties.fontAxisSettings(),
+                properties.cssFontInfo(),
                 chunk.text,
                 static_cast<quint32>(finalRes),
                 static_cast<quint32>(finalRes),
-                fontSize,
-                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-                properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                style.style, style.slantValue.isAuto? 14: style.slantValue.customValue,
                 disableFontMatching);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(),
@@ -1166,23 +1157,13 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     QVector<int> lengths;
-    const KoSvgText::CssFontStyleData style = properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
-    KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
-    if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
-        fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
-    }
     const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
-        properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
         lengths,
-        properties.fontAxisSettings(),
+        properties.cssFontInfo(),
         QString(),
         static_cast<quint32>(res),
         static_cast<quint32>(res),
-        fontSize,
-        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-        properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-        properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style.style, style.slantValue.isAuto? 14: style.slantValue.customValue, disableFontMatching);
+        disableFontMatching);
 
     hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);

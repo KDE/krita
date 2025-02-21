@@ -213,8 +213,8 @@ inline qreal roundToStraightAngle(qreal value)
     return normalizeAngle(int((value + M_PI_4) / M_PI_2) * M_PI_2);
 }
 
-QVariantHash parseVariantStringList(const QStringList features) {
-    QVariantHash settings;
+QVariantMap parseVariantStringList(const QStringList features) {
+    QVariantMap settings;
     for (int i = 0; i < features.size(); i++) {
         QString feature = features.at(i).trimmed();
         if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
@@ -684,7 +684,7 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
     if (hasProperty(FontVariationSettingsId)) {
         QStringList settings;
-        QVariantHash vals = property(FontVariationSettingsId).toHash();
+        QVariantMap vals = property(FontVariationSettingsId).toMap();
         for(auto it = vals.begin(); it != vals.end(); it++) {
             settings.append(QString("'%1' %2").arg(it.key()).arg(it.value().toDouble()));
         }
@@ -1051,30 +1051,30 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
     return fontFeatures;
 }
 
-QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
+KoCSSFontInfo KoSvgTextProperties::cssFontInfo() const
 {
-    QMap<QString, qreal> settings;
-    settings.insert("wght", propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
-    settings.insert("wdth", propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
-    if (propertyOrDefault(KoSvgTextProperties::FontOpticalSizingId).toBool()) {
-        settings.insert("opsz", fontSize().value);
-    }
-    const KoSvgText::CssFontStyleData style = propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
-    if (style.style == QFont::StyleItalic) {
-        settings.insert("ital", 1);
-    } else if (style.style == QFont::StyleOblique) {
-        settings.insert("slnt", -(style.slantValue.isAuto? 14: style.slantValue.customValue));
-    } else {
-        settings.insert("ital", 0);
-    }
-    if (hasProperty(FontVariationSettingsId)) {
-        QVariantHash features = property(FontVariationSettingsId).toHash();
-        for (auto it = features.begin(); it != features.end(); it++) {
-            settings.insert(it.key(), it.value().toDouble());
-        }
+    KoCSSFontInfo info;
+    info.weight = propertyOrDefault(FontWeightId).toInt();
+    info.width = propertyOrDefault(FontStretchId).toInt();
+    info.automaticOpticalSizing = propertyOrDefault(FontOpticalSizingId).toBool();
+    info.size = propertyOrDefault(FontSizeId).value<KoSvgText::CssLengthPercentage>().value;
+    info.families = propertyOrDefault(FontFamiliesId).toStringList();
+    const KoSvgText::AutoValue fontSizeAdjust = propertyOrDefault(FontSizeAdjustId).value<KoSvgText::AutoValue>();
+    if (property(KraTextVersionId).toInt() >= 3) {
+        info.fontSizeAdjust = fontSizeAdjust.isAuto? 1.0: fontSizeAdjust.customValue;
     }
 
-    return settings;
+    const KoSvgText::CssFontStyleData style = propertyOrDefault(FontStyleId).value<KoSvgText::CssFontStyleData>();
+    info.slantMode = style.style;
+    info.autoSlant = style.slantValue.isAuto;
+    info.slantValue = style.slantValue.customValue;
+
+    QVariantMap features = property(FontVariationSettingsId).toMap();
+    for (auto it = features.begin(); it != features.end(); it++) {
+        info.axisSettings.insert(it.key(), it.value().toDouble());
+    }
+
+    return info;
 }
 
 QSharedPointer<KoShapeBackground> KoSvgTextProperties::background() const

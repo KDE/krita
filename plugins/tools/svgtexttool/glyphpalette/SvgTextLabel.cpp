@@ -103,12 +103,7 @@ qreal SvgTextLabel::fontSlant() const
 
 QVariantMap SvgTextLabel::fontAxesValues() const
 {
-    QVariantMap map;
-    QVariantHash axes = d->props.propertyOrDefault(KoSvgTextProperties::FontVariationSettingsId).toHash();
-    Q_FOREACH(const QString key, axes.keys()) {
-        map.insert(key, axes.value(key));
-    }
-    return map;
+    return d->props.propertyOrDefault(KoSvgTextProperties::FontVariationSettingsId).toMap();
 }
 
 qreal SvgTextLabel::fontSize() const
@@ -202,25 +197,22 @@ void SvgTextLabel::setFontSlant(qreal fontSlant)
 
 void SvgTextLabel::setFontAxesValues(QVariantMap fontAxesValues)
 {
-    QVariantHash compare;
-    Q_FOREACH (const QString key, fontAxesValues.keys()) {
-        compare.insert(key, fontAxesValues.value(key));
-    }
-    QVariantHash current = d->props.property(KoSvgTextProperties::FontVariationSettingsId).toHash();
-    if (current == compare)
+    QVariantMap current = d->props.property(KoSvgTextProperties::FontVariationSettingsId).toMap();
+    if (current == fontAxesValues)
         return;
 
-    d->props.setProperty(KoSvgTextProperties::FontVariationSettingsId, QVariant::fromValue(compare));
+    d->props.setProperty(KoSvgTextProperties::FontVariationSettingsId, QVariant::fromValue(fontAxesValues));
     emit fontAxesValuesChanged(fontAxesValues);
 }
 
 void SvgTextLabel::setFontSize(qreal fontSize)
 {
-    qreal current = d->props.property(KoSvgTextProperties::FontSizeId).toReal();
-    if (qFuzzyCompare(current, fontSize))
+    KoSvgText::CssLengthPercentage current = d->props.property(KoSvgTextProperties::FontSizeId).value<KoSvgText::CssLengthPercentage>();
+    if (qFuzzyCompare(current.value, fontSize))
         return;
 
-    d->props.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
+    current.value = fontSize;
+    d->props.setProperty(KoSvgTextProperties::FontSizeId, QVariant::fromValue(current));
     emit fontSizeChanged(fontSize);
 }
 

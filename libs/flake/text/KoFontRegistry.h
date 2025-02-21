@@ -13,6 +13,7 @@
 #include <KoFontLibraryResourceUtils.h>
 #include <KoFFWWSConverter.h>
 
+#include "KoCSSFontInfo.h"
 #include "kritaflake_export.h"
 
 /**
@@ -45,18 +46,11 @@ public:
      * will be filled with the lengths of consequetive characters
      * a face can be set on.
      */
-    std::vector<FT_FaceSP> facesForCSSValues(const QStringList &families,
-                                             QVector<int> &lengths,
-                                             const QMap<QString, qreal> &axisSettings,
+    std::vector<FT_FaceSP> facesForCSSValues(QVector<int> &lengths,
+                                             KoCSSFontInfo info = KoCSSFontInfo(),
                                              const QString &text = "",
                                              quint32 xRes = 72,
                                              quint32 yRes = 72,
-                                             qreal size = -1,
-                                             qreal fontSizeAdjust = 1.0,
-                                             int weight = 400,
-                                             int width = 100,
-                                             int slantMode = false,
-                                             int slantValue = 0,
                                              bool disableFontMatching = false,
                                              const QString &language = QString());
 

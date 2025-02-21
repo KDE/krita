@@ -1053,19 +1053,14 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
     return candidates;
 }
 
-QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStringList &families,
-                                                     const QMap<QString, qreal> &axisSettings,
-                                                     quint32 xRes, quint32 yRes,
-                                                     qreal size,
-                                                     int weight, int width,
-                                                     int slantMode, int slantValue) const
+QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const KoCSSFontInfo info,
+                                                     quint32 xRes, quint32 yRes) const
 {
-    Q_UNUSED(axisSettings)
     QVector<QPair<QString, int>> candidateFileNames;
 
-    int pixelSize = size * (qMin(xRes, yRes) / 72.0);
+    int pixelSize = info.size * (qMin(xRes, yRes) / 72.0);
 
-    Q_FOREACH(const QString &family, families) {
+    Q_FOREACH(const QString &family, info.families) {
         auto it = d->fontFamilyCollection.compositionBegin();
         it = searchNodes(it, d->fontFamilyCollection.compositionEnd(), family);
         if (it != d->fontFamilyCollection.compositionEnd()) {
@@ -1098,12 +1093,12 @@ QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStr
 
             if (candidates.size() > 1) {
                 // first find width
-                candidates = findNodesByAxis(candidates, WIDTH_TAG, width, 100.0, 100.0);
+                candidates = findNodesByAxis(candidates, WIDTH_TAG, info.width, 100.0, 100.0);
             }
 
             if (candidates.size() > 1) {
                 // then find weight
-                candidates = findNodesByAxis(candidates, WEIGHT_TAG, weight, 400.0, 500.0);
+                candidates = findNodesByAxis(candidates, WEIGHT_TAG, info.weight, 400.0, 500.0);
             }
             // then match italic
             if (candidates.size() > 1) {
@@ -1112,7 +1107,7 @@ QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStr
 
                 if (wws->isVariable) {
                     italics = findNodesByAxis(candidates, ITALIC_TAG, 1.0, 0.0, 0.0);
-                    obliques = findNodesByAxis(candidates, SLANT_TAG, -slantValue, 0.0, 0.0);
+                    obliques = findNodesByAxis(candidates, SLANT_TAG, -info.slantValue, 0.0, 0.0);
                 }
                 if (italics.isEmpty() && obliques.isEmpty()) {
                     Q_FOREACH(const FontFamilyNode &node, candidates) {
@@ -1126,13 +1121,13 @@ QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStr
                     }
                 }
 
-                if (slantMode == QFont::StyleItalic) {
+                if (info.slantMode == QFont::StyleItalic) {
                     if (!italics.isEmpty()) {
                         candidates = italics;
                     } else if (!obliques.isEmpty()) {
                         candidates = obliques;
                     }
-                } else if (slantMode == QFont::StyleOblique) {
+                } else if (info.slantMode == QFont::StyleOblique) {
                     if (!obliques.isEmpty()) {
                         candidates = obliques;
                     } else if (!italics.isEmpty()) {

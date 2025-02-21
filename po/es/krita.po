@@ -54,7 +54,7 @@
 # SPDX-FileCopyrightText: 2006 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez (Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
@@ -64,15 +64,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-20 01:54+0000\n"
-"PO-Revision-Date: 2025-02-08 00:29+0100\n"
+"POT-Creation-Date: 2025-02-21 01:53+0000\n"
+"PO-Revision-Date: 2025-02-20 23:52+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.1\n"
+"X-Generator: Lokalize 24.12.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -8116,7 +8116,7 @@ msgstr "En mosaico"
 #, kde-format
 msgctxt "action"
 msgid "Create Resource Bundle..."
-msgstr "Crear un paquete de recursos..."
+msgstr "Crear un paquete de recursos…"
 
 #. i18n: context: toolTip @ Action (create_bundle), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_bundle), Actions (General), ActionCollection (Krita)
@@ -8349,7 +8349,7 @@ msgstr "Abrir la barra de órdenes para buscar entre las acciones."
 #, kde-format
 msgctxt "action"
 msgid "Rename Composition..."
-msgstr "Cambiar el nombre de la composición..."
+msgstr "Cambiar el nombre de la composición…"
 
 #. i18n: context: toolTip @ Action (rename_composition), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rename_composition), Actions (General), ActionCollection (Krita)
@@ -9435,7 +9435,7 @@ msgstr "Filtros"
 #, kde-format
 msgctxt "action"
 msgid "&Color to Alpha..."
-msgstr "&Color a alfa..."
+msgstr "&Color a alfa…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
@@ -9469,7 +9469,7 @@ msgstr "Detección del borde superior"
 #, kde-format
 msgctxt "action"
 msgid "&Index Colors..."
-msgstr "Colores &indexados..."
+msgstr "Colores &indexados…"
 
 #. i18n: context: toolTip @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
@@ -9571,7 +9571,7 @@ msgstr "Eliminación de la media"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "Desenfoque &gaussiano..."
+msgstr "Desenfoque &gaussiano…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9605,7 +9605,7 @@ msgstr "Repujar en todas las direcciones"
 #, kde-format
 msgctxt "action"
 msgid "&Small Tiles..."
-msgstr "Mo&saicos pequeños..."
+msgstr "Mo&saicos pequeños…"
 
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
@@ -9622,7 +9622,7 @@ msgstr "Mosaicos pequeños"
 #, kde-format
 msgctxt "action"
 msgid "&Levels..."
-msgstr "Nive&les..."
+msgstr "Nive&les…"
 
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
@@ -9639,7 +9639,7 @@ msgstr "Niveles"
 #, kde-format
 msgctxt "action"
 msgid "&Sobel..."
-msgstr "&Sobel..."
+msgstr "&Sobel…"
 
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
@@ -9656,7 +9656,7 @@ msgstr "Sobel"
 #, kde-format
 msgctxt "action"
 msgid "&Wave..."
-msgstr "&Onda..."
+msgstr "&Onda…"
 
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
@@ -9673,7 +9673,7 @@ msgstr "Onda"
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "Desenfoque de &movimiento..."
+msgstr "Desenfoque de &movimiento…"
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
@@ -9707,7 +9707,7 @@ msgstr "Invertir"
 #, kde-format
 msgctxt "action"
 msgid "&Color Adjustment curves..."
-msgstr "&Curvas de ajuste de color..."
+msgstr "&Curvas de ajuste de color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
@@ -9724,7 +9724,7 @@ msgstr "Curvas de ajuste de color"
 #, kde-format
 msgctxt "action"
 msgid "Pi&xelize..."
-msgstr "Pi&xelar..."
+msgstr "Pi&xelar…"
 
 #. i18n: context: toolTip @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
@@ -9775,7 +9775,7 @@ msgstr "Detección del borde izquierdo"
 #, kde-format
 msgctxt "action"
 msgid "&Blur..."
-msgstr "&Desenfocar..."
+msgstr "&Desenfocar…"
 
 #. i18n: context: text @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
@@ -9799,7 +9799,7 @@ msgstr "Desenfocar"
 #, kde-format
 msgctxt "action"
 msgid "&Raindrops..."
-msgstr "Gotas de ll&uvia..."
+msgstr "Gotas de ll&uvia…"
 
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
@@ -9833,7 +9833,7 @@ msgstr "Detección del borde inferior"
 #, kde-format
 msgctxt "action"
 msgid "&Random Noise..."
-msgstr "&Ruido aleatorio..."
+msgstr "&Ruido aleatorio…"
 
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
@@ -9850,7 +9850,7 @@ msgstr "Ruido aleatorio"
 #, kde-format
 msgctxt "action"
 msgid "Colo&r Balance..."
-msgstr "Balan&ce de color..."
+msgstr "Balan&ce de color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
@@ -9867,7 +9867,7 @@ msgstr "Balance de color"
 #, kde-format
 msgctxt "action"
 msgid "&Phong Bumpmap..."
-msgstr "Mapa de relieve &Phong..."
+msgstr "Mapa de relieve &Phong…"
 
 #. i18n: context: toolTip @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
@@ -9901,7 +9901,7 @@ msgstr "Desaturar"
 #, kde-format
 msgctxt "action"
 msgid "Color &Transfer..."
-msgstr "&Transferencia de color..."
+msgstr "&Transferencia de color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
@@ -9935,7 +9935,7 @@ msgstr "Repujar solo en vertical"
 #, kde-format
 msgctxt "action"
 msgid "&Lens Blur..."
-msgstr "Desenfoque de &lente..."
+msgstr "Desenfoque de &lente…"
 
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
@@ -9986,7 +9986,7 @@ msgstr "Maximizar el canal"
 #, kde-format
 msgctxt "action"
 msgid "&Oilpaint..."
-msgstr "Pintura al óle&o..."
+msgstr "Pintura al óle&o…"
 
 #. i18n: context: toolTip @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
@@ -10037,7 +10037,7 @@ msgstr "Contraste automático"
 #, kde-format
 msgctxt "action"
 msgid "&Round Corners..."
-msgstr "&Redondear las esquinas..."
+msgstr "&Redondear las esquinas…"
 
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
@@ -10054,7 +10054,7 @@ msgstr "Esquinas redondeadas"
 #, kde-format
 msgctxt "action"
 msgid "&Unsharp Mask..."
-msgstr "Máscara de desenfoq&ue..."
+msgstr "Máscara de desenfoq&ue…"
 
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
@@ -10071,7 +10071,7 @@ msgstr "Máscara de desenfoque"
 #, kde-format
 msgctxt "action"
 msgid "&Emboss with Variable Depth..."
-msgstr "R&epuar con profundidad variable..."
+msgstr "R&epuar con profundidad variable…"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
@@ -10105,7 +10105,7 @@ msgstr "Repujar en horizontal y en vertical"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr "Elección aleato&ria..."
+msgstr "Elección aleato&ria…"
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -10122,7 +10122,7 @@ msgstr "Elección aleatoria"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
-msgstr "Reducción de ruido &gaussiana..."
+msgstr "Reducción de ruido &gaussiana…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10139,7 +10139,7 @@ msgstr "Reducción de ruido gaussiana"
 #, kde-format
 msgctxt "action"
 msgid "&Posterize..."
-msgstr "&Posterizar..."
+msgstr "&Posterizar…"
 
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
@@ -10156,7 +10156,7 @@ msgstr "Posterizar"
 #, kde-format
 msgctxt "action"
 msgid "&Wavelet Noise Reducer..."
-msgstr "Reductor de ruido mediante &ondículas..."
+msgstr "Reductor de ruido mediante &ondículas…"
 
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10173,7 +10173,7 @@ msgstr "Reductor de ruido mediante ondículas"
 #, kde-format
 msgctxt "action"
 msgid "&HSV Adjustment..."
-msgstr "Ajuste de &HSV..."
+msgstr "Ajuste de &HSV…"
 
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
@@ -11415,7 +11415,7 @@ msgstr "Capa vectorial"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr "Añadir capa de &filtro..."
+msgstr "Añadir capa de &filtro…"
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2618
@@ -11436,7 +11436,7 @@ msgstr "Capa de filtro"
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr "Añadir capa de &relleno..."
+msgstr "Añadir capa de &relleno…"
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2630
@@ -11457,7 +11457,7 @@ msgstr "Capa de relleno"
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr "Añadir capa de &archivo..."
+msgstr "Añadir capa de &archivo…"
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2642
@@ -11499,7 +11499,7 @@ msgstr "Máscara de transparencia"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr "Añadir máscara de &filtro..."
+msgstr "Añadir máscara de &filtro…"
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2666
@@ -12008,7 +12008,7 @@ msgstr "Seleccionar todas las capas desbloqueadas"
 #, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
-msgstr "G&uardar capa/máscara..."
+msgstr "G&uardar capa/máscara…"
 
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
@@ -12025,7 +12025,7 @@ msgstr "Guardar capa/máscara"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr "Guardar capa vectorial como SVG..."
+msgstr "Guardar capa vectorial como SVG…"
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -12042,7 +12042,7 @@ msgstr "Guardar capa vectorial como SVG"
 #, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
-msgstr "&Guardar capas de grupo..."
+msgstr "&Guardar capas de grupo…"
 
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
@@ -12101,7 +12101,7 @@ msgstr "Convertir capa en fotogramas de animación"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Convertir en capa de arc&hivo..."
+msgstr "Convertir en capa de arc&hivo…"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3062
@@ -12123,7 +12123,7 @@ msgstr "Convertir en capa de archivo"
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
-msgstr "I&mportar capa..."
+msgstr "I&mportar capa…"
 
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
@@ -12140,7 +12140,7 @@ msgstr "Importar capa"
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr "&como capa de pintura..."
+msgstr "&como capa de pintura…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12157,7 +12157,7 @@ msgstr "como capa de pintura"
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
-msgstr "como máscara de &transparencia..."
+msgstr "como máscara de &transparencia…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12174,7 +12174,7 @@ msgstr "como máscara de transparencia"
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
-msgstr "como máscara de &filtro..."
+msgstr "como máscara de &filtro…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12191,7 +12191,7 @@ msgstr "como máscara de filtro"
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
-msgstr "como má&scara de selección..."
+msgstr "como má&scara de selección…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -12242,7 +12242,7 @@ msgstr "a máscara de transparencia"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
-msgstr "Convertir en máscara de &filtro..."
+msgstr "Convertir en máscara de &filtro…"
 
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12310,7 +12310,7 @@ msgstr "Escribir como alfa"
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
-msgstr "G&uardar fusionado..."
+msgstr "G&uardar fusionado…"
 
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
@@ -12327,7 +12327,7 @@ msgstr "Guardar fusionado"
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
-msgstr "Dividir capa..."
+msgstr "Dividir capa…"
 
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
@@ -12344,7 +12344,7 @@ msgstr "Dividir la capa"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr "Descomponer ondículas..."
+msgstr "Descomponer ondículas…"
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12395,7 +12395,7 @@ msgstr "Reflejar las capas verticalmente"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "&Rotar capas..."
+msgstr "&Rotar capas…"
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
@@ -12463,7 +12463,7 @@ msgstr "Rotar las capas 180°"
 #, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Esca&lar capas a un nuevo tamaño..."
+msgstr "Esca&lar capas a un nuevo tamaño…"
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
@@ -12480,7 +12480,7 @@ msgstr "Escalar las capas a un nuevo tamaño"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "Pro&yectar capas..."
+msgstr "Pro&yectar capas…"
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12531,7 +12531,7 @@ msgstr "Reflejar todas las capas verticalmente"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
-msgstr "&Rotar todas las capas..."
+msgstr "&Rotar todas las capas…"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12599,7 +12599,7 @@ msgstr "Rotar todas las capas 180°"
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
-msgstr "Esca&lar todas las capas a un nuevo tamaño..."
+msgstr "Esca&lar todas las capas a un nuevo tamaño…"
 
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12616,7 +12616,7 @@ msgstr "Escalar todas las capas a un nuevo tamaño"
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "Pro&yectar todas las capas..."
+msgstr "Pro&yectar todas las capas…"
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12633,7 +12633,7 @@ msgstr "Proyectar todas las capas"
 #, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "&Desplazar capas..."
+msgstr "&Desplazar capas…"
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
@@ -12650,7 +12650,7 @@ msgstr "Desplazar las capas"
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr "T&abla de clones..."
+msgstr "T&abla de clones…"
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -12667,7 +12667,7 @@ msgstr "Tabla de clones"
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
-msgstr "&Editar metadatos..."
+msgstr "&Editar metadatos…"
 
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
@@ -12684,7 +12684,7 @@ msgstr "Editar los metadatos"
 #, kde-format
 msgctxt "action"
 msgid "&Histogram..."
-msgstr "&Histograma..."
+msgstr "&Histograma…"
 
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
@@ -12701,7 +12701,7 @@ msgstr "Histograma"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr "&Convertir espacio de color de la capa..."
+msgstr "&Convertir espacio de color de la capa…"
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12790,7 +12790,7 @@ msgstr "Aplanar la imagen"
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr "Es&tilo de capa..."
+msgstr "Es&tilo de capa…"
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -12880,7 +12880,7 @@ msgstr "Bajar capa o máscara"
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr "&Propiedades..."
+msgstr "&Propiedades…"
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -12897,7 +12897,7 @@ msgstr "Propiedades"
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
-msgstr "Defini&r copia desde..."
+msgstr "Defini&r copia desde…"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3634
@@ -13116,7 +13116,7 @@ msgstr "Archivo"
 #, kde-format
 msgctxt "New document"
 msgid "&New..."
-msgstr "&Nuevo..."
+msgstr "&Nuevo…"
 
 #. i18n: context: toolTip @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:9
@@ -13137,7 +13137,7 @@ msgstr "Nueva"
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "&Abrir..."
+msgstr "&Abrir…"
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
@@ -13196,7 +13196,7 @@ msgstr "Guardar"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "G&uardar como..."
+msgstr "G&uardar como…"
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -13217,7 +13217,7 @@ msgstr "Guardar como"
 #, kde-format
 msgctxt "action"
 msgid "Sessions..."
-msgstr "Sesiones..."
+msgstr "Sesiones…"
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
@@ -13238,7 +13238,7 @@ msgstr "Sesiones"
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Abr&ir documento existente como documento sin título..."
+msgstr "Abr&ir documento existente como documento sin título…"
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -13255,7 +13255,7 @@ msgstr "Abrir documento existente como documento sin título"
 #, kde-format
 msgctxt "action"
 msgid "E&xport..."
-msgstr "E&xportar..."
+msgstr "E&xportar…"
 
 #. i18n: context: toolTip @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_export_file), Actions (File), ActionCollection (Menu)
@@ -13275,7 +13275,7 @@ msgstr "Exportar"
 #, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr "Exportar avanzado..."
+msgstr "Exportar avanzado…"
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
@@ -13289,7 +13289,7 @@ msgstr "Exportación avanzada"
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr "Importar fotogramas de animación..."
+msgstr "Importar fotogramas de animación…"
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
@@ -13306,7 +13306,7 @@ msgstr "Importar fotogramas de animación"
 #, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr "Importar animación de vídeo..."
+msgstr "Importar animación de vídeo…"
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
@@ -13323,7 +13323,7 @@ msgstr "Importar animación de vídeo"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr "&Renderizar animación..."
+msgstr "&Renderizar animación…"
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
@@ -13395,7 +13395,7 @@ msgstr "Guardar copia de respaldo incremental"
 #, kde-format
 msgctxt "action"
 msgid "&Create Template From Image..."
-msgstr "&Crear plantilla a partir de una imagen..."
+msgstr "&Crear plantilla a partir de una imagen…"
 
 #. i18n: context: toolTip @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_template), Actions (File), ActionCollection (Menu)
@@ -13859,7 +13859,7 @@ msgstr "Trazar las formas seleccionadas"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "&Trazar la selección..."
+msgstr "&Trazar la selección…"
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -14703,7 +14703,7 @@ msgstr "Imagen"
 #, kde-format
 msgctxt "Image Properties"
 msgid "&Properties..."
-msgstr "&Propiedades..."
+msgstr "&Propiedades…"
 
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
@@ -14720,7 +14720,7 @@ msgstr "Propiedades"
 #, kde-format
 msgctxt "action"
 msgid "&Image Background Color and Transparency..."
-msgstr "Color del fondo y transparenc&ia de la imagen..."
+msgstr "Color del fondo y transparenc&ia de la imagen…"
 
 #. i18n: context: toolTip @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1163
@@ -14741,7 +14741,7 @@ msgstr "Color del fondo y transparencia de la imagen"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "&Convertir espacio de colores de la imagen..."
+msgstr "&Convertir espacio de colores de la imagen…"
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
@@ -14809,7 +14809,7 @@ msgstr "Recortar a la selección"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
-msgstr "&Rotar imagen..."
+msgstr "&Rotar imagen…"
 
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
@@ -14877,7 +14877,7 @@ msgstr "Rotar la imagen 180°"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "&Proyectar imagen..."
+msgstr "&Proyectar imagen…"
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14928,7 +14928,7 @@ msgstr "Reflejar la imagen verticalmente"
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
-msgstr "Escalar image&n a un nuevo tamaño..."
+msgstr "Escalar image&n a un nuevo tamaño…"
 
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
@@ -14945,7 +14945,7 @@ msgstr "Escalar la imagen a un nuevo tamaño"
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
-msgstr "&Desplazar imagen..."
+msgstr "&Desplazar imagen…"
 
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
@@ -14962,7 +14962,7 @@ msgstr "Desplazar la imagen"
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr "Cambiar tamaño d&el lienzo..."
+msgstr "Cambiar tamaño d&el lienzo…"
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
@@ -14996,7 +14996,7 @@ msgstr "División de la imagen"
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr "Separar la ima&gen..."
+msgstr "Separar la ima&gen…"
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
@@ -15135,7 +15135,7 @@ msgstr "Convertir formas a selección vectorial"
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr "Selección di&fuminada..."
+msgstr "Selección di&fuminada…"
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
@@ -15169,7 +15169,7 @@ msgstr "Mostrar la selección"
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
-msgstr "Esca&lar..."
+msgstr "Esca&lar…"
 
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
@@ -15186,7 +15186,7 @@ msgstr "Escalar"
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
-msgstr "S&eleccionar de un intervalo de colores..."
+msgstr "S&eleccionar de un intervalo de colores…"
 
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
@@ -15271,7 +15271,7 @@ msgstr "Seleccionar opaco (Intersección)"
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "A&umentar la selección..."
+msgstr "A&umentar la selección…"
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
@@ -15288,7 +15288,7 @@ msgstr "Aumentar la selección"
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Enco&ger la selección..."
+msgstr "Enco&ger la selección…"
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
@@ -15305,7 +15305,7 @@ msgstr "Encoger la selección"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Selección del &borde..."
+msgstr "Selección del &borde…"
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -15532,7 +15532,7 @@ msgstr "Preferencias"
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
-msgstr "&Configurar Krita..."
+msgstr "&Configurar Krita…"
 
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
@@ -15549,7 +15549,7 @@ msgstr "Configurar Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
-msgstr "&Gestionar bibliotecas de recursos..."
+msgstr "&Gestionar bibliotecas de recursos…"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1753
@@ -15570,7 +15570,7 @@ msgstr "Gestión de bibliotecas de recursos"
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
-msgstr "Gestionar recursos..."
+msgstr "Gestionar recursos…"
 
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
@@ -15580,14 +15580,14 @@ msgstr "Gestionar recursos..."
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources"
-msgstr "Gestionar recursos..."
+msgstr "Gestionar recursos…"
 
 #. i18n: context: text @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1775
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
-msgstr "In&tercambiar el idioma de la aplicación..."
+msgstr "In&tercambiar el idioma de la aplicación…"
 
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
@@ -15638,7 +15638,7 @@ msgstr "Mostrar la barra de título en paneles"
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
-msgstr "Configurar las &barras de herramientas..."
+msgstr "Configurar las &barras de herramientas…"
 
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
@@ -15736,7 +15736,7 @@ msgstr "Reiniciar las preferencias"
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
-msgstr "Con&figurar los accesos rápidos de teclado..."
+msgstr "Con&figurar los accesos rápidos de teclado…"
 
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
@@ -15784,7 +15784,7 @@ msgstr "Manual de Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Informar de fallo..."
+msgstr "&Informar de fallo…"
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -16532,31 +16532,3826 @@ msgstr ""
 "documento, el objeto de texto se convertirá al formato de Krita 5, que ya no "
 "será compatible con Krita 4.x."
 
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:21
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
+#| "Basic_mix.kpp"
+#| msgid "Basic mix"
+msgctxt "@title"
+msgid "Basic Latin"
+msgstr "Mezcla básica"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:22
+#, kde-format
+msgctxt "@title"
+msgid "Latin-1 Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:23
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:24
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:25
+#, fuzzy, kde-format
+#| msgid "Extension"
+msgctxt "@title"
+msgid "IPA Extensions"
+msgstr "Extensión"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:26
+#, kde-format
+msgctxt "@title"
+msgid "Spacing Modifier Letters"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:27
+#, fuzzy, kde-format
+#| msgid "Combine Normal Maps"
+msgctxt "@title"
+msgid "Combining Diacritical Marks"
+msgstr "Combinar mapas de normales"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:28
+#, fuzzy, kde-format
+#| msgid "Freehand path"
+msgctxt "@title"
+msgid "Greek and Coptic"
+msgstr "Ruta a mano alzada"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:29
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:30
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:31
+#, kde-format
+msgctxt "@title"
+msgid "Armenian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:32
+#, kde-format
+msgctxt "@title"
+msgid "Hebrew"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:33
+#, fuzzy, kde-format
+#| msgid "Arabic"
+msgctxt "@title"
+msgid "Arabic"
+msgstr "Arábiga"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:34
+#, fuzzy, kde-format
+#| msgid "Soriac"
+msgctxt "@title"
+msgid "Syriac"
+msgstr "Soriac"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:35
+#, kde-format
+msgctxt "@title"
+msgid "Arabic Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:36
+#, kde-format
+msgctxt "@title"
+msgid "Thaana"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:37
+#, fuzzy, kde-format
+#| msgid "No"
+msgctxt "@title"
+msgid "NKo"
+msgstr "No"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:38
+#, kde-format
+msgctxt "@title"
+msgid "Samaritan"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:39
+#, kde-format
+msgctxt "@title"
+msgid "Mandaic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:40
+#, kde-format
+msgctxt "@title"
+msgid "Syriac Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:41
+#, kde-format
+msgctxt "@title"
+msgid "Arabic Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:42
+#, kde-format
+msgctxt "@title"
+msgid "Arabic Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:43
+#, kde-format
+msgctxt "@title"
+msgid "Devanagari"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:44
+#, fuzzy, kde-format
+#| msgid "Bengali"
+msgctxt "@title"
+msgid "Bengali"
+msgstr "Bengalí"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:45
+#, fuzzy, kde-format
+#| msgid "Gurumukhi"
+msgctxt "@title"
+msgid "Gurmukhi"
+msgstr "Gurmukhi"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:46
+#, fuzzy, kde-format
+#| msgid "Gujarati"
+msgctxt "@title"
+msgid "Gujarati"
+msgstr "Guyaratí"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:47
+#, fuzzy, kde-format
+#| msgid "Oriya"
+msgctxt "@title"
+msgid "Oriya"
+msgstr "Oriya"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:48
+#, fuzzy, kde-format
+#| msgid "Tamil"
+msgctxt "@title"
+msgid "Tamil"
+msgstr "Tamil"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:49
+#, fuzzy, kde-format
+#| msgid "Telugu"
+msgctxt "@title"
+msgid "Telugu"
+msgstr "Télugu"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:50
+#, fuzzy, kde-format
+#| msgid "Kannada"
+msgctxt "@title"
+msgid "Kannada"
+msgstr "Canarés"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:51
+#, fuzzy, kde-format
+#| msgid "Malayalam"
+msgctxt "@title"
+msgid "Malayalam"
+msgstr "Malayalam"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:52
+#, kde-format
+msgctxt "@title"
+msgid "Sinhala"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:53
+#, fuzzy, kde-format
+#| msgid "Thai"
+msgctxt "@title"
+msgid "Thai"
+msgstr "Tailandés"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:54
+#, fuzzy, kde-format
+#| msgid "Lasso"
+msgctxt "@title"
+msgid "Lao"
+msgstr "Lazo"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:55
+#, fuzzy, kde-format
+#| msgid "Tibetan"
+msgctxt "@title"
+msgid "Tibetan"
+msgstr "Tibetano"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:56
+#, kde-format
+msgctxt "@title"
+msgid "Myanmar"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:57
+#, kde-format
+msgctxt "@title"
+msgid "Georgian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:58
+#, kde-format
+msgctxt "@title"
+msgid "Hangul Jamo"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:59
+#, kde-format
+msgctxt "@title"
+msgid "Ethiopic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:60
+#, kde-format
+msgctxt "@title"
+msgid "Ethiopic Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:61
+#, kde-format
+msgctxt "@title"
+msgid "Cherokee"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:62
+#, kde-format
+msgctxt "@title"
+msgid "Unified Canadian Aboriginal Syllabics"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:63
+#, kde-format
+msgctxt "@title"
+msgid "Ogham"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:64
+#, kde-format
+msgctxt "@title"
+msgid "Runic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:65
+#, fuzzy, kde-format
+#| msgid "Dialog"
+msgctxt "@title"
+msgid "Tagalog"
+msgstr "Diálogo"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:66
+#, kde-format
+msgctxt "@title"
+msgid "Hanunoo"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:67
+#, kde-format
+msgctxt "@title"
+msgid "Buhid"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:68
+#, kde-format
+msgctxt "@title"
+msgid "Tagbanwa"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:69
+#, kde-format
+msgctxt "@title"
+msgid "Khmer"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:70
+#, fuzzy, kde-format
+#| msgid "Kongorilla"
+msgctxt "@title"
+msgid "Mongolian"
+msgstr "Kongorilla"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:71
+#, kde-format
+msgctxt "@title"
+msgid "Unified Canadian Aboriginal Syllabics Extended"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:72
+#, kde-format
+msgctxt "@title"
+msgid "Limbu"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:73
+#, kde-format
+msgctxt "@title"
+msgid "Tai Le"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:74
+#, fuzzy, kde-format
+#| msgid "New Text"
+msgctxt "@title"
+msgid "New Tai Lue"
+msgstr "Texto nuevo"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:75
+#, kde-format
+msgctxt "@title"
+msgid "Khmer Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:76
+#, fuzzy, kde-format
+#| msgctxt "Category of brush engines"
+#| msgid "Brush engines"
+msgctxt "@title"
+msgid "Buginese"
+msgstr "Motores de pinceles"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:77
+#, kde-format
+msgctxt "@title"
+msgid "Tai Tham"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:78
+#, kde-format
+msgctxt "@title"
+msgid "Combining Diacritical Marks Extended"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:79
+#, fuzzy, kde-format
+#| msgid "BSpline"
+msgctxt "@title"
+msgid "Balinese"
+msgstr "BSpline"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:80
+#, kde-format
+msgctxt "@title"
+msgid "Sundanese"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:81
+#, kde-format
+msgctxt "@title"
+msgid "Batak"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:82
+#, kde-format
+msgctxt "@title"
+msgid "Lepcha"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:83
+#, kde-format
+msgctxt "@title"
+msgid "Ol Chiki"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:84
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic Extended-C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:85
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "OpenEXR (Extended)"
+msgctxt "@title"
+msgid "Georgian Extended"
+msgstr "OpenEXR (extendido)"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:86
+#, kde-format
+msgctxt "@title"
+msgid "Sundanese Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:87
+#, fuzzy, kde-format
+#| msgid "Extension"
+msgctxt "@title"
+msgid "Vedic Extensions"
+msgstr "Extensión"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:88
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Snap Extension"
+msgctxt "@title"
+msgid "Phonetic Extensions"
+msgstr "Ajustar extensión"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:89
+#, kde-format
+msgctxt "@title"
+msgid "Phonetic Extensions Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:90
+#, kde-format
+msgctxt "@title"
+msgid "Combining Diacritical Marks Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:91
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended Additional"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:92
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "OpenEXR (Extended)"
+msgctxt "@title"
+msgid "Greek Extended"
+msgstr "OpenEXR (extendido)"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:93
+#, fuzzy, kde-format
+#| msgid "General settings"
+msgctxt "@title"
+msgid "General Punctuation"
+msgstr "Preferencias generales"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:94
+#, kde-format
+msgctxt "@title"
+msgid "Superscripts and Subscripts"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:95
+#, fuzzy, kde-format
+#| msgid "Current color model:"
+msgctxt "@title"
+msgid "Currency Symbols"
+msgstr "Modelo de color actual:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:96
+#, kde-format
+msgctxt "@title"
+msgid "Combining Diacritical Marks for Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:97
+#, kde-format
+msgctxt "@title"
+msgid "Letterlike Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:98
+#, fuzzy, kde-format
+#| msgctxt "@label:spinbox"
+#| msgid "Number of frames:"
+msgctxt "@title"
+msgid "Number Forms"
+msgstr "Número de fotogramas:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:99
+#, fuzzy, kde-format
+#| msgid "Arrows"
+msgctxt "@title"
+msgid "Arrows"
+msgstr "Flechas"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:100
+#, fuzzy, kde-format
+#| msgid "Logical Operations"
+msgctxt "@title"
+msgid "Mathematical Operators"
+msgstr "Operaciones lógicas"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:101
+#, fuzzy, kde-format
+#| msgid "Miscellaneous"
+msgctxt "@title"
+msgid "Miscellaneous Technical"
+msgstr "Diversos"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:102
+#, fuzzy, kde-format
+#| msgid "Could not load picture."
+msgctxt "@title"
+msgid "Control Pictures"
+msgstr "No se ha podido cargar la imagen."
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:103
+#, kde-format
+msgctxt "@title"
+msgid "Optical Character Recognition"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:104
+#, fuzzy, kde-format
+#| msgid "Alphanumeric"
+msgctxt "@title"
+msgid "Enclosed Alphanumerics"
+msgstr "Alfanumérico"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:105
+#, fuzzy, kde-format
+#| msgctxt "webp preset option name"
+#| msgid "drawing"
+msgctxt "@title"
+msgid "Box Drawing"
+msgstr "dibujo"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:106
+#, fuzzy, kde-format
+#| msgid "- Elements"
+msgctxt "@title"
+msgid "Block Elements"
+msgstr "- Elementos"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:107
+#, fuzzy, kde-format
+#| msgid "Geometrics"
+msgctxt "@title"
+msgid "Geometric Shapes"
+msgstr "Geométricas"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:108
+#, fuzzy, kde-format
+#| msgid "Miscellaneous"
+msgctxt "@title"
+msgid "Miscellaneous Symbols"
+msgstr "Diversos"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:109
+#, kde-format
+msgctxt "@title"
+msgid "Dingbats"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:110
+#, kde-format
+msgctxt "@title"
+msgid "Miscellaneous Mathematical Symbols-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:111
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Arrows-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:112
+#, fuzzy, kde-format
+#| msgid "Fill Patterns"
+msgctxt "@title"
+msgid "Braille Patterns"
+msgstr "Patrones de relleno"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:113
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Arrows-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:114
+#, kde-format
+msgctxt "@title"
+msgid "Miscellaneous Mathematical Symbols-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:115
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Mathematical Operators"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:116
+#, kde-format
+msgctxt "@title"
+msgid "Miscellaneous Symbols and Arrows"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:117
+#, fuzzy, kde-format
+#| msgid "Politics"
+msgctxt "@title"
+msgid "Glagolitic"
+msgstr "Política"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:118
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:119
+#, kde-format
+msgctxt "@title"
+msgid "Coptic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:120
+#, kde-format
+msgctxt "@title"
+msgid "Georgian Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:121
+#, kde-format
+msgctxt "@title"
+msgid "Tifinagh"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:122
+#, kde-format
+msgctxt "@title"
+msgid "Ethiopic Extended"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:123
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:124
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Punctuation"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:125
+#, kde-format
+msgctxt "@title"
+msgid "CJK Radicals Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:126
+#, kde-format
+msgctxt "@title"
+msgid "Kangxi Radicals"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:127
+#, kde-format
+msgctxt "@title"
+msgid "Ideographic Description Characters"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:128
+#, kde-format
+msgctxt "@title"
+msgid "CJK Symbols and Punctuation"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:129
+#, fuzzy, kde-format
+#| msgid "Braga"
+msgctxt "@title"
+msgid "Hiragana"
+msgstr "Braga"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:130
+#, kde-format
+msgctxt "@title"
+msgid "Katakana"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:131
+#, kde-format
+msgctxt "@title"
+msgid "Bopomofo"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:132
+#, kde-format
+msgctxt "@title"
+msgid "Hangul Compatibility Jamo"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:133
+#, kde-format
+msgctxt "@title"
+msgid "Kanbun"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:134
+#, kde-format
+msgctxt "@title"
+msgid "Bopomofo Extended"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:135
+#, fuzzy, kde-format
+#| msgid "Key Strokes"
+msgctxt "@title"
+msgid "CJK Strokes"
+msgstr "Trazos clave"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:136
+#, kde-format
+msgctxt "@title"
+msgid "Katakana Phonetic Extensions"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:137
+#, kde-format
+msgctxt "@title"
+msgid "Enclosed CJK Letters and Months"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:138
+#, kde-format
+msgctxt "@title"
+msgid "CJK Compatibility"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:139
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:140
+#, kde-format
+msgctxt "@title"
+msgid "Yijing Hexagram Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:141
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:142
+#, kde-format
+msgctxt "@title"
+msgid "Yi Syllables"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:143
+#, fuzzy, kde-format
+#| msgid "Radial"
+msgctxt "@title"
+msgid "Yi Radicals"
+msgstr "Radial"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:144
+#, kde-format
+msgctxt "@title"
+msgid "Lisu"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:145
+#, kde-format
+msgctxt "@title"
+msgid "Vai"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:146
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:147
+#, kde-format
+msgctxt "@title"
+msgid "Bamum"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:148
+#, fuzzy, kde-format
+#| msgid "Modifiers"
+msgctxt "@title"
+msgid "Modifier Tone Letters"
+msgstr "Modificadores"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:149
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-D"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:150
+#, kde-format
+msgctxt "@title"
+msgid "Syloti Nagri"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:151
+#, kde-format
+msgctxt "@title"
+msgid "Common Indic Number Forms"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:152
+#, kde-format
+msgctxt "@title"
+msgid "Phags-pa"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:153
+#, kde-format
+msgctxt "@title"
+msgid "Saurashtra"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:154
+#, kde-format
+msgctxt "@title"
+msgid "Devanagari Extended"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:155
+#, kde-format
+msgctxt "@title"
+msgid "Kayah Li"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:156
+#, kde-format
+msgctxt "@title"
+msgid "Rejang"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:157
+#, kde-format
+msgctxt "@title"
+msgid "Hangul Jamo Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:158
+#, fuzzy, kde-format
+#| msgid "Java"
+msgctxt "@title"
+msgid "Javanese"
+msgstr "Granos de café"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:159
+#, kde-format
+msgctxt "@title"
+msgid "Myanmar Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:160
+#, kde-format
+msgctxt "@title"
+msgid "Cham"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:161
+#, kde-format
+msgctxt "@title"
+msgid "Myanmar Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:162
+#, fuzzy, kde-format
+#| msgid "Fit View"
+msgctxt "@title"
+msgid "Tai Viet"
+msgstr "Ajustar a la vista"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:163
+#, kde-format
+msgctxt "@title"
+msgid "Meetei Mayek Extensions"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:164
+#, kde-format
+msgctxt "@title"
+msgid "Ethiopic Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:165
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-E"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:166
+#, fuzzy, kde-format
+#| msgid "Remove Segment"
+msgctxt "@title"
+msgid "Cherokee Supplement"
+msgstr "Eliminar el segmento"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:167
+#, kde-format
+msgctxt "@title"
+msgid "Meetei Mayek"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:168
+#, kde-format
+msgctxt "@title"
+msgid "Hangul Syllables"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:169
+#, kde-format
+msgctxt "@title"
+msgid "Hangul Jamo Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:170
+#, kde-format
+msgctxt "@title"
+msgid "High Surrogates"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:171
+#, fuzzy, kde-format
+#| msgid "High Pressure"
+msgctxt "@title"
+msgid "High Private Use Surrogates"
+msgstr "Presión alta"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:172
+#, kde-format
+msgctxt "@title"
+msgid "Low Surrogates"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:173
+#, kde-format
+msgctxt "@title"
+msgid "Private Use Area"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:174
+#, kde-format
+msgctxt "@title"
+msgid "CJK Compatibility Ideographs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:175
+#, fuzzy, kde-format
+#| msgid "a presentation"
+msgctxt "@title"
+msgid "Alphabetic Presentation Forms"
+msgstr "una presentación"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:176
+#, fuzzy, kde-format
+#| msgid "a presentation"
+msgctxt "@title"
+msgid "Arabic Presentation Forms-A"
+msgstr "una presentación"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:177
+#, fuzzy, kde-format
+#| msgid "Artistic Color Selector"
+msgctxt "@title"
+msgid "Variation Selectors"
+msgstr "Selector de color artístico"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:178
+#, fuzzy, kde-format
+#| msgid "Vertical border:"
+msgctxt "@title"
+msgid "Vertical Forms"
+msgstr "Borde vertical:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:179
+#, fuzzy, kde-format
+#| msgid "Combine Normal Maps"
+msgctxt "@title"
+msgid "Combining Half Marks"
+msgstr "Combinar mapas de normales"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:180
+#, kde-format
+msgctxt "@title"
+msgid "CJK Compatibility Forms"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:181
+#, kde-format
+msgctxt "@title"
+msgid "Small Form Variants"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:182
+#, fuzzy, kde-format
+#| msgid "a presentation"
+msgctxt "@title"
+msgid "Arabic Presentation Forms-B"
+msgstr "una presentación"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:183
+#, kde-format
+msgctxt "@title"
+msgid "Halfwidth and Fullwidth Forms"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:184
+#, fuzzy, kde-format
+#| msgid "Fill Special"
+msgctxt "@title"
+msgid "Specials"
+msgstr "Relleno especial"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:185
+#, fuzzy, kde-format
+#| msgid "Linear Burn"
+msgctxt "@title"
+msgid "Linear B Syllabary"
+msgstr "Quemado lineal"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:186
+#, fuzzy, kde-format
+#| msgid "Linear Burn"
+msgctxt "@title"
+msgid "Linear B Ideograms"
+msgstr "Quemado lineal"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:187
+#, fuzzy, kde-format
+#| msgid "Home Number:"
+msgctxt "@title"
+msgid "Aegean Numbers"
+msgstr "Número de casa:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:188
+#, kde-format
+msgctxt "@title"
+msgid "Ancient Greek Numbers"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:189
+#, kde-format
+msgctxt "@title"
+msgid "Ancient Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:190
+#, kde-format
+msgctxt "@title"
+msgid "Phaistos Disc"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:191
+#, kde-format
+msgctxt "@title"
+msgid "Lycian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:192
+#, fuzzy, kde-format
+#| msgid "Caricature"
+msgctxt "@title"
+msgid "Carian"
+msgstr "Caricatura"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:193
+#, kde-format
+msgctxt "@title"
+msgid "Coptic Epact Numbers"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:194
+#, fuzzy, kde-format
+#| msgid "Italic"
+msgctxt "@title"
+msgid "Old Italic"
+msgstr "Cursiva"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:195
+#, fuzzy, kde-format
+#| msgctxt "None"
+#| msgid "Nothing"
+msgctxt "@title"
+msgid "Gothic"
+msgstr "Nada"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:196
+#, kde-format
+msgctxt "@title"
+msgid "Old Permic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:197
+#, fuzzy, kde-format
+#| msgid "Logarithmic"
+msgctxt "@title"
+msgid "Ugaritic"
+msgstr "Logarítmico"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:198
+#, kde-format
+msgctxt "@title"
+msgid "Old Persian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:199
+#, fuzzy, kde-format
+#| msgid "Deselect"
+msgctxt "@title"
+msgid "Deseret"
+msgstr "Deseleccionar"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:200
+#, kde-format
+msgctxt "@title"
+msgid "Shavian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:201
+#, kde-format
+msgctxt "@title"
+msgid "Osmanya"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:202
+#, kde-format
+msgctxt "@title"
+msgid "Osage"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:203
+#, kde-format
+msgctxt "@title"
+msgid "Elbasan"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:204
+#, kde-format
+msgctxt "@title"
+msgid "Caucasian Albanian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:205
+#, kde-format
+msgctxt "@title"
+msgid "Vithkuqi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:206
+#, kde-format
+msgctxt "@title"
+msgid "Todhri"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:207
+#, fuzzy, kde-format
+#| msgctxt "Gradient type - Linear"
+#| msgid "Linear"
+msgctxt "@title"
+msgid "Linear A"
+msgstr "Lineal"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:208
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-F"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:209
+#, kde-format
+msgctxt "@title"
+msgid "Cypriot Syllabary"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:210
+#, kde-format
+msgctxt "@title"
+msgid "Imperial Aramaic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:211
+#, kde-format
+msgctxt "@title"
+msgid "Palmyrene"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:212
+#, kde-format
+msgctxt "@title"
+msgid "Nabataean"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:213
+#, kde-format
+msgctxt "@title"
+msgid "Hatran"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:214
+#, kde-format
+msgctxt "@title"
+msgid "Phoenician"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:215
+#, kde-format
+msgctxt "@title"
+msgid "Lydian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:216
+#, kde-format
+msgctxt "@title"
+msgid "Meroitic Hieroglyphs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:217
+#, kde-format
+msgctxt "@title"
+msgid "Meroitic Cursive"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:218
+#, kde-format
+msgctxt "@title"
+msgid "Kharoshthi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Old South Arabian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:220
+#, kde-format
+msgctxt "@title"
+msgid "Old North Arabian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:221
+#, fuzzy, kde-format
+#| msgid "Michael"
+msgctxt "@title"
+msgid "Manichaean"
+msgstr "Michael"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:222
+#, kde-format
+msgctxt "@title"
+msgid "Avestan"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:223
+#, fuzzy, kde-format
+#| msgid "Initialization"
+msgctxt "@title"
+msgid "Inscriptional Parthian"
+msgstr "Inicialización"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:224
+#, kde-format
+msgctxt "@title"
+msgid "Inscriptional Pahlavi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:225
+#, kde-format
+msgctxt "@title"
+msgid "Psalter Pahlavi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:226
+#, kde-format
+msgctxt "@title"
+msgid "Old Turkic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:227
+#, kde-format
+msgctxt "@title"
+msgid "Old Hungarian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:228
+#, kde-format
+msgctxt "@title"
+msgid "Hanifi Rohingya"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:229
+#, kde-format
+msgctxt "@title"
+msgid "Garay"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:230
+#, kde-format
+msgctxt "@title"
+msgid "Rumi Numeral Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:231
+#, kde-format
+msgctxt "@title"
+msgid "Yezidi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:232
+#, kde-format
+msgctxt "@title"
+msgid "Arabic Extended-C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:233
+#, kde-format
+msgctxt "@title"
+msgid "Old Sogdian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:234
+#, kde-format
+msgctxt "@title"
+msgid "Sogdian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:235
+#, kde-format
+msgctxt "@title"
+msgid "Old Uyghur"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:236
+#, kde-format
+msgctxt "@title"
+msgid "Chorasmian"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:237
+#, kde-format
+msgctxt "@title"
+msgid "Elymaic"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:238
+#, kde-format
+msgctxt "@title"
+msgid "Brahmi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:239
+#, kde-format
+msgctxt "@title"
+msgid "Kaithi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:240
+#, kde-format
+msgctxt "@title"
+msgid "Sora Sompeng"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:241
+#, kde-format
+msgctxt "@title"
+msgid "Chakma"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:242
+#, kde-format
+msgctxt "@title"
+msgid "Mahajani"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:243
+#, fuzzy, kde-format
+#| msgid "Ihara"
+msgctxt "@title"
+msgid "Sharada"
+msgstr "Ihara"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:244
+#, kde-format
+msgctxt "@title"
+msgid "Sinhala Archaic Numbers"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:245
+#, kde-format
+msgctxt "@title"
+msgid "Khojki"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:246
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Multiply"
+#| msgid "Multiply"
+msgctxt "@title"
+msgid "Multani"
+msgstr "Multiplicar"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:247
+#, kde-format
+msgctxt "@title"
+msgid "Khudawadi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:248
+#, kde-format
+msgctxt "@title"
+msgid "Grantha"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:249
+#, kde-format
+msgctxt "@title"
+msgid "Tulu-Tigalari"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:250
+#, kde-format
+msgctxt "@title"
+msgid "Newa"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:251
+#, kde-format
+msgctxt "@title"
+msgid "Tirhuta"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:252
+#, fuzzy, kde-format
+#| msgid "Siddharth Sharma"
+msgctxt "@title"
+msgid "Siddham"
+msgstr "Siddharth Sharma"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:253
+#, fuzzy, kde-format
+#| msgid "Modified:"
+msgctxt "@title"
+msgid "Modi"
+msgstr "Modificado:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:254
+#, kde-format
+msgctxt "@title"
+msgid "Mongolian Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:255
+#, kde-format
+msgctxt "@title"
+msgid "Takri"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:256
+#, kde-format
+msgctxt "@title"
+msgid "Myanmar Extended-C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:257
+#, kde-format
+msgctxt "@title"
+msgid "Ahom"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:258
+#, fuzzy, kde-format
+#| msgid "Program:"
+msgctxt "@title"
+msgid "Dogra"
+msgstr "Programa:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:259
+#, kde-format
+msgctxt "@title"
+msgid "Warang Citi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:260
+#, kde-format
+msgctxt "@title"
+msgid "Dives Akuru"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:261
+#, kde-format
+msgctxt "@title"
+msgid "Nandinagari"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:262
+#, kde-format
+msgctxt "@title"
+msgid "Zanabazar Square"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:263
+#, kde-format
+msgctxt "@title"
+msgid "Soyombo"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:264
+#, kde-format
+msgctxt "@title"
+msgid "Unified Canadian Aboriginal Syllabics Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:265
+#, kde-format
+msgctxt "@title"
+msgid "Pau Cin Hau"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:266
+#, kde-format
+msgctxt "@title"
+msgid "Devanagari Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:267
+#, kde-format
+msgctxt "@title"
+msgid "Sunuwar"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:268
+#, kde-format
+msgctxt "@title"
+msgid "Bhaiksuki"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:269
+#, fuzzy, kde-format
+#| msgid "Marc Pegon"
+msgctxt "@title"
+msgid "Marchen"
+msgstr "Marc Pegon"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:270
+#, kde-format
+msgctxt "@title"
+msgid "Masaram Gondi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:271
+#, kde-format
+msgctxt "@title"
+msgid "Gunjala Gondi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:272
+#, kde-format
+msgctxt "@title"
+msgid "Makasar"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:273
+#, kde-format
+msgctxt "@title"
+msgid "Kawi"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:274
+#, kde-format
+msgctxt "@title"
+msgid "Lisu Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:275
+#, kde-format
+msgctxt "@title"
+msgid "Tamil Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:276
+#, fuzzy, kde-format
+#| msgctxt "Uniform distribution in spray engine"
+#| msgid "Uniform"
+msgctxt "@title"
+msgid "Cuneiform"
+msgstr "Uniforme"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:277
+#, kde-format
+msgctxt "@title"
+msgid "Cuneiform Numbers and Punctuation"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:278
+#, kde-format
+msgctxt "@title"
+msgid "Early Dynastic Cuneiform"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:279
+#, kde-format
+msgctxt "@title"
+msgid "Cypro-Minoan"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:280
+#, kde-format
+msgctxt "@title"
+msgid "Egyptian Hieroglyphs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:281
+#, kde-format
+msgctxt "@title"
+msgid "Egyptian Hieroglyph Format Controls"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:282
+#, kde-format
+msgctxt "@title"
+msgid "Egyptian Hieroglyphs Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:283
+#, kde-format
+msgctxt "@title"
+msgid "Anatolian Hieroglyphs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:284
+#, kde-format
+msgctxt "@title"
+msgid "Gurung Khema"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:285
+#, kde-format
+msgctxt "@title"
+msgid "Bamum Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:286
+#, fuzzy, kde-format
+#| msgid "Marco"
+msgctxt "@title"
+msgid "Mro"
+msgstr "Marco"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:287
+#, kde-format
+msgctxt "@title"
+msgid "Tangsa"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:288
+#, kde-format
+msgctxt "@title"
+msgid "Bassa Vah"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:289
+#, kde-format
+msgctxt "@title"
+msgid "Pahawh Hmong"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:290
+#, kde-format
+msgctxt "@title"
+msgid "Kirat Rai"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:291
+#, kde-format
+msgctxt "@title"
+msgid "Medefaidrin"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:292
+#, kde-format
+msgctxt "@title"
+msgid "Miao"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:293
+#, kde-format
+msgctxt "@title"
+msgid "Ideographic Symbols and Punctuation"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:294
+#, kde-format
+msgctxt "@title"
+msgid "Tangut"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:295
+#, fuzzy, kde-format
+#| msgid "Components:"
+msgctxt "@title"
+msgid "Tangut Components"
+msgstr "Componentes:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:296
+#, fuzzy, kde-format
+#| msgid "Enable Script"
+msgctxt "@title"
+msgid "Khitan Small Script"
+msgstr "Activar guion"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:297
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Segment"
+msgctxt "@title"
+msgid "Tangut Supplement"
+msgstr "Cambiar segmento"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:298
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "OpenEXR (Extended)"
+msgctxt "@title"
+msgid "Kana Extended-B"
+msgstr "OpenEXR (extendido)"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:299
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Segment"
+msgctxt "@title"
+msgid "Kana Supplement"
+msgstr "Cambiar segmento"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:300
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "OpenEXR (Extended)"
+msgctxt "@title"
+msgid "Kana Extended-A"
+msgstr "OpenEXR (extendido)"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:301
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Snap Extension"
+msgctxt "@title"
+msgid "Small Kana Extension"
+msgstr "Ajustar extensión"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:302
+#, kde-format
+msgctxt "@title"
+msgid "Nushu"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:303
+#, kde-format
+msgctxt "@title"
+msgid "Duployan"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:304
+#, kde-format
+msgctxt "@title"
+msgid "Shorthand Format Controls"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:305
+#, kde-format
+msgctxt "@title"
+msgid "Symbols for Legacy Computing Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:306
+#, fuzzy, kde-format
+#| msgid "Enable Touch Rotation"
+msgctxt "@title"
+msgid "Znamenny Musical Notation"
+msgstr "Activar la rotación al tacto"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:307
+#, kde-format
+msgctxt "@title"
+msgid "Byzantine Musical Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:308
+#, fuzzy, kde-format
+#| msgctxt "resource type"
+#| msgid "symbols"
+msgctxt "@title"
+msgid "Musical Symbols"
+msgstr "simbolos"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:309
+#, kde-format
+msgctxt "@title"
+msgid "Ancient Greek Musical Notation"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:310
+#, kde-format
+msgctxt "@title"
+msgid "Kaktovik Numerals"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:311
+#, fuzzy, kde-format
+#| msgid "Numerical"
+msgctxt "@title"
+msgid "Mayan Numerals"
+msgstr "Numérico"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:312
+#, kde-format
+msgctxt "@title"
+msgid "Tai Xuan Jing Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:313
+#, kde-format
+msgctxt "@title"
+msgid "Counting Rod Numerals"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:314
+#, kde-format
+msgctxt "@title"
+msgid "Mathematical Alphanumeric Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:315
+#, kde-format
+msgctxt "@title"
+msgid "Sutton SignWriting"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:316
+#, kde-format
+msgctxt "@title"
+msgid "Latin Extended-G"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:317
+#, kde-format
+msgctxt "@title"
+msgid "Glagolitic Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:318
+#, kde-format
+msgctxt "@title"
+msgid "Cyrillic Extended-D"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:319
+#, kde-format
+msgctxt "@title"
+msgid "Nyiakeng Puachue Hmong"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:320
+#, kde-format
+msgctxt "@title"
+msgid "Toto"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:321
+#, fuzzy, kde-format
+#| msgid "Anchor:"
+msgctxt "@title"
+msgid "Wancho"
+msgstr "Ancla:"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:322
+#, kde-format
+msgctxt "@title"
+msgid "Nag Mundari"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:323
+#, kde-format
+msgctxt "@title"
+msgid "Ol Onal"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:324
+#, kde-format
+msgctxt "@title"
+msgid "Ethiopic Extended-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:325
+#, kde-format
+msgctxt "@title"
+msgid "Mende Kikakui"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:326
+#, kde-format
+msgctxt "@title"
+msgid "Adlam"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:327
+#, kde-format
+msgctxt "@title"
+msgid "Indic Siyaq Numbers"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:328
+#, kde-format
+msgctxt "@title"
+msgid "Ottoman Siyaq Numbers"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:329
+#, kde-format
+msgctxt "@title"
+msgid "Arabic Mathematical Alphabetic Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:330
+#, kde-format
+msgctxt "@title"
+msgid "Mahjong Tiles"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:331
+#, fuzzy, kde-format
+#| msgid "Small Tiles"
+msgctxt "@title"
+msgid "Domino Tiles"
+msgstr "Mosaicos pequeños"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:332
+#, fuzzy, kde-format
+#| msgid "Playing back macro"
+msgctxt "@title"
+msgid "Playing Cards"
+msgstr "Repitiendo la macro"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:333
+#, kde-format
+msgctxt "@title"
+msgid "Enclosed Alphanumeric Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:334
+#, kde-format
+msgctxt "@title"
+msgid "Enclosed Ideographic Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:335
+#, kde-format
+msgctxt "@title"
+msgid "Miscellaneous Symbols and Pictographs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:336
+#, fuzzy, kde-format
+#| msgctxt "webp preset option name"
+#| msgid "icon"
+msgctxt "@title"
+msgid "Emoticons"
+msgstr "icono"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:337
+#, kde-format
+msgctxt "@title"
+msgid "Ornamental Dingbats"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:338
+#, kde-format
+msgctxt "@title"
+msgid "Transport and Map Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:339
+#, kde-format
+msgctxt "@title"
+msgid "Alchemical Symbols"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:340
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
+#| "t)_Shapes_Rounded.kpp"
+#| msgid "t) Shapes Rounded"
+msgctxt "@title"
+msgid "Geometric Shapes Extended"
+msgstr "t) Formas Redondeadas"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:341
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Arrows-C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:342
+#, kde-format
+msgctxt "@title"
+msgid "Supplemental Symbols and Pictographs"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:343
+#, fuzzy, kde-format
+#| msgctxt "resource type"
+#| msgid "symbols"
+msgctxt "@title"
+msgid "Chess Symbols"
+msgstr "simbolos"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:344
+#, kde-format
+msgctxt "@title"
+msgid "Symbols and Pictographs Extended-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:345
+#, kde-format
+msgctxt "@title"
+msgid "Symbols for Legacy Computing"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:346
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:347
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension C"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:348
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension D"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:349
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension E"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:350
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension F"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:351
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension I"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:352
+#, kde-format
+msgctxt "@title"
+msgid "CJK Compatibility Ideographs Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:353
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension G"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:354
+#, kde-format
+msgctxt "@title"
+msgid "CJK Unified Ideographs Extension H"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:355
+#, fuzzy, kde-format
+#| msgid "Tags"
+msgctxt "@title"
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:356
+#, kde-format
+msgctxt "@title"
+msgid "Variation Selectors Supplement"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:357
+#, kde-format
+msgctxt "@title"
+msgid "Supplementary Private Use Area-A"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.cpp:358
+#, kde-format
+msgctxt "@title"
+msgid "Supplementary Private Use Area-B"
+msgstr ""
+
+#: libs/flake/text/data/KoUnicodeBlockData.h:47
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Align Block"
+msgctxt "@title"
+msgid "No Block"
+msgstr "Alinear bloque"
+
+#: libs/flake/text/KoFontGlyphModel.cpp:341
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "%1 glyph variants."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
+#, fuzzy, kde-format
+#| msgid "Global Alternate"
+msgctxt "@title"
+msgid "Access All Alternates"
+msgstr "Alternativo global"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
+#, kde-format
+msgctxt "@tooltip"
+msgid "Access any possible substitutions."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
+#, fuzzy, kde-format
+#| msgid "Global Alternate"
+msgctxt "@title"
+msgid "Contextual Alternates"
+msgstr "Alternativo global"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs depending on their context within a text."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
+#, fuzzy, kde-format
+#| msgid "Montel Laurent"
+msgctxt "@title"
+msgid "Contextual Ligatures"
+msgstr "Montel Laurent"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences of glyphs with ligatures depending on their context "
+"within a text."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
+#, kde-format
+msgctxt "@title"
+msgid "Contextual Swash"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs with swashed glyphs depending on their context within a text."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
+#, fuzzy, kde-format
+#| msgid "Direction Filter"
+msgctxt "@title"
+msgid "Discretionary Ligatures"
+msgstr "Filtro de dirección"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences of glyphs with ligatures intended for typographic effect."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
+#, kde-format
+msgctxt "@title"
+msgid "Final Glyph on Line Alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their line-end forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
+#, fuzzy, kde-format
+#| msgid "Histogram"
+msgctxt "@title"
+msgid "Historical Forms"
+msgstr "Histograma"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their historical forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences glyphs with ligatures that were in use in the past, but "
+"rare today."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
+#, kde-format
+msgctxt "@title"
+msgid "Justification Alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their alternates meant for justification."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
+#, fuzzy, kde-format
+#| msgctxt "EXIF: postprocessing - light source"
+#| msgid "Standard light A"
+msgctxt "@title"
+msgid "Standard Ligatures"
+msgstr "Luz normal A"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces sequences glyphs with common ligatures."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
+#, fuzzy, kde-format
+#| msgid "Image Bounds"
+msgctxt "@title"
+msgid "Left Bounds"
+msgstr "Límites de la imagen"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
+#, kde-format
+msgctxt "@tooltip"
+msgid "This adjusts glyphs so there is no space at the left side."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
+#, fuzzy, kde-format
+#| msgid "Local Resources"
+msgctxt "@title"
+msgid "Localized Forms"
+msgstr "Recursos locales"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
+#, kde-format
+msgctxt "@tooltip"
+msgid "This replaces glyphs with language specific versions."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
+#, fuzzy, kde-format
+#| msgid "Options"
+msgctxt "@title"
+msgid "Optical Bounds"
+msgstr "Opciones"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Adjusts glyphs so they align by their optical bounds. Doesn't do anything in "
+"Krita."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
+#, fuzzy, kde-format
+#| msgid "Gradients"
+msgctxt "@title"
+msgid "Ornaments"
+msgstr "Degradados"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with ornaments for decorative purposes."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
+#, fuzzy, kde-format
+#| msgid "Randomize"
+msgctxt "@title"
+msgid "Randomize"
+msgstr "Al azar"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:82
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with random alternates."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
+#, fuzzy, kde-format
+#| msgid "Image Bounds"
+msgctxt "@title"
+msgid "Right Bounds"
+msgstr "Límites de la imagen"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
+#, kde-format
+msgctxt "@tooltip"
+msgid "This adjusts glyphs so there is no space at the right side."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
+#, fuzzy, kde-format
+#| msgid "Alternate"
+msgctxt "@title"
+msgid "Stylistic Alternates"
+msgstr "Alternativo"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs with stylistic alternates that do not fit in other "
+"categories."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
+#, kde-format
+msgctxt "@title"
+msgid "Swash"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with swashed alternates."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
+#, kde-format
+msgctxt "@title"
+msgid "Glyph Composition/Decomposition"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"This composes or decomposes graphemes so that the resulting glyphs can later "
+"be recomposed. Commonly used to handle diacritics."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Kerning"
+msgctxt "@title"
+msgid "Kerning"
+msgstr "Interletraje"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
+#, kde-format
+msgctxt "@tooltip"
+msgid "This controls kerning on the font."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
+#, fuzzy, kde-format
+#| msgid "Position"
+msgctxt "@title"
+msgid "Mark Positioning"
+msgstr "Posición"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"This controls the positioning of mark glyphs on base glyphs. Commonly used "
+"for diacritics."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"This controls the positioning of mark glyphs onto other mark glyphs. "
+"Commonly used for diacritics."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
+#, kde-format
+msgctxt "@title"
+msgid "Required Contextual Alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs contextually wth alternates, required to make the font work."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
+#, kde-format
+msgctxt "@title"
+msgid "Required Ligatures"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces sequences of glyphs with required ligatures."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
+#, kde-format
+msgctxt "@title"
+msgid "Required Variation Alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs in a variable font with ones suited for the current "
+"variation."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
+#, fuzzy, kde-format
+#| msgctxt "@info:label"
+#| msgid "Optical Size"
+msgctxt "@title"
+msgid "Optical size"
+msgstr "Tamaño óptico"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Indicates how much the font is suitable for its current size. Does nothing "
+"in Krita."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgctxt "@title"
+msgid "Vertical Kerning"
+msgstr "Líneas verticales"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
+#, fuzzy, kde-format
+#| msgid "Text flows vertical, right to left."
+msgctxt "@tooltip"
+msgid "This controls vertical kerning on the font."
+msgstr "El texto fluye verticalmente, de derecha a izquierda."
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
+#, fuzzy, kde-format
+#| msgid "Alternative array"
+msgctxt "@title"
+msgid "Alternative Fractions"
+msgstr "Lista alternativa"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces figures separated by a slash with a nut fraction form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
+#, fuzzy, kde-format
+#| msgid "Illuminator"
+msgctxt "@title"
+msgid "Denominators"
+msgstr "Iluminador"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces figures with forms that are suited to represent the denominator in "
+"a fraction."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:145
+#, kde-format
+msgctxt "@title"
+msgid "Dotless Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces dotted letters such as i and j with dotless forms, for use in "
+"mathematical formula."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Flatten Layer"
+msgctxt "@title"
+msgid "Flattened accent forms"
+msgstr "Aplanar la capa"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces accents on capital letters with flattened forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
+#, fuzzy, kde-format
+#| msgid "Actions"
+msgctxt "@title"
+msgid "Fractions"
+msgstr "Acciones"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces figures separated by a slash with a proper diagonal fraction form. "
+"If a font has the numerator and denominator features, and the numbers are "
+"separated by a 'fraction slash' (U+2044), then this will replace the figures "
+"with numerators before the slash and denominators after the slash."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
+#, fuzzy, kde-format
+#| msgid "Winding Fill"
+msgctxt "@title"
+msgid "Lining Figures"
+msgstr "Relleno sinuoso"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces oldstyle figures with lining figures, which harmonize well with "
+"uppercase letters."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
+#, kde-format
+msgctxt "@title"
+msgid "Mathematical Greek"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces normal Greek script with glyphs intended for mathematical usage."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
+#, fuzzy, kde-format
+#| msgid "Alternate Invocation"
+msgctxt "@title"
+msgid "Alternate Annotation Forms"
+msgstr "Invocación alternativa"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces figures and letters with notational forms, like encircled."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
+#, fuzzy, kde-format
+#| msgid "Curator"
+msgctxt "@title"
+msgid "Numerators"
+msgstr "Conservador"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces figures with forms that are suited to represent the numerator in a "
+"fraction."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
+#, kde-format
+msgctxt "@title"
+msgid "Oldstyle Figures"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces lining figures with oldstyle figures, which harmonize well with "
+"lowercase letters."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
+#, fuzzy, kde-format
+#| msgid "Original"
+msgctxt "@title"
+msgid "Ordinals"
+msgstr "Original"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces letters that follow figures with their ordinal forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@title"
+msgid "Proportional Figures"
+msgstr "Proporcional"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces tabular figures with proportional figures."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:185
+#, kde-format
+msgctxt "@title"
+msgid "Scientific Inferiors"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs with forms that are suited for displaying the number in "
+"chemical formulas."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:189
+#, kde-format
+msgctxt "@title"
+msgid "Math script style alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with ones more suited for super- and subscripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
+#, fuzzy, kde-format
+#| msgid "Subscript"
+msgctxt "@title"
+msgid "Subscript"
+msgstr "Subíndice"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with ones more suited for subscript."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
+#, fuzzy, kde-format
+#| msgid "Superscript"
+msgctxt "@title"
+msgid "Superscript"
+msgstr "Superíndice"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with ones more suited for superscript."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
+#, kde-format
+msgctxt "@title"
+msgid "Tabular Figures"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces proportional figures with tabular figures."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:205
+#, kde-format
+msgctxt "@title"
+msgid "Slashed Zero"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the number zero with one that has a slash in the middle, which can "
+"help prevent confusion with similar glyphs like the letter 'O'."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
+#, kde-format
+msgctxt "@title"
+msgid "Case-Sensitive Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Adjusts glyphs to work beter with text that consists of only capitals or "
+"lining figures."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
+#, fuzzy, kde-format
+#| msgid "Cell Spacing:"
+msgctxt "@title"
+msgid "Capital Spacing"
+msgstr "Espaciado entre celdas:"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
+#, kde-format
+msgctxt "@tooltip"
+msgid "Adjusts inter-glyph spacing for all-capital text."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:219
+#, kde-format
+msgctxt "@title"
+msgid "Petite Capitals From Capitals"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces uppercase letters with petite capital forms, which are closer to "
+"the x-height of a font than small capital forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
+#, kde-format
+msgctxt "@title"
+msgid "Small Capitals From Capitals"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces uppercase letters with small capital forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
+#, kde-format
+msgctxt "@title"
+msgid "Petite Capitals"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces lowercase letters with petite capital forms, which are closer to "
+"the x-height of a font than small capital forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
+#, fuzzy, kde-format
+#| msgid "Small Caps"
+msgctxt "@title"
+msgid "Small Capitals"
+msgstr "Versalillas"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces lowercase letters with small capital forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
+#, fuzzy, kde-format
+#| msgid "Title"
+msgctxt "@title"
+msgid "Titling"
+msgstr "Título"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with alternate forms suited for header text."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
+#, fuzzy, kde-format
+#| msgid "nut-case"
+msgctxt "@title"
+msgid "Unicase"
+msgstr "nut-case"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
+#, kde-format
+msgctxt "@title"
+msgid "Above-base Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Controls substitution for above base forms in Khmer and other Indic scripts"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
+#, kde-format
+msgctxt "@title"
+msgid "Above-base Mark Positioning"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls above-base mark positioning for Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
+#, kde-format
+msgctxt "@title"
+msgid "Above-base Substitutions"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls above-base mark ligatures for Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
+#, kde-format
+msgctxt "@title"
+msgid "Akhand"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls Akhand ligatures for Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
+#, kde-format
+msgctxt "@title"
+msgid "Below-base Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls substitution for below base forms in Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
+#, kde-format
+msgctxt "@title"
+msgid "Below-base Mark Positioning"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls below-base mark positioning for Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
+#, kde-format
+msgctxt "@title"
+msgid "Below-base Substitutions"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls below-base mark ligatures for Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
+#, kde-format
+msgctxt "@title"
+msgid "Conjunct Form After Ro"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls glyphs following conjoined Ro in Khmer script."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
+#, kde-format
+msgctxt "@title"
+msgid "Conjunct Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls conjunct forms in Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
+#, fuzzy, kde-format
+#| msgid "Distance"
+msgctxt "@title"
+msgid "Distances"
+msgstr "Distancia"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
+#, kde-format
+msgctxt "@tooltip"
+msgid "Controls distances in Indic scripts, to avoid collisions."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
+#, kde-format
+msgctxt "@title"
+msgid "Half Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces consonants in Indic scripts with their half forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
+#, kde-format
+msgctxt "@title"
+msgid "Halant Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces consonants in Indic scripts with their halant forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
+#, kde-format
+msgctxt "@title"
+msgid "Nukta Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces consonants combined with Nukta in Indic scripts with their Nukta "
+"forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
+#, kde-format
+msgctxt "@title"
+msgid "Pre-base Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
+"situation occurs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Decrease Saturation HSY"
+#| msgid "Decrease Saturation"
+msgctxt "@title"
+msgid "Pre-base Substitutions"
+msgstr "Reducir saturación"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces consonants with their pre-base forms in Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
+#, kde-format
+msgctxt "@title"
+msgid "Post-base Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces consonants with their post-base forms in Gurmukhi, Malayalam, and "
+"Khmer."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:309
+#, kde-format
+msgctxt "@title"
+msgid "Post-base Substitutions"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
+#, kde-format
+msgctxt "@title"
+msgid "Rakar Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
+#, fuzzy, kde-format
+#| msgid "Form"
+msgctxt "@title"
+msgid "Reph Form"
+msgstr "Forma"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
+#, kde-format
+msgctxt "@title"
+msgid "Vattu Variants"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces ligatures in Indic scripts with a base consonant and Vattu form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
+#, kde-format
+msgctxt "@title"
+msgid "Contextual Half-width Spacing"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Respaces full-width glyphs to be half-width depending on the context, common "
+"examples include CJK full-width brackets and other punctuation marks."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
+#, kde-format
+msgctxt "@title"
+msgid "Centered CJK Punctuation"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
+#, kde-format
+msgctxt "@tooltip"
+msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
+#, fuzzy, kde-format
+#| msgid "Expert"
+msgctxt "@title"
+msgid "Expert Forms"
+msgstr "Experto"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard forms in Japanese fonts with expert forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
+#, fuzzy, kde-format
+#| msgid "Width"
+msgctxt "@title"
+msgid "Full Widths"
+msgstr "Anchura"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces or respaces proportional glyphs with full-width glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:344
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Respaces full-width glyphs to be half-width, common examples include CJK "
+"full-width brackets and other punctuation marks."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
+#, fuzzy, kde-format
+#| msgid "Horizontal Lines"
+msgctxt "@title"
+msgid "Horizontal Kana Alternates"
+msgstr "Líneas horizontales"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces standard kana in Japanese fonts with ones suited for horizontal "
+"layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
+#, fuzzy, kde-format
+#| msgid "Angular"
+msgctxt "@title"
+msgid "Hangul"
+msgstr "Angular"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
+#, kde-format
+msgctxt "@title"
+msgid "Hojo Kanji Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
+"X 0212-1990') forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
+#, fuzzy, kde-format
+#| msgid "Width"
+msgctxt "@title"
+msgid "Half Widths"
+msgstr "Anchura"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces or respaces proportional or full-width glyphs with half-width "
+"glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
+#, fuzzy, kde-format
+#| msgid "Italic"
+msgctxt "@title"
+msgid "Italics"
+msgstr "Cursiva"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces Latin glyphs in a CJK font with their italic forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
+#, kde-format
+msgctxt "@title"
+msgid "JIS78 Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
+#, kde-format
+msgctxt "@title"
+msgid "JIS83 Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
+#, kde-format
+msgctxt "@title"
+msgid "JIS90 Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
+#, kde-format
+msgctxt "@title"
+msgid "JIS2004 Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
+#, kde-format
+msgctxt "@title"
+msgid "Leading Jamo Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences of leading class Hangul Jamo with a combined leading form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
+#, kde-format
+msgctxt "@title"
+msgid "NLC Kanji Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
+#, kde-format
+msgctxt "@title"
+msgid "Proportional Alternate Widths"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
+#, kde-format
+msgctxt "@tooltip"
+msgid "Respaces full-width glyphs to fit in a proportional context."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@title"
+msgid "Proportional Kana"
+msgstr "Proporcional"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces full-width kana in Japanese fonts with proportional kana."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@title"
+msgid "Proportional Widths"
+msgstr "Proporcional"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces uniform-width glyphs with proportional glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
+#, fuzzy, kde-format
+#| msgid "Quarter"
+msgctxt "@title"
+msgid "Quarter Widths"
+msgstr "Un cuarto"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with quarter-width glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:407
+#, kde-format
+msgctxt "@title"
+msgid "Ruby Notation Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs in CJK fonts with ones suited for the small text in ruby "
+"annotations."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
+#, fuzzy, kde-format
+#| msgid "Simplex Noise"
+msgctxt "@title"
+msgid "Simplified Forms"
+msgstr "Ruido símplex"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
+#, kde-format
+msgctxt "@title"
+msgid "Trailing Jamo Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences of trailing class Hangul Jamo with a combined trailing "
+"form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
+#, kde-format
+msgctxt "@title"
+msgid "Traditional Name Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces standard form Kanji in Japanese fonts with the ones traditionally "
+"used in names."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
+#, fuzzy, kde-format
+#| msgid "Gradient Colors"
+msgctxt "@title"
+msgid "Traditional Forms"
+msgstr "Colores del degradado"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
+#, fuzzy, kde-format
+#| msgid "Thirds"
+msgctxt "@title"
+msgid "Third Widths"
+msgstr "Tercios"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with third-width glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Align to vertical center"
+msgctxt "@title"
+msgid "Alternate Vertical Metrics"
+msgstr "Alinear al centro vertical"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
+#, kde-format
+msgctxt "@tooltip"
+msgid "Repositions glyphs so they look more appropriate in vertical layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
+#, fuzzy, kde-format
+#| msgid "Alternate"
+msgctxt "@title"
+msgid "Alternate Half Widths"
+msgstr "Alternativo"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
+#, kde-format
+msgctxt "@tooltip"
+msgid "Repositions glyphs so they look more appropriate in horizontal layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
+#, kde-format
+msgctxt "@title"
+msgid "Vertical Contextual Half-width Spacing"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
+#, fuzzy, kde-format
+#| msgid "Vertical Lines"
+msgctxt "@title"
+msgid "Vertical Alternates"
+msgstr "Líneas verticales"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
+#, kde-format
+msgctxt "@title"
+msgid "Alternate Vertical Half Metrics"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Repositions glyphs so they are half-width in a vertical writing context."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
+#, kde-format
+msgctxt "@title"
+msgid "Vowel Jamo Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
+#, fuzzy, kde-format
+#| msgid "Vertical Translation"
+msgctxt "@title"
+msgid "Vertical Kana Alternates"
+msgstr "Traslación vertical"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces standard kana in Japanese fonts with ones suited for vertical "
+"layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
+#, kde-format
+msgctxt "@title"
+msgid "Proportional Alternate Vertical Metrics"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Repositions glyphs so they are proportional in a vertical writing context."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
+#, fuzzy, kde-format
+#| msgid "Vertical Translation"
+msgctxt "@title"
+msgid "Vertical Alternates for Rotation"
+msgstr "Traslación vertical"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
+#, fuzzy, kde-format
+#| msgid "Alternate Invocation"
+msgctxt "@title"
+msgid "Vertical Alternates and Rotation"
+msgstr "Invocación alternativa"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces all horizontal-script glyphs with rotated variants for vertical "
+"layout."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
+#, fuzzy, kde-format
+#| msgid "Text Position"
+msgctxt "@title"
+msgid "Cursive Positioning"
+msgstr "Posición del texto"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
+#, kde-format
+msgctxt "@tooltip"
+msgid "Adjusts the position of glyphs so they cursively connect."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
+#, kde-format
+msgctxt "@title"
+msgid "Terminal Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the final glyph in a sequence of glyphs in a joined script with its "
+"end form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
+#, kde-format
+msgctxt "@title"
+msgid "Terminal Form #2"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the Alaph glyph at the end of Syriac words with its appropriate "
+"form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
+#, kde-format
+msgctxt "@title"
+msgid "Terminal Form #3"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the Alaph glyph at the end of Syriac words with its appropriate "
+"form, when neither Terminal forms or Terminal forms 2 are applicable."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
+#, fuzzy, kde-format
+#| msgid "Initials:"
+msgctxt "@title"
+msgid "Initial Forms"
+msgstr "Iniciales:"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the first glyph in a sequence of glyphs in a joined script with its "
+"start form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces a glyph in a sequence of glyphs in a joined script with its "
+"isolated form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
+#, kde-format
+msgctxt "@title"
+msgid "Left-to-right glyph alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their left-to-right alternates."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Left-to-right"
+msgctxt "@title"
+msgid "Left-to-right mirrored forms"
+msgstr "De i&zquierda a derecha"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their left-to-right mirrored forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
+#, kde-format
+msgctxt "@title"
+msgid "Medial Forms"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces glyphs in the middle of a sequence of glyphs in a joined script "
+"with their medial forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
+#, kde-format
+msgctxt "@title"
+msgid "Medial Forms #2"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
+"form."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
+#, kde-format
+msgctxt "@title"
+msgid "mset"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
+#, kde-format
+msgctxt "@tooltip"
+msgid ""
+"Positions Arabic combining marks in fonts for Windows 95 using glyph "
+"substitution."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
+#, kde-format
+msgctxt "@title"
+msgid "Right-to-left glyph alternates"
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their right-to-left alternates."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
+#, fuzzy, kde-format
+#| msgctxt "@item:inmenu Toolbox layout direction"
+#| msgid "&Right-to-left"
+msgctxt "@title"
+msgid "Right-to-left mirrored forms"
+msgstr "De de&recha a izquierda"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with their right-to-left mirrored forms."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Sort by position"
+msgctxt "@title"
+msgid "Stretching Glyph Decomposition"
+msgstr "Ordenar por posición"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs that need to stretch with stretchable glyphs."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Artistic Text"
+msgctxt "@title"
+msgid "Stylistic Set %1"
+msgstr "Texto artístico"
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
+#, kde-format
+msgctxt "@tooltip"
+msgid "Replaces glyphs with alternates."
+msgstr ""
+
+#: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
+#, fuzzy, kde-format
+#| msgid "Variant (%1)"
+msgctxt "@title"
+msgid "Character Variant %1"
+msgstr "Variante (%1)"
+
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1614
+#: libs/flake/text/KoSvgTextShape.cpp:1634
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Texto a introducir"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1593
+#: libs/flake/text/KoSvgTextShape.cpp:1613
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1595
-#: libs/flake/text/KoSvgTextShape.cpp:1603
+#: libs/flake/text/KoSvgTextShape.cpp:1615
+#: libs/flake/text/KoSvgTextShape.cpp:1623
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1601
+#: libs/flake/text/KoSvgTextShape.cpp:1621
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1624
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16819,7 +20614,7 @@ msgstr "Re&ducir"
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:235
@@ -17811,7 +21606,7 @@ msgstr "Vista previa instantánea"
 #: libs/image/kis_update_scheduler.cpp:126
 #, kde-format
 msgid "Updating..."
-msgstr "Actualizando..."
+msgstr "Actualizando…"
 
 #: libs/image/kis_update_time_monitor.cpp:191
 #, kde-format
@@ -18508,7 +22303,7 @@ msgstr "Anonimizador"
 #: libs/metadata/kis_meta_data_filter_p.cc:44
 #, kde-format
 msgid "Remove personal information: author, location..."
-msgstr "Eliminar la información personal: autor, ubicación..."
+msgstr "Eliminar la información personal: autor, ubicación…"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:84
 #, kde-format
@@ -20824,7 +24619,7 @@ msgid ""
 "                                                              Are you sure "
 "you want to overwrite the existing file?"
 msgstr ""
-"Ya existe un archivo en la ruta donde quiere renderizar el vídeo [%1]...\n"
+"Ya existe un archivo en la ruta donde quiere renderizar el vídeo [%1]…\n"
 "                                                              ¿Seguro que "
 "quiere sobrescribir el archivo existente?"
 
@@ -20887,7 +24682,7 @@ msgstr "N/D"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:419
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr "No se ha proporcionado un binario de FFmpeg válido..."
+msgstr "No se ha proporcionado un binario de FFmpeg válido…"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:500
 #, kde-format
@@ -21187,7 +24982,7 @@ msgstr "FFMpeg ha fallado"
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr "Cargando datos de vídeo... %1 fotogramas examinados."
+msgstr "Cargando datos de vídeo… %1 fotogramas examinados."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
@@ -21280,7 +25075,7 @@ msgstr "Modo HDR"
 #: libs/ui/animation/video_export_options_dialog.ui:197
 #, kde-format
 msgid "HDR Metadata..."
-msgstr "Metadatos HDR..."
+msgstr "Metadatos HDR…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
@@ -22701,7 +26496,7 @@ msgstr "Cerrar, no guardar"
 #: libs/ui/dialogs/kis_delayed_save_dialog.ui:31
 #, kde-format
 msgid "Waiting for image operation to complete..."
-msgstr "Esperando que se complete la operación en la imagen..."
+msgstr "Esperando que se complete la operación en la imagen…"
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
@@ -23575,12 +27370,12 @@ msgstr "Propiedades de la selección de trazos"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
-msgstr "Regenerando la caché..."
+msgstr "Regenerando la caché…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, kde-format
 msgid "Saving frames..."
-msgstr "Guardando fotogramas..."
+msgstr "Guardando fotogramas…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, kde-format
@@ -23625,7 +27420,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
 #, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Espere a que termine el proceso de generación de fotograma en curso..."
+msgstr "Espere a que termine el proceso de generación de fotograma en curso…"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -24527,7 +28322,7 @@ msgstr ""
 "El tono y la saturación se mantienen, y se sacrifica la claridad para "
 "mantener la saturación. El punto blanco se cambia para obtener grises "
 "neutrales. Es bueno para imágenes de negocios (como gráficas a todo color, "
-"gráficos, presentaciones...)."
+"gráficos, presentaciones…)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
@@ -24552,7 +28347,7 @@ msgstr ""
 "la claridad y la saturación. Fuera de la gama de color; se mantienen el tono "
 "y la claridad, y se sacrifica la saturación. No se cambia el punto blanco de "
 "origen y destino. Se aconseja para colores puntuales (Pantone, TruMatch, "
-"colores corporativos...)."
+"colores corporativos…)."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -24939,7 +28734,7 @@ msgstr ""
 "claridad para mantener la saturación. El punto\n"
 "blanco se cambia para obtener grises neutrales.\n"
 "Es bueno para imágenes de negocios (como gráficas\n"
-"a todo color, gráficos, presentaciones...).\n"
+"a todo color, gráficos, presentaciones…).\n"
 "Si está presente en el perfil la tabla adecuada,\n"
 "se usa. Si no, se revierte al propósito\n"
 "perceptivo."
@@ -24966,7 +28761,7 @@ msgstr ""
 "Fuera de la gama de color; se mantienen el tono y la \n"
 "claridad, y se sacrifica la saturación. No se cambia\n"
 "el punto blanco de origen y destino. Se aconseja para\n"
-"colores puntuales (Pantone, TruMatch, colores corporativos, ...)"
+"colores puntuales (Pantone, TruMatch, colores corporativos…)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
@@ -25619,7 +29414,7 @@ msgstr "Forma del contorno del pincel:"
 #: libs/ui/forms/wdggeneralsettings.ui:111
 #, kde-format
 msgid "While painting..."
-msgstr "Al pintar..."
+msgstr "Al pintar…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
@@ -25659,7 +29454,7 @@ msgstr "Forma del contorno del borrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:232
 #, kde-format
 msgid "While painting with an eraser..."
-msgstr "Al pintar con un borrador..."
+msgstr "Al pintar con un borrador…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:267
@@ -26322,7 +30117,7 @@ msgstr "Usar deshacer acumulativo"
 #: libs/ui/forms/wdggeneralsettings.ui:1538
 #, kde-format
 msgid "Advanced..."
-msgstr "Avanzado..."
+msgstr "Avanzado…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -26568,7 +30363,7 @@ msgstr "TextLabel"
 #: libs/ui/forms/wdgimportimagesequence.ui:37
 #, kde-format
 msgid "Add images..."
-msgstr "Añadir imágenes..."
+msgstr "Añadir imágenes…"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
@@ -27032,7 +30827,7 @@ msgstr "Como capa de re&lleno"
 #: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
-msgstr "Este documento..."
+msgstr "Este documento…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgNewWindowLayout)
 #: libs/ui/forms/wdgnewwindowlayout.ui:24
@@ -27120,7 +30915,7 @@ msgstr "Motor de pincel actual"
 #: libs/ui/forms/wdgpaintopsettings.ui:340
 #, kde-format
 msgid "Save New Brush Preset..."
-msgstr "Guardar preajustes del pincel..."
+msgstr "Guardar preajustes del pincel…"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:359
@@ -27443,7 +31238,7 @@ msgstr ""
 "<html><head/><body><p>El tiempo de espera para renderizar un fotograma. Si "
 "la renderización de la animación falla habitualmente con un tiempo de "
 "espera, pruebe a aumentar este valor.</p><p><br/></p><p><span style=\" font-"
-"weight:600;\">Valor recomendado:</span> 30...60 segundos.</p></body></html>"
+"weight:600;\">Valor recomendado:</span> 30…60 segundos.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:326
@@ -28118,13 +31913,13 @@ msgstr "Sesiones"
 #, kde-format
 msgctxt "New session"
 msgid "New..."
-msgstr "Nueva..."
+msgstr "Nueva…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRename)
 #: libs/ui/forms/wdgsessionmanager.ui:41
 #, kde-format
 msgid "Rename..."
-msgstr "Cambiar nombre..."
+msgstr "Cambiar nombre…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnSwitchTo)
 #: libs/ui/forms/wdgsessionmanager.ui:48
@@ -28136,7 +31931,7 @@ msgstr "Cambiar a"
 #: libs/ui/forms/wdgsessionmanager.ui:55
 #, kde-format
 msgid "Delete..."
-msgstr "Borrar..."
+msgstr "Borrar…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:34
@@ -28283,7 +32078,7 @@ msgstr "WinTab"
 #, kde-format
 msgctxt "Tablet mapping settings"
 msgid "Advanced..."
-msgstr "Avanzado..."
+msgstr "Avanzado…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWin8PointerInput)
 #: libs/ui/forms/wdgtabletsettings.ui:167
@@ -28345,7 +32140,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:220
 #, kde-format
 msgid "Open Tablet Tester..."
-msgstr "Abrir el probador de la tableta..."
+msgstr "Abrir el probador de la tableta…"
 
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
@@ -28517,7 +32312,7 @@ msgstr "Filtro:"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
 msgid "Add shortcut..."
-msgstr "Añadir acceso rápido..."
+msgstr "Añadir acceso rápido…"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
 #, kde-format
@@ -28626,7 +32421,7 @@ msgstr "Ninguno"
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
-msgstr "Entrada..."
+msgstr "Entrada…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_input_configuration_page.ui:48
@@ -29566,7 +33361,7 @@ msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "Esperando que se complete la acción..."
+msgstr "Esperando que se complete la acción…"
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -29809,7 +33604,7 @@ msgstr "Convertir grupo a capa animada"
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
 msgid "Save layers to..."
-msgstr "Guardar capas en..."
+msgstr "Guardar capas en…"
 
 #: libs/ui/kis_layer_manager.cc:532
 #, kde-format
@@ -30694,32 +34489,32 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:434
 #, kde-format
 msgid "Initializing Globals..."
-msgstr "Inicializando valores globales..."
+msgstr "Inicializando valores globales…"
 
 #: libs/ui/KisApplication.cpp:466
 #, kde-format
 msgid "Adding resource types..."
-msgstr "Añadiendo tipos de recursos..."
+msgstr "Añadiendo tipos de recursos…"
 
 #: libs/ui/KisApplication.cpp:470
 #, kde-format
 msgid "Loading plugins..."
-msgstr "Cargando complementos..."
+msgstr "Cargando complementos…"
 
 #: libs/ui/KisApplication.cpp:476
 #, kde-format
 msgid "Loading resources..."
-msgstr "Cargando recursos..."
+msgstr "Cargando recursos…"
 
 #: libs/ui/KisApplication.cpp:485
 #, kde-format
 msgid "Loading Main Window..."
-msgstr "Cargando la ventana principal..."
+msgstr "Cargando la ventana principal…"
 
 #: libs/ui/KisApplication.cpp:517
 #, kde-format
 msgid "Launching..."
-msgstr "Lanzando..."
+msgstr "Lanzando…"
 
 #: libs/ui/KisApplication.cpp:586
 #, kde-format
@@ -31000,12 +34795,12 @@ msgstr "No se ha podido crear un archivo de respaldo numerado"
 #: libs/ui/KisDocument.cpp:831
 #, kde-format
 msgid "Exporting Document..."
-msgstr "Exportando documento..."
+msgstr "Exportando documento…"
 
 #: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Saving Document..."
-msgstr "Guardando documento..."
+msgstr "Guardando documento…"
 
 #: libs/ui/KisDocument.cpp:847
 #, kde-format
@@ -31061,19 +34856,19 @@ msgstr "Se ha terminado de guardar %1"
 #: libs/ui/KisDocument.cpp:1468
 #, kde-format
 msgid "Autosaving... %1"
-msgstr "Guardando automáticamente... %1"
+msgstr "Guardando automáticamente… %1"
 
 #: libs/ui/KisDocument.cpp:1476
 #, kde-format
 msgid "Autosaving..."
-msgstr "Guardado automático en proceso..."
+msgstr "Guardado automático en proceso…"
 
 #: libs/ui/KisDocument.cpp:1482
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 "Se ha pospuesto el proceso de guardar automáticamente: el documento está "
-"ocupado..."
+"ocupado…"
 
 #: libs/ui/KisDocument.cpp:1625
 #, kde-format
@@ -31131,7 +34926,7 @@ msgstr "Relleno del fondo"
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
 msgid "Waiting for saving to complete..."
-msgstr "Esperando que se termine de guardar..."
+msgstr "Esperando que se termine de guardar…"
 
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -31401,12 +35196,12 @@ msgstr "Abrir sonido"
 #: libs/ui/KisImportExportManager.cpp:401
 #, kde-format
 msgid "Opening document..."
-msgstr "Abriendo documento..."
+msgstr "Abriendo documento…"
 
 #: libs/ui/KisImportExportManager.cpp:469
 #, kde-format
 msgid "Saving document..."
-msgstr "Guardando el documento..."
+msgstr "Guardando el documento…"
 
 #: libs/ui/KisImportExportManager.cpp:563
 #, kde-format
@@ -31696,19 +35491,19 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
-msgstr "&Importar espacio de trabajo..."
+msgstr "&Importar espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2634
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "&Nuevo espacio de trabajo..."
+msgstr "&Nuevo espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2638
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
-msgstr "Nuevo espacio de trabajo..."
+msgstr "Nuevo espacio de trabajo…"
 
 #: libs/ui/KisMainWindow.cpp:2682
 #, kde-format
@@ -31917,13 +35712,13 @@ msgstr ""
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
-msgstr "Descargando imagen de %1..."
+msgstr "Descargando imagen de %1…"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:74
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
-msgstr "Descargando imagen de %1... (%2 / %3)"
+msgstr "Descargando imagen de %1… (%2 / %3)"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:91
 #, kde-format
@@ -31953,7 +35748,7 @@ msgstr "Grupo:"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "&Añadir grupo..."
+msgstr "&Añadir grupo…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
@@ -31981,7 +35776,7 @@ msgstr "Personalizado:"
 #: libs/ui/KisTemplateCreateDia.cpp:141
 #, kde-format
 msgid "&Select..."
-msgstr "&Seleccionar..."
+msgstr "&Seleccionar…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
@@ -33108,19 +36903,19 @@ msgstr "Trazo"
 #, kde-format
 msgctxt "Save as new layer style..."
 msgid "&Save as..."
-msgstr "G&uardar como..."
+msgstr "G&uardar como…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnLoadStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:163
 #, kde-format
 msgid "&Import..."
-msgstr "&Importar..."
+msgstr "&Importar…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnSaveStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:170
 #, kde-format
 msgid "&Export..."
-msgstr "&Exportar..."
+msgstr "&Exportar…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreview)
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
@@ -33226,7 +37021,7 @@ msgstr "Profun&didad:"
 msgid "Li&nk with Layer"
 msgstr "E&nlazar con capa"
 
-#: libs/ui/opengl/kis_opengl.cpp:153
+#: libs/ui/opengl/kis_opengl.cpp:159
 #, kde-format
 msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
@@ -33235,14 +37030,14 @@ msgstr ""
 "Los búferes se han desactivado explícitamente en el renderizador de ANGLE "
 "debido a problemas de rendimiento."
 
-#: libs/ui/opengl/kis_opengl.cpp:649
+#: libs/ui/opengl/kis_opengl.cpp:655
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Se sabe que el controlador gráfico de Intel en uso tiene problemas con "
 "OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:651
+#: libs/ui/opengl/kis_opengl.cpp:657
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -33253,7 +37048,7 @@ msgstr ""
 "lo que se usará ANGLE por defecto. Puede cambiar manualmente a OpenGL, "
 "aunque no se le garantiza que funcione correctamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1074
+#: libs/ui/opengl/kis_opengl.cpp:1080
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -33262,7 +37057,7 @@ msgstr ""
 "El renderizador preferido no permite el formato de superficie solicitado. Se "
 "ha seleccionado otro renderizador."
 
-#: libs/ui/opengl/kis_opengl.cpp:1076
+#: libs/ui/opengl/kis_opengl.cpp:1082
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -33649,7 +37444,7 @@ msgstr "Elementos de tamaño personalizado"
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:239
 #, kde-format
 msgid "Add..."
-msgstr "Añadir..."
+msgstr "Añadir…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:244
 #, kde-format
@@ -33664,7 +37459,7 @@ msgstr "Degradado segmentado"
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:253
 #, kde-format
 msgid "Edit..."
-msgstr "Editar..."
+msgstr "Editar…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:491
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:500
@@ -34703,7 +38498,7 @@ msgstr "Espacio de color sin calibrar"
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:664
 #, kde-format
 msgid "No profile available..."
-msgstr "No hay ningún perfil disponible..."
+msgstr "No hay ningún perfil disponible…"
 
 #: libs/ui/widgets/kis_cmb_idlist.cc:28
 #, kde-format
@@ -34781,12 +38576,12 @@ msgstr "El portapapeles está vacío o no contiene ninguna imagen."
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
 msgid "Filter by name..."
-msgstr "Filtrar por nombre..."
+msgstr "Filtrar por nombre…"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:59
 #, kde-format
 msgid "Filter by color label..."
-msgstr "Filtrar por etiqueta de color..."
+msgstr "Filtrar por etiqueta de color…"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:81
 #, kde-format
@@ -35117,7 +38912,7 @@ msgstr "Diferencia simétrica (%1)"
 #: libs/ui/widgets/kis_tone_curve_widget.cpp:318
 #, kde-format
 msgid "No tone curve available..."
-msgstr "No hay disponible ninguna curva de tonos..."
+msgstr "No hay disponible ninguna curva de tonos…"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:27
 #, kde-format
@@ -35776,12 +39571,12 @@ msgstr "V:"
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
 msgid "Select a file to load..."
-msgstr "Seleccionar un archivo a cargar..."
+msgstr "Seleccionar un archivo a cargar…"
 
 #: libs/widgets/kis_file_name_requester.cpp:90
 #, kde-format
 msgid "Select a directory to load..."
-msgstr "Seleccionar un directorio a cargar..."
+msgstr "Seleccionar un directorio a cargar…"
 
 #: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
@@ -36141,7 +39936,7 @@ msgstr "&Detalles"
 #: libs/widgets/KoDialog.cpp:931
 #, kde-format
 msgid "Get help..."
-msgstr "Obtener ayuda..."
+msgstr "Obtener ayuda…"
 
 #: libs/widgets/KoDockWidgetTitleBar.cpp:44
 #, kde-format
@@ -36255,7 +40050,7 @@ msgstr "Nombre del archivo seleccionado"
 #: libs/widgets/wdg_file_name_requester.ui:46
 #, kde-format
 msgid "Select file name..."
-msgstr "Seleccionar nombre de archivo..."
+msgstr "Seleccionar nombre de archivo…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
@@ -37031,7 +40826,7 @@ msgstr "Esquemas de accesos rápidos:"
 #, kde-format
 msgctxt "New shortcut scheme"
 msgid "New..."
-msgstr "Nuevo..."
+msgstr "Nuevo…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:67
 #, kde-format
@@ -37053,12 +40848,12 @@ msgstr "Cargar accesos rápidos personalizados"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:78
 #, kde-format
 msgid "Export Scheme..."
-msgstr "Exportar esquema..."
+msgstr "Exportar esquema…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:80
 #, kde-format
 msgid "Import Scheme..."
-msgstr "Importar esquema..."
+msgstr "Importar esquema…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:96
 #, kde-format
@@ -38566,7 +42361,7 @@ msgstr "Línea de tiempo de la animación"
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Importar sonido..."
+msgstr "Importar sonido…"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
@@ -39120,12 +42915,12 @@ msgstr "Seleccionar un directorio"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:268
 #, kde-format
 msgid "Exporting Compositions..."
-msgstr "Exportando composiciones..."
+msgstr "Exportando composiciones…"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:294
 #, kde-format
 msgid "Exporting composition: %1..."
-msgstr "Exportando composición: %1..."
+msgstr "Exportando composición: %1…"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
@@ -40046,7 +43841,7 @@ msgstr "Comportamiento del historial:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:312
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr "Configurar el número de pinceles mostrados..."
+msgstr "Configurar el número de pinceles mostrados…"
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -40081,7 +43876,7 @@ msgstr "Grabar secuencia de lapso de tiempo"
 #, kde-format
 msgctxt "action"
 msgid "Export Timelapse..."
-msgstr "Exportar secuencia de lapso de tiempo..."
+msgstr "Exportar secuencia de lapso de tiempo…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:92
 #, kde-format
@@ -40109,7 +43904,7 @@ msgstr "¿Interrumpir la codificación del vídeo de lapso de tiempo?"
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
-msgstr "Iniciando FFmpeg..."
+msgstr "Iniciando FFmpeg…"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:372
@@ -40157,7 +43952,7 @@ msgstr "Seleccionar archivo ejecutable de FFmpeg"
 #: plugins/dockers/recorder/recorder_export.cpp:600
 #, kde-format
 msgid "Export Timelapse Video As"
-msgstr "Exportar vídeo de secuencia de lapso de tiempo como..."
+msgstr "Exportar vídeo de secuencia de lapso de tiempo como…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:616
 #, kde-format
@@ -40172,7 +43967,7 @@ msgstr "No hay fotogramas a exportar."
 #: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
-msgstr "El vídeo de secuencia de lapso de tiempo se está codificando..."
+msgstr "El vídeo de secuencia de lapso de tiempo se está codificando…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:663
 #, kde-format
@@ -40199,7 +43994,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
-msgstr "Limpiando..."
+msgstr "Limpiando…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderExport)
 #: plugins/dockers/recorder/recorder_export.ui:18
@@ -40471,7 +44266,7 @@ msgstr "Última modificación"
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
-msgstr "Explorando..."
+msgstr "Explorando…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:195
@@ -40508,7 +44303,7 @@ msgstr "Borrar grabaciones"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
 #, kde-format
 msgid "Scanning..."
-msgstr "Explorando..."
+msgstr "Explorando…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
@@ -40539,13 +44334,13 @@ msgstr "Directorio de grabaciones:"
 #: plugins/dockers/recorder/recorderdocker.ui:105
 #, kde-format
 msgid "Manage recordings..."
-msgstr "Gestionar grabaciones..."
+msgstr "Gestionar grabaciones…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr "Seleccionar directorio para las grabaciones..."
+msgstr "Seleccionar directorio para las grabaciones…"
 
 #. i18n: This value changes for RealtTimeCapture mode switched to on. It can alter the column width of the labels, if this value is the longest of all labels. Please ensure, that at least one other label has more characters than this one (by stuffing space characters after the colon of one label).
 #. i18n: ectx: property (text), widget (QLabel, labelRate)
@@ -40669,7 +44464,7 @@ msgstr "Grabar"
 #: plugins/dockers/recorder/recorderdocker.ui:411
 #, kde-format
 msgid "Export..."
-msgstr "Exportar..."
+msgstr "Exportar…"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:147
 #, kde-format
@@ -41332,7 +45127,7 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Tamaño óptico"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:103
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
 #, kde-format
 msgid "Text Properties"
 msgstr "Propiedades del texto"
@@ -41394,7 +45189,7 @@ msgstr "Diseños de selector de favoritos:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
 #, kde-format
 msgid "Select..."
-msgstr "Seleccionar..."
+msgstr "Seleccionar…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
@@ -41782,7 +45577,7 @@ msgstr "Selector de color de gama amplia"
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "Configurar..."
+msgstr "Configurar…"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:71
 #, kde-format
@@ -42059,7 +45854,7 @@ msgstr "Convertir la capa actual de %1"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "&Explorar la base de datos de la caché de recursos..."
+msgstr "&Explorar la base de datos de la caché de recursos…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -44166,12 +47961,12 @@ msgstr "Importar recursos y bibliotecas de recursos"
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
 #, kde-format
 msgid "Manage Resource Libraries..."
-msgstr "Gestión de bibliotecas de recursos..."
+msgstr "Gestión de bibliotecas de recursos…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
 #, kde-format
 msgid "Manage Resources..."
-msgstr "Gestionar recursos..."
+msgstr "Gestionar recursos…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -44214,7 +48009,7 @@ msgstr "Actualizado:"
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, kde-format
 msgid "New Bundle..."
-msgstr "Nuevo paquete..."
+msgstr "Nuevo paquete…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -44696,7 +48491,7 @@ msgstr "Filtro de inclinación, desplazamiento, potencia"
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
 #, kde-format
 msgid "&Slope, Offset, Power..."
-msgstr "Inclinación, de&splazamiento, potencia..."
+msgstr "Inclinación, de&splazamiento, potencia…"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
@@ -44724,7 +48519,7 @@ msgstr "Inclinación:"
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
 msgid "&Blur..."
-msgstr "&Desenfocar..."
+msgstr "&Desenfocar…"
 
 #: plugins/filters/blur/kis_blur_filter.h:26
 #, kde-format
@@ -44734,7 +48529,7 @@ msgstr "Desenfocar"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Desenfoque &gaussiano..."
+msgstr "Desenfoque &gaussiano…"
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
@@ -44744,7 +48539,7 @@ msgstr "Desenfoque gaussiano"
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
 msgid "&Lens Blur..."
-msgstr "Desenfoque de &lente..."
+msgstr "Desenfoque de &lente…"
 
 #: plugins/filters/blur/kis_lens_blur_filter.h:30
 #, kde-format
@@ -44754,7 +48549,7 @@ msgstr "Desenfoque de lente"
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Desenfoque de &movimiento..."
+msgstr "Desenfoque de &movimiento…"
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
@@ -44908,7 +48703,7 @@ msgstr "Fuerza:"
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
 msgid "&Color to Alpha..."
-msgstr "&Color a alfa..."
+msgstr "&Color a alfa…"
 
 #: plugins/filters/colors/kis_color_to_alpha.h:28
 #, kde-format
@@ -44938,7 +48733,7 @@ msgstr "Minimizar el canal"
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
 #, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "Superp&osición de color rápida..."
+msgstr "Superp&osición de color rápida…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
@@ -45020,7 +48815,7 @@ msgstr "Contraste automático"
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
 msgid "&Color Balance..."
-msgstr "Balan&ce de color..."
+msgstr "Balan&ce de color…"
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:40
 #, kde-format
@@ -45030,7 +48825,7 @@ msgstr "Balance de color"
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:328
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
-msgstr "Curvas de ajuste de &canal cruzado..."
+msgstr "Curvas de ajuste de &canal cruzado…"
 
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.h:43
 #, kde-format
@@ -45040,7 +48835,7 @@ msgstr "Ajuste de color de canal cruzado"
 #: plugins/filters/colorsfilters/kis_desaturate_filter.cpp:48
 #, kde-format
 msgid "&Desaturate..."
-msgstr "&Desaturar..."
+msgstr "&Desaturar…"
 
 #: plugins/filters/colorsfilters/kis_desaturate_filter.h:35
 #, kde-format
@@ -45102,7 +48897,7 @@ msgstr "Verde-rojo"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
 msgid "&HSV Adjustment..."
-msgstr "Ajuste de &HSV..."
+msgstr "Ajuste de &HSV…"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.h:38
 #, kde-format
@@ -45121,7 +48916,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:163
 #, kde-format
 msgid "&Color Adjustment curves..."
-msgstr "Curvas de ajuste de &color..."
+msgstr "Curvas de ajuste de &color…"
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:54
 #, kde-format
@@ -45333,7 +49128,7 @@ msgstr "Filtro de altura a mapa normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Alt&ura a mapa normal..."
+msgstr "Alt&ura a mapa normal…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
@@ -45436,17 +49231,17 @@ msgstr "Repujar en diagonal"
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
 msgid "Dodge..."
-msgstr "Blanquear..."
+msgstr "Blanquear…"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
 #, kde-format
 msgid "Burn..."
-msgstr "Quemar..."
+msgstr "Quemar…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
 #, kde-format
 msgid "&Edge Detection..."
-msgstr "D&etección de bordes..."
+msgstr "D&etección de bordes…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
@@ -45532,7 +49327,7 @@ msgstr "Salida:"
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
 msgid "&Emboss with Variable Depth..."
-msgstr "R&epuar con profundidad variable..."
+msgstr "R&epuar con profundidad variable…"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
 #, kde-format
@@ -45553,7 +49348,7 @@ msgstr "Invertir"
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
 msgid "&Color Transfer..."
-msgstr "Transferencia de &color..."
+msgstr "Transferencia de &color…"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
 #, kde-format
@@ -45583,7 +49378,7 @@ msgstr "Filtro de paso alto gaussiano"
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.cpp:37
 #, kde-format
 msgid "&Gaussian High Pass..."
-msgstr "Paso alto &gaussiano..."
+msgstr "Paso alto &gaussiano…"
 
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.h:29
 #, kde-format
@@ -45611,7 +49406,7 @@ msgstr "Filtro de mapa de degradado"
 #: plugins/filters/gradientmap/KisGradientMapFilter.cpp:32
 #, kde-format
 msgid "&Gradient Map..."
-msgstr "Mapa de de&gradado..."
+msgstr "Mapa de de&gradado…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
@@ -45731,7 +49526,7 @@ msgstr "Modo:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Semitono..."
+msgstr "&Semitono…"
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
@@ -45741,7 +49536,7 @@ msgstr "Semitono"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
 msgid "&Gaussian Noise Reduction..."
-msgstr "Reducción de ruido &gaussiano..."
+msgstr "Reducción de ruido &gaussiano…"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:44
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:40
@@ -45763,7 +49558,7 @@ msgstr "Reductor de ruido gaussiano"
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:26
 #, kde-format
 msgid "&Wavelet Noise Reducer..."
-msgstr "Reductor de ruido mediante &ondículas..."
+msgstr "Reductor de ruido mediante &ondículas…"
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.h:37
 #, kde-format
@@ -45773,7 +49568,7 @@ msgstr "Reductor de ruido mediante «ondículas»"
 #: plugins/filters/indexcolors/indexcolors.cpp:33
 #, kde-format
 msgid "&Index Colors..."
-msgstr "Colores &indexados..."
+msgstr "Colores &indexados…"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
 #, kde-format
@@ -45989,12 +49784,12 @@ msgstr "Reiniciar todos los canales"
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
 msgid "&Levels..."
-msgstr "Nive&les..."
+msgstr "Nive&les…"
 
 #: plugins/filters/noisefilter/noisefilter.cpp:42
 #, kde-format
 msgid "&Random Noise..."
-msgstr "Ruido aleato&rio..."
+msgstr "Ruido aleato&rio…"
 
 #: plugins/filters/noisefilter/noisefilter.h:38
 #, kde-format
@@ -46041,7 +49836,7 @@ msgstr "Filtro de normalizar"
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
 msgid "&Oilpaint..."
-msgstr "Pintura al óle&o..."
+msgstr "Pintura al óle&o…"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
@@ -46096,7 +49891,7 @@ msgstr "Índice:"
 #: plugins/filters/palettize/palettize.cpp:190
 #, kde-format
 msgid "&Palettize..."
-msgstr "&Poner en paleta..."
+msgstr "&Poner en paleta…"
 
 #: plugins/filters/palettize/palettize.h:68
 #, kde-format
@@ -46147,7 +49942,7 @@ msgstr "Mapa de relieve Phong"
 #: plugins/filters/phongbumpmap/kis_phong_bumpmap_filter.cpp:26
 #, kde-format
 msgid "&Phong Bumpmap..."
-msgstr "Mapa de relieve &Phong..."
+msgstr "Mapa de relieve &Phong…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalSettings)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:64
@@ -46295,7 +50090,7 @@ msgstr "Fuente de luz &3"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:46
 #, kde-format
 msgid "&Pixelize..."
-msgstr "&Pixelizar..."
+msgstr "&Pixelizar…"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
 #, kde-format
@@ -46315,7 +50110,7 @@ msgstr "Pixelizar"
 #: plugins/filters/posterize/posterize.cpp:43
 #, kde-format
 msgid "&Posterize..."
-msgstr "&Posterizar..."
+msgstr "&Posterizar…"
 
 #: plugins/filters/posterize/posterize.cpp:81
 #, kde-format
@@ -46450,7 +50245,7 @@ msgstr "Propagar colores"
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
 #, kde-format
 msgid "&Propagate Colors..."
-msgstr "&Propagar colores..."
+msgstr "&Propagar colores…"
 
 #. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
@@ -46469,7 +50264,7 @@ msgstr "Filtro para propagar colores"
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
 msgid "&Raindrops..."
-msgstr "Gotas de ll&uvia..."
+msgstr "Gotas de ll&uvia…"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
 #, kde-format
@@ -46494,7 +50289,7 @@ msgstr "Gotas de lluvia"
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
 #, kde-format
 msgid "&Random Pick..."
-msgstr "Elección aleato&ria..."
+msgstr "Elección aleato&ria…"
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
@@ -46516,7 +50311,7 @@ msgstr "Reiniciar transparente"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "&Redondear las esquinas..."
+msgstr "&Redondear las esquinas…"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, kde-format
@@ -46531,7 +50326,7 @@ msgstr "Esquinas redondeadas"
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:44
 #, kde-format
 msgid "&Small Tiles..."
-msgstr "Mosaicos pequeño&s..."
+msgstr "Mosaicos pequeño&s…"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:91
 #, kde-format
@@ -46560,7 +50355,7 @@ msgstr "Filtro de umbral"
 #: plugins/filters/threshold/threshold.cpp:55
 #, kde-format
 msgid "&Threshold..."
-msgstr "Um&bral..."
+msgstr "Um&bral…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/threshold/wdg_threshold.ui:127
@@ -46571,7 +50366,7 @@ msgstr "Ni&vel de umbral:"
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
-msgstr "Máscara de desenfoq&ue..."
+msgstr "Máscara de desenfoq&ue…"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
@@ -46595,7 +50390,7 @@ msgstr "Solo claridad:"
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
 msgid "&Wave..."
-msgstr "&Onda..."
+msgstr "&Onda…"
 
 #: plugins/filters/wavefilter/wavefilter.h:39
 #, kde-format
@@ -46924,7 +50719,7 @@ msgstr "Un hexágono"
 #: plugins/generators/gradient/KisGradientGenerator.cpp:20
 #, kde-format
 msgid "&Gradient..."
-msgstr "De&gradado..."
+msgstr "De&gradado…"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
@@ -47165,7 +50960,7 @@ msgstr "Punto de esquina"
 #: plugins/generators/multigridpattern/multigridpatterngenerator.cpp:52
 #, kde-format
 msgid "&Multigrid Pattern..."
-msgstr "&Patrón multicuadrícula..."
+msgstr "&Patrón multicuadrícula…"
 
 #: plugins/generators/multigridpattern/multigridpatterngenerator.h:69
 #, kde-format
@@ -47286,7 +51081,7 @@ msgstr[1] "Cada {n} repeticiones verticalmente"
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
 msgid "&Pattern..."
-msgstr "&Patrón..."
+msgstr "&Patrón…"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPattern)
 #: plugins/generators/pattern/wdgpatternoptions.ui:27
@@ -47492,7 +51287,7 @@ msgstr "Contraste:"
 #: plugins/generators/screentone/KisScreentoneGenerator.cpp:30
 #, kde-format
 msgid "&Screentone..."
-msgstr "&Trama..."
+msgstr "&Trama…"
 
 #: plugins/generators/screentone/KisScreentoneGenerator.h:52
 #, kde-format
@@ -47588,7 +51383,7 @@ msgstr "Sinusoidal"
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
 msgid "&SeExpr..."
-msgstr "&SeExpr..."
+msgstr "&SeExpr…"
 
 #: plugins/generators/seexpr/generator.h:52
 #, kde-format
@@ -47663,7 +51458,7 @@ msgstr "Opciones"
 #: plugins/generators/seexpr/wdgseexpr.ui:237
 #, kde-format
 msgid "Save New SeExpr Preset..."
-msgstr "Guardar nuevo valor predefinido de SeExpr..."
+msgstr "Guardar nuevo valor predefinido de SeExpr…"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:244
@@ -47686,7 +51481,7 @@ msgstr "&Renderizar guion a miniatura"
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
 msgid "&Simplex Noise..."
-msgstr "Ruido &símplex..."
+msgstr "Ruido &símplex…"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.h:40
 #, kde-format
@@ -47708,7 +51503,7 @@ msgstr "Usar semilla personalizada"
 #: plugins/generators/solid/colorgenerator.cpp:44
 #, kde-format
 msgid "&Solid Color..."
-msgstr "Color &sólido..."
+msgstr "Color &sólido…"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
 #: plugins/generators/solid/wdgcoloroptions.ui:21
@@ -49346,7 +53141,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:785
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr "Usar la paleta de color para ... colores o menos"
+msgstr "Usar la paleta de color para … colores o menos"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:799
@@ -51220,7 +55015,7 @@ msgstr "Restablecer el valor predeterminado"
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:363
 #, kde-format
 msgid "Browse..."
-msgstr "Explorar..."
+msgstr "Explorar…"
 
 #. i18n: ectx: property (text), widget (QLabel, preview)
 #: plugins/impex/raw/wdgrawimport.ui:55
@@ -55815,7 +59610,7 @@ msgstr "TIFF"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:423
 #, python-brace-format
 msgid "v{version}-in this version..."
-msgstr "v{version}-en esta versión..."
+msgstr "v{version}-en esta versión…"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
@@ -55838,7 +59633,7 @@ msgstr "Preparando la exportación."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
-msgstr "Exportando el cómic..."
+msgstr "Exportando el cómic…"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
@@ -56389,7 +60184,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
-msgstr "Cargando páginas..."
+msgstr "Cargando páginas…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
@@ -56429,7 +60224,7 @@ msgstr "Cambiar el tamaño de todas las páginas"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
-msgstr "Cambiando el tamaño de las páginas..."
+msgstr "Cambiando el tamaño de las páginas…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
@@ -57235,124 +61030,118 @@ msgstr "Número de líneas del deslizador:"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Conservador"
+msgstr "Mutador"
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Rotar"
+msgstr "Mutar"
 
 #: plugins/python/mutator/mutator.py:122
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "Primeros pasos"
+msgstr "Preferencias mutadas"
 
 #: plugins/python/mutator/mutator.py:152
-#, fuzzy
-#| msgid "Curator"
 msgid "Mutator"
-msgstr "Conservador"
+msgstr "Mutador"
 
 #: plugins/python/mutator/mutator.py:166
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr ""
+"Controla el grado en el que la mutación afecta al tamaño de pincel global de "
+"Krita."
 
 #: plugins/python/mutator/mutator.py:168
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "Saturación:"
+msgstr "Mutación de tamaño: "
 
 #: plugins/python/mutator/mutator.py:175
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr ""
+"Controla el grado en el que la mutación afecta a la rotación de pincel "
+"global de Krita."
 
 #: plugins/python/mutator/mutator.py:177
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Rotation Mutation: "
-msgstr "Rotación: "
+msgstr "Mutación de rotación: "
 
 #: plugins/python/mutator/mutator.py:184
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr ""
+"Controla el grado en el que la mutación afecta a la opacidad de pincel "
+"global de Krita."
 
 #: plugins/python/mutator/mutator.py:186
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "Opacidad: "
+msgstr "Mutación de opacidad: "
 
 #: plugins/python/mutator/mutator.py:193
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr ""
+"Controla el grado en el que la mutación afecta al flujo de pincel global de "
+"Krita."
 
 #: plugins/python/mutator/mutator.py:195
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Flow Mutation: "
-msgstr "Rotación: "
+msgstr "Mutación de flujo: "
 
 #: plugins/python/mutator/mutator.py:202
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
 msgstr ""
+"Controla el grado en el que la mutación afecta al tono del color de primer "
+"plano global de Krita."
 
 #: plugins/python/mutator/mutator.py:204
-#, fuzzy
-#| msgid "Rotation: "
 msgid "Hue Mutation: "
-msgstr "Rotación: "
+msgstr "Mutación de tono: "
 
 #: plugins/python/mutator/mutator.py:211
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr ""
+"Controla el grado en el que la mutación afecta a la saturación del color de "
+"primer plano global de Krita."
 
 #: plugins/python/mutator/mutator.py:213
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Saturation Rings:"
 msgid "Saturation Mutation: "
-msgstr "Anillos de saturación:"
+msgstr "Mutación de saturación: "
 
 #: plugins/python/mutator/mutator.py:220
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
 msgstr ""
+"Controla el grado en el que la mutación afecta al valor del color de primer "
+"plano global de Krita."
 
 #: plugins/python/mutator/mutator.py:222
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "Duración del vídeo:"
+msgstr "Mutación de valor: "
 
 #: plugins/python/mutator/mutator.py:232
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "Rotar"
+msgstr "Mutar"
 
 #: plugins/python/mutator/mutator.py:233
 msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
+"Llama a la acción «Mutar», que muta aleatoriamente varios ajustes globales "
+"de pincel y de color según las preferencias de mutación configuradas más "
+"arriba."
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"
@@ -57442,7 +61231,7 @@ msgstr "Definir carpeta de referencias"
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
 #, kde-format
 msgid "Filter images by words..."
-msgstr "Filtrar imágenes por palabras..."
+msgstr "Filtrar imágenes por palabras…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -57466,14 +61255,14 @@ msgstr "Importador de complementos de Python"
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "Importar complemento de Python desde archivo..."
+msgstr "Importar complemento de Python desde archivo…"
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Importar complemento de Python desde la web..."
+msgstr "Importar complemento de Python desde la web…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -57485,11 +61274,11 @@ msgstr "No se han encontrado complementos en el archivo comprimido"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:32
 msgid "Import Python Plugin from File..."
-msgstr "Importar complemento de Python desde archivo..."
+msgstr "Importar complemento de Python desde archivo…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
 msgid "Import Python Plugin from Web..."
-msgstr "Importar complemento de Python desde la web..."
+msgstr "Importar complemento de Python desde la web…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -59481,7 +63270,7 @@ msgstr "Forma caligráfica"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:59
 #, kde-format
 msgid "Save profile as..."
-msgstr "Guardar perfil como..."
+msgstr "Guardar perfil como…"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
 #, kde-format
@@ -60069,6 +63858,20 @@ msgctxt "action"
 msgid "Similar Color Selection Tool"
 msgstr "Herramienta de selección de color similar"
 
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
+#, fuzzy, kde-format
+#| msgid "Open Palette"
+msgctxt "@title:window"
+msgid "Glyph Palette"
+msgstr "Abrir paleta"
+
+#: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
+#, fuzzy, kde-format
+#| msgid "All pa&ges"
+msgctxt "@title"
+msgid "All glyphs"
+msgstr "Todas las pá&ginas"
+
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
@@ -60167,7 +63970,7 @@ msgstr "100 %"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1609
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:150
 #, kde-format
 msgid "Letter Spacing"
 msgstr "Espacio entre letras"
@@ -60229,7 +64032,7 @@ msgstr "Color del texto"
 #, kde-format
 msgctxt "action"
 msgid "Text Color..."
-msgstr "Color del texto..."
+msgstr "Color del texto…"
 
 #. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60247,7 +64050,7 @@ msgstr "Fondo"
 #, kde-format
 msgctxt "action"
 msgid "Background Color..."
-msgstr "Color del fondo..."
+msgstr "Color del fondo…"
 
 #. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60272,7 +64075,7 @@ msgstr "Tamaño del tipo de letra"
 #, kde-format
 msgctxt "action"
 msgid "Font..."
-msgstr "Tipo de letra..."
+msgstr "Tipo de letra…"
 
 #. i18n: context: toolTip @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:48
@@ -60298,7 +64101,7 @@ msgstr "Cambiar los atributos de los caracteres seleccionados."
 #, kde-format
 msgctxt "action"
 msgid "Special Character..."
-msgstr "Carácter especial..."
+msgstr "Carácter especial…"
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:58
@@ -60542,7 +64345,7 @@ msgstr "Preferencias del editor de texto"
 #, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
-msgstr "Preferencias..."
+msgstr "Preferencias…"
 
 #. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -60637,7 +64440,7 @@ msgstr ""
 "Usar el modo de ajuste CSS `white-space: pre-wrap` de SVG, con `inline-size` "
 "para definir la anchura del texto."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:301
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:305
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -60692,70 +64495,77 @@ msgid "SVG"
 msgstr "SVG"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEdit)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:21
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:47
 #, kde-format
 msgid "Edit Text"
 msgstr "Editar texto"
 
 #. i18n: ectx: property (title), widget (QGroupBox, defsOptions)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:28
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:67
 #, kde-format
 msgid "Create new texts with..."
-msgstr "Crear nuevos textos con..."
+msgstr "Crear nuevos textos con…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:42
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:81
 #, kde-format
 msgid "Anchor text to the left."
 msgstr "Anclar el texto a la izquierda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignCenter)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:65
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:104
 #, kde-format
 msgid "Anchor text to the middle."
 msgstr "Anclar el texto en el centro."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignRight)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:88
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:127
 #, kde-format
 msgid "Anchor text to the right."
 msgstr "Anclar el texto a la derecha."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeHorizontalTb)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:170
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
 msgstr "El texto fluye horizontalmente, de arriba a abajo."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:196
 #, kde-format
 msgid "Text flows vertical, right to left."
 msgstr "El texto fluye verticalmente, de derecha a izquierda."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:222
 #, kde-format
 msgid "Text flows vertical, left to right."
 msgstr "El texto fluye verticalmente, de izquierda a derecha."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:255
 #, kde-format
 msgid "Left to right text direction."
 msgstr "Dirección del texto de izquierda a derecha."
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:281
 #, kde-format
 msgid "Right to left text direction."
 msgstr "Dirección del texto de derecha a izquierda."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
-#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:325
 #, kde-format
 msgid "Edit SVG Source"
 msgstr "Editar fuente SVG"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
+#: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
+#, fuzzy, kde-format
+#| msgid "Open Palette"
+msgid "Glyph Palette"
+msgstr "Abrir paleta"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -62389,9 +66199,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Editor Widget Control:"
 #~ msgstr "Color del panel del editor:"
 
-#~ msgid "Fit View"
-#~ msgstr "Ajustar a la vista"
-
 #~ msgid "Fit View Width"
 #~ msgstr "Ajustar al ancho de la vista"
 
@@ -63677,9 +67484,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Use same aspect as pixels"
 #~ msgstr "Usar el mismo aspecto que los píxeles"
 
-#~ msgid "Enable Touch Rotation"
-#~ msgstr "Activar la rotación al tacto"
-
 #~ msgid "Hold last frame for:"
 #~ msgstr "Mantener el último fotograma durante:"
 
@@ -64442,9 +68246,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Color Burn"
 #~ msgstr "Quemado de color"
 
-#~ msgid "Linear Burn"
-#~ msgstr "Quemado lineal"
-
 #~ msgid "Gamma Dark"
 #~ msgstr "Oscurecer gamma"
 
@@ -64561,9 +68362,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Tangent Normalmap"
 #~ msgstr "Mapa de normales de tangente"
-
-#~ msgid "Combine Normal Maps"
-#~ msgstr "Combinar mapas de normales"
 
 #~ msgctxt "HSY Color"
 #~ msgid "Color"
@@ -64772,9 +68570,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Mirror Segment"
 #~ msgstr "Replicar el segmento"
 
-#~ msgid "Remove Segment"
-#~ msgstr "Eliminar el segmento"
-
 #~ msgid "Work Recursively"
 #~ msgstr "Trabajar recursivamente"
 
@@ -64809,10 +68604,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "resource type"
 #~ msgid "workspaces"
 #~ msgstr "espacios_de_trabajo"
-
-#~ msgctxt "resource type"
-#~ msgid "symbols"
-#~ msgstr "simbolos"
 
 #~ msgctxt "resource type"
 #~ msgid "windowlayouts"
@@ -64885,9 +68676,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "action"
 #~ msgid "Move selection to next frame"
 #~ msgstr "Mover la selección al siguiente fotograma"
-
-#~ msgid "Open Palette"
-#~ msgstr "Abrir paleta"
 
 #~ msgid "Import a Bundle"
 #~ msgstr "Importar un paquete"
@@ -65451,10 +69239,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgstr "Alinear al borde superior"
 
 #~ msgctxt "action"
-#~ msgid "Align to vertical center"
-#~ msgstr "Alinear al centro vertical"
-
-#~ msgctxt "action"
 #~ msgid "Align to bottom edge"
 #~ msgstr "Alinear al borde inferior"
 
@@ -65832,9 +69616,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Sort algorithm:"
 #~ msgstr "Algoritmo de ordenación:"
 
-#~ msgid "Alphanumeric"
-#~ msgstr "Alfanumérico"
-
 #~ msgid "This is a line of inserted text."
 #~ msgstr "Esto es una línea de texto insertado."
 
@@ -65991,9 +69772,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Include in table of contents"
 #~ msgstr "Incluir en la tabla de contenido"
 
-#~ msgid "Small Caps"
-#~ msgstr "Versalillas"
-
 #~ msgid "Uppercase"
 #~ msgstr "Mayúsculas"
 
@@ -66002,12 +69780,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Capitalize"
 #~ msgstr "Capitalizar"
-
-#~ msgid "Superscript"
-#~ msgstr "Superíndice"
-
-#~ msgid "Subscript"
-#~ msgstr "Subíndice"
 
 #~ msgid "Text color:"
 #~ msgstr "Color del texto:"
@@ -66070,10 +69842,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "Parada de tabulación"
-
-#~ msgctxt "None"
-#~ msgid "Nothing"
-#~ msgstr "Nada"
 
 #~ msgid "Select a list image"
 #~ msgstr "Seleccionar una imagen de lista"
@@ -66658,9 +70426,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Rightwards Arrow Bullet"
 #~ msgstr "Viñeta de flecha hacia la derecha"
 
-#~ msgid "Arabic"
-#~ msgstr "Arábiga"
-
 #~ msgid "Lower Alphabetical"
 #~ msgstr "Alfabética en minúscula"
 
@@ -66681,36 +70446,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Rightwards Arrow Head Bullet"
 #~ msgstr "Viñeta de punta de flecha hacia la derecha"
-
-#~ msgid "Bengali"
-#~ msgstr "Bengalí"
-
-#~ msgid "Gujarati"
-#~ msgstr "Guyaratí"
-
-#~ msgid "Gurumukhi"
-#~ msgstr "Gurmukhi"
-
-#~ msgid "Kannada"
-#~ msgstr "Canarés"
-
-#~ msgid "Malayalam"
-#~ msgstr "Malayalam"
-
-#~ msgid "Oriya"
-#~ msgstr "Oriya"
-
-#~ msgid "Tamil"
-#~ msgstr "Tamil"
-
-#~ msgid "Telugu"
-#~ msgstr "Télugu"
-
-#~ msgid "Tibetan"
-#~ msgstr "Tibetano"
-
-#~ msgid "Thai"
-#~ msgstr "Tailandés"
 
 #~ msgid "Abjad"
 #~ msgstr "Abyad"
@@ -67293,9 +71028,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Draw path"
 #~ msgstr "Dibujar ruta"
 
-#~ msgid "Freehand path"
-#~ msgstr "Ruta a mano alzada"
-
 #~ msgid "Create object"
 #~ msgstr "Crear objeto"
 
@@ -67808,9 +71540,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Play macro"
 #~ msgstr "Reproducir la macro"
-
-#~ msgid "Playing back macro"
-#~ msgstr "Repitiendo la macro"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Filter: \"%1\""
@@ -69068,9 +72797,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Street:"
 #~ msgstr "Calle:"
 
-#~ msgid "Home Number:"
-#~ msgstr "Número de casa:"
-
 #~ msgid "E&mail:"
 #~ msgstr "Co&rreo electrónico:"
 
@@ -69351,12 +73077,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Remove Shape Collection"
 #~ msgstr "Eliminar colección de formas"
-
-#~ msgid "Geometrics"
-#~ msgstr "Geométricas"
-
-#~ msgid "Arrows"
-#~ msgstr "Flechas"
 
 #~ msgid "Funny"
 #~ msgstr "Divertida"
@@ -74878,10 +78598,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort"
 #~ msgstr "Orden"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sort by position"
-#~ msgstr "Ordenar por posición"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Sort keys"
@@ -83317,9 +87033,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "a spreadsheet"
 #~ msgstr "una hoja de cálculo"
 
-#~ msgid "a presentation"
-#~ msgstr "una presentación"
-
 #~ msgctxt "(qtundo-format)"
 #~ msgid "a presentation"
 #~ msgstr "una presentación"
@@ -88411,10 +92124,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgstr "Una forma que muestra una única línea de texto"
 
 #~ msgctxt "(qtundo-format)"
-#~ msgid "Artistic Text"
-#~ msgstr "Texto artístico"
-
-#~ msgctxt "(qtundo-format)"
 #~ msgid "Click to change cursor position."
 #~ msgstr "Pulse para cambiar la posición del cursor."
 
@@ -93305,9 +97014,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "From"
 #~ msgstr "Copiar de"
 
-#~ msgid "Global Alternate"
-#~ msgstr "Alternativo global"
-
 #~ msgid "Mouse Button Gesture"
 #~ msgstr "Gesto del botón del ratón"
 
@@ -93694,9 +97400,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "manu tortosa"
 #~ msgstr "manu tortosa"
 
-#~ msgid "Marc Pegon"
-#~ msgstr "Marc Pegon"
-
 #~ msgid "Marijn Kruisselbrink"
 #~ msgstr "Marijn Kruisselbrink"
 
@@ -93741,9 +97444,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Mojtaba Shahi Senobari"
 #~ msgstr "Mojtaba Shahi Senobari"
-
-#~ msgid "Montel Laurent"
-#~ msgstr "Montel Laurent"
 
 #~ msgid "Moritz Molch"
 #~ msgstr "Moritz Molch"
@@ -93819,9 +97519,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Shivaraman Aiyer"
 #~ msgstr "Shivaraman Aiyer"
-
-#~ msgid "Siddharth Sharma"
-#~ msgstr "Siddharth Sharma"
 
 #~ msgid "Silvio Heinrich"
 #~ msgstr "Silvio Heinrich"
@@ -94400,9 +98097,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "icarrion"
 #~ msgstr "icarrion"
 
-#~ msgid "Ihara"
-#~ msgstr "Ihara"
-
 #~ msgid "iiinn"
 #~ msgstr "iiinn"
 
@@ -94538,9 +98232,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "kokobin"
 #~ msgstr "kokobin"
 
-#~ msgid "Kongorilla"
-#~ msgstr "Kongorilla"
-
 #~ msgid "Kpowgames"
 #~ msgstr "Kpowgames"
 
@@ -94670,9 +98361,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Metalfreak"
 #~ msgstr "Metalfreak"
 
-#~ msgid "Michael"
-#~ msgstr "Michael"
-
 #~ msgid "Michael Abrahams"
 #~ msgstr "Michael Abrahams"
 
@@ -94750,9 +98438,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "nullreff"
 #~ msgstr "nullreff"
-
-#~ msgid "nut-case"
-#~ msgstr "nut-case"
 
 #~ msgid "nya"
 #~ msgstr "nya"
@@ -94912,9 +98597,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Søren Thing Andersen"
 #~ msgstr "Søren Thing Andersen"
-
-#~ msgid "Soriac"
-#~ msgstr "Soriac"
 
 #~ msgid "Stefan Steinbauer"
 #~ msgstr "Stefan Steinbauer"
@@ -95398,9 +99080,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Ferguson"
 #~ msgstr "Ferguson"
 
-#~ msgid "Marco"
-#~ msgstr "Marco"
-
 #~ msgid "(@p2edwards)"
 #~ msgstr "(@p2edwards)"
 
@@ -95409,9 +99088,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Croft"
 #~ msgstr "Croft"
-
-#~ msgid "Braga"
-#~ msgstr "Braga"
 
 #~ msgid "(c) 1999-%1 The Krita team and KO GmbH.\n"
 #~ msgstr "(c) 1999-%1, el equipo de Krita y KO GmbH.\n"
@@ -97620,9 +101296,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Ice"
 #~ msgstr "Hielo"
 
-#~ msgid "Java"
-#~ msgstr "Granos de café"
-
 #~ msgid "Leopard"
 #~ msgstr "Leopardo"
 
@@ -98434,9 +102107,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "interacting with"
 #~ msgstr "interactuando con"
-
-#~ msgid "Program:"
-#~ msgstr "Programa:"
 
 #~ msgid "add"
 #~ msgstr "añadir"

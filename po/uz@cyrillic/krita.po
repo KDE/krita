@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-21 01:53+0000\n"
+"POT-Creation-Date: 2025-02-22 01:53+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -19597,7 +19597,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Replaces glyphs contextually wth alternates, required to make the font work."
+"Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
@@ -19906,7 +19906,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Adjusts glyphs to work beter with text that consists of only capitals or "
+"Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
 msgstr ""
 
@@ -21389,7 +21389,7 @@ msgstr "Ўлчами:"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:493
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -24458,7 +24458,7 @@ msgid "Could not add %1 to the database"
 msgstr "Расмни юклаб бўлмади."
 
 #: libs/resources/KisResourceLocator.cpp:866
-#: libs/resources/KisResourceLocator.cpp:1236
+#: libs/resources/KisResourceLocator.cpp:1239
 #, fuzzy, kde-format
 #| msgid "Could not read the beginning of the file."
 msgid "Could not remove storage %1 from the database"
@@ -24510,15 +24510,15 @@ msgstr "Матнни ўчириш"
 msgid "Temporary Resources"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: libs/resources/KisResourceLocator.cpp:1079
+#: libs/resources/KisResourceLocator.cpp:1081
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Select Font"
 msgid "Font Storage"
 msgstr "Шрифтни танлаш"
 
-#: libs/resources/KisResourceLocator.cpp:1212
-#: libs/resources/KisResourceLocator.cpp:1218
+#: libs/resources/KisResourceLocator.cpp:1215
+#: libs/resources/KisResourceLocator.cpp:1221
 #, fuzzy, kde-format
 #| msgid "Could not load picture."
 msgid "Could not synchronize %1 with the database"
@@ -63367,101 +63367,110 @@ msgstr "Қатор:"
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:57
+#: plugins/tools/basictools/kis_tool_brush.cc:58
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Гуруҳни олиб ташлаш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:146
+#: plugins/tools/basictools/kis_tool_brush.cc:215
 #, fuzzy, kde-format
 #| msgid "Change Borders"
-msgid "Sample count:"
+msgid "Sample Count at Max Speed:"
 msgstr "Чегараларни ўзгартириш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:157
+#: plugins/tools/basictools/kis_tool_brush.cc:225
 #, fuzzy, kde-format
-msgctxt ""
-"Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-msgid "Distance:"
+#| msgid "Change Borders"
+msgid "Sample Count at Min Speed:"
+msgstr "Чегараларни ўзгартириш"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:235
+#, fuzzy, kde-format
+msgid "Distance at Max Speed:"
 msgstr "Белги услубини ўзгартириш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:314
+#: plugins/tools/basictools/kis_tool_brush.cc:245
+#, fuzzy, kde-format
+msgid "Distance at Min Speed:"
+msgstr "Белги услубини ўзгартириш"
+
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Йўқ"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:315
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:316
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "&Узунаси:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:317
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, fuzzy, kde-format
 #| msgid "Location:"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Манзили:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:318
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Нуқта (pt)"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:320
+#: plugins/tools/basictools/kis_tool_brush.cc:420
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "Қатор:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:481
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "&Алмаштириш:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:351
+#: plugins/tools/basictools/kis_tool_brush.cc:486
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:355
+#: plugins/tools/basictools/kis_tool_brush.cc:490
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:362
+#: plugins/tools/basictools/kis_tool_brush.cc:497
 #, fuzzy, kde-format
 #| msgid "First line indent"
 msgid "Finish line:"
 msgstr "Биринчи сатрда бўш жой"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:375
+#: plugins/tools/basictools/kis_tool_brush.cc:509
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:384
+#: plugins/tools/basictools/kis_tool_brush.cc:517
 #, fuzzy, kde-format
 #| msgid "Current Section"
 msgid "Stroke Ending:"
 msgstr "Жорий бўлим"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:391
+#: plugins/tools/basictools/kis_tool_brush.cc:523
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Smooth Pressure"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:529
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -63469,40 +63478,40 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:403
+#: plugins/tools/basictools/kis_tool_brush.cc:534
 #, fuzzy, kde-format
 #| msgid "Subject:"
 msgid "Scalable Distance"
 msgstr "Мавзу:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:419
+#: plugins/tools/basictools/kis_tool_brush.cc:549
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, fuzzy, kde-format
 #| msgid "Save as %1"
 msgid "Snap to Assistants"
 msgstr "%1 сифатида сақлаш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:551
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:426
+#: plugins/tools/basictools/kis_tool_brush.cc:556
 #, fuzzy, kde-format
 msgid "Assistant Magnetism"
 msgstr "Белги услубини ўзгартириш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:432
+#: plugins/tools/basictools/kis_tool_brush.cc:562
 #, fuzzy, kde-format
 msgid "Magnetism:"
 msgstr "Белги услубини ўзгартириш"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:565
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "Битта"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:438
+#: plugins/tools/basictools/kis_tool_brush.cc:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -63510,19 +63519,19 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:443
+#: plugins/tools/basictools/kis_tool_brush.cc:573
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, fuzzy, kde-format
 msgid "Snap Eraser"
 msgstr "ёлғон"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:576
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:137
+#: plugins/tools/basictools/kis_tool_brush.h:146
 #, fuzzy, kde-format
 msgid "Freehand Brush Tool"
 msgstr "Гуруҳни олиб ташлаш"
@@ -67794,6 +67803,12 @@ msgid "Reference Images Tool"
 msgstr "&Алмаштириш:"
 
 #, fuzzy
+#~ msgctxt ""
+#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
+#~ msgid "Distance:"
+#~ msgstr "Белги услубини ўзгартириш"
+
+#, fuzzy
 #~| msgid "Position"
 #~ msgid "Proofing Rendering Intent:"
 #~ msgstr "Жойлашиши"
@@ -71344,10 +71359,6 @@ msgstr "&Алмаштириш:"
 #~| msgid "Change Shadow"
 #~ msgid "Drop caps:"
 #~ msgstr "Сояни ўзгартириш"
-
-#, fuzzy
-#~ msgid "Distance to paragraph:"
-#~ msgstr "Белги услубини ўзгартириш"
 
 #, fuzzy
 #~ msgid "Number of characters:"

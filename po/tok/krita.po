@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-21 01:53+0000\n"
+"POT-Creation-Date: 2025-02-22 01:53+0000\n"
 "PO-Revision-Date: 2022-07-08 04:45+0000\n"
 "Last-Translator: Weblate Admin <admin@example.com>\n"
 "Language-Team: Toki Pona <http://weblate.blackquill.cc/projects/ante-toki-pi-"
@@ -18746,7 +18746,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Replaces glyphs contextually wth alternates, required to make the font work."
+"Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
@@ -19047,7 +19047,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Adjusts glyphs to work beter with text that consists of only capitals or "
+"Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
 msgstr ""
 
@@ -20501,7 +20501,7 @@ msgstr ""
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:493
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -23366,7 +23366,7 @@ msgid "Could not add %1 to the database"
 msgstr ""
 
 #: libs/resources/KisResourceLocator.cpp:866
-#: libs/resources/KisResourceLocator.cpp:1236
+#: libs/resources/KisResourceLocator.cpp:1239
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr ""
@@ -23408,14 +23408,14 @@ msgstr ""
 msgid "Temporary Resources"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1079
+#: libs/resources/KisResourceLocator.cpp:1081
 #: libs/resources/KisResourceStorage.h:127
 #, kde-format
 msgid "Font Storage"
 msgstr ""
 
-#: libs/resources/KisResourceLocator.cpp:1212
-#: libs/resources/KisResourceLocator.cpp:1218
+#: libs/resources/KisResourceLocator.cpp:1215
+#: libs/resources/KisResourceLocator.cpp:1221
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr ""
@@ -59589,94 +59589,102 @@ msgstr ""
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:57
+#: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:146
+#: plugins/tools/basictools/kis_tool_brush.cc:215
 #, kde-format
-msgid "Sample count:"
+msgid "Sample Count at Max Speed:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:157
+#: plugins/tools/basictools/kis_tool_brush.cc:225
 #, kde-format
-msgctxt ""
-"Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-msgid "Distance:"
+msgid "Sample Count at Min Speed:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:314
+#: plugins/tools/basictools/kis_tool_brush.cc:235
+#, kde-format
+msgid "Distance at Max Speed:"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_brush.cc:245
+#, kde-format
+msgid "Distance at Min Speed:"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:315
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:316
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:317
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:318
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:320
+#: plugins/tools/basictools/kis_tool_brush.cc:420
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:481
 #, kde-format
 msgid "Delay:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:351
+#: plugins/tools/basictools/kis_tool_brush.cc:486
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:355
+#: plugins/tools/basictools/kis_tool_brush.cc:490
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:362
+#: plugins/tools/basictools/kis_tool_brush.cc:497
 #, kde-format
 msgid "Finish line:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:375
+#: plugins/tools/basictools/kis_tool_brush.cc:509
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:384
+#: plugins/tools/basictools/kis_tool_brush.cc:517
 #, kde-format
 msgid "Stroke Ending:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:391
+#: plugins/tools/basictools/kis_tool_brush.cc:523
 #, kde-format
 msgid "Smooth Pressure"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:529
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59684,38 +59692,38 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:403
+#: plugins/tools/basictools/kis_tool_brush.cc:534
 #, kde-format
 msgid "Scalable Distance"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:419
+#: plugins/tools/basictools/kis_tool_brush.cc:549
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:551
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:426
+#: plugins/tools/basictools/kis_tool_brush.cc:556
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:432
+#: plugins/tools/basictools/kis_tool_brush.cc:562
 #, kde-format
 msgid "Magnetism:"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:565
 #, kde-format
 msgid "Snap to Single Line"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:438
+#: plugins/tools/basictools/kis_tool_brush.cc:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -59723,19 +59731,19 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:443
+#: plugins/tools/basictools/kis_tool_brush.cc:573
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:576
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.h:137
+#: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
 msgid "Freehand Brush Tool"
 msgstr ""

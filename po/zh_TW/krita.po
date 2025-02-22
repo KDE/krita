@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-21 01:53+0000\n"
+"POT-Creation-Date: 2025-02-22 01:53+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -18883,7 +18883,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Replaces glyphs contextually wth alternates, required to make the font work."
+"Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
@@ -19200,7 +19200,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
-"Adjusts glyphs to work beter with text that consists of only capitals or "
+"Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
 msgstr ""
 
@@ -20690,7 +20690,7 @@ msgstr "大小"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:358
+#: plugins/tools/basictools/kis_tool_brush.cc:493
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
@@ -23580,7 +23580,7 @@ msgid "Could not add %1 to the database"
 msgstr "無法新增 %1 至資料庫"
 
 #: libs/resources/KisResourceLocator.cpp:866
-#: libs/resources/KisResourceLocator.cpp:1236
+#: libs/resources/KisResourceLocator.cpp:1239
 #, kde-format
 msgid "Could not remove storage %1 from the database"
 msgstr "無法從資料庫移除 %1 儲存空間"
@@ -23623,15 +23623,15 @@ msgstr "正在初始化資源。"
 msgid "Temporary Resources"
 msgstr "暫存資源"
 
-#: libs/resources/KisResourceLocator.cpp:1079
+#: libs/resources/KisResourceLocator.cpp:1081
 #: libs/resources/KisResourceStorage.h:127
 #, fuzzy, kde-format
 #| msgid "Font Style"
 msgid "Font Storage"
 msgstr "字型樣式"
 
-#: libs/resources/KisResourceLocator.cpp:1212
-#: libs/resources/KisResourceLocator.cpp:1218
+#: libs/resources/KisResourceLocator.cpp:1215
+#: libs/resources/KisResourceLocator.cpp:1221
 #, kde-format
 msgid "Could not synchronize %1 with the database"
 msgstr "無法與資料庫同步 %1"
@@ -60992,95 +60992,109 @@ msgstr "%1 鍵"
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:57
+#: plugins/tools/basictools/kis_tool_brush.cc:58
 msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "手繪筆刷筆畫"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:146
-#, kde-format
-msgid "Sample count:"
+#: plugins/tools/basictools/kis_tool_brush.cc:215
+#, fuzzy, kde-format
+#| msgid "Sample count:"
+msgid "Sample Count at Max Speed:"
 msgstr "取樣數："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:157
-#, kde-format
-msgctxt ""
-"Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-msgid "Distance:"
-msgstr "距離："
+#: plugins/tools/basictools/kis_tool_brush.cc:225
+#, fuzzy, kde-format
+#| msgid "Sample count:"
+msgid "Sample Count at Min Speed:"
+msgstr "取樣數："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:314
+#: plugins/tools/basictools/kis_tool_brush.cc:235
+#, fuzzy, kde-format
+#| msgctxt "EXIF: autofocus"
+#| msgid "D&istance range:"
+msgid "Distance at Max Speed:"
+msgstr "距離範圍(&I)："
+
+#: plugins/tools/basictools/kis_tool_brush.cc:245
+#, fuzzy, kde-format
+#| msgctxt "EXIF: autofocus"
+#| msgid "D&istance range:"
+msgid "Distance at Min Speed:"
+msgstr "距離範圍(&I)："
+
+#: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "無"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:315
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "基本"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:316
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "權衡"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:317
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "防抖"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:318
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, fuzzy, kde-format
 #| msgid "Pixel"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "像素"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:320
+#: plugins/tools/basictools/kis_tool_brush.cc:420
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "筆刷平滑："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:346
+#: plugins/tools/basictools/kis_tool_brush.cc:481
 #, kde-format
 msgid "Delay:"
 msgstr "延遲："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:351
+#: plugins/tools/basictools/kis_tool_brush.cc:486
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "延遲筆畫響應以平滑線條"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:355
+#: plugins/tools/basictools/kis_tool_brush.cc:490
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "筆刷延遲的半徑大小"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:362
+#: plugins/tools/basictools/kis_tool_brush.cc:497
 #, kde-format
 msgid "Finish line:"
 msgstr "筆末挑尖："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:375
+#: plugins/tools/basictools/kis_tool_brush.cc:509
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "穩定感測器："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:384
+#: plugins/tools/basictools/kis_tool_brush.cc:517
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "筆末跟隨："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:391
+#: plugins/tools/basictools/kis_tool_brush.cc:523
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "平滑壓力"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:398
+#: plugins/tools/basictools/kis_tool_brush.cc:529
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61088,38 +61102,38 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr "按照畫布縮放比例縮放距離，使任意畫布縮放下的距離在視覺上一致"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:403
+#: plugins/tools/basictools/kis_tool_brush.cc:534
 #, kde-format
 msgid "Scalable Distance"
 msgstr "隨檢視縮放距離"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:419
+#: plugins/tools/basictools/kis_tool_brush.cc:549
 #: plugins/tools/basictools/kis_tool_line.cc:110
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "吸附到輔助尺"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:421
+#: plugins/tools/basictools/kis_tool_brush.cc:551
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "此工具在新增輔助尺後才能作業。"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:426
+#: plugins/tools/basictools/kis_tool_brush.cc:556
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "輔助尺磁性"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:432
+#: plugins/tools/basictools/kis_tool_brush.cc:562
 #, kde-format
 msgid "Magnetism:"
 msgstr "磁性："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:435
+#: plugins/tools/basictools/kis_tool_brush.cc:565
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "吸附單一輔助尺："
 
-#: plugins/tools/basictools/kis_tool_brush.cc:438
+#: plugins/tools/basictools/kis_tool_brush.cc:568
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61127,19 +61141,19 @@ msgid ""
 "using the infinite assistants."
 msgstr "只吸附至單一輔助尺，可避免在使用無限延伸輔助尺時吸附失靈。"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:443
+#: plugins/tools/basictools/kis_tool_brush.cc:573
 #: plugins/tools/basictools/kis_tool_line.cc:113
 #, kde-format
 msgid "Snap Eraser"
 msgstr "擦除模式時吸附"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:446
+#: plugins/tools/basictools/kis_tool_brush.cc:576
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
 msgstr "在使用擦除模式時啟用吸附"
 
-#: plugins/tools/basictools/kis_tool_brush.h:137
+#: plugins/tools/basictools/kis_tool_brush.h:146
 #, kde-format
 msgid "Freehand Brush Tool"
 msgstr "手繪筆刷工具"
@@ -65200,6 +65214,11 @@ msgstr "縮放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "參考圖工具"
+
+#~ msgctxt ""
+#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
+#~ msgid "Distance:"
+#~ msgstr "距離："
 
 #~ msgctxt "left mouse button"
 #~ msgid "left button"

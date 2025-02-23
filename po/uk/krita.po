@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-22 01:53+0000\n"
-"PO-Revision-Date: 2025-02-21 17:36+0200\n"
+"PO-Revision-Date: 2025-02-22 09:02+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -18912,11 +18912,7 @@ msgid "Required Contextual Alternates"
 msgstr "Обов'язкові контекстуальні альтернативи"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "Replaces glyphs contextually wth alternates, required to make the font "
-#| "work."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
@@ -19239,11 +19235,7 @@ msgid "Case-Sensitive Forms"
 msgstr "Чутливі до регістру форми"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
-#, fuzzy, kde-format
-#| msgctxt "@tooltip"
-#| msgid ""
-#| "Adjusts glyphs to work beter with text that consists of only capitals or "
-#| "lining figures."
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
@@ -62304,30 +62296,24 @@ msgstr ""
 "довільний мазок пензлем"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:215
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Лічильник семплів:"
+msgstr "Кількість семплів на макс. швидкості:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:225
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Лічильник семплів:"
+msgstr "Кількість семплів на мін. швидкості:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:235
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "&Діапазон відстаней:"
+msgstr "Відстань на макс. швидкості:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:245
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "&Діапазон відстаней:"
+msgstr "Відстань на мін. швидкості:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format

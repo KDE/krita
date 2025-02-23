@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-22 01:53+0000\n"
-"PO-Revision-Date: 2025-02-21 22:43+0100\n"
+"PO-Revision-Date: 2025-02-22 08:49+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -18842,7 +18842,7 @@ msgid "Required Contextual Alternates"
 msgstr "Alternatives contextuals requerides"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
@@ -19175,7 +19175,7 @@ msgid "Case-Sensitive Forms"
 msgstr "Formes que distingeixen majúscules i minúscules"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
@@ -61818,30 +61818,24 @@ msgid "Freehand Brush Stroke"
 msgstr "Traç del pinzell a mà alçada"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:215
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Comptador de mostres:"
+msgstr "Comptador de mostres a màxima velocitat:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:225
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Comptador de mostres:"
+msgstr "Comptador de mostres a mínima velocitat:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:235
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "Abast de d&istància:"
+msgstr "Distància a màxima velocitat:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:245
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "Abast de d&istància:"
+msgstr "Distància a mínima velocitat:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format

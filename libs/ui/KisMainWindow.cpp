@@ -424,7 +424,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->styleActions = new QActionGroup(this);
     QAction * action;
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QStringList allowableStyles = QStringList() << "macintosh" << "breeze" << "fusion";
+#else
+    QStringList allowableStyles = QStringList() << "macos" << "breeze" << "fusion";
+#endif
 
     Q_FOREACH (QString styleName, QStyleFactory::keys()) {
 #ifdef Q_OS_ANDROID

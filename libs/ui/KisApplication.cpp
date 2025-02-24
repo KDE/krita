@@ -211,7 +211,11 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QStringList styles = QStringList() << "haiku" << "macintosh" << "breeze" << "fusion";
+#else
+        QStringList styles = QStringList() << "haiku" << "macos" << "breeze" << "fusion";
+#endif
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {

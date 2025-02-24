@@ -56,13 +56,13 @@ struct KRITAFLAKE_EXPORT KoCSSFontInfo: public boost::equality_comparable<KoCSSF
     }
 
     bool operator==(const KoCSSFontInfo &rhs) const {
-        bool sizeMatch = automaticOpticalSizing? true: size == rhs.size;
-        bool slantMatch = autoSlant == rhs.autoSlant? true: slantValue == rhs.slantValue;
+        bool sizeMatch = automaticOpticalSizing? true: qFuzzyCompare(size, rhs.size);
+        bool slantMatch = autoSlant == rhs.autoSlant? true: qFuzzyCompare(slantValue, rhs.slantValue);
         return families == rhs.families
                 && automaticOpticalSizing == rhs.automaticOpticalSizing
                 && sizeMatch
-                && weight == rhs.weight
-                && width == rhs.width
+                && qFuzzyCompare(weight, rhs.weight)
+                && qFuzzyCompare(width, rhs.width)
                 && slantMode == rhs.slantMode
                 && slantMatch
                 && axisSettings == rhs.axisSettings;

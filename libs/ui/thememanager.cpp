@@ -132,6 +132,12 @@ void ThemeManager::setCurrentTheme(const QString& name)
 
 void ThemeManager::slotChangePalette()
 {
+    if (currentThemeName() == "System") {
+        qApp->setPalette(QPalette());
+        Q_EMIT signalThemeChanged();
+        return;
+    }
+
     //qDebug() << "slotChangePalette" << sender();
 
     // We must clear the icon cache before the palette is changed. That way
@@ -226,6 +232,11 @@ void ThemeManager::populateThemeMenu()
         action->setCheckable(true);
         actionMap.insert(name, action);
     }
+
+    // Add a "System" theme, which resets the palette to system colors
+    action = new QAction("System", d->themeMenuActionGroup);
+    action->setCheckable(true);
+    actionMap.insert("System", action);
 
     // sort the list
     QStringList actionMapKeys = actionMap.keys();

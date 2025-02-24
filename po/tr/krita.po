@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-22 01:53+0000\n"
-"PO-Revision-Date: 2025-02-22 13:08+0300\n"
+"PO-Revision-Date: 2025-02-23 12:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -35222,7 +35222,7 @@ msgstr "Farklı Kaydediliyor"
 #: libs/ui/KisMainWindow.cpp:1741
 #, kde-format
 msgid "Create new document"
-msgstr "Yeni belge oluştur"
+msgstr "Yeni Belge Oluştur"
 
 #: libs/ui/KisMainWindow.cpp:1765
 #, kde-format

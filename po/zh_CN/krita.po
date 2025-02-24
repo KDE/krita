@@ -18467,31 +18467,31 @@ msgstr "%1 个字符变体。"
 #, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "访问所有替代字符"
+msgstr "访问所有替代字符形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr "访问所有可能的替代字符。"
+msgstr "访问所有可能的替代字符形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "上下文替代字符"
+msgstr "根据上下文确定替代字符形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
-msgstr "根据字符在文本中的上下文替换字符。"
+msgstr "根据字符在文本中的上下文替换字符形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr "上下文连字"
+msgstr "根据上下文确定连字形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18499,20 +18499,20 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
-msgstr "根据字符序列在文本中的上下文将其替换为连字。"
+msgstr "根据字符序列在文本中的上下文将其替换为连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "上下文花体字"
+msgstr "根据上下文确定花体字形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
-msgstr "根据字符在文本中的上下文将其替换为花体字。"
+msgstr "根据字符在文本中的上下文将其替换为花体字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
@@ -18525,13 +18525,13 @@ msgstr "独立连字"
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
-msgstr "将字符序列替换为专为排版效果而设计的连字。"
+msgstr "将字符序列替换为专为排版效果而设计的连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr "行尾形式替代字符"
+msgstr "行尾替代字符形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
@@ -18558,19 +18558,19 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences glyphs with ligatures that were in use in the past, but "
 "rare today."
-msgstr "将字符序列替换为历史曾用，但如今少用的连字"
+msgstr "将字符序列替换为历史曾用，但如今少用的连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr "对齐专用替代字符"
+msgstr "对齐专用替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
-msgstr "将字符替换为用于对齐的替代字符"
+msgstr "将字符替换为用于对齐的替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
 #, kde-format
@@ -18582,7 +18582,7 @@ msgstr "标准连字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr "将字符序列替换为常用连字。"
+msgstr "将字符序列替换为常用连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
@@ -18594,7 +18594,7 @@ msgstr "左顶格"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
-msgstr "将字符调整为左侧没有空白。"
+msgstr "将字符调整为左侧没有空白的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
 #, kde-format
@@ -18606,7 +18606,7 @@ msgstr "本地化形式"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr "将字符替换为特定语言的版本。"
+msgstr "将字符替换为特定语言的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
 #, kde-format
@@ -18644,7 +18644,7 @@ msgstr "随机替换"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with random alternates."
-msgstr "将字符替换为随机的替代字符。"
+msgstr "将字符替换为随机的替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
 #, kde-format
@@ -18656,13 +18656,13 @@ msgstr "右顶格"
 #, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the right side."
-msgstr "将字符调整为右侧没有空白。"
+msgstr "将字符调整为右侧没有空白的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "其他替代样式字符"
+msgstr "其他替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18670,7 +18670,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
-msgstr "将字符替换为无法被归类到其他类别下的替代样式字符。"
+msgstr "将字符替换为无法被归类到其他类别下的替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
@@ -18682,7 +18682,7 @@ msgstr "花体字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr "将字符替换为花体字替代字符。"
+msgstr "将字符替换为花体字替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
@@ -18738,14 +18738,14 @@ msgstr "控制标记字符在其他标记字符上的位置。通常用于变音
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr "必需上下文替代字符"
+msgstr "必需根据上下文确定替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
-msgstr ""
+msgstr "根据上下文将字符替换为替代形式，这是此字体正常工作的必要条件。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
@@ -18757,7 +18757,7 @@ msgstr "必需连字"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs with required ligatures."
-msgstr "将字符序列替换为必需连字。"
+msgstr "将字符序列替换为必需连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:123
 #, kde-format
@@ -18771,7 +18771,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in a variable font with ones suited for the current "
 "variation."
-msgstr "用适合当前变体的字符替换在可变字体中的字符。"
+msgstr "将可变样式字体中的字符替换为适合当前变体的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
 #, kde-format
@@ -18791,13 +18791,13 @@ msgstr "指定字体在当前大小下的适用程度。在 Krita 中不起作�
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "垂直字偶间距调整"
+msgstr "竖排字偶间距调整"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr "控制字体的垂直字偶间距"
+msgstr "控制字体的竖排字偶间距"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
 #, kde-format
@@ -18895,7 +18895,7 @@ msgstr "数学希腊字母"
 msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
-msgstr "将正常希腊字母替换为用于数学的字符。"
+msgstr "将正常希腊字母替换为用于数学的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
@@ -19051,7 +19051,7 @@ msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
-msgstr ""
+msgstr "调整字符使其与仅由大写字母或齐线数字组成的文本更好地配合。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
 #, kde-format
@@ -19149,152 +19149,152 @@ msgstr "将大写和小写字符均替换为单一大小写字符。"
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
-msgstr "高于基字符形式"
+msgstr "基字上方形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
-msgstr "控制高棉语及其他印度语系文字中的高于基字符形式的替代字符"
+msgstr "控制高棉语及其他印度语系文字中的基字上方替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "基字上方标记字符位置"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字的基字上方标记字符位置。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "基字上方替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字的基字上方标记字符连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr ""
+msgstr "Akhand 连字"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字的 Akhand 连字。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "基字下方形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字中的基字下方替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "基字下方标记字符位置"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字的基字下方标记字符位置。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "基字下方替代字符"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字的基字下方标记字符连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Ro 之后的连写形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr ""
+msgstr "控制高棉语中连写 Ro 后的字形。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "连写形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr ""
+msgstr "控制印度语系文字中的连写形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr ""
+msgstr "距离"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
-msgstr ""
+msgstr "控制印度语系文字之间的距离，以避免出现重叠。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr ""
+msgstr "半字符形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "将印度语系文字中的辅音替换为其半字符形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Halant 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "将印度语系文字中的辅音替换为其 halant 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Nukta 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19302,13 +19302,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
-msgstr ""
+msgstr "在印度语系文字中，将与 Nukta 组合的辅音替换为其 Nukta 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Forms"
-msgstr ""
+msgstr "基字前方形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
 #, kde-format
@@ -19316,25 +19316,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
-msgstr ""
+msgstr "在高棉语中出现“Coeng Ra”情况时，替换辅音的基字前方形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "基字前方替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
-msgstr ""
+msgstr "在印度语系文字中，将辅音替换为其基字前方形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "基字后方形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
 #, kde-format
@@ -19342,65 +19342,65 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces consonants with their post-base forms in Gurmukhi, Malayalam, and "
 "Khmer."
-msgstr ""
+msgstr "在古木基文、马拉雅拉姆文和高棉文中，将辅音替换为其基字后方形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "基字后方替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
-msgstr ""
+msgstr "在印度语系文字中，将基字和基字后方字符替换为连字形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Rakar 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
-msgstr ""
+msgstr "将印度语系文字中的字符序列替换为其 Rakar 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
 #, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr ""
+msgstr "Reph 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
-msgstr ""
+msgstr "在印度语系文字中，将 Reph 形式替换为辅音与 Halant 序列。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr ""
+msgstr "Vattu 变体"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
-msgstr ""
+msgstr "将印度语系文字中的连字替换为基本辅音和 Vattu 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Half-width Spacing"
-msgstr ""
+msgstr "根据上下文确定半角间距"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
@@ -19410,42 +19410,43 @@ msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
 "examples include CJK full-width brackets and other punctuation marks."
 msgstr ""
+"根据上下文将全角字符调整为半角，常见的例子包括中日韩全角括号和其他标点符号。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "中日韩标点符号居中对齐"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
-msgstr ""
+msgstr "在中日韩文字系统中将非居中对齐的标点符号调整为居中对齐。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr ""
+msgstr "专家形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
-msgstr ""
+msgstr "将日文字体中的标准形式替换为专家形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr ""
+msgstr "全角"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces or respaces proportional glyphs with full-width glyphs."
-msgstr ""
+msgstr "将比例字符替换为全角字符或重新调整其间距。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:344
 #, kde-format
@@ -19453,13 +19454,13 @@ msgctxt "@tooltip"
 msgid ""
 "Respaces full-width glyphs to be half-width, common examples include CJK "
 "full-width brackets and other punctuation marks."
-msgstr ""
+msgstr "将全角字符调整为半角，常见的例子包括中日韩全角括号和其他标点符号。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "假名横排替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19467,25 +19468,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for horizontal "
 "layout."
-msgstr ""
+msgstr "将日文字体中的标准假名替换为适合横排的假名。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr ""
+msgstr "谚文"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
-msgstr ""
+msgstr "将韩文中的汉字替换为对应的谚文。已废弃。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
 #, kde-format
 msgctxt "@title"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "辅助汉字形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
 #, kde-format
@@ -19494,12 +19495,13 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
+"将日文字体中 JIS X 0213:2004 形式的汉字替换为辅助形式 (JIS X 0212-1990)。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
 #, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr ""
+msgstr "半角"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19507,146 +19509,146 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces or respaces proportional or full-width glyphs with half-width "
 "glyphs."
-msgstr ""
+msgstr "将比例或全角字符替换为半角或重新调整其间距。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
 #, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr ""
+msgstr "斜体"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces Latin glyphs in a CJK font with their italic forms."
-msgstr ""
+msgstr "在中日韩字体中，将拉丁字母替换为其斜体形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
 #, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "JIS78 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为 JIS78 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
 #, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "JIS83 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为 JIS83 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
 #, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为 JIS90 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
 #, kde-format
 msgctxt "@title"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004 形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为 JIS2004 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
 #, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "首字母形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
-msgstr ""
+msgstr "将首字母类谚文字母序列替换为组合的首字母形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC 汉字形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为 NLC 形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "比例字符替代宽度"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
-msgstr ""
+msgstr "重新调整全角字符的间距，使其适应比例字符排版。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "比例假名"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces full-width kana in Japanese fonts with proportional kana."
-msgstr ""
+msgstr "将日文字体中的全角假名替换为比例假名。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "比例宽度"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uniform-width glyphs with proportional glyphs."
-msgstr ""
+msgstr "将等宽字符替换为比例字符。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
 #, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "四分之一角"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with quarter-width glyphs."
-msgstr ""
+msgstr "将字符替换为四分之一角字符。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:407
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "假名注音形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -19654,25 +19656,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in CJK fonts with ones suited for the small text in ruby "
 "annotations."
-msgstr ""
+msgstr "将中日韩字体中的字符替换为适合用于假名注音中较小文本的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
 #, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "简体形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
-msgstr ""
+msgstr "将中日韩字体中的字符替换为它们的简体形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
 #, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "尾字母形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
 #, kde-format
@@ -19680,13 +19682,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of trailing class Hangul Jamo with a combined trailing "
 "form."
-msgstr ""
+msgstr "将尾字母类谚文字母序列替换为组合的尾字母形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "传统姓名形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -19694,105 +19696,105 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
-msgstr ""
+msgstr "将日文字体中的标准形式汉字替换为传统姓名中使用的汉字。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "繁体形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
-msgstr ""
+msgstr "将中日韩字体中的字符替换为它们的繁体形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
 #, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr ""
+msgstr "三分之一角"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with third-width glyphs."
-msgstr ""
+msgstr "将字符替换为三分之一角字符。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "替代竖排尺寸"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in vertical layout."
-msgstr ""
+msgstr "调整字符位置，使其更适合竖排。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "替代半角宽度"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in horizontal layout."
-msgstr ""
+msgstr "调整字符位置，使其更适合横排。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr ""
+msgstr "根据上下文确定竖排半角间距"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr ""
+msgstr "竖排替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
-msgstr ""
+msgstr "将中日韩字体中的字符替换为适合竖排的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "替代竖排半角尺寸"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
-msgstr ""
+msgstr "调整字符位置，使其在竖排环境中变为半角。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "元音谚文形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
-msgstr ""
+msgstr "将元音类谚文字母序列替换为组合元音形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "竖排假名替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -19800,38 +19802,38 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
 "layout."
-msgstr ""
+msgstr "将日文字体中的标准假名替换为适合竖排的假名。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "比例替代竖排尺寸"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are proportional in a vertical writing context."
-msgstr ""
+msgstr "调整字符位置，使其在竖排环境中变为比例字符形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "部分竖排替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
-msgstr ""
+msgstr "将部分字符替换为旋转后的变体以适应竖排。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "完全竖排替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -19839,25 +19841,25 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces all horizontal-script glyphs with rotated variants for vertical "
 "layout."
-msgstr ""
+msgstr "将所有横排文字的字符替换为适合竖排的旋转变体。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
 #, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "草书式定位"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts the position of glyphs so they cursively connect."
-msgstr ""
+msgstr "调整字符位置，使它们能够以草书样式衔接。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr ""
+msgstr "结尾形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -19865,13 +19867,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
-msgstr ""
+msgstr "在连写体文字中，将字符序列中的最后一个字符替换为其结尾形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr ""
+msgstr "结尾形式 #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -19879,13 +19881,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "将叙利亚语单词末尾的 Alaph 字符替换为合适的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr ""
+msgstr "结尾形式 #3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -19894,13 +19896,15 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form, when neither Terminal forms or Terminal forms 2 are applicable."
 msgstr ""
+"当结尾形式和结尾形式 #2 均不适用时，将叙利亚语单词末尾的 Alaph 字符替换为合适"
+"的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
 #, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr ""
+msgstr "开头形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -19908,7 +19912,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
-msgstr ""
+msgstr "在连写体文字中，将字符序列中的第一个字符替换为其开头形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -19916,37 +19920,37 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
-msgstr ""
+msgstr "在连写体文字中，将字符序列中的一个字符替换为其独立形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr ""
+msgstr "从左到右替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right alternates."
-msgstr ""
+msgstr "将字符替换为其从左到右的替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr ""
+msgstr "从左到右镜像形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr ""
+msgstr "将字符替换为其从左到右的镜像形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr ""
+msgstr "中间形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -19954,13 +19958,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
-msgstr ""
+msgstr "在连写体文字中，将字符序列中的一个字符替换为其中间形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "中间形式 #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -19968,13 +19972,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
 "form."
-msgstr ""
+msgstr "将叙利亚语单词中间的 Alaph 字符替换为合适的形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
 #, kde-format
 msgctxt "@title"
 msgid "mset"
-msgstr ""
+msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
 #, kde-format
@@ -19982,43 +19986,43 @@ msgctxt "@tooltip"
 msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
-msgstr ""
+msgstr "在为 Windows 95 设计的字体使用替代字符形式对阿拉伯语组合符号进行定位。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr ""
+msgstr "从右到左替代形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left alternates."
-msgstr ""
+msgstr "将字符替换为其从右到左的替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr ""
+msgstr "从右到左镜像形式"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr ""
+msgstr "将字符替换为其从右到左的镜像形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "可拉伸字符分解"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr ""
+msgstr "将需要拉伸的字符替换为可拉伸形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, kde-format
@@ -20031,7 +20035,7 @@ msgstr "样式集 %1"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
-msgstr "将字符替换为替代字符。"
+msgstr "将字符替换为替代形式。"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
 #, kde-format
@@ -60621,22 +60625,22 @@ msgstr "手绘笔刷笔画"
 #: plugins/tools/basictools/kis_tool_brush.cc:215
 #, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr ""
+msgstr "最大速度下的采样次数："
 
 #: plugins/tools/basictools/kis_tool_brush.cc:225
 #, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr ""
+msgstr "最小速度下的采样次数："
 
 #: plugins/tools/basictools/kis_tool_brush.cc:235
 #, kde-format
 msgid "Distance at Max Speed:"
-msgstr ""
+msgstr "最大速度下的距离："
 
 #: plugins/tools/basictools/kis_tool_brush.cc:245
 #, kde-format
 msgid "Distance at Min Speed:"
-msgstr ""
+msgstr "最小速度下的距离："
 
 #: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format

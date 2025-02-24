@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-22 01:53+0000\n"
-"PO-Revision-Date: 2025-02-22 16:20+0100\n"
+"PO-Revision-Date: 2025-02-23 15:43+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -17492,127 +17492,127 @@ msgstr "Speciellt"
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr ""
+msgstr "Linjär B stavelseskrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
 #, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr ""
+msgstr "Linjär B ideogram"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
 #, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr ""
+msgstr "Attiska siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr ""
+msgstr "Forntida grekiska siffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr ""
+msgstr "Forntida symboler"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
 msgctxt "@title"
 msgid "Phaistos Disc"
-msgstr ""
+msgstr "Festosdisken"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:191
 #, kde-format
 msgctxt "@title"
 msgid "Lycian"
-msgstr ""
+msgstr "Lykisk skrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
 #, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr ""
+msgstr "Karisk skrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "Koptiska epaktsiffror"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
 #, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr ""
+msgstr "Gammalitalienska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr ""
+msgstr "Gotisk skrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr ""
+msgstr "Fornpermiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
 #, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr ""
+msgstr "Ugaritiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
 msgctxt "@title"
 msgid "Old Persian"
-msgstr ""
+msgstr "Gammalpersiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
 #, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr ""
+msgstr "Deseret"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
 msgctxt "@title"
 msgid "Shavian"
-msgstr ""
+msgstr "Shavian"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:201
 #, kde-format
 msgctxt "@title"
 msgid "Osmanya"
-msgstr ""
+msgstr "Osmanya-skrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:202
 #, kde-format
 msgctxt "@title"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:203
 #, kde-format
 msgctxt "@title"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:204
 #, kde-format
 msgctxt "@title"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Kaukasiska albanska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Vithkuq"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:206
 #, kde-format
@@ -17624,13 +17624,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr ""
+msgstr "Linjär A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr ""
+msgstr "Utökat latin-F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
 #, kde-format
@@ -17744,7 +17744,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Gammalungerska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:228
 #, kde-format
@@ -18218,25 +18218,25 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Znamenny Musical Notation"
-msgstr ""
+msgstr "Krjuki musiknotation"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:307
 #, kde-format
 msgctxt "@title"
 msgid "Byzantine Musical Symbols"
-msgstr ""
+msgstr "Bysantinsk musiknotation"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:308
 #, kde-format
 msgctxt "@title"
 msgid "Musical Symbols"
-msgstr ""
+msgstr "Musiknotation"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Musical Notation"
-msgstr ""
+msgstr "Forntida grekisk musiknotation"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:310
 #, kde-format
@@ -18278,7 +18278,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr ""
+msgstr "Utökat latin-G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
 #, kde-format
@@ -19591,6 +19591,7 @@ msgstr ""
 msgctxt "@tooltip"
 msgid "Replaces Latin glyphs in a CJK font with their italic forms."
 msgstr ""
+"Ersätter latinska glyfer i ett CJK-teckensnitt med deras kursiva former."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
 #, kde-format

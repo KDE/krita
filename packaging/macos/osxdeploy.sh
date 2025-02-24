@@ -81,9 +81,18 @@ KRITA_DMG_TEMPLATE=${BUILDROOT}/_kritadmg-template
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
-# We only support from 10.14 up
-export MACOSX_DEPLOYMENT_TARGET=10.14
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14
+echo "Trying to guess Qt version..."
+if [[ -n "${KIS_INSTALL_DIR}/lib/QtCore.framework/Versions/A/QtCore" ]]; then
+    echo " Found Qt6"
+    # We only support from 12 up
+    export MACOSX_DEPLOYMENT_TARGET=12
+    export QMAKE_MACOSX_DEPLOYMENT_TARGET=12
+else
+    echo " Assuming Qt5"
+    # We only support from 10.14 up
+    export MACOSX_DEPLOYMENT_TARGET=10.14
+    export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14
+fi
 
 KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
 

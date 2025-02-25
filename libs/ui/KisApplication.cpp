@@ -211,6 +211,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QStringList styles = QStringList() << "haiku" << "macintosh" << "breeze" << "fusion";
 #else
@@ -233,7 +234,17 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
         QString widgetStyleFromConfig = cfg.widgetStyle();
         if(widgetStyleFromConfig != "") {
             qApp->setStyle(widgetStyleFromConfig);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        } else if (style()->objectName().toLower() == "macintosh") {
+            // if no configured style on macOS, default to Fusion
+            qApp->setStyle("fusion");
         }
+#else
+        } else if (style()->objectName().toLower() == "macos") {
+            // if no configured style on macOS, default to Fusion
+            qApp->setStyle("fusion");
+        }
+#endif
 
     }
     else {

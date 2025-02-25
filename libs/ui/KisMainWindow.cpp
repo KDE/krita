@@ -1995,7 +1995,7 @@ bool KisMainWindow::restoreWorkspace(KoResourceSP res)
 
     const bool showTitlebars = KisConfig(false).showDockerTitleBars();
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        if (dock->titleBarWidget()) {
+        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
             dock->titleBarWidget()->setVisible(showTitlebars || dock->isFloating());
         }
     }

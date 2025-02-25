@@ -35,6 +35,7 @@
 #include <KoSelectedShapesProxy.h>
 
 #include "CutThroughShapeStrategy.h"
+#include "RemoveGutterStrategy.h"
 
 #include "kis_paint_layer.h"
 #include "kis_algebra_2d.h"
@@ -312,7 +313,13 @@ KoInteractionStrategy *KisToolKnife::createStrategy(KoPointerEvent *event)
 {
     qCritical() << "Creating a strategy for " << event->point << event->buttons();
     KoSelection *selection = canvas()->selectedShapesProxy()->selection();
-    return new CutThroughShapeStrategy(this, selection, event->point, m_d->optionsWidget->getCurrentWidth());
+
+    if (m_d->optionsWidget->getToolMode() == KisToolKnifeOptionsWidget::ToolMode::AddGutter) {
+        return new CutThroughShapeStrategy(this, selection, event->point, m_d->optionsWidget->getCurrentWidth());
+    } else {
+        return new RemoveGutterStrategy(this, selection, event->point);
+    }
+
     //return NULL;
 }
 

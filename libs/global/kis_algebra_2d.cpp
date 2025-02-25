@@ -1845,4 +1845,435 @@ QPointF movePointAlongTheLine(const QPointF &point, const QLineF &direction, qre
 
 
 
+QLineF getLineFromElements(const QPainterPath &shape, int index)
+{
+    QPainterPath::Element element1 = shape.elementAt(wrapValue(index, 0, shape.elementCount() - 1));
+    QPainterPath::Element element2 = shape.elementAt(wrapValue(index + 1, 0, shape.elementCount() - 1));
+    // it doesn't handle isCurveTo, just assumes it's a line... sorry!
+
+    return QLineF(element1, element2);
 }
+
+// local
+QLineF reverseDirection(const QLineF& line)
+{
+    return QLineF(line.p2(), line.p1());
+}
+
+// local
+QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2, QPointF middleLineVector, bool reverseFirstPoly, bool reverseSecondPoly)
+{
+    // moving from shape1.index1.p1 to shape1.index2.p2
+
+    auto reverseIfNeeded = [] (const QLineF &line, bool reverse) {
+        if (reverse) {
+            return reverseDirection(line);
+        }
+        return line;
+    };
+
+    QLineF line1 = reverseIfNeeded(getLineFromElements(shape1, index1), reverseFirstPoly);
+    QLineF line2 = reverseIfNeeded(getLineFromElements(shape2, index2), reverseSecondPoly);
+
+    qCritical() << ppVar(line1) << ppVar(line2) << ppVar(reverseFirstPoly) << ppVar(reverseSecondPoly) << ppVar(index1) << ppVar(index2);
+
+    QLineF leftLine;
+    QLineF rightLine;
+
+    int indexMultiplierFirst = reverseFirstPoly ? -1 : 1;
+    int indexMultiplierSecond = reverseSecondPoly ? -1 : 1;
+
+    auto fixIndex = [] (int index, const QPainterPath& shape) {
+        //if (index == shape.)
+    };
+
+
+    leftLine = reverseIfNeeded(getLineFromElements(shape1, index1 - indexMultiplierFirst*1), reverseFirstPoly);
+    rightLine = reverseIfNeeded(getLineFromElements(shape2, index2 + indexMultiplierSecond*1), reverseSecondPoly);
+
+    qCritical() << "Lines from the polygons next to the points to figure out correct behaviour: ";
+    qCritical() << ppVar(leftLine);
+    qCritical() << ppVar(rightLine);
+
+    qreal leftPointDistanceFromMiddle;
+    qreal rightPointDistanceFromMiddle;
+
+    QLineF middleLine = QLineF(QPointF(), middleLineVector);
+
+    QPointF leftPoint = line1.p1();
+    QPointF rightPoint = line2.p2();
+
+    qCritical() << ppVar(leftPoint) << ppVar(rightPoint);
+
+
+    leftPointDistanceFromMiddle = kisDistanceToLine(leftPoint, middleLine);
+    rightPointDistanceFromMiddle = kisDistanceToLine(rightPoint, middleLine);
+
+    QPainterPath simpleResult;
+    simpleResult.moveTo(leftPoint);
+    simpleResult.lineTo(rightPoint);
+
+    auto makeTrianglePath = [leftPoint, rightPoint] (QPointF middle) {
+        QPainterPath result;
+        result.moveTo(leftPoint);
+        result.lineTo(middle);
+        result.lineTo(rightPoint);
+        return result;
+    };
+
+    QPointF intersectionPoint;
+    QLineF::IntersectionType intersectionType = leftLine.intersects(rightLine, &intersectionPoint);
+
+    qCritical() << "Checking intersection between lines: leftLine & rightLine, shown above, result: " << ppVar(intersectionType) << ppVar(intersectionPoint);
+    if (intersectionType == QLineF::NoIntersection) {
+
+        // first arg: bounded line, second: unbounded
+        boost::optional<QPointF> leftIntersection = intersectLines(line2, leftLine);
+        boost::optional<QPointF> rightIntersection = intersectLines(line1, rightLine);
+
+        qCritical() << "We're in the if. Checking two cases: ";
+        qCritical() << "Intersection between bounded: " << ppVar(line2) << "and unbounded: " << ppVar(leftLine) << "result: " << ppVar(leftIntersection.get_value_or(QPointF()));
+        qCritical() << "Intersection between bounded: " << ppVar(line1) << "and unbounded: " << ppVar(rightLine) << "result:" << ppVar(rightIntersection.get_value_or(QPointF()));
+
+
+        if (leftIntersection.has_value()) {
+            return makeTrianglePath(leftIntersection.value());
+        } else if (rightIntersection.has_value()) {
+            return makeTrianglePath(rightIntersection.value());
+        } else {
+            return simpleResult;
+        }
+
+    }
+
+    qreal distanceToMiddle = kisDistanceToLine(intersectionPoint, middleLine);
+    if (distanceToMiddle > qMax(leftPointDistanceFromMiddle, rightPointDistanceFromMiddle)) {
+        return simpleResult;
+    }
+
+    QPainterPath betterResult = makeTrianglePath(intersectionPoint);
+
+    return betterResult;
+
+}
+
+// local
+QPainterPath removeGutterOneEndOld(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2, QPointF middleLineVector, bool whichEnd, bool reverseSecondPoly)
+{
+    auto reverseIfNeeded = [] (const QLineF &line, bool reverse) {
+        if (reverse) {
+            return reverseDirection(line);
+        }
+        return line;
+    };
+
+    QLineF line1 = getLineFromElements(shape1, index1);
+    QLineF line2 = reverseIfNeeded(getLineFromElements(shape1, index1), reverseSecondPoly);
+
+    QLineF leftLine;
+    QLineF rightLine;
+
+    int indexMultiplier = reverseSecondPoly ? -1 : 1;
+
+    if (whichEnd) {
+        leftLine = getLineFromElements(shape1, index1 - 1);
+        rightLine = reverseIfNeeded(getLineFromElements(shape1, index2 + indexMultiplier*1), reverseSecondPoly);
+    } else {
+        leftLine = getLineFromElements(shape1, index1 + 1);
+        rightLine = reverseIfNeeded(getLineFromElements(shape1, index2 - indexMultiplier*1), reverseSecondPoly);
+    }
+
+    qreal leftPointDistanceFromMiddle;
+    qreal rightPointDistanceFromMiddle;
+
+    QLineF middleLine = QLineF(QPointF(), middleLineVector);
+
+    if (whichEnd) {
+        leftPointDistanceFromMiddle = kisDistanceToLine(line1.p1(), middleLine);
+        rightPointDistanceFromMiddle = kisDistanceToLine(line2.p2(), middleLine);
+    } else {
+        leftPointDistanceFromMiddle = kisDistanceToLine(line1.p2(), middleLine);
+        rightPointDistanceFromMiddle = kisDistanceToLine(line2.p1(), middleLine);
+    }
+
+    QPainterPath simpleResult;
+    if (whichEnd) {
+        simpleResult.moveTo(line1.p1());
+        simpleResult.lineTo(line2.p2());
+    } else {
+        simpleResult.moveTo(line1.p2());
+        simpleResult.lineTo(line2.p1());
+    }
+
+    QPointF intersectionPoint;
+    QLineF::IntersectionType intersectionType = leftLine.intersects(rightLine, &intersectionPoint);
+    if (intersectionType == QLineF::NoIntersection) {
+        return simpleResult;
+    }
+    qreal distanceToMiddle = kisDistanceToLine(intersectionPoint, middleLine);
+    if (distanceToMiddle > leftPointDistanceFromMiddle + rightPointDistanceFromMiddle) {
+        return simpleResult;
+    }
+
+
+
+    return QPainterPath();
+}
+
+QPainterPath simplifyShape(const QPainterPath& path) {
+
+    QPainterPath::Element buffor;
+    QPainterPath result;
+    QPointF lastPosition = QPointF(0, 0);
+    for (int i = 0; i < path.elementCount() - 1; i++) {
+        if (path.elementAt(i).isMoveTo()) {
+            lastPosition = path.elementAt(i);
+        }
+        if (path.elementAt(i).isLineTo()) {
+            if (path.elementAt(i + 1).isLineTo()) {
+                if (qFuzzyIsNull(dotProduct(path.elementAt(i + 1) - lastPosition, path.elementAt(i) - lastPosition))) {
+                    // they are parallel
+                    continue;
+                }
+            }
+
+        }
+    }
+
+    return path;
+
+}
+
+
+QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2)
+{
+    qCritical() << ppVar(index1) << ppVar(shape1.elementCount()) << ppVar(index2) << ppVar(shape2.elementCount());
+    if (index1 + 1 >= shape1.elementCount() || index2 + 1 >= shape2.elementCount()) {
+        return QPainterPath();
+    }
+
+    // shape1.elementAt(index1)
+    QLineF line1 = getLineFromElements(shape1, index1);
+    QLineF line2 = getLineFromElements(shape2, index2);
+
+    QPointF middleLineVector = QPointF((line1.dx() + line2.dx())/2, (line1.dy() + line2.dy()));
+
+    QPainterPath gutterShape = QPainterPath();
+    QVector<QPointF> poly1 = QVector<QPointF>() << line1.p1() << line1.p2() << line2.p1();
+    QVector<QPointF> poly2 = QVector<QPointF>() << line1.p2() << line2.p1() << line2.p2();
+    bool reverseSecondPoly = false;
+    if (polygonDirection(poly1) != polygonDirection(poly2)) {
+        line2 = QLineF(line2.p2(), line2.p1()); // quick fix to ensure that the shape will be correct (convex)
+        reverseSecondPoly = true;
+    }
+
+    // more difficult version:
+    QPainterPath oneEnd = removeGutterOneEndSmart(shape1, index1, shape2, index2, middleLineVector, false, reverseSecondPoly);
+    int secondShapeIndexInOtherEnd = reverseSecondPoly ? -index2 + 1 : -index2 + 1;
+    //QPainterPath otherEnd = removeGutterOneEndSmart(shape2, secondShapeIndexInOtherEnd, shape1, -index1 + 2, middleLineVector, reverseSecondPoly);
+    //QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLineVector, true, !reverseSecondPoly);
+    QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLineVector, reverseSecondPoly, false);
+
+
+
+    gutterShape.moveTo(oneEnd.elementAt(0));
+    gutterShape.connectPath(oneEnd);
+    gutterShape.connectPath(otherEnd);
+    gutterShape.closeSubpath();
+
+    qCritical() << ppVar(gutterShape);
+    qCritical() << ppVar(oneEnd);
+    qCritical() << ppVar(otherEnd);
+
+
+    QPainterPath result = shape1 | shape2 | gutterShape;
+
+
+    return result.simplified();
+
+
+
+    // now, easy version:
+
+
+    gutterShape.moveTo(line1.p1());
+    gutterShape.lineTo(line1.p2());
+    gutterShape.lineTo(line2.p1());
+    gutterShape.lineTo(line2.p2());
+
+    //QPainterPath result = shape1 | shape2 | gutterShape;
+    //result.closeSubpath();
+    //return result.simplified();
+
+    //return result;
+
+
+
+}
+
+
+// isAlgebra2D::getLineSegmentCrossingLineIndexes(QLineF const&, QPainterPath const&)
+QList<int> getLineSegmentCrossingLineIndexes(const QLineF &line, const QPainterPath &shape)
+{
+    QList<int> indexes;
+    qCritical() << "Searching for line: " << line;
+    for (int i = 0; i < shape.elementCount() - 1; i++) { // last element would wrap around to be the first segment again
+        QLineF lineSegment = getLineFromElements(shape, i);
+        QPointF intersection;
+        QLineF::IntersectionType type = lineSegment.intersects(line, &intersection);
+        qCritical() << ppVar(i) << ppVar(lineSegment);
+        if (type == QLineF::IntersectionType::BoundedIntersection) {
+            qCritical() << "Found an intersection: " << ppVar(line) << ppVar(lineSegment) << ppVar(intersection) << "At: " << ppVar(i);
+            indexes << i;
+        }
+    }
+    return indexes;
+}
+
+VectorPath::VectorPath(const QPainterPath &path)
+{
+    using VPoint = VectorPath::VectorPathPoint;
+    qCritical() << "Start, for the path that has elements: " << path.elementCount();
+
+    m_points = QList<VectorPath::VectorPathPoint>();
+    for (int i = 0; i < path.elementCount(); i++) {
+        QPainterPath::Element el = path.elementAt(i);
+        switch(el.type) {
+            case QPainterPath::MoveToElement:
+                m_points.append(VPoint(VPoint::MoveTo, el));
+            break;
+            case QPainterPath::LineToElement:
+                m_points.append(VPoint(VPoint::LineTo, el));
+            break;
+            case QPainterPath::CurveToElement:
+                //m_points.append(VPoint(VPoint::CuTo, el));
+                KIS_SAFE_ASSERT_RECOVER(i + 2 < path.elementCount()) { continue; }
+                KIS_SAFE_ASSERT_RECOVER(path.elementAt(i + 1).type == QPainterPath::CurveToDataElement) { continue; }
+                KIS_SAFE_ASSERT_RECOVER(path.elementAt(i + 2).type == QPainterPath::CurveToDataElement) { continue; }
+                // Qt saves the data this way: [control point 1, CurveToElement] [control point 2, CurveToDataElement] [end point, CurveToDataElement]
+                m_points.append(VPoint(VPoint::BezierTo, path.elementAt(i + 2), el, path.elementAt(i + 1)));
+                i += 2; // skip next two points
+            break;
+        }
+        qCritical() << "Added point: " << m_points[m_points.length() - 1].endPoint;
+    }
+    qCritical() << "End.";
+}
+
+VectorPath::VectorPath(const QList<VectorPathPoint> path)
+{
+    m_points = path;
+}
+
+int VectorPath::pointsCount()
+{
+    return m_points.length();
+}
+
+VectorPath::VectorPathPoint VectorPath::pointAt(int i)
+{
+    return m_points[i];
+}
+
+int VectorPath::segmentsCount()
+{
+    return m_points.length() - 1 >= 0 ? m_points.length() - 1 : 0;
+}
+
+QList<VectorPath::VectorPathPoint> VectorPath::segmentAt(int i)
+{
+    QList<VectorPath::VectorPathPoint> response;
+    if (i < 0 || i >= segmentsCount()) {
+        return response;
+    }
+    response << m_points[i] << m_points[i + 1];
+    return response;
+}
+
+QLineF VectorPath::segmentAtAsLine(int i)
+{
+    QList<VectorPath::VectorPathPoint> points = segmentAt(i);
+    if (points.length() < 1) {
+        return QLineF();
+    }
+    return QLineF(points[0].endPoint, points[1].endPoint);
+}
+
+VectorPath VectorPath::trulySimplified()
+{
+    using VPoint = VectorPath::VectorPathPoint;
+
+    qCritical() << "Start simplifying path that has segments: " << segmentsCount();
+
+    QList<VPoint> response;
+    VPoint lineBeginPoint = VPoint(VPoint::MoveTo, QPointF(0, 0));
+    VPoint previousPoint = m_points[0];
+    for (int i = 1; i < m_points.length(); i++) {
+        qCritical() << "Point is: " << m_points[i].endPoint << m_points[i].type;
+        if (m_points[i].type == VPoint::MoveTo) {
+            if (previousPoint.type == VPoint::MoveTo) {
+                previousPoint = m_points[i]; // let's skip the previous point since they're both just moving
+                continue;
+            } else { // LineTo or BezierTo, both need to be added
+                response << previousPoint;
+                previousPoint = m_points[i];
+                continue;
+            }
+        } else if (m_points[i].type == VPoint::LineTo) {
+            if (previousPoint.type == VPoint::LineTo) {
+                // check whether they're parallel
+                qCritical() << "Check whether they're parallel";
+                qreal eps = 1e-05;
+                if (qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)) >= eps) {
+                    qCritical() << "They are not parallel: " << m_points[i].endPoint - lineBeginPoint.endPoint << previousPoint.endPoint - lineBeginPoint.endPoint
+                                << crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)
+                                << qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint))
+                                << eps;
+                    response << previousPoint;
+                    lineBeginPoint = previousPoint;
+                }
+                previousPoint = m_points[i]; // let's skip the previous point since they're parallel
+                continue;
+            } else { // MoveTo or BezierTo, both need to be added
+                response << previousPoint;
+                lineBeginPoint = previousPoint;
+                previousPoint = m_points[i];
+                continue;
+            }
+        } else { // currently in BezierTo
+            response << previousPoint;
+            previousPoint = m_points[i];
+            continue;
+        }
+    }
+    response << previousPoint;
+    qCritical() << "After simplification, we've got points: " << response.length();
+    return VectorPath(response);
+}
+
+QPainterPath VectorPath::asPainterPath()
+{
+    using VPoint = VectorPath::VectorPathPoint;
+    if (m_originalPath.elementCount() > 0) {
+        return m_originalPath;
+    }
+    QPainterPath response;
+    for (int i = 0; i < pointsCount(); i++) {
+        switch(m_points[i].type) {
+        case VPoint::MoveTo:
+            response.moveTo(m_points[i].endPoint);
+            break;
+        case VPoint::LineTo:
+            response.lineTo(m_points[i].endPoint);
+            break;
+        case VPoint::BezierTo:
+            response.cubicTo(m_points[i].controlPoint1, m_points[i].controlPoint2, m_points[i].endPoint);
+            break;
+        }
+    }
+    return response;
+}
+
+
+
+} // namespace

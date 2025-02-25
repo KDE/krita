@@ -11,10 +11,27 @@
     <x>0</x>
     <y>0</y>
     <width>250</width>
-    <height>189</height>
+    <height>230</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QComboBox" name="comboBox">
+     <property name="modelColumn">
+      <number>0</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>Add a gutter</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Remove a gutter</string>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item>
     <widget class="QRadioButton" name="thickGapWidthRadioButton">
      <property name="text">

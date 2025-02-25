@@ -30,6 +30,11 @@ public:
         Special
     };
 
+    enum ToolMode {
+        AddGutter,
+        RemoveGutter
+    };
+
     int getThickGapWidth(void);
     int getThinGapWidth(void);
     int getSpecialGapWidth(void);
@@ -37,8 +42,12 @@ public:
     int getCurrentWidth();
     int getWidthForType(GapWidthType type);
 
+    ToolMode getToolMode();
+
 
 private:
+    friend class KisToolKnife;
+
     struct Private;
     const QScopedPointer<Private> m_d;
 };

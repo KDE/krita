@@ -999,14 +999,24 @@ void KisAlgebra2DTest::testLinePolygonIntersectionsManual()
 
 }
 
-bool fuzzyComparePolygons(const QPolygonF &one, const QPolygonF &other) {
+bool fuzzyComparePolygons(const QPolygonF &one, const QPolygonF &other, qreal eps = 1e-05) {
     if (one.count() != other.count()) {
+        qCritical() << "Counts don't match: " << one.count() << other.count();
         return false;
     }
+
+    auto compare = [eps] (const QPointF& a, const QPointF& b) {
+        if (KisAlgebra2D::fuzzyPointCompare(a, b)) {
+            return true;
+        }
+        return qAbs(a.x() - b.x()) < eps && qAbs(a.y() - b.y()) < eps;
+    };
+
     bool firstWay = true;
     for (int i = 0; i < one.count(); i++) {
-        if (!KisAlgebra2D::fuzzyPointCompare(one[i], other[i])) {
+        if (!compare(one[i], other[i])) {
             firstWay = false;
+            qCritical() << "Mismatch on: " << one[i] << other[i] << "difference: " << one[i] - other[i];
             break;
         }
     }
@@ -1014,7 +1024,8 @@ bool fuzzyComparePolygons(const QPolygonF &one, const QPolygonF &other) {
         return true;
     }
     for (int i = 0; i < one.count(); i++) {
-        if (!KisAlgebra2D::fuzzyPointCompare(one[one.count() - i - 1], other[i])) {
+        if (!compare(one[one.count() - i - 1], other[i])) {
+            qCritical() << "Mismatch on (second way): " << one[one.count() - i - 1] << other[i];
             return false;
         }
     }
@@ -1104,6 +1115,176 @@ void KisAlgebra2DTest::testGetParallelLines2()
     QLineF line2 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), -gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), -gutterLineNormalVector, gutterWidth/2));
 
     qCritical() << line1 << line2;
+
+
+}
+
+QPainterPath makeSpecialShape(bool left)
+{
+    // left has teeth on the left
+    int m = left ? 1 : -1; // multiplier
+    QPainterPath path;
+    path.moveTo(m*100, 100);
+    path.lineTo(m*400, 100);
+
+    path.lineTo(m*400, 200);
+    path.lineTo(m*100, 200);
+
+    path.lineTo(m*150, 175);
+    path.lineTo(m*100, 150);
+    path.lineTo(m*150, 125);
+    path.lineTo(m*100, 100);
+
+
+    if (!left) {
+        path.translate(QPointF(1000, 0));
+    }
+
+    return path;
+
+}
+
+//QPainterPath fromPolygon(const QVector<QPointF>& poly) {
+//    return fromPolygon(poly);
+//}
+
+QPainterPath fromPolygon(const QPolygonF& poly) {
+    QPainterPath path;
+    path.addPolygon(poly);
+    path.closeSubpath();
+    return path;
+}
+
+QPolygonF toPolygon(const QPainterPath& path) {
+    return path.toFillPolygon();
+}
+
+
+void testRemoveGutterOneCase(const QPainterPath& shape1, const QPainterPath& shape2, const QLineF& mouseLine, int expectedSize = -1, const QPainterPath &expectedPath = QPainterPath())
+{
+
+    QList<int> indexes1 = KisAlgebra2D::getLineSegmentCrossingLineIndexes(mouseLine, shape1);
+    QList<int> indexes2 = KisAlgebra2D::getLineSegmentCrossingLineIndexes(mouseLine, shape2);
+
+    assert(indexes1.length() == 1);
+    assert(indexes2.length() == 1);
+
+    QPainterPath result = KisAlgebra2D::removeGutterSmart(shape1, indexes1[0], shape2, indexes2[0]);
+    qCritical() << result;
+
+    if (expectedSize >= 0) {
+        qCritical() << ppVar(result.elementCount()) << ppVar(expectedSize);
+        assert(result.elementCount() == expectedSize);
+    }
+
+    if (expectedPath.elementCount() > 0) {
+        //assert(expectedPath.elementCount() == result.elementCount());
+        bool compare = fuzzyComparePolygons(expectedPath.toFillPolygon(), result.toFillPolygon());
+        if (!compare) {
+            qCritical() << "Expected:" << expectedPath.toFillPolygon();
+            qCritical() << "Actual:" << result.toFillPolygon();
+            qCritical() << "Simplified, really? " << result.simplified();
+
+            KisAlgebra2D::VectorPath expectedVector(expectedPath);
+            KisAlgebra2D::VectorPath actualVector(result);
+
+            actualVector = actualVector.trulySimplified();
+            expectedVector = expectedVector.trulySimplified();
+
+            qCritical() << "After my simplification: " << actualVector.asPainterPath();
+            qCritical() << "After my simplification, expected: " << expectedVector.asPainterPath();
+
+            compare = fuzzyComparePolygons(actualVector.asPainterPath().toFillPolygon(), expectedVector.asPainterPath().toFillPolygon());
+            qCritical() << ppVar(compare);
+            qCritical() << ppVar(actualVector.asPainterPath().toFillPolygon());
+            qCritical() << ppVar(expectedVector.asPainterPath().toFillPolygon());
+        }
+        assert(compare);
+        /*
+        for(int i = 0; i < expectedPath.elementCount(); i++) {
+            assert(expectedPath.elementAt(i).type == result.elementAt(i).type);
+            assert(KisAlgebra2D::fuzzyPointCompare(expectedPath.elementAt(i), result.elementAt(i)));
+        }
+        */
+    }
+
+}
+
+void convertShapeToDebugArray(const QPainterPath& shape) {
+    // useful to use with Geogebra
+    // TODO: to remove later
+    for (int i = 0; i < shape.elementCount(); i++) {
+        QPainterPath::Element el = shape.elementAt(i);
+        qCritical() << el.x << "\t" << el.y << "\t" << el.type;
+    }
+
+}
+
+void KisAlgebra2DTest::testRemoveGutter()
+{
+    // simple shape: a rectangle with a middle very easy gutter
+    QPolygonF poly;
+    poly << QPointF(0, 0) << QPointF(100, 0) << QPointF(100, 100) << QPointF(0, 100);
+    QPainterPath polyPath;
+    polyPath.addPolygon(poly);
+    polyPath.closeSubpath();
+
+    QPolygonF poly2;
+
+    poly2 << QPointF(200, 0) << QPointF(300, 0) << QPointF(300, 100) << QPointF(200, 100);
+    QPainterPath polyPath2;
+    polyPath2.addPolygon(poly2);
+    polyPath2.closeSubpath();
+
+    QLineF mouseLine = QLineF(QPointF(50, 50), QPointF(250, 50));
+
+    testRemoveGutterOneCase(polyPath, polyPath2, mouseLine, 5, fromPolygon(QRectF(0, 0, 300, 100)));
+    testRemoveGutterOneCase(polyPath, polyPath2.toReversed(), mouseLine, 5, fromPolygon(QRectF(0, 0, 300, 100)));
+
+
+    //qCritical() << result2;
+
+    QPainterPath special1 = makeSpecialShape(true);
+    QPainterPath special2 = makeSpecialShape(false);
+    QPainterPath specialResult = fromPolygon(QVector({QPointF(100, 100), QPointF(900, 100), QPointF(850, 125), QPointF(900, 150), QPointF(850, 175), QPointF(900, 200), QPointF(100, 200), QPointF(150, 175),
+                                             QPointF(100, 150), QPointF(150, 125), QPointF(100, 100)}));
+
+    testRemoveGutterOneCase(special1, special2, QLineF(QPointF(300, 150), QPointF(700, 150)), 11, specialResult);
+    testRemoveGutterOneCase(special1, special2.toReversed(), QLineF(QPointF(300, 150), QPointF(700, 150)), 11, specialResult);
+
+    //QPainterPath bigOnTop = fromPolygon(QPolygonF(QVector({QPointF(0, 0), QPointF(100, 0)})));
+    QPainterPath bigOnTop = fromPolygon(QRectF(0, 3, 10, 3));
+    QPainterPath smallRight = fromPolygon(QRectF(7, 0, 3, 2));
+    QPainterPath smallMiddle = fromPolygon(QRectF(3, 0, 3, 2));
+    QPainterPath smallLeft = fromPolygon(QRectF(0, 0, 2, 2));
+
+
+    testRemoveGutterOneCase(bigOnTop, smallRight, QLineF(QPointF(8, 1), QPointF(8, 5)), -1, fromPolygon(QVector({QPointF(0, 3), QPointF(7, 3), QPointF(7, 0), QPointF(10, 0), QPointF(10, 6), QPointF(0, 6), QPointF(0, 3)})));
+    testRemoveGutterOneCase(bigOnTop, smallMiddle, QLineF(QPointF(5, 1), QPointF(5, 5)), -1, fromPolygon(QVector({QPointF(0,3), QPointF(3,3), QPointF(3,0), QPointF(6,0), QPointF(6,3), QPointF(10,3), QPointF(10,6), QPointF(0,6), QPointF(0,3)})));
+    testRemoveGutterOneCase(bigOnTop, smallLeft, QLineF(QPointF(1, 1), QPointF(1, 5)), -1, fromPolygon(QVector({QPointF(2,3), QPointF(10,3), QPointF(10,6), QPointF(0,6), QPointF(0,0), QPointF(2,0), QPointF(2,3)})));
+
+
+    //testRemoveGutterOneCase(fromPolygon({QPointF(1134.24,823.696), QPointF(1777.95,819.542), QPointF(2109.36,1598.84), QPointF(1143.4,1625.02)}));
+    QPainterPath onePoly = fromPolygon(QVector({QPointF(2275.28,763.721), QPointF(3270,757.3), QPointF(3270,210), QPointF(1127.23,210),
+                                       QPointF(1133.64,771.092), QPointF(2236.91,763.971), QPointF(2275.28,763.721)}));
+
+    QPainterPath otherPoly = fromPolygon(QVector({QPointF(1794.87,819.433), QPointF(2264.27,816.404), QPointF(2664.69,1583.79), QPointF(2126.14,1598.38),
+                                         QPointF(1794.87,819.433)}));
+
+
+    qCritical() << "First poly:";
+    convertShapeToDebugArray(onePoly);
+    qCritical() << "Second poly:";
+    convertShapeToDebugArray(otherPoly);
+
+
+
+
+    //testRemoveGutterOneCase(onePoly, otherPoly, QLineF(QPointF(2010,662),QPointF(2006,938)));
+
+
+
+
 
 
 }

@@ -11,6 +11,7 @@
 #include <QPointF>
 #include <QVector>
 #include <QPolygonF>
+#include <QPainterPath>
 #include <QTransform>
 #include <cmath>
 #include <kis_global.h>
@@ -310,6 +311,13 @@ inline Point clampPoint(Point pt, const Rect &bounds)
     return pt;
 }
 
+template <class Point>
+inline typename PointTypeTraits<Point>::rect_type
+createRectFromCorners(Point corner1, Point corner2)
+{
+    return typename PointTypeTraits<Point>::rect_type(qMin(corner1.x(), corner2.x()), qMin(corner1.y(), corner2.y()), qAbs(corner1.x() - corner2.x()), qAbs(corner1.y() - corner2.y()));
+}
+
 template <class Size>
 auto maxDimension(Size size) -> decltype(size.width()) {
     return qMax(size.width(), size.height());
@@ -555,6 +563,58 @@ private:
     const qreal m_radius;
     const qreal m_radius_sq;
     const qreal m_fadeCoeff;
+};
+
+
+// wrapper for QPainterPath providing sane line segment indexing
+class KRITAGLOBAL_EXPORT VectorPath
+{
+public:
+    struct VectorPathPoint
+    {
+        typedef enum Type {
+            MoveTo,
+            LineTo,
+            BezierTo
+        } Type;
+
+
+        QPointF endPoint {QPointF()};
+        QPointF controlPoint1 {QPointF()};
+        QPointF controlPoint2 {QPointF()};
+
+        Type type {MoveTo};
+
+
+
+        VectorPathPoint(Type _type, QPointF _endPoint, QPointF c1 = QPointF(), QPointF c2 = QPointF()) {
+            type = _type;
+            endPoint = _endPoint;
+            controlPoint1 = c1;
+            controlPoint1 = c2;
+        }
+    };
+
+public:
+    VectorPath(const QPainterPath& path);
+    VectorPath(const QList<VectorPathPoint> path);
+
+    int pointsCount();
+    VectorPathPoint pointAt(int i);
+    int segmentsCount();
+    QList<VectorPathPoint> segmentAt(int i);
+    QLineF segmentAtAsLine(int i);
+
+    VectorPath trulySimplified();
+
+    QPainterPath asPainterPath();
+
+private:
+    QPainterPath m_originalPath;
+    QList<VectorPathPoint> m_points;
+
+
+
 };
 
 QVector<QPoint> KRITAGLOBAL_EXPORT sampleRectWithPoints(const QRect &rect);
@@ -973,6 +1033,19 @@ QPainterPath KRITAGLOBAL_EXPORT getOnePathFromRectangleCutThrough(const QList<QP
 /// \return
 ///
 QList<QPainterPath> KRITAGLOBAL_EXPORT getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine);
+
+// isAlgebra2D::getLineSegmentCrossingLineIndexes(QLineF const&, QPainterPath const&)
+QList<int> KRITAGLOBAL_EXPORT getLineSegmentCrossingLineIndexes(const QLineF &line, const QPainterPath& shape);
+
+///
+/// \brief removeGutterSmart
+/// \param shape1
+/// \param index1
+/// \param shape2
+/// \param index2
+/// \return
+///
+QPainterPath KRITAGLOBAL_EXPORT removeGutterSmart(const QPainterPath& shape1, int index1, const QPainterPath& shape2, int index2);
 
 }
 

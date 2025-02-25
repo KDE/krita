@@ -3,6 +3,7 @@ set(kritatoolKnife_SOURCES
     KisToolKnife.cpp
     KisToolKnifeOptionsWidget.cpp
 	CutThroughShapeStrategy.cpp
+    RemoveGutterStrategy.cpp
     )
 
 ki18n_wrap_ui(kritatoolKnife_SOURCES KisToolKnifeOptionsWidget.ui)

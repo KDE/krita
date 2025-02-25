@@ -62,6 +62,16 @@ struct KisToolKnifeOptionsWidget::Private {
         }
     }
 
+    KisToolKnifeOptionsWidget::ToolMode getToolMode() {
+        // TODO: obviously gonna be removed later,
+        // replaced with buttons with icons like the Transform Tool has
+        if (ui->comboBox->currentText() == "Add a gutter") {
+            return KisToolKnifeOptionsWidget::AddGutter;
+        } else {
+            return KisToolKnifeOptionsWidget::RemoveGutter;
+        }
+    }
+
 };
 
 KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider */*provider*/, QWidget *parent)
@@ -107,6 +117,11 @@ int KisToolKnifeOptionsWidget::getWidthForType(GapWidthType type)
 {
     return m_d->getWidthForType(type);
 
+}
+
+KisToolKnifeOptionsWidget::ToolMode KisToolKnifeOptionsWidget::getToolMode()
+{
+    return m_d->getToolMode();
 }
 
 

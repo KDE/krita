@@ -96,7 +96,8 @@ public:
                                        int slantValue = 0) const;
 
     /// Print out the font family hierarchy into the debug output.
-    void debugInfo();
+    void debugInfo() const;
+
 private:
     struct Private;
     QScopedPointer<Private> d;

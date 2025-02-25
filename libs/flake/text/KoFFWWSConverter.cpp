@@ -374,9 +374,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         } else {
             fontFamily.axes.insert(WEIGHT_TAG, KoSvgText::FontFamilyAxis::weightAxis(400));
         }
-        if (fontFamily.fontFamily.isEmpty()) {
-            fontFamily.fontFamily = QFileInfo(fontFamily.fileName).baseName();
-        }
+
         for (int i=0; i< face->num_fixed_sizes; i++) {
             // 64 = Freetype pixel
             fontFamily.pixelSizes.insert((face->available_sizes[i].size / 64.0), {fontFamily.fileName});
@@ -503,6 +501,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
             std::vector<char> buff(length);
             hb_ot_name_get_utf8(hbFace.data(), entry.name_id, entry.language, &length, buff.data());
             QString name = QString::fromUtf8(buff.data(), length);
+            if (name.isEmpty()) continue;
 
             if (entry.name_id == HB_OT_NAME_ID_FONT_FAMILY) {
                 ribbiFamilyNames.insert(locale, name);
@@ -555,14 +554,16 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         }
         fontFamily.localizedWWSStyle = WWSStyleNames;
     }
+
+    if (fontFamily.fontFamily.isEmpty()) {
+        fontFamily.fontFamily = QFileInfo(fontFamily.fileName).baseName();
+    }
     if (typographicFamily.fontFamily.isEmpty()) {
         typographicFamily.fontFamily = fontFamily.fontFamily;
     }
     wwsFamily.isVariable = fontFamily.isVariable;
     wwsFamily.type = fontFamily.type;
     typographicFamily.type = typographicFamily.type;
-
-    //qDebug() << "adding..." << fontFamily.fontFamily << fontFamily.fileName;
 
     if (typographicFamily.fontFamily.isEmpty() && fontFamily.fontFamily.isEmpty()) {
         d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), fontFamily);
@@ -1184,7 +1185,7 @@ QVector<QPair<QString, int>> KoFFWWSConverter::candidatesForCssValues(const QStr
     return candidateFileNames;
 }
 
-void KoFFWWSConverter::debugInfo()
+void KoFFWWSConverter::debugInfo() const
 {
     qDebug() << "Debug for font family collection" << KisForestDetail::size(d->fontFamilyCollection);
     QString spaces;

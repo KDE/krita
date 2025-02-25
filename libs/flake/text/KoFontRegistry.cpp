@@ -780,7 +780,9 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
 
     const bool useFallback = hb_version_atleast(4, 0, 0);
 
-    QVector<hb_ot_metrics_tag_t> metricTags ({
+    // metrics
+
+    const QVector<hb_ot_metrics_tag_t> metricTags ({
                                               HB_OT_METRICS_TAG_X_HEIGHT,
                                               HB_OT_METRICS_TAG_CAP_HEIGHT,
                                               HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
@@ -789,11 +791,10 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
                                               HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET
                                           });
 
-    // metrics
     for (auto it = metricTags.begin(); it!= metricTags.end(); it++) {
         char c[4];
         hb_tag_to_string(*it, c);
-        QLatin1String tagName(c);
+        const QLatin1String tagName(c, 4);
         hb_position_t origin = 0;
         if (useFallback) {
             hb_ot_metrics_get_position_with_fallback(font.data(), *it, &origin);
@@ -816,11 +817,10 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
                 HB_OT_LAYOUT_BASELINE_TAG_MATH
     });
 
-
     for (auto it = baselines.begin(); it!= baselines.end(); it++) {
         char c[4];
         hb_tag_to_string(*it, c);
-        QLatin1String tagName(c);
+        const QLatin1String tagName(c, 4);
         hb_position_t origin = 0;
         if (useFallback) {
             hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, script, HB_TAG_NONE, &origin);
@@ -830,7 +830,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         metrics.setBaselineValueByTag(tagName, origin);
     }
 
-    // Ascender line gap, descender.
+    // Ascender, line gap, descender.
 
     hb_position_t ascender = 0;
     hb_position_t descender = 0;

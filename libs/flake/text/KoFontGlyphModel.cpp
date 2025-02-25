@@ -156,7 +156,7 @@ struct KoFontGlyphModel::Private {
         for (auto it = tags.begin(); it != tags.end(); it++) {
             char c[4];
             hb_tag_to_string(*it, c);
-            QLatin1String tagName(c);
+            const QLatin1String tagName(c, 4);
             uint featureIndex;
 
             QVector<uint> lookUpsProcessed;

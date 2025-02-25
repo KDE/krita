@@ -223,7 +223,6 @@ set(kritaflake_SRCS
     text/KoSvgTextShapeLayoutFunc_inShape.cpp
     text/KoSvgTextShapeLayoutFunc_lines.cpp
     text/KoSvgTextShapeMarkupConverter.cpp
-    text/KoCSSFontInfo.h
     text/KoFontRegistry.cpp
     text/KoCssTextUtils.cpp
     text/KoPolygonUtils.cpp

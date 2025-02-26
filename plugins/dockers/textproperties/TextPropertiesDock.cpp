@@ -127,7 +127,6 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
-    m_quickWidget->setPalette(this->palette());
     m_quickWidget->setMinimumHeight(100);
 
     d->fontModel = new KisResourceModel(ResourceType::FontFamilies);

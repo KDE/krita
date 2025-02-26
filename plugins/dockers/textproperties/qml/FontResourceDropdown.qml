@@ -50,9 +50,13 @@ Button {
                 fontName = familyCmb.modelWrapper.localizedNameFromMetadata(meta, locales, model.name);
             }
 
+            palette: familyCmb.palette;
+
             contentItem: KoShapeQtQuickLabel {
                 id: fontFamilyDelegate;
                 property alias meta: fontDelegateItem.meta;
+                property alias highlighted: fontDelegateItem.highlighted;
+                property alias palette: fontDelegateItem.palette;
                 property bool colorBitmap : typeof meta.color_bitmap === 'boolean'? meta.color_bitmap: false;
                 property bool colorCLRV0 : typeof meta.color_clrv0 === 'boolean'?  meta.color_clrv0: false;
                 property bool colorCLRV1 : typeof meta.color_clrv1 === 'boolean'?  meta.color_clrv1: false;
@@ -65,14 +69,16 @@ Button {
                 imageScale: 3;
                 imagePadding: nameLabel.height;
                 svgData: fontDelegateItem.sample;
-                foregroundColor: sysPalette.text;
+                foregroundColor: highlighted? palette.highlightedText: palette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
 
                 Label {
                     id: nameLabel;
+                    palette: fontDelegateItem.palette;
                     text: fontFamilyDelegate.fontName;
                     anchors.top: parent.top;
                     anchors.left: parent.left;
+                    color: parent.highlighted? palette.highlightedText: palette.text;
                 }
 
                 Row {
@@ -89,7 +95,8 @@ Button {
                         property int type: fontFamilyDelegate.type;
                         icon.width: parent.imgHeight;
                         icon.height: parent.imgHeight;
-                        icon.color: sysPalette.text;
+                        palette: fontDelegateItem.palette;
+                        icon.color: nameLabel.color;
                         icon.source: type === KoSvgText.BDFFontType? "qrc:///font-type-bitmap.svg"
                                                               : type === KoSvgText.Type1FontType? "qrc:///font-type-postscript.svg"
                                                                                                 : type === KoSvgText.OpenTypeFontType? "qrc:///font-type-opentype.svg":"qrc:///light_system-help.svg";
@@ -101,7 +108,8 @@ Button {
                         height: parent.imgHeight;
                         icon.width: parent.imgHeight;
                         icon.height: parent.imgHeight;
-                        icon.color: sysPalette.text;
+                        palette: fontDelegateItem.palette;
+                        icon.color: nameLabel.color;
                         visible: fontFamilyDelegate.isVariable;
                         icon.source: "qrc:///font-type-opentype-variable.svg"
                     }
@@ -149,7 +157,7 @@ Button {
                 }
             }
             background: Rectangle {
-                color: highlighted? familyCmb.palette.highlight:"transparent";
+                color: highlighted? familyCmb.palette.highlight: "transparent";
             }
 
             MouseArea {
@@ -184,6 +192,8 @@ Button {
         width: contentWidth;
         height: contentHeight;
         padding: 2;
+
+        palette: familyCmb.palette;
 
         contentItem:
             ColumnLayout {
@@ -225,6 +235,8 @@ Button {
                     //--- Tag Setup ---//
                     Menu {
                         id: tagActionsContextMenu;
+
+                        palette: familyCmb.palette;
                         property int resourceIndex: -1;
                         property alias resourceName: resourceLabel.text;
                         property var resourceTaggedModel : [];
@@ -352,7 +364,6 @@ Button {
                 }
             }
         }
-        palette: familyCmb.palette;
 
     }
 }

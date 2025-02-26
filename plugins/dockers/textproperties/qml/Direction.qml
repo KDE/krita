@@ -61,6 +61,7 @@ TextPropertyBase {
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             font.italic: properties.directionState === KoSvgTextPropertiesModel.PropertyTriState;
+            palette: directionCmbPalette.palette;
         }
 
         ComboBox {
@@ -74,6 +75,11 @@ TextPropertyBase {
             valueRole: "value";
             onActivated: direction = currentValue;
             wheelEnabled: true;
+            PaletteControl {
+                id: directionCmbPalette;
+                colorGroup: directionCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
+            }
+            palette: directionCmbPalette.palette;
         }
 
         RevertPropertyButton {
@@ -88,6 +94,7 @@ TextPropertyBase {
             Layout.fillWidth: true;
             visible: parentPropertyType === TextPropertyBase.Character;
             font.italic: properties.unicodeBidiState === KoSvgTextPropertiesModel.PropertyTriState;
+            palette: unicodeBidiCmbPalette.palette;
         }
 
         ComboBox {
@@ -106,6 +113,12 @@ TextPropertyBase {
             valueRole: "value";
             onActivated: unicodeBidi = currentValue;
             wheelEnabled: true;
+
+            PaletteControl {
+                id: unicodeBidiCmbPalette;
+                colorGroup: unicodeBidiCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
+            }
+            palette: unicodeBidiCmbPalette.palette;
         }
     }
 }

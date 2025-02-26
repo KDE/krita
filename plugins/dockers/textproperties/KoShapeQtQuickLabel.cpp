@@ -124,7 +124,7 @@ void KoShapeQtQuickLabel::setForegroundColor(const QColor &newForegroundColor)
     }
 
     d->shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(newForegroundColor)));
-
+    update(this->boundingRect().toAlignedRect());
     emit foregroundColorChanged();
 }
 

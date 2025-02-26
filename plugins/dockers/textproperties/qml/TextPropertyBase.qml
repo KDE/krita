@@ -40,6 +40,10 @@ Column {
         children.push(seperator);
     }
 
+    property PaletteControl propertyBasePalette: PaletteControl {
+        colorGroup: enabled? SystemPalette.Active: SystemPalette.Disabled;
+    }
+
     MenuSeparator {
         id: seperator;
         width: parent.width;

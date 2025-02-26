@@ -76,6 +76,12 @@ ColumnLayout {
         clip: true;
         padding: 0;
 
+        PaletteControl {
+            id: paletteControl;
+            colorGroup: frame.enabled? SystemPalette.Active: SystemPalette.Disabled;
+        }
+        palette: paletteControl.palette;
+
         ListView {
             id: propertiesWidgetView
 
@@ -157,6 +163,12 @@ ColumnLayout {
         signal searchChanged;
         onSearchChanged: parent.filterChanged();
 
+        PaletteControl {
+            id: cmbPalette;
+            colorGroup: addPropertyCmb.enabled? SystemPalette.Active: SystemPalette.Disabled;
+        }
+        palette: cmbPalette.palette;
+
         delegate: ItemDelegate {
             id: addPropertyDelegate;
             width: addPropertyCmb.width;
@@ -184,6 +196,8 @@ ColumnLayout {
             width: addPropertyCmb.width;
             height: contentHeight;
             padding: 2;
+
+            palette: cmbPalette.palette;
 
             contentItem: ColumnLayout {
                 clip: true;

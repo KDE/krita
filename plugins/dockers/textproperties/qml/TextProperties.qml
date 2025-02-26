@@ -19,6 +19,11 @@ Rectangle {
         colorGroup: SystemPalette.Active
     }
 
+    PaletteControl {
+        id: paletteControl;
+        colorGroup: root.enabled? SystemPalette.Active: SystemPalette.Disabled;
+    }
+
     function setProperties() {
         characterPropertyList.updateProperties()
         paragraphPropertyList.updateProperties()
@@ -29,6 +34,7 @@ Rectangle {
         anchors.right: parent.right;
         anchors.left: parent.left;
         anchors.top: parent.top;
+        palette: paletteControl.palette;
         TabButton {
             text: i18nc("@title:tab", "Character")
         }

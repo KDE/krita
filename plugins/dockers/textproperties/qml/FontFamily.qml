@@ -59,6 +59,11 @@ CollapsibleGroupProperty {
                     fontFamilies = [ text ];
                 }
             }
+            PaletteControl {
+                id: mainCmbPalette;
+                colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
+            }
+            palette: mainCmbPalette.palette;
             function updateCurrentIndex() {
                 var name = mainWindow.wwsFontFamilyName(fontFamilies[0]);
                 if (name !== modelWrapper.resourceFilename) {
@@ -103,6 +108,11 @@ CollapsibleGroupProperty {
                         onActivated: {
                             fontFamilies[fontListDelegate.dIndex] = text;
                         }
+                        PaletteControl {
+                            id: fontCmbPalette;
+                            colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
+                        }
+                        palette: fontCmbPalette.palette;
                         Component.onCompleted: {
                             if (fontListDelegate.dIndex === 0) {
                                 modelWrapper = mainFamilyCmb.modelWrapper;

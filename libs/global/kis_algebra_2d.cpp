@@ -1861,7 +1861,7 @@ QLineF reverseDirection(const QLineF& line)
 }
 
 // local
-QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2, QPointF middleLineVector, bool reverseFirstPoly, bool reverseSecondPoly)
+QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2, QLineF middleLine, bool reverseFirstPoly, bool reverseSecondPoly)
 {
     // moving from shape1.index1.p1 to shape1.index2.p2
 
@@ -1898,8 +1898,6 @@ QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, con
     qreal leftPointDistanceFromMiddle;
     qreal rightPointDistanceFromMiddle;
 
-    QLineF middleLine = QLineF(QPointF(), middleLineVector);
-
     QPointF leftPoint = line1.p1();
     QPointF rightPoint = line2.p2();
 
@@ -1925,7 +1923,15 @@ QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, con
     QLineF::IntersectionType intersectionType = leftLine.intersects(rightLine, &intersectionPoint);
 
     qCritical() << "Checking intersection between lines: leftLine & rightLine, shown above, result: " << ppVar(intersectionType) << ppVar(intersectionPoint);
-    if (intersectionType == QLineF::NoIntersection) {
+
+    qreal distanceToMiddle = 0;
+    if (intersectionType != QLineF::NoIntersection) {
+        distanceToMiddle = kisDistanceToLine(intersectionPoint, middleLine);
+        qCritical() << "Distances: " << ppVar(distanceToMiddle) << ppVar(leftPointDistanceFromMiddle) << ppVar(rightPointDistanceFromMiddle);
+    }
+
+
+    if (intersectionType == QLineF::NoIntersection || distanceToMiddle > qMax(leftPointDistanceFromMiddle, rightPointDistanceFromMiddle)) {
 
         // first arg: bounded line, second: unbounded
         boost::optional<QPointF> leftIntersection = intersectLines(line2, leftLine);
@@ -1946,10 +1952,6 @@ QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, con
 
     }
 
-    qreal distanceToMiddle = kisDistanceToLine(intersectionPoint, middleLine);
-    if (distanceToMiddle > qMax(leftPointDistanceFromMiddle, rightPointDistanceFromMiddle)) {
-        return simpleResult;
-    }
 
     QPainterPath betterResult = makeTrianglePath(intersectionPoint);
 
@@ -2022,26 +2024,8 @@ QPainterPath removeGutterOneEndOld(const QPainterPath &shape1, int index1, const
 
 QPainterPath simplifyShape(const QPainterPath& path) {
 
-    QPainterPath::Element buffor;
-    QPainterPath result;
-    QPointF lastPosition = QPointF(0, 0);
-    for (int i = 0; i < path.elementCount() - 1; i++) {
-        if (path.elementAt(i).isMoveTo()) {
-            lastPosition = path.elementAt(i);
-        }
-        if (path.elementAt(i).isLineTo()) {
-            if (path.elementAt(i + 1).isLineTo()) {
-                if (qFuzzyIsNull(dotProduct(path.elementAt(i + 1) - lastPosition, path.elementAt(i) - lastPosition))) {
-                    // they are parallel
-                    continue;
-                }
-            }
-
-        }
-    }
-
-    return path;
-
+    VectorPath vector(path);
+    return vector.trulySimplified().asPainterPath();
 }
 
 
@@ -2056,7 +2040,6 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
     QLineF line1 = getLineFromElements(shape1, index1);
     QLineF line2 = getLineFromElements(shape2, index2);
 
-    QPointF middleLineVector = QPointF((line1.dx() + line2.dx())/2, (line1.dy() + line2.dy()));
 
     QPainterPath gutterShape = QPainterPath();
     QVector<QPointF> poly1 = QVector<QPointF>() << line1.p1() << line1.p2() << line2.p1();
@@ -2067,12 +2050,15 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
         reverseSecondPoly = true;
     }
 
+    QLineF middleLine = QLineF((line1.p1() + line2.p2())/2, (line1.p2() + line2.p1())/2);
+    QPointF middleLineVector = middleLine.p2() - middleLine.p1();
+
     // more difficult version:
-    QPainterPath oneEnd = removeGutterOneEndSmart(shape1, index1, shape2, index2, middleLineVector, false, reverseSecondPoly);
+    QPainterPath oneEnd = removeGutterOneEndSmart(shape1, index1, shape2, index2, middleLine, false, reverseSecondPoly);
     int secondShapeIndexInOtherEnd = reverseSecondPoly ? -index2 + 1 : -index2 + 1;
     //QPainterPath otherEnd = removeGutterOneEndSmart(shape2, secondShapeIndexInOtherEnd, shape1, -index1 + 2, middleLineVector, reverseSecondPoly);
     //QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLineVector, true, !reverseSecondPoly);
-    QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLineVector, reverseSecondPoly, false);
+    QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLine, reverseSecondPoly, false);
 
 
 
@@ -2204,6 +2190,9 @@ VectorPath VectorPath::trulySimplified()
     using VPoint = VectorPath::VectorPathPoint;
 
     qCritical() << "Start simplifying path that has segments: " << segmentsCount();
+    if (m_points.length() < 1) {
+        return VectorPath(QList<VectorPath::VectorPathPoint>());
+    }
 
     QList<VPoint> response;
     VPoint lineBeginPoint = VPoint(VPoint::MoveTo, QPointF(0, 0));

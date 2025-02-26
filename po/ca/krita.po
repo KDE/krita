@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-22 08:49+0100\n"
+"PO-Revision-Date: 2025-02-25 10:26+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -27147,8 +27147,8 @@ msgstr[1] "Suavitzat de la velocitat del pinzell: {n} mostres"
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Desplaçament de la direcció de la inclinació del llapis: {n}°"
+msgstr[1] "Desplaçament de la direcció de la inclinació del llapis: {n}°"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1566
@@ -32118,6 +32118,8 @@ msgstr ""
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
 msgstr ""
+"Desplaçament afegit a l'angle de la direcció informada d'inclinació del "
+"llapis."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233

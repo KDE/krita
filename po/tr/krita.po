@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-23 12:38+0300\n"
+"PO-Revision-Date: 2025-02-25 09:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -27020,8 +27020,8 @@ msgstr[1] "Fırça hızı pürüzsüzleştirme: {n} örnek"
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kalem eğim yönü ofseti: {n}°"
+msgstr[1] "Kalem eğim yönü ofseti: {n}°"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1566
@@ -31961,7 +31961,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
-msgstr ""
+msgstr "Açı ofseti, bildirilen kalem eğim yönüne eklendi."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233

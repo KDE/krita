@@ -252,12 +252,21 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     qCritical() << "Found two shapes.";
     qCritical() << "Shape 1:";
     convertShapeToDebugArray(srcOutlines[shapeNewIndexes[0]]);
+    qCritical() << ppVar(srcOutlines[shapeNewIndexes[0]].toFillPolygon());
+
     qCritical() << "Shape 2:";
     convertShapeToDebugArray(srcOutlines[shapeNewIndexes[1]]);
+    qCritical() << ppVar(srcOutlines[shapeNewIndexes[1]].toFillPolygon());
+
+
 
 
 
     QPainterPath result = KisAlgebra2D::removeGutterSmart(srcOutlines[shapeNewIndexes[0]], lineSegmentIndexes[0], srcOutlines[shapeNewIndexes[1]], lineSegmentIndexes[1]);
+
+    qCritical() << "Finally got a result:";
+    convertShapeToDebugArray(result);
+    qCritical() << ppVar(result.toFillPolygon());
 
     QList<KoShape*> resultShapes;
 

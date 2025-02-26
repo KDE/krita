@@ -1170,7 +1170,8 @@ void testRemoveGutterOneCase(const QPainterPath& shape1, const QPainterPath& sha
     assert(indexes2.length() == 1);
 
     QPainterPath result = KisAlgebra2D::removeGutterSmart(shape1, indexes1[0], shape2, indexes2[0]);
-    qCritical() << result;
+    qCritical() << "Result path:" << result;
+    qCritical() << "Result polygon: " << result.toFillPolygon();
 
     if (expectedSize >= 0) {
         qCritical() << ppVar(result.elementCount()) << ppVar(expectedSize);
@@ -1278,13 +1279,89 @@ void KisAlgebra2DTest::testRemoveGutter()
     convertShapeToDebugArray(otherPoly);
 
 
+    testRemoveGutterOneCase(onePoly, otherPoly, QLineF(QPointF(2010,662),QPointF(2006,938)));
 
 
-    //testRemoveGutterOneCase(onePoly, otherPoly, QLineF(QPointF(2010,662),QPointF(2006,938)));
+    QPainterPath disappearingOne = fromPolygon(QVector({QPointF(2302.64, 816.154), QPointF(3270, 809.908), QPointF(3270, 1567.38), QPointF(2702.65, 1582.76), QPointF(2302.64, 816.154)}));
+    QPainterPath disappearingTwo = fromPolygon(QVector({QPointF(3077.96, 2307), QPointF(2427.5, 2307), QPointF(2148.5, 1650.95), QPointF(3073.03, 1625.89), QPointF(3077.96, 2307)}));
 
 
+    testRemoveGutterOneCase(disappearingOne, disappearingTwo, QLineF(QPointF(2892,1773),QPointF(3027,1245)));
 
 
+    qCritical() << "###############################";
+
+    //shape1.toFillPolygon() = QPolygonF(QPointF(3077.96,2307)QPointF(2427.5,2307)QPointF(2148.5,1650.95)QPointF(3073.03,1625.89)QPointF(3077.96,2307))
+    // shape2.toFillPolygon() = QPolygonF(QPointF(2302.64,816.154)QPointF(3270,809.908)QPointF(3270,1567.38)QPointF(2702.65,1582.76)QPointF(2302.64,816.154))
+    // gutterShape.toFillPolygon() = QPolygonF(QPointF(2148.5,1650.95)QPointF(2730.01,1635.19)QPointF(2702.65,1582.76)QPointF(3270,1567.38)QPointF(3072.64,1572.73)QPointF(3073.03,1625.89)QPointF(2148.5,1650.95))
+    QPainterPath toUnite1 = fromPolygon(QPolygonF(QVector({QPointF(3077.96,2307), QPointF(2427.5,2307), QPointF(2148.5,1650.95), QPointF(3073.03,1625.89), QPointF(3077.96,2307)})));
+    QPainterPath toUnite2 = fromPolygon(QPolygonF(QVector({QPointF(2302.64,816.154), QPointF(3270,809.908), QPointF(3270,1567.38), QPointF(2702.65,1582.76), QPointF(2302.64,816.154)})));
+    QPainterPath toUniteGutter = fromPolygon(QPolygonF(QVector({QPointF(2148.5,1650.95), QPointF(2730.01,1635.19), QPointF(2702.65,1582.76), QPointF(3270,1567.38), QPointF(3072.64,1572.73), QPointF(3073.03,1625.89), QPointF(2148.5,1650.95)})));
+
+    qCritical() << "Is it really so incorrect>? " << (toUnite1 | toUnite2 | toUniteGutter);
+
+}
+
+void KisAlgebra2DTest::testMergingPainterPaths()
+{
+    QPainterPath first; // counter-clockwise
+    first.moveTo(0, 0);
+    first.lineTo(100, 0);
+    first.lineTo(100, 100);
+    first.lineTo(0, 100);
+    first.lineTo(0, 0);
+
+
+    QPainterPath second;
+    second.moveTo(100, 0);
+    second.lineTo(200, 0);
+    second.lineTo(200, 100);
+    second.lineTo(100, 100);
+    second.lineTo(100, 0);
+
+
+    qCritical() << ppVar(first | second);
+    qCritical() << ppVar(first | second.toReversed());
+
+    qCritical() << ppVar((first | second).simplified());
+    qCritical() << ppVar((first | second.toReversed()).simplified());
+
+    first.setFillRule(Qt::OddEvenFill);
+    second.setFillRule(Qt::OddEvenFill);
+
+
+    qCritical() << ppVar(first | second);
+    qCritical() << ppVar(first | second.toReversed());
+
+    qCritical() << ppVar((first | second).simplified());
+    qCritical() << ppVar((first | second.toReversed()).simplified());
+
+    // this is from the real life example, how to make it work?
+
+    QPainterPath shape1;
+    shape1.moveTo(QPointF(2302.64, 816.154));
+    shape1.lineTo(QPointF(3270, 809.908));
+    shape1.lineTo(QPointF(3270, 1567.38));
+    shape1.lineTo(QPointF(2702.65, 1582.76));
+    shape1.lineTo(QPointF(2302.64, 816.154));
+
+    QPainterPath shape2;
+    shape2.moveTo(QPointF(3077.96, 2307));
+    shape2.lineTo(QPointF(2427.5, 2307));
+    shape2.lineTo(QPointF(2148.5, 1650.95));
+    shape2.lineTo(QPointF(3073.03, 1625.89));
+    shape2.lineTo(QPointF(3077.96, 2307));
+
+    QPainterPath gutter;
+    gutter.moveTo(QPointF(3270, 1567.38));
+    gutter.lineTo(QPointF(2702.65, 1582.76));
+    gutter.lineTo(QPointF(2730.01, 1635.19));
+    gutter.lineTo(QPointF(2148.5, 1650.95));
+    gutter.lineTo(QPointF(3073.03, 1625.89));
+    gutter.lineTo(QPointF(3072.64, 1572.73));
+    gutter.lineTo(QPointF(3270, 1567.38));
+
+    qCritical() << ppVar(shape1 | shape2 | gutter);
 
 
 }

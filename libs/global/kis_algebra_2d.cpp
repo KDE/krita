@@ -1952,6 +1952,10 @@ QPainterPath removeGutterOneEndSmart(const QPainterPath &shape1, int index1, con
 
     }
 
+    //qreal distanceToMiddle = kisDistanceToLine(intersectionPoint, middleLine);
+    //if (distanceToMiddle > qMax(leftPointDistanceFromMiddle, rightPointDistanceFromMiddle)) {
+    //    return simpleResult;
+    //}
 
     QPainterPath betterResult = makeTrianglePath(intersectionPoint);
 
@@ -2028,6 +2032,29 @@ QPainterPath simplifyShape(const QPainterPath& path) {
     return vector.trulySimplified().asPainterPath();
 }
 
+VectorPath combineShapes(VectorPath shape1, int index1, VectorPath shape2, int index2, VectorPath end1, VectorPath end2)
+{
+    using VPoint = VectorPath::VectorPathPoint;
+    QList<VPoint> result;
+
+    // s1(0..index1), end1, s2(index2, ..., index2 wrapped)
+
+    for(int i = 0; i < index1; i++) {
+        result << shape1.pointAt(i);
+    }
+    for (int i = 0; i < end1.pointsCount(); i++) {
+        result << end1.pointAt(i);
+    }
+    for (int i = index2; i < index2 + shape2.pointsCount(); i++) {
+        result << shape2.pointAt(wrapValue(i, 0, shape2.pointsCount()));
+    }
+
+    return VectorPath(QList<VPoint>());
+
+
+}
+
+
 
 QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2)
 {
@@ -2039,6 +2066,8 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
     // shape1.elementAt(index1)
     QLineF line1 = getLineFromElements(shape1, index1);
     QLineF line2 = getLineFromElements(shape2, index2);
+
+    //QPointF middleLineVector = QPointF((line1.dx() + line2.dx())/2, (line1.dy() + line2.dy())/2);
 
 
     QPainterPath gutterShape = QPainterPath();
@@ -2067,32 +2096,130 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
     gutterShape.connectPath(otherEnd);
     gutterShape.closeSubpath();
 
+    gutterShape = gutterShape.toReversed();
+
     qCritical() << ppVar(gutterShape);
     qCritical() << ppVar(oneEnd);
     qCritical() << ppVar(otherEnd);
 
+    qreal eps = 1e-05;
+    for (int i = 0; i < gutterShape.elementCount(); i++) {
+        QPainterPath::Element gutterEl = gutterShape.elementAt(i);
+        qCritical() << "Gutter element: " << gutterEl.x << gutterEl.y << gutterEl.type;
+        for (int j = 0; j < shape1.elementCount(); j++) {
+            QPainterPath::Element shapeEl = shape1.elementAt(j);
+            if (qAbs(gutterEl.x - shapeEl.x) < eps && qAbs(gutterEl.y - shapeEl.y) < eps) {
+                gutterShape.setElementPositionAt(i, shapeEl.x, shapeEl.y);
+                break;
+            }
+        }
+        for (int j = 0; j < shape2.elementCount(); j++) {
+            QPainterPath::Element shapeEl = shape2.elementAt(j);
+            if (qAbs(gutterEl.x - shapeEl.x) < eps && qAbs(gutterEl.y - shapeEl.y) < eps) {
+                gutterShape.setElementPositionAt(i, shapeEl.x, shapeEl.y);
+                break;
+            }
+        }
+    }
 
-    QPainterPath result = shape1 | shape2 | gutterShape;
+    for (int i = 0; i < shape1.elementCount(); i++) {
+        QPainterPath::Element shapeEl = shape1.elementAt(i);
+        qCritical() << "Shape1 element: " << shapeEl.x << shapeEl.y << shapeEl.type;
+    }
+
+    for (int i = 0; i < shape2.elementCount(); i++) {
+        QPainterPath::Element shapeEl = shape2.elementAt(i);
+        qCritical() << "Shape2 element: " << shapeEl.x << shapeEl.y << shapeEl.type;
+    }
 
 
-    return result.simplified();
+    QPainterPath windingShape1 = shape1;
+    QPainterPath windingShape2 = shape2;
+    gutterShape.setFillRule(Qt::WindingFill);
+    windingShape1.setFillRule(Qt::WindingFill);
+    windingShape2.setFillRule(Qt::WindingFill);
+
+
+    QPainterPath result = (windingShape1 | windingShape2 | gutterShape);
 
 
 
-    // now, easy version:
+    qCritical() << "#* Result of everything, after adding the gutter, is: " << result;
+    qCritical() << "#* Partial results: " << ppVar(shape1 | shape2) << ppVar(shape2 | gutterShape) << ppVar(shape1 | gutterShape) << ppVar(shape1 | shape2 | gutterShape) << ppVar((shape1 | shape2) | gutterShape) << ppVar((shape1 | gutterShape) | shape2);
+    qCritical() << "#* Shapes to unite were also: " << ppVar(shape1) << ppVar(shape2);
+    qCritical() << "#* Shapes to unite were also (2): " << ppVar(shape1.toFillPolygon()) << ppVar(shape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
+    qCritical() << "#* Fill rules:" << ppVar(shape1.fillRule()) << ppVar(shape2.fillRule()) << ppVar(gutterShape.fillRule());
 
 
-    gutterShape.moveTo(line1.p1());
-    gutterShape.lineTo(line1.p2());
-    gutterShape.lineTo(line2.p1());
-    gutterShape.lineTo(line2.p2());
+    qCritical() << "#* Result of everything, after adding the gutter, is: " << result;
+    qCritical() << "#* Partial results: " << ppVar(windingShape1 | windingShape2) << ppVar(windingShape2 | gutterShape) << ppVar(windingShape1 | gutterShape) << ppVar(windingShape1 | windingShape2 | gutterShape)
+                << ppVar((windingShape1 | windingShape2) | gutterShape) << ppVar((windingShape1 | gutterShape) | windingShape2);
+    qCritical() << "#* Shapes to unite were also: " << ppVar(windingShape1) << ppVar(windingShape2);
+    qCritical() << "#* Shapes to unite were also (2): " << ppVar(windingShape1.toFillPolygon()) << ppVar(windingShape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
+    qCritical() << "#* Fill rules:" << ppVar(windingShape1.fillRule()) << ppVar(windingShape2.fillRule()) << ppVar(gutterShape.fillRule());
 
-    //QPainterPath result = shape1 | shape2 | gutterShape;
-    //result.closeSubpath();
-    //return result.simplified();
 
-    //return result;
+    return VectorPath(result).trulySimplified().asPainterPath();
 
+    QPainterPath closedShape1 = shape1;
+    QPainterPath closedShape2 = shape2;
+
+    closedShape1.closeSubpath();
+    closedShape2.closeSubpath();
+    gutterShape.closeSubpath();
+
+    closedShape1.setFillRule(Qt::WindingFill);
+    closedShape2.setFillRule(Qt::WindingFill);
+    gutterShape.setFillRule(Qt::WindingFill);
+
+
+    QPainterPath partialResult = (closedShape1 | gutterShape);
+    partialResult.closeSubpath();
+    partialResult.setFillRule(Qt::WindingFill);
+    result = (partialResult | closedShape2);
+    result.closeSubpath();
+    result = result.simplified();
+    //result = (shape1 | gutterShape) | shape2;
+
+
+    qCritical() << "# Result of everything, after adding the gutter, is: " << result;
+    qCritical() << "# Partial results: " << ppVar(shape1 | shape2) << ppVar(shape2 | gutterShape) << ppVar(shape1 | gutterShape) << ppVar(shape1 | shape2 | gutterShape) << ppVar((shape1 | shape2) | gutterShape) << ppVar((shape1 | gutterShape) | shape2);
+    qCritical() << "# Shapes to unite were also: " << ppVar(shape1) << ppVar(shape2);
+    qCritical() << "# Shapes to unite were also (2): " << ppVar(shape1.toFillPolygon()) << ppVar(shape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
+
+
+    // TEMPORARY:
+    VectorPath shape1Vector(shape1);
+    VectorPath shape2Vector(shape2);
+    VectorPath gutterVector(gutterShape);
+
+    QPolygonF shape1Polygon = shape1Vector.trulySimplified().asPainterPath().toFillPolygon();
+    QPolygonF shape2Polygon = shape2Vector.trulySimplified().asPainterPath().toFillPolygon();
+    QPolygonF gutterPolygon = gutterVector.trulySimplified().asPainterPath().toFillPolygon();
+
+    QPolygonF resultPolygon = shape1Polygon.united(gutterPolygon);
+    resultPolygon = resultPolygon.united(shape2Polygon);
+
+
+
+    QPainterPath newResult;
+    newResult.addPolygon(resultPolygon);
+    newResult.closeSubpath();
+
+    newResult = VectorPath(newResult).trulySimplified().asPainterPath();
+
+    return newResult;
+    //return QPainterPath.addPolygon();
+
+
+
+
+
+    VectorPath vectorResult(result);
+    qCritical() << ppVar(vectorResult.asPainterPath()) << ppVar(vectorResult.trulySimplified().asPainterPath());
+    qCritical() << "^ that's what we're gonna return.";
+
+    return vectorResult.trulySimplified().asPainterPath();
 
 
 }
@@ -2211,7 +2338,8 @@ VectorPath VectorPath::trulySimplified()
         } else if (m_points[i].type == VPoint::LineTo) {
             if (previousPoint.type == VPoint::LineTo) {
                 // check whether they're parallel
-                qCritical() << "Check whether they're parallel";
+                qCritical() << "Check whether they're parallel: to " << ppVar(m_points[i].endPoint) << " from " << ppVar(lineBeginPoint.endPoint) << " and to " << ppVar(previousPoint.endPoint) << " from " << ppVar(lineBeginPoint.endPoint);
+
                 qreal eps = 1e-05;
                 if (qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)) >= eps) {
                     qCritical() << "They are not parallel: " << m_points[i].endPoint - lineBeginPoint.endPoint << previousPoint.endPoint - lineBeginPoint.endPoint

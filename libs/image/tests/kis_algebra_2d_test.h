@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testGetParallelLines2();
 
     void testRemoveGutter();
+    void testMergingPainterPaths();
 
 
 

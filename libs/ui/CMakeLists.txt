@@ -493,19 +493,10 @@ if(WIN32)
         ${kritaui_LIB_SRCS}
         qtlockedfile/qtlockedfile_win.cpp
     )
-    if (NOT USE_QT_TABLET_WINDOWS)
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            input/wintab/kis_tablet_support_win.cpp
-            input/wintab/kis_screen_size_choice_dialog.cpp
-            input/wintab/kis_tablet_support_win8.cpp
-            )
-    else()
-        set(kritaui_LIB_SRCS
-            ${kritaui_LIB_SRCS}
-            dialogs/KisDlgCustomTabletResolution.cpp
-            )
-    endif()
+    set(kritaui_LIB_SRCS
+        ${kritaui_LIB_SRCS}
+        dialogs/KisDlgCustomTabletResolution.cpp
+        )
 endif()
 
     set(kritaui_LIB_SRCS
@@ -650,7 +641,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     layerstyles/wdgKisLayerStyleAngleSelector.ui
 
     wdgsplash.ui
-    input/wintab/kis_screen_size_choice_dialog.ui
     input/wintab/drawpile_tablettester/tablettest.ui
 
     animation/wdg_animationrenderer.ui
@@ -664,15 +654,9 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
 )
 
 if(WIN32)
-    if(USE_QT_TABLET_WINDOWS)
-        ki18n_wrap_ui(kritaui_LIB_SRCS
-            dialogs/KisDlgCustomTabletResolution.ui
-        )
-    else()
-        ki18n_wrap_ui(kritaui_LIB_SRCS
-            input/wintab/kis_screen_size_choice_dialog.ui
-        )
-    endif()
+    ki18n_wrap_ui(kritaui_LIB_SRCS
+        dialogs/KisDlgCustomTabletResolution.ui
+    )
 endif()
 
 
@@ -707,9 +691,11 @@ if(WIN32)
     # Private headers are needed for:
     #    * KisDlgCustomTabletResolution
     #    * KisScreenInformationAdapter
+    #    * dialogs/kis_dlg_preferences.cc
     set_source_files_properties(
         dialogs/KisDlgCustomTabletResolution.cpp
         opengl/KisScreenInformationAdapter.cpp
+        dialogs/kis_dlg_preferences.cc # for WinTab switching API
         PROPERTIES
         INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
         )

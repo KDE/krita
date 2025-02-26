@@ -57,15 +57,16 @@
 #endif
 
 #if defined Q_OS_WIN
-#include "config_use_qt_tablet_windows.h"
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+// this include is Qt5-only, the switch to WinTab is embedded in Qt
+#  include "config_use_qt_tablet_windows.h"
+#else
+#  include <QtGui/private/qguiapplication_p.h>
+#  include <QtGui/qpa/qplatformintegration.h>
+#endif
 #include <windows.h>
 #include <winuser.h>
-#ifndef USE_QT_TABLET_WINDOWS
-#include <kis_tablet_support_win.h>
-#include <kis_tablet_support_win8.h>
-#else
 #include <dialogs/KisDlgCustomTabletResolution.h>
-#endif
 #include "config-high-dpi-scale-factor-rounding-policy.h"
 #include "config-set-has-border-in-full-screen-default.h"
 #ifdef HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
@@ -547,7 +548,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     KisUsageLogger::writeLocaleSysInfo();
 
-#if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
+#if defined Q_OS_WIN && QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && defined QT5_HAS_WINTAB_SWITCH
     const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
     QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);
 
@@ -563,6 +564,15 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     // first create the application so we can create a pixmap
     KisApplication app(key, argc, argv);
+
+#if defined Q_OS_WIN && QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+    const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
+    using QWindowsApplication = QNativeInterface::Private::QWindowsApplication;
+    if (auto nativeWindowsApp = dynamic_cast<QWindowsApplication *>(QGuiApplicationPrivate::platformIntegration())) {
+        nativeWindowsApp->setWinTabEnabled(forceWinTab);
+    }
+#endif
+
 
     installTranslators(app);
 
@@ -680,14 +690,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #if defined Q_OS_WIN
     KisConfig cfg(false);
-    bool supportedWindowsVersion = true;
     QOperatingSystemVersion osVersion = QOperatingSystemVersion::current();
     if (osVersion.type() == QOperatingSystemVersion::Windows) {
-        if (osVersion.majorVersion() >= QOperatingSystemVersion::Windows7.majorVersion()) {
-            supportedWindowsVersion  = true;
-        }
-        else {
-            supportedWindowsVersion  = false;
+        // TODO QT6: update minimum requirement
+        if (osVersion.majorVersion() < QOperatingSystemVersion::Windows7.majorVersion()) {
             if (cfg.readEntry("WarnedAboutUnsupportedWindows", false)) {
                 QMessageBox::information(nullptr,
                                          i18nc("@title:window", "Krita: Warning"),
@@ -699,48 +705,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             }
         }
     }
-#ifndef USE_QT_TABLET_WINDOWS
-    {
-        if (cfg.useWin8PointerInput() && !KisTabletSupportWin8::isAvailable()) {
-            cfg.setUseWin8PointerInput(false);
-        }
-        if (!cfg.useWin8PointerInput()) {
-            bool hasWinTab = KisTabletSupportWin::init();
-            if (!hasWinTab && supportedWindowsVersion) {
-                if (KisTabletSupportWin8::isPenDeviceAvailable()) {
-                    // Use WinInk automatically
-                    cfg.setUseWin8PointerInput(true);
-                } else if (!cfg.readEntry("WarnedAboutMissingWinTab", false)) {
-                    if (KisTabletSupportWin8::isAvailable()) {
-                        QMessageBox::information(nullptr,
-                                                 i18n("Krita Tablet Support"),
-                                                 i18n("Cannot load WinTab driver and no Windows Ink pen devices are found. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                                 QMessageBox::Ok, QMessageBox::Ok);
-                    } else {
-                        QMessageBox::information(nullptr,
-                                                 i18n("Krita Tablet Support"),
-                                                 i18n("Cannot load WinTab driver. If you have a drawing tablet, please make sure the tablet driver is properly installed."),
-                                                 QMessageBox::Ok, QMessageBox::Ok);
-                    }
-                    cfg.writeEntry("WarnedAboutMissingWinTab", true);
-                }
-            }
-        }
-        if (cfg.useWin8PointerInput()) {
-            KisTabletSupportWin8 *penFilter = new KisTabletSupportWin8();
-            if (penFilter->init()) {
-                // penFilter.registerPointerDeviceNotifications();
-                app.installNativeEventFilter(penFilter);
-                dbgKrita << "Using Win8 Pointer Input for tablet support";
-            } else {
-                dbgKrita << "No Win8 Pointer Input available";
-                delete penFilter;
-            }
-        }
-    }
-#elif defined QT_HAS_WINTAB_SWITCH
-    Q_UNUSED(supportedWindowsVersion);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0) && defined QT5_HAS_WINTAB_SWITCH
     // Check if WinTab/WinInk has actually activated
     const bool useWinInkAPI = !KisApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 
@@ -750,7 +716,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         cfg.setUseWin8PointerInput(useWinInkAPI);
         cfg.setUseRightMiddleTabletButtonWorkaround(true);
     }
-
 #endif
 #endif
     KisApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
@@ -777,8 +742,31 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisUsageLogger::writeSysInfo(
         QString("  Supported instruction sets: %1")
             .arg(KisSupportedArchitectures::supportedInstructionSets()));
-
     KisUsageLogger::writeSysInfo("");
+
+    // Tablet API information
+#if defined Q_OS_WIN && QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+    {
+        auto tabletAPIName = [] (bool useWinTab) {
+            return useWinTab ? "WinTab" : "WinInk";
+        };
+
+        QString actualTabletProtocol = "<unknown>";
+
+        using QWindowsApplication = QNativeInterface::Private::QWindowsApplication;
+        if (auto nativeWindowsApp = dynamic_cast<QWindowsApplication *>(QGuiApplicationPrivate::platformIntegration())) {
+            actualTabletProtocol = tabletAPIName(nativeWindowsApp->isWinTabEnabled());
+        } else {
+            KisUsageLogger::log("WARNING: Failed to fetch WinTab protocol status: QWindowsApplication is not available");
+        }
+
+        KisUsageLogger::writeSysInfo("\nTablet API Information\n");
+        KisUsageLogger::writeSysInfo(QString("  User-selected tablet API: %1").arg(tabletAPIName(!cfg.useWin8PointerInput())));
+        KisUsageLogger::writeSysInfo(QString("  Actually used tablet API: %1").arg(actualTabletProtocol));
+        KisUsageLogger::writeSysInfo("");
+    }
+#endif
+
 
     KisConfig(true).logImportantSettings();
 

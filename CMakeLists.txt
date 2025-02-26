@@ -498,7 +498,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
 endif()
 
 
-if (WIN32)
+if (WIN32 AND QT_MAJOR_VERSION STREQUAL "5")
     set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
     set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES})
 
@@ -508,16 +508,14 @@ int main(int argc, char *argv[]) {
 QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 }
 "
-    QT_HAS_WINTAB_SWITCH
+    QT5_HAS_WINTAB_SWITCH
     )
 
     unset(CMAKE_REQUIRED_INCLUDES)
     unset(CMAKE_REQUIRED_LIBRARIES)
 
-    option(USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt." ON)
-	add_feature_info("Use Qt's Windows Tablet Support" USE_QT_TABLET_WINDOWS "Do not use Krita's forked Wintab and Windows Ink support on Windows, but leave everything to Qt.")
     configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
-endif ()     
+endif ()
 
 set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})

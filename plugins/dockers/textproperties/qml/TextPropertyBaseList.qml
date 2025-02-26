@@ -178,8 +178,14 @@ ColumnLayout {
             required property string toolTip;
             contentItem: Label {
                 enabled: addPropertyDelegate.enabled;
+                PaletteControl {
+                    id: addPropertyPalette;
+                    colorGroup: parent.enabled? SystemPalette.Active: SystemPalette.Disabled;
+                }
+                palette: addPropertyPalette.palette;
+                color: addPropertyDelegate.highlighted? palette.highlightedText: palette.text;
                 text: addPropertyDelegate.name;
-                elide: Text.ElideRight
+                elide: Text.ElideRight;
                 verticalAlignment: Text.AlignVCenter
             }
             enabled: !item.visible;

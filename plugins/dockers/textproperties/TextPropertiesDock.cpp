@@ -152,6 +152,8 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
 
+    m_quickWidget->setPalette(this->palette());
+
 }
 
 TextPropertiesDock::~TextPropertiesDock()

@@ -744,30 +744,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             .arg(KisSupportedArchitectures::supportedInstructionSets()));
     KisUsageLogger::writeSysInfo("");
 
-    // Tablet API information
-#if defined Q_OS_WIN && QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
-    {
-        auto tabletAPIName = [] (bool useWinTab) {
-            return useWinTab ? "WinTab" : "WinInk";
-        };
-
-        QString actualTabletProtocol = "<unknown>";
-
-        using QWindowsApplication = QNativeInterface::Private::QWindowsApplication;
-        if (auto nativeWindowsApp = dynamic_cast<QWindowsApplication *>(QGuiApplicationPrivate::platformIntegration())) {
-            actualTabletProtocol = tabletAPIName(nativeWindowsApp->isWinTabEnabled());
-        } else {
-            KisUsageLogger::log("WARNING: Failed to fetch WinTab protocol status: QWindowsApplication is not available");
-        }
-
-        KisUsageLogger::writeSysInfo("\nTablet API Information\n");
-        KisUsageLogger::writeSysInfo(QString("  User-selected tablet API: %1").arg(tabletAPIName(!cfg.useWin8PointerInput())));
-        KisUsageLogger::writeSysInfo(QString("  Actually used tablet API: %1").arg(actualTabletProtocol));
-        KisUsageLogger::writeSysInfo("");
-    }
-#endif
-
-
     KisConfig(true).logImportantSettings();
 
     KisApplication::setFont(KisUiFont::normalFont());

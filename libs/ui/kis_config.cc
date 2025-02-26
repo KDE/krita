@@ -44,8 +44,9 @@
 #include <kis_image_config.h>
 #include <KisCumulativeUndoData.h>
 
-#ifdef Q_OS_WIN
-#include "config_use_qt_tablet_windows.h"
+#ifdef Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#  include <QtGui/private/qguiapplication_p.h>
+#  include <QtGui/qpa/qplatformintegration.h>
 #endif
 
 KisConfig::KisConfig(bool readOnly)
@@ -108,6 +109,30 @@ void KisConfig::logImportantSettings() const
     KisUsageLogger::writeSysInfo(QString("  Use Zip64: %1").arg(useZip64() ? "true" : "false"));
 
     KisUsageLogger::writeSysInfo("\n");
+
+    // Tablet API information
+#if defined Q_OS_WIN && QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+{
+    auto tabletAPIName = [] (bool useWinTab) {
+        return useWinTab ? "WinTab" : "WinInk";
+    };
+
+    QString actualTabletProtocol = "<unknown>";
+
+    using QWindowsApplication = QNativeInterface::Private::QWindowsApplication;
+    if (auto nativeWindowsApp = dynamic_cast<QWindowsApplication *>(QGuiApplicationPrivate::platformIntegration())) {
+        actualTabletProtocol = tabletAPIName(nativeWindowsApp->isWinTabEnabled());
+    } else {
+        KisUsageLogger::log("WARNING: Failed to fetch WinTab protocol status: QWindowsApplication is not available");
+    }
+
+    KisUsageLogger::writeSysInfo("Tablet API Information\n");
+    KisUsageLogger::writeSysInfo(QString("  User-selected tablet API: %1").arg(tabletAPIName(!useWin8PointerInput())));
+    KisUsageLogger::writeSysInfo(QString("  Actually used tablet API: %1").arg(actualTabletProtocol));
+    KisUsageLogger::writeSysInfo("\n");
+}
+#endif
+
 }
 
 bool KisConfig::disableTouchOnCanvas(bool defaultValue) const

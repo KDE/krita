@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-01-08 07:19+0100\n"
+"PO-Revision-Date: 2025-02-21 17:39+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -59276,7 +59276,7 @@ msgstr "Color de mostra"
 #, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr "Entre les lletres"
+msgstr "Interlletratge"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:141
 #, kde-format

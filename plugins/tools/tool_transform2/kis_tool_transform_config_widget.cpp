@@ -64,9 +64,9 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     granularityPreview->addItems(granularityValues);
     granularityPreview->setCurrentIndex(2);
 
-    connect(changeGranularity,SIGNAL(currentIndexChanged(QString)),
+    connect(changeGranularity,SIGNAL(currentTextChanged(QString)),
             this,SLOT(slotGranularityChanged(QString)));
-    connect(granularityPreview, SIGNAL(currentIndexChanged(QString)),
+    connect(granularityPreview, SIGNAL(currentTextChanged(QString)),
             this,SLOT(slotPreviewGranularityChanged(QString)));
 
     // Init Filter  combo
@@ -156,7 +156,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
 
     cameraHeightBox->setRange(1, 20000, 2);
 
-    connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
+    connect(m_rotationCenterButtons, SIGNAL(idPressed(int)), this, SLOT(slotRotationCenterChanged(int)));
     connect(btnTransformAroundPivotPoint, SIGNAL(clicked(bool)), this, SLOT(slotTransformAroundRotationCenter(bool)));
 
     // Init Free Transform Values
@@ -288,7 +288,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // delivery is definite.
     connect(cmbFilter, SIGNAL(activated(KoID)), this, SLOT(notifyEditingFinished()));
     connect(cmbWarpType, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
-    connect(m_rotationCenterButtons, SIGNAL(buttonPressed(int)), this, SLOT(notifyEditingFinished()));
+    connect(m_rotationCenterButtons, SIGNAL(idPressed(int)), this, SLOT(notifyEditingFinished()));
     connect(aspectButton, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(notifyEditingFinished()));
 
     connect(lockUnlockPointsButton, SIGNAL(clicked()), this, SLOT(notifyEditingFinished()));

@@ -278,7 +278,7 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
+    connect(m_comboBox, SIGNAL(currentTextChanged(QString)),
             SLOT(loadProfile(QString)));
 
     // propagate changes

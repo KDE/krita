@@ -39,7 +39,7 @@ KisInputConfigurationPage::KisInputConfigurationPage(QWidget *parent, Qt::Window
 
     ui->profileComboBox->setModel(new KisInputProfileModel(ui->profileComboBox));
     updateSelectedProfile();
-    connect(ui->profileComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(changeCurrentProfile(QString)));
+    connect(ui->profileComboBox, SIGNAL(currentTextChanged(QString)), SLOT(changeCurrentProfile(QString)));
 
     ui->editProfilesButton->setIcon(KisIconUtils::loadIcon("document-edit"));
 

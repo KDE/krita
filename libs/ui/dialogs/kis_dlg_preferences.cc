@@ -101,7 +101,7 @@
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 // this include is Qt5-only, the switch to WinTab is embedded in Qt
-#  include "config_use_qt_tablet_windows.h"
+#  include "config_qt5_has_wintab_switch.h"
 #else
 #  include <QtGui/private/qguiapplication_p.h>
 #  include <QtGui/qpa/qplatformintegration.h>

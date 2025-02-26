@@ -29,7 +29,7 @@ class SvgTextLabel : public QQuickPaintedItem
     Q_PROPERTY(QVariantMap fontAxesValues READ fontAxesValues WRITE setFontAxesValues NOTIFY fontAxesValuesChanged)
     Q_PROPERTY(qreal fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
     Q_PROPERTY(QColor textColor READ textColor WRITE setTextColor NOTIFY textColorChanged)
-    Q_PROPERTY(QStringList openTypeFeatures READ openTypeFeatures WRITE setOpenTypeFeatures NOTIFY openTypeFeaturesChanged)
+    Q_PROPERTY(QVariantMap openTypeFeatures READ openTypeFeatures WRITE setOpenTypeFeatures NOTIFY openTypeFeaturesChanged)
     Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
     Q_PROPERTY(int padding READ padding WRITE setPadding NOTIFY paddingChanged)
     Q_PROPERTY(QString language READ language WRITE setLanguage NOTIFY languageChanged)
@@ -56,7 +56,7 @@ public:
 
     QColor textColor() const;
 
-    QStringList openTypeFeatures() const;
+    QVariantMap openTypeFeatures() const;
 
     QString text() const;
 
@@ -81,7 +81,7 @@ public Q_SLOTS:
 
     void setTextColor(QColor textColor);
 
-    void setOpenTypeFeatures(QStringList openTypeFeatures);
+    void setOpenTypeFeatures(QVariantMap openTypeFeatures);
 
     void setText(QString text);
 
@@ -106,7 +106,7 @@ Q_SIGNALS:
 
     void textColorChanged(QColor textColor);
 
-    void openTypeFeaturesChanged(QStringList openTypeFeatures);
+    void openTypeFeaturesChanged(QVariantMap openTypeFeatures);
 
     void textChanged(QString text);
 

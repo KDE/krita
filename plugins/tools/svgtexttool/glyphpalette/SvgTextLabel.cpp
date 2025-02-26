@@ -120,9 +120,9 @@ QColor SvgTextLabel::textColor() const
     return Qt::black;
 }
 
-QStringList SvgTextLabel::openTypeFeatures() const
+QVariantMap SvgTextLabel::openTypeFeatures() const
 {
-    return d->shape->textProperties().property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
+    return d->shape->textProperties().property(KoSvgTextProperties::FontFeatureSettingsId).toMap();
 }
 
 QString SvgTextLabel::text() const
@@ -235,13 +235,13 @@ void SvgTextLabel::setTextColor(QColor textColor)
     emit textColorChanged(textColor);
 }
 
-void SvgTextLabel::setOpenTypeFeatures(QStringList openTypeFeatures)
+void SvgTextLabel::setOpenTypeFeatures(QVariantMap openTypeFeatures)
 {
-    QStringList otf = d->props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
+    QVariantMap otf = d->props.property(KoSvgTextProperties::FontFeatureSettingsId).toMap();
     if (otf == openTypeFeatures)
         return;
 
-    d->props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, openTypeFeatures);
+    d->props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, QVariant::fromValue(openTypeFeatures));
     emit openTypeFeaturesChanged(openTypeFeatures);
 }
 

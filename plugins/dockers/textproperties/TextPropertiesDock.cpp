@@ -45,6 +45,7 @@
 #include "FontStyleModel.h"
 #include "FontAxesModel.h"
 #include "KoShapeQtQuickLabel.h"
+#include "OpenTypeFeatureModel.h"
 #include "TagFilterProxyModelQmlWrapper.h"
 
 /// Strange place to put this, do we have a better spot?
@@ -63,6 +64,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
+    qmlRegisterType<OpenTypeFeatureModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureModel");
     qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
     qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
 }
@@ -103,6 +105,7 @@ struct TextPropertiesDock::Private
     FontAxesModel axesModel;
     KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
+    OpenTypeFeatureModel featureModel;
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -141,11 +144,12 @@ TextPropertiesDock::TextPropertiesDock()
     d->stylesModel.setLocales(locales);
 
     connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
-
+    connect(&d->featureModel, SIGNAL(openTypeFeaturesChanged()), this, SLOT(slotUpdateFeatureSettings()));
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
+    m_quickWidget->rootContext()->setContextProperty("fontFeatureModel", QVariant::fromValue(&d->featureModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
@@ -210,6 +214,11 @@ void TextPropertiesDock::slotCanvasTextPropertiesChanged()
     KoSvgTextPropertyData data = d->provider->textPropertyData();
     if (d->textModel->textData.get() != data) {
         d->textModel->textData.set(data);
+
+        KoSvgTextProperties main = data.commonProperties;
+        main.inheritFrom(data.inheritedProperties);
+         d->featureModel.setFromTextProperties(main);
+
         QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     }
 }
@@ -256,6 +265,13 @@ void TextPropertiesDock::slotUpdateAxesValues()
     if (d->axesModel.axisValues() == d->textModel->axisValues())
         return;
     d->textModel->setaxisValues(d->axesModel.axisValues());
+}
+
+void TextPropertiesDock::slotUpdateFeatureSettings()
+{
+    if (d->featureModel.openTypeFeatures() == d->textModel->fontFeatureSettings())
+        return;
+    d->textModel->setfontFeatureSettings(d->featureModel.openTypeFeatures());
 }
 
 #include <KoFontRegistry.h>

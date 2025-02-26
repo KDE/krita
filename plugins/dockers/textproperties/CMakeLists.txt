@@ -5,6 +5,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     FontAxesModel.cpp
     KoShapeQtQuickLabel.cpp
     TagFilterProxyModelQmlWrapper.cpp
+    OpenTypeFeatureModel.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

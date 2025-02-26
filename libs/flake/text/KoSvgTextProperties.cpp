@@ -214,6 +214,15 @@ inline qreal roundToStraightAngle(qreal value)
     return normalizeAngle(int((value + M_PI_4) / M_PI_2) * M_PI_2);
 }
 
+QPair<QString, QString> parseTag(QString taggedValue) {
+    QPair<QString, QString> tag;
+    tag.first = taggedValue.mid(1, 4);
+    if (taggedValue.length() > 6) {
+        tag.second = taggedValue.remove(0, 6).trimmed();
+    }
+    return tag;
+}
+
 QVariantMap parseVariantStringList(const QStringList features) {
     QVariantMap settings;
     for (int i = 0; i < features.size(); i++) {
@@ -221,14 +230,40 @@ QVariantMap parseVariantStringList(const QStringList features) {
         if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
             continue;
         }
-        QString tag = feature.mid(1, 4);
-        feature = feature.remove(0, 6).trimmed();
+        QPair<QString, QString> tag = parseTag(feature);
         bool ok = false;
-        double featureVal = feature.toDouble(&ok);
+        double featureVal = tag.second.toDouble(&ok);
 
-        if (ok && !tag.isEmpty()) {
-            settings.insert(tag, QVariant(featureVal));
-            tag = QString();
+        if (ok && !tag.first.isEmpty()) {
+            settings.insert(tag.first, QVariant(featureVal));
+        }
+    }
+    return settings;
+}
+
+QVariantMap parseFeatureSettingsStringList(const QStringList features) {
+    QVariantMap settings;
+    for (int i = 0; i < features.size(); i++) {
+        QString feature = features.at(i).trimmed();
+        if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
+            continue;
+        }
+        QPair<QString, QString> tag = parseTag(feature);
+        if (tag.second.isEmpty()) {
+            settings.insert(tag.first, QVariant(1));
+        } else {
+            bool ok = false;
+            int featureVal = tag.second.toInt(&ok);
+            if (tag.second.toLower() == "on") {
+                featureVal = 1;
+                ok = true;
+            } else if (tag.second.toLower() == "off") {
+                featureVal = 0;
+                ok = true;
+            }
+            if (ok && !tag.first.isEmpty()) {
+                settings.insert(tag.first, QVariant(featureVal));
+            }
         }
     }
     return settings;
@@ -354,7 +389,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
 
     } else if (command == "font-feature-settings") {
-        setProperty(FontFeatureSettingsId, value.split(","));
+        setProperty(FontFeatureSettingsId, QVariant::fromValue(parseFeatureSettingsStringList(value.split(","))));
     } else if (command == "font-stretch") {
         int newStretch = 100;
 
@@ -675,7 +710,12 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         result.insert("font-variant-east-asian", writeFontFeatureEastAsian(feat));
     }
     if (hasProperty(FontFeatureSettingsId)) {
-        result.insert("font-feature-settings", property(FontFeatureSettingsId).toStringList().join(", "));
+        QStringList settings;
+        QVariantMap vals = property(FontFeatureSettingsId).toMap();
+        for(auto it = vals.begin(); it != vals.end(); it++) {
+            settings.append(QString("'%1' %2").arg(it.key()).arg(it.value().toDouble()));
+        }
+        result.insert("font-feature-settings", settings.join(", "));
     }
 
     if (hasProperty(FontOpticalSizingId)) {
@@ -1028,29 +1068,10 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
     }
 
     if (hasProperty(FontFeatureSettingsId)) {
-        QStringList features = property(FontFeatureSettingsId).toStringList();
-        for (int i = 0; i < features.size(); i++) {
-            QString feature = features.at(i).trimmed();
-            if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
-                continue;
-            }
-            QString openTypeTag = feature.mid(1, 4);
-            if (feature.size() == 6) {
-                openTypeTag += QString("[%1:%2]=1").arg(start).arg(start + length);
-            } else {
-                feature = feature.remove(0, 6).trimmed();
-                bool ok = false;
-                int featureVal = feature.toInt(&ok);
-                if (feature == "on") {
-                    openTypeTag += QString("[%1:%2]=1").arg(start).arg(start + length);
-                } else if (feature == "off") {
-                    openTypeTag += QString("[%1:%2]=0").arg(start).arg(start + length);
-                } else if (ok) {
-                    openTypeTag += QString("[%1:%2]=%3").arg(start).arg(start + length).arg(featureVal);
-                } else {
-                    continue;
-                }
-            }
+        QVariantMap features = property(FontFeatureSettingsId).toMap();
+        for (int i = 0; i < features.keys().size(); i++) {
+            const QString key = features.keys().at(i);
+            QString openTypeTag = QString("%1[%2:%3]=%4").arg(key).arg(start).arg(start + length).arg(features.value(key).toInt());
             fontFeatures.append(openTypeTag);
         }
     }

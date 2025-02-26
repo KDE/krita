@@ -16,6 +16,7 @@
 
 class KoDialog;
 class QQuickWidget;
+class KoSvgTextProperties;
 
 class TextPropertiesDock : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
@@ -27,13 +28,12 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-
-
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
     void slotUpdateStylesModel();
     void slotUpdateAxesValues();
+    void slotUpdateFeatureSettings();
     QString wwsFontFamilyName(QString familyName);
     void connectAutoEnabler(QObject *watched);
 

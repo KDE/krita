@@ -12,6 +12,7 @@
 #include "data/KoUnicodeBlockData.h"
 #include "kritaflake_export.h"
 
+class KoOpenTypeFeatureInfo;
 /**
  * @brief The KoFontGlyphModel class
  * Creates a tree model of all the glyphs in a given face.
@@ -51,7 +52,17 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
+    /**
+     * @brief blocks
+     * @return list of Unicode blocks available in the font.
+     */
     QVector<KoUnicodeBlockData> blocks() const;
+
+    /**
+     * @brief featureInfo
+     * @return list of OpenTypeFeatures available in the font.
+     */
+    QMap<QString, KoOpenTypeFeatureInfo> featureInfo() const;
 
 private:
     struct Private;

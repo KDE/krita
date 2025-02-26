@@ -127,18 +127,19 @@ void GlyphPaletteDialog::slotInsertRichText(const int charRow, const int glyphRo
         QModelIndex idx = model->index(charRow, 0);
         QString  text = idx.isValid()? model->data(idx, Qt::DisplayRole).toString(): QString();
         KoSvgTextProperties props = m_lastUsedProperties.first;
-        QStringList otf;
+        QVariantMap otf;
 
         if (glyphRow > -1) {
             idx = model->index(glyphRow, 0, idx);
             text = model->data(idx, Qt::DisplayRole).toString();
-            otf.append(model->data(idx, KoFontGlyphModel::OpenTypeFeatures).value<QStringList>());
+            otf = model->data(idx, KoFontGlyphModel::OpenTypeFeatures).toMap();
         }
 
         if (!text.isEmpty()) {
             KoSvgTextShape *richText = new KoSvgTextShape();
+
             if (!otf.isEmpty()) {
-                props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, otf);
+                props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, QVariant::fromValue(otf));
             }
 
             richText->setPropertiesAtPos(-1, props);

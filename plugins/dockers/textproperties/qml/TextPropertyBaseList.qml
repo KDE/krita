@@ -140,6 +140,8 @@ ColumnLayout {
                 }
                 OTEastAsian {
                 }
+                OpenTypeFeatureSettings {
+                }
                 BaselineShift {
                 }
                 AlignmentBaseline {

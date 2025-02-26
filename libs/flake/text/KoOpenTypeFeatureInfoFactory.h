@@ -7,6 +7,7 @@
 #include <QStringList>
 #include <QVector>
 #include <QScopedPointer>
+#include <kritaflake_export.h>
 
 /*
  * KoOpenTypeFeatureInfo provides basic info about
@@ -38,12 +39,14 @@ struct KoOpenTypeFeatureInfo
                           const QString &name,
                           const QString &description,
                           const QVector<OpenTypeTable> &tables,
-                          const bool glyphPalette = false)
+                          const bool glyphPalette = false,
+                          const int maxValue = 1)
     : tag(tag)
     , name(name)
     , description(description)
     , tables(tables)
     , glyphPalette(glyphPalette)
+    , maxValue(maxValue)
     {
     }
     
@@ -58,8 +61,10 @@ struct KoOpenTypeFeatureInfo
     QStringList namedParameters;/// Named parameters. Only used by CVXX features and retrieved from the font.
     
     QVector<OpenTypeTable> tables; ///< Which table type(s) are recommended for this feature in the official registery.
-    
+
     bool glyphPalette{false}; ///< Whether the feature should be visible in the glyph palette.
+
+    int maxValue; ///< The maximum value possible, this is by default 1 (on), but for alternate substitution(gsub 3), it can have more inside the font.
     
 };
 
@@ -69,13 +74,26 @@ struct KoOpenTypeFeatureInfo
  * This returns KoOpenTypeFeatureInfo's for the given tag.
  */
 
-class KoOpenTypeFeatureInfoFactory
+class KRITAFLAKE_EXPORT KoOpenTypeFeatureInfoFactory
 {
 public:
     KoOpenTypeFeatureInfoFactory();
     ~KoOpenTypeFeatureInfoFactory();
     
-    KoOpenTypeFeatureInfo infoByTag(const QLatin1String &tag);
+    /**
+     * @brief infoByTag
+     * @param tag -- the opentype tag for a given feature.
+     * Note that it is possible for Fonts to have custom features,
+     * in this case a generic KoOpenTypeFeatureInfo will be returned.
+     * @return KoOpenTypeFeatureInfo for a given tag.
+     */
+    KoOpenTypeFeatureInfo infoByTag(const QLatin1String &tag) const;
+
+    /**
+     * @brief tags
+     * @return all the tags we have prepared KoOpenTypeFeatureInfo for.
+     */
+    QList<QString> tags() const;
 
 private:
     struct Private;

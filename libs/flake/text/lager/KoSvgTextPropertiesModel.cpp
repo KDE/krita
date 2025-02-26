@@ -228,6 +228,8 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontVariantLigaturesState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontVariantLigatureId))}
     , LAGER_QT(fontVariantNumericState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontVariantNumericId))}
     , LAGER_QT(fontVariantEastAsianState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontVariantEastAsianId))}
+    , LAGER_QT(fontFeatureSettings) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFeatureSettingsId)).zoom(variant_to<QVariantMap>)}
+    , LAGER_QT(fontFeatureSettingsState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontFeatureSettingsId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

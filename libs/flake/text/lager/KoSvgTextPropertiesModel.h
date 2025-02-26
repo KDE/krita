@@ -178,8 +178,6 @@ public:
     LAGER_QT_CURSOR(bool, fontSynthesisStyle);
     LAGER_QT_CURSOR(PropertyState, fontSynthesisStyleState);
 
-    /// We're selecting a span of text instead of the whole paragraph.
-    LAGER_QT_CURSOR(bool, spanSelection);
 
     LAGER_QT_CURSOR(int, fontVariantPosition);
     LAGER_QT_CURSOR(PropertyState, fontVariantPositionState);
@@ -192,6 +190,12 @@ public:
     LAGER_QT_CURSOR(PropertyState, fontVariantNumericState);
     FontVariantEastAsianModel *fontVariantEastAsian();
     LAGER_QT_CURSOR(PropertyState, fontVariantEastAsianState);
+
+    LAGER_QT_CURSOR(QVariantMap, fontFeatureSettings);
+    LAGER_QT_CURSOR(PropertyState, fontFeatureSettingsState);
+
+    /// We're selecting a span of text instead of the whole paragraph.
+    LAGER_QT_CURSOR(bool, spanSelection);
 
     /**
      * @brief resolvedFontSize

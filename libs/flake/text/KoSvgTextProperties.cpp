@@ -994,7 +994,10 @@ qreal KoSvgTextProperties::xHeight() const
     const qreal fontSizeVal = fontSize().value;
     const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
     const KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
-    return double((metrics.xHeight*-1)/metrics.fontSize) * fontSizeVal;
+    if (metrics.xHeight > 0 && metrics.fontSize > 0) {
+        return metrics.xHeight * fontSizeVal / metrics.fontSize;
+    }
+    return fontSizeVal * 0.5;
 }
 
 QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) const

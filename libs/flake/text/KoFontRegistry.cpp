@@ -741,6 +741,7 @@ KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo inf
             yRes,
             disableFontMatching,
             language);
+        if (faces.empty()) return metrics;
         metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
         d->fontMetrics().insert(suggestedHash, metrics);
     }

@@ -37,7 +37,7 @@
     <key>LSRequiresCarbon</key>
     <true/>
     <key>LSMinimumSystemVersion</key>
-    <string>10.14</string>
+    <string>${MACOS_MINIMUM_VERSION}</string>
     <key>NSSupportsAutomaticGraphicsSwitching</key>
     <true/>
     <key>NSHumanReadableCopyright</key>

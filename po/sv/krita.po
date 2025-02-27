@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-23 15:43+0100\n"
+"PO-Revision-Date: 2025-02-26 18:25+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -17618,7 +17618,7 @@ msgstr "Vithkuq"
 #, kde-format
 msgctxt "@title"
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
 #, kde-format
@@ -17636,19 +17636,19 @@ msgstr "Utökat latin-F"
 #, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr ""
+msgstr "Cypriotisk stavelseskrift"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
 msgctxt "@title"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Kejserlig arameiska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmyriska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:212
 #, kde-format
@@ -17666,7 +17666,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Phoenician"
-msgstr ""
+msgstr "Feniciska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:215
 #, kde-format
@@ -17918,7 +17918,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-C"
-msgstr ""
+msgstr "Utökad Myanmar-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:257
 #, kde-format
@@ -18062,7 +18062,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "Egyptiska hieroglyfer"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:281
 #, kde-format
@@ -18074,7 +18074,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr ""
+msgstr "Utökade egyptiska hieroglyfer-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:283
 #, kde-format
@@ -18326,7 +18326,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-B"
-msgstr ""
+msgstr "Utökad etiopiska-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:325
 #, kde-format
@@ -63371,13 +63371,13 @@ msgstr "Liknande färgmarkeringsverktyg"
 #, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr ""
+msgstr "Glyfpalett"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
 #, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr ""
+msgstr "Alla glyfer"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -64069,7 +64069,7 @@ msgstr "Redigera SVG-källa"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
 #, kde-format
 msgid "Glyph Palette"
-msgstr ""
+msgstr "Glyfpalett"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33

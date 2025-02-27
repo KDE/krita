@@ -26789,7 +26789,7 @@ msgstr[0] "笔刷速度平滑：{n} 次采样"
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
+msgstr[0] "笔身指向偏移：{n}°"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1566
@@ -31630,7 +31630,7 @@ msgstr "Krita 对速度传感器数据的平滑程度。此数值视设备的具
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
-msgstr ""
+msgstr "将指定的偏移角度附加到设备报告的笔身倾斜指向值。"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233

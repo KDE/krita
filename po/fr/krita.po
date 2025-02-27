@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-24 11:40+0100\n"
+"PO-Revision-Date: 2025-02-25 14:45+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -17137,7 +17137,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-A"
-msgstr ""
+msgstr "Supplément pour « Arrows-A »"
 
 # barre d'outils
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
@@ -17150,7 +17150,7 @@ msgstr "Motifs de Braille"
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-B"
-msgstr ""
+msgstr "Supplément pour « Arrows-B »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:114
 #, kde-format
@@ -17168,7 +17168,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Arrows"
-msgstr ""
+msgstr "Symboles et flèches divers"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:117
 #, kde-format
@@ -17234,7 +17234,7 @@ msgstr "Radicaux Kangxi"
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Description Characters"
-msgstr ""
+msgstr "Caractères de description idéographique"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
 #, kde-format
@@ -17306,7 +17306,7 @@ msgstr "Compatibilité avec « CJK »"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension A"
-msgstr ""
+msgstr "Idéogrammes unifiés « CJK » pour « Extension-A »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:140
 #, kde-format
@@ -17546,11 +17546,10 @@ msgid "Vertical Forms"
 msgstr "Formulaires verticales"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
-#| msgid "Combine Normal Maps"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Combiner les cartes normales"
+msgstr "Combiner les demi-marques"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -17635,7 +17634,7 @@ msgstr "Carien"
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "Nombres coptes « Epact »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
 #, kde-format
@@ -18282,12 +18281,10 @@ msgid "Kana Extended-A"
 msgstr "Kana Étendu-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "Étalement de l'aimantation"
+msgstr "Extension pour Kana en petit"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
@@ -18365,7 +18362,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "Symboles alphanumériques mathématiques"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
@@ -18479,7 +18476,7 @@ msgstr "Cartes à jouer"
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr ""
+msgstr "Supplément alphanumérique intégré"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
@@ -18503,7 +18500,7 @@ msgstr "Émoticônes"
 #, kde-format
 msgctxt "@title"
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Fonte « Dingbats » ornementales"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:338
 #, kde-format
@@ -18527,7 +18524,7 @@ msgstr "Formes géométriques étendues"
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-C"
-msgstr ""
+msgstr "Supplément pour « Arrows-C »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:342
 #, kde-format
@@ -18623,13 +18620,13 @@ msgstr "Supplément pour sélecteurs de variation"
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "Utilisation supplémentaire à usage privé de « Area-A »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "Utilisation supplémentaire à usage privé de « Area-B »"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
 #, kde-format
@@ -19388,6 +19385,8 @@ msgstr ""
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
+"Contrôle la substitution des formes basiques ci-dessous dans les scripts "
+"« Indic »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
@@ -19435,7 +19434,7 @@ msgstr "Formulaires conjoints"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr ""
+msgstr "Contrôle les formes conjointes dans les scripts « Indic »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19453,13 +19452,13 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr "Demi-formulaires"
+msgstr "Demi-formes"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "Remplace les consonnes dans les scripts Indic par leurs demi-formes."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
@@ -19566,6 +19565,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
+"Remplace les formes « Reph » dans les scripts « Indic » par une consonne et "
+"une séquence « Halant »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
@@ -19622,6 +19623,8 @@ msgstr "Formulaires d’expert"
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
+"Remplace les formes classiques Kanji dans les polices japonaises par celles "
+"de type « Expert »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
 #, kde-format
@@ -19721,6 +19724,8 @@ msgstr "Formulaires JIS78"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles de "
+"type « JIS78 »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
 #, kde-format
@@ -19733,6 +19738,8 @@ msgstr "Formulaires JIS83"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles de "
+"type « JIS83 »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
 #, kde-format
@@ -19745,6 +19752,8 @@ msgstr "Formulaires JIS90"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles de "
+"type « JIS90 »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
 #, kde-format
@@ -19757,6 +19766,8 @@ msgstr "Formulaires JIS2004"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles de "
+"type « JIS2004 »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
 #, kde-format
@@ -19782,6 +19793,8 @@ msgstr "Formulaires Kanji NLC"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles de "
+"type « NLC »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
 #, kde-format
@@ -19856,6 +19869,7 @@ msgstr "Formes simplifiées"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
 msgstr ""
+"Remplace les glyphes dans les polices CJC par des formes « simplifiées »."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
 #, kde-format
@@ -19884,6 +19898,8 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
+"Remplace la forme classique Kanji dans les polices japonaises par celles "
+"traditionnellement utilisées dans les noms."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
 #, kde-format

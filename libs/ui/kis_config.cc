@@ -44,7 +44,7 @@
 #include <kis_image_config.h>
 #include <KisCumulativeUndoData.h>
 
-#ifdef Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if defined Q_OS_WIN && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #  include <QtGui/private/qguiapplication_p.h>
 #  include <QtGui/qpa/qplatformintegration.h>
 #endif

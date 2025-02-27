@@ -1458,12 +1458,16 @@ void TabletSettingsTab::slotTabletTest()
     tabletTestDialog.exec();
 }
 
+#ifdef Q_OS_WIN
 #include "KisDlgCustomTabletResolution.h"
+#endif
 
 void TabletSettingsTab::slotResolutionSettings()
 {
+#ifdef Q_OS_WIN
     KisDlgCustomTabletResolution dlg(this);
     dlg.exec();
+#endif
 }
 
 

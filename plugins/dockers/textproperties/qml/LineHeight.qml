@@ -97,7 +97,7 @@ TextPropertyBase {
             }
         }
 
-        ComboBox {
+        SqueezedComboBox {
             id: lineHeightUnitCmb;
             property QtObject spinBoxControl: lineHeightSpn;
             model: [

@@ -85,19 +85,21 @@ CollapsibleGroupProperty {
             font.italic: properties.textAlignAllState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
-        ComboBox {
+        SqueezedComboBox {
             id: textAlignAllCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "Left"), value: KoSvgText.AlignLeft},
-                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AlignStart},
-                {text: i18nc("@label:inlistbox", "Center"), value: KoSvgText.AlignCenter},
-                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AlignEnd},
-                {text: i18nc("@label:inlistbox", "Right"), value: KoSvgText.AlignRight},
-                {text: i18nc("@label:inlistbox", "Justified"), value: KoSvgText.AlignJustify}
+                {text: i18nc("@label:inlistbox", "Left"), value: KoSvgText.AlignLeft, icon: "qrc:///16_light_format-justify-left.svg"},
+                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AlignStart, icon: "qrc:///16_light_format-justify-left.svg"},
+                {text: i18nc("@label:inlistbox", "Center"), value: KoSvgText.AlignCenter, icon: "qrc:///16_light_format-justify-center.svg"},
+                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AlignEnd, icon: "qrc:///16_light_format-justify-right.svg"},
+                {text: i18nc("@label:inlistbox", "Right"), value: KoSvgText.AlignRight, icon: "qrc:///16_light_format-justify-right.svg"},
+                {text: i18nc("@label:inlistbox", "Justified"), value: KoSvgText.AlignJustify, icon: "qrc:///16_light_format-justify-fill.svg"}
             ]
             Layout.fillWidth: true
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 16;
             onActivated: textAlignAll = currentValue;
             wheelEnabled: true;
         }
@@ -144,15 +146,17 @@ CollapsibleGroupProperty {
             font.italic: properties.textAnchorState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
-        ComboBox {
+        SqueezedComboBox {
             id: textAnchorCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AnchorStart},
-                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.AnchorMiddle},
-                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AnchorEnd}]
+                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AnchorStart, icon: "qrc:///16_light_format-justify-left.svg"},
+                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.AnchorMiddle, icon: "qrc:///16_light_format-justify-center.svg"},
+                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AnchorEnd, icon: "qrc:///16_light_format-justify-right.svg"}]
             Layout.fillWidth: true
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 16;
             onActivated: textAnchor = currentValue;
             wheelEnabled: true;
         }

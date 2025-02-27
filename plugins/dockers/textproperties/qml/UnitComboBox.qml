@@ -7,12 +7,14 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import org.krita.flake.text 1.0
 
-ComboBox {
+SqueezedComboBox {
     property QtObject spinBoxControl;
     property bool isFontSize: false;
     property int comboBoxUnit;
     property bool allowPercentage: true;
     wheelEnabled: true;
+
+    property int minimumUnitBoxWidth: height+indicator.width;
 
     property string ptString: i18nc("@label:inlistbox", "Pt");
     property string emString: i18nc("@label:inlistbox", "Em");

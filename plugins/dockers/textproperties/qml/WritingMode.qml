@@ -50,18 +50,19 @@ TextPropertyBase {
         }
 
 
-        ComboBox {
+        SqueezedComboBox {
             id: writingModeCmb
             model: [
-                {text: i18nc("@label:inlistbox", "Horizontal"), value: KoSvgText.HorizontalTB},
-                {text: i18nc("@label:inlistbox", "Vertical, Right to Left"), value: KoSvgText.VerticalRL},
-                {text: i18nc("@label:inlistbox", "Vertical, Left To Right"), value: KoSvgText.VerticalLR}
+                {text: i18nc("@label:inlistbox", "Horizontal"), value: KoSvgText.HorizontalTB, icon: "qrc:///22_light_format-text-direction-horizontal-tb.svg"},
+                {text: i18nc("@label:inlistbox", "Vertical, Right to Left"), value: KoSvgText.VerticalRL, icon: "qrc:///22_light_format-text-direction-vertical-rl.svg"},
+                {text: i18nc("@label:inlistbox", "Vertical, Left To Right"), value: KoSvgText.VerticalLR, icon: "qrc:///22_light_format-text-direction-vertical-lr.svg"}
             ]
             Layout.fillWidth: true;
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 22;
             onActivated: writingMode = currentValue;
-            wheelEnabled: true;
         }
     }
 }

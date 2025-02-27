@@ -69,7 +69,8 @@ TextPropertyBase {
             id: wordSpacingUnitCmb
             spinBoxControl: wordSpacingSpn;
             isFontSize: false;
-            Layout.fillWidth: true;
+            Layout.preferredWidth: minimumUnitBoxWidth;
+            Layout.maximumWidth: implicitWidth;
             allowPercentage: false; // CSS-Text-4 has percentages for word-spacing, but so does SVG 1.1, and they both are implemented differently.
         }
     }

@@ -83,7 +83,8 @@ CollapsibleGroupProperty {
         UnitComboBox {
             id: textIndentUnitCmb;
             spinBoxControl: textIndentSpn;
-            Layout.fillWidth: true;
+            Layout.preferredWidth: minimumUnitBoxWidth;
+            Layout.maximumWidth: implicitWidth;
         }
     }
 

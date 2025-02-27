@@ -64,15 +64,18 @@ TextPropertyBase {
             palette: directionCmbPalette.palette;
         }
 
-        ComboBox {
+        SqueezedComboBox {
             id: directionCmb
             Layout.fillWidth: true;
+            Layout.preferredWidth: implicitWidth;
             model: [
-                {text: i18nc("@label:inlistbox", "Left to Right"), value: KoSvgText.DirectionLeftToRight},
-                {text: i18nc("@label:inlistbox", "Right to Left"), value: KoSvgText.DirectionRightToLeft}
+                {text: i18nc("@label:inlistbox", "Left to Right"), value: KoSvgText.DirectionLeftToRight, icon: "qrc:///22_light_format-text-direction-ltr.svg"},
+                {text: i18nc("@label:inlistbox", "Right to Left"), value: KoSvgText.DirectionRightToLeft, icon: "qrc:///22_light_format-text-direction-rtl.svg"}
             ]
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 22;
             onActivated: direction = currentValue;
             wheelEnabled: true;
             PaletteControl {

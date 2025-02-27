@@ -107,7 +107,7 @@ CollapsibleGroupProperty {
             Layout.maximumWidth: contentWidth;
         }
 
-        ComboBox {
+        SqueezedComboBox {
         id: styleCmb;
         model: fontStylesModel;
         textRole: "display";

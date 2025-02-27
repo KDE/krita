@@ -70,7 +70,8 @@ TextPropertyBase {
             id: fontSizeUnitCmb;
             spinBoxControl: fontSizeSpn;
             isFontSize: true;
-            Layout.fillWidth: true;
+            Layout.preferredWidth: minimumUnitBoxWidth;
+            Layout.maximumWidth: implicitWidth;
         }
     }
 }

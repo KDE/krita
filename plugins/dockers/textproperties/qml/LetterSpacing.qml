@@ -68,7 +68,8 @@ TextPropertyBase {
                 id: letterSpacingUnitCmb
                 spinBoxControl: letterSpacingSpn;
                 isFontSize: false;
-                Layout.fillWidth: true;
+                Layout.preferredWidth: minimumUnitBoxWidth;
+                Layout.maximumWidth: implicitWidth;
                 allowPercentage: false; // CSS-Text-4 has percentages for letter-spacing, but so does SVG 1.1, and they both are implemented differently.
             }
     }

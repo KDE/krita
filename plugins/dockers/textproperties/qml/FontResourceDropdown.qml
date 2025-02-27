@@ -78,6 +78,8 @@ Button {
                     text: fontFamilyDelegate.fontName;
                     anchors.top: parent.top;
                     anchors.left: parent.left;
+                    elide: Text.ElideRight;
+                    width: parent.width;
                     color: parent.highlighted? palette.highlightedText: palette.text;
                 }
 
@@ -179,6 +181,10 @@ Button {
                     tagActionsContextMenu.resourceIndex = fontDelegateItem.model.index;
                     tagActionsContextMenu.popup()
                 }
+
+                ToolTip.text: fontDelegateItem.fontName;
+                ToolTip.visible: containsMouse;
+                ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
 
             }
         }

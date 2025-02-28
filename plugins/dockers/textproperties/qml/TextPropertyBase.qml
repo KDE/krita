@@ -12,7 +12,7 @@ Column {
     property int firstColumnWidth: 32;
     property int columnSpacing: 5;
     padding: columnSpacing;
-    width: parent? parent.width - (padding*2): 100;
+    width: parent && parent !== undefined? parent.width - (padding*2): 100;
     height: visible? childrenRect.height: 0;
 
     enum PropertyType {

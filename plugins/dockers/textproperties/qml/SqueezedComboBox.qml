@@ -31,7 +31,7 @@ ComboBox {
         icon.width: squeezedComboBox.iconSize;
         icon.color: highlighted? palette.highlightedText: palette.text;
         icon.source: squeezedComboBox.iconRole && mData !== undefined ? mData[squeezedComboBox.iconRole] : "";
-        text: squeezedComboBox.textRole && mData !== undefined? mData[squeezedComboBox.textRole] : "";
+        text: squeezedComboBox.displayText;
 
         background: Rectangle{ color:"transparent";}
 
@@ -43,37 +43,20 @@ ComboBox {
         }
     }
 
-    TextMetrics {
-        id: textMetrics;
-        font: contentItemDelegate.font;
-    }
-
     // It is surprisingly hard to get the listview to be the same size as the child rect, if we also want the children
     // to grow if there's any more space. This function calculates that.
-    function recalculatePopupWidth() {
-        if (model === undefined) return;
-        let maxValue = 0;
-        for (let i = 0; i < count; i++) {
-            textMetrics.text = squeezedComboBox.textRole ? model[i][squeezedComboBox.textRole] : "";
-            maxValue = Math.max(maxValue, textMetrics.width);
-        }
-        let iconWidth = iconRole? iconSize: 0;
-        let total = iconWidth + maxValue + contentItemDelegate.leftPadding+contentItemDelegate.rightPadding+(contentItemDelegate.spacing*2);
-        view.maxWidth = total;
-    }
 
-    Component.onCompleted: recalculatePopupWidth();
-    onModelChanged: recalculatePopupWidth();
 
     delegate: ItemDelegate {
         id: squeezedComboDelegate;
-        width: parent && parent != undefined? parent.width: 0;
+        width: Math.max(implicitWidth, parent && parent != undefined? parent.width: 0);
+        implicitWidth: leftPadding + textMetrics.advanceWidth + rightPadding + spacing + (squeezedComboBox.iconRole ? iconSize+spacing: 0);
         palette: squeezedComboBox.palette;
         highlighted: squeezedComboBox.highlightedIndex === index;
         // Depending on the model, either modelData (read only) or model(read/write) is available.
         // See https://bugreports.qt.io/browse/QTBUG-111176
-        required property var modelData;
         required property var model;
+        property var modelData: model.modelData;
         property var mData: modelData && modelData !== undefined? modelData: model;
         required property int index;
         property string tooltipText: squeezedComboBox.toolTipRole ? mData[squeezedComboBox.toolTipRole] : "";
@@ -82,36 +65,43 @@ ComboBox {
         icon.color: highlighted? palette.highlightedText: palette.text;
         icon.source: squeezedComboBox.iconRole ? mData[squeezedComboBox.iconRole] : "";
         text: squeezedComboBox.textRole ? mData[squeezedComboBox.textRole] : "";
+        property alias textMetricText: textMetrics.text;
+        textMetricText: text;
+
+        background: Rectangle {
+            color: squeezedComboDelegate.highlighted? palette.highlight: "transparent";
+        }
+
+        // To get the pop-up to be the same size as the maximum view, we first need to calculate
+        // the implict width via text-metrics, because icon label elides by default.
+        // then, on completed, we need to set the neededwidth to the max of all completed items.
+        // then, we need to set the width to the max of implicit and parent width, so the item fills.
+        Component.onCompleted: view.neededWidth = Math.max(view.neededWidth, implicitWidth);
+
+        TextMetrics {
+            id: textMetrics;
+            font: squeezedComboDelegate.font;
+        }
 
         ToolTip.text: tooltipText;
         ToolTip.visible: highlighted && tooltipText.length > 0;
         ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
     }
 
-    popup: Popup {
-        id: squeezedComboPopup;
-        y: squeezedComboBox.height - 1;
-        x: squeezedComboBox.width - width;
-        width: contentWidth;
-        height: contentHeight;
-        padding: 1;
-
-        palette: squeezedComboBox.palette;
-
-        contentItem: ListView {
-            leftMargin: 0;
-            rightMargin: 0;
-            id: view;
-            property int maxWidth: 100;
-            implicitWidth: Math.max(maxWidth, squeezedComboBox.width);
-            width: implicitWidth;
-            implicitHeight: contentHeight;
-            height: implicitHeight;
-            clip: true;
-            model: squeezedComboBox.delegateModel;
-            currentIndex: squeezedComboBox.currentIndex;
-            ScrollBar.vertical: ScrollBar {
-            }
+    popup.palette: squeezedComboBox.palette;
+    popup.x: squeezedComboBox.width - popup.width;
+    popup.width: popup.contentWidth + popup.leftPadding + popup.rightPadding;
+    popup.contentItem: ListView {
+        id: view;
+        property int neededWidth: 100;
+        implicitWidth: Math.max(neededWidth, squeezedComboBox.width);
+        width: implicitWidth;
+        implicitHeight: contentHeight;
+        height: implicitHeight;
+        clip: true;
+        model: squeezedComboBox.delegateModel;
+        currentIndex: squeezedComboBox.currentIndex;
+        ScrollBar.vertical: ScrollBar {
         }
     }
 }

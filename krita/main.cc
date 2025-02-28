@@ -422,6 +422,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         KisOpenGL::setDefaultSurfaceConfig(config);
         KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);
 
+#if defined Q_OS_WIN
+    qputenv("QT_WIDGETS_RHI", "1");
+    qputenv("QT_WIDGETS_RHI_BACKEND", "opengl");
+#endif
+
 #ifdef Q_OS_WIN
         // HACK: https://bugs.kde.org/show_bug.cgi?id=390651
         resetRotation();

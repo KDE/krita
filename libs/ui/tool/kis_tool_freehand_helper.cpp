@@ -920,7 +920,7 @@ void KisToolFreehandHelper::finishStroke()
         m_d->haveTangent = false;
 
         QPointF newTangent = (m_d->previousPaintInformation.pos() - m_d->olderPaintInformation.pos()) /
-            (m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
+            qMax(qreal(1.0), m_d->previousPaintInformation.currentTime() - m_d->olderPaintInformation.currentTime());
 
         paintBezierSegment(m_d->olderPaintInformation,
                            m_d->previousPaintInformation,

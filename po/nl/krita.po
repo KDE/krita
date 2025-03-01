@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-27 23:23+0100\n"
+"PO-Revision-Date: 2025-02-28 11:25+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -19926,7 +19926,7 @@ msgstr "Traditionele vormen"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
-msgstr ""
+msgstr "Vervangt glyphs in CJK lettertypen door 'traditionele' vormen."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
 #, kde-format
@@ -19938,7 +19938,7 @@ msgstr "Een derde-vormen"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with third-width glyphs."
-msgstr ""
+msgstr "Vervangt glyphs door derde-breedte glyphs."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
 #, kde-format
@@ -19951,6 +19951,7 @@ msgstr "Alternatieve verticale afmetingen"
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
+"Positioneert glyphs opnieuw zodat ze er beter uitzien in verticale indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
 #, kde-format
@@ -19963,12 +19964,14 @@ msgstr "Alternatieve half-breedtes"
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in horizontal layout."
 msgstr ""
+"Positioneert glyphs opnieuw zodat ze er beter uitzien in horizontale "
+"indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr ""
+msgstr "Contextuele verticale half-breedte spatiëring"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
 #, kde-format
@@ -19981,12 +19984,14 @@ msgstr "Verticale alternatieven"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
+"Vervangt glyphs in CJK lettertypen door diegenen geschikt voor verticaal "
+"schrijven."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Alternatieve verticale halve afmetingen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -19994,12 +19999,13 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
 msgstr ""
+"Positioneert glyphs opnieuw zodat ze half-breedte zijn in verticale context."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Klinker Jamo-vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -20007,6 +20013,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
 msgstr ""
+"Vervangt reeksen van klinker klasse Hangul Jamo door een gecombineerd "
+"klinkervorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
 #, kde-format
@@ -20021,12 +20029,14 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
 "layout."
 msgstr ""
+"Vervangt standaard kana in Japanse lettertypen door diegenen geschikt voor "
+"verticale indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:459
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Alternatieve proportionele verticale afmetingen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -20034,6 +20044,8 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are proportional in a vertical writing context."
 msgstr ""
+"Positioneert glyphs opnieuw zodat ze proportioneel zijn in verticale "
+"schrijfcontext."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
 #, kde-format
@@ -20046,6 +20058,8 @@ msgstr "Verticale alternatieven voor rotatie"
 msgctxt "@tooltip"
 msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
+"Vervangt een subset van glyphs door gedraaide varianten voor verticale "
+"indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
 #, kde-format
@@ -20060,6 +20074,8 @@ msgid ""
 "Replaces all horizontal-script glyphs with rotated variants for vertical "
 "layout."
 msgstr ""
+"Vervangt alle horizontaal geschreven glyphs door gedraaide varianten voor "
+"verticale indeling."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
 #, kde-format
@@ -20071,13 +20087,13 @@ msgstr "Cursieve positionering"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts the position of glyphs so they cursively connect."
-msgstr ""
+msgstr "Past de positie van glyphs aan zodat ze cursief verbinden."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:477
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr ""
+msgstr "Terminalvormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -20086,12 +20102,14 @@ msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
 "end form."
 msgstr ""
+"Vervangt de uiteindelijke glyph in een reeks van glyphs in een samengevoegd "
+"schrift door zijn eindvorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:481
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr ""
+msgstr "Terminalvorm #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -20100,12 +20118,14 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form."
 msgstr ""
+"Vervangt het Alaph-glyph aan het einde van Syrische woorden door de juiste "
+"vorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:485
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr ""
+msgstr "Terminalvorm #3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -20114,6 +20134,8 @@ msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
 "form, when neither Terminal forms or Terminal forms 2 are applicable."
 msgstr ""
+"Vervangt het Alaph-glyph aan het einde van Syrische woorden door de juiste "
+"vorm, wanneer noch terminalvormen terminalvormen 2 van toepassing zijn."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
@@ -20129,6 +20151,8 @@ msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
 "start form."
 msgstr ""
+"Vervangt de eerste glyph in een reeks van glyphs in een samengevoegd schrift "
+"door zijn beginvorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
 #, kde-format
@@ -20137,18 +20161,20 @@ msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
 "isolated form."
 msgstr ""
+"Vervangt een glyph in een reeks van glyphs in een samengevoegd schrift door "
+"zijn geïsoleerde vorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
 #, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr ""
+msgstr "Alternatieve glyphs links naar rechts"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right alternates."
-msgstr ""
+msgstr "Vervangt glyphs door alternatieven links naar rechts."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
 #, kde-format
@@ -20160,13 +20186,13 @@ msgstr "Links naar rechts gespiegelde vormen"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr ""
+msgstr "Vervangt glyphs door hun gespiegelde vormen links naar rechts."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Mediale vormen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20175,12 +20201,14 @@ msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
 msgstr ""
+"Vervangt glyphs in het midden van een reeks van glyphs in een samengevoegd "
+"schrift door hun mediale vorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Mediale vormen #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20189,12 +20217,14 @@ msgid ""
 "Replaces the Alaph glyph in the middle of Syriac words with its appropriate "
 "form."
 msgstr ""
+"Vervangt het Alaph-glyph aan het midden van Syrische woorden door zijn "
+"juiste vorm."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
 #, kde-format
 msgctxt "@title"
 msgid "mset"
-msgstr ""
+msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
 #, kde-format
@@ -20203,18 +20233,20 @@ msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
 "substitution."
 msgstr ""
+"Positioneert Arabische combinerende markeringen in lettertypen voor Windows "
+"95 door gebruik van substitutie van glyphs."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:517
 #, kde-format
 msgctxt "@title"
 msgid "Right-to-left glyph alternates"
-msgstr ""
+msgstr "Alternatieve glyphs rechts naar links"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:518
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left alternates."
-msgstr ""
+msgstr "Vervangt glyphs door alternatieven rechts naar links."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
 #, kde-format
@@ -20226,7 +20258,7 @@ msgstr "Rechts naar links gespiegelde vormen"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their right-to-left mirrored forms."
-msgstr ""
+msgstr "Vervangt glyphs door hun gespiegelde vormen rechts naar links."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
 #, kde-format
@@ -20238,7 +20270,7 @@ msgstr "Uitgerekte Glyph decompositie"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr ""
+msgstr "Vervangt glyphs die uittrekken nodig hebben door uittrekbare glyphs."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
 #, kde-format
@@ -20251,7 +20283,7 @@ msgstr "Stilistische set %1"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
-msgstr ""
+msgstr "Vervangt glyphs door alternatieven."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
 #, kde-format
@@ -27101,8 +27133,8 @@ msgstr[1] "Penseelsnelheid vloeiend maken: {n} samples"
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Richtingverschuiving van kanteling van pen: {n}°"
+msgstr[1] "Richtingverschuiving van kanteling van pen: {n}°"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1566
@@ -32067,14 +32099,15 @@ msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
 "hardware-dependent"
 msgstr ""
-"Hoeveel vloeiend maken Krita moet toepassen op de speed sensor. Deze waarde "
-"is erg afhankelijk van de hardware"
+"Hoeveel vloeiend maken Krita moet toepassen op de snelheidssensor. Deze "
+"waarde is erg afhankelijk van de hardware"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intTiltDirectionOffset)
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
 msgstr ""
+"Hoekverschuiving toegevoegd aan de gerapporteerde richting van kanteling."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
 #: libs/ui/forms/wdgtabletsettings.ui:233

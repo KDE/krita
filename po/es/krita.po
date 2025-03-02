@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-28 01:57+0100\n"
+"PO-Revision-Date: 2025-03-01 12:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17760,7 +17760,7 @@ msgstr "Pelvi para inscripciones"
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Pelvi salterio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
@@ -17778,7 +17778,7 @@ msgstr "Húngaro antiguo"
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi rohinyá"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
@@ -17790,7 +17790,7 @@ msgstr "Garay"
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Símbolos numéricos rumi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
@@ -17826,7 +17826,7 @@ msgstr "Uigur antiguo"
 #, kde-format
 msgctxt "@title"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Corasmio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:237
 #, kde-format
@@ -17874,7 +17874,7 @@ msgstr "Sharada"
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala Archaic Numbers"
-msgstr ""
+msgstr "Números arcaicos cingaleses"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:245
 #, kde-format
@@ -17892,25 +17892,25 @@ msgstr "Multani"
 #, kde-format
 msgctxt "@title"
 msgid "Khudawadi"
-msgstr ""
+msgstr "Khudabadi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:248
 #, kde-format
 msgctxt "@title"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-tigalari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:250
 #, kde-format
 msgctxt "@title"
 msgid "Newa"
-msgstr ""
+msgstr "Newa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:251
 #, kde-format
@@ -17925,11 +17925,10 @@ msgid "Siddham"
 msgstr "Siddham"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr "Modificado:"
+msgstr "Modi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
@@ -17971,19 +17970,19 @@ msgstr "Warang Citi"
 #, kde-format
 msgctxt "@title"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Nandinagari"
-msgstr ""
+msgstr "Nandinagari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:262
 #, kde-format
 msgctxt "@title"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Zanabazar cuadrado"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:263
 #, kde-format
@@ -17995,31 +17994,31 @@ msgstr "Soyombo"
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr ""
+msgstr "Sílabas aborígenes canadienses unificadas extendidas A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr ""
+msgstr "Devanagari extendido A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
 msgctxt "@title"
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunwar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:268
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
 #, kde-format
@@ -18043,7 +18042,7 @@ msgstr "Gunjala Gondi"
 #, kde-format
 msgctxt "@title"
 msgid "Makasar"
-msgstr ""
+msgstr "Makasar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:273
 #, kde-format
@@ -18079,13 +18078,13 @@ msgstr "Puntuación y números cuneiformes"
 #, kde-format
 msgctxt "@title"
 msgid "Early Dynastic Cuneiform"
-msgstr ""
+msgstr "Cuneiforme dinástico temprano"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:279
 #, kde-format
 msgctxt "@title"
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Chipro-minoico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:280
 #, kde-format
@@ -18097,7 +18096,7 @@ msgstr "Jeroglíficos egipcios"
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "Controles de formato de jeroglíficos egipcios"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
 #, kde-format
@@ -18115,7 +18114,7 @@ msgstr "Jeroglíficos anatolios"
 #, kde-format
 msgctxt "@title"
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:285
 #, kde-format
@@ -18139,13 +18138,13 @@ msgstr "Tangsa"
 #, kde-format
 msgctxt "@title"
 msgid "Bassa Vah"
-msgstr ""
+msgstr "Bassa vah"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
 #, kde-format
@@ -18235,7 +18234,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Shorthand Format Controls"
-msgstr ""
+msgstr "Controles de formato taquigráfico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:305
 #, kde-format
@@ -18284,19 +18283,19 @@ msgstr "Numérico"
 #, kde-format
 msgctxt "@title"
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Símbolos Tai Xuan Jing"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "Numerales de barras"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "Símbolos matemáticos alfanuméricos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
@@ -18386,7 +18385,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Símbolos matemáticos alfabéticos árabes"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format

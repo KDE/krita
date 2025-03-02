@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-02-25 01:54+0000\n"
-"PO-Revision-Date: 2025-02-21 19:50+0100\n"
+"PO-Revision-Date: 2025-03-01 16:49+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -17391,7 +17391,7 @@ msgstr "Etiopico esteso-A"
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-E"
-msgstr "Latino esteso-E"
+msgstr "Latino esteso E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
 #, kde-format
@@ -17440,1222 +17440,1160 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr ""
+msgstr "Area uso privato"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs"
-msgstr ""
+msgstr "Ideogrammi compatibili CJK"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:175
-#, fuzzy, kde-format
-#| msgid "a presentation"
+#, kde-format
 msgctxt "@title"
 msgid "Alphabetic Presentation Forms"
-msgstr "una presentazione"
+msgstr "Forme di presentazione alfabetiche"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
-#, fuzzy, kde-format
-#| msgid "a presentation"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr "una presentazione"
+msgstr "Forme di presentazione arabe A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
-#, fuzzy, kde-format
-#| msgid "Artistic Color Selector"
+#, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "Selettore dei colori artistici"
+msgstr "Selettori di varianti"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "Bordo verticale:"
+msgstr "Forme verticali"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
-#| msgid "Combine Normal Maps"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Combina mappe normali"
+msgstr "Mezze marche di combinazione"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Forms"
-msgstr ""
+msgstr "Forme compatibili CJK"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:181
 #, kde-format
 msgctxt "@title"
 msgid "Small Form Variants"
-msgstr ""
+msgstr "Piccole varianti di forma"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:182
-#, fuzzy, kde-format
-#| msgid "a presentation"
+#, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr "una presentazione"
+msgstr "Forme di presentazione arabe B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
 msgctxt "@title"
 msgid "Halfwidth and Fullwidth Forms"
-msgstr ""
+msgstr "Forme a metà larghezza e a larghezza intera"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr "Riempi speciale"
+msgstr "Simboli speciali"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
-#, fuzzy, kde-format
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "Brucia lineare"
+msgstr "Sillabario lineare B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
-#, fuzzy, kde-format
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "Brucia lineare"
+msgstr "Ideogrammi lineari B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
-#| msgid "Number:"
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "Numero:"
+msgstr "Numeri egei"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr ""
+msgstr "Numeri greci antichi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr ""
+msgstr "Simboli arcaici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
 msgctxt "@title"
 msgid "Phaistos Disc"
-msgstr ""
+msgstr "Disco di Festo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:191
 #, kde-format
 msgctxt "@title"
 msgid "Lycian"
-msgstr ""
+msgstr "Licio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgid "Caricature"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Caricatura"
+msgstr "Cario"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "Numeri epatta copta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "Corsivo"
+msgstr "Corsivo arcaico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
-#, fuzzy, kde-format
-#| msgctxt "None"
-#| msgid "Nothing"
+#, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr "Niente"
+msgstr "Gotico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr ""
+msgstr "Abur"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "Logaritmici"
+msgstr "Ugaritico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
 msgctxt "@title"
 msgid "Old Persian"
-msgstr ""
+msgstr "Persiano arcaico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
-#, fuzzy, kde-format
-#| msgid "Deselect"
+#, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "Deseleziona"
+msgstr "Deseret"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
 msgctxt "@title"
 msgid "Shavian"
-msgstr ""
+msgstr "Shaviano"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:201
 #, kde-format
 msgctxt "@title"
 msgid "Osmanya"
-msgstr ""
+msgstr "Osmanya"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:202
 #, kde-format
 msgctxt "@title"
 msgid "Osage"
-msgstr ""
+msgstr "Osage"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:203
 #, kde-format
 msgctxt "@title"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:204
 #, kde-format
 msgctxt "@title"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "Albanese caucasico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Vithkuqi"
-msgstr ""
+msgstr "Alfabeto Vithkuqi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:206
 #, kde-format
 msgctxt "@title"
 msgid "Todhri"
-msgstr ""
+msgstr "Todhri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "Lineare"
+msgstr "Lineare A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr ""
+msgstr "Latino esteso F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
 #, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr ""
+msgstr "Sillabario cipriota"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
 msgctxt "@title"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Aramaico imperiale"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmireno"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:212
 #, kde-format
 msgctxt "@title"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabateo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:213
 #, kde-format
 msgctxt "@title"
 msgid "Hatran"
-msgstr ""
+msgstr "Aramaico di Hatra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:214
 #, kde-format
 msgctxt "@title"
 msgid "Phoenician"
-msgstr ""
+msgstr "Fenicio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:215
 #, kde-format
 msgctxt "@title"
 msgid "Lydian"
-msgstr ""
+msgstr "Lidio"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:216
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Geroglifici meroitici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:217
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "Corsivo meroitico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:218
 #, kde-format
 msgctxt "@title"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Kharoshthi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "Sudarabico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:220
 #, kde-format
 msgctxt "@title"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "Nordarabico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:221
-#, fuzzy, kde-format
-#| msgid "Michael"
+#, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr "Michael"
+msgstr "Manicheo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
 msgctxt "@title"
 msgid "Avestan"
-msgstr ""
+msgstr "Avestico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "Inizializzazione"
+msgstr "Partico iscrizionale"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Pahlavi iscrizionale"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Salterio Pahlavi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr ""
+msgstr "Turco antico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
 msgctxt "@title"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "Ungherese antico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:228
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Rohingya hanifi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
 msgctxt "@title"
 msgid "Garay"
-msgstr ""
+msgstr "Garay"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:230
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "Simboli numerici rumi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Yezidi"
-msgstr ""
+msgstr "Yazidi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr ""
+msgstr "Arabo esteso-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
 msgctxt "@title"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "Sogdiano antico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:234
 #, kde-format
 msgctxt "@title"
 msgid "Sogdian"
-msgstr ""
+msgstr "Sogdiano"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Old Uyghur"
-msgstr ""
+msgstr "Uiguro antico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:236
 #, kde-format
 msgctxt "@title"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Corasmiano"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:237
 #, kde-format
 msgctxt "@title"
 msgid "Elymaic"
-msgstr ""
+msgstr "Elamaico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:238
 #, kde-format
 msgctxt "@title"
 msgid "Brahmi"
-msgstr ""
+msgstr "Brahmi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kaithi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:240
 #, kde-format
 msgctxt "@title"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:241
 #, kde-format
 msgctxt "@title"
 msgid "Chakma"
-msgstr ""
+msgstr "Chakma"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:242
 #, kde-format
 msgctxt "@title"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
-#, fuzzy, kde-format
-#| msgid "Ihara"
+#, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr "Ihara"
+msgstr "Sharada"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala Archaic Numbers"
-msgstr ""
+msgstr "Numeri arcaici singalesi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Multiply"
-#| msgid "Multiply"
+#, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "Moltiplica"
+msgstr "Multani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
 msgctxt "@title"
 msgid "Khudawadi"
-msgstr ""
+msgstr "Khudawadi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:248
 #, kde-format
 msgctxt "@title"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Tulu-Tigalari"
-msgstr ""
+msgstr "Tulu-Tigalari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:250
 #, kde-format
 msgctxt "@title"
 msgid "Newa"
-msgstr ""
+msgstr "Newa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:251
 #, kde-format
 msgctxt "@title"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhuta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:252
-#, fuzzy, kde-format
-#| msgid "Siddharth Sharma"
+#, kde-format
 msgctxt "@title"
 msgid "Siddham"
-msgstr "Siddharth Sharma"
+msgstr "Siddham"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr "Modificato:"
+msgstr "Modi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian Supplement"
-msgstr ""
+msgstr "Supplemento mongolo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:255
 #, kde-format
 msgctxt "@title"
 msgid "Takri"
-msgstr ""
+msgstr "Takri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:256
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-C"
-msgstr ""
+msgstr "Myanmar esteso C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:257
 #, kde-format
 msgctxt "@title"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahom"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:258
-#, fuzzy, kde-format
-#| msgid "Program:"
+#, kde-format
 msgctxt "@title"
 msgid "Dogra"
-msgstr "Programma:"
+msgstr "Dogra"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:259
 #, kde-format
 msgctxt "@title"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:260
 #, kde-format
 msgctxt "@title"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dhives Akuru"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Nandinagari"
-msgstr ""
+msgstr "Nandinagari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:262
 #, kde-format
 msgctxt "@title"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "Scrittura mongola quadrata Zanabazar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:263
 #, kde-format
 msgctxt "@title"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:264
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr ""
+msgstr "Sillabico aborigeno canadese unificato esteso-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr ""
+msgstr "Devanagari esteso-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
 msgctxt "@title"
 msgid "Sunuwar"
-msgstr ""
+msgstr "Sunuwar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:268
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
-#, fuzzy, kde-format
-#| msgid "Marc Pegon"
+#, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr "Marc Pegon"
+msgstr "Marchen"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
 msgctxt "@title"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:271
 #, kde-format
 msgctxt "@title"
 msgid "Gunjala Gondi"
-msgstr ""
+msgstr "Gunjala Gondi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:272
 #, kde-format
 msgctxt "@title"
 msgid "Makasar"
-msgstr ""
+msgstr "Makasar"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Kawi"
-msgstr ""
+msgstr "Kawi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:274
 #, kde-format
 msgctxt "@title"
 msgid "Lisu Supplement"
-msgstr ""
+msgstr "Supplemento Lisu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:275
 #, kde-format
 msgctxt "@title"
 msgid "Tamil Supplement"
-msgstr ""
+msgstr "Supplemento Tamil"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "Uniform distribution in spray engine"
-#| msgid "Uniform"
+#, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr "Uniforme"
+msgstr "Cuneiforme"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform Numbers and Punctuation"
-msgstr ""
+msgstr "Numeri e punteggiatura cuneiformi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:278
 #, kde-format
 msgctxt "@title"
 msgid "Early Dynastic Cuneiform"
-msgstr ""
+msgstr "Cuneiforme proto-dinastico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:279
 #, kde-format
 msgctxt "@title"
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "Cipro-Minoico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:280
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "Geroglifici egiziani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:281
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "Controlli formati geroglifici egiziani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr ""
+msgstr "Geroglifici egiziani esteso-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:283
 #, kde-format
 msgctxt "@title"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Geroglifici anatolici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:284
 #, kde-format
 msgctxt "@title"
 msgid "Gurung Khema"
-msgstr ""
+msgstr "Gurung Khema"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:285
 #, kde-format
 msgctxt "@title"
 msgid "Bamum Supplement"
-msgstr ""
+msgstr "Supplemento Bamum"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
-#, fuzzy, kde-format
-#| msgid "Marco"
+#, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr "Marco"
+msgstr "Mro"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
 msgctxt "@title"
 msgid "Tangsa"
-msgstr ""
+msgstr "Tangsa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:288
 #, kde-format
 msgctxt "@title"
 msgid "Bassa Vah"
-msgstr ""
+msgstr "Bassa Vah"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahawh Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
 #, kde-format
 msgctxt "@title"
 msgid "Kirat Rai"
-msgstr ""
+msgstr "Kirat Rai"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:291
 #, kde-format
 msgctxt "@title"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:292
 #, kde-format
 msgctxt "@title"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Symbols and Punctuation"
-msgstr ""
+msgstr "Simboli e punteggiatura ideografici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:294
 #, kde-format
 msgctxt "@title"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr "Componenti"
+msgstr "Componenti Tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
-#, fuzzy, kde-format
-#| msgid "Enable Script"
+#, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "Abilita script"
+msgstr "Scrittura piccola Khitan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "Cambia segmento"
+msgstr "Supplemento Tangut"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr "OpenEXR (esteso)"
+msgstr "Kana esteso-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "Cambia segmento"
+msgstr "Supplemento Kana"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr "OpenEXR (esteso)"
+msgstr "Kana esteso-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "Aggancia estensione"
+msgstr "Estensione Kana piccolo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
 msgctxt "@title"
 msgid "Nushu"
-msgstr ""
+msgstr "Nü shu"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:303
 #, kde-format
 msgctxt "@title"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployan"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:304
 #, kde-format
 msgctxt "@title"
 msgid "Shorthand Format Controls"
-msgstr ""
+msgstr "Controlli formati stenografici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Supplemento simboli di informatica obsoleta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
-#, fuzzy, kde-format
-#| msgid "Enable Touch Rotation"
+#, kde-format
 msgctxt "@title"
 msgid "Znamenny Musical Notation"
-msgstr "Abilita rotazione con tocco"
+msgstr "Notazione musicale Znamenny"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:307
 #, kde-format
 msgctxt "@title"
 msgid "Byzantine Musical Symbols"
-msgstr ""
+msgstr "Simboli musicali bizantini"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:308
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "symbols"
+#, kde-format
 msgctxt "@title"
 msgid "Musical Symbols"
-msgstr "simboli"
+msgstr "Simboli musicali"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Musical Notation"
-msgstr ""
+msgstr "Notazione musicale Greco antico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:310
 #, kde-format
 msgctxt "@title"
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "Numeri Kaktovik"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
-#, fuzzy, kde-format
-#| msgid "Numerical"
+#, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr "Numerico"
+msgstr "Sistema di numerazione maya"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
 msgctxt "@title"
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Simboli Tai Xuan Jing"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "Barre numerali"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "Simboli matematici alfanumerici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
 msgctxt "@title"
 msgid "Sutton SignWriting"
-msgstr ""
+msgstr "Sign Writing di Sutton"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:316
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr ""
+msgstr "Latino esteso G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr ""
+msgstr "Supplemento glagolitico"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr ""
+msgstr "Cirillico esteso-D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "Nyiakeng Puachue Hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "Toto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Àncora:"
+msgstr "Wancho"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "Nag Mundari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
-msgstr ""
+msgstr "Ol Onal"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:324
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-B"
-msgstr ""
+msgstr "Etiopico esteso-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:325
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende Kikakui"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "Numeri indoari siyac"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Numeri ottomani siyac"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "Simboli alfabetici matematici arabi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format
 msgctxt "@title"
 msgid "Mahjong Tiles"
-msgstr ""
+msgstr "Tessere del Mahjong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "Quadratini"
+msgstr "Tessere del domino"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
-#, fuzzy, kde-format
-#| msgid "Playing back macro"
+#, kde-format
 msgctxt "@title"
 msgid "Playing Cards"
-msgstr "Riproduci macro"
+msgstr "Carte da gioco"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:333
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr ""
+msgstr "Supplemento alfanumerico racchiuso"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Ideographic Supplement"
-msgstr ""
+msgstr "Supplemento ideografico racchiuso"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr ""
+msgstr "Simboli e pittogrammi vari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "icon"
+#, kde-format
 msgctxt "@title"
 msgid "Emoticons"
-msgstr "icona"
+msgstr "Emoticon"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:337
 #, kde-format
 msgctxt "@title"
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Caratteri decorativi ornamentali"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:338
 #, kde-format
 msgctxt "@title"
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "Simboli di mappe e trasporto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Alchemical Symbols"
-msgstr ""
+msgstr "Simboli alchemici"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
-#| "t)_Shapes_Rounded.kpp"
-#| msgid "t) Shapes Rounded"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "t) Forme Arrotondate"
+msgstr "Forme geometriche estese"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-C"
-msgstr ""
+msgstr "Supplementi frecce C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:342
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "Simboli e pittogrammi supplementari"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:343
-#, fuzzy, kde-format
-#| msgctxt "resource type"
-#| msgid "symbols"
+#, kde-format
 msgctxt "@title"
 msgid "Chess Symbols"
-msgstr "simboli"
+msgstr "Simboli degli scacchi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:344
 #, kde-format
 msgctxt "@title"
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "Simboli e pittogrammi esteso-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:345
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Simboli di informatica obsoleta"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:346
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension B"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension C"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:348
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension D"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:349
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension E"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:350
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension F"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension I"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione I"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:352
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "Ideogrammi compatibili CJK - Supplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension G"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:354
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension H"
-msgstr ""
+msgstr "Ideogramma CJK unificato estensione H"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgctxt "@title"
 msgid "Tags"
-msgstr "Tag"
+msgstr "Tags"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:356
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors Supplement"
-msgstr ""
+msgstr "Supplemento selettori di varianti"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:357
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "Area uso privato A supplementare"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "Area uso privato B supplementare"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Block"
+#, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr "Allinea blocco"
+msgstr "Nessun blocco"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:341
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
-msgstr ""
+msgstr "%1 varianti di glifo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "Alternativa"
+msgstr "Accedi a tutte le alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
 msgctxt "@tooltip"
 msgid "Access any possible substitutions."
-msgstr ""
+msgstr "Accedi a tutte le sostituzioni possibili."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "Alternativa"
+msgstr "Alternative contestuali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs depending on their context within a text."
 msgstr ""
+"Sostituisci i glifi a seconda del loro contesto all'interno di un testo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:33
-#, fuzzy, kde-format
-#| msgid "Montel Laurent"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr "Montel Laurent"
+msgstr "Legature contestuali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18664,12 +18602,14 @@ msgid ""
 "Replaces sequences of glyphs with ligatures depending on their context "
 "within a text."
 msgstr ""
+"Sostituisci sequenze di glifi con legature a seconda del loro contesto "
+"all'interno di un testo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Glifi ornati contestuali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18677,13 +18617,14 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
 msgstr ""
+"Sostituisci i glifi con glifi ornati contestuali a seconda del loro contesto "
+"all'interno di un testo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
-#, fuzzy, kde-format
-#| msgid "Direction Filter"
+#, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "Filtro direzione"
+msgstr "Legature discrezionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18691,12 +18632,13 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of glyphs with ligatures intended for typographic effect."
 msgstr ""
+"Sostituisci sequenze di glifi con legature pensate per l'effetto tipografico."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternative al glifo finale di una riga"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
@@ -18706,11 +18648,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgid "Histogram"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Istogramma"
+msgstr "Forme storiche"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18730,7 +18671,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Giustificati alternativi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
@@ -18739,12 +18680,10 @@ msgid "Replaces glyphs with their alternates meant for justification."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Luce standard A"
+msgstr "Legature standard"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
@@ -18753,11 +18692,10 @@ msgid "Replaces sequences glyphs with common ligatures."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "Bordi immagine"
+msgstr "Limiti di sinistra"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
@@ -18766,11 +18704,10 @@ msgid "This adjusts glyphs so there is no space at the left side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
-#, fuzzy, kde-format
-#| msgid "Local Resources"
+#, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "Risorse locali"
+msgstr "Forme localizzate"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
@@ -18779,11 +18716,10 @@ msgid "This replaces glyphs with language specific versions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "Opzioni"
+msgstr "Limiti ottici"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18794,11 +18730,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
-#, fuzzy, kde-format
-#| msgid "Gradients"
+#, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "Sfumature"
+msgstr "Ornamenti"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
@@ -18807,8 +18742,7 @@ msgid "Replaces glyphs with ornaments for decorative purposes."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
-#| msgid "Randomize"
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
 msgstr "Casuale"
@@ -18820,11 +18754,10 @@ msgid "Replaces glyphs with random alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "Bordi immagine"
+msgstr "Limiti di destra"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
@@ -18833,11 +18766,10 @@ msgid "This adjusts glyphs so there is no space at the right side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Alternativa"
+msgstr "Alternative stilistiche"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18851,7 +18783,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "Glifo ornato"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
@@ -18874,9 +18806,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
 msgstr "Crenatura"
@@ -18889,11 +18819,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "Posizione"
+msgstr "Posizionamento contrassegno"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18915,7 +18844,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Alternative contestuali richieste"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -18928,7 +18857,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Legature richieste"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
@@ -18951,11 +18880,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Ottimizza"
+msgstr "Dimensione ottica"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18966,11 +18894,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "Linee verticali"
+msgstr "Crenatura verticale"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, fuzzy, kde-format
@@ -18980,11 +18907,10 @@ msgid "This controls vertical kerning on the font."
 msgstr "Il testo scorre verticale, da destra a sinistra."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
-#| msgid "Alternative array"
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Array alternativo"
+msgstr "Frazioni alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
@@ -18993,11 +18919,10 @@ msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
-#| msgid "Illuminator"
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Miniaturista"
+msgstr "Denominatori"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -19036,11 +18961,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Azioni"
+msgstr "Frazioni"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -19053,11 +18977,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
-#, fuzzy, kde-format
-#| msgid "Winding Fill"
+#, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "Riempimento ad avvolgimento"
+msgstr "Cifre allineate"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -19071,7 +18994,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Greco matematico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -19081,11 +19004,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "Richiamo alternativo"
+msgstr "Formati di notazione alternativi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
@@ -19094,11 +19016,10 @@ msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Curatore"
+msgstr "Numeratori"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -19112,7 +19033,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Numeri elzeviriani"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19123,11 +19044,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "Originale"
+msgstr "Ordinali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
@@ -19136,11 +19056,10 @@ msgid "Replaces letters that follow figures with their ordinal forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Proporzionale"
+msgstr "Figure proporzionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19152,7 +19071,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Pedici scientifici"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19175,8 +19094,7 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
 msgstr "Pedice"
@@ -19188,8 +19106,7 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
 msgstr "Apice"
@@ -19216,7 +19133,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Zero barrato"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -19241,11 +19158,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
-#, fuzzy, kde-format
-#| msgid "Cell Spacing:"
+#, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "Distanza cella:"
+msgstr "Spaziatura tra maiuscole"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
@@ -19307,11 +19223,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "Titolo"
+msgstr "Titolazione"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19320,11 +19235,10 @@ msgid "Replaces glyphs with alternate forms suited for header text."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
-#, fuzzy, kde-format
-#| msgid "nut-case"
+#, kde-format
 msgctxt "@title"
 msgid "Unicase"
-msgstr "nut-case"
+msgstr "Unicamerale"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
 #, kde-format
@@ -19373,7 +19287,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr ""
+msgstr "Akhand"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
 #, kde-format
@@ -19442,11 +19356,10 @@ msgid "Controls conjunct forms in Indic scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "Distanza"
+msgstr "Distanze"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -19470,7 +19383,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Formati Halant"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
@@ -19482,7 +19395,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Formati Nukta"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19551,7 +19464,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Formati Rakar"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
 #, kde-format
@@ -19560,11 +19473,10 @@ msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr "Formato"
+msgstr "Formato Reph"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
@@ -19577,7 +19489,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr ""
+msgstr "Varianti Vattu"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
 #, kde-format
@@ -19606,7 +19518,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Punteggiatura CJK centrata"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
@@ -19615,11 +19527,10 @@ msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
-#, fuzzy, kde-format
-#| msgid "Expert"
+#, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "Esperto"
+msgstr "Formati esperti"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -19628,11 +19539,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "Larghezza"
+msgstr "Larghezze intere"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -19649,11 +19559,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Linee orizzontali"
+msgstr "Alternative kana orizzontali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19664,11 +19573,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr "Angolare"
+msgstr "Hangul"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
@@ -19680,7 +19588,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Formati Kanji Hojo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
 #, kde-format
@@ -19691,11 +19599,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Half-width:"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "Mezza larghezza:"
+msgstr "Mezze larghezze"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19706,8 +19613,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Italics"
 msgstr "Corsivo"
@@ -19722,7 +19628,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Formati JIS78"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
@@ -19734,7 +19640,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "Formati JIS83"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
@@ -19746,7 +19652,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Formati JIS90"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
@@ -19758,7 +19664,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Formati JIS2004"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
 #, kde-format
@@ -19783,7 +19689,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Formati kanji NLC"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
@@ -19804,11 +19710,10 @@ msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "Proporzionale"
+msgstr "Kana proporzionale"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -19817,11 +19722,10 @@ msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "Proporzionale"
+msgstr "Larghezze proporzionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -19830,11 +19734,10 @@ msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr "Un quarto"
+msgstr "Quarti di larghezza"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
@@ -19846,7 +19749,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Formati Ruby Notation"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -19857,11 +19760,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
+#, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "Rumore Simplex"
+msgstr "Formati semplificati"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -19887,7 +19789,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Formati tradizionali per nomi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -19898,11 +19800,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgid "Gradient Colors"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Colori della sfumatura"
+msgstr "Formati tradizionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -19911,11 +19812,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Terzi"
+msgstr "Terzi di larghezza"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -19924,12 +19824,10 @@ msgid "Replaces glyphs with third-width glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align to vertical center"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Allinea al centro verticalmente"
+msgstr "Metriche verticali alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -19938,11 +19836,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternativa"
+msgstr "Mezze larghezze alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -19957,11 +19854,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Linee verticali"
+msgstr "Alternative verticali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -19973,7 +19869,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Mezze metriche verticali alternative"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -19996,11 +19892,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "Traslazione verticale"
+msgstr "Alternative kana verticali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -20014,7 +19909,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Metriche verticali alternative proporzionali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -20024,11 +19919,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr "Traslazione verticale"
+msgstr "Alternative verticali per la rotazione"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
@@ -20037,11 +19931,10 @@ msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "Richiamo alternativo"
+msgstr "Alternative verticali e rotazione"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -20068,7 +19961,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr ""
+msgstr "Formati terminali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -20082,7 +19975,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #2"
-msgstr ""
+msgstr "Formato terminale #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
 #, kde-format
@@ -20096,7 +19989,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Form #3"
-msgstr ""
+msgstr "Formato terminale #3"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:486
 #, kde-format
@@ -20108,11 +20001,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "Iniziali:"
+msgstr "Formati iniziali"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20143,12 +20035,10 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Left-to-right"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "Da &sinistra a destra"
+msgstr "Formati rispecchiati da sinistra a destra"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
@@ -20188,7 +20078,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "mset"
-msgstr ""
+msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
 #, kde-format
@@ -20211,12 +20101,10 @@ msgid "Replaces glyphs with their right-to-left alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Right-to-left"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "Da &destra a sinistra"
+msgstr "Formati rispecchiati da destra a sinistra"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
@@ -20238,11 +20126,10 @@ msgid "Replaces glyphs that need to stretch with stretchable glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
-#, fuzzy, kde-format
-#| msgid "Artistic Text"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr "Testo elegante"
+msgstr "Insieme stilistico %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
@@ -20252,11 +20139,10 @@ msgid "Replaces glyphs with alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Variante (%1)"
+msgstr "Variante di carattere %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1634
@@ -27097,8 +26983,8 @@ msgstr[1] "Smussatura velocità del pennello: {n} campioni"
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Scostamento direzione di inclinazione della penna: {n}°"
+msgstr[1] "Scostamento direzione di inclinazione della penna: {n}°"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1566
@@ -61826,29 +61712,24 @@ msgid "Freehand Brush Stroke"
 msgstr "Tratto pennello a mano libera"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:215
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Conteggio campioni:"
+msgstr "Conteggio campioni alla velocità massima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:225
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Conteggio campioni:"
+msgstr "Conteggio campioni alla velocità minima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:235
-#, fuzzy, kde-format
-#| msgid "Distance to paragraph:"
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "Distanza dal paragrafo:"
+msgstr "Distanza alla velocità massima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:245
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "Ordine della d&istanza:"
+msgstr "Distanza alla velocità minima:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
@@ -63829,18 +63710,16 @@ msgid "Similar Color Selection Tool"
 msgstr "Strumento di selezione dei colori simili"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Open Palette"
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "Apri tavolozza"
+msgstr "Tavolozza dei glifi"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
-#, fuzzy, kde-format
-#| msgid "All pa&ges"
+#, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "Tutte le pa&gine"
+msgstr "Tutti i glifi"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -64531,10 +64410,9 @@ msgstr "Modifica sorgente SVG"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
-#| msgid "Open Palette"
+#, kde-format
 msgid "Glyph Palette"
-msgstr "Apri tavolozza"
+msgstr "Tavolozza dei glifi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33

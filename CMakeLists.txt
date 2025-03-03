@@ -394,6 +394,7 @@ include(ECMInstallIcons)
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
 include(CheckFunctionExists)
+include(CheckCXXSymbolExists)
 
 if (QT_MAJOR_VERSION STREQUAL "6")
     set (KDE_COMPILERSETTINGS_LEVEL "5.0")
@@ -497,7 +498,35 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     )
 endif()
 
+#
+# Check for the presence of custom patches in Qt
+#
+set(CMAKE_REQUIRED_INCLUDES ${Qt${QT_MAJOR_VERSION}Gui_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt${QT_MAJOR_VERSION}Gui_LIBRARIES})
 
+check_cxx_symbol_exists(QT_HAS_ENTER_LEAVE_PATCH "QtGui/qevent.h" KRITA_QT_HAS_ENTER_LEAVE_PATCH)
+
+if (QT_MAJOR_VERSION STREQUAL "5")
+    # in Qt5 we didn't have a separate definition for key-press/release patch
+    set(KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH ${KRITA_QT_HAS_ENTER_LEAVE_PATCH})
+else()
+    check_cxx_symbol_exists(QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH "QtGui/qevent.h" KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH)
+endif()
+
+unset(CMAKE_REQUIRED_INCLUDES)
+unset(CMAKE_REQUIRED_LIBRARIES)
+
+option(KRITA_QT_HAS_ENTER_LEAVE_PATCH "Qt has a custom patch for unbalanced enter/leave events" ON)
+add_feature_info("Qt: Unbalanced Enter/Leave patch" KRITA_QT_HAS_ENTER_LEAVE_PATCH "Krita will disable internal workarounds for unbalanced Enter/Leave")
+
+option(KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH "Qt has a custom patch for unbalanced KeyPress/KeyRelease events in non-latin layouts" ON)
+add_feature_info("Qt: Unbalanced KeyPress/KeyRelease in non-latin layout patch" KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH "Krita will disable internal workarounds for unbalanced KeyPress/KeyRelease events")
+
+configure_file(config-qt-patches-present.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qt-patches-present.h)
+
+#
+# Check for the presence the Wintab switch in Qt5
+#
 if (WIN32 AND QT_MAJOR_VERSION STREQUAL "5")
     set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS})
     set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES})

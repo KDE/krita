@@ -25,6 +25,8 @@
 
 #include "kis_zoom_and_rotate_action.h"
 #include "kis_popup_palette.h"
+#include "config-qt-patches-present.h"
+
 
 /**
  * This hungry class EventEater encapsulates event masking logic.
@@ -229,7 +231,7 @@ KisInputManager::Private::Private(KisInputManager *qq)
      * In Linux distributions Qt is not patched, so we should
      * use workaround for them
      */
-#if defined Q_OS_LINUX &&  !defined QT_HAS_ENTER_LEAVE_PATCH
+#if defined Q_OS_LINUX &&  !KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH
     useUnbalancedKeyPressEventWorkaround = true;
 #endif
 

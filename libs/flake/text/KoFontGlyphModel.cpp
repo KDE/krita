@@ -414,11 +414,11 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
 
 QModelIndex KoFontGlyphModel::index(int row, int column, const QModelIndex &parent) const
 {
-    //qDebug() << Q_FUNC_INFO << row  << column << parent;
     if (parent.isValid() && parent.row() >= 0 && parent.row() < d->codePoints.size()) {
         Private::CodePointInfo info = d->codePoints.at(parent.row());
         if (row >= 0 && row < info.glyphs.size()) {
-            return createIndex(row, column, &info.glyphs[row]);
+            Private::GlyphInfo glyphInfo = info.glyphs.at(row);
+            return createIndex(row, column, &glyphInfo);
         }
 
     } else if (row >= 0 && row < d->codePoints.size()) {
@@ -433,13 +433,13 @@ QModelIndex KoFontGlyphModel::parent(const QModelIndex &child) const
         return QModelIndex();
     }
     Private::InfoNode *node = static_cast<Private::InfoNode*>(child.internalPointer());
-
-    if (node) {
-        const uint targetUcs = node->ucs;
+    Private::GlyphInfo *glyphInfo = dynamic_cast<Private::GlyphInfo*>(node);
+    if (glyphInfo) {
+        const uint targetUcs = glyphInfo->ucs;
         for(int i = 0; i < d->codePoints.size(); i++) {
             Private::CodePointInfo info = d->codePoints.at(i);
             if (info.ucs == targetUcs) {
-                return index(i, 0, QModelIndex());
+                return createIndex(i, 0);
             }
         }
     }

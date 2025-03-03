@@ -80,8 +80,8 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-01-15 03:22+0000\n"
-"PO-Revision-Date: 2025-02-09 13:34+0100\n"
-"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
+"PO-Revision-Date: 2025-03-02 08:11+0100\n"
+"Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
@@ -37174,7 +37174,7 @@ msgstr "&Configuración"
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:194
 #, kde-format
 msgid "Main Toolbar"
-msgstr "Barra de ferramentas Principal"
+msgstr "Barra de ferramentas principal"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:32

@@ -101,7 +101,7 @@ struct KoFontGlyphModel::Private {
         return vsData;
     }
 
-    static QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QMap<QString, KoOpenTypeFeatureInfo> previousFeatureInfo, bool gpos, QStringList locales, QLatin1String lang = QLatin1String()) {
+    static QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QMap<QString, KoOpenTypeFeatureInfo> previousFeatureInfo, bool gpos, bool samplesOnly, QStringList locales, QLatin1String lang = QLatin1String()) {
         // All of this was referenced from Inkscape's OpenTypeUtil.cpp::readOpenTypeGsubTable
         QMap<QString, KoOpenTypeFeatureInfo> featureInfo = previousFeatureInfo;
         hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
@@ -290,6 +290,9 @@ struct KoFontGlyphModel::Private {
                     }
                     if (samples.size() < 6 && addSample) {
                         samples.append(QString::fromUcs4(&gci.ucs, 1));
+                    }
+                    if (samples.size() >= 6 && samplesOnly) {
+                        break;
                     }
                 }
                 lookUpsProcessed.append(lookUpIndex);
@@ -484,7 +487,7 @@ static bool sortBlocks(const KoUnicodeBlockData &a, const KoUnicodeBlockData &b)
     return a.start < b.start;
 }
 
-void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language)
+void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language, bool samplesOnly)
 {
     beginResetModel();
     d->codePoints = Private::charMap(face);
@@ -509,8 +512,8 @@ void KoFontGlyphModel::setFace(FT_FaceSP face, QLatin1String language)
         }
     }
     std::sort(d->blocks.begin(), d->blocks.end(), sortBlocks);
-    d->featureData = Private::getOpenTypeTables(face, d->codePoints, QMap<QString, KoOpenTypeFeatureInfo>() ,false, KLocalizedString::languages(), language);
-    d->featureData = Private::getOpenTypeTables(face, d->codePoints, d->featureData, true, KLocalizedString::languages(), language);
+    d->featureData = Private::getOpenTypeTables(face, d->codePoints, QMap<QString, KoOpenTypeFeatureInfo>() , false, samplesOnly, KLocalizedString::languages(), language);
+    d->featureData = Private::getOpenTypeTables(face, d->codePoints, d->featureData, true, samplesOnly, KLocalizedString::languages(), language);
 
     endResetModel();
 }

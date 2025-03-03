@@ -48,7 +48,15 @@ public:
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
     QModelIndex indexForString(QString grapheme);
-    void setFace(FT_FaceSP face, QLatin1String language = QLatin1String());
+
+    /**
+     * @brief setFace
+     * set the face to retrieve glyph data for.
+     * @param face -- the face.
+     * @param language -- the language for which to retrieve data for, OpenType data can have different glyphs depending on the language.
+     * @param samplesOnly -- Whether to only retrieve enough data for 6 samples, or to retrieve the full glyph layout. Turning this on speeds up loading.
+     */
+    void setFace(FT_FaceSP face, QLatin1String language = QLatin1String(), bool samplesOnly = false);
 
     QHash<int, QByteArray> roleNames() const override;
 

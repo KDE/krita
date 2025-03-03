@@ -180,7 +180,8 @@ void OpenTypeFeatureModel::setFromTextProperties(const KoSvgTextProperties &prop
 
         if (!faces.empty()) {
             QString language = props.propertyOrDefault(KoSvgTextProperties::TextLanguage).toString();
-            d->glyphModel->setFace(faces.front(), QLatin1String(language.toLatin1()));
+            // NOTE: We're retrieving only enough data for 6 samples here, to speed up loading.
+            d->glyphModel->setFace(faces.front(), QLatin1String(language.toLatin1()), true);
             d->allFeatures->setAvailableFeatures(d->availableFeatures());
             d->fontInfo = props.cssFontInfo();
         }

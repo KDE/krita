@@ -434,13 +434,15 @@ QModelIndex KoFontGlyphModel::parent(const QModelIndex &child) const
     }
     Private::InfoNode *node = static_cast<Private::InfoNode*>(child.internalPointer());
 
-    for(int i = 0; i < d->codePoints.size(); i++) {
-        Private::CodePointInfo info = d->codePoints.at(i);
-        if (info.ucs == node->ucs) {
-            return index(i, 0, QModelIndex());
+    if (node) {
+        const uint targetUcs = node->ucs;
+        for(int i = 0; i < d->codePoints.size(); i++) {
+            Private::CodePointInfo info = d->codePoints.at(i);
+            if (info.ucs == targetUcs) {
+                return index(i, 0, QModelIndex());
+            }
         }
     }
-
 
     return QModelIndex();
 }

@@ -3,17 +3,24 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "OpenTypeFeatureModel.h"
+#include <QList>
+
 #include <KoFontGlyphModel.h>
 #include <KoCSSFontInfo.h>
 #include <KoOpenTypeFeatureInfoFactory.h>
 #include <KoFontLibraryResourceUtils.h>
 #include <KoSvgTextProperties.h>
 #include <KoFontRegistry.h>
+#include <lager/KoSvgTextPropertiesModel.h>
+#include <KoSvgTextPropertyData.h>
 
+
+#include "OpenTypeFeatureModel.h"
 struct OpenTypeFeatureModel::Private {
     Private(QObject *parent)
-        : glyphModel(new KoFontGlyphModel(parent)) {
+        : glyphModel(new KoFontGlyphModel(parent))
+        , allFeatures(new AllOpenTypeFeaturesModel(parent))
+    {
     }
 
     QList<KoOpenTypeFeatureInfo> availableFeatures() const {
@@ -32,6 +39,7 @@ struct OpenTypeFeatureModel::Private {
     }
 
     KoFontGlyphModel *glyphModel {nullptr};
+    AllOpenTypeFeaturesModel *allFeatures {nullptr};
     KoOpenTypeFeatureInfoFactory factory;
     KoCSSFontInfo fontInfo;
     QVariantMap currentFeatures;
@@ -173,7 +181,8 @@ void OpenTypeFeatureModel::setFromTextProperties(const KoSvgTextProperties &prop
         if (!faces.empty()) {
             QString language = props.propertyOrDefault(KoSvgTextProperties::TextLanguage).toString();
             d->glyphModel->setFace(faces.front(), QLatin1String(language.toLatin1()));
-            emit availableFeaturesChanged();
+            d->allFeatures->setAvailableFeatures(d->availableFeatures());
+            d->fontInfo = props.cssFontInfo();
         }
     }
 
@@ -197,21 +206,6 @@ void OpenTypeFeatureModel::setOpenTypeFeatures(const QVariantMap &newOpenTypeFea
     d->currentFeatures = newOpenTypeFeatures;
     endResetModel();
     emit openTypeFeaturesChanged();
-}
-
-QVariantList OpenTypeFeatureModel::availableFeatures() const
-{
-    QVariantList features;
-    Q_FOREACH(const KoOpenTypeFeatureInfo info, d->availableFeatures()) {
-        QVariantMap feat;
-
-        feat.insert("tag", info.tag);
-        feat.insert("display", info.name);
-        feat.insert("toolTip", info.description);
-        feat.insert("sample", info.sample);
-        features.append(feat);
-    }
-    return features;
 }
 
 void OpenTypeFeatureModel::addFeature(const QString &tag)
@@ -240,3 +234,124 @@ void OpenTypeFeatureModel::removeFeature(const QString &tag)
     endRemoveRows();
     emit openTypeFeaturesChanged();
 }
+
+QAbstractItemModel *OpenTypeFeatureModel::featureFilterModel() const
+{
+    return d->allFeatures;
+}
+
+
+void OpenTypeFeatureModel::setFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel)
+{
+    KoSvgTextProperties main;
+    if (textPropertiesModel) {
+        KoSvgTextPropertyData data = textPropertiesModel->textData.get();
+        main = data.commonProperties;
+        main.inheritFrom(data.inheritedProperties);
+    }
+    setFromTextProperties(main);
+}
+
+/********* AllOpenTypeFeaturesModel ************/
+struct AllOpenTypeFeaturesModel::Private {
+
+    KoOpenTypeFeatureInfoFactory factory;
+    QList<KoOpenTypeFeatureInfo> availableFeatures; // Features in font.
+    QStringList availableTags;
+    QStringList allTags;
+
+    bool featureAvailable(const QString &tag) const {
+        return availableTags.contains(tag);
+    }
+
+    KoOpenTypeFeatureInfo featureByTag(QLatin1String tag) const {
+        Q_FOREACH(KoOpenTypeFeatureInfo feature, availableFeatures) {
+            if (feature.tag == tag) {
+                return feature;
+                break;
+            }
+        }
+
+        return factory.infoByTag(tag);
+    }
+
+    // OpenType allows for "custom" opentype features, this forloop checks for those.
+    void setAvailableTags() {
+        QStringList tags;
+        allTags = factory.tags();
+        Q_FOREACH(KoOpenTypeFeatureInfo feature, availableFeatures) {
+            const QString tag = QString::fromLatin1(feature.tag.data(), 4);
+            if (!allTags.contains(tag)) {
+                allTags.append(tag);
+            }
+            tags.append(tag);
+        }
+        availableTags = tags;
+    }
+};
+
+AllOpenTypeFeaturesModel::AllOpenTypeFeaturesModel(QObject *parent)
+    : QAbstractListModel(parent)
+    , d(new Private)
+{
+
+}
+
+AllOpenTypeFeaturesModel::~AllOpenTypeFeaturesModel()
+{
+
+}
+
+void AllOpenTypeFeaturesModel::setAvailableFeatures(const QList<KoOpenTypeFeatureInfo> &features)
+{
+    beginResetModel();
+    d->availableFeatures = features;
+    d->setAvailableTags();
+    endResetModel();
+}
+
+QVariant AllOpenTypeFeaturesModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    const QString feature = d->allTags.at(index.row());
+    KoOpenTypeFeatureInfo info = d->featureByTag(QLatin1String(feature.toLatin1(), 4));
+    if (role == Qt::DisplayRole) {
+        return info.name;
+    } else if (role == Qt::ToolTipRole) {
+        return info.description;
+    } else if (role == Tag) {
+        return feature;
+    } else if (role == Sample) {
+        return info.sample;
+    } else if (role == Available) {
+        return d->featureAvailable(feature);
+    }
+    return QVariant();
+}
+
+int AllOpenTypeFeaturesModel::rowCount(const QModelIndex &parent) const
+{
+    return d->allTags.size();
+}
+
+QVariant AllOpenTypeFeaturesModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole) {
+        if (orientation == Qt::Horizontal && section == 0) {
+            return i18nc("@title:column", "OpenType Feature Tag");
+        }
+    }
+    return QVariant();
+}
+
+QHash<int, QByteArray> AllOpenTypeFeaturesModel::roleNames() const
+{
+    QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
+    roles[Tag] = "tag";
+    roles[Sample] = "sample";
+    roles[Available] = "available";
+    return roles;
+}
+

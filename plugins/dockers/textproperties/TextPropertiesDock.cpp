@@ -105,7 +105,6 @@ struct TextPropertiesDock::Private
     FontAxesModel axesModel;
     KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
-    OpenTypeFeatureModel featureModel;
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -144,12 +143,10 @@ TextPropertiesDock::TextPropertiesDock()
     d->stylesModel.setLocales(locales);
 
     connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
-    connect(&d->featureModel, SIGNAL(openTypeFeaturesChanged()), this, SLOT(slotUpdateFeatureSettings()));
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
-    m_quickWidget->rootContext()->setContextProperty("fontFeatureModel", QVariant::fromValue(&d->featureModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
@@ -157,7 +154,6 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
 
     m_quickWidget->setPalette(this->palette());
-
 }
 
 TextPropertiesDock::~TextPropertiesDock()
@@ -215,10 +211,6 @@ void TextPropertiesDock::slotCanvasTextPropertiesChanged()
     if (d->textModel->textData.get() != data) {
         d->textModel->textData.set(data);
 
-        KoSvgTextProperties main = data.commonProperties;
-        main.inheritFrom(data.inheritedProperties);
-         d->featureModel.setFromTextProperties(main);
-
         QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     }
 }
@@ -265,13 +257,6 @@ void TextPropertiesDock::slotUpdateAxesValues()
     if (d->axesModel.axisValues() == d->textModel->axisValues())
         return;
     d->textModel->setaxisValues(d->axesModel.axisValues());
-}
-
-void TextPropertiesDock::slotUpdateFeatureSettings()
-{
-    if (d->featureModel.openTypeFeatures() == d->textModel->fontFeatureSettings())
-        return;
-    d->textModel->setfontFeatureSettings(d->featureModel.openTypeFeatures());
 }
 
 #include <KoFontRegistry.h>

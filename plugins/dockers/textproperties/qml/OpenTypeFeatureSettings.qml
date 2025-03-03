@@ -17,8 +17,19 @@ TextPropertyBase {
     searchTerms: i18nc("comma separated search terms for the font-feature-settings property, matching is case-insensitive",
                        "font-feature-settings, OpenType");
 
+    OpenTypeFeatureModel {
+        id: fontFeatureModel;
+        onOpenTypeFeaturesChanged: {
+            if (!blockSignals) {
+                properties.fontFeatureSettings = openTypeFeatures;
+            }
+        }
+    }
+
     onPropertiesUpdated: {
         blockSignals = true;
+        // Setting text properties model will also set the opentype features.
+        fontFeatureModel.setFromTextPropertiesModel(properties);
         visible = properties.fontFeatureSettingsState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
@@ -83,10 +94,22 @@ TextPropertyBase {
 
                     currentIndex: activeFeatureDelegate.model.edit;
 
+                    contentItem: OpenTypeFeatureDelegate {
+                        display: activeFeatureControl.currentText;
+                        toolTip: activeFeatureDelegate.toolTip;
+                        sample: activeFeatureDelegate.sample;
+                        tag: activeFeatureDelegate.tag;
+                        enableMouseEvents: false;
+                    }
+
+                    ToolTip.text: activeFeatureDelegate.toolTip;
+                    ToolTip.visible: activeFeatureControl.hovered;
+                    ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+
                     delegate: OpenTypeFeatureDelegate {
                         display: modelData.display;
                         width: activeFeatureControl.width;
-                        toolTip: activeFeatureDelegate.display;
+                        toolTip: display;
                         sample: activeFeatureDelegate.sample;
                         tag: activeFeatureDelegate.tag;
                         onFeatureClicked: {
@@ -107,7 +130,7 @@ TextPropertyBase {
                     icon.height: 22;
                     icon.source: "qrc:///22_light_list-remove.svg"
                     onClicked: fontFeatureModel.removeFeature(parent.tag);
-                    ToolTip.text: i18n("Remove feature");
+                    ToolTip.text: i18n("Remove feature.");
                     ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     ToolTip.visible: hovered;
                 }
@@ -120,17 +143,28 @@ TextPropertyBase {
         }
         ComboBox {
             id: cmbAvailableFeatures;
-            model: fontFeatureModel.availableFeatures;
+            model: fontFeatureModel.featureFilterModel();
             textRole: "display";
             valueRole: "tag";
             Layout.fillWidth: true;
 
+            editable: true;
+            selectTextByMouse: true;
+
+            onAccepted: {
+                fontFeatureModel.addFeature(currentValue);
+            }
+
+
             delegate: OpenTypeFeatureDelegate {
-                display: modelData.display;
-                toolTip: modelData.toolTip;
-                sample: modelData.sample;
-                tag: modelData.tag;
+                required property var model;
+                required property int index;
+                display: model.display;
+                toolTip: model.toolTip;
+                sample: model.sample;
+                tag: model.tag;
                 width: cmbAvailableFeatures.width;
+                visible: model.available;
                 onFeatureClicked: (mouse) => {
                     cmbAvailableFeatures.currentIndex = index;
                     fontFeatureModel.addFeature(tag);

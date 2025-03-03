@@ -33,7 +33,6 @@ public Q_SLOTS:
     void slotTextPropertiesChanged();
     void slotUpdateStylesModel();
     void slotUpdateAxesValues();
-    void slotUpdateFeatureSettings();
     QString wwsFontFamilyName(QString familyName);
     void connectAutoEnabler(QObject *watched);
 

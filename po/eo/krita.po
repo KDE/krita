@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-25 01:54+0000\n"
+"POT-Creation-Date: 2025-03-04 01:55+0000\n"
 "PO-Revision-Date: 2025-02-12 07:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -15984,13 +15984,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Laborspacoj"
 
-#: krita/main.cc:571
+#: krita/main.cc:586
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Grava eraro"
 
-#: krita/main.cc:572
+#: krita/main.cc:587
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15999,14 +15999,14 @@ msgstr ""
 "Krita ne subtenas la Wayland-platformon. Uzu XWayland por ruli Krita sur "
 "Wayland. Krita fermos nun."
 
-#: krita/main.cc:693 libs/ui/KisApplication.cpp:416
+#: krita/main.cc:704 libs/ui/KisApplication.cpp:416
 #: libs/ui/KisApplication.cpp:688
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Averto"
 
-#: krita/main.cc:694
+#: krita/main.cc:705
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16016,31 +16016,6 @@ msgstr ""
 "Vi rulas nesubtenan version de Vindozo: %1.\n"
 "Ĉi tio ne estas rekomendita. Ne raportu cimojn.\n"
 "Bonvolu ĝisdatigi al subtenata versio de Vindozo: Windows 7, 8, 8.1 aŭ 10."
-
-#: krita/main.cc:716 krita/main.cc:721
-#, kde-format
-msgid "Krita Tablet Support"
-msgstr "Krita Tabuleta Subteno"
-
-#: krita/main.cc:717
-#, kde-format
-msgid ""
-"Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
-"have a drawing tablet, please make sure the tablet driver is properly "
-"installed."
-msgstr ""
-"Ne povas ŝargi WinTab-pelilon kaj neniuj aparatoj de Windows Ink plumo estas "
-"trovitaj. Se vi havas desegnan tabuleton, bonvolu certigi, ke la tabuleta "
-"pelilo estas ĝuste instalita."
-
-#: krita/main.cc:722
-#, kde-format
-msgid ""
-"Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-"the tablet driver is properly installed."
-msgstr ""
-"Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tabuleton, bonvolu "
-"certigi, ke la tabuleta pelilo estas ĝuste instalita."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, kde-format
@@ -20667,7 +20642,7 @@ msgstr "Grandeco"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20976,7 +20951,7 @@ msgid "<%1> (embedded)"
 msgstr "<%1> (enigita)"
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:521
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23539,7 +23514,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:972
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
@@ -23811,8 +23786,8 @@ msgstr "Metadatenoj"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24613,7 +24588,7 @@ msgstr ""
 "bildfrekvenco estos reduktita al 50 bildoj sekunde"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1973
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1955
 #, kde-format
 msgid "Warning(s):"
 msgstr "Averto(j):"
@@ -25580,8 +25555,8 @@ msgstr "Majstra ekrano:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25681,8 +25656,8 @@ msgstr "Video Animacia Importo"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -25848,7 +25823,6 @@ msgstr "Dokumento"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:133
 #: libs/ui/imagesize/wdg_canvassize.ui:55 libs/ui/imagesize/wdg_imagesize.ui:71
 #: libs/ui/imagesize/wdg_layersize.ui:62
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
@@ -25890,7 +25864,6 @@ msgstr "Larĝeco:"
 #: libs/ui/imagesize/wdg_canvassize.ui:39
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:688
@@ -26530,49 +26503,49 @@ msgid "Set color used for warning"
 msgstr "Agordi koloron uzatan por averto"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "Percepta"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
 msgstr "Relativa Kolorimetria"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "Satureco"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
 #, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
 msgstr "Absoluta Kolorimetria"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1164
 #, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
 msgstr "Uzi ĉiean bildigan agordon"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1162
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr "Simuli paperan blankonigron"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
 #, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
@@ -26660,12 +26633,12 @@ msgstr "Ecoj de Tavolo"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1512
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1516
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1520
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1603
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2024
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2082 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1498
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26820,17 +26793,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Multoblaj Algluaj Fontoj Detektis"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, kde-format
 msgid "No Cursor"
 msgstr "Neniu Kursoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, kde-format
 msgid "Tool Icon"
 msgstr "Ilpiktogramo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -26839,131 +26812,131 @@ msgstr "Ilpiktogramo"
 msgid "Arrow"
 msgstr "Sago"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, kde-format
 msgid "Small Circle"
 msgstr "Malgranda Rondo"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Kruc-haro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, kde-format
 msgid "Triangle Righthanded"
 msgstr "Triangulo Righthanded"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, kde-format
 msgid "Triangle Lefthanded"
 msgstr "Triangulo Maldekstramana"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, kde-format
 msgid "Black Pixel"
 msgstr "Nigra Rastrumero"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, kde-format
 msgid "White Pixel"
 msgstr "Blanka Rastrumero"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Neniu Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, kde-format
 msgid "Circle Outline"
 msgstr "Cirkla Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, kde-format
 msgid "Preview Outline"
 msgstr "Antaŭrigardo Skizo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, kde-format
 msgid "Tilt Outline"
 msgstr "Inklina Skizo"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, kde-format
 msgid "Eraser"
 msgstr "Skrapgumo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:334
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, kde-format
 msgid "On Touch Drag"
 msgstr "Sur Tuŝo-Trenado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, kde-format
 msgid "On Click Drag"
 msgstr "Sur Klako Treni"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Sur Meza-Alklako Trenado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:387
 #, kde-format
 msgid "All Supported Files"
 msgstr "Ĉiuj Subtenataj Dosieroj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:415
 #, kde-format
 msgid "Open default window"
 msgstr "Malfermi defaŭltan fenestron"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:416
 #, kde-format
 msgid "Load previous session"
 msgstr "Ŝargi antaŭan seancon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:414
+#: libs/ui/dialogs/kis_dlg_preferences.cc:417
 #, kde-format
 msgid "Show session manager"
 msgstr "Montri seancan administranton"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:483
+#: libs/ui/dialogs/kis_dlg_preferences.cc:486
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr "Noto: Vi devos restarti Krita por ke la ŝanĝoj efektiviĝu."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:489
+#: libs/ui/dialogs/kis_dlg_preferences.cc:492
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 "Konservado ĉe loko elektita el la File-Picker povas malrapidigi la startigon!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:521
+#: libs/ui/dialogs/kis_dlg_preferences.cc:524
 #, kde-format
 msgid "Internal Storage"
 msgstr "Interna Konservejo:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:526
 #, kde-format
 msgid "SD-Card"
 msgstr "SD-Karto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:561
+#: libs/ui/dialogs/kis_dlg_preferences.cc:564
 #, kde-format
 msgid "Choose Manually"
 msgstr "Elekti Permane"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:626
+#: libs/ui/dialogs/kis_dlg_preferences.cc:629
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -26988,26 +26961,26 @@ msgstr ""
 "<br/>\n"
 "%2</p>"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:960
 #, kde-format
 msgid "Select a Background Image"
 msgstr "Elekti Fonan Bildon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:972
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "%1 ne estas valida bilddosiero!"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:992
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr "<b>Averto:</b> ĉi tiu loko ne estas skribebla."
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1113
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1241
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1116
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -27015,14 +26988,19 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "Ekrano %1 (%2):"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1204
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, kde-format
 msgid "Install Color Profiles"
 msgstr "Instali Kolorajn Profilojn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1442
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#, kde-format
+msgid "Tablet Input API (currently active API: \"%1\")"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
@@ -27031,7 +27009,7 @@ msgstr ""
 "Uzu tabulmarkojn por tabuleta rapido (povas kaŭzi severajn artefaktojn kiam "
 "vi uzas WinTab-tabulo-API)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr "Uzi tabuletpelilajn tempomarkojn por penikla rapideco"
@@ -27039,7 +27017,7 @@ msgstr "Uzi tabuletpelilajn tempomarkojn por penikla rapideco"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, kde-format
 msgid "Maximum brush speed: {n} px/ms"
 msgid_plural "Maximum brush speed: {n} px/ms"
@@ -27049,14 +27027,14 @@ msgstr[1] "Maksimuma penikorapideco: {n} px/ms:"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1463
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "Penikrapideca Glatigado: {n} specimeno"
 msgstr[1] "Penikrapideca Glatigado: {n} specimenoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1469
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
@@ -27064,13 +27042,13 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1548
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1569
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27079,181 +27057,181 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr " sek"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1591
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1573
 #, kde-format
 msgid " fps"
 msgstr " fps"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1802
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1803
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Programaro Reprezentilo (tre malrapida)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 per ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1814
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1852
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Aŭtomata (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Montra Identigilo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Afiŝnomo: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Min Lumeco: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1932
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Maksimuma Lumineco: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1933
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Maksimuma Plenkadra Lumo: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Ruĝa Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Verda Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Blua Ĉefa: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "Blanka Punkto: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Averto:</b> nuna ekrano ne subtenas HDR-bildigon"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2204
 #, kde-format
 msgid "Configure Krita"
 msgstr "Agordi Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Klavaraj ŝparvojoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Ŝparvojoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Canvas Enigo Agordoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, kde-format
 msgid "Canvas Input"
 msgstr "Canvas Enigo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Koloradministrado"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2271
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2253
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Koloro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
 #, kde-format
 msgid "Performance"
 msgstr "Rendimento"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2271
 #, kde-format
 msgid "Tablet settings"
 msgstr "Agordoj de la tabuleto"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2291
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2273
 #, kde-format
 msgid "Tablet"
 msgstr "Tabulo"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Nur kanvasaj agordoj"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2301
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2283
 #, kde-format
 msgid "Canvas-only"
 msgstr "Tolo-nur"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2309
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2311
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2291
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2293
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Ŝprucfenestra Paletro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2319
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2301
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Aŭtoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2321
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2303
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Aŭtoro"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2328
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27464,11 +27442,11 @@ msgstr "Uzi informojn provizitajn de tabuleto"
 msgid "Map to custom area"
 msgstr "Mapo al propra areo"
 
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intSize)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intXOffset)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intHeight)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intYOffset)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intSize)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbPaletteSize)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbSelectorSize)
 #. i18n: ectx: property (text), item, widget (QComboBox, sizeBox)
@@ -27489,10 +27467,6 @@ msgstr "Mapo al propra areo"
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:66
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:110
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:166
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:88
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:105
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:125
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:142
 #: libs/ui/layerstyles/wdgInnerGlow.ui:246
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:177
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:190
@@ -27510,14 +27484,12 @@ msgstr "px"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:88
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:98
 #, kde-format
 msgid "X offset:"
 msgstr "X-deŝovo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:125
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:135
 #, kde-format
 msgid "Y offset:"
 msgstr "Y-deŝovo:"
@@ -33150,54 +33122,6 @@ msgstr "Aktivigi Transformilon"
 #, kde-format
 msgid "Tablet Tester"
 msgstr "Tabuleta Testilo"
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:22
-#, kde-format
-msgctxt "Screen rect when choosing Wintab/Qt settings"
-msgid "%1x%2 offset: %3,%4"
-msgstr "%1x%2 deŝovo: %3,%4"
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:48
-#, kde-format
-msgctxt "@option:radio"
-msgid "%1 (Wintab)"
-msgstr "%1 (Wintab)"
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:49
-#, kde-format
-msgctxt "@option:radio"
-msgid "%1 (Qt)"
-msgstr "%1 (Qt)"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisScreenSizeChoiceDialog)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
-#, kde-format
-msgid "Choose screen resolution"
-msgstr "Elekti ekranan distingivon"
-
-#. i18n: ectx: property (text), widget (QLabel, lblTitleMessage)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:24
-#, kde-format
-msgid ""
-"<html><head/><body><p>The driver for your  drawing tablet and Windows do not "
-"agree on the size of the screen your tablet is connected to. Please select "
-"the right option.</p></body></html>"
-msgstr ""
-"<html><head/><body><p>La pelilo por via desegna tabuleto kaj Vindozo ne "
-"konsentas pri la grandeco de la ekrano al kiu via tabuleto estas konektita. "
-"Bonvolu elekti la ĝustan opcion.</p></body></html>"
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioManual)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:56
-#, kde-format
-msgid "If both are wrong, enter the size manually:"
-msgstr "Se ambaŭ estas malĝustaj, enigu la grandecon permane:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkRememberSetting)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:159
-#, kde-format
-msgid "Do not ask again (hold Shift to ask again)"
-msgstr "Ne demandi denove (premu Shift por demandi denove)"
 
 #: libs/ui/kis_animation_importer.cpp:65
 msgctxt "(qtundo-format)"
@@ -65719,6 +65643,55 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgid "Krita Tablet Support"
+#~ msgstr "Krita Tabuleta Subteno"
+
+#~ msgid ""
+#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
+#~ "you have a drawing tablet, please make sure the tablet driver is properly "
+#~ "installed."
+#~ msgstr ""
+#~ "Ne povas ŝargi WinTab-pelilon kaj neniuj aparatoj de Windows Ink plumo "
+#~ "estas trovitaj. Se vi havas desegnan tabuleton, bonvolu certigi, ke la "
+#~ "tabuleta pelilo estas ĝuste instalita."
+
+#~ msgid ""
+#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
+#~ "the tablet driver is properly installed."
+#~ msgstr ""
+#~ "Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tabuleton, bonvolu "
+#~ "certigi, ke la tabuleta pelilo estas ĝuste instalita."
+
+#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
+#~ msgid "%1x%2 offset: %3,%4"
+#~ msgstr "%1x%2 deŝovo: %3,%4"
+
+#~ msgctxt "@option:radio"
+#~ msgid "%1 (Wintab)"
+#~ msgstr "%1 (Wintab)"
+
+#~ msgctxt "@option:radio"
+#~ msgid "%1 (Qt)"
+#~ msgstr "%1 (Qt)"
+
+#~ msgid "Choose screen resolution"
+#~ msgstr "Elekti ekranan distingivon"
+
+#~ msgid ""
+#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
+#~ "not agree on the size of the screen your tablet is connected to. Please "
+#~ "select the right option.</p></body></html>"
+#~ msgstr ""
+#~ "<html><head/><body><p>La pelilo por via desegna tabuleto kaj Vindozo ne "
+#~ "konsentas pri la grandeco de la ekrano al kiu via tabuleto estas "
+#~ "konektita. Bonvolu elekti la ĝustan opcion.</p></body></html>"
+
+#~ msgid "If both are wrong, enter the size manually:"
+#~ msgstr "Se ambaŭ estas malĝustaj, enigu la grandecon permane:"
+
+#~ msgid "Do not ask again (hold Shift to ask again)"
+#~ msgstr "Ne demandi denove (premu Shift por demandi denove)"
 
 #~ msgctxt ""
 #~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-02-25 01:54+0000\n"
+"POT-Creation-Date: 2025-03-04 01:55+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -16052,52 +16052,32 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Không gian màu"
 
-#: krita/main.cc:571
+#: krita/main.cc:586
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Bước vi phân:"
 
-#: krita/main.cc:572
+#: krita/main.cc:587
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:693 libs/ui/KisApplication.cpp:416
+#: krita/main.cc:704 libs/ui/KisApplication.cpp:416
 #: libs/ui/KisApplication.cpp:688
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Cảnh báo!"
 
-#: krita/main.cc:694
+#: krita/main.cc:705
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
 "This is not recommended. Do not report any bugs.\n"
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
-msgstr ""
-
-#: krita/main.cc:716 krita/main.cc:721
-#, fuzzy, kde-format
-msgid "Krita Tablet Support"
-msgstr "Krita %1"
-
-#: krita/main.cc:717
-#, kde-format
-msgid ""
-"Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
-"have a drawing tablet, please make sure the tablet driver is properly "
-"installed."
-msgstr ""
-
-#: krita/main.cc:722
-#, kde-format
-msgid ""
-"Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-"the tablet driver is properly installed."
 msgstr ""
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:552
@@ -20628,7 +20608,7 @@ msgstr "Cỡ"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1597
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20957,7 +20937,7 @@ msgid "<%1> (embedded)"
 msgstr ""
 
 #: libs/image/kis_base_mask_generator.h:22
-#: libs/ui/dialogs/kis_dlg_preferences.cc:518
+#: libs/ui/dialogs/kis_dlg_preferences.cc:521
 #: libs/ui/kis_bookmarked_configurations_model.cc:54
 #, kde-format
 msgid "Default"
@@ -23564,7 +23544,7 @@ msgstr "Gỡ bỏ Layer"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:703
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:773
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
-#: libs/ui/dialogs/kis_dlg_preferences.cc:969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:972
 #: libs/ui/input/kis_tablet_debugger.cpp:106 libs/ui/kis_clipboard.cc:728
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
@@ -23843,8 +23823,8 @@ msgstr "&Sửa siêu dữ liệu..."
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1943
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1947
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1925
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24645,7 +24625,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1973
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1955
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Warning(s):"
@@ -25589,8 +25569,8 @@ msgstr "Hiển thị"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2243
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25692,8 +25672,8 @@ msgstr "Định hướng"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2211
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2213
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -25856,7 +25836,6 @@ msgstr "Tài liệu"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:133
 #: libs/ui/imagesize/wdg_canvassize.ui:55 libs/ui/imagesize/wdg_imagesize.ui:71
 #: libs/ui/imagesize/wdg_layersize.ui:62
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
@@ -25898,7 +25877,6 @@ msgstr "Chiều rộng:"
 #: libs/ui/imagesize/wdg_canvassize.ui:39
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:688
@@ -26491,7 +26469,7 @@ msgid "Set color used for warning"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1155
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
 #, fuzzy, kde-format
 #| msgid "Perceptual"
 msgctxt "Color conversion intent"
@@ -26499,7 +26477,7 @@ msgid "Perceptual"
 msgstr "Cảm nhận"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1159
 #, fuzzy, kde-format
 #| msgid "Relative Colorimetric"
 msgctxt "Color conversion intent"
@@ -26507,7 +26485,7 @@ msgid "Relative Colorimetric"
 msgstr "Đo màu tương đối"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1157
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1160
 #, fuzzy, kde-format
 #| msgid "Saturation"
 msgctxt "Color conversion intent"
@@ -26515,7 +26493,7 @@ msgid "Saturation"
 msgstr "Bão hoà"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
 #, fuzzy, kde-format
 #| msgid "Absolute Colorimetric"
 msgctxt "Color conversion intent"
@@ -26523,21 +26501,21 @@ msgid "Absolute Colorimetric"
 msgstr "Đo màu tuyệt đối"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1164
 #, fuzzy, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
 msgstr "Hiện phần chọn"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1162
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1165
 #, kde-format
 msgctxt "Display Mode"
 msgid "Simulate paper white and black"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1163
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1166
 #, fuzzy, kde-format
 #| msgid "Custom"
 msgctxt "Display Mode"
@@ -26626,12 +26604,12 @@ msgstr "Tính chất Lớp"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1512
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1516
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1520
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1603
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2024
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2082 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1498
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2006
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2064 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26789,17 +26767,17 @@ msgctxt "@title:window"
 msgid "Multiple Paste Sources Detected"
 msgstr "Công cụ &trình lọc"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:213
+#: libs/ui/dialogs/kis_dlg_preferences.cc:216
 #, fuzzy, kde-format
 msgid "No Cursor"
 msgstr "Con trỏ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:217
 #, fuzzy, kde-format
 msgid "Tool Icon"
 msgstr "Hình công cụ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:218
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:187
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:221
 #: plugins/flake/pathshapes/enhancedpath/EnhancedPathShapeFactory.cpp:255
@@ -26808,134 +26786,134 @@ msgstr "Hình công cụ"
 msgid "Arrow"
 msgstr "Mũi tên"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:219
 #, fuzzy, kde-format
 msgid "Small Circle"
 msgstr "Miếng nhỏ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
 msgstr "Dấu cộng"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:218
+#: libs/ui/dialogs/kis_dlg_preferences.cc:221
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Triangle Righthanded"
 msgstr "Cỡ chổi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:222
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Triangle Lefthanded"
 msgstr "Cỡ chổi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:220
+#: libs/ui/dialogs/kis_dlg_preferences.cc:223
 #, fuzzy, kde-format
 msgid "Black Pixel"
 msgstr "Chiều rộng điểm ảnh"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:221
+#: libs/ui/dialogs/kis_dlg_preferences.cc:224
 #, fuzzy, kde-format
 msgid "White Pixel"
 msgstr "tuỳ chọn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:224
+#: libs/ui/dialogs/kis_dlg_preferences.cc:227
 #, fuzzy, kde-format
 msgctxt "Display options label to not DISPLAY brush outline"
 msgid "No Outline"
 msgstr "Không chọn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:225
+#: libs/ui/dialogs/kis_dlg_preferences.cc:228
 #, fuzzy, kde-format
 msgid "Circle Outline"
 msgstr "Cỡ chổi"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:229
 #, fuzzy, kde-format
 msgid "Preview Outline"
 msgstr "Xem trước:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:230
 #, fuzzy, kde-format
 msgid "Tilt Outline"
 msgstr "Cỡ chổi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnEraser)
 #. i18n: ectx: property (text), widget (QCheckBox, eraserBox)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:254
 #: plugins/paintops/libpaintop/forms/wdgCompositeOpOption.ui:88
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:41
 #, fuzzy, kde-format
 msgid "Eraser"
 msgstr "Xoá điểm ảnh"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:334
+#: libs/ui/dialogs/kis_dlg_preferences.cc:337
 #, fuzzy, kde-format
 msgid "On Touch Drag"
 msgstr "Hiện Thước kẻ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:335
+#: libs/ui/dialogs/kis_dlg_preferences.cc:338
 #, fuzzy, kde-format
 msgid "On Click Drag"
 msgstr "Hiện Thước kẻ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:336
+#: libs/ui/dialogs/kis_dlg_preferences.cc:339
 #, fuzzy, kde-format
 msgid "On Middle-Click Drag"
 msgstr "Hiện Thước kẻ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:384
+#: libs/ui/dialogs/kis_dlg_preferences.cc:387
 #, kde-format
 msgid "All Supported Files"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:412
+#: libs/ui/dialogs/kis_dlg_preferences.cc:415
 #, kde-format
 msgid "Open default window"
 msgstr "Mở cửa sổ mặc định"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:413
+#: libs/ui/dialogs/kis_dlg_preferences.cc:416
 #, fuzzy, kde-format
 msgid "Load previous session"
 msgstr "Bỏ chọn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:414
+#: libs/ui/dialogs/kis_dlg_preferences.cc:417
 #, fuzzy, kde-format
 #| msgid "Preview: "
 msgid "Show session manager"
 msgstr "Xem trước:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:483
+#: libs/ui/dialogs/kis_dlg_preferences.cc:486
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:489
+#: libs/ui/dialogs/kis_dlg_preferences.cc:492
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:521
+#: libs/ui/dialogs/kis_dlg_preferences.cc:524
 #, fuzzy, kde-format
 msgid "Internal Storage"
 msgstr "Bước vi phân:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:523
+#: libs/ui/dialogs/kis_dlg_preferences.cc:526
 #, kde-format
 msgid "SD-Card"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:561
+#: libs/ui/dialogs/kis_dlg_preferences.cc:564
 #, fuzzy, kde-format
 #| msgid "Manual"
 msgid "Choose Manually"
 msgstr "Bằng tay"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:626
+#: libs/ui/dialogs/kis_dlg_preferences.cc:629
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -26950,26 +26928,26 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:957
+#: libs/ui/dialogs/kis_dlg_preferences.cc:960
 #, fuzzy, kde-format
 msgid "Select a Background Image"
 msgstr "nền"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:969
+#: libs/ui/dialogs/kis_dlg_preferences.cc:972
 #: libs/ui/KisTemplateCreateDia.cpp:390
 #, fuzzy, kde-format
 msgid "%1 is not a valid image file!"
 msgstr "Cỡ Lớp"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:989
+#: libs/ui/dialogs/kis_dlg_preferences.cc:992
 #, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1113
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1241
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1322
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1116
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1325
 #, fuzzy, kde-format
 msgctxt ""
 "The number of the screen (ordinal) and shortened 'name' of the screen (model "
@@ -26977,21 +26955,26 @@ msgctxt ""
 msgid "Screen %1 (%2):"
 msgstr "&Cỡ Màn hình"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1201
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1204
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:804
 #: libs/ui/widgets/kis_color_space_selector.cc:197
 #, fuzzy, kde-format
 msgid "Install Color Profiles"
 msgstr "Khoảng màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1442
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1410
+#, kde-format
+msgid "Tablet Input API (currently active API: \"%1\")"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #, kde-format
 msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1444
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1426
 #, kde-format
 msgid "Use tablet driver timestamps for brush speed"
 msgstr ""
@@ -26999,7 +26982,7 @@ msgstr ""
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1454
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1436
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Maximum brush speed: {n} px/ms"
@@ -27009,26 +26992,26 @@ msgstr[0] "Cỡ chổi"
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1463
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1445
 #, fuzzy, kde-format
 msgid "Brush speed smoothing: {n} sample"
 msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "Thiết lập"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1469
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
 #, kde-format
 msgid "Pen tilt direction offset: {n}°"
 msgid_plural "Pen tilt direction offset: {n}°"
 msgstr[0] ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1566
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1548
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1587
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1569
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -27037,186 +27020,186 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1591
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1573
 #, kde-format
 msgid " fps"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1820
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1802
 #, fuzzy, kde-format
 #| msgid "OpenGL"
 msgctxt "canvas renderer"
 msgid "OpenGL"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1821
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1803
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1823
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1805
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1825
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1832
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1814
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Không rõ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1852
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1834
 #, fuzzy, kde-format
 #| msgid "Auto"
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Tự động"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1929
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
 #, fuzzy, kde-format
 msgid "Display Id: %1"
 msgstr "Hiển thị"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1930
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
 #, fuzzy, kde-format
 msgid "Min Luminance: %1"
 msgstr "Khoảng cách:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1932
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
 #, fuzzy, kde-format
 msgid "Max Luminance: %1"
 msgstr "Khoảng cách:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1933
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1934
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1935
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1936
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1937
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, fuzzy, kde-format
 msgid "White Point: %1, %2"
 msgstr "tuỳ chọn"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2093
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2222
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2204
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Cấu hình %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2221
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Xuất Tài liệu Ra"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2241
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2223
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Gắn vào Lưới"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2233
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Thiết lập Màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2252
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Tải lại Canvas"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2251
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Quản lí màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2271
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2253
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2261
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2263
 #, fuzzy, kde-format
 msgid "Performance"
 msgstr "Tốc độ"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2271
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Thiết lập Màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2291
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2273
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "Kích hoạt"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2281
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Thiết lập Màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2301
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2283
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Màu giấy:"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2309
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2311
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2291
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2293
 #, fuzzy, kde-format
 #| msgid "Open palette"
 msgid "Pop-up Palette"
 msgstr "Mở bảng màu"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2319
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2301
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Tác giả "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2321
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2303
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Tác giả "
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2328
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2310
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27392,11 +27375,11 @@ msgstr ""
 msgid "Map to custom area"
 msgstr ""
 
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intSize)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intXOffset)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intHeight)
 #. i18n: ectx: property (suffix), widget (QSpinBox, intYOffset)
-#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intSize)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbPaletteSize)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, sbSelectorSize)
 #. i18n: ectx: property (text), item, widget (QComboBox, sizeBox)
@@ -27417,10 +27400,6 @@ msgstr ""
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:66
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:110
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:166
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:88
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:105
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:125
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:142
 #: libs/ui/layerstyles/wdgInnerGlow.ui:246
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:177
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:190
@@ -27438,14 +27417,12 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblXOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:88
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:98
 #, fuzzy, kde-format
 msgid "X offset:"
 msgstr "Khoảng cách &X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:125
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:135
 #, fuzzy, kde-format
 msgid "Y offset:"
 msgstr "Khoảng cách &Y:"
@@ -32984,51 +32961,6 @@ msgstr "Lớp hiện tại"
 #, fuzzy, kde-format
 msgid "Tablet Tester"
 msgstr "Kích hoạt"
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:22
-#, kde-format
-msgctxt "Screen rect when choosing Wintab/Qt settings"
-msgid "%1x%2 offset: %3,%4"
-msgstr ""
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:48
-#, fuzzy, kde-format
-msgctxt "@option:radio"
-msgid "%1 (Wintab)"
-msgstr "xanh nước biển"
-
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.cpp:49
-#, fuzzy, kde-format
-msgctxt "@option:radio"
-msgid "%1 (Qt)"
-msgstr "xanh nước biển"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisScreenSizeChoiceDialog)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
-#, fuzzy, kde-format
-msgid "Choose screen resolution"
-msgstr "Chọn"
-
-#. i18n: ectx: property (text), widget (QLabel, lblTitleMessage)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:24
-#, kde-format
-msgid ""
-"<html><head/><body><p>The driver for your  drawing tablet and Windows do not "
-"agree on the size of the screen your tablet is connected to. Please select "
-"the right option.</p></body></html>"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QRadioButton, radioManual)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:56
-#, kde-format
-msgid "If both are wrong, enter the size manually:"
-msgstr ""
-
-#. i18n: ectx: property (text), widget (QCheckBox, chkRememberSetting)
-#: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:159
-#, kde-format
-msgid "Do not ask again (hold Shift to ask again)"
-msgstr ""
 
 #: libs/ui/kis_animation_importer.cpp:65
 #, fuzzy
@@ -65206,6 +65138,24 @@ msgstr "Công cụ &Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ảnh tham chiếu:"
+
+#, fuzzy
+#~ msgid "Krita Tablet Support"
+#~ msgstr "Krita %1"
+
+#, fuzzy
+#~ msgctxt "@option:radio"
+#~ msgid "%1 (Wintab)"
+#~ msgstr "xanh nước biển"
+
+#, fuzzy
+#~ msgctxt "@option:radio"
+#~ msgid "%1 (Qt)"
+#~ msgstr "xanh nước biển"
+
+#, fuzzy
+#~ msgid "Choose screen resolution"
+#~ msgstr "Chọn"
 
 #, fuzzy
 #~ msgctxt ""

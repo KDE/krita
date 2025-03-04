@@ -142,6 +142,8 @@ ColumnLayout {
                 }
                 OpenTypeFeatureSettings {
                 }
+                FontKerning {
+                }
                 BaselineShift {
                 }
                 AlignmentBaseline {

@@ -62,6 +62,7 @@ public:
                        << "text-decoration-style"
                        << "text-decoration-color"
                        << "text-decoration-position"
+                       << "font-kerning"
                        << "letter-spacing"
                        << "word-spacing"
                        << "baseline-shift"
@@ -336,7 +337,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->markerMidId = gc->markerStartId;
             gc->markerEndId = gc->markerStartId;
         }
-    } else if (command == "line-height" || command == "white-space" || command == "xml:space" || command == "text-transform" || command == "text-indent"
+    } else if (command == "font-kerning" || command == "line-height" || command == "white-space" || command == "xml:space" || command == "text-transform" || command == "text-indent"
                || command == "word-break" || command == "line-break" || command == "hanging-punctuation" || command == "text-align"
                || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"

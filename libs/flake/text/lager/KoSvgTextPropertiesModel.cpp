@@ -64,6 +64,22 @@ auto simplifiedAutoLengthPropertyImpl = lager::lenses::getset(
 
 auto simplifiedAutoLengthProperty = variant_to<KoSvgText::AutoLengthPercentage> | simplifiedAutoLengthPropertyImpl;
 
+// Used for font-kerning.
+auto autoValueToBoolImpl = lager::lenses::getset(
+            [](const KoSvgText::AutoValue &value) -> bool {
+                return value.isAuto;
+            },
+            [](KoSvgText::AutoValue value, const bool &val){
+                value.isAuto = val;
+                if (!val) {
+                    value.customValue = 0;
+                }
+                return value;
+            }
+        );
+
+auto autoValueToBool = variant_to<KoSvgText::AutoValue> | autoValueToBoolImpl;
+
 auto textDecorLinePropImpl = [](KoSvgText::TextDecoration flag) {
     return lager::lenses::getset(
         [flag] (const KoSvgText::TextDecorations &value) -> bool {
@@ -230,6 +246,8 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontVariantEastAsianState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontVariantEastAsianId))}
     , LAGER_QT(fontFeatureSettings) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFeatureSettingsId)).zoom(variant_to<QVariantMap>)}
     , LAGER_QT(fontFeatureSettingsState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontFeatureSettingsId))}
+    , LAGER_QT(fontKerning) {textData.zoom(createTextProperty(KoSvgTextProperties::KerningId)).zoom(autoValueToBool)}
+    , LAGER_QT(fontKerningState) {textData.zoom(propertyModifyState(KoSvgTextProperties::KerningId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

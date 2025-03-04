@@ -47,5 +47,6 @@
         <file alias="SqueezedComboBox.qml">qml/SqueezedComboBox.qml</file>
         <file alias="OpenTypeFeatureSettings.qml">qml/OpenTypeFeatureSettings.qml</file>
         <file alias="OpenTypeFeatureDelegate.qml">qml/OpenTypeFeatureDelegate.qml</file>
+        <file alias="FontKerning.qml">qml/FontKerning.qml</file>
     </qresource>
 </RCC>

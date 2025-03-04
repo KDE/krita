@@ -325,7 +325,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 parseSvgTextAttribute(context, "alignment-baseline", param);
             }
         }
-    } else if (command == "kerning") {
+    } else if (command == "kerning" || command == "font-kerning") {
         KoSvgText::AutoValue kerning;
         if (value == "none") {
             kerning.isAuto = false;
@@ -662,11 +662,11 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         } else {
             AutoValue kerning = property(KerningId).value<AutoValue>();
             if (kerning.isAuto) {
-                result.insert("kerning", "auto");
+                result.insert("font-kerning", "auto");
             } else if (kerning.customValue == 0) {
-                result.insert("kerning", "none");
+                result.insert("font-kerning", "none");
             } else {
-                result.insert("kerning", "normal");
+                result.insert("font-kerning", "normal");
             }
         }
     }

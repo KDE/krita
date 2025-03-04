@@ -32,7 +32,8 @@ public:
 
     enum ToolMode {
         AddGutter,
-        RemoveGutter
+        RemoveGutter,
+        MoveGutterEndPoint,
     };
 
     int getThickGapWidth(void);

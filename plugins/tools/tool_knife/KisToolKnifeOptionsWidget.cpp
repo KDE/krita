@@ -14,6 +14,9 @@
 #include "kis_config.h"
 #include <resources/KoColorSet.h>
 #include "kis_canvas_resource_provider.h"
+#include <KisOptionButtonStrip.h>
+#include <kis_icon_utils.h>
+#include <KoGroupButton.h>
 
 
 struct KisToolKnifeOptionsWidget::Private {
@@ -22,6 +25,12 @@ struct KisToolKnifeOptionsWidget::Private {
     }
 
     Ui_KisToolKnifeOptionsWidget *ui {nullptr};
+    KoGroupButton* buttonModeAddGutter {nullptr};
+    KoGroupButton* buttonModeRemoveGutter {nullptr};
+    KoGroupButton* buttonModeMoveGutterEndPoint {nullptr};
+    //KoGroupButton* m_buttonModeAddGutter {nullptr};
+
+
 
     int getThickGapWidth(void)
     {
@@ -35,7 +44,7 @@ struct KisToolKnifeOptionsWidget::Private {
 
     int getSpecialGapWidth(void)
     {
-        return ui->specialGapWidth->value();
+        return ui->customGapWidth->value();
     }
 
     KisToolKnifeOptionsWidget::GapWidthType getWidthType()
@@ -49,7 +58,7 @@ struct KisToolKnifeOptionsWidget::Private {
         }
     }
 
-    int getWidthForType(GapWidthType type) {
+    int getWidthForType(KisToolKnifeOptionsWidget::GapWidthType type) {
         switch(type) {
             case KisToolKnifeOptionsWidget::Thick:
                 return getThickGapWidth();
@@ -63,12 +72,15 @@ struct KisToolKnifeOptionsWidget::Private {
     }
 
     KisToolKnifeOptionsWidget::ToolMode getToolMode() {
-        // TODO: obviously gonna be removed later,
-        // replaced with buttons with icons like the Transform Tool has
-        if (ui->comboBox->currentText() == "Add a gutter") {
+        if (buttonModeAddGutter && buttonModeAddGutter->isChecked()) {
             return KisToolKnifeOptionsWidget::AddGutter;
-        } else {
+        } else if (buttonModeRemoveGutter && buttonModeRemoveGutter->isChecked()) {
             return KisToolKnifeOptionsWidget::RemoveGutter;
+        } else if (buttonModeMoveGutterEndPoint && buttonModeMoveGutterEndPoint->isChecked()) {
+            return KisToolKnifeOptionsWidget::MoveGutterEndPoint;
+        } else {
+            // default
+            return KisToolKnifeOptionsWidget::AddGutter;
         }
     }
 
@@ -80,6 +92,27 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
 {
     m_d->ui = new Ui_KisToolKnifeOptionsWidget();
     m_d->ui->setupUi(this);
+    //m_d->ui->optionButtonStripToolMode->addButton(KisIconUtils::loadIcon("tool_comic_panel_scissors"));
+    //KisOptionButtonStrip *optionButtonStripToolMode =
+    //    new KisOptionButtonStrip;
+    m_d->buttonModeAddGutter = m_d->ui->optionButtonStripToolMode->addButton(
+        KisIconUtils::loadIcon("tool_comic_panel_scissors"));
+    m_d->buttonModeRemoveGutter = m_d->ui->optionButtonStripToolMode->addButton(
+        KisIconUtils::loadIcon("tool_comic_panel_zipper"));
+    m_d->buttonModeMoveGutterEndPoint = m_d->ui->optionButtonStripToolMode->addButton(
+        KisIconUtils::loadIcon("tool_comic_panel_move_point"));
+
+    m_d->buttonModeAddGutter->setChecked(true);
+    m_d->buttonModeAddGutter->setMinimumSize(QSize(36, 36));
+    m_d->buttonModeRemoveGutter->setMinimumSize(QSize(36, 36));
+    m_d->buttonModeAddGutter->setIconSize(QSize(28, 28));
+    m_d->buttonModeRemoveGutter->setIconSize(QSize(28, 28));
+    m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
+    m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
+
+
+
+    //m_d->ui->mainLayout->addWidget(optionButtonStripToolMode);
 }
 
 KisToolKnifeOptionsWidget::~KisToolKnifeOptionsWidget()

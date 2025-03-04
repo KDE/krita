@@ -14,53 +14,23 @@
     <height>230</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="mainLayout">
    <item>
-    <widget class="QComboBox" name="comboBox">
-     <property name="modelColumn">
-      <number>0</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>Add a gutter</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Remove a gutter</string>
-      </property>
-     </item>
-    </widget>
+    <widget class="KisOptionButtonStrip" name="optionButtonStripToolMode" native="true"/>
    </item>
    <item>
-    <widget class="QRadioButton" name="thickGapWidthRadioButton">
-     <property name="text">
-      <string>Thick gap:</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="gapWidthLabel1">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="1" column="0">
+      <widget class="QRadioButton" name="thickGapWidthRadioButton">
        <property name="text">
-        <string>Width:</string>
+        <string>Thick gap:</string>
        </property>
-       <property name="buddy">
-        <cstring>gapWidthLabel1</cstring>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="1">
       <widget class="QSpinBox" name="thickGapWidth">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -88,34 +58,14 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="thinGapWidthRadioButton">
-     <property name="text">
-      <string>Thin gap:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="gapWidthLabel2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+     <item row="2" column="0">
+      <widget class="QRadioButton" name="thinGapWidthRadioButton">
        <property name="text">
-        <string>Width:</string>
-       </property>
-       <property name="buddy">
-        <cstring>gapWidthLabel2</cstring>
+        <string>Thin gap:</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="2" column="1">
       <widget class="QSpinBox" name="thinGapWidth">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -143,35 +93,15 @@
        </property>
       </widget>
      </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="customWidthRadioButton">
-     <property name="text">
-      <string>Special gap:</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="gapWidthLabel3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+     <item row="3" column="0">
+      <widget class="QRadioButton" name="customWidthRadioButton">
        <property name="text">
-        <string>Width:</string>
-       </property>
-       <property name="buddy">
-        <cstring>gapWidthLabel3</cstring>
+        <string>Special gap:</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QSpinBox" name="specialGapWidth">
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="customGapWidth">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -198,6 +128,67 @@
        </property>
       </widget>
      </item>
+     <item row="4" column="0">
+      <widget class="QRadioButton" name="radioButton">
+       <property name="text">
+        <string>Automatic</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Horizontal:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Vertical:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Diagonal:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QComboBox" name="comboBox">
+       <property name="currentText">
+        <string>Thick</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Thick</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QComboBox" name="comboBox_2">
+       <property name="currentText">
+        <string>Thin</string>
+       </property>
+       <item>
+        <property name="text">
+         <string>Thin</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="7" column="1">
+      <widget class="QComboBox" name="comboBox_3">
+       <item>
+        <property name="text">
+         <string>Thin</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -215,6 +206,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisOptionButtonStrip</class>
+   <extends>QWidget</extends>
+   <header>KisOptionButtonStrip.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

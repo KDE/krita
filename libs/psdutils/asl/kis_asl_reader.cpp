@@ -247,10 +247,10 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
         throw ASLParseException("VAList: Krita doesn't support ASL files with 'numberOfChannels' flag not equal to 24 (it is not documented)!");
     }
 
-    // dbgKrita << ppVar(arrayVersion);
-    // dbgKrita << ppVar(arrayLength);
-    // dbgKrita << ppVar(arrayRect);
-    // dbgKrita << ppVar(numberOfChannels);
+    dbgKrita << ppVar(arrayVersion);
+    dbgKrita << ppVar(arrayLength);
+    dbgKrita << ppVar(arrayRect);
+    dbgKrita << ppVar(numberOfChannels);
 
     if (numPlanes != 1 && numPlanes != 3) {
         throw ASLParseException("VAList: unsupported number of planes!");
@@ -397,8 +397,18 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
         for (int i = 0; i < dataLength; i++) {
             for (int j = 2; j >= 0; j--) {
-                const int plane = qMin(numPlanes, j);
-                *dstPtr++ = dataPlanes[plane][i];
+                int plane;
+                if (numPlanes == 1) {
+                    plane = 0;
+                }
+                else {
+                    plane = j;
+                }
+
+                QByteArray ba = dataPlanes[plane];
+                Q_ASSERT(ba.size() == dataLength);
+                Q_ASSERT(ba.size() > i);
+                *dstPtr++ = ba[i];
             }
             *dstPtr++ = 0xFF;
         }

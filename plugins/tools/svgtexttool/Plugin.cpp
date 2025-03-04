@@ -8,19 +8,20 @@
 
 #include <kpluginfactory.h>
 
+#include <QQmlEngine>
+
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
 #include <KisStaticInitializer.h>
 #include "SvgTextToolFactory.h"
 
-#include "glyphpalette/SvgTextLabel.h"
 #include "glyphpalette/GlyphPaletteProxyModel.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "krita_tool_svgtext.json", registerPlugin<Plugin>();)
 
 KIS_DECLARE_STATIC_INITIALIZER {
-    qmlRegisterType<SvgTextLabel>("org.krita.tools.text", 1, 0, "SvgTextLabel");
+    //qmlRegisterType<SvgTextLabel>("org.krita.tools.text", 1, 0, "SvgTextLabel");
     qmlRegisterType<GlyphPaletteProxyModel>("org.krita.tools.text", 1, 0, "GlyphPaletteProxyModel");
 }
 Plugin::Plugin(QObject *parent, const QVariantList &)

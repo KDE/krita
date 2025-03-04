@@ -406,7 +406,7 @@ if (BUILD_WITH_QT6)
     find_package(ECM 6.0 REQUIRED CONFIG)
 else()
     set(QT_MAJOR_VERSION 5)
-    find_package(ECM 5.90 REQUIRED CONFIG)
+    find_package(ECM 5.91 REQUIRED CONFIG)
 endif()
 
 # KDE Frameworks
@@ -426,6 +426,7 @@ include(ECMGenerateHeaders)
 include(GenerateExportHeader)
 include(ECMMarkAsTest)
 include(ECMInstallIcons)
+include(ECMQmlModule)
 
 include(CMakePackageConfigHelpers)
 include(WriteBasicConfigVersionFile)
@@ -1473,6 +1474,7 @@ include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
 add_subdirectory(sdk/tests)
 
 add_subdirectory(libs)
+add_subdirectory(qmlmodules)
 add_subdirectory(plugins)
 if (BUILD_TESTING)
     add_subdirectory(benchmarks)

@@ -26,7 +26,6 @@ set (SvgTextTool_SRCS
 
     glyphpalette/GlyphPaletteDialog.cpp
     glyphpalette/GlyphPaletteProxyModel.cpp
-    glyphpalette/SvgTextLabel.cpp
     glyphpalette/GlyphPaletteAltPopup.cpp
 )
 
@@ -58,6 +57,7 @@ target_link_libraries(krita_tool_svgtext_static
     Qt${QT_MAJOR_VERSION}::QuickControls2
     Qt${QT_MAJOR_VERSION}::Qml
     KF${KF_MAJOR}::I18n)
+
 target_link_libraries(krita_tool_svgtext PRIVATE krita_tool_svgtext_static)
 
 install(TARGETS krita_tool_svgtext DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -7,6 +7,7 @@ import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
+import org.krita.qml 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label:spinbox", "Font Size");

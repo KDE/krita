@@ -6,6 +6,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.5
 import org.krita.tools.text 1.0
+import org.krita.qml 1.0
 
 SvgTextLabel {
     id: glyphLabel;

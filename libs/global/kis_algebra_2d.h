@@ -591,23 +591,43 @@ public:
             type = _type;
             endPoint = _endPoint;
             controlPoint1 = c1;
-            controlPoint1 = c2;
+            controlPoint2 = c2;
+        }
+
+        static VectorPathPoint moveTo(QPointF _endPoint) {
+            return VectorPathPoint(MoveTo, _endPoint);
+        }
+
+        static VectorPathPoint lineTo(QPointF _endPoint) {
+            return VectorPathPoint(LineTo, _endPoint);
+        }
+
+        static VectorPathPoint bezierTo(QPointF _endPoint, QPointF _controlPoint1, QPointF _controlPoint2) {
+            return VectorPathPoint(BezierTo, _endPoint, _controlPoint1, _controlPoint2);
         }
     };
 
 public:
     VectorPath(const QPainterPath& path);
     VectorPath(const QList<VectorPathPoint> path);
+    //VectorPath(const QList<VectorPathPoint> path);
 
-    int pointsCount();
-    VectorPathPoint pointAt(int i);
-    int segmentsCount();
-    QList<VectorPathPoint> segmentAt(int i);
-    QLineF segmentAtAsLine(int i);
 
-    VectorPath trulySimplified();
+    int pointsCount() const;
+    VectorPathPoint pointAt(int i) const;
+    int segmentsCount() const;
+    QList<VectorPathPoint> segmentAt(int i) const;
+    QLineF segmentAtAsLine(int i) const;
 
-    QPainterPath asPainterPath();
+    VectorPath trulySimplified(qreal epsDegrees = 0.5) const;
+    // not open-path friendly
+    VectorPath reversed() const;
+
+
+    bool fuzzyCompareCyclic(const VectorPath& path, qreal eps = 0.00001f) const;
+
+
+    QPainterPath asPainterPath() const;
 
 private:
     QPainterPath m_originalPath;
@@ -1032,7 +1052,8 @@ QPainterPath KRITAGLOBAL_EXPORT getOnePathFromRectangleCutThrough(const QList<QP
 /// \param rightLine right line of the rectangle (used for the right-(bottom) side of the rectangle
 /// \return
 ///
-QList<QPainterPath> KRITAGLOBAL_EXPORT getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine);
+QList<QPainterPath> KRITAGLOBAL_EXPORT getPathsFromRectangleCutThrough(const QRectF &rect, const QLineF &leftLine, const QLineF &rightLine);
+
 
 // isAlgebra2D::getLineSegmentCrossingLineIndexes(QLineF const&, QPainterPath const&)
 QList<int> KRITAGLOBAL_EXPORT getLineSegmentCrossingLineIndexes(const QLineF &line, const QPainterPath& shape);
@@ -1045,7 +1066,20 @@ QList<int> KRITAGLOBAL_EXPORT getLineSegmentCrossingLineIndexes(const QLineF &li
 /// \param index2
 /// \return
 ///
-QPainterPath KRITAGLOBAL_EXPORT removeGutterSmart(const QPainterPath& shape1, int index1, const QPainterPath& shape2, int index2);
+QPainterPath KRITAGLOBAL_EXPORT removeGutterSmart(const QPainterPath& shape1, int index1, const QPainterPath& shape2, int index2, bool isSameShape);
+
+
+///
+/// \brief mergeShapesWithGutter merges two shapes with a gutter shape (defined as two paths)
+/// \param shape1
+/// \param shape2
+/// \param oneEnd
+/// \param otherEnd
+/// \param index1 index of the segment in the first shape
+/// \param index2 index of the segment in the second shape
+/// \return
+///
+VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& shape2, const VectorPath& oneEnd, const VectorPath& otherEnd, int index1, int index2, bool reverseSecondPoly, bool isSameShape);
 
 }
 

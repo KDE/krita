@@ -262,7 +262,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
 
-    QPainterPath result = KisAlgebra2D::removeGutterSmart(srcOutlines[shapeNewIndexes[0]], lineSegmentIndexes[0], srcOutlines[shapeNewIndexes[1]], lineSegmentIndexes[1]);
+    QPainterPath result = KisAlgebra2D::removeGutterSmart(srcOutlines[shapeNewIndexes[0]], lineSegmentIndexes[0], srcOutlines[shapeNewIndexes[1]], lineSegmentIndexes[1], shapeNewIndexes[0]==shapeNewIndexes[1]);
 
     qCritical() << "Finally got a result:";
     convertShapeToDebugArray(result);
@@ -335,7 +335,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
 
 
-    qCritical() << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ END OF REMOVING A GUTTER, SUCCESSFUL, yay! :) ";
+    qCritical() << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ END OF REMOVING A GUTTER, it did happen, whether successful or not... ";
 
 
 

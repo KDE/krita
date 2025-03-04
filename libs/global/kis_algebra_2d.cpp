@@ -1774,7 +1774,7 @@ QPainterPath getOnePathFromRectangleCutThrough(const QList<QPointF> &points, con
     return path;
 }
 
-QList<QPainterPath> getPathsFromRectangleCutThrough(QRectF rect, QLineF leftLine, QLineF rightLine) {
+QList<QPainterPath> getPathsFromRectangleCutThrough(const QRectF &rect, const QLineF &leftLine, const QLineF &rightLine) {
 
     qCritical() << "~~~ BOTH PATHS ~~~";
 
@@ -2032,6 +2032,8 @@ QPainterPath simplifyShape(const QPainterPath& path) {
     return vector.trulySimplified().asPainterPath();
 }
 
+
+// TODO: obsolete, to remove
 VectorPath combineShapes(VectorPath shape1, int index1, VectorPath shape2, int index2, VectorPath end1, VectorPath end2)
 {
     using VPoint = VectorPath::VectorPathPoint;
@@ -2055,8 +2057,186 @@ VectorPath combineShapes(VectorPath shape1, int index1, VectorPath shape2, int i
 }
 
 
+VectorPath mergeShapesWithGutter(const VectorPath& shape1, const VectorPath& shape2, const VectorPath& oneEnd, const VectorPath& otherEnd, int index1, int index2, bool reverseSecondPoly, bool isSameShape)
+{
+    using VPoint = VectorPath::VectorPathPoint;
+    QList<VPoint> result;
 
-QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2)
+
+    ENTER_FUNCTION();
+
+    result.append(shape1.pointAt(0));
+    qCritical() << "Added point from shape1: " << shape1.pointAt(0).endPoint;
+
+    auto appendFrom = [] (QList<VPoint>& res, int start, int end, const VectorPath& shape) {
+        for (int i = start; i < end; i++) {
+            QList<VPoint> segment = shape.segmentAt(i);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(segment.length() == 2);
+            res.append(segment[1]);
+        }
+    };
+
+    VectorPath reversedShape2 = reverseSecondPoly ? shape2.reversed() : VectorPath(shape2);
+    int reversedIndex2 = reverseSecondPoly ? (shape2.segmentsCount() - index2 - 1) : index2;
+
+    if (isSameShape) {
+
+        qCritical() << "Same shape = true, is reversedIndex?" << reverseSecondPoly;
+        int minIndex = qMin(index1, index2);
+        int maxIndex = qMax(index1, index2);
+
+
+        qCritical() << "Indexes are: " << index1 << index2 << "therefore: " << minIndex << maxIndex;
+        /*
+        qCritical() << "Append from shape1, indexes: (" << 0 << ", " << minIndex << ")";
+        appendFrom(0, minIndex, shape1);
+        qCritical() << "Append from oneEnd, indexes: (" << 0 << ", " << oneEnd.segmentsCount() << ")";
+        appendFrom(0, oneEnd.segmentsCount(), oneEnd);
+        qCritical() << "Append from shape1, indexes: (" << minIndex + 1 << ", " << maxIndex << ")";
+        appendFrom(minIndex + 1, maxIndex, shape1);
+        qCritical() << "Append from otherEnd, indexes: (" << 0 << ", " << otherEnd.segmentsCount() << ")";
+        appendFrom(0, otherEnd.segmentsCount(), otherEnd);
+        qCritical() << "Append from shape1, indexes: (" << maxIndex + 1 << ", " << shape1.segmentsCount() << ")";
+        appendFrom(maxIndex + 1, shape1.segmentsCount(), shape1);
+        */
+
+        // the indexes define a way to cut the shape into two shapes
+        // and one of them is kind of more outer than the other
+        // (they could intersect but... that's the user problem at that point, they can fix it point by point)
+        // in normal situation, it's like an outer ring of edges and inner ring of edges (which might be just one edge, which is the most common case)
+        // and we can find that out by checking whether the ends of the selected edges are inside or outside of the shape
+        // and if they're inside a shape, we're assuming that's the resulting shape (and the other is discarded)
+        // no islands in comic panels on my watch!
+
+
+
+        QList<VPoint> result1;
+        // min index to max index
+        result1 << VPoint::moveTo(shape1.segmentAt(minIndex)[1].endPoint);
+        appendFrom(result1, minIndex + 1, maxIndex, shape1);
+
+        QList<VPoint> result2;
+        result2 << VPoint::moveTo(shape1.segmentAt(maxIndex)[1].endPoint);
+        appendFrom(result2, maxIndex + 1, shape1.segmentsCount(), shape1);
+        appendFrom(result2, 0, minIndex, shape1);
+
+        qCritical() << "result 1 initialized with: " << shape1.segmentAt(minIndex)[1].endPoint;
+        qCritical() << "result 2 initialized with: " << shape1.segmentAt(maxIndex)[1].endPoint;
+
+        qCritical() << "Result 1 got indexes: (" << ppVar(minIndex + 1) << ", " << ppVar(maxIndex) << ")";
+        qCritical() << "Result 2 got indexes: (" << ppVar(maxIndex + 1) << ", " << ppVar(shape1.segmentsCount()) << ")";
+        qCritical() << "And: (" << ppVar(0) << ", " << ppVar(minIndex) << ")";
+
+
+
+        // TODO: include gutter shapes!!!!!
+        // minEnd and maxEnd
+        // and combine with results!
+
+
+
+        qCritical() << "Result 1 before appending = " << ppVar(VectorPath(result1).asPainterPath()) << ppVar(VectorPath(result1).segmentsCount());
+        qCritical() << "Result 2 before appending = " << ppVar(VectorPath(result2).asPainterPath()) << ppVar(VectorPath(result2).segmentsCount());
+        qCritical() << "Original had: " << ppVar(shape1.segmentsCount());
+
+
+
+
+        VectorPath minEnd = index1 > index2 ? oneEnd : otherEnd;
+        VectorPath maxEnd = index1 > index2 ? otherEnd : oneEnd;
+
+
+        qCritical() << "Indexes were: " << index1 << index2 << "therefore NOT swapping: " << (index1 < index2);
+        qCritical() << ppVar(oneEnd.asPainterPath()) << ppVar(otherEnd.asPainterPath()) << ppVar(minEnd.asPainterPath()) << ppVar(maxEnd.asPainterPath());
+
+
+        appendFrom(result1, 0, minEnd.segmentsCount(), minEnd);
+        appendFrom(result2, 0, maxEnd.segmentsCount(), maxEnd);
+
+
+
+
+
+
+        VectorPath result1Vec(result1);
+        VectorPath result2Vec(result2);
+
+
+        qCritical() << "Result 1 = " << ppVar(VectorPath(result1).asPainterPath()) << ppVar(VectorPath(result1).segmentsCount());
+        qCritical() << "Result 2 = " << ppVar(VectorPath(result2).asPainterPath()) << ppVar(VectorPath(result2).segmentsCount());
+        qCritical() << "Original had: " << ppVar(shape1.segmentsCount());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //QPolygonF result1Poly = result1Vec.asPainterPath().toFillPolygon();
+        QPolygonF result2Poly = result2Vec.asPainterPath().toFillPolygon();
+
+        // TODO: assumes winding fill
+        if (result2Poly.containsPoint(shape1.segmentAt(minIndex)[1].endPoint, Qt::WindingFill)) {
+            // could check all
+            return result2Vec;
+        }
+        return result1Vec;
+
+
+
+
+        //return VectorPath(result1);
+
+
+
+
+
+
+    } else {
+        appendFrom(result, 0, index1, shape1);
+        appendFrom(result, 0, oneEnd.segmentsCount(), oneEnd);
+        appendFrom(result, reversedIndex2 + 1, reversedShape2.segmentsCount(), reversedShape2);
+        appendFrom(result, 0, reversedIndex2, reversedShape2);
+        appendFrom(result, 0, otherEnd.segmentsCount(), otherEnd);
+        appendFrom(result, index1 + 1, shape1.segmentsCount(), shape1);
+    }
+
+    return VectorPath(result);
+
+
+
+    /*
+
+    for (int i = 0; i < index1; i++) {
+        QList<VPoint> segment = shape1.segmentAt(i);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(segment.length() > 1, shape1);
+        result.append(segment[1]);
+    }
+
+    for (int i = 0; i < oneEnd.segmentsCount(); i++) {
+        QList<VPoint> segment = oneEnd.segmentAt(i);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(segment.length() > 1, shape1);
+        result.append(segment[1]);
+    }
+
+
+
+    */
+
+
+
+}
+
+
+QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPainterPath &shape2, int index2, bool isSameShape)
 {
     qCritical() << ppVar(index1) << ppVar(shape1.elementCount()) << ppVar(index2) << ppVar(shape2.elementCount());
     if (index1 + 1 >= shape1.elementCount() || index2 + 1 >= shape2.elementCount()) {
@@ -2090,6 +2270,17 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
     QPainterPath otherEnd = removeGutterOneEndSmart(shape2, index2, shape1, index1, middleLine, reverseSecondPoly, false);
 
 
+    VectorPath vectorShape1 = VectorPath(shape1);
+    VectorPath vectorShape2 = VectorPath(shape2);
+    VectorPath vectorOneEnd = VectorPath(oneEnd);
+    VectorPath vectorOtherEnd = VectorPath(otherEnd);
+
+    VectorPath vectorResultHere = mergeShapesWithGutter(vectorShape1, vectorShape2, vectorOneEnd, vectorOtherEnd, index1, index2, reverseSecondPoly, isSameShape);
+    return vectorResultHere.trulySimplified(1e-02).asPainterPath();
+
+
+
+    /// -----
 
     gutterShape.moveTo(oneEnd.elementAt(0));
     gutterShape.connectPath(oneEnd);
@@ -2098,11 +2289,41 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
 
     gutterShape = gutterShape.toReversed();
 
-    qCritical() << ppVar(gutterShape);
-    qCritical() << ppVar(oneEnd);
-    qCritical() << ppVar(otherEnd);
+
+    QPainterPath roundedShape1 = shape1;
+    QPainterPath roundedShape2 = shape2;
+
+
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "GUTTER SHAPE BEFORE ROUNDING:" ppVar(gutterShape);
+
+
+    // NOW THE DANGEROUS PART:
+    for (int i = 0; i < gutterShape.elementCount(); i++) {
+        QPainterPath::Element el = gutterShape.elementAt(i);
+        gutterShape.setElementPositionAt(i, qRound(el.x), qRound(el.y));
+    }
+
+    for (int i = 0; i < roundedShape1.elementCount(); i++) {
+        QPainterPath::Element el = roundedShape1.elementAt(i);
+        roundedShape1.setElementPositionAt(i, qRound(el.x), qRound(el.y));
+    }
+
+    for (int i = 0; i < roundedShape2.elementCount(); i++) {
+        QPainterPath::Element el = roundedShape2.elementAt(i);
+        roundedShape2.setElementPositionAt(i, qRound(el.x), qRound(el.y));
+    }
+
+
+
+
+
+
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << ppVar(gutterShape);
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << ppVar(oneEnd);
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << ppVar(otherEnd);
 
     qreal eps = 1e-05;
+    /*
     for (int i = 0; i < gutterShape.elementCount(); i++) {
         QPainterPath::Element gutterEl = gutterShape.elementAt(i);
         qCritical() << "Gutter element: " << gutterEl.x << gutterEl.y << gutterEl.type;
@@ -2121,6 +2342,7 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
             }
         }
     }
+    */
 
     for (int i = 0; i < shape1.elementCount(); i++) {
         QPainterPath::Element shapeEl = shape1.elementAt(i);
@@ -2144,22 +2366,23 @@ QPainterPath removeGutterSmart(const QPainterPath &shape1, int index1, const QPa
 
 
 
-    qCritical() << "#* Result of everything, after adding the gutter, is: " << result;
-    qCritical() << "#* Partial results: " << ppVar(shape1 | shape2) << ppVar(shape2 | gutterShape) << ppVar(shape1 | gutterShape) << ppVar(shape1 | shape2 | gutterShape) << ppVar((shape1 | shape2) | gutterShape) << ppVar((shape1 | gutterShape) | shape2);
-    qCritical() << "#* Shapes to unite were also: " << ppVar(shape1) << ppVar(shape2);
-    qCritical() << "#* Shapes to unite were also (2): " << ppVar(shape1.toFillPolygon()) << ppVar(shape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
-    qCritical() << "#* Fill rules:" << ppVar(shape1.fillRule()) << ppVar(shape2.fillRule()) << ppVar(gutterShape.fillRule());
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10) << "#* Result of everything, after adding the gutter, is: " << result;
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Partial results: " << ppVar(shape1 | shape2) << ppVar(shape2 | gutterShape) << ppVar(shape1 | gutterShape) << ppVar(shape1 | shape2 | gutterShape) << ppVar((shape1 | shape2) | gutterShape) << ppVar((shape1 | gutterShape) | shape2);
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Shapes to unite were also: " << ppVar(shape1) << ppVar(shape2) << ppVar(gutterShape);
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Shapes to unite were also (2): " << ppVar(shape1.toFillPolygon()) << ppVar(shape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Fill rules:" << ppVar(shape1.fillRule()) << ppVar(shape2.fillRule()) << ppVar(gutterShape.fillRule());
 
 
-    qCritical() << "#* Result of everything, after adding the gutter, is: " << result;
-    qCritical() << "#* Partial results: " << ppVar(windingShape1 | windingShape2) << ppVar(windingShape2 | gutterShape) << ppVar(windingShape1 | gutterShape) << ppVar(windingShape1 | windingShape2 | gutterShape)
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Result of everything, after adding the gutter, is: " << result;
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Partial results: " << ppVar(windingShape1 | windingShape2) << ppVar(windingShape2 | gutterShape) << ppVar(windingShape1 | gutterShape) << ppVar(windingShape1 | windingShape2 | gutterShape)
                 << ppVar((windingShape1 | windingShape2) | gutterShape) << ppVar((windingShape1 | gutterShape) | windingShape2);
-    qCritical() << "#* Shapes to unite were also: " << ppVar(windingShape1) << ppVar(windingShape2);
-    qCritical() << "#* Shapes to unite were also (2): " << ppVar(windingShape1.toFillPolygon()) << ppVar(windingShape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
-    qCritical() << "#* Fill rules:" << ppVar(windingShape1.fillRule()) << ppVar(windingShape2.fillRule()) << ppVar(gutterShape.fillRule());
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Shapes to unite were also: " << ppVar(windingShape1) << ppVar(windingShape2);
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Shapes to unite were also (2): " << ppVar(windingShape1.toFillPolygon()) << ppVar(windingShape2.toFillPolygon()) << ppVar(gutterShape.toFillPolygon());
+    qCritical() << Qt::fixed << qSetRealNumberPrecision(10)  << "#* Fill rules:" << ppVar(windingShape1.fillRule()) << ppVar(windingShape2.fillRule()) << ppVar(gutterShape.fillRule());
 
 
-    return VectorPath(result).trulySimplified().asPainterPath();
+    return VectorPath(result).trulySimplified(1e-02).asPainterPath();
+    /// -------
 
     QPainterPath closedShape1 = shape1;
     QPainterPath closedShape2 = shape2;
@@ -2278,22 +2501,22 @@ VectorPath::VectorPath(const QList<VectorPathPoint> path)
     m_points = path;
 }
 
-int VectorPath::pointsCount()
+int VectorPath::pointsCount() const
 {
     return m_points.length();
 }
 
-VectorPath::VectorPathPoint VectorPath::pointAt(int i)
+VectorPath::VectorPathPoint VectorPath::pointAt(int i) const
 {
     return m_points[i];
 }
 
-int VectorPath::segmentsCount()
+int VectorPath::segmentsCount() const
 {
     return m_points.length() - 1 >= 0 ? m_points.length() - 1 : 0;
 }
 
-QList<VectorPath::VectorPathPoint> VectorPath::segmentAt(int i)
+QList<VectorPath::VectorPathPoint> VectorPath::segmentAt(int i) const
 {
     QList<VectorPath::VectorPathPoint> response;
     if (i < 0 || i >= segmentsCount()) {
@@ -2303,7 +2526,7 @@ QList<VectorPath::VectorPathPoint> VectorPath::segmentAt(int i)
     return response;
 }
 
-QLineF VectorPath::segmentAtAsLine(int i)
+QLineF VectorPath::segmentAtAsLine(int i) const
 {
     QList<VectorPath::VectorPathPoint> points = segmentAt(i);
     if (points.length() < 1) {
@@ -2312,8 +2535,11 @@ QLineF VectorPath::segmentAtAsLine(int i)
     return QLineF(points[0].endPoint, points[1].endPoint);
 }
 
-VectorPath VectorPath::trulySimplified()
+VectorPath VectorPath::trulySimplified(qreal epsDegrees) const
 {
+    qreal eps = kisDegreesToRadians(epsDegrees);
+
+
     using VPoint = VectorPath::VectorPathPoint;
 
     qCritical() << "Start simplifying path that has segments: " << segmentsCount();
@@ -2324,6 +2550,22 @@ VectorPath VectorPath::trulySimplified()
     QList<VPoint> response;
     VPoint lineBeginPoint = VPoint(VPoint::MoveTo, QPointF(0, 0));
     VPoint previousPoint = m_points[0];
+
+
+    //qreal eps = 1e-05;
+    auto onTheLine = [eps] (QPointF start, QPointF middle, QPointF end) {
+        //QPointF vector1 = end - start;
+        //QPointF vector2 = end - start;
+        QLineF line1(start, end);
+        QLineF line2(start, middle);
+
+        qCritical() << "abs after dividing:" << qAbs(crossProduct(end - start, middle - start)/line1.length()/line2.length());
+        qCritical() << "meaning degrees: " << kisRadiansToDegrees(qAbs(crossProduct(end - start, middle - start)/line1.length()/line2.length()));
+
+
+        return (qAbs(crossProduct(end - start, middle - start)/line1.length()/line2.length()) < eps);
+    };
+
     for (int i = 1; i < m_points.length(); i++) {
         qCritical() << "Point is: " << m_points[i].endPoint << m_points[i].type;
         if (m_points[i].type == VPoint::MoveTo) {
@@ -2340,14 +2582,16 @@ VectorPath VectorPath::trulySimplified()
                 // check whether they're parallel
                 qCritical() << "Check whether they're parallel: to " << ppVar(m_points[i].endPoint) << " from " << ppVar(lineBeginPoint.endPoint) << " and to " << ppVar(previousPoint.endPoint) << " from " << ppVar(lineBeginPoint.endPoint);
 
-                qreal eps = 1e-05;
-                if (qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)) >= eps) {
-                    qCritical() << "They are not parallel: " << m_points[i].endPoint - lineBeginPoint.endPoint << previousPoint.endPoint - lineBeginPoint.endPoint
-                                << crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)
-                                << qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint))
-                                << eps;
+                qCritical() << "Are they parallel?: (two vectors) " << m_points[i].endPoint - lineBeginPoint.endPoint << previousPoint.endPoint - lineBeginPoint.endPoint
+                            << "cross product = " << crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint)
+                            << "abs(cross product) = " << qAbs(crossProduct(m_points[i].endPoint - lineBeginPoint.endPoint, previousPoint.endPoint - lineBeginPoint.endPoint))
+                            << ppVar(eps);
+                if (!onTheLine(lineBeginPoint.endPoint, previousPoint.endPoint, m_points[i].endPoint)) {
+                    qCritical() << "Not parallel";
                     response << previousPoint;
                     lineBeginPoint = previousPoint;
+                } else {
+                    qCritical() << "Parallel!";
                 }
                 previousPoint = m_points[i]; // let's skip the previous point since they're parallel
                 continue;
@@ -2365,10 +2609,76 @@ VectorPath VectorPath::trulySimplified()
     }
     response << previousPoint;
     qCritical() << "After simplification, we've got points: " << response.length();
+
+    // now eliminate additional point at the beginning of the shape if it's in the middle of a line
+    // and wasn't simplified only because it's at the beginning
+
+    if (response.length() < 3) {
+        return VectorPath(response);
+    }
+
+    VPoint start = response[0];
+    VPoint second = response[1];
+
+    qCritical() << "In the middle, the amount of points is: " << response.length();
+    for(int i = 0; i < response.length(); i++) {
+        qCritical() << ppVar(response[i].type) << response[i].endPoint;
+    }
+
+
+    if (start.type == VPoint::MoveTo) {
+        if (fuzzyPointCompare(previousPoint.endPoint, start.endPoint)) {
+            // they are the same point, now whether they're on the line
+            if (second.type == VPoint::LineTo && onTheLine(response[response.length()-2].endPoint, start.endPoint, second.endPoint)) {
+                qCritical() << "Checked: " << "fuzzy compare point: " << ppVar(response[response.length()-2].endPoint) << ppVar(start.endPoint) << ", on the line: " << ppVar(previousPoint.endPoint) << ppVar(start.endPoint) << ppVar(second.endPoint);
+                response.pop_front();
+                response[0].type = VPoint::MoveTo;
+                response[response.length() - 1].endPoint = second.endPoint;
+                qCritical() << "We're in this case: simplify first MoveTo";
+            }
+        }
+
+    } else if (response[0].type == VPoint::LineTo) { // first point is then QPointF(0, 0)
+        if (qFuzzyIsNull(previousPoint.endPoint.x()) && qFuzzyIsNull(previousPoint.endPoint.y())) {
+            // they are the same point, now whether they're on the line
+            if (second.type == VPoint::LineTo && onTheLine(previousPoint.endPoint, QPointF(0, 0), start.endPoint)) {
+                qCritical() << "We're in this case";
+                //response.pop_front();
+                //response[0].type = VPoint::MoveTo;
+                //response[response.length() - 1].endPoint = start.endPoint;
+            }
+        }
+    }
+
+
+
+
     return VectorPath(response);
 }
 
-QPainterPath VectorPath::asPainterPath()
+VectorPath VectorPath::reversed() const
+{
+    using VPoint = VectorPath::VectorPathPoint;
+    QList<VPoint> response;
+    response.append(VPoint(VPoint::MoveTo, m_points[m_points.length() - 1].endPoint));
+    for (int i = m_points.length() - 1; i > 0; i--) {
+         // to reverse a segment, we take the end VPoint and change the .endPoint to the start VPoint coords
+        VPoint point = m_points[i];
+        //qCritical() << "Copying point" << point;
+        point.endPoint = m_points[i - 1].endPoint;
+        //qCritical() << "Changed end point to: " << point;
+        response.append(point);
+    }
+    return VectorPath(response);
+}
+
+bool VectorPath::fuzzyCompareCyclic(const VectorPath &path, qreal eps) const
+{
+    //
+    return true;
+}
+
+QPainterPath VectorPath::asPainterPath() const
 {
     using VPoint = VectorPath::VectorPathPoint;
     if (m_originalPath.elementCount() > 0) {
@@ -2388,6 +2698,7 @@ QPainterPath VectorPath::asPainterPath()
             break;
         }
     }
+    response.closeSubpath();
     return response;
 }
 

@@ -40,6 +40,8 @@ private Q_SLOTS:
     void testGetParallelLines();
     void testGetParallelLines2();
 
+
+    void testVectorPathReversed();
     void testRemoveGutter();
     void testMergingPainterPaths();
 

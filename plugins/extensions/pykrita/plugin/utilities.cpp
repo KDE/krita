@@ -391,12 +391,14 @@ bool Python::setPath(const QStringList& scriptPaths)
 
             paths.append(d + "/" + p2 + "/site-packages");
             paths.append(d + "/" + p2 + "/site-packages/PyQt5");
+            paths.append(d + "/" + p2 + "/site-packages/PyQt6");
         }
         else {
 #endif
             paths.append(originalPath + "/lib-dynload");
             paths.append(originalPath + "/site-packages");
             paths.append(originalPath + "/site-packages/PyQt5");
+            paths.append(originalPath + "/site-packages/PyQt6");
 #ifdef Q_OS_MAC
         }
 #endif

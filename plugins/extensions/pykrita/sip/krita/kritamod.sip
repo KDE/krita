@@ -4,6 +4,8 @@
 #pragma GCC visibility push(default)
 %End
 
+%Feature Krita_Qt5
+
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
 %Import QtXml/QtXmlmod.sip

@@ -11,6 +11,6 @@ add_subdirectory( paintops )
 add_subdirectory( tools )
 add_subdirectory( qt )
 
-if (HAVE_PYQT5 AND HAVE_SIP AND HAVE_PYTHONLIBS)
+if ((HAVE_PYQT5 OR HAVE_PYQT6) AND HAVE_SIP AND HAVE_PYTHONLIBS)
     add_subdirectory( python )
 endif()

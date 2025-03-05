@@ -11,7 +11,7 @@
 #include "PythonPluginsModel.h"
 
 #include <kcolorscheme.h>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include "PythonPluginManager.h"
 
@@ -89,12 +89,14 @@ QVariant PythonPluginsModel::data(const QModelIndex& index, const int role) cons
                     }
                 }
                 break;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0)) // todo: why does this fail to build on Qt6?
             case Qt::ForegroundRole:
                 if (plugin->isUnstable()) {
                     KColorScheme scheme(QPalette::Inactive, KColorScheme::View);
                     return scheme.foreground(KColorScheme::NegativeText).color();
                 }
                 break;
+#endif
             default:
                 break;
         }

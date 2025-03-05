@@ -104,7 +104,7 @@ function(macos_test_fixrpath)
     if (APPLE AND BUILD_TESTING)
     foreach(TEST IN LISTS ARGN)
         set_property(TARGET ${TEST}
-                     PROPERTY BUILD_RPATH "@loader_path/../../../../lib;@loader_path/../lib;@loader_path/../Frameworks;${CMAKE_INSTALL_PREFIX}/${LIB_INSTALL_DIR}")
+                     PROPERTY BUILD_RPATH "@loader_path/../../../../lib;@loader_path/../lib;@loader_path/../Frameworks;${CMAKE_INSTALL_PREFIX}/${KDE_INSTALL_LIBDIR}")
     endforeach()
     endif()
 endfunction()

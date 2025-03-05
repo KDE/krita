@@ -26,9 +26,16 @@ public:
     QString colorProfile() const;
     bool setColorProfile(const QString &colorProfile);
     bool setColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile);
+    %If (Krita_Qt5)
     QVector<float> components() const;
     QVector<float> componentsOrdered() const;
     void setComponents(const QVector<float> &values);
+    %End
+    %If (!Krita_Qt5)
+    QList<float> components() const;
+    QList<float> componentsOrdered() const;
+    void setComponents(const QList<float> &values);
+    %End
     QString toXML() const;
     void fromXML(const QString &xml);
     QString toQString();

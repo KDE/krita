@@ -13,11 +13,11 @@
 #include <QFile>
 #include <QFileInfo>
 #include <KoResourcePaths.h>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KDesktopFile>
-#include <KI18n/KLocalizedString>
-#include <KConfigCore/KSharedConfig>
-#include <KConfigCore/KConfigGroup>
+#include <KConfig>
+#include <KDesktopFile>
+#include <KLocalizedString>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
 #include <KisUsageLogger.h>
 

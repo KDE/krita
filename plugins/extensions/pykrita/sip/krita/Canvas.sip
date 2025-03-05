@@ -22,6 +22,9 @@ public:
 public Q_SLOTS:
     qreal zoomLevel() const;
     void setZoomLevel(qreal value);
+    QPointF preferredCenter() const;
+    void setPreferredCenter(const QPointF& imagePos);
+    void pan(const QPoint& offset);
     void resetZoom();
     void resetRotation();
     qreal rotation() const;

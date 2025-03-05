@@ -43,6 +43,21 @@ public Q_SLOTS:
     void setZoomLevel(qreal value);
 
     /**
+     * @brief setPan Centers the image pixel at \p imagePos in the current view
+     */
+    void setPreferredCenter(const QPointF& imagePos);
+
+    /**
+     * @brief \return the position of the image pixel that is placed in the center of the current view
+     */
+    QPointF preferredCenter() const;
+
+    /**
+     * @brief pan the current view in pixels.
+     */
+    void pan(const QPoint& offset);
+
+    /**
      * @brief resetZoom set the zoomlevel to 100%
      */
     void resetZoom();

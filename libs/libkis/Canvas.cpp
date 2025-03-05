@@ -54,6 +54,36 @@ void Canvas::setZoomLevel(qreal value)
     d->canvas->imageView()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, value);
 }
 
+void Canvas::setPreferredCenter(const QPointF& imagePos)
+{
+    if (!d->canvas) return;
+
+    const KisCoordinatesConverter *coordConv = d->canvas->coordinatesConverter();
+
+    QPointF documentPos = coordConv->imageToDocument(imagePos);
+    QPointF flakePos = coordConv->documentToFlake(documentPos);
+
+    d->canvas->imageView()->canvasController()->setPreferredCenter(flakePos);
+}
+
+QPointF Canvas::preferredCenter() const
+{
+    if (!d->canvas) return QPointF();
+
+    QPointF flakePos = d->canvas->imageView()->canvasController()->preferredCenter();
+
+    const KisCoordinatesConverter *coordConv = d->canvas->coordinatesConverter();
+    QPointF docPos = coordConv->flakeToDocument(flakePos);
+    QPointF imagePos = coordConv->documentToImage(docPos);
+
+    return imagePos; 
+}
+
+void Canvas::pan(const QPoint& offset)
+{
+    d->canvas->imageView()->canvasController()->pan(offset);
+}
+
 void Canvas::resetZoom()
 {
     if (!d->canvas) return;

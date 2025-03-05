@@ -7,7 +7,7 @@ cppcheck:
   before_script:
     - git clone https://invent.kde.org/sysadmin/ci-utilities
   script:
-    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
+    - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never

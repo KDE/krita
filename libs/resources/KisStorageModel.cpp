@@ -199,10 +199,10 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
             {
                 QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
                 QVariant name = query.value("location");
-                if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
+                if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].toString().isNull()) {
                     name = r[KisResourceStorage::s_meta_name];
                 }
-                else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
+                else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].toString().isNull()) {
                     name = r[KisResourceStorage::s_meta_title];
                 }
                 return name;
@@ -246,10 +246,10 @@ QVariant KisStorageModel::data(const QModelIndex &index, int role) const
         {
             QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForStorage(query.value("location").toString());
             QVariant name = query.value("location");
-            if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].isNull()) {
+            if (r.contains(KisResourceStorage::s_meta_name) && !r[KisResourceStorage::s_meta_name].toString().isNull()) {
                 name = r[KisResourceStorage::s_meta_name];
             }
-            else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].isNull()) {
+            else if (r.contains(KisResourceStorage::s_meta_title) && !r[KisResourceStorage::s_meta_title].toString().isNull()) {
                 name = r[KisResourceStorage::s_meta_title];
             }
             return name;

@@ -395,6 +395,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
     if (format == QImage::Format_ARGB32) {
         quint8 *dstPtr = image.bits();
 
+        // This copies the single channel data into all three rgb channels, creating a grayscale picture
         for (int i = 0; i < dataLength; i++) {
             for (int j = 2; j >= 0; j--) {
                 int plane;
@@ -404,7 +405,6 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
                 else {
                     plane = j;
                 }
-
                 *dstPtr++ = dataPlanes[plane][i];
             }
             *dstPtr++ = 0xFF;

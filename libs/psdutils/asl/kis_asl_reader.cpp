@@ -405,10 +405,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
                     plane = j;
                 }
 
-                QByteArray ba = dataPlanes[plane];
-                Q_ASSERT(ba.size() == dataLength);
-                Q_ASSERT(ba.size() > i);
-                *dstPtr++ = ba[i];
+                *dstPtr++ = dataPlanes[plane][i];
             }
             *dstPtr++ = 0xFF;
         }

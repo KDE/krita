@@ -23193,13 +23193,13 @@ msgstr "<html><head/><body><h1 align=\"center\">Erstellt von</h1></p><p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Jannick Kuhr,Eduard Gotwig"
+msgstr "Deutsches KDE-Übersetzungsteam"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "opensource@kuhr.org,gotwig@ubuntu.com"
+msgstr "kde-i18n-de@kde.org"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format

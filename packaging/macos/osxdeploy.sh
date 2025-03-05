@@ -64,6 +64,16 @@ print_error() {
     printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
 }
 
+# Debug helper function
+debug_script() {
+    echo "## running subcmd: ${@}"
+    ${@}
+}
+
+if [[ -z ${DEBUG} ]]; then
+    RUN_CMD="debug_script"
+fi
+
 DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
 
 # There is some duplication between build and deploy scripts
@@ -356,13 +366,16 @@ find_missing_libs (){
 }
 
 copy_missing_lib_wlink() {
-    local libfile=${1}
+    local inlibfile=${1}
     local dst=${2}
 
+    local sourceLibDir=$(dirname ${inlibfile})
+    local libfile=$(basename ${inlibfile})
+
     while [[ true ]]; do
-        echo "cp -av ${libfile} ${dst}"
-        cp -av ${libfile} ${dst}
-        libfile=$(readlink ${libfile})
+        local lib="${sourceLibDir}/${libfile}"
+        ${RUN_CMD} cp -av ${lib} ${dst}
+        libfile=$(readlink ${lib})
         if [[ -z ${libfile} ]]; then break; fi
     done
 }

@@ -11,9 +11,14 @@ A dialog for editing the exporter settings.
 """
 
 from enum import IntEnum
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
-from PyQt5.QtCore import Qt, QUuid
+try:
+    from PyQt6.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
+    from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
+    from PyQt6.QtCore import Qt, QUuid
+except:
+    from PyQt5.QtGui import QStandardItem, QStandardItemModel, QColor, QFont, QIcon, QPixmap
+    from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QGroupBox, QFormLayout, QCheckBox, QComboBox, QSpinBox, QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, QPushButton, QLineEdit, QLabel, QListView, QTableView, QFontComboBox, QSpacerItem, QColorDialog, QStyledItemDelegate
+    from PyQt5.QtCore import Qt, QUuid
 from krita import *
 
 """
@@ -142,10 +147,10 @@ class labelSelector(QComboBox):
         self.itemModel = QStandardItemModel()
         for color in lisOfColors:
             item = QStandardItem()
-            item.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-            item.setCheckState(Qt.Unchecked)
+            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+            item.setCheckState(Qt.CheckState.Unchecked)
             item.setText(" ")
-            item.setData(color, Qt.BackgroundColorRole)
+            item.setData(color, Qt.ItemDataRole.BackgroundColorRole)
             self.itemModel.appendRow(item)
         self.setModel(self.itemModel)
 
@@ -168,11 +173,11 @@ class labelSelector(QComboBox):
 Little Enum to keep track of where in the item we add styles.
 """
 class styleEnum(IntEnum):
-    FONT = Qt.UserRole + 1
-    FONTLIST = Qt.UserRole + 2
-    FONTGENERIC = Qt.UserRole + 3
-    BOLD = Qt.UserRole + 4
-    ITALIC = Qt.UserRole + 5
+    FONT = Qt.ItemDataRole.UserRole + 1
+    FONTLIST = Qt.ItemDataRole.UserRole + 2
+    FONTGENERIC = Qt.ItemDataRole.UserRole + 3
+    BOLD = Qt.ItemDataRole.UserRole + 4
+    ITALIC = Qt.ItemDataRole.UserRole + 5
 """
 A simple delegate to allows editing fonts with a QFontComboBox
 """
@@ -207,7 +212,7 @@ class comic_export_setting_dialog(QDialog):
         super().__init__()
         self.setLayout(QVBoxLayout())
         self.setWindowTitle(i18n("Export Settings"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
@@ -525,7 +530,7 @@ class comic_export_setting_dialog(QDialog):
     """
     
     def slot_change_regular_color(self):
-        if (self.regularColor.exec_() == QDialog.Accepted):
+        if (self.regularColor.exec() == QDialog.DialogCode.Accepted):
             square = QPixmap(32, 32)
             square.fill(self.regularColor.currentColor())
             self.btn_acbfRegColor.setIcon(QIcon(square))
@@ -534,7 +539,7 @@ class comic_export_setting_dialog(QDialog):
     """
     
     def slot_change_inverted_color(self):
-        if (self.invertedColor.exec_() == QDialog.Accepted):
+        if (self.invertedColor.exec() == QDialog.DialogCode.Accepted):
             square = QPixmap(32, 32)
             square.fill(self.invertedColor.currentColor())
             self.btn_acbfInvColor.setIcon(QIcon(square))
@@ -634,9 +639,9 @@ class comic_export_setting_dialog(QDialog):
                 style = QStandardItem(key.title())
                 style.setCheckable(True)
                 if key in styleDict.keys():
-                    style.setCheckState(Qt.Checked)
+                    style.setCheckState(Qt.CheckState.Checked)
                 else:
-                    style.setCheckState(Qt.Unchecked)
+                    style.setCheckState(Qt.CheckState.Unchecked)
                 fontOn = False
                 if "font" in keyDict.keys() or "genericfont" in keyDict.keys():
                     fontOn = True
@@ -667,7 +672,7 @@ class comic_export_setting_dialog(QDialog):
             for key in self.acbfStylesList:
                 style = QStandardItem(key.title())
                 style.setCheckable(True)
-                style.setCheckState(Qt.Unchecked)
+                style.setCheckState(Qt.CheckState.Unchecked)
                 style.setData(False, role=styleEnum.FONT)
                 style.setData(QFont().family(), role=styleEnum.FONTLIST)
                 style.setData("sans-serif", role=styleEnum.FONTGENERIC)
@@ -717,13 +722,13 @@ class comic_export_setting_dialog(QDialog):
         versionList = []
         for r in range(self.ACBFhistoryModel.rowCount()):
             index = self.ACBFhistoryModel.index(r, 0)
-            versionList.append(self.ACBFhistoryModel.data(index, Qt.DisplayRole))
+            versionList.append(self.ACBFhistoryModel.data(index, Qt.ItemDisplayrole.DisplayRole))
         config["acbfHistory"] = versionList
         
         acbfStylesDict = {}
         for row in range(0, self.ACBFStylesModel.rowCount()):
             entry = self.ACBFStylesModel.item(row)
-            if entry.checkState() == Qt.Checked:
+            if entry.checkState() == Qt.CheckState.Checked:
                 key = entry.text().lower()
                 style = {}
                 if entry.data(role=styleEnum.FONT):

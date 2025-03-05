@@ -22,11 +22,14 @@ print("%s added to PYTHONPATH" % krita_path, file=sys.stderr)
 
 # Look for PyQt
 try:
-    from PyQt5 import QtCore
-except ImportError:
-    print("Python cannot find the Qt5 bindings.", file=sys.stderr)
-    print("Please make sure, that the needed packages are installed.", file=sys.stderr)
-    raise
+    from PyQt6 import QtCore
+except:
+    try:
+        from PyQt5 import QtCore
+    except ImportError:
+        print("Python cannot find the Qt5 bindings.", file=sys.stderr)
+        print("Please make sure, that the needed packages are installed.", file=sys.stderr)
+        raise
 
 # Shows nice looking error dialog if an unhandled exception occurs.
 import excepthook

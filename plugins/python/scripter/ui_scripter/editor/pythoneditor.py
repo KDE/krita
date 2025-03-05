@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
-from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
-from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
+try:
+    from PyQt6.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
+    from PyQt6.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
+    from PyQt6.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
+except:
+    from PyQt5.QtCore import Qt, QRect, QSize, QPoint, pyqtSlot
+    from PyQt5.QtWidgets import QPlainTextEdit, QTextEdit, QLabel
+    from PyQt5.QtGui import QIcon, QColor, QPainter, QTextFormat, QFont, QTextCursor
 from scripter.ui_scripter.editor import linenumberarea, debugarea
 
 ##################
@@ -15,8 +20,8 @@ from scripter.ui_scripter.editor import linenumberarea, debugarea
 INDENT_WIDTH = 4  # size in spaces of indent in editor window.
 # ideally make this a setting sometime?
 
-MODIFIER_COMMENT = Qt.ControlModifier
-KEY_COMMENT = Qt.Key_M
+MODIFIER_COMMENT = Qt.KeyboardModifier.ControlModifier
+KEY_COMMENT = Qt.Key.Key_M
 CHAR_COMMENT = "#"
 
 CHAR_SPACE = " "
@@ -36,7 +41,7 @@ class CodeEditor(QPlainTextEdit):
     def __init__(self, scripter, parent=None):
         super(CodeEditor, self).__init__(parent)
 
-        self.setLineWrapMode(self.NoWrap)
+        self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
 
         self.scripter = scripter
         self.lineNumberArea = linenumberarea.LineNumberArea(self)
@@ -68,7 +73,7 @@ class CodeEditor(QPlainTextEdit):
             max_ /= 10
             digits += 1
 
-        space = 3 + self.fontMetrics().width('9') * digits + 3
+        space = 3 + self.fontMetrics().horizontalAdvance('9') * digits + 3
 
         return space
 
@@ -123,7 +128,7 @@ class CodeEditor(QPlainTextEdit):
                 number = str(blockNumber + 1)
                 painter.setPen(self.palette().text().color())
                 painter.drawText(0, top, self.lineNumberArea.width() - 3, self.fontMetrics().height(),
-                                 Qt.AlignRight, number)
+                                 Qt.AlignmentFlag.AlignRight, number)
 
             block = block.next()
             top = bottom
@@ -157,7 +162,7 @@ class CodeEditor(QPlainTextEdit):
             lineColor = QColor(43, 43, 43)
 
         currentSelection.format.setBackground(lineColor)
-        currentSelection.format.setProperty(QTextFormat.FullWidthSelection, True)
+        currentSelection.format.setProperty(QTextFormat.Property.FullWidthSelection, True)
         currentSelection.cursor = self.textCursor()
         currentSelection.cursor.clearSelection()
 
@@ -166,7 +171,7 @@ class CodeEditor(QPlainTextEdit):
     def wheelEvent(self, e):
         """When the CTRL is pressed during the wheelEvent, zoomIn and zoomOut
            slots are invoked"""
-        if e.modifiers() == Qt.ControlModifier:
+        if e.modifiers() == Qt.KeyboardModifier.ControlModifier:
             delta = e.angleDelta().y()
             if delta < 0:
                 self.zoomOut()
@@ -177,13 +182,13 @@ class CodeEditor(QPlainTextEdit):
 
     def keyPressEvent(self, e):
         modifiers = e.modifiers()
-        if (e.key() == Qt.Key_Tab):
+        if (e.key() == Qt.Key.Key_Tab):
             self.indent()
-        elif e.key() == Qt.Key_Backtab:
+        elif e.key() == Qt.Key.Key_Backtab:
             self.dedent()
         elif modifiers == MODIFIER_COMMENT and e.key() == KEY_COMMENT:
             self.toggleComment()
-        elif e.key() == Qt.Key_Return:
+        elif e.key() == Qt.Key.Key_Return:
             super(CodeEditor, self).keyPressEvent(e)
             self.autoindent()
         else:
@@ -195,10 +200,10 @@ class CodeEditor(QPlainTextEdit):
 
         # get block text
         cursor = self.textCursor()
-        cursor.movePosition(QTextCursor.Start)
-        cursor.movePosition(QTextCursor.NextBlock, n=blockNumber)
-        cursor.movePosition(QTextCursor.StartOfLine)
-        cursor.movePosition(QTextCursor.EndOfLine, QTextCursor.KeepAnchor)
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        cursor.movePosition(QTextCursor.MoveOperation.NextBlock, n=blockNumber)
+        cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
+        cursor.movePosition(QTextCursor.MoveOperation.EndOfLine, QTextCursor.MoveMode.KeepAnchor)
         text = cursor.selectedText()
         if text.strip() == "":
             return True
@@ -226,27 +231,27 @@ class CodeEditor(QPlainTextEdit):
         cursor.setPosition(selectionEnd)
         endBlock = cursor.blockNumber()
 
-        cursor.movePosition(QTextCursor.Start)
-        cursor.movePosition(QTextCursor.NextBlock, n=startBlock)
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        cursor.movePosition(QTextCursor.MoveOperation.NextBlock, n=startBlock)
 
         for i in range(0, endBlock - startBlock + 1):
             if not self.isEmptyBlock(startBlock + i):  # Don't insert whitespace on empty lines
-                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
                 cursor.insertText(" " * self.indent_width)
 
-            cursor.movePosition(QTextCursor.NextBlock)
+            cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
 
         # QT maintains separate cursors, so don't need to track or reset user's cursor
 
     def dedentBlock(self, blockNumber):
         # dedent the line at blockNumber
         cursor = self.textCursor()
-        cursor.movePosition(QTextCursor.Start)
-        cursor.movePosition(QTextCursor.NextBlock, n=blockNumber)
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        cursor.movePosition(QTextCursor.MoveOperation.NextBlock, n=blockNumber)
 
         for _ in range(self.indent_width):
-            cursor.movePosition(QTextCursor.StartOfLine)
-            cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor)
+            cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
+            cursor.movePosition(QTextCursor.MoveOperation.Right, QTextCursor.ModeMode.KeepAnchor)
             if cursor.selectedText() == " ":  # need to test each char
                 cursor.removeSelectedText()
             else:
@@ -349,33 +354,33 @@ class CodeEditor(QPlainTextEdit):
         cursor.setPosition(selectionEnd)
         endBlock = cursor.blockNumber()
 
-        cursor.movePosition(QTextCursor.Start)
-        cursor.movePosition(QTextCursor.NextBlock, n=startBlock)
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        cursor.movePosition(QTextCursor.MoveOperation.NextBlock, n=startBlock)
 
         for _ in range(0, endBlock - startBlock + 1):
             # Test for empty line (if the line is empty moving the cursor right will overflow
             # to next line, throwing the line tracking off)
-            cursor.movePosition(QTextCursor.StartOfLine)
+            cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
             p1 = cursor.position()
-            cursor.movePosition(QTextCursor.EndOfLine)
+            cursor.movePosition(QTextCursor.MoveOperation.EndOfLine)
             p2 = cursor.position()
             if p1 == p2:  # empty line - comment it
-                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
                 cursor.insertText(CHAR_COMMENT)
-                cursor.movePosition(QTextCursor.NextBlock)
+                cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
                 continue
 
-            cursor.movePosition(QTextCursor.StartOfLine)
-            cursor.movePosition(QTextCursor.Right, QTextCursor.KeepAnchor)
+            cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
+            cursor.movePosition(QTextCursor.MoveOperation.Right, QTextCursor.MoveMode.KeepAnchor)
             text = cursor.selectedText()
 
             if text == CHAR_COMMENT:
                 cursor.removeSelectedText()
             else:
-                cursor.movePosition(QTextCursor.StartOfLine)
+                cursor.movePosition(QTextCursor.MoveOperation.StartOfLine)
                 cursor.insertText(CHAR_COMMENT)
 
-            cursor.movePosition(QTextCursor.NextBlock)
+            cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
 
     @property
     def font(self):

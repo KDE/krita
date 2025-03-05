@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
-from PyQt5.QtGui import QPixmap
+try:
+    from PyQt6.QtCore import QAbstractItemModel, QModelIndex, Qt
+    from PyQt6.QtGui import QPixmap
+except:
+    from PyQt5.QtCore import QAbstractItemModel, QModelIndex, Qt
+    from PyQt5.QtGui import QPixmap
 from . import filtermanagertreeitem
 
 
@@ -69,28 +73,28 @@ class FilterManagerTreeModel(QAbstractItemModel):
 
         item = index.internalPointer()
 
-        if role == Qt.UserRole + 1:
+        if role == Qt.ItemDataRole.UserRole + 1:
             return item.data(self.NODE_COLUMN)
 
-        if role == Qt.UserRole + 2:
+        if role == Qt.ItemDataRole.UserRole + 2:
             return item.data(self.DOCUMENT_COLUMN)
 
-        if role == Qt.UserRole + 3:
+        if role == Qt.ItemDataRole.UserRole + 3:
             return item.data(self.TYPE_COLUMN)
 
-        if role != Qt.DisplayRole and role != Qt.DecorationRole:
+        if role != Qt.ItemDataRole.DisplayRole and role != Qt.ItemDataRole.DecorationRole:
             return None
 
         return item.data(index.column())
 
     def flags(self, index):
         if not index.isValid():
-            return Qt.NoItemFlags
+            return Qt.ItemFlag.NoItemFlags
 
-        return Qt.ItemIsEnabled | Qt.ItemIsSelectable
+        return Qt.ItemFlag.ItemIsEnabled | Qt.ItemFlag.ItemIsSelectable
 
     def headerData(self, section, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self.rootItem.data(section)
 
         return None

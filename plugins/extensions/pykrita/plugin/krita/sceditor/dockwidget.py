@@ -4,12 +4,20 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 import os
 
-from PyQt5.QtCore import QPoint, QSize, Qt, QRect, QTimer
-from PyQt5.QtGui import (QIcon, QPainter)
-from PyQt5.QtWidgets import (QAbstractButton, QApplication, QComboBox,
-                             QDockWidget, QHBoxLayout, QLayout, QMainWindow,
-                             QPushButton, QStyle, QStyleOptionDockWidget,
-                             QStyleOptionToolButton, QStylePainter, QWidget)
+try:
+    from PyQt6.QtCore import QPoint, QSize, Qt, QRect, QTimer
+    from PyQt6.QtGui import (QIcon, QPainter)
+    from PyQt6.QtWidgets import (QAbstractButton, QApplication, QComboBox,
+                                 QDockWidget, QHBoxLayout, QLayout, QMainWindow,
+                                 QPushButton, QStyle, QStyleOptionDockWidget,
+                                 QStyleOptionToolButton, QStylePainter, QWidget)
+except:
+    from PyQt5.QtCore import QPoint, QSize, Qt, QRect, QTimer
+    from PyQt5.QtGui import (QIcon, QPainter)
+    from PyQt5.QtWidgets import (QAbstractButton, QApplication, QComboBox,
+                                 QDockWidget, QHBoxLayout, QLayout, QMainWindow,
+                                 QPushButton, QStyle, QStyleOptionDockWidget,
+                                 QStyleOptionToolButton, QStylePainter, QWidget)
 
 
 import dockwidget_icons
@@ -23,14 +31,14 @@ class DockWidgetTitleBarButton(QAbstractButton):
 
     def __init__(self, titlebar):
         QAbstractButton.__init__(self, titlebar)
-        self.setFocusPolicy(Qt.NoFocus)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     def sizeHint(self):
         self.ensurePolished()
-        margin = self.style().pixelMetric(QStyle.PM_DockWidgetTitleBarButtonMargin, None, self)
+        margin = self.style().pixelMetric(QStyle.PixelMetric.PM_DockWidgetTitleBarButtonMargin, None, self)
         if self.icon().isNull():
             return QSize(margin, margin)
-        iconSize = self.style().pixelMetric(QStyle.PM_SmallIconSize, None, self)
+        iconSize = self.style().pixelMetric(QStyle.PixelMetric.PM_SmallIconSize, None, self)
         pm = self.icon().pixmap(iconSize)
         return QSize(pm.width() + margin, pm.height() + margin)
 
@@ -49,28 +57,28 @@ class DockWidgetTitleBarButton(QAbstractButton):
         r = self.rect()
         opt = QStyleOptionToolButton()
         opt.init(self)
-        opt.state |= QStyle.State_AutoRaise
+        opt.state |= QStyle.StateFlag.State_AutoRaise
         if self.isEnabled() and self.underMouse() and \
            not self.isChecked() and not self.isDown():
-            opt.state |= QStyle.State_Raised
+            opt.state |= QStyle.StateFlag.State_Raised
         if self.isChecked():
-            opt.state |= QStyle.State_On
+            opt.state |= QStyle.StateFlag.State_On
         if self.isDown():
-            opt.state |= QStyle.State_Sunken
+            opt.state |= QStyle.StateFlag.State_Sunken
         self.style().drawPrimitive(
-            QStyle.PE_PanelButtonTool, opt, p, self)
+            QStyle.PrimitiveElement.PE_PanelButtonTool, opt, p, self)
         opt.icon = self.icon()
         opt.subControls = QStyle.SubControls()
         opt.activeSubControls = QStyle.SubControls()
-        opt.features = QStyleOptionToolButton.None
-        opt.arrowType = Qt.NoArrow
-        size = self.style().pixelMetric(QStyle.PM_SmallIconSize, None, self)
+        opt.features = QStyleOptionToolButton.ToolButtonFeature.None_
+        opt.arrowType = Qt.ArrowType.NoArrow
+        size = self.style().pixelMetric(QStyle.PixelMetric.PM_SmallIconSize, None, self)
         opt.iconSize = QSize(size, size)
-        self.style().drawComplexControl(QStyle.CC_ToolButton, opt, p, self)
+        self.style().drawComplexControl(QStyle.ComplexControl.CC_ToolButton, opt, p, self)
 
 
 class DockWidgetTitleBar(QWidget):
-    # XXX: support QDockWidget.DockWidgetVerticalTitleBar feature
+    # XXX: support QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar feature
 
     def __init__(self, dockWidget):
         QWidget.__init__(self, dockWidget)
@@ -80,12 +88,12 @@ class DockWidgetTitleBar(QWidget):
         q = dockWidget
         self.floatButton = DockWidgetTitleBarButton(self)
         self.floatButton.setIcon(q.style().standardIcon(
-            QStyle.SP_TitleBarNormalButton, None, q))
+            QStyle.StandardPixmap.SP_TitleBarNormalButton, None, q))
         self.floatButton.clicked.connect(self.toggleFloating)
         self.floatButton.setVisible(True)
         self.closeButton = DockWidgetTitleBarButton(self)
         self.closeButton.setIcon(q.style().standardIcon(
-            QStyle.SP_TitleBarCloseButton, None, q))
+            QStyle.StandardPixmap.SP_TitleBarCloseButton, None, q))
         self.closeButton.clicked.connect(dockWidget.close)
         self.closeButton.setVisible(True)
         self.collapseButton = DockWidgetTitleBarButton(self)
@@ -106,8 +114,8 @@ class DockWidgetTitleBar(QWidget):
 
     def sizeHint(self):
         q = self.parentWidget()
-        mw = q.style().pixelMetric(QStyle.PM_DockWidgetTitleMargin, None, q)
-        fw = q.style().pixelMetric(QStyle.PM_DockWidgetFrameWidth, None, q)
+        mw = q.style().pixelMetric(QStyle.PixelMetric.PM_DockWidgetTitleMargin, None, q)
+        fw = q.style().pixelMetric(QStyle.PixelMetric.PM_DockWidgetFrameWidth, None, q)
         closeSize = QSize(0, 0)
         if self.closeButton:
             closeSize = self.closeButton.sizeHint()
@@ -127,14 +135,14 @@ class DockWidgetTitleBar(QWidget):
         fontHeight = titleFontMetrics.lineSpacing() + 2 * mw
         height = max(buttonHeight, fontHeight)
         width = buttonWidth + height + 4 * mw + 2 * fw
-        if hasFeature(q, QDockWidget.DockWidgetVerticalTitleBar):
+        if hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar):
             width, height = height, width
         return QSize(width, height)
 
     def paintEvent(self, event):
         p = QStylePainter(self)
         q = self.parentWidget()
-        if hasFeature(q, QDockWidget.DockWidgetVerticalTitleBar):
+        if hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar):
             fw = 1 or q.isFloating() and q.style().pixelMetric(
                 QStyle.PM_DockWidgetFrameWidth, None, q) or 0
             mw = q.style().pixelMetric(QStyle.PM_DockWidgetTitleMargin, None, q)
@@ -149,13 +157,13 @@ class DockWidgetTitleBar(QWidget):
                     self.geometry().height() - (fw * 2) -
                     mw - self.collapseButton.size().height() - self.pinButton.size().height()))
             titleOpt.title = q.windowTitle()
-            titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
-            titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
+            titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetClosable)
+            titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFloatable)
             p.drawControl(QStyle.CE_DockWidgetTitle, titleOpt)
         else:
             fw = q.isFloating() and q.style().pixelMetric(
                 QStyle.PM_DockWidgetFrameWidth, None, q) or 0
-            mw = q.style().pixelMetric(QStyle.PM_DockWidgetTitleMargin, None, q)
+            mw = q.style().pixelMetric(QStyle.PixelMetric.PM_DockWidgetTitleMargin, None, q)
             titleOpt = QStyleOptionDockWidget()
             titleOpt.initFrom(q)
             titleOpt.rect = QRect(
@@ -166,15 +174,15 @@ class DockWidgetTitleBar(QWidget):
                     mw - self.collapseButton.size().width() - self.pinButton.size().width(),
                     self.geometry().height() - (fw * 2)))
             titleOpt.title = q.windowTitle()
-            titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
-            titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
-            p.drawControl(QStyle.CE_DockWidgetTitle, titleOpt)
+            titleOpt.closable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetClosable)
+            titleOpt.floatable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFloatable)
+            p.drawControl(QStyle.ControlElement.CE_DockWidgetTitle, titleOpt)
 
     def resizeEvent(self, event):
         q = self.parentWidget()
-        if hasFeature(q, QDockWidget.DockWidgetVerticalTitleBar):
+        if hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar):
             fh = q.isFloating() and q.style().pixelMetric(
-                QStyle.PM_DockWidgetFrameWidth, None, q) or 0
+                QStyle.PixelMetric.PM_DockWidgetFrameWidth, None, q) or 0
             opt = QStyleOptionDockWidget()
             opt.initFrom(q)
             opt.verticalTitleBar = True
@@ -184,14 +192,14 @@ class DockWidgetTitleBar(QWidget):
                     self.geometry().width() - (fh * 2),
                     fh * 2))
             opt.title = q.windowTitle()
-            opt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
-            opt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
+            opt.closable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetClosable)
+            opt.floatable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFloatable)
             floatRect = q.style().subElementRect(
-                QStyle.SE_DockWidgetFloatButton, opt, q)
+                QStyle.SubElement.SubElement.SE_DockWidgetFloatButton, opt, q)
             if not floatRect.isNull():
                 self.floatButton.setGeometry(floatRect)
             closeRect = q.style().subElementRect(
-                QStyle.SE_DockWidgetCloseButton, opt, q)
+                QStyle.SubElement.SubElement.SE_DockWidgetCloseButton, opt, q)
             if not closeRect.isNull():
                 self.closeButton.setGeometry(closeRect)
             top = fh
@@ -210,7 +218,7 @@ class DockWidgetTitleBar(QWidget):
             self.pinButton.setGeometry(pinRect)
         else:
             fw = q.isFloating() and q.style().pixelMetric(
-                QStyle.PM_DockWidgetFrameWidth, None, q) or 0
+                QStyle.PixelMetric.PixelMetric.PM_DockWidgetFrameWidth, None, q) or 0
             opt = QStyleOptionDockWidget()
             opt.initFrom(q)
             opt.rect = QRect(
@@ -219,14 +227,14 @@ class DockWidgetTitleBar(QWidget):
                     self.geometry().width() - (fw * 2),
                     self.geometry().height() - (fw * 2)))
             opt.title = q.windowTitle()
-            opt.closable = hasFeature(q, QDockWidget.DockWidgetClosable)
-            opt.floatable = hasFeature(q, QDockWidget.DockWidgetFloatable)
+            opt.closable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFeature.DockWidgetClosable)
+            opt.floatable = hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFeature.DockWidgetFloatable)
             floatRect = q.style().subElementRect(
-                QStyle.SE_DockWidgetFloatButton, opt, q)
+                QStyle.SubElement.SE_DockWidgetFloatButton, opt, q)
             if not floatRect.isNull():
                 self.floatButton.setGeometry(floatRect)
             closeRect = q.style().subElementRect(
-                QStyle.SE_DockWidgetCloseButton, opt, q)
+                QStyle.SubElement.SE_DockWidgetCloseButton, opt, q)
             if not closeRect.isNull():
                 self.closeButton.setGeometry(closeRect)
             top = fw
@@ -268,8 +276,8 @@ class DockWidgetTitleBar(QWidget):
 
     def featuresChanged(self, features):
         q = self.parentWidget()
-        self.closeButton.setVisible(hasFeature(q, QDockWidget.DockWidgetClosable))
-        self.floatButton.setVisible(hasFeature(q, QDockWidget.DockWidgetFloatable))
+        self.closeButton.setVisible(hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetClosable))
+        self.floatButton.setVisible(hasFeature(q, QDockWidget.DockWidgetFeature.DockWidgetFloatable))
         # self.resizeEvent(None)
 
 
@@ -296,7 +304,7 @@ class DockMainWidgetWrapper(QWidget):
             self.old_size = self.size()
             self.layout().removeWidget(self.widget)
             self.widget.hide()
-            if hasFeature(self.parent(), QDockWidget.DockWidgetVerticalTitleBar):
+            if hasFeature(self.parent(), QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar):
                 self.parent().setMaximumWidth(self.parent().width() - self.width())
             else:
                 self.parent().setMaximumHeight(self.parent().height() - self.height())
@@ -374,17 +382,17 @@ if __name__ == "__main__":
     app.setStyle("qtcurve")
     win = QMainWindow()
     dock1 = DockWidget("1st dockwidget", win)
-    dock1.setFeatures(dock1.features() | QDockWidget.DockWidgetVerticalTitleBar)
+    dock1.setFeatures(dock1.features() | QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar)
     combo = QComboBox(dock1)
     dock1.setWidget(combo)
-    win.addDockWidget(Qt.LeftDockWidgetArea, dock1)
+    win.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, dock1)
     dock2 = DockWidget("2nd dockwidget")
-    dock2.setFeatures(dock1.features() | QDockWidget.DockWidgetVerticalTitleBar)
+    dock2.setFeatures(dock1.features() | QDockWidget.DockWidgetFeature.DockWidgetVerticalTitleBar)
     button = QPushButton("Hello, world!", dock2)
     dock2.setWidget(button)
-    win.addDockWidget(Qt.RightDockWidgetArea, dock2)
+    win.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, dock2)
     edit = QTextEdit(win)
     win.setCentralWidget(edit)
     win.resize(640, 480)
     win.show()
-    app.exec_()
+    app.exec()

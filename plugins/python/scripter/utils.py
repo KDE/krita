@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2022 Ivan Santa Maria <ghevan@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtGui import QIcon, QPixmap, QColor, QPainter
+try:
+    from PyQt6.QtGui import QIcon, QPixmap, QColor, QPainter
+except:
+    from PyQt5.QtGui import QIcon, QPixmap, QColor, QPainter
 
 needDarkIcon = False
 
@@ -16,7 +19,7 @@ def getThemedIcon(filepath) -> QIcon:
     global needDarkIcon
     pixmap = QPixmap(filepath)
     painter = QPainter(pixmap)
-    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
 
     if needDarkIcon:
         painter.fillRect(pixmap.rect(),QColor(32,32,32))

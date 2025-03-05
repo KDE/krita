@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import QComboBox
+try:
+    from PyQt6.QtWidgets import QComboBox
+except:
+    from PyQt5.QtWidgets import QComboBox
 
 
 class ColorModelComboBox(QComboBox):

@@ -1,10 +1,17 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
-                             QLineEdit, QScrollArea, QGridLayout, QFileDialog,
-                             QLabel, QDialogButtonBox)
-from PyQt5.QtGui import QKeySequence
+try:
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
+                                 QLineEdit, QScrollArea, QGridLayout, QFileDialog,
+                                 QLabel, QDialogButtonBox)
+    from PyQt6.QtGui import QKeySequence
+except:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import (QWidget, QVBoxLayout, QPushButton,
+                                 QLineEdit, QScrollArea, QGridLayout, QFileDialog,
+                                 QLabel, QDialogButtonBox)
+    from PyQt5.QtGui import QKeySequence
 from . import tenscriptsdialog
 import krita
 
@@ -26,9 +33,9 @@ class UITenScripts(object):
         self.buttonBox.accepted.connect(self.mainDialog.accept)
         self.buttonBox.rejected.connect(self.mainDialog.reject)
 
-        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.scrollArea.setWidgetResizable(True)
 
     def initialize(self, tenscripts):
@@ -50,7 +57,7 @@ class UITenScripts(object):
 
         self.mainDialog.show()
         self.mainDialog.activateWindow()
-        self.mainDialog.exec_()
+        self.mainDialog.exec()
 
     def addNewRow(self, index):
         rowPosition = self.scriptsLayout.rowCount()
@@ -62,20 +69,20 @@ class UITenScripts(object):
         action = Application.action(self.tenscripts.indexToAction[index])
 
         directoryTextField.setReadOnly(True)
-        label.setText(action.shortcut().toString(QKeySequence.NativeText))
+        label.setText(action.shortcut().toString(QKeySequence.SequenceFormat.NativeText))
         directoryTextField.setToolTip(i18n("Selected path"))
         directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
         directoryClearButton.clicked.connect(self._clearScript)
 
         self.scriptsLayout.addWidget(
-            label, rowPosition, 0, Qt.AlignLeft | Qt.AlignTop)
+            label, rowPosition, 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         self.scriptsLayout.addWidget(
-            directoryTextField, rowPosition, 1, Qt.AlignLeft | Qt.AlignTop)
+            directoryTextField, rowPosition, 1, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         self.scriptsLayout.addWidget(
-            directoryClearButton, rowPosition, 2, Qt.AlignLeft | Qt.AlignTop)
+            directoryClearButton, rowPosition, 2, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         self.scriptsLayout.addWidget(
-            directoryDialogButton, rowPosition, 3, Qt.AlignLeft | Qt.AlignTop)
+            directoryDialogButton, rowPosition, 3, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
     def saved_scripts(self):
         _saved_scripts = []
@@ -98,7 +105,7 @@ class UITenScripts(object):
         dialog = QFileDialog(self.mainDialog)
         dialog.setNameFilter(i18n("Python files (*.py)"))
 
-        if dialog.exec_():
+        if dialog.exec():
             selectedFile = dialog.selectedFiles()[0]
             obj = self.mainDialog.sender()
             textField = self.scriptsLayout.itemAt(

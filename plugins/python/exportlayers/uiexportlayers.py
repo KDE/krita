@@ -1,12 +1,20 @@
 # SPDX-License-Identifier: CC0-1.0
 
 from . import exportlayersdialog
-from PyQt5.QtCore import (Qt, QRect)
-from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
-                             QDialogButtonBox, QVBoxLayout, QFrame,
-                             QPushButton, QAbstractScrollArea, QLineEdit,
-                             QMessageBox, QFileDialog, QCheckBox, QSpinBox,
-                             QComboBox, QListWidgetItem)
+try:
+    from PyQt6.QtCore import (Qt, QRect)
+    from PyQt6.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
+                                 QDialogButtonBox, QVBoxLayout, QFrame,
+                                 QPushButton, QAbstractScrollArea, QLineEdit,
+                                 QMessageBox, QFileDialog, QCheckBox, QSpinBox,
+                                 QComboBox, QListWidgetItem)
+except:
+    from PyQt5.QtCore import (Qt, QRect)
+    from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
+                                 QDialogButtonBox, QVBoxLayout, QFrame,
+                                 QPushButton, QAbstractScrollArea, QLineEdit,
+                                 QMessageBox, QFileDialog, QCheckBox, QSpinBox,
+                                 QComboBox, QListWidgetItem)
 import os
 import krita
 
@@ -44,7 +52,7 @@ class UIExportLayers(object):
         self.resSpinBox = QSpinBox()
 
         self.buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self.documentsList = []
@@ -53,16 +61,16 @@ class UIExportLayers(object):
         self.batchmodeCheckBox.setChecked(True)
         self.directoryDialogButton.clicked.connect(self._selectDir)
         self.widgetDocuments.currentRowChanged.connect(self._setResolution)
-        self.widgetDocuments.setSelectionMode(3) #multi-selection
+        self.widgetDocuments.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
         self.widgetDocuments.setMouseTracking(True) #enable ToolTips to show the paths
         self.refreshButton.clicked.connect(self.refreshButtonClicked)
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
         self.cropToImageBounds.stateChanged.connect(self._toggleCropSize)
 
-        self.mainDialog.setWindowModality(Qt.NonModal)
+        self.mainDialog.setWindowModality(Qt.WindowModality.NonModal)
         self.widgetDocuments.setSizeAdjustPolicy(
-            QAbstractScrollArea.AdjustToContents)
+            QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
 
     def initialize(self):
         self.loadDocuments()
@@ -102,8 +110,8 @@ class UIExportLayers(object):
             i18n("Images extensions:"), self.formatsComboBox)
 
         self.line = QFrame()
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.mainLayout.addLayout(self.formLayout)
         self.mainLayout.addWidget(self.line)
@@ -163,7 +171,7 @@ class UIExportLayers(object):
             for doc in selectedDocuments:
                 self.export(doc)
             self.msgBox.setText(i18n("All layers have been exported."))
-        self.msgBox.exec_()
+        self.msgBox.exec()
 
     def mkdir(self, directory):
         target_directory = self.directoryTextField.text() + directory
@@ -234,7 +242,7 @@ class UIExportLayers(object):
             self.mainDialog,
             i18n("Select a Folder"),
             os.path.expanduser("~"),
-            QFileDialog.ShowDirsOnly)
+            QFileDialog.Option.ShowDirsOnly)
         self.directoryTextField.setText(directory)
 
     def _setResolution(self, index):

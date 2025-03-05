@@ -2,9 +2,14 @@
 
 from . import filtermanagerdialog
 from .components import (filtercombobox, filtermanagertreemodel)
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
-                             QVBoxLayout, QFrame, QTreeView)
+try:
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
+                                 QVBoxLayout, QFrame, QTreeView)
+except:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import (QFormLayout, QAbstractItemView, QDialogButtonBox,
+                                 QVBoxLayout, QFrame, QTreeView)
 import krita
 
 
@@ -15,7 +20,7 @@ class UIFilterManager(object):
         self.mainLayout = QVBoxLayout(self.mainDialog)
         self.formLayout = QFormLayout()
         self.buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self._filters = sorted(self.kritaInstance.filters())
@@ -29,8 +34,8 @@ class UIFilterManager(object):
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
         self.documentsTreeView.setSelectionMode(
-            QAbstractItemView.SingleSelection)
-        self.mainDialog.setWindowModality(Qt.NonModal)
+            QAbstractItemView.SelectionMode.SingleSelection)
+        self.mainDialog.setWindowModality(Qt.WindowModality.NonModal)
 
     def initialize(self):
         self.documentsTreeView.setModel(self.treeModel)
@@ -42,8 +47,8 @@ class UIFilterManager(object):
         self.formLayout.addRow(i18nc("Python filters", "Filters:"), self.filterComboBox)
 
         self.line = QFrame()
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.mainLayout.addWidget(self.documentsTreeView)
         self.mainLayout.addLayout(self.formLayout)
@@ -61,9 +66,9 @@ class UIFilterManager(object):
 
         selectionModel = self.documentsTreeView.selectionModel()
         for index in selectionModel.selectedRows():
-            node = self.treeModel.data(index, Qt.UserRole + 1)
-            documentIndex = self.treeModel.data(index, Qt.UserRole + 2)
-            _type = self.treeModel.data(index, Qt.UserRole + 3)
+            node = self.treeModel.data(index, Qt.ItemDataRole.UserRole + 1)
+            documentIndex = self.treeModel.data(index, Qt.ItemDataRole.UserRole + 2)
+            _type = self.treeModel.data(index, Qt.ItemDataRole.UserRole + 3)
 
             if _type == 'Document':
                 self.applyFilterOverDocument(self.documents[documentIndex])

@@ -12,9 +12,14 @@ Template dialog
 import os
 import shutil
 #from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
-from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
-from PyQt5.QtGui import QImage, QPainter, QPixmap
+try:
+    from PyQt6.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
+    from PyQt6.QtCore import QLocale, Qt, QByteArray, QRectF
+    from PyQt6.QtGui import QImage, QPainter, QPixmap
+except:
+    from PyQt5.QtWidgets import QDialog, QComboBox, QDialogButtonBox, QVBoxLayout, QFormLayout, QGridLayout, QWidget, QPushButton, QHBoxLayout, QLabel, QSpinBox, QDoubleSpinBox, QLineEdit, QTabWidget, QColorDialog, QProgressDialog
+    from PyQt5.QtCore import QLocale, Qt, QByteArray, QRectF
+    from PyQt5.QtGui import QImage, QPainter, QPixmap
 from krita import *
 """
 Quick and dirty QComboBox subclassing that handles unitconversion for us.
@@ -34,7 +39,7 @@ class simpleUnitBox(QComboBox):
         self.addItem(self.centimeter)
         self.addItem(self.millimeter)
 
-        if QLocale().system().measurementSystem() is QLocale.MetricSystem:
+        if QLocale().system().measurementSystem() is QLocale.MeasurementSystem.MetricSystem:
             self.setCurrentIndex(2)  # set to centimeter if metric system.
         else:
             self.setCurrentIndex(1)
@@ -68,7 +73,7 @@ class simpleUnitBox(QComboBox):
 class comics_template_dialog(QDialog):
     templateDirectory = str()
     templates = QComboBox()
-    buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+    buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
     def __init__(self, templateDirectory):
         super().__init__()
@@ -79,10 +84,10 @@ class comics_template_dialog(QDialog):
         self.templates = QComboBox()
         self.templates.setEnabled(False)
 
-        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
-        self.buttons.button(QDialogButtonBox.Ok).setEnabled(False)
+        self.buttons.button(QDialogButtonBox.StandardButton.Ok).setEnabled(False)
         mainWidget = QWidget()
         self.layout().addWidget(mainWidget)
         self.layout().addWidget(self.buttons)
@@ -105,12 +110,12 @@ class comics_template_dialog(QDialog):
                 self.templates.addItem(name)
         if self.templates.model().rowCount() > 0:
             self.templates.setEnabled(True)
-            self.buttons.button(QDialogButtonBox.Ok).setEnabled(True)
+            self.buttons.button(QDialogButtonBox.StandardButton.Ok).setEnabled(True)
 
     def slot_create_template(self):
         create = comics_template_create(self.templateDirectory)
 
-        if create.exec_() == QDialog.Accepted:
+        if create.exec() == QDialog.DialogCode.Accepted:
             if (create.prepare_krita_file()):
                 self.fill_templates()
 
@@ -127,14 +132,14 @@ class comics_template_dialog(QDialog):
 class comics_template_create(QDialog):
     urlSavedTemplate = str()
     templateDirectory = str()
-    currentColor = QColor(Qt.white)
+    currentColor = QColor(Qt.GlobalColor.white)
 
     def __init__(self, templateDirectory):
         super().__init__()
         self.templateDirectory = templateDirectory
         self.setWindowTitle(i18n("Create new Template"))
         self.setLayout(QVBoxLayout())
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
         mainWidget = QWidget()
@@ -204,16 +209,16 @@ class comics_template_create(QDialog):
         self.marginBottom = QDoubleSpinBox()
         self.marginBottom.setMaximum(1000)
         self.marginBottomUnit = simpleUnitBox()
-        marginForm.addWidget(QLabel(i18n("Left:")), 0, 0, Qt.AlignRight)
+        marginForm.addWidget(QLabel(i18n("Left:")), 0, 0, Qt.AlignmentFlag.AlignRight)
         marginForm.addWidget(self.marginLeft, 0, 1)
         marginForm.addWidget(self.marginLeftUnit, 0, 2)
-        marginForm.addWidget(QLabel(i18n("Top:")), 1, 0, Qt.AlignRight)
+        marginForm.addWidget(QLabel(i18n("Top:")), 1, 0, Qt.AlignmentFlag.AlignRight)
         marginForm.addWidget(self.marginTop, 1, 1)
         marginForm.addWidget(self.marginTopUnit, 1, 2)
-        marginForm.addWidget(QLabel(i18n("Right:")), 2, 0, Qt.AlignRight)
+        marginForm.addWidget(QLabel(i18n("Right:")), 2, 0, Qt.AlignmentFlag.AlignRight)
         marginForm.addWidget(self.marginRight, 2, 1)
         marginForm.addWidget(self.marginRightUnit, 2, 2)
-        marginForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignRight)
+        marginForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignmentFlag.AlignRight)
         marginForm.addWidget(self.marginBottom, 3, 1)
         marginForm.addWidget(self.marginBottomUnit, 3, 2)
         marginAndBleed.addTab(margins, i18n("Margins"))
@@ -233,22 +238,22 @@ class comics_template_create(QDialog):
         self.bleedBottom = QDoubleSpinBox()
         self.bleedBottom.setMaximum(1000)
         self.bleedBottomUnit = simpleUnitBox()
-        bleedsForm.addWidget(QLabel(i18n("Left:")), 0, 0, Qt.AlignRight)
+        bleedsForm.addWidget(QLabel(i18n("Left:")), 0, 0, Qt.AlignmentFlag.AlignRight)
         bleedsForm.addWidget(self.bleedLeft, 0, 1)
         bleedsForm.addWidget(self.bleedLeftUnit, 0, 2)
-        bleedsForm.addWidget(QLabel(i18n("Top:")), 1, 0, Qt.AlignRight)
+        bleedsForm.addWidget(QLabel(i18n("Top:")), 1, 0, Qt.AlignmentFlag.AlignRight)
         bleedsForm.addWidget(self.bleedTop, 1, 1)
         bleedsForm.addWidget(self.bleedTopUnit, 1, 2)
-        bleedsForm.addWidget(QLabel(i18n("Right:")), 2, 0, Qt.AlignRight)
+        bleedsForm.addWidget(QLabel(i18n("Right:")), 2, 0, Qt.AlignmentFlag.AlignRight)
         bleedsForm.addWidget(self.bleedRight, 2, 1)
         bleedsForm.addWidget(self.bleedRightUnit, 2, 2)
-        bleedsForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignRight)
+        bleedsForm.addWidget(QLabel(i18n("Bottom:")), 3, 0, Qt.AlignmentFlag.AlignRight)
         bleedsForm.addWidget(self.bleedBottom, 3, 1)
         bleedsForm.addWidget(self.bleedBottomUnit, 3, 2)
 
         marginAndBleed.addTab(bleeds, i18n("Bleeds"))
 
-        if QLocale().system().measurementSystem() is QLocale.MetricSystem:
+        if QLocale().system().measurementSystem() is QLocale.MeasurementSystem.MetricSystem:
             self.setDefaults("European")
         else:
             self.setDefaults("American")
@@ -280,7 +285,7 @@ class comics_template_create(QDialog):
         dialog = QColorDialog(self)
         dialog.setCurrentColor(self.currentColor)
         
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             self.currentColor = dialog.currentColor()
             self.updateImagePreview()
 
@@ -308,7 +313,7 @@ class comics_template_create(QDialog):
             template.rootNode().addChildNode(backgroundNode, None)
         
         pixelByteArray = QByteArray()
-        if self.currentColor == Qt.white:
+        if self.currentColor == Qt.GlobalColor.white:
             pixelByteArray = backgroundNode.pixelData(0, 0, template.width(), template.height())
             pixelByteArray.fill(int(255).to_bytes(1, byteorder='little'))
         else:
@@ -320,7 +325,7 @@ class comics_template_create(QDialog):
             progress = QProgressDialog(i18n("Creating template"), str(), 0, template.width()*template.height())
             progress.setCancelButton(None)
             progress.show()
-            qApp.processEvents()
+            QApplication.instance().processEvents()
             for byteNumber in range(template.width()*template.height()):
                 pixelByteArray.append( blue)
                 pixelByteArray.append(green)
@@ -383,8 +388,8 @@ class comics_template_create(QDialog):
         height = (hBase + bT + bB) * scaleRatio
         topLeft = [max((maxSize - width) / 2, 0), max((maxSize - height) / 2, 0)]
 
-        image = QImage(maxSize, maxSize, QImage.Format_ARGB32)
-        image.fill(Qt.transparent)
+        image = QImage(maxSize, maxSize, QImage.Format.Format_ARGB32)
+        image.fill(Qt.GlobalColor.transparent)
 
         p = QPainter(image)
 
@@ -400,8 +405,8 @@ class comics_template_create(QDialog):
         PageSize.setX(PageSize.x() + (bL * scaleRatio))
         PageSize.setY(PageSize.y() + (bT * scaleRatio))
 
-        p.setPen(Qt.blue)
-        p.setBrush(Qt.transparent)
+        p.setPen(Qt.GlobalColor.blue)
+        p.setBrush(Qt.GlobalColor.transparent)
         p.drawRect(PageSize.toRect())
 
         # Draw liveArea
@@ -411,7 +416,7 @@ class comics_template_create(QDialog):
         LiveArea.setX(LiveArea.x() + (mL * scaleRatio))
         LiveArea.setY(LiveArea.y() + (mT * scaleRatio))
 
-        p.setPen(Qt.blue)
+        p.setPen(Qt.GlobalColor.blue)
         p.drawRect(LiveArea.toRect())
 
         p.end()

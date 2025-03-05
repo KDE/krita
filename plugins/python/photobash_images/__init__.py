@@ -18,4 +18,4 @@
 from krita import *
 from .photobash_images_docker import *
 
-Krita.instance().addDockWidgetFactory(DockWidgetFactory("PhotobashDocker", DockWidgetFactoryBase.DockRight, PhotobashDocker))
+Krita.instance().addDockWidgetFactory(DockWidgetFactory("PhotobashDocker", DockWidgetFactoryBase.DockPosition.DockRight, PhotobashDocker))

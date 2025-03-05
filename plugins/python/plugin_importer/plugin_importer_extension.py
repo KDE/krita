@@ -10,8 +10,12 @@ import tempfile
 
 import krita
 
-from PyQt5.QtCore import QStandardPaths
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
+try:
+    from PyQt6.QtCore import QStandardPaths
+    from PyQt6.QtWidgets import QFileDialog, QMessageBox, QInputDialog
+except:
+    from PyQt5.QtCore import QStandardPaths
+    from PyQt5.QtWidgets import QFileDialog, QMessageBox, QInputDialog
 
 from .plugin_importer import PluginImporter, PluginImportError
 from .plugin_downloader import download_plugin, PluginDownloadError
@@ -44,8 +48,8 @@ class PluginImporterExtension(krita.Extension):
             i18n('Overwrite Plugin'),
             i18n('The plugin "%s" already exists. Overwrite it?') % (
                 plugin['ui_name']),
-            QMessageBox.Yes | QMessageBox.No)
-        return reply == QMessageBox.Yes
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        return reply == QMessageBox.StandardButton.Yes
 
     def confirm_activate(self, plugins):
         txt = [
@@ -67,8 +71,8 @@ class PluginImporterExtension(krita.Extension):
             self.parent.activeWindow().qwindow(),
             i18n('Activate Plugins?'),
             ('\n').join(txt),
-            QMessageBox.Yes | QMessageBox.No)
-        return reply == QMessageBox.Yes
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        return reply == QMessageBox.StandardButton.Yes
 
     def display_errors(self, error):
         msg = '<p>%s</p><pre>%s</pre>' % (

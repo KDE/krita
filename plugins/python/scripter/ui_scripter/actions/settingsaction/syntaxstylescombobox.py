@@ -3,8 +3,12 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QComboBox
-from PyQt5.QtGui import QPalette
+try:
+    from PyQt6.QtWidgets import QComboBox
+    from PyQt6.QtGui import QPalette
+except:
+    from PyQt5.QtWidgets import QComboBox
+    from PyQt5.QtGui import QPalette
 from scripter.ui_scripter.syntax import syntaxstyles
 
 
@@ -31,8 +35,8 @@ class SyntaxStylesComboBox(QComboBox):
         self.highlight.setSyntaxStyle(syntaxStyle)
         self.highlight.rehighlight()
         p = self.editor.palette()
-        p.setColor(QPalette.Base, syntaxStyle['background'].foreground().color())
-        p.setColor(QPalette.Text, syntaxStyle['foreground'].foreground().color())
+        p.setColor(QPalette.ColorRole.Base, syntaxStyle['background'].foreground().color())
+        p.setColor(QPalette.ColorRole.Text, syntaxStyle['foreground'].foreground().color())
         self.editor.setPalette(p)
         self.editor.highlightCurrentLine()
 

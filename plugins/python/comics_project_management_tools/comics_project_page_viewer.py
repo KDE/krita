@@ -15,12 +15,20 @@ import os
 import sys
 import json
 import zipfile
-from PyQt5.QtGui import QImage, QPainter
-from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QDialogButtonBox, QShortcut, QLabel
-from PyQt5.QtCore import QSize, Qt
+try:
+    from PyQt6.QtGui import QImage, QPainter, QShortcut
+    from PyQt6.QtWidgets import QDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QDialogButtonBox, QLabel
+    from PyQt6.QtCore import QSize, Qt
 
-# To run standalon
-from PyQt5.QtWidgets import QApplication
+    # To run standalone
+    from PyQt6.QtWidgets import QApplication
+except:
+    from PyQt5.QtGui import QImage, QPainter
+    from PyQt5.QtWidgets import QDialog, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QSizePolicy, QDialogButtonBox, QShortcut, QLabel
+    from PyQt5.QtCore import QSize, Qt
+
+    # To run standalone
+    from PyQt5.QtWidgets import QApplication
 
 
 class page_viewer(QPushButton):
@@ -29,7 +37,7 @@ class page_viewer(QPushButton):
         super(page_viewer, self).__init__(parent)
         self.alignment = 'left'
         self.image = QImage()
-        self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.MinimumExpanding)
 
     def align_left(self):
         self.alignment = 'left'
@@ -51,9 +59,9 @@ class page_viewer(QPushButton):
 
         if self.image.width() <= previewSize.width() or self.image.height() <= previewSize.height():
             # pixel art
-            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.FastTransformation)
+            image = self.image.scaled(previewSize, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.FastTransformation)
         else:
-            image = self.image.scaled(previewSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            image = self.image.scaled(previewSize, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         image.setDevicePixelRatio(self.devicePixelRatioF())
         if self.alignment == 'right':
             x_offset = int(self.width() - image.width()/self.devicePixelRatioF())
@@ -77,10 +85,10 @@ class comics_project_page_viewer(QDialog):
         self.setModal(False)
         self.setWindowTitle('Untitled')
         self.setWindowFlags(
-            Qt.WindowTitleHint |
-            Qt.WindowMinimizeButtonHint |
-            Qt.WindowMaximizeButtonHint |
-            Qt.WindowCloseButtonHint
+            Qt.WindowType.WindowTitleHint |
+            Qt.WindowType.WindowMinimizeButtonHint |
+            Qt.WindowType.WindowMaximizeButtonHint |
+            Qt.WindowType.WindowCloseButtonHint
             )
         self.resize(1024, 768)
         self.setLayout(QVBoxLayout())
@@ -140,7 +148,7 @@ class comics_project_page_viewer(QDialog):
         self.projecturl = os.path.dirname(str(self.path_to_config))
         if 'readingDirection' in self.setupDictionary:
             if self.setupDictionary['readingDirection'] == "leftToRight":
-                self.setLayoutDirection(Qt.LeftToRight)
+                self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
                 self.left_shortcut.disconnect()
                 self.right_shortcut.disconnect()
                 self.left_shortcut.activated.connect(self.prev_page)
@@ -148,13 +156,13 @@ class comics_project_page_viewer(QDialog):
             else:
                 self.left_shortcut.disconnect()
                 self.right_shortcut.disconnect()
-                self.setLayoutDirection(Qt.RightToLeft)
+                self.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
                 self.left_shortcut.activated.connect(self.next_page)
                 self.right_shortcut.activated.connect(self.prev_page)
         else:
             self.left_shortcut.disconnect()
             self.right_shortcut.disconnect()
-            self.setLayoutDirection(Qt.LeftToRight)
+            self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
             self.left_shortcut.activated.connect(self.prev_page)
             self.right_shortcut.activated.connect(self.next_page)
         configFile.close()
@@ -263,8 +271,8 @@ class comics_project_page_viewer(QDialog):
                 image = QImage.fromData(page.read("mergedimage.png"))
                 page.close()
                 return image
-        image = QImage(QSize(10, 10), QImage.Format_ARGB32)
-        image.fill(Qt.GlobalColor(19))
+        image = QImage(QSize(10, 10), QImage.Format.Format_ARGB32)
+        image.fill(Qt.GlobalColor.transparent)
         return image
 
 if __name__ == '__main__':
@@ -284,7 +292,7 @@ if __name__ == '__main__':
     else:
         print('Pass the path to a Krita comicConfig.json file to this script, to view the comic.')
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
 
 
 

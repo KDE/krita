@@ -3,11 +3,18 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtCore import Qt, QObject, QFileInfo, QRect
-from PyQt5.QtGui import QTextCursor, QPalette
-from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
-                             QLabel, QVBoxLayout, QMessageBox,
-                             QSplitter, QSizePolicy)
+try:
+    from PyQt6.QtCore import Qt, QObject, QFileInfo, QRect
+    from PyQt6.QtGui import QTextCursor, QPalette
+    from PyQt6.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
+                                 QLabel, QVBoxLayout, QMessageBox,
+                                 QSplitter, QSizePolicy)
+except:
+    from PyQt5.QtCore import Qt, QObject, QFileInfo, QRect
+    from PyQt5.QtGui import QTextCursor, QPalette
+    from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
+                                 QLabel, QVBoxLayout, QMessageBox,
+                                 QSplitter, QSizePolicy)
 from .ui_scripter.syntax import syntax, syntaxstyles
 from .ui_scripter.editor import pythoneditor
 from . import scripterdialog, utils
@@ -24,15 +31,16 @@ class Elided_Text_Label(QLabel):
 
     def __init__(self, parent=None):
         super(QLabel, self).__init__(parent)
-        self.setMinimumWidth(self.fontMetrics().width("..."))
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.setMinimumWidth(self.fontMetrics().horizontalAdvance("..."))
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
     def setMainText(self, text=str()):
         self.mainText = text
         self.elideText()
 
     def elideText(self):
-        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.ElideRight, self.width()))
+        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.TextElideMode.ElideRight, self.width()))
 
     def resizeEvent(self, event):
         self.elideText()
@@ -52,7 +60,7 @@ class UIController(object):
 
         self.actions = []
 
-        self.mainWidget.setWindowModality(Qt.NonModal)
+        self.mainWidget.setWindowModality(Qt.WindowModality.NonModal)
 
     def initialize(self, scripter):
         self.editor = pythoneditor.CodeEditor(scripter)
@@ -60,11 +68,11 @@ class UIController(object):
         self.statusBar = Elided_Text_Label()
         self.statusBar.setMainText('untitled')
         self.splitter = QSplitter()
-        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.highlight = syntax.PythonHighlighter(self.editor.document(), syntaxstyles.DefaultSyntaxStyle())
         p = self.editor.palette()
-        p.setColor(QPalette.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color())
-        p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color())
+        p.setColor(QPalette.ColorRole.Base, syntaxstyles.DefaultSyntaxStyle()['background'].foreground().color())
+        p.setColor(QPalette.ColorRole.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color())
         self.editor.setPalette(p)
 
         utils.setNeedDarkIcon(self.mainWidget.palette().window().color())
@@ -166,10 +174,10 @@ class UIController(object):
 
     def setDocumentEditor(self, document):
         self.editor.clear()
-        self.editor.moveCursor(QTextCursor.Start)
+        self.editor.moveCursor(QTextCursor.MoveOperation.Start)
         self.editor._documentModified = False
         self.editor.setPlainText(document.data)
-        self.editor.moveCursor(QTextCursor.End)
+        self.editor.moveCursor(QTextCursor.MoveOperation.End)
 
     def setStatusBar(self, value='untitled'):
         self.documentStatusBarText = value

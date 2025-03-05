@@ -10,10 +10,16 @@ similar dockers in other drawing programs.
 '''
 
 # Importing the relevant dependencies:
-from PyQt5.QtCore import pyqtSlot, Qt, QPointF
-from PyQt5.QtGui import (QStandardItem, QStandardItemModel, QPainter, QPalette,
-                         QPixmap, QImage, QBrush, QPen, QIcon)
-from PyQt5.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
+try:
+    from PyQt6.QtCore import pyqtSlot, Qt, QPointF
+    from PyQt6.QtGui import (QStandardItem, QStandardItemModel, QPainter, QPalette,
+                            QPixmap, QImage, QBrush, QPen, QIcon)
+    from PyQt6.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
+except:
+    from PyQt5.QtCore import pyqtSlot, Qt, QPointF
+    from PyQt5.QtGui import (QStandardItem, QStandardItemModel, QPainter, QPalette,
+                            QPixmap, QImage, QBrush, QPen, QIcon)
+    from PyQt5.QtWidgets import QWidget, QTabWidget, QListView, QVBoxLayout
 from krita import DockWidget
 
 
@@ -30,25 +36,25 @@ class QuickSettingsDocker(DockWidget):
         tabWidget = QTabWidget()
 
         self.brushSizeTableView = QListView()
-        self.brushSizeTableView.setViewMode(QListView.IconMode)
-        self.brushSizeTableView.setMovement(QListView.Static)
-        self.brushSizeTableView.setResizeMode(QListView.Adjust)
+        self.brushSizeTableView.setViewMode(QListView.ViewMode.IconMode)
+        self.brushSizeTableView.setMovement(QListView.Movement.Static)
+        self.brushSizeTableView.setResizeMode(QListView.ResizeMode.Adjust)
         self.brushSizeTableView.setUniformItemSizes(True)
-        self.brushSizeTableView.setSelectionMode(QListView.SingleSelection)
+        self.brushSizeTableView.setSelectionMode(QListView.SelectionMode.SingleSelection)
 
         self.brushOpacityTableView = QListView()
-        self.brushOpacityTableView.setViewMode(QListView.IconMode)
-        self.brushOpacityTableView.setMovement(QListView.Static)
-        self.brushOpacityTableView.setResizeMode(QListView.Adjust)
+        self.brushOpacityTableView.setViewMode(QListView.ViewMode.IconMode)
+        self.brushOpacityTableView.setMovement(QListView.Movement.Static)
+        self.brushOpacityTableView.setResizeMode(QListView.ResizeMode.Adjust)
         self.brushOpacityTableView.setUniformItemSizes(True)
-        self.brushOpacityTableView.setSelectionMode(QListView.SingleSelection)
+        self.brushOpacityTableView.setSelectionMode(QListView.SelectionMode.SingleSelection)
 
         self.brushFlowTableView = QListView()
-        self.brushFlowTableView.setViewMode(QListView.IconMode)
-        self.brushFlowTableView.setMovement(QListView.Static)
-        self.brushFlowTableView.setResizeMode(QListView.Adjust)
+        self.brushFlowTableView.setViewMode(QListView.ViewMode.IconMode)
+        self.brushFlowTableView.setMovement(QListView.Movement.Static)
+        self.brushFlowTableView.setResizeMode(QListView.ResizeMode.Adjust)
         self.brushFlowTableView.setUniformItemSizes(True)
-        self.brushFlowTableView.setSelectionMode(QListView.SingleSelection)
+        self.brushFlowTableView.setSelectionMode(QListView.SelectionMode.SingleSelection)
 
         tabWidget.addTab(self.brushSizeTableView, i18n("Size"))
         tabWidget.addTab(self.brushOpacityTableView, i18n("Opacity"))
@@ -102,15 +108,15 @@ class QuickSettingsDocker(DockWidget):
             item.setText(str(self.sizesList[s])+" px")
             # And from here on we'll make an icon.
             brushImage = QPixmap(64, 64)
-            img = QImage(64, 64, QImage.Format_RGBA8888)
+            img = QImage(64, 64, QImage.Format.Format_RGBA8888)
             circlePainter = QPainter()
-            img.fill(Qt.transparent)
+            img.fill(Qt.GlobalColor.transparent)
             circlePainter.begin(img)
-            brush = QBrush(Qt.SolidPattern)
+            brush = QBrush(Qt.BrushStyle.SolidPattern)
             brush.setColor(
-                self.brushSizeTableView.palette().color(QPalette.Text))
+                self.brushSizeTableView.palette().color(QPalette.ColorRole.Text))
             circlePainter.setBrush(brush)
-            circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
+            circlePainter.setPen(QPen(QBrush(Qt.GlobalColor.transparent), 0))
             brushSize = max(min(self.sizesList[s], 64), 1)
             brushSize = brushSize * 0.5
             circlePainter.drawEllipse(QPointF(32, 32), brushSize, brushSize)
@@ -133,15 +139,15 @@ class QuickSettingsDocker(DockWidget):
             item.setDragEnabled(False)
             item.setText(str(self.opacityList[s])+" %")
             brushImage = QPixmap(64, 64)
-            img = QImage(64, 64, QImage.Format_RGBA8888)
+            img = QImage(64, 64, QImage.Format.Format_RGBA8888)
             circlePainter = QPainter()
-            img.fill(Qt.transparent)
+            img.fill(Qt.GlobalColor.transparent)
             circlePainter.begin(img)
-            brush = QBrush(Qt.SolidPattern)
+            brush = QBrush(Qt.BrushStyle.SolidPattern)
             brush.setColor(
-                self.brushSizeTableView.palette().color(QPalette.Text))
+                self.brushSizeTableView.palette().color(QPalette.ColorRole.Text))
             circlePainter.setBrush(brush)
-            circlePainter.setPen(QPen(QBrush(Qt.transparent), 0))
+            circlePainter.setPen(QPen(QBrush(Qt.GlobalColor.transparent), 0))
             circlePainter.setOpacity(float(self.opacityList[s]) / 100.0)
             circlePainter.drawEllipse(QPointF(32, 32), 32, 32)
             circlePainter.end()

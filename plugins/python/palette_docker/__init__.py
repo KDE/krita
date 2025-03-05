@@ -7,5 +7,5 @@ from .palette_docker import PaletteDocker
 
 
 Application.addDockWidgetFactory(
-    DockWidgetFactory("palette_docker", DockWidgetFactoryBase.DockRight,
+    DockWidgetFactory("palette_docker", DockWidgetFactoryBase.DockPosition.DockRight,
                       PaletteDocker))

@@ -10,8 +10,13 @@ SPDX-License-Identifier: GPL-3.0-or-later
 A dialog for editing the general project settings.
 """
 import os
-from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QFileDialog, QComboBox, QSizePolicy
-from PyQt5.QtCore import QDir, Qt, pyqtSignal
+try:
+    from PyQt6.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QFileDialog, QComboBox, QSizePolicy
+    from PyQt6.QtCore import QDir, Qt, pyqtSignal
+    from PyQt6.QtGui import QAction
+except:
+    from PyQt5.QtWidgets import QWidget, QDialog, QDialogButtonBox, QHBoxLayout, QFormLayout, QPushButton, QLabel, QLineEdit, QToolButton, QFrame, QAction, QFileDialog, QComboBox, QSizePolicy
+    from PyQt5.QtCore import QDir, Qt, pyqtSignal
 from krita import *
 
 """
@@ -41,11 +46,11 @@ class path_select(QWidget):
         self.layout().addWidget(self.location)
         self.layout().addWidget(self.button)
         self.layout().setContentsMargins(0, 0, 0, 0)
-        self.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
-        self.location.setFrameStyle(QFrame.StyledPanel | QFrame.Sunken)
-        self.button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        self.location.setSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Minimum)
-        self.location.setAlignment(Qt.AlignRight)
+        self.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+        self.location.setFrameStyle(QFrame.Shape.StyledPanel | QFrame.Shadow.Sunken)
+        self.button.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
+        self.location.setSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Minimum)
+        self.location.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.location.setLineWidth(1)
         if projectUrl is None:
             self.projectUrl = QDir.homePath()
@@ -102,7 +107,7 @@ class comics_project_details_editor(QDialog):
         layout = QFormLayout()
         self.setLayout(layout)
         self.setWindowTitle(i18n("Comic Project Settings"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)

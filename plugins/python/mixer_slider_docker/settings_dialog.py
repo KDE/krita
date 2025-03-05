@@ -5,7 +5,10 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
 '''
-from PyQt5.QtWidgets import QDialog
+try:
+    from PyQt6.QtWidgets import QDialog
+except:
+    from PyQt5.QtWidgets import QDialog
 
 
 class SettingsDialog(QDialog):

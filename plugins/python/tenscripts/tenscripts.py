@@ -2,7 +2,10 @@
 
 import sys
 import krita
-from PyQt5.QtGui import QIcon
+try:
+    from PyQt6.QtGui import QIcon
+except:
+    from PyQt5.QtGui import QIcon
 from . import uitenscripts
 
 if sys.version_info[0] > 2:

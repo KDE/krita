@@ -5,9 +5,14 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
 '''
-from PyQt5.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
-from PyQt5.QtGui import QIntValidator
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
+    from PyQt6.QtGui import QIntValidator
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QDialogButtonBox, QLabel, QVBoxLayout, QHBoxLayout, QSpinBox
+    from PyQt5.QtGui import QIntValidator
+    from PyQt5.QtCore import Qt
 import krita
 
 from .settings_dialog import SettingsDialog
@@ -26,8 +31,8 @@ class UIMixerSliderDocker(object):
         self.button_box.accepted.connect(self.main_dialog.accept)
         self.button_box.rejected.connect(self.main_dialog.reject)
 
-        self.button_box.setOrientation(Qt.Horizontal)
-        self.button_box.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.button_box.setOrientation(Qt.Orientation.Horizontal)
+        self.button_box.setStandardButtons(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
     def initialize(self, docker):
         self.docker = docker
@@ -42,4 +47,4 @@ class UIMixerSliderDocker(object):
 
         self.main_dialog.show()
         self.main_dialog.activateWindow()
-        self.main_dialog.exec_()
+        self.main_dialog.exec()

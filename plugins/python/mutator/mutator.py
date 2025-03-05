@@ -25,8 +25,13 @@ SOFTWARE.
 
 
 import sys, math, random, colorsys
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
+try:
+    from PyQt6.QtGui import QIcon
+    from PyQt6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy, QPushButton
+    from PyQt6.QtGui import QAction
+except:
+    from PyQt5.QtGui import QIcon
+    from PyQt5.QtWidgets import QWidget, QAction, QVBoxLayout, QSizePolicy, QPushButton
 from krita import Extension, DockWidget, DockWidgetFactory, SliderSpinBox, ManagedColor
 
 
@@ -155,7 +160,7 @@ class MutatorDocker(DockWidget):
         body = QWidget(self)
         self.setWidget(body)
         body.setLayout(QVBoxLayout())
-        body.setSizePolicy(QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred))
+        body.setSizePolicy(QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred))
         
         # Create mutation amount sliders...
         mutationSettings = QWidget()
@@ -282,4 +287,4 @@ class MutatorDocker(DockWidget):
 
 # Krita boilerplate.
 Krita.instance().addExtension(Mutator(Krita.instance()))
-Krita.instance().addDockWidgetFactory(DockWidgetFactory("mutatorDocker", DockWidgetFactory.DockRight, MutatorDocker))
+Krita.instance().addDockWidgetFactory(DockWidgetFactory("mutatorDocker", DockWidgetFactory.DockPosition.DockRight, MutatorDocker))

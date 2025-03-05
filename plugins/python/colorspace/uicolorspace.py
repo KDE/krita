@@ -6,12 +6,20 @@ from .components import (
     colormodelcombobox,
     colorprofilecombobox,
 )
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QFormLayout, QListWidget,
-                             QAbstractItemView, QDialogButtonBox,
-                             QVBoxLayout, QFrame, QMessageBox, QPushButton,
-                             QAbstractScrollArea)
-from PyQt5.QtGui import QIcon
+try:
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtWidgets import (QFormLayout, QListWidget,
+                                QAbstractItemView, QDialogButtonBox,
+                                QVBoxLayout, QFrame, QMessageBox, QPushButton,
+                                QAbstractScrollArea)
+    from PyQt6.QtGui import QIcon
+except:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import (QFormLayout, QListWidget,
+                                QAbstractItemView, QDialogButtonBox,
+                                QVBoxLayout, QFrame, QMessageBox, QPushButton,
+                                QAbstractScrollArea)
+    from PyQt5.QtGui import QIcon
 import krita
 
 
@@ -30,7 +38,7 @@ class UIColorSpace(object):
         self.colorProfileComboBox = \
             colorprofilecombobox.ColorProfileComboBox(self)
         self.buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
 
         self.kritaInstance = krita.Krita.instance()
         self.documentsList = []
@@ -42,10 +50,10 @@ class UIColorSpace(object):
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
 
-        self.mainDialog.setWindowModality(Qt.NonModal)
-        self.widgetDocuments.setSelectionMode(QAbstractItemView.MultiSelection)
+        self.mainDialog.setWindowModality(Qt.WindowModality.NonModal)
+        self.widgetDocuments.setSelectionMode(QAbstractItemView.SelectionMode.MultiSelection)
         self.widgetDocuments.setSizeAdjustPolicy(
-            QAbstractScrollArea.AdjustToContents)
+            QAbstractScrollArea.SizeAdjustPolicy.AdjustToContents)
 
     def initialize(self):
         self.loadDocuments()
@@ -63,8 +71,8 @@ class UIColorSpace(object):
                                self.colorProfileComboBox)
 
         self.line = QFrame()
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.mainLayout.addLayout(self.formLayout)
         self.mainLayout.addWidget(self.line)
@@ -129,7 +137,7 @@ class UIColorSpace(object):
                 i18n("The selected documents have been converted."))
         else:
             self.msgBox.setText(i18n("Select at least one document."))
-        self.msgBox.exec_()
+        self.msgBox.exec()
 
     def convertColorSpace(self, documents):
         for document in documents:

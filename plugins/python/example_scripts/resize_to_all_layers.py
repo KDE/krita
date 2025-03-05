@@ -7,7 +7,10 @@ the image to the unity of all boundaries.
 """
 
 from krita import Krita
-from PyQt5.QtCore import QRect
+try:
+    from PyQt6.QtCore import QRect
+except:
+    from PyQt5.QtCore import QRect
 
 d = Krita.instance().activeDocument()
 w = d.width()

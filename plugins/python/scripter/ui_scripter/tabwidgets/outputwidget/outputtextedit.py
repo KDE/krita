@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QPlainTextEdit
+try:
+    from PyQt6.QtWidgets import QPlainTextEdit
+except:
+    from PyQt5.QtWidgets import QPlainTextEdit
 
 
 class OutPutTextEdit(QPlainTextEdit):

@@ -1,8 +1,13 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import (QDialogButtonBox, QDialog,
-                             QMessageBox, QComboBox, QVBoxLayout)
+try:
+    from PyQt6.QtCore import Qt
+    from PyQt6.QtWidgets import (QDialogButtonBox, QDialog,
+                                 QMessageBox, QComboBox, QVBoxLayout)
+except:
+    from PyQt5.QtCore import Qt
+    from PyQt5.QtWidgets import (QDialogButtonBox, QDialog,
+                                 QMessageBox, QComboBox, QVBoxLayout)
 from krita import Extension
 
 
@@ -30,16 +35,16 @@ class AssignProfileDialog(Extension):
         vbox = QVBoxLayout(self.dialog)
         vbox.addWidget(self.cmbProfile)
         self.buttonBox = QDialogButtonBox(self.dialog)
-        self.buttonBox.setOrientation(Qt.Horizontal)
+        self.buttonBox.setOrientation(Qt.Orientation.Horizontal)
         self.buttonBox.setStandardButtons(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.buttonBox.accepted.connect(self.dialog.accept)
         self.buttonBox.accepted.connect(self.accept)
         self.buttonBox.rejected.connect(self.dialog.reject)
         vbox.addWidget(self.buttonBox)
         self.dialog.show()
         self.dialog.activateWindow()
-        self.dialog.exec_()
+        self.dialog.exec()
 
     def accept(self):
         doc = Application.activeDocument()

@@ -6,7 +6,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+try:
+    from PyQt6 import QtCore, QtGui, QtWidgets
+except:
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_ExceptHookDialog(object):

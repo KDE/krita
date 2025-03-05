@@ -19,7 +19,10 @@
 from krita import *
 import copy
 import math
-from PyQt5 import QtWidgets, QtCore, uic
+try:
+    from PyQt6 import QtWidgets, QtCore, uic
+except:
+    from PyQt5 import QtWidgets, QtCore, uic
 from .photobash_images_modulo import (
     Photobash_Display,
     Photobash_Button,
@@ -94,8 +97,8 @@ class PhotobashDocker(DockWidget):
         ]
 
         # Adjust Layouts
-        self.layout.imageWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Ignored)
-        self.layout.middleWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layout.imageWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
+        self.layout.middleWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
         # setup connections for top elements
         self.layout.filterTextEdit.textChanged.connect(self.textFilterChanged)
@@ -188,7 +191,7 @@ class PhotobashDocker(DockWidget):
             self.updateImages()
             return 
 
-        it = QDirIterator(self.directoryPath, QDirIterator.Subdirectories)
+        it = QDirIterator(self.directoryPath, QDirIterator.IteratorFlag.Subdirectories)
 
 
         while(it.hasNext()):
@@ -231,7 +234,7 @@ class PhotobashDocker(DockWidget):
         self.updateImages()
 
     def changedFitCanvas(self, state):
-        if state == Qt.Checked:
+        if state == Qt.CheckState.Checked:
             self.fitCanvasChecked = True
             Application.writeSetting(self.applicationName, self.fitCanvasSetting, "true")
         else:
@@ -269,7 +272,7 @@ class PhotobashDocker(DockWidget):
             self.cachedImages.pop(removedPath)
 
         self.cachedPathImages = [path] + self.cachedPathImages
-        self.cachedImages[path] = QImage(path).scaled(200, 200, Qt.KeepAspectRatio, Qt.FastTransformation)
+        self.cachedImages[path] = QImage(path).scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.FastTransformation)
 
         return self.cachedImages[path]
 
@@ -344,11 +347,11 @@ class PhotobashDocker(DockWidget):
 
         # Scale Image
         if self.fitCanvasChecked:
-            image = QImage(photoPath).scaled(int(doc.width() * scale), int(doc.height() * scale), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            image = QImage(photoPath).scaled(int(doc.width() * scale), int(doc.height() * scale), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         else:
             image = QImage(photoPath)
             # scale image
-            image = image.scaled(int(image.width() * scale), int(image.height() * scale), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            image = image.scaled(int(image.width() * scale), int(image.height() * scale), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
         # MimeData
         mimedata = QMimeData()
@@ -406,12 +409,12 @@ class PhotobashDocker(DockWidget):
 
     def openPreview(self, path):
         self.imageWidget.setImage(path, self.getImage(path))
-        self.layout.imageWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.layout.middleWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Ignored)
+        self.layout.imageWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.layout.middleWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
 
     def closePreview(self):
-        self.layout.imageWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Ignored)
-        self.layout.middleWidget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.layout.imageWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Ignored)
+        self.layout.middleWidget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
     def pinToFavourites(self, path):
         self.currPage = 0
@@ -451,10 +454,10 @@ class PhotobashDocker(DockWidget):
 
     def changePath(self):
         fileDialog = QFileDialog(QWidget(self));
-        fileDialog.setFileMode(QFileDialog.DirectoryOnly);
+        fileDialog.setFileMode(QFileDialog.FileMode.DirectoryOnly);
 
         if self.directoryPath == "":
-            dialogDirectory = QStandardPaths.writableLocation(QStandardPaths.PicturesLocation)
+            dialogDirectory = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.PicturesLocation)
         else:
             dialogDirectory = self.directoryPath
         self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, i18n("Change Directory for Images"), dialogDirectory)

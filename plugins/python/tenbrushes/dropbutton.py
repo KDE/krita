@@ -1,8 +1,13 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import QPushButton
-from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QSize
+try:
+    from PyQt6.QtWidgets import QPushButton
+    from PyQt6.QtGui import QPixmap, QIcon
+    from PyQt6.QtCore import QSize
+except:
+    from PyQt5.QtWidgets import QPushButton
+    from PyQt5.QtGui import QPixmap, QIcon
+    from PyQt5.QtCore import QSize
 
 
 class DropButton(QPushButton):

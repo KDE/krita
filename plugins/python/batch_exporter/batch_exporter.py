@@ -9,16 +9,28 @@ SPDX-License-Identifier: GPL-3.0-only
 
 from functools import partial
 from krita import DockWidget, DockWidgetFactory, DockWidgetFactoryBase, Krita
-from PyQt5.QtWidgets import (
-    QPushButton,
-    QStatusBar,
-    QLabel,
-    QLineEdit,
-    QHBoxLayout,
-    QVBoxLayout,
-    QGroupBox,
-    QWidget,
-)
+try:
+    from PyQt6.QtWidgets import (
+        QPushButton,
+        QStatusBar,
+        QLabel,
+        QLineEdit,
+        QHBoxLayout,
+        QVBoxLayout,
+        QGroupBox,
+        QWidget,
+    )
+except:
+    from PyQt5.QtWidgets import (
+        QPushButton,
+        QStatusBar,
+        QLabel,
+        QLineEdit,
+        QHBoxLayout,
+        QVBoxLayout,
+        QGroupBox,
+        QWidget,
+    )
 import os
 from .Config import CONFIG
 from .Infrastructure import WNode
@@ -190,6 +202,6 @@ class GameArtTools(DockWidget):
 
 def registerDocker():
     docker = DockWidgetFactory(
-        "pykrita_gdquest_art_tools", DockWidgetFactoryBase.DockRight, GameArtTools
+        "pykrita_gdquest_art_tools", DockWidgetFactoryBase.DockPosition.DockRight, GameArtTools
     )
     KI.addDockWidgetFactory(docker)

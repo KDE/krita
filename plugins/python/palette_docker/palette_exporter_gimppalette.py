@@ -9,7 +9,10 @@
 
 
 # Importing the relevant dependencies:
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+try:
+    from PyQt6.QtWidgets import QFileDialog, QMessageBox
+except:
+    from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from krita import Palette
 
 
@@ -27,7 +30,7 @@ class gimpPaletteExporter:
         done.setText(
             str(i18n("{input} has been exported to {output}.")).format(
                 input=self.paletteName, output=self.fileName))
-        done.exec_()
+        done.exec()
         pass
 
     def export(self):

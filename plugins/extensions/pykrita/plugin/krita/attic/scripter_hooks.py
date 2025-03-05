@@ -11,7 +11,10 @@ Support for the toolbar, statusbar and dockarea have still to be implemented.
 I have to think about how to provide this stuff to QtQml.
 """
 
-from PyQt5.QtWidgets import QApplication, QMenu
+try:
+    from PyQt6.QtWidgets import QApplication, QMenu
+except:
+    from PyQt5.QtWidgets import QApplication, QMenu
 
 import mikro
 

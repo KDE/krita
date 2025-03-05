@@ -5,9 +5,14 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
 '''
-from PyQt5.QtWidgets import QHBoxLayout, QWidget
-from PyQt5.QtGui import QPixmap, QPainter
-from PyQt5.Qt import pyqtSlot, pyqtSignal
+try:
+    from PyQt6.QtWidgets import QHBoxLayout, QWidget
+    from PyQt6.QtGui import QPixmap, QPainter
+    from PyQt6.QtCore import pyqtSlot, pyqtSignal
+except:
+    from PyQt5.QtWidgets import QHBoxLayout, QWidget
+    from PyQt5.QtGui import QPixmap, QPainter
+    from PyQt5.Qt import pyqtSlot, pyqtSignal
 
 from .color_slider import ColorSlider
 

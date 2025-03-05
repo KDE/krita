@@ -3,9 +3,13 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction
-from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtGui import QIcon, QKeySequence, QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction
+    from PyQt5.QtGui import QIcon, QKeySequence
+    from PyQt5.QtCore import Qt
 import sys
 import traceback
 import inspect
@@ -38,7 +42,7 @@ class RunAction(QAction):
 
         self.setText(i18n("Run"))
         self.setToolTip(i18n('Run Ctrl+R'))
-        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
+        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_R))
         self.setIcon(utils.getThemedIcon(':/icons/run.svg'))
 
     @property

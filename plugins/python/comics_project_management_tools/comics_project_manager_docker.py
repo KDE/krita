@@ -17,9 +17,15 @@ import shutil
 import enum
 from math import floor
 import xml.etree.ElementTree as ET
-from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
-from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, qApp, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
+try:
+    from PyQt6.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
+    from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont, QAction
+    from PyQt6.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
+
+except:
+    from PyQt5.QtCore import QElapsedTimer, QSize, Qt, QRect, QFileSystemWatcher, QTimer
+    from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QFontMetrics, QPainter, QPalette, QFont
+    from PyQt5.QtWidgets import QHBoxLayout, QVBoxLayout, QListView, QToolButton, QMenu, QAction, QPushButton, QSpacerItem, QSizePolicy, QWidget, QAbstractItemView, QProgressDialog, QDialog, QFileDialog, QDialogButtonBox, QApplication, QSplitter, QSlider, QLabel, QStyledItemDelegate, QStyle, QMessageBox
 import math
 from krita import *
 from . import comics_metadata_dialog, comics_exporter, comics_export_dialog, comics_project_setup_wizard, comics_template_dialog, comics_project_settings_dialog, comics_project_page_viewer, comics_project_translation_scraper
@@ -36,27 +42,27 @@ class Elided_Text_Label(QLabel):
 
     def __init__(self, parent=None):
         super(QLabel, self).__init__(parent)
-        self.setMinimumWidth(self.fontMetrics().width("..."))
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.setMinimumWidth(self.fontMetrics().horizontalAdvance("..."))
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
     def setMainText(self, text=str()):
         self.mainText = text
         self.elideText()
 
     def elideText(self):
-        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.ElideRight, self.width()))
+        self.setText(self.fontMetrics().elidedText(self.mainText, Qt.TextElideMode.ElideRight, self.width()))
 
     def resizeEvent(self, event):
         self.elideText()
 
 class CPE(enum.IntEnum):
-    TITLE = Qt.DisplayRole
-    URL = Qt.UserRole + 1
-    KEYWORDS = Qt.UserRole+2
-    DESCRIPTION = Qt.UserRole+3
-    LASTEDIT = Qt.UserRole+4
-    EDITOR = Qt.UserRole+5
-    IMAGE = Qt.DecorationRole
+    TITLE = Qt.ItemDataRole.DisplayRole
+    URL = Qt.ItemDataRole.UserRole + 1
+    KEYWORDS = Qt.ItemDataRole.UserRole+2
+    DESCRIPTION = Qt.ItemDataRole.UserRole+3
+    LASTEDIT = Qt.ItemDataRole.UserRole+4
+    EDITOR = Qt.ItemDataRole.UserRole+5
+    IMAGE = Qt.ItemDataRole.DecorationRole
 
 class comic_page_delegate(QStyledItemDelegate):
 
@@ -70,9 +76,9 @@ class comic_page_delegate(QStyledItemDelegate):
             return
         painter.save()
         painter.setOpacity(0.6)
-        if(option.state & QStyle.State_Selected):
+        if(option.state & QStyle.StateFlag.State_Selected):
             painter.fillRect(option.rect, option.palette.highlight())
-        if (option.state & QStyle.State_MouseOver):
+        if (option.state & QStyle.StateFlag.State_MouseOver):
             painter.setOpacity(0.25)
             painter.fillRect(option.rect, option.palette.highlight())
         painter.setOpacity(1.0)
@@ -100,8 +106,8 @@ class comic_page_delegate(QStyledItemDelegate):
         if (decoratonSize.width()+(margin*2)< rect.width()):
         
             textRect = QRect(decoratonSize.width()+margin, margin+rect.top(), labelWidth, metrics.height())
-            textTitle = metrics.elidedText(str(index.row()+1)+". "+index.data(CPE.TITLE), Qt.ElideRight, labelWidth)
-            painter.drawText(textRect, Qt.TextWordWrap, textTitle)
+            textTitle = metrics.elidedText(str(index.row()+1)+". "+index.data(CPE.TITLE), Qt.TextElideMode.ElideRight, labelWidth)
+            painter.drawText(textRect, Qt.TextFlag.TextWordWrap, textTitle)
             
             if rect.height()/(metrics.lineSpacing()+margin) > 5 or index.data(CPE.KEYWORDS) is not None:
                 painter.setOpacity(0.6)
@@ -112,8 +118,8 @@ class comic_page_delegate(QStyledItemDelegate):
                         textKeyWords = i18n("No keywords")
                         painter.setOpacity(0.3)
                         painter.setFont(italics)
-                    textKeyWords = metrics.elidedText(textKeyWords, Qt.ElideRight, labelWidth)
-                    painter.drawText(textRect, Qt.TextWordWrap, textKeyWords)
+                    textKeyWords = metrics.elidedText(textKeyWords, Qt.TextElideMode.ElideRight, labelWidth)
+                    painter.drawText(textRect, Qt.TextFlag.TextWordWrap, textKeyWords)
             
             painter.setFont(regular)
             
@@ -129,8 +135,8 @@ class comic_page_delegate(QStyledItemDelegate):
                     if (index.data(CPE.LASTEDIT) is None) and (index.data(CPE.EDITOR) is None):
                         painter.setOpacity(0.3)
                         painter.setFont(italics)
-                    textLastEdit = metrics.elidedText(textLastEdit, Qt.ElideRight, labelWidth)
-                    painter.drawText(textRect, Qt.TextWordWrap, textLastEdit)
+                    textLastEdit = metrics.elidedText(textLastEdit, Qt.TextElideFlag.ElideRight, labelWidth)
+                    painter.drawText(textRect, Qt.TextFlag.TextWordWrap, textLastEdit)
             
             painter.setFont(regular)
             
@@ -148,26 +154,26 @@ class comic_page_delegate(QStyledItemDelegate):
                     painter.setFont(italics)
                 linesTotal = floor(descRect.height()/metrics.lineSpacing())
                 if linesTotal == 1:
-                    textDescription = metrics.elidedText(textDescription, Qt.ElideRight, labelWidth)
-                    painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                    textDescription = metrics.elidedText(textDescription, Qt.TextElideFlag.ElideRight, labelWidth)
+                    painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                 else:
                     descRect.setHeight(linesTotal*metrics.lineSpacing())
-                    totalDescHeight = metrics.boundingRect(descRect, Qt.TextWordWrap, textDescription).height()
+                    totalDescHeight = metrics.boundingRect(descRect, Qt.TextFlag.TextWordWrap, textDescription).height()
                     if totalDescHeight>descRect.height():
                         if totalDescHeight-metrics.lineSpacing()>descRect.height():
                             painter.setOpacity(0.5)
-                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                             descRect.setHeight((linesTotal-1)*metrics.lineSpacing())
-                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                             descRect.setHeight((linesTotal-2)*metrics.lineSpacing())
-                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                         else:
                             painter.setOpacity(0.75)
-                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                             descRect.setHeight((linesTotal-1)*metrics.lineSpacing())
-                            painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                            painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
                     else:
-                        painter.drawText(descRect, Qt.TextWordWrap, textDescription)
+                        painter.drawText(descRect, Qt.TextFlag.TextWordWrap, textDescription)
             
             painter.setFont(regular)
         
@@ -212,10 +218,10 @@ class comics_project_manager_docker(DockWidget):
 
         # Comic page list and pages model
         self.comicPageList = QListView()
-        self.comicPageList.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.comicPageList.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.comicPageList.setDragEnabled(True)
-        self.comicPageList.setDragDropMode(QAbstractItemView.InternalMove)
-        self.comicPageList.setDefaultDropAction(Qt.MoveAction)
+        self.comicPageList.setDragDropMode(QAbstractItemView.DragDropMode.InternalMove)
+        self.comicPageList.setDefaultDropAction(Qt.DropAction.MoveAction)
         self.comicPageList.setAcceptDrops(True)
         self.comicPageList.setItemDelegate(comic_page_delegate(self.devicePixelRatioF()))
         self.pagesModel = QStandardItemModel()
@@ -229,7 +235,7 @@ class comics_project_manager_docker(DockWidget):
         self.comicPageList.setModel(self.pagesModel)
         pageBox = QWidget()
         pageBox.setLayout(QVBoxLayout())
-        zoomSlider = QSlider(Qt.Horizontal, None)
+        zoomSlider = QSlider(Qt.Orientation.Horizontal, None)
         zoomSlider.setRange(1, 8)
         zoomSlider.setValue(4)
         zoomSlider.setTickInterval(1)
@@ -242,8 +248,8 @@ class comics_project_manager_docker(DockWidget):
         baseLayout.addWidget(pageBox)
 
         self.btn_project = QToolButton()
-        self.btn_project.setPopupMode(QToolButton.MenuButtonPopup)
-        self.btn_project.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.btn_project.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+        self.btn_project.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         menu_project = QMenu()
         self.action_new_project = QAction(i18n("New Project"), self)
         self.action_new_project.triggered.connect(self.slot_new_project)
@@ -257,8 +263,8 @@ class comics_project_manager_docker(DockWidget):
 
         # Settings dropdown with actions for the different settings menus.
         self.btn_settings = QToolButton()
-        self.btn_settings.setPopupMode(QToolButton.MenuButtonPopup)
-        self.btn_settings.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.btn_settings.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+        self.btn_settings.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         self.action_edit_project_settings = QAction(i18n("Project Settings"), self)
         self.action_edit_project_settings.triggered.connect(self.slot_edit_project_settings)
         self.action_edit_meta_data = QAction(i18n("Meta Data"), self)
@@ -276,8 +282,8 @@ class comics_project_manager_docker(DockWidget):
 
         # Add page drop down with different page actions.
         self.btn_add_page = QToolButton()
-        self.btn_add_page.setPopupMode(QToolButton.MenuButtonPopup)
-        self.btn_add_page.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        self.btn_add_page.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+        self.btn_add_page.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.action_add_page = QAction(i18n("Add Page"), self)
         self.action_add_page.triggered.connect(self.slot_add_new_page_single)
@@ -312,7 +318,7 @@ class comics_project_manager_docker(DockWidget):
         buttonLayout.addWidget(self.btn_add_page)
         self.btn_add_page.setDisabled(True)
 
-        self.comicPageList.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.comicPageList.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
         self.comicPageList.addActions(actionList)
 
         # Export button that... exports.
@@ -332,7 +338,7 @@ class comics_project_manager_docker(DockWidget):
         self.pagesWatcher = QFileSystemWatcher()
         self.pagesWatcher.fileChanged.connect(self.slot_start_delayed_check_page_update)
 
-        buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Minimum, QSizePolicy.MinimumExpanding))
+        buttonLayout.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.MinimumExpanding))
 
     """
     Open the config file and load the json file into a dictionary.
@@ -342,7 +348,7 @@ class comics_project_manager_docker(DockWidget):
         self.path_to_config = QFileDialog.getOpenFileName(caption=i18n("Please select the JSON comic config file."), filter=str(i18n("JSON files") + "(*.json)"))[0]
         if os.path.exists(self.path_to_config) is True:
             if os.access(self.path_to_config, os.W_OK) is False:
-                QMessageBox.warning(None, i18n("Config cannot be used"), i18n("Krita doesn't have write access to this folder, so new files cannot be made. Please configure the folder access or move the project to a folder that can be written to."), QMessageBox.Ok)
+                QMessageBox.warning(None, i18n("Config cannot be used"), i18n("Krita doesn't have write access to this folder, so new files cannot be made. Please configure the folder access or move the project to a folder that can be written to."), QMessageBox.StandardButton.Ok)
                 return
             configFile = open(self.path_to_config, "r", newline="", encoding="utf-16")
             self.setupDictionary = json.load(configFile)
@@ -518,7 +524,7 @@ class comics_project_manager_docker(DockWidget):
         dialog = comics_project_settings_dialog.comics_project_details_editor(self.projecturl)
         dialog.setConfig(self.setupDictionary, self.projecturl)
 
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             self.setupDictionary = dialog.getConfig(self.setupDictionary)
             self.slot_write_config()
             self.projectName.setMainText(str(self.setupDictionary["projectName"]))
@@ -589,12 +595,12 @@ class comics_project_manager_docker(DockWidget):
 
         if templateExists is False:
             if "templateLocation" not in self.setupDictionary.keys():
-                self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
+                self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
 
             templateDir = os.path.join(self.projecturl, self.setupDictionary["templateLocation"])
             template = comics_template_dialog.comics_template_dialog(templateDir)
 
-            if template.exec_() == QDialog.Accepted:
+            if template.exec() == QDialog.DialogCode.Accepted:
                 templateUrl = os.path.relpath(template.url(), self.projecturl)
                 self.setupDictionary["singlePageTemplate"] = templateUrl
         if os.path.exists(os.path.join(self.projecturl, templateUrl)):
@@ -608,12 +614,12 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_add_new_page_from_template(self):
         if "templateLocation" not in self.setupDictionary.keys():
-            self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
+            self.setupDictionary["templateLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where are the templates located?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
 
         templateDir = os.path.join(self.projecturl, self.setupDictionary["templateLocation"])
         template = comics_template_dialog.comics_template_dialog(templateDir)
 
-        if template.exec_() == QDialog.Accepted:
+        if template.exec() == QDialog.DialogCode.Accepted:
             templateUrl = os.path.relpath(template.url(), self.projecturl)
             self.add_new_page(templateUrl)
 
@@ -632,7 +638,7 @@ class comics_project_manager_docker(DockWidget):
             self.setupDictionary['pageNumber'] = 0
 
         if (str(self.setupDictionary["pagesLocation"]).isspace()):
-            self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.ShowDirsOnly), self.projecturl)
+            self.setupDictionary["pagesLocation"] = os.path.relpath(QFileDialog.getExistingDirectory(caption=i18n("Where should the pages go?"), options=QFileDialog.Option.ShowDirsOnly), self.projecturl)
 
         # Search for the possible name.
         extraUnderscore = str()
@@ -673,7 +679,7 @@ class comics_project_manager_docker(DockWidget):
 
         # close page document.
         while os.path.exists(absoluteUrl) is False:
-            qApp.processEvents()
+            QApplication.instance().processEvents()
 
         self.pagesWatcher.addPath(absoluteUrl)
         newPage.close()
@@ -722,7 +728,7 @@ class comics_project_manager_docker(DockWidget):
 
                 # Set the title to the filename if it was empty. It looks a bit neater.
                 if page.name().isspace or len(page.name()) < 1:
-                    page.setName(str(self.pagesModel.data(index, role=Qt.DisplayRole)).replace("_", " "))
+                    page.setName(str(self.pagesModel.data(index, role=Qt.ItemDataRole.DisplayRole)).replace("_", " "))
 
                 # Add views for the document so the user can use it.
                 Application.activeWindow().addView(page)
@@ -738,7 +744,7 @@ class comics_project_manager_docker(DockWidget):
         dialog = comics_metadata_dialog.comic_meta_data_editor()
 
         dialog.setConfig(self.setupDictionary)
-        if (dialog.exec_() == QDialog.Accepted):
+        if (dialog.exec() == QDialog.DialogCode.Accepted):
             self.setupDictionary = dialog.getConfig(self.setupDictionary)
             self.slot_write_config()
 
@@ -764,7 +770,7 @@ class comics_project_manager_docker(DockWidget):
             aboutelem = xmlroot.find(calligra + 'about')
             if ET.iselement(aboutelem.find(calligra + 'subject')):
                 desc = aboutelem.find(calligra + 'subject')
-                desc.text = self.pagesModel.data(index, role=Qt.EditRole)
+                desc.text = self.pagesModel.data(index, role=Qt.ItemDataRole.EditRole)
                 xmlstring = ET.tostring(xmlroot, encoding='unicode', method='xml', short_empty_elements=False)
                 page.writestr(zinfo_or_arcname="documentinfo.xml", data=xmlstring)
                 for document in Application.documents():
@@ -780,7 +786,7 @@ class comics_project_manager_docker(DockWidget):
         dialog = comics_export_dialog.comic_export_setting_dialog()
         dialog.setConfig(self.setupDictionary)
 
-        if (dialog.exec_() == QDialog.Accepted):
+        if (dialog.exec() == QDialog.DialogCode.Accepted):
             self.setupDictionary = dialog.getConfig(self.setupDictionary)
             self.slot_write_config()
 
@@ -804,7 +810,7 @@ class comics_project_manager_docker(DockWidget):
         exportSuccess = exporter.export()
         if exportSuccess:
             print("CPMT: Export success! The files have been written to the export folder!")
-            QMessageBox.information(self, i18n("Export success"), i18n("The files have been written to the export folder."), QMessageBox.Ok)
+            QMessageBox.information(self, i18n("Export success"), i18n("The files have been written to the export folder."), QMessageBox.StandardButton.Ok)
 
     """
     Calls up the comics project setup wizard so users can create a new json file with the basic information.
@@ -882,7 +888,7 @@ class comics_project_manager_docker(DockWidget):
     def slot_batch_resize(self):
         dialog = QDialog()
         dialog.setWindowTitle(i18n("Resize all Pages"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
         sizesBox = comics_export_dialog.comic_export_resize_widget("Scale", batch=True, fileType=False)
@@ -891,7 +897,7 @@ class comics_project_manager_docker(DockWidget):
         dialog.layout().addWidget(sizesBox)
         dialog.layout().addWidget(buttons)
 
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec() == QDialog.Accepted:
             progress = QProgressDialog(i18n("Resizing pages..."), str(), 0, len(self.setupDictionary["pages"]))
             progress.setWindowTitle(i18n("Resizing Pages"))
             progress.setCancelButton(None)
@@ -908,7 +914,7 @@ class comics_project_manager_docker(DockWidget):
                     passedString = str(int(timePassed / 60000)) + ":" + format(int(timePassed / 1000), "02d") + ":" + format(timePassed % 1000, "03d")
                     estimatedString = str(int(timeEstimated / 60000)) + ":" + format(int(timeEstimated / 1000), "02d") + ":" + format(int(timeEstimated % 1000), "03d")
                     progress.setLabelText(str(i18n("{pages} of {pagesTotal} done. \nTime passed: {passedString}:\n Estimated:{estimated}")).format(pages=p, pagesTotal=len(self.setupDictionary["pages"]), passedString=passedString, estimated=estimatedString))
-                    qApp.processEvents()
+                    QApplication.instance().processEvents()
                 if os.path.exists(absoluteUrl):
                     doc = Application.openDocument(absoluteUrl)
                     listScales = exporterSizes.get_scale_from_resize_config(config["Scale"], [doc.width(), doc.height(), doc.resolution(), doc.resolution()])
@@ -932,7 +938,7 @@ class comics_project_manager_docker(DockWidget):
 
     def slot_copy_project_url(self):
         if self.projecturl is not None:
-            clipboard = qApp.clipboard()
+            clipboard = QApplication.instance().clipboard()
             clipboard.setText(str(self.projecturl))
 
     """
@@ -955,7 +961,7 @@ class comics_project_manager_docker(DockWidget):
         metadata["keywords"] = ", ".join(self.setupDictionary.get("otherKeywords", [""]))
         metadata["transnotes"] = self.setupDictionary.get("translatorHeader", "Translator's Notes")
         scraper.start(self.setupDictionary["pages"], language, metadata)
-        QMessageBox.information(self, i18n("Scraping success"), str(i18n("POT file has been written to: {file}")).format(file=fullTranslationPath), QMessageBox.Ok)
+        QMessageBox.information(self, i18n("Scraping success"), str(i18n("POT file has been written to: {file}")).format(file=fullTranslationPath), QMessageBox.StandardButton.Ok)
     """
     This is required by the dockwidget class, otherwise unused.
     """
@@ -967,4 +973,4 @@ class comics_project_manager_docker(DockWidget):
 """
 Add docker to program
 """
-Application.addDockWidgetFactory(DockWidgetFactory("comics_project_manager_docker", DockWidgetFactoryBase.DockRight, comics_project_manager_docker))
+Application.addDockWidgetFactory(DockWidgetFactory("comics_project_manager_docker", DockWidgetFactoryBase.DockPosition.DockRight, comics_project_manager_docker))

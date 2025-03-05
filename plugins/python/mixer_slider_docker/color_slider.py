@@ -5,9 +5,14 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
 '''
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QPolygon
-from PyQt5.QtCore import QPoint
+try:
+    from PyQt6.QtWidgets import QWidget
+    from PyQt6.QtGui import QPixmap, QPainter, QColor, QBrush, QPolygon
+    from PyQt6.QtCore import QPoint
+except:
+    from PyQt5.QtWidgets import QWidget
+    from PyQt5.QtGui import QPixmap, QPainter, QColor, QBrush, QPolygon
+    from PyQt5.QtCore import QPoint
 from krita import ManagedColor
 
 

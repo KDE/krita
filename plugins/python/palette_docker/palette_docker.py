@@ -9,11 +9,19 @@
 
 
 # Importing the relevant dependencies:
-from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QAction, QTabWidget,
-    QLineEdit, QSpinBox, QDialogButtonBox, QToolButton, QDialog,
-    QPlainTextEdit, QCompleter, QMenu)
-from PyQt5.Qt import Qt, pyqtSlot
+try:
+    from PyQt6.QtWidgets import (
+        QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QTabWidget,
+        QLineEdit, QSpinBox, QDialogButtonBox, QToolButton, QDialog,
+        QPlainTextEdit, QCompleter, QMenu)
+    from PyQt6.QtCore import Qt, pyqtSlot
+    from PyQt6.QtGui import QAction
+except:
+    from PyQt5.QtWidgets import (
+        QWidget, QVBoxLayout, QHBoxLayout, QComboBox, QAction, QTabWidget,
+        QLineEdit, QSpinBox, QDialogButtonBox, QToolButton, QDialog,
+        QPlainTextEdit, QCompleter, QMenu)
+    from PyQt5.Qt import Qt, pyqtSlot
 from krita import DockWidget, Palette, PaletteView
 
 # import the exporters
@@ -157,9 +165,9 @@ class PaletteDocker(DockWidget):
 #            if entry.spotColor() is True:
 #                img = colorSquare.toImage()
 #                circlePainter = QPainter()
-#                img.fill(self.colorComboBox.palette().color(QPalette.Base))
+#                img.fill(self.colorComboBox.palette().color(QPalette.ColorRole.Base))
 #                circlePainter.begin(img)
-#                brush = QBrush(Qt.SolidPattern)
+#                brush = QBrush(Qt.BrushStyle.SolidPattern)
 #                brush.setColor(color)
 #                circlePainter.setBrush(brush)
 #                circlePainter.pen().setWidth(0)
@@ -174,11 +182,11 @@ class PaletteDocker(DockWidget):
 #            self.colorList.append(name)
 #            self.colorComboBox.addItem(QIcon(colorSquare), name)
         self.colorComboBox.setEditable(True)
-        self.colorComboBox.setInsertPolicy(QComboBox.NoInsert)
+        self.colorComboBox.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.colorComboBox.completer().setCompletionMode(
-            QCompleter.PopupCompletion)
+            QCompleter.CompletionMode.PopupCompletion)
         self.colorComboBox.completer().setCaseSensitivity(False)
-        self.colorComboBox.completer().setFilterMode(Qt.MatchContains)
+        self.colorComboBox.completer().setFilterMode(Qt.MatchFlag.MatchContains)
 
     def slot_get_color_from_combobox(self):
         if self.currentPalette is not None:
@@ -227,12 +235,12 @@ class PaletteDocker(DockWidget):
         paletteComment = QPlainTextEdit()
         paletteComment.appendPlainText(self.currentPalette.comment())
         paletteWidget.layout().addWidget(paletteComment)
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok)
         dialog.layout().addWidget(buttons)
         buttons.accepted.connect(dialog.accept)
         # buttons.rejected.connect(dialog.reject())
 
-        if dialog.exec_() == QDialog.Accepted:
+        if dialog.exec() == QDialog.DialogCode.Accepted:
             Resource = Application.resources("palette")[
                 self.cmb_palettes.currentText()]
             Resource.setName(paletteName.text())

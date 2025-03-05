@@ -8,5 +8,5 @@ from .lastdocumentsdocker import LastDocumentsDocker
 
 Application.addDockWidgetFactory(
     krita.DockWidgetFactory("lastdocumentsdocker",
-                            krita.DockWidgetFactoryBase.DockRight,
+                            krita.DockWidgetFactoryBase.DockPosition.DockRight,
                             LastDocumentsDocker))

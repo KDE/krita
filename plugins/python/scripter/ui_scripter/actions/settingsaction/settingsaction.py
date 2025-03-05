@@ -3,8 +3,12 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtGui import QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction
+    from PyQt5.QtCore import Qt
 from . import settingsdialog
 import krita
 
@@ -18,7 +22,7 @@ class SettingsAction(QAction):
         self.triggered.connect(self.openSettings)
 
         self.settingsDialog = settingsdialog.SettingsDialog(self.scripter)
-        self.settingsDialog.setWindowModality(Qt.WindowModal)
+        self.settingsDialog.setWindowModality(Qt.WindowModality.WindowModal)
         self.settingsDialog.setFixedSize(400, 250)
 
         self.setText(i18n("Settings"))
@@ -29,7 +33,7 @@ class SettingsAction(QAction):
 
     def openSettings(self):
         self.settingsDialog.show()
-        self.settingsDialog.exec_()
+        self.settingsDialog.exec()
 
     def readSettings(self):
         self.settingsDialog.readSettings(self.scripter.settings)

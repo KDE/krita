@@ -7,7 +7,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore
+try:
+    from PyQt6 import QtCore
+except:
+    from PyQt5 import QtCore
 
 qt_resource_data = "\
 \x00\x00\x02\x0d\

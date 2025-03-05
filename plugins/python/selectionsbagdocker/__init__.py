@@ -7,5 +7,5 @@ from .selectionsbagdocker import SelectionsBagDocker
 
 Krita.instance().addDockWidgetFactory(
     DockWidgetFactory("SelectionsBagDocker",
-                      DockWidgetFactory.DockRight,
+                      DockWidgetFactory.DockPosition.DockRight,
                       SelectionsBagDocker))

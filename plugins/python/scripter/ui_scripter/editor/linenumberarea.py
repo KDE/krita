@@ -3,8 +3,12 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QWidget
-from PyQt5.QtCore import QSize
+try:
+    from PyQt6.QtWidgets import QWidget
+    from PyQt6.QtCore import QSize
+except:
+    from PyQt5.QtWidgets import QWidget
+    from PyQt5.QtCore import QSize
 
 
 class LineNumberArea(QWidget):

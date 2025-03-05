@@ -16,9 +16,14 @@ from xml.dom import minidom
 from xml.etree import ElementTree as ET
 import types
 import re
-from PyQt5.QtWidgets import QLabel, QProgressDialog, QMessageBox, qApp  # For the progress dialog.
-from PyQt5.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
-from PyQt5.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
+try:
+    from PyQt6.QtWidgets import QLabel, QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
+    from PyQt6.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
+    from PyQt6.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
+except:
+    from PyQt5.QtWidgets import QLabel, QProgressDialog, QMessageBox, QApplication  # For the progress dialog.
+    from PyQt5.QtCore import QElapsedTimer, QLocale, Qt, QRectF, QPointF
+    from PyQt5.QtGui import QImage, QTransform, QPainterPath, QFontMetrics, QFont
 from krita import *
 from . import exporters
 
@@ -141,7 +146,7 @@ class comicsExporter():
             self.timer = QElapsedTimer()
             self.timer.start()
             self.progress.show()
-            qApp.processEvents()
+            QApplication.instance().processEvents()
             export_success = self.save_out_pngs(sizesList)
 
             # Export acbf metadata.
@@ -170,7 +175,7 @@ class comicsExporter():
                     export_success = exporters.EPUB.export(self.configDictionary, self.projectURL, self.pagesLocationList["EPUB"], self.acbfPageData)
                     print("CPMT: Exported to EPUB", export_success)
         else:
-            QMessageBox.warning(None, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.Ok)
+            QMessageBox.warning(None, i18n("Export not Possible"), i18n("Nothing to export, URL not set."), QMessageBox.StandardButton.Ok)
             print("CPMT: Nothing to export, url not set.")
 
         return export_success
@@ -204,7 +209,7 @@ class comicsExporter():
 
             # Check if there's export methods, and if so make sure the appropriate dictionaries are initialised.
             if len(sizesList.keys()) < 1:
-                QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export failed because there's no export settings configured."), QMessageBox.Ok)
+                QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export failed because there's no export settings configured."), QMessageBox.StandardButton.Ok)
                 print("CPMT: Export failed because there's no export methods set.")
                 return False
             else:
@@ -236,7 +241,7 @@ class comicsExporter():
                     estimatedString = str(u"\u221E")
                 passedString = self.parseTime(timePassed)
                 self.progress.setLabelText("\n".join([pagesDone, timeString(passedString, estimatedString), i18n("Opening next page")]))
-                qApp.processEvents()
+                QApplication.instance().processEvents()
                 # Get the appropriate url and open the page.
                 url = str(Path(self.projectURL) / pagesList[p])
                 page = Application.openDocument(url)
@@ -310,7 +315,7 @@ class comicsExporter():
                             croph = page.height() - self.configDictionary["cropBottom"] - cropy
                         projection.crop(int(cropx), int(cropy), int(cropw), int(croph))
                         projection.waitForDone()
-                        qApp.processEvents()
+                        QApplication.instance().processEvents()
                         # resize appropriately
                     else:
                         cropx = 0
@@ -322,7 +327,7 @@ class comicsExporter():
                     listScales = sizesCalc.get_scale_from_resize_config(config=w, listSizes=listScales)
                     projection.scaleImage(listScales[0], listScales[1], listScales[2], listScales[3], "bicubic")
                     projection.waitForDone()
-                    qApp.processEvents()
+                    QApplication.instance().processEvents()
                     # png, gif and other webformats should probably be in 8bit srgb at maximum.
                     if key != "TIFF":
                         if (projection.colorModel() != "RGBA" and projection.colorModel() != "GRAYA") or projection.colorDepth() != "U8":
@@ -344,7 +349,7 @@ class comicsExporter():
                     # find the pages and store them.
                     projection.exportImage(fn, InfoObject())
                     projection.waitForDone()
-                    qApp.processEvents()
+                    QApplication.instance().processEvents()
                     if key == "CBZ" or key == "EPUB":
                         transform = {}
                         transform["offsetX"] = cropx
@@ -363,7 +368,7 @@ class comicsExporter():
             print("CPMT: Export has finished. If there are memory leaks, they are caused by file layers.")
             return True
         print("CPMT: Export not happening because there aren't any pages.")
-        QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.Ok)
+        QMessageBox.warning(None, i18n("Export not Possible"), i18n("Export not happening because there are no pages."), QMessageBox.StandardButton.Ok)
         return False
 
     """
@@ -479,7 +484,7 @@ class comicsExporter():
                         path.cubicTo(coordinates[0], coordinates[1], coordinates[2], coordinates[3], x, y)
                     else:
                         path.lineTo(QPointF(x, y) + offset)
-                path.setFillRule(Qt.WindingFill)
+                path.setFillRule(Qt.FillRule.WindingFill)
                 for polygon in path.simplified().toSubpathPolygons(adjust):
                     for point in polygon:
                         listOfPoints.append(point)
@@ -541,7 +546,7 @@ class comicsExporter():
                     string = el.toxml()
                     string = re.sub(r"\<.*?\>", " ", string)
                     string = string.replace("  ", " ")
-                    width = min(QFontMetrics(font).width(string.strip()), rect.width())
+                    width = min(QFontMetrics(font).horizontalAdvance(string.strip()), rect.width())
                     height = QFontMetrics(font).height()
                     anchor = "start"
                     if docElem.hasAttribute("text-anchor"):

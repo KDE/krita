@@ -20,36 +20,68 @@ from krita import (
         Node,
         Selection
     )
-from PyQt5.Qt import *
-from PyQt5 import QtCore
-from PyQt5.QtCore import (
-        pyqtSlot,
-        QBuffer,
-        QByteArray,
-        QIODevice
-    )
-from PyQt5.QtGui import (
-        QColor,
-        QImage,
-        QPixmap,
-    )
-from PyQt5.QtWidgets import (
-        QApplication,
-        QCheckBox,
-        QComboBox,
-        QDialog,
-        QDialogButtonBox,
-        QFormLayout,
-        QGroupBox,
-        QHBoxLayout,
-        QLabel,
-        QLineEdit,
-        QMessageBox,
-        QProgressBar,
-        QProgressDialog,
-        QVBoxLayout,
-        QWidget
-    )
+try:
+    from PyQt6.QtCore import (
+            pyqtSlot,
+            QBuffer,
+            QByteArray,
+            QIODevice,
+            Qt,
+            QRect
+        )
+    from PyQt6.QtGui import (
+            QColor,
+            QImage,
+            QPixmap,
+        )
+    from PyQt6.QtWidgets import (
+            QApplication,
+            QCheckBox,
+            QComboBox,
+            QDialog,
+            QDialogButtonBox,
+            QFormLayout,
+            QGroupBox,
+            QHBoxLayout,
+            QLabel,
+            QLineEdit,
+            QMessageBox,
+            QProgressBar,
+            QProgressDialog,
+            QVBoxLayout,
+            QWidget
+        )
+except:
+    from PyQt5.QtCore import (
+            pyqtSlot,
+            QBuffer,
+            QByteArray,
+            QIODevice,
+            Qt,
+            QRect
+        )
+    from PyQt5.QtGui import (
+            QColor,
+            QImage,
+            QPixmap,
+        )
+    from PyQt5.QtWidgets import (
+            QApplication,
+            QCheckBox,
+            QComboBox,
+            QDialog,
+            QDialogButtonBox,
+            QFormLayout,
+            QGroupBox,
+            QHBoxLayout,
+            QLabel,
+            QLineEdit,
+            QMessageBox,
+            QProgressBar,
+            QProgressDialog,
+            QVBoxLayout,
+            QWidget
+        )
 
 
 PLUGIN_VERSION = '1.1.0'
@@ -101,7 +133,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.blue)
+                                                'color' :  QColor(Qt.GlobalColor.blue)
                                             }
                                 },
                                 {
@@ -129,7 +161,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.green)
+                                                'color' :  QColor(Qt.GlobalColor.green)
                                             }
                                 },
                                 {
@@ -157,7 +189,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.red)
+                                                'color' :  QColor(Qt.GlobalColor.red)
                                             }
                                 },
                                 {
@@ -191,7 +223,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.yellow)
+                                                'color' :  QColor(Qt.GlobalColor.yellow)
                                             }
                                 },
                                 {
@@ -219,7 +251,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.magenta)
+                                                'color' :  QColor(Qt.GlobalColor.magenta)
                                             }
                                 },
                                 {
@@ -247,7 +279,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.cyan)
+                                                'color' :  QColor(Qt.GlobalColor.cyan)
                                             }
                                 },
                                 {
@@ -294,7 +326,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.yellow)
+                                                'color' :  QColor(Qt.GlobalColor.yellow)
                                             }
                                 },
                                 {
@@ -334,7 +366,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.magenta)
+                                                'color' :  QColor(Qt.GlobalColor.magenta)
                                             }
                                 },
                                 {
@@ -374,7 +406,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.cyan)
+                                                'color' :  QColor(Qt.GlobalColor.cyan)
                                             }
                                 },
                                 {
@@ -420,7 +452,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.blue)
+                                                'color' :  QColor(Qt.GlobalColor.blue)
                                             }
                                 },
                                 {
@@ -452,7 +484,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.green)
+                                                'color' :  QColor(Qt.GlobalColor.green)
                                             }
                                 },
                                 {
@@ -484,7 +516,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.red)
+                                                'color' :  QColor(Qt.GlobalColor.red)
                                             }
                                 },
                                 {
@@ -522,7 +554,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.yellow)
+                                                'color' :  QColor(Qt.GlobalColor.yellow)
                                             }
                                 },
                                 {
@@ -554,7 +586,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.magenta)
+                                                'color' :  QColor(Qt.GlobalColor.magenta)
                                             }
                                 },
                                 {
@@ -586,7 +618,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.cyan)
+                                                'color' :  QColor(Qt.GlobalColor.cyan)
                                             }
                                 },
                                 {
@@ -637,7 +669,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.yellow)
+                                                'color' :  QColor(Qt.GlobalColor.yellow)
                                             }
                                 },
                                 {
@@ -681,7 +713,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.magenta)
+                                                'color' :  QColor(Qt.GlobalColor.magenta)
                                             }
                                 },
                                 {
@@ -725,7 +757,7 @@ OUTPUT_MODE_NFO = {
                                     'action' : 'new',
                                     'value' : {
                                                 'type' : 'filllayer',
-                                                'color' :  QColor(Qt.cyan)
+                                                'color' :  QColor(Qt.GlobalColor.cyan)
                                             }
                                 },
                                 {
@@ -908,11 +940,11 @@ class ChannelsToLayers(Extension):
             projectionMode = True
 
         if projectionMode == True:
-            img = QImage(layerNode.projectionPixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format_ARGB32)
+            img = QImage(layerNode.projectionPixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format.Format_ARGB32)
         else:
-            img = QImage(layerNode.pixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format_ARGB32)
+            img = QImage(layerNode.pixelData(srcRect.left(), srcRect.top(), srcRect.width(), srcRect.height()), srcRect.width(), srcRect.height(), QImage.Format.Format_ARGB32)
 
-        return img.scaled(rect.width(), rect.height(), Qt.IgnoreAspectRatio, Qt.SmoothTransformation)
+        return img.scaled(rect.width(), rect.height(), Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
 
     def openDialogOptions(self):
@@ -1025,8 +1057,8 @@ class ChannelsToLayers(Extension):
 
         # main dialog box, OK/Cancel buttons
         dbbxOkCancel = QDialogButtonBox(dlgMain)
-        dbbxOkCancel.setOrientation(QtCore.Qt.Horizontal)
-        dbbxOkCancel.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        dbbxOkCancel.setOrientation(Qt.Orientation.Horizontal)
+        dbbxOkCancel.setStandardButtons(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         dbbxOkCancel.accepted.connect(dlgMain.accept)
         dbbxOkCancel.rejected.connect(dlgMain.reject)
         vbxMainContainer.addWidget(dbbxOkCancel)
@@ -1174,7 +1206,7 @@ class ChannelsToLayers(Extension):
 
         buildPreview()
 
-        returned = dlgMain.exec_()
+        returned = dlgMain.exec()
 
         return returned
 

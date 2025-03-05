@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction, QFileDialog
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QFileDialog
+    from PyQt6.QtGui import QKeySequence, QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction, QFileDialog
+    from PyQt5.QtGui import QKeySequence
+    from PyQt5.QtCore import Qt
 import krita
 
 
@@ -20,7 +25,7 @@ class SaveAsAction(QAction):
 
         self.setText(i18n("Save As"))
         self.setObjectName('saveas')
-        self.setShortcut(QKeySequence(Qt.CTRL + Qt.SHIFT + Qt.Key_S))
+        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_Shift + Qt.Key.Key_S))
 
     @property
     def parent(self):

@@ -8,16 +8,24 @@ import sys
 import traceback
 import re
 
-from PyQt5.QtCore import QObject, Qt
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import qApp, QApplication, QPlainTextEdit
+try:
+    from PyQt6.QtCore import QObject, Qt
+    from PyQt6.QtGui import QTextCursor
+    from PyQt6.QtWidgets import QApplication, QPlainTextEdit
+except:
+    from PyQt5.QtCore import QObject, Qt
+    from PyQt5.QtGui import QTextCursor
+    from PyQt5.QtWidgets import QApplication, QPlainTextEdit
 
 
 from highlighter import PythonHighlighter,  QtQmlHighlighter
 
-
-from PyQt5.QtQml import (
-    QScriptEngine, QScriptValue, QScriptValueIterator)
+try:
+    from PyQt6.QtQml import (
+        QScriptEngine, QScriptValue, QScriptValueIterator)
+except:
+    from PyQt5.QtQml import (
+        QScriptEngine, QScriptValue, QScriptValueIterator)
 
 
 class OutputWidget(QPlainTextEdit):
@@ -45,12 +53,12 @@ class OutputWidget(QPlainTextEdit):
         doc = self.document()
         cursor = QTextCursor(doc)
         cursor.clearSelection()
-        cursor.movePosition(QTextCursor.End, QTextCursor.MoveAnchor)
+        cursor.movePosition(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
         cursor.insertText(s)
-        cursor.movePosition(QTextCursor.End, QTextCursor.MoveAnchor)
+        cursor.movePosition(QTextCursor.MoveOperation.End, QTextCursor.MoveMode.MoveAnchor)
         cursor.clearSelection()
         self.ensureCursorVisible()
-        qApp.processEvents()
+        QApplication.instance().processEvents()
 
     def writelines(self, lines):
         self.write("\n".join(lines))
@@ -81,7 +89,7 @@ class ConsoleWidget(OutputWidget):
     def keyPressEvent(self, event):
         def remove_line():
             cursor = self.textCursor()
-            cursor.select(QTextCursor.BlockUnderCursor)
+            cursor.select(QTextCursor.SelectionType.BlockUnderCursor)
             cursor.removeSelectedText()
         key = event.key()
         modifiers = event.modifiers()
@@ -89,23 +97,23 @@ class ConsoleWidget(OutputWidget):
         line = unicode(self.document().end().previous().text())
         ps1orps2, line = line[:l - 1], line[l:]
 
-        if not key in [Qt.Key_Tab, Qt.Key_Backtab] and \
+        if not key in [Qt.Key.Key_Tab, Qt.Key.Key_Backtab] and \
                 len(event.text()):
             self.tab_state = -1
-        if key == Qt.Key_Up:
+        if key == Qt.Key.Key_Up:
             if self.history_index + 1 < len(self.history):
                 self.history_index += 1
             remove_line()
             print()
             print(ps1orps2, self.history[self.history_index], end='')
-        elif key == Qt.Key_Down:
+        elif key == Qt.Key.Key_Down:
             if self.history_index > 0:
                 self.history_index -= 1
             remove_line()
             print()
             print(ps1orps2, self.history[self.history_index], end='')
-        elif key == Qt.Key_Tab:
-            if modifiers & Qt.ControlModifier:
+        elif key == Qt.Key.Key_Tab:
+            if modifiers & Qt.KeyboardModifier.ControlModifier:
                 print(" " * 4, end='')
             else:
                 self.tab_state += 1
@@ -113,18 +121,18 @@ class ConsoleWidget(OutputWidget):
                 print()
                 print(ps1orps2, end='')
                 print(self.completer.complete(line, self.tab_state) or line, end='')
-        elif key == Qt.Key_Backtab:
+        elif key == Qt.Key.Key_Backtab:
             if self.tab_state >= 0:
                 self.tab_state -= 1
             remove_line()
             print()
             print(ps1orps2, end='')
             print(self.completer.complete(line, self.tab_state) or line, end='')
-        elif key in [Qt.Key_Backspace, Qt.Key_Left]:
+        elif key in [Qt.Key.Key_Backspace, Qt.Key.Key_Left]:
             if self.textCursor().columnNumber() > len(ps1orps2) + 1:
                 return OutputWidget.keyPressEvent(self, event)
-        elif key == Qt.Key_Return:
-            self.moveCursor(QTextCursor.EndOfLine,  QTextCursor.MoveAnchor)
+        elif key == Qt.Key.Key_Return:
+            self.moveCursor(QTextCursor.MoveOperation.EndOfLine,  QTextCursor.MoveMode.MoveAnchor)
             print()
             if self.push(line):
                 print(self.ps2, end='')
@@ -457,7 +465,7 @@ class QtQmlConsole(ConsoleWidget):
             return QScriptValue(engine, repr(l))
         namespace["print"] = console_print
         namespace["dir"] = dir_context
-        namespace["Application"] = qApp
+        namespace["Application"] = QApplication.instance()
         try:
             namespace["Scripter"] = Scripter.qt
         except:
@@ -476,4 +484,4 @@ if __name__ == "__main__":
     o.resize(640, 480)
     o.attach()
     o.show()
-    app.exec_()
+    app.exec()

@@ -5,15 +5,20 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 # editor.py
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+try:
+    from PyQt6.QtCore import *
+    from PyQt6.QtGui import *
+    from PyQt6.QtWidgets import *
+except:
+    from PyQt5.QtCore import *
+    from PyQt5.QtGui import *
+    from PyQt5.QtWidgets import *
 
 import syntax
 
 app = QApplication([])
 editor = QPlainTextEdit()
-f = QFont("monospace", 10, QFont.Normal)
+f = QFont("monospace", 10, QFont.Weight.Normal)
 f.setFixedPitch(True)
 editor.document().setDefaultFont(f)
 highlight = syntax.PythonHighlighter(editor.document())
@@ -26,4 +31,4 @@ editor.show()
 # infile = open('syntax.py', 'r')
 # editor.setPlainText(infile.read())
 
-app.exec_()
+app.exec()

@@ -35,7 +35,10 @@ Web
 """
 
 from xml.dom import minidom
-from PyQt5.QtCore import QDate, Qt
+try:
+    from PyQt6.QtCore import QDate, Qt
+except:
+    from PyQt5.QtCore import QDate, Qt
 
 def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
     document = minidom.Document()
@@ -66,7 +69,7 @@ def write_xml(configDictionary = {}, pagesLocationList = [],  location = str()):
         root.appendChild(seriesname)
 
     if "publishingDate" in configDictionary.keys():
-        date = QDate.fromString(configDictionary["publishingDate"], Qt.ISODate)
+        date = QDate.fromString(configDictionary["publishingDate"], Qt.DateFormat.ISODate)
         publishYear = document.createElement("Year")
         publishYear.appendChild(document.createTextNode(str(date.year())))
         publishMonth = document.createElement("Month")

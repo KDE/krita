@@ -1,7 +1,10 @@
 # SPDX-License-Identifier: CC0-1.0
 
 import krita
-from PyQt5.QtGui import QPixmap, QIcon
+try:
+    from PyQt6.QtGui import QPixmap, QIcon
+except:
+    from PyQt5.QtGui import QPixmap, QIcon
 from . import uitenbrushes
 
 

@@ -15,9 +15,14 @@ import csv
 import re
 import types
 from pathlib import Path  # For reading all the files in a directory.
-from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
-from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
-from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
+try:
+    from PyQt6.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
+    from PyQt6.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
+    from PyQt6.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
+except:
+    from PyQt5.QtGui import QStandardItem, QStandardItemModel, QImage, QIcon, QPixmap, QPainter, QPalette, QFontDatabase
+    from PyQt5.QtWidgets import QComboBox, QCompleter, QStyledItemDelegate, QLineEdit, QDialog, QDialogButtonBox, QVBoxLayout, QFormLayout, QTabWidget, QWidget, QPlainTextEdit, QHBoxLayout, QSpinBox, QDateEdit, QPushButton, QLabel, QTableView
+    from PyQt5.QtCore import QDir, QLocale, QStringListModel, Qt, QDate, QSize, QUuid
 """
 multi entry completer cobbled together from the two examples on stackoverflow:3779720
 
@@ -60,8 +65,8 @@ class language_combo_box(QComboBox):
 
     def __init__(self, parent=None):
         super(QComboBox, self).__init__(parent)
-        for locale in QLocale.matchingLocales(QLocale.AnyLanguage, QLocale.AnyScript, QLocale.AnyCountry):
-            if locale.language() == QLocale.C:
+        for locale in QLocale.matchingLocales(QLocale.Language.AnyLanguage, QLocale.Script.AnyScript, QLocale.Country.AnyCountry):
+            if locale.language() == QLocale.Language.C:
                 continue
             codeName = locale.name().split("_")[0]
             if codeName not in self.codesToDisplayNames:
@@ -80,14 +85,14 @@ class language_combo_box(QComboBox):
 
             self.languageList.append(languageName)
             self.setIconSize(QSize(32, 22))
-            codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+            codeIcon = QImage(self.iconSize(), QImage.Format.Format_ARGB32)
             painter = QPainter(codeIcon)
-            painter.setBrush(Qt.transparent)
+            painter.setBrush(Qt.GlobalColor.transparent)
             codeIcon.fill(Qt.transparent)
-            font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+            font = QFontDatabase().systemFont(QFontDatabase.SystemFont.FixedFont)
             painter.setFont(font)
-            painter.setPen(self.palette().color(QPalette.Text))
-            painter.drawText(codeIcon.rect(), Qt.AlignCenter,lang)
+            painter.setPen(self.palette().color(QPalette.ColorRole.Text))
+            painter.drawText(codeIcon.rect(), Qt.AlignmentFlag.AlignCenter,lang)
             painter.end()
             self.addItem(QIcon(QPixmap.fromImage(codeIcon)), languageName)
 
@@ -112,7 +117,7 @@ class country_combo_box(QComboBox):
         self.clear()
         self.codesList = []
         self.countryList = []
-        for locale in QLocale.matchingLocales(languageLocale.language(), QLocale.AnyScript, QLocale.AnyCountry):
+        for locale in QLocale.matchingLocales(languageLocale.language(), QLocale.Script.AnyScript, QLocale.Country.AnyCountry):
             codeName = locale.name().split("_")[-1]
             if codeName not in self.codesList:
                 self.codesList.append(codeName)
@@ -129,14 +134,14 @@ class country_combo_box(QComboBox):
                 countryName = locale.nativeCountryName()
                 self.countryList.append(countryName.title())
                 self.setIconSize(QSize(32, 22))
-                codeIcon = QImage(self.iconSize(), QImage.Format_ARGB32)
+                codeIcon = QImage(self.iconSize(), QImage.Format.Format_ARGB32)
                 painter = QPainter(codeIcon)
                 painter.setBrush(Qt.transparent)
                 codeIcon.fill(Qt.transparent)
-                font = QFontDatabase().systemFont(QFontDatabase.FixedFont)
+                font = QFontDatabase().systemFont(QFontDatabase.SystemFont.FixedFont)
                 painter.setFont(font)
-                painter.setPen(self.palette().color(QPalette.Text))
-                painter.drawText(codeIcon.rect(), Qt.AlignCenter,country)
+                painter.setPen(self.palette().color(QPalette.ColorRole.Text))
+                painter.drawText(codeIcon.rect(), Qt.AlignmentFlag.AlignCenter,country)
                 painter.end()
                 self.addItem(QIcon(QPixmap.fromImage(codeIcon)), countryName.title())
 
@@ -203,8 +208,8 @@ class author_delegate(QStyledItemDelegate):
             editor = QComboBox(parent)
             editor.addItem("")
             for i in range(2, 356):
-                if QLocale(i, QLocale.AnyScript, QLocale.AnyCountry) is not None:
-                    languagecode = QLocale(i, QLocale.AnyScript, QLocale.AnyCountry).name().split("_")[0]
+                if QLocale(i, QLocale.Script.AnyScript, QLocale.Country.AnyCountry) is not None:
+                    languagecode = QLocale(i, QLocale.Script.AnyScript, QLocale.Country.AnyCountry).name().split("_")[0]
                     if languagecode != "C":
                         editor.addItem(languagecode)
             editor.model().sort(0)
@@ -253,7 +258,7 @@ class comic_meta_data_editor(QDialog):
         mainWidget = QTabWidget()
         self.layout().addWidget(mainWidget)
         self.setWindowTitle(i18n("Comic Metadata"))
-        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.layout().addWidget(buttons)
         buttons.accepted.connect(self.accept)
         buttons.rejected.connect(self.reject)
@@ -280,7 +285,7 @@ class comic_meta_data_editor(QDialog):
         characterCompletion = multi_entry_completer()
         characterCompletion.setModel(QStringListModel(self.characterKeysList))
         characterCompletion.setCaseSensitivity(False)
-        characterCompletion.setFilterMode(Qt.MatchContains)  # So that if there is a list of names with last names, people can type in a last name.
+        characterCompletion.setFilterMode(Qt.MatchFlag.MatchContains)  # So that if there is a list of names with last names, people can type in a last name.
         self.lnCharacters.setCompleter(characterCompletion)
         self.lnCharacters.setToolTip(i18n("The names of the characters that this comic revolves around. Comma-separated."))
 
@@ -314,7 +319,7 @@ class comic_meta_data_editor(QDialog):
         otherCompletion = multi_entry_completer()
         otherCompletion.setModel(QStringListModel(self.otherKeysList))
         otherCompletion.setCaseSensitivity(False)
-        otherCompletion.setFilterMode(Qt.MatchContains)
+        otherCompletion.setFilterMode(Qt.MatchFlag.MatchContains)
         self.lnOtherKeywords = QLineEdit()
         self.lnOtherKeywords.setCompleter(otherCompletion)
         self.lnOtherKeywords.setToolTip(i18n("Other keywords that do not fit in the previously mentioned sets. As always, comma-separated."))
@@ -394,7 +399,7 @@ class comic_meta_data_editor(QDialog):
         self.isbn = QLineEdit()
         self.license = license_combo_box()  # Maybe ought to make this a QLineEdit...
         self.license.setEditable(True)
-        self.license.completer().setCompletionMode(QCompleter.PopupCompletion)
+        self.license.completer().setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
         dataBaseReference = QVBoxLayout()
         self.ln_database_name = QLineEdit()
         self.ln_database_name.setToolTip(i18n("If there is an entry in a comics data base, that should be added here. It is unlikely to be a factor for comics from scratch, but useful when doing a conversion."))
@@ -619,9 +624,9 @@ class comic_meta_data_editor(QDialog):
                 self.cmbLanguage.setEntryToCode(code)
         if "readingDirection" in config.keys():
             if config["readingDirection"] == "leftToRight":
-                self.cmbReadingMode.setCurrentIndex(int(Qt.LeftToRight))
+                self.cmbReadingMode.setCurrentIndex(int(Qt.LayoutDirection.LeftToRight))
             else:
-                self.cmbReadingMode.setCurrentIndex(int(Qt.RightToLeft))
+                self.cmbReadingMode.setCurrentIndex(int(Qt.LayoutDirection.RightToLeft))
         else:
             self.cmbReadingMode.setCurrentIndex(QLocale(self.cmbLanguage.codeForCurrentEntry()).textDirection())
         if "publisherName" in config.keys():
@@ -629,7 +634,7 @@ class comic_meta_data_editor(QDialog):
         if "publisherCity" in config.keys():
             self.publishCity.setText(config["publisherCity"])
         if "publishingDate" in config.keys():
-            self.publishDate.setDate(QDate.fromString(config["publishingDate"], Qt.ISODate))
+            self.publishDate.setDate(QDate.fromString(config["publishingDate"], Qt.DateFormat.ISODate))
         if "isbn-number" in config.keys():
             self.isbn.setText(config["isbn-number"])
         if "source" in config.keys():
@@ -749,7 +754,7 @@ class comic_meta_data_editor(QDialog):
             if self.spnSeriesVol.value() > 0:
                 config["seriesVolume"] = self.spnSeriesVol.value()
         config["language"] = str(self.cmbLanguage.codeForCurrentEntry()+"-"+self.cmbCountry.codeForCurrentEntry())
-        if self.cmbReadingMode.currentIndex() is int(Qt.LeftToRight):
+        if self.cmbReadingMode.currentIndex() is int(Qt.LayoutDirection.LeftToRight):
             config["readingDirection"] = "leftToRight"
         else:
             config["readingDirection"] = "rightToLeft"
@@ -774,7 +779,7 @@ class comic_meta_data_editor(QDialog):
         config["authorList"] = authorList
         config["publisherName"] = self.publisherName.text()
         config["publisherCity"] = self.publishCity.text()
-        config["publishingDate"] = self.publishDate.date().toString(Qt.ISODate)
+        config["publishingDate"] = self.publishDate.date().toString(Qt.DateFormat.ISODate)
         config["isbn-number"] = self.isbn.text()
         config["source"] = self.ln_source.text()
         config["license"] = self.license.currentText()

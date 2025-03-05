@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction, QMessageBox
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtGui import QKeySequence, QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction, QMessageBox
+    from PyQt5.QtGui import QKeySequence
+    from PyQt5.QtCore import Qt
 import krita
 
 
@@ -19,7 +24,7 @@ class NewAction(QAction):
 
         self.setText(i18n("New"))
         self.setObjectName('new')
-        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_N))
+        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_N))
 
     @property
     def parent(self):
@@ -30,14 +35,14 @@ class NewAction(QAction):
 
         msgBox.setText(i18n("The document has been modified."))
         msgBox.setInformativeText(i18n("Do you want to save your changes?"))
-        msgBox.setStandardButtons(QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
-        msgBox.setDefaultButton(QMessageBox.Save)
+        msgBox.setStandardButtons(QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Discard | QMessageBox.StandardButton.Cancel)
+        msgBox.setDefaultButton(QMessageBox.StandardButton.Save)
 
-        ret = msgBox.exec_()
+        ret = msgBox.exec()
 
-        if ret == QMessageBox.Cancel:
+        if ret == QMessageBox.StandardButton.Cancel:
             return
-        if ret == QMessageBox.Save:
+        if ret == QMessageBox.StandardButton.Save:
             self.scripter.uicontroller.invokeAction('save')
 
         self.scripter.documentcontroller.clearActiveDocument()

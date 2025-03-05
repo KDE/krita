@@ -32,9 +32,14 @@ BBD
 
 import os
 import sys
-from PyQt5.QtCore import QStandardPaths, QSettings
-from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
-import PyQt5.uic as uic
+try:
+    from PyQt6.QtCore import QStandardPaths, QSettings
+    from PyQt6.QtWidgets import QApplication, QWidget, QMessageBox
+    import PyQt6.uic as uic
+except:
+    from PyQt5.QtCore import QStandardPaths, QSettings
+    from PyQt5.QtWidgets import QApplication, QWidget, QMessageBox
+    import PyQt5.uic as uic
 
 try:
     import krita
@@ -158,7 +163,7 @@ class {class_name}(DockWidget):
 
 instance = Krita.instance()
 dock_widget_factory = DockWidgetFactory(DOCKER_ID,
-                                        DockWidgetFactoryBase.DockRight,
+                                        DockWidgetFactoryBase.DockPosition.DockRight,
                                         {class_name})
 
 instance.addDockWidgetFactory(dock_widget_factory)
@@ -324,9 +329,9 @@ class KritaScriptStarter(EXTENSION):
             msgbox = QMessageBox(self)
         msgbox.setWindowTitle(title)
         msgbox.setText(message)
-        msgbox.setStandardButtons(QMessageBox.Ok)
-        msgbox.setDefaultButton(QMessageBox.Ok)
-        msgbox.setIcon(QMessageBox.Information)
+        msgbox.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msgbox.setDefaultButton(QMessageBox.StandardButton.Ok)
+        msgbox.setIcon(QMessageBox.Icon.Information)
         msgbox.exec()
 
         self.ui.close()
@@ -419,4 +424,4 @@ if __name__ == "__main__":
         extension = KritaScriptStarter(None)
         extension.setup()
         extension.action_triggered()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())

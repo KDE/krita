@@ -13,7 +13,10 @@ import inspect
 import sys
 import traceback
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+try:
+    from PyQt6 import QtCore, QtGui, QtWidgets
+except:
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
 import pykrita
 

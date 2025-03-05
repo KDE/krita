@@ -2,10 +2,16 @@
 #  SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtGui import QCloseEvent
-from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow,
-                             QMessageBox, QSplitter, QTabWidget)
+try:
+    from PyQt6.QtCore import pyqtSlot, Qt
+    from PyQt6.QtGui import QCloseEvent
+    from PyQt6.QtWidgets import (QApplication, QFileDialog, QMainWindow,
+                                 QMessageBox, QSplitter, QTabWidget)
+except:
+    from PyQt5.QtCore import pyqtSlot, Qt
+    from PyQt5.QtGui import QCloseEvent
+    from PyQt5.QtWidgets import (QApplication, QFileDialog, QMainWindow,
+                                 QMessageBox, QSplitter, QTabWidget)
 
 from widget import PythonEditorWidget,  QtQmlEditorWidget, SaveDialog
 from console import PythonConsole, QtQmlConsole
@@ -29,7 +35,7 @@ class EditorMainWindow(QMainWindow):
         self.ui = Ui_ScriptEditor()
         self.ui.setupUi(self)
         # self.ui.actionExit.triggered.connect(self.exit)
-        self.splitter = QSplitter(Qt.Vertical, self)
+        self.splitter = QSplitter(Qt.Orientation.Vertical, self)
         self.setCentralWidget(self.splitter)
         self.edit_tab = QTabWidget(self.splitter)
         self.console_tab = QTabWidget(self.splitter)
@@ -47,14 +53,14 @@ class EditorMainWindow(QMainWindow):
             if edit:
                 if(edit.isModified()):
                     saveBox = SaveDialog("You have unsaved script. Save it now?")
-                    prompt = saveBox.exec_()
-                    if(prompt == QMessageBox.Save):
+                    prompt = saveBox.exec()
+                    if(prompt == QMessageBox.StandardButton.Save):
                         event.ignore()
                         self.save(True)
-                    elif(prompt == QMessageBox.Cancel):
+                    elif(prompt == QMessageBox.StandardButton.Cancel):
                         event.ignore()
                         return
-                    elif(prompt == QMessageBox.Discard):
+                    elif(prompt == QMessageBox.StandardButton.Discard):
                         event.accept()
                 i = self.edit_tab.indexOf(edit)
                 self.edit_tab.removeTab(i)
@@ -68,12 +74,12 @@ class EditorMainWindow(QMainWindow):
             if edit:
                 if(edit.isModified()):
                     saveBox = SaveDialog("You have unsaved script. Save it now?")
-                    prompt = saveBox.exec_()
-                    if(prompt == QMessageBox.Save):
+                    prompt = saveBox.exec()
+                    if(prompt == QMessageBox.StandardButton.Save):
                         self.save(True)
-                    elif(prompt == QMessageBox.Cancel):
+                    elif(prompt == QMessageBox.StandardButton.Cancel):
                         return
-                    elif(prompt == QMessageBox.Discard):
+                    elif(prompt == QMessageBox.StandardButton.Discard):
                         pass
                 i = self.edit_tab.indexOf(edit)
                 self.edit_tab.removeTab(i)
@@ -107,12 +113,12 @@ class EditorMainWindow(QMainWindow):
         if edit:
             if(edit.isModified()):
                 saveBox = SaveDialog("Do you want to save this Script?")
-                prompt = saveBox.exec_()
-                if(prompt == QMessageBox.Save):
+                prompt = saveBox.exec()
+                if(prompt == QMessageBox.StandardButton.Save):
                     self.save(True)
-                elif(prompt == QMessageBox.Cancel):
+                elif(prompt == QMessageBox.StandardButton.Cancel):
                     return
-                elif(prompt == QMessageBox.Discard):
+                elif(prompt == QMessageBox.StandardButton.Discard):
                     pass
             i = self.edit_tab.indexOf(edit)
             self.edit_tab.removeTab(i)
@@ -208,4 +214,4 @@ if __name__ == "__main__":
     win = EditorMainWindow()
     win.resize(640, 480)
     win.show()
-    app.exec_()
+    app.exec()

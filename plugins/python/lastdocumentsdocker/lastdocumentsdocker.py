@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
+try:
+    from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
+except:
+    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QListView, QPushButton
 import krita
 from . import lastdocumentslistmodel
 
@@ -17,7 +20,7 @@ class LastDocumentsDocker(krita.DockWidget):
         self.listModel = lastdocumentslistmodel.LastDocumentsListModel(self.devicePixelRatioF())
 
         self.listView.setModel(self.listModel)
-        self.listView.setFlow(QListView.LeftToRight)
+        self.listView.setFlow(QListView.Flow.LeftToRight)
 
         self.layout.addWidget(self.listView)
         self.layout.addWidget(self.loadButton)

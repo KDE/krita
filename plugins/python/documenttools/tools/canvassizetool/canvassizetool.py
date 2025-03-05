@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import (QWidget, QSpinBox,
-                             QVBoxLayout, QFormLayout)
+try:
+    from PyQt6.QtWidgets import (QWidget, QSpinBox,
+                                 QVBoxLayout, QFormLayout)
+except:
+    from PyQt5.QtWidgets import (QWidget, QSpinBox,
+                                 QVBoxLayout, QFormLayout)
 
 
 class CanvasSizeTool(QWidget):

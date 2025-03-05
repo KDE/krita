@@ -9,8 +9,12 @@ from itertools import groupby, product, starmap, tee
 from pathlib import Path
 
 from krita import Krita
-from PyQt5.QtCore import QSize, Qt
-from PyQt5.QtGui import QColor, QImage, QPainter
+try:
+    from PyQt6.QtCore import QSize, Qt
+    from PyQt6.QtGui import QColor, QImage, QPainter
+except:
+    from PyQt5.QtCore import QSize, Qt
+    from PyQt5.QtGui import QColor, QImage, QPainter
 
 from .Utils import flip, kickstart
 from .Utils.Export import exportPath, sanitize
@@ -40,7 +44,7 @@ def nodeToImage(wnode):
         temp_node.setColorSpace("RGBA", "U8", SRGB_PROFILE)
         pixel_data = temp_node.projectionPixelData(x, y, w, h).data()
 
-    return QImage(pixel_data, w, h, QImage.Format_ARGB32)
+    return QImage(pixel_data, w, h, QImage.Format.Format_ARGB32)
 
 
 def expandAndFormat(img, margin=0, is_jpg=False):
@@ -53,7 +57,7 @@ def expandAndFormat(img, margin=0, is_jpg=False):
     corner = QSize(margin, margin)
     white = QColor(255, 255, 255) if is_jpg else QColor(255, 255, 255, 0)
     canvas = QImage(
-        img.size() + corner * 2, QImage.Format_RGB32 if is_jpg else QImage.Format_ARGB32
+        img.size() + corner * 2, QImage.Format.Format_RGB32 if is_jpg else QImage.Format.Format_ARGB32
     )
     canvas.fill(white)
     p = QPainter(canvas)
@@ -326,7 +330,7 @@ class WNode:
             lambda scale, margin, extension, path: (
                 [int(1e-2 * wh * scale) for wh in self.size],
                 100 - scale != 0,
-                Qt.SmoothTransformation if bilinear else Qt.FastTransformation,
+                Qt.TransformationMode.SmoothTransformation if bilinear else Qt.TransformationMode.FastTransformation,
                 margin,
                 extension,
                 path,
@@ -385,7 +389,7 @@ class WNode:
         image_width, image_height = self.size  # Target frame size
         sheet_width, sheet_height = (image_width, image_height * tiles_y)  # Sheet dimensions
 
-        sheet = QImage(sheet_width, sheet_height, QImage.Format_ARGB32)
+        sheet = QImage(sheet_width, sheet_height, QImage.Format.Format_ARGB32)
         sheet.fill(QColor(255, 255, 255, 0))
         painter = QPainter(sheet)
 

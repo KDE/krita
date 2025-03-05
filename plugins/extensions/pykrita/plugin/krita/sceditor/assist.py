@@ -2,17 +2,22 @@
 #  SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtWidgets import (qApp, QListWidget, QListWidgetItem, QTextBrowser,
-                             QVBoxLayout, QWidget)
+try:
+    from PyQt6.QtCore import QTimer, Qt
+    from PyQt6.QtWidgets import (QApplication, QListWidget, QListWidgetItem, QTextBrowser,
+                                 QVBoxLayout, QWidget)
+except:
+    from PyQt5.QtCore import QTimer, Qt
+    from PyQt5.QtWidgets import (QApplication, QListWidget, QListWidgetItem, QTextBrowser,
+                                 QVBoxLayout, QWidget)
 
 
 class PopupWidget(QWidget):
 
     def __init__(self, textedit):
-        flags = Qt.ToolTip
-        flags = Qt.Window | Qt.FramelessWindowHint | \
-            Qt.CustomizeWindowHint | Qt.X11BypassWindowManagerHint
+        flags = Qt.WindowType.ToolTip
+        flags = Qt.WindowType.Window | Qt.WindowType.FramelessWindowHint | \
+            Qt.WindowType.CustomizeWindowHint | Qt.WindowType.X11BypassWindowManagerHint
         QWidget.__init__(self, None, flags)
         self.textedit = textedit
         self.vlayout = QVBoxLayout(self)
@@ -24,7 +29,7 @@ class PopupWidget(QWidget):
 
     def show(self, timeout=0, above=False):
         self.cursor_start_col = self.textedit.textCursor().columnNumber()
-        desktop = qApp.desktop()
+        desktop = QApplication.instance().desktop()
         screen = desktop.screen(desktop.screenNumber(self))
         screen_width = screen.width()
         screen_height = screen.height()
@@ -112,7 +117,7 @@ class AutoComplete(PopupWidget):
         self.list.keyPressEvent(event)
         key = event.key()
         text = event.text()
-        if key in [Qt.Key_Right, Qt.Key_Enter, Qt.Key_Return]:
+        if key in [Qt.Key.Key_Right, Qt.Key.Key_Enter, Qt.Key.Key_Return]:
             text = ""
         cursor = self.textedit.textCursor()
         line = unicode(cursor.block().text())
@@ -131,9 +136,9 @@ class AutoComplete(PopupWidget):
             self.hide()
             return
 
-        if key in [Qt.Key_Up, Qt.Key_Down, Qt.Key_PageUp, Qt.Key_PageDown]:
+        if key in [Qt.Key.Key_Up, Qt.Key.Key_Down, Qt.Key.Key_PageUp, Qt.Key.Key_PageDown]:
             return True
-        elif key in [Qt.Key_Tab, Qt.Key_Right, Qt.Key_Enter, Qt.Key_Return]:
+        elif key in [Qt.Key.Key_Tab, Qt.Key.Key_Right, Qt.Key.Key_Enter, Qt.Key.Key_Return]:
             self.insert()
             return True
         elif not text:

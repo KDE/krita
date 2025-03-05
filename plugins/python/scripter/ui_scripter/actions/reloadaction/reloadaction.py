@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction, QMessageBox
-from PyQt5.QtGui import QIcon, QKeySequence
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtGui import QIcon, QKeySequence, QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction, QMessageBox
+    from PyQt5.QtGui import QIcon, QKeySequence
+    from PyQt5.QtCore import Qt
 from .... import utils
 import krita
 
@@ -21,7 +26,7 @@ class ReloadAction(QAction):
 
         self.setText(i18n("Reload File"))
         self.setObjectName('reloadfile')
-        self.setShortcut(QKeySequence(Qt.ALT + Qt.Key_R))
+        self.setShortcut(QKeySequence(Qt.Key.Key_Alt+ Qt.Key.Key_R))
 
         self.setToolTip(i18n('Reload File Alt+R'))
         self.setIcon(utils.getThemedIcon(':/icons/reload_script.svg'))

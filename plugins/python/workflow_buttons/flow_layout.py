@@ -4,8 +4,12 @@
 
 # FlowLayout class copied from https://doc.qt.io/qtforpython-6/examples/example_widgets_layouts_flowlayout.html
 
-from PyQt5.QtCore import Qt, QMargins, QPoint, QRect, QSize
-from PyQt5.QtWidgets import QLayout, QSizePolicy
+try:
+    from PyQt6.QtCore import Qt, QMargins, QPoint, QRect, QSize
+    from PyQt6.QtWidgets import QLayout, QSizePolicy
+except:
+    from PyQt5.QtCore import Qt, QMargins, QPoint, QRect, QSize
+    from PyQt5.QtWidgets import QLayout, QSizePolicy
 
 class FlowLayout(QLayout):
     def __init__(self, parent=None):
@@ -74,10 +78,10 @@ class FlowLayout(QLayout):
         for item in self._item_list:
             style = item.widget().style()
             layout_spacing_x = style.layoutSpacing(
-                QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Horizontal
+                QSizePolicy.ControlType.PushButton, QSizePolicy.ControlType.PushButton, Qt.Orientation.Horizontal
             )
             layout_spacing_y = style.layoutSpacing(
-                QSizePolicy.PushButton, QSizePolicy.PushButton, Qt.Vertical
+                QSizePolicy.ControlType.PushButton, QSizePolicy.ControlType.PushButton, Qt.Orientation.Vertical
             )
             space_x = spacing + layout_spacing_x
             space_y = spacing + layout_spacing_y

@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QFileDialog, QMessageBox
+    from PyQt6.QtGui import QKeySequence, QAction
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QAction, QFileDialog, QMessageBox
+    from PyQt5.QtGui import QKeySequence
+    from PyQt5.QtCore import Qt
 import krita
 
 import os
@@ -21,7 +26,7 @@ class OpenAction(QAction):
 
         self.setText(i18n("Open"))
         self.setObjectName('open')
-        self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_O))
+        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_O))
 
     @property
     def parent(self):
@@ -31,7 +36,7 @@ class OpenAction(QAction):
         dialog = QFileDialog(self.scripter.uicontroller.mainWidget)
         dialog.setNameFilter(i18n("Python Files (*.py)"))
 
-        if dialog.exec_():
+        if dialog.exec():
             try:
                 selectedFile = dialog.selectedFiles()[0]
                 _, fileExtension = os.path.splitext(selectedFile)

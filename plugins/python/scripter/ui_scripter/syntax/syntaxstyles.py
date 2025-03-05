@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtGui import QColor, QTextCharFormat, QFont
+try:
+    from PyQt6.QtGui import QColor, QTextCharFormat, QFont
+except:
+    from PyQt5.QtGui import QColor, QTextCharFormat, QFont
 
 
 def _format(color, style='', darker=100, lighter=100):
@@ -16,7 +19,7 @@ def _format(color, style='', darker=100, lighter=100):
     fmt = QTextCharFormat()
     fmt.setForeground(_color)
     if 'bold' in style:
-        fmt.setFontWeight(QFont.Bold)
+        fmt.setFontWeight(QFont.Weight.Bold)
     if 'italic' in style:
         fmt.setFontItalic(True)
 

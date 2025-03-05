@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
+try:
+    from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem
+except:
+    from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 
 class DebuggerTable(QTableWidget):
@@ -15,7 +18,7 @@ class DebuggerTable(QTableWidget):
 
         tableHeader = [i18n('Scope'), i18n('Name'), i18nc('Value in DebuggerTable', 'Value'), i18n('Type')]
         self.setHorizontalHeaderLabels(tableHeader)
-        self.setEditTriggers(self.NoEditTriggers)
+        self.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
     def updateTable(self, data):
         self.clearContents()

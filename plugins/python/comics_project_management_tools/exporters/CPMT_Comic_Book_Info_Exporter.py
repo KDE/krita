@@ -23,7 +23,10 @@ country
 """
 
 import json
-from PyQt5.QtCore import QDateTime, QDate, Qt, QLocale
+try:
+    from PyQt6.QtCore import QDateTime, QDate, Qt, QLocale
+except:
+    from PyQt5.QtCore import QDateTime, QDate, Qt, QLocale
 
 def writeJson(configDictionary = {}):
     basedata = {}
@@ -74,7 +77,7 @@ def writeJson(configDictionary = {}):
     if "publisherName" in configDictionary.keys():
         metadata["publisher"] = configDictionary["publisherName"]
     if "publishingDate" in configDictionary.keys():
-        date = QDate.fromString(configDictionary["publishingDate"], Qt.ISODate)
+        date = QDate.fromString(configDictionary["publishingDate"], Qt.DateFormat.ISODate)
         metadata["publicationMonth"] = date.month()
         metadata["publicationYear"] = date.year()
     if "seriesNumber" in configDictionary.keys():
@@ -103,7 +106,7 @@ def writeJson(configDictionary = {}):
     # 
 
     basedata["appID"] = "Krita"
-    basedata["lastModified"] = QDateTime.currentDateTimeUtc().toString(Qt.ISODate)
+    basedata["lastModified"] = QDateTime.currentDateTimeUtc().toString(Qt.DateFormat.ISODate)
     basedata["ComicBookInfo/1.0"] = metadata
     
 

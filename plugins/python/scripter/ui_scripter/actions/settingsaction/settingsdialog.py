@@ -3,7 +3,10 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QDialog, QFormLayout
+try:
+    from PyQt6.QtWidgets import QDialog, QFormLayout
+except:
+    from PyQt5.QtWidgets import QDialog, QFormLayout
 from . import syntaxstylescombobox, fontscombobox
 import krita
 
@@ -21,10 +24,10 @@ class SettingsDialog(QDialog):
 
     def readSettings(self, settings):
         for index in range(self.mainLayout.rowCount()):
-            widget = self.mainLayout.itemAt(index, QFormLayout.FieldRole).widget()
+            widget = self.mainLayout.itemAt(index, QFormLayout.ItemRole.FieldRole).widget()
             widget.readSettings(settings)
 
     def writeSettings(self, settings):
         for index in range(self.mainLayout.rowCount()):
-            widget = self.mainLayout.itemAt(index, QFormLayout.FieldRole).widget()
+            widget = self.mainLayout.itemAt(index, QFormLayout.ItemRole.FieldRole).widget()
             widget.writeSettings(settings)

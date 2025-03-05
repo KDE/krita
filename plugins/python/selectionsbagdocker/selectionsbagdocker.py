@@ -1,8 +1,13 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import QWidget
+try:
+    from PyQt6.QtWidgets import QWidget
 
-from PyQt5 import uic
+    from PyQt6 import uic
+except:
+    from PyQt5.QtWidgets import QWidget
+
+    from PyQt5 import uic
 from krita import DockWidget
 import os
 

@@ -5,8 +5,12 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
 '''
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+try:
+    from PyQt6.QtGui import QColor
+    from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
+except:
+    from PyQt5.QtGui import QColor
+    from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton
 
 from krita import Krita, DockWidget, ManagedColor, DockWidgetFactory, DockWidgetFactoryBase
 
@@ -117,4 +121,4 @@ class MixerSliderDocker(DockWidget):
     def managedcolor_to_qcolor(self, managedcolor):
         return managedcolor.colorForCanvas(self.canvas())
 
-Application.addDockWidgetFactory(DockWidgetFactory("mixer_slider_docker", DockWidgetFactoryBase.DockRight, MixerSliderDocker))
+Application.addDockWidgetFactory(DockWidgetFactory("mixer_slider_docker", DockWidgetFactoryBase.DockPosition.DockRight, MixerSliderDocker))

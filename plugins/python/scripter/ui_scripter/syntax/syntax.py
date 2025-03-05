@@ -5,9 +5,12 @@ SPDX-License-Identifier: GPL-2.0-or-later
 """
 # syntax.py: taken from https://wiki.python.org/moin/PyQt/Python%20syntax%20highlighting
 
-
-from PyQt5.QtCore import QRegExp
-from PyQt5.QtGui import QSyntaxHighlighter
+try:
+    from PyQt6.QtCore import QRegularExpression
+    from PyQt6.QtGui import QSyntaxHighlighter
+except:
+    from PyQt5.QtCore import QRegularExpression
+    from PyQt5.QtGui import QSyntaxHighlighter
 
 
 class PythonHighlighter (QSyntaxHighlighter):
@@ -51,8 +54,8 @@ class PythonHighlighter (QSyntaxHighlighter):
         # Multi-line strings (expression, flag, style)
         # FIXME: The triple-quotes in these two lines will mess up the
         # syntax highlighting from this point onward
-        self.tri_single = (QRegExp(r"""'''(?!")"""), 1, 'string2')
-        self.tri_double = (QRegExp(r'''"""(?!')'''), 2, 'string2')
+        self.tri_single = (QRegularExpression(r"""'''(?!")"""), 1, 'string2')
+        self.tri_double = (QRegularExpression(r'''"""(?!')'''), 2, 'string2')
 
         rules = []
 
@@ -88,22 +91,20 @@ class PythonHighlighter (QSyntaxHighlighter):
             (r'\b[+-]?[0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\b', 0, 'numbers'),
         ]
 
-        # Build a QRegExp for each pattern
-        self.rules = [(QRegExp(pat), index, identifier)
+        # Build a QRegularExpression for each pattern
+        self.rules = [(QRegularExpression(pat), index, identifier)
                       for (pat, index, identifier) in rules]
 
     def highlightBlock(self, text):
         """Apply syntax highlighting to the given block of text."""
         # Do other syntax formatting
         for expression, nth, identifier in self.rules:
-            index = expression.indexIn(text, 0)
-
-            while index >= 0:
-                # We actually want the index of the nth match
-                index = expression.pos(nth)
-                length = len(expression.cap(nth))
+            matchIter = expression.globalMatch(text)
+            while matchIter.hasNext():
+                match = matchIter.next()
+                index = match.capturedStart(nth)
+                length = match.capturedLength(nth)
                 self.setFormat(index, length, self.syntaxStyle[identifier])
-                index = expression.indexIn(text, index + length)
 
         self.setCurrentBlockState(0)
 
@@ -114,7 +115,7 @@ class PythonHighlighter (QSyntaxHighlighter):
 
     def match_multiline(self, text, delimiter, in_state, style):
         """Do highlighting of multi-line strings. ``delimiter`` should be a
-        ``QRegExp`` for triple-single-quotes or triple-double-quotes, and
+        ``QRegularExpression`` for triple-single-quotes or triple-double-quotes, and
         ``in_state`` should be a unique integer to represent the corresponding
         state changes when inside those strings. Returns True if we're still
         inside a multi-line string when this function is finished.
@@ -125,17 +126,18 @@ class PythonHighlighter (QSyntaxHighlighter):
             add = 0
         # Otherwise, look for the delimiter on this line
         else:
-            start = delimiter.indexIn(text)
+            start = delimiter.match(text).capturedStart()
             # Move past this match
-            add = delimiter.matchedLength()
+            add = delimiter.match(text).capturedLength(delimiter.match(text).lastCapturedIndex())
 
         # As long as there's a delimiter match on this line...
         while start >= 0:
             # Look for the ending delimiter
-            end = delimiter.indexIn(text, start + add)
+            match = delimiter.match(text, start + add)
+            end = match.capturedStart()
             # Ending delimiter on this line?
             if end >= add:
-                length = end - start + add + delimiter.matchedLength()
+                length = end - start + add + match.capturedLength(match.lastCapturedIndex())
                 self.setCurrentBlockState(0)
             # No; multi-line string
             else:
@@ -144,7 +146,7 @@ class PythonHighlighter (QSyntaxHighlighter):
             # Apply formatting
             self.setFormat(start, length, self.syntaxStyle[style])
             # Look for the next match
-            start = delimiter.indexIn(text, start + length)
+            start = delimiter.match(text, start + length).capturedStart()
 
         # Return True if still inside a multi-line string, False otherwise
         if self.currentBlockState() == in_state:

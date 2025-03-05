@@ -16,7 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from krita import *
-from PyQt5 import QtWidgets, QtCore
+try:
+    from PyQt6 import QtWidgets, QtCore
+except:
+    from PyQt5 import QtWidgets, QtCore
 
 DRAG_DELTA = 30
 TRIANGLE_SIZE = 20
@@ -29,9 +32,9 @@ FAVOURITE_TRIANGLE = QPolygon([
 
 def customPaintEvent(instance, event):
     painter = QPainter(instance)
-    painter.setRenderHint(QtGui.QPainter.Antialiasing, True)
-    painter.setPen(QPen(Qt.black, 2, Qt.SolidLine))
-    painter.setBrush(QBrush(Qt.white, Qt.SolidPattern))
+    painter.setRenderHint(QtGui.QPainter.RenderHint.Antialiasing, True)
+    painter.setPen(QPen(Qt.GlobalColor.black, 2, Qt.PenStyle.SolidLine))
+    painter.setBrush(QBrush(Qt.GlobalColor.white, Qt.BrushStyle.SolidPattern))
 
     # Calculations
     total_width = event.rect().width()
@@ -84,12 +87,12 @@ def customSetImage(instance, image):
     instance.update()
 
 def customMouseMoveEvent(self, event):
-    if event.modifiers() != QtCore.Qt.ShiftModifier and event.modifiers() != QtCore.Qt.AltModifier:
+    if event.modifiers() != QtCore.Qt.KeyboardModifier.ShiftModifier and event.modifiers() != QtCore.Qt.KeyboardModifier.AltModifier:
         self.PREVIOUS_DRAG_X = None
         return 
 
     # alt modifier is reserved for scrolling through
-    if self.PREVIOUS_DRAG_X and event.modifiers() == QtCore.Qt.AltModifier:
+    if self.PREVIOUS_DRAG_X and event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
         if self.PREVIOUS_DRAG_X < event.x() - DRAG_DELTA:
             self.SIGNAL_WUP.emit(0)
             self.PREVIOUS_DRAG_X = event.x()
@@ -115,11 +118,11 @@ def customMouseMoveEvent(self, event):
 
     # only scale to document if it exists
     if self.fitCanvasChecked and not doc is None:
-        fullImage = QImage(self.path).scaled(doc.width() * scale, doc.height() * scale, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        fullImage = QImage(self.path).scaled(doc.width() * scale, doc.height() * scale, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
     else:
         fullImage = QImage(self.path)
         # scale image, now knowing the bounds
-        fullImage = fullImage.scaled(fullImage.width() * scale, fullImage.height() * scale, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        fullImage = fullImage.scaled(fullImage.width() * scale, fullImage.height() * scale, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
 
     fullPixmap = QPixmap(50, 50).fromImage(fullImage)
     mimedata.setImageData(fullPixmap)
@@ -132,7 +135,7 @@ def customMouseMoveEvent(self, event):
     drag.setMimeData(mimedata)
     drag.setPixmap(self.pixmap)
     drag.setHotSpot(QPoint(self.qimage.width() / 2, self.qimage.height() / 2))
-    drag.exec_(Qt.CopyAction)
+    drag.exec(Qt.DropAction.CopyAction)
 
 class Photobash_Display(QWidget):
     SIGNAL_HOVER = QtCore.pyqtSignal(str)
@@ -154,7 +157,7 @@ class Photobash_Display(QWidget):
         self.SIGNAL_HOVER.emit("None")
 
     def mousePressEvent(self, event):
-        if (event.modifiers() == QtCore.Qt.NoModifier and event.buttons() == QtCore.Qt.LeftButton):
+        if (event.modifiers() == QtCore.Qt.KeyboardModifier.NoModifier and event.buttons() == QtCore.Qt.MouseButton.LeftButton):
             self.SIGNAL_CLOSE.emit(0)
 
     def mouseMoveEvent(self, event):
@@ -221,9 +224,9 @@ class Photobash_Button(QWidget):
         self.SIGNAL_HOVER.emit("None")
 
     def mousePressEvent(self, event):
-        if event.modifiers() == QtCore.Qt.NoModifier and event.buttons() == QtCore.Qt.LeftButton:
+        if event.modifiers() == QtCore.Qt.KeyboardModifier.NoModifier and event.buttons() == QtCore.Qt.MouseButton.LeftButton:
             self.SIGNAL_LMB.emit(self.number)
-        if event.modifiers() == QtCore.Qt.AltModifier:
+        if event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
             self.PREVIOUS_DRAG_X = event.x()
 
     def mouseDoubleClickEvent(self, event):
@@ -250,11 +253,11 @@ class Photobash_Button(QWidget):
         cmenuOpenNew = cmenu.addAction("Open as New Document")
         cmenuReference = cmenu.addAction("Place as Reference")
 
-        background = qApp.palette().color(QPalette.Window).name().split("#")[1]
+        background = QApplication().instance().palette().color(QPalette.ColorRole.Window).name().split("#")[1]
         cmenuStyleSheet = f"""QMenu {{ background-color: #AA{background}; border: 1px solid #{background}; }}"""
         cmenu.setStyleSheet(cmenuStyleSheet)
 
-        action = cmenu.exec_(self.mapToGlobal(event.pos()))
+        action = cmenu.exec(self.mapToGlobal(event.pos()))
         if action == cmenuDisplay:
             self.SIGNAL_PREVIEW.emit(self.path)
         if action == cmenuFavourite:

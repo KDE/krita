@@ -14,8 +14,12 @@ import sys
 import traceback
 import atexit
 
-from PyQt5.QtCore import pyqtSlot, Qt
-from PyQt5.QtWidgets import QApplication, QDialog
+try:
+    from PyQt6.QtCore import pyqtSlot, Qt
+    from PyQt6.QtWidgets import QApplication, QDialog
+except:
+    from PyQt5.QtCore import pyqtSlot, Qt
+    from PyQt5.QtWidgets import QApplication, QDialog
 
 from excepthook_ui import Ui_ExceptHookDialog
 
@@ -26,7 +30,7 @@ def on_error(exc_type, exc_obj, exc_tb):
     """
     dlg = ExceptHookDialog(exc_type, exc_obj, exc_tb)
     dlg.show()
-    dlg.exec_()
+    dlg.exec()
 
 
 def show_current_error(title=None):
@@ -36,7 +40,7 @@ def show_current_error(title=None):
     """
     dlg = ExceptHookDialog(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2], title)
     dlg.show()
-    dlg.exec_()
+    dlg.exec()
 
 
 def install():

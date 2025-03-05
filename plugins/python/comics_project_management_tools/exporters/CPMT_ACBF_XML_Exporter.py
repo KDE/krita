@@ -15,9 +15,14 @@ http://acbf.wikia.com/wiki/ACBF_Specifications
 
 import os
 import re
-from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
-from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
-from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+try:
+    from PyQt6.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
+    from PyQt6.QtGui import QImage, QColor, QFont, QRawFont
+    from PyQt6.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
+except:
+    from PyQt5.QtCore import QDate, Qt, QPointF, QByteArray, QBuffer
+    from PyQt5.QtGui import QImage, QColor, QFont, QRawFont
+    from PyQt5.QtXml import QDomDocument, QDomElement, QDomText, QDomNodeList
 from . import CPMT_po_parser as po_parser
 
 def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], locationBasic = str(), locationStandAlone = str(), projectUrl = str()):
@@ -277,7 +282,7 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
     if "publishingDate" in configDictionary.keys():
         publishingDate = document.createElement("publish-date")
         publishingDate.setAttribute("value", configDictionary["publishingDate"])
-        publishingDate.appendChild(document.createTextNode(QDate.fromString(configDictionary["publishingDate"], Qt.ISODate).toString(Qt.SystemLocaleLongDate)))
+        publishingDate.appendChild(document.createTextNode(QDate.fromString(configDictionary["publishingDate"], Qt.DateFormat.ISODate).toString(Qt.DateFormat.SystemLocaleLongDate)))
         publisherInfo.appendChild(publishingDate)
     if "publisherCity" in configDictionary.keys():
         publishCity = document.createElement("city")
@@ -345,8 +350,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
 
     acbfDate = document.createElement("creation-date")
     now = QDate.currentDate()
-    acbfDate.setAttribute("value", now.toString(Qt.ISODate))
-    acbfDate.appendChild(document.createTextNode(str(now.toString(Qt.SystemLocaleLongDate))))
+    acbfDate.setAttribute("value", now.toString(Qt.DateFormat.ISODate))
+    acbfDate.appendChild(document.createTextNode(str(now.toString(Qt.DateFormat.SystemLocaleLongDate))))
     documentInfo.appendChild(acbfDate)
 
     if "acbfSource" in configDictionary.keys():

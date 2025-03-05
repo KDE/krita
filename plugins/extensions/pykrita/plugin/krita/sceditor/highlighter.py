@@ -9,7 +9,10 @@ SPDX-FileCopyrightText: 2005-2006 Trolltech ASA. All rights reserved.
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 
-from PyQt5 import QtCore, QtGui
+try:
+    from PyQt6 import QtCore, QtGui
+except:
+    from PyQt5 import QtCore, QtGui
 
 
 class PythonHighlighter(QtGui.QSyntaxHighlighter):
@@ -87,46 +90,46 @@ class PythonHighlighter(QtGui.QSyntaxHighlighter):
         # self.empty_format.setFontPointSize(font.pointSize()/4.0)
 
         self.keywordFormat = QtGui.QTextCharFormat(self.base_format)
-        self.keywordFormat.setForeground(QtCore.Qt.darkBlue)
-        self.keywordFormat.setFontWeight(QtGui.QFont.Bold)
+        self.keywordFormat.setForeground(QtCore.Qt.GlobalColor.darkBlue)
+        self.keywordFormat.setFontWeight(QtGui.QFont.Weight.Bold)
         self.callableFormat = QtGui.QTextCharFormat(self.base_format)
-        self.callableFormat.setForeground(QtCore.Qt.darkBlue)
+        self.callableFormat.setForeground(QtCore.Qt.GlobalColor.darkBlue)
         self.magicFormat = QtGui.QTextCharFormat(self.base_format)
         self.magicFormat.setForeground(QtGui.QColor(224, 128, 0))
         self.qtFormat = QtGui.QTextCharFormat(self.base_format)
-        self.qtFormat.setForeground(QtCore.Qt.blue)
-        self.qtFormat.setFontWeight(QtGui.QFont.Bold)
+        self.qtFormat.setForeground(QtCore.Qt.GlobalColor.blue)
+        self.qtFormat.setFontWeight(QtGui.QFont.Weight.Bold)
         self.selfFormat = QtGui.QTextCharFormat(self.base_format)
-        self.selfFormat.setForeground(QtCore.Qt.red)
+        self.selfFormat.setForeground(QtCore.Qt.GlobalColor.red)
         # self.selfFormat.setFontItalic(True)
         self.singleLineCommentFormat = QtGui.QTextCharFormat(self.base_format)
-        self.singleLineCommentFormat.setForeground(QtCore.Qt.darkGreen)
+        self.singleLineCommentFormat.setForeground(QtCore.Qt.GlobalColor.darkGreen)
         self.multiLineStringFormat = QtGui.QTextCharFormat(self.base_format)
         self.multiLineStringFormat.setBackground(
             QtGui.QBrush(QtGui.QColor(127, 127, 255)))
         self.quotationFormat1 = QtGui.QTextCharFormat(self.base_format)
-        self.quotationFormat1.setForeground(QtCore.Qt.blue)
+        self.quotationFormat1.setForeground(QtCore.Qt.GlobalColor.blue)
         self.quotationFormat2 = QtGui.QTextCharFormat(self.base_format)
-        self.quotationFormat2.setForeground(QtCore.Qt.blue)
+        self.quotationFormat2.setForeground(QtCore.Qt.GlobalColor.blue)
 
     def updateRules(self):
 
         self.rules = []
-        self.rules += map(lambda s: (QtCore.QRegExp(r"\b" + s + r"\b"),
+        self.rules += map(lambda s: (QtCore.QRegularExpression(r"\b" + s + r"\b"),
                                      self.keywordFormat), self.keywords)
 
-        self.rules.append((QtCore.QRegExp(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
-        self.rules.append((QtCore.QRegExp(r"\b__[a-z]+__\b"), self.magicFormat))
-        self.rules.append((QtCore.QRegExp(r"\bself\b"), self.selfFormat))
-        self.rules.append((QtCore.QRegExp(r"\bQ([A-Z][a-z]*)+\b"), self.qtFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\b__[a-z]+__\b"), self.magicFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\bself\b"), self.selfFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\bQ([A-Z][a-z]*)+\b"), self.qtFormat))
 
-        self.rules.append((QtCore.QRegExp(r"#[^\n]*"), self.singleLineCommentFormat))
+        self.rules.append((QtCore.QRegularExpression(r"#[^\n]*"), self.singleLineCommentFormat))
 
-        self.multiLineStringBegin = QtCore.QRegExp(r'\"\"\"')
-        self.multiLineStringEnd = QtCore.QRegExp(r'\"\"\"')
+        self.multiLineStringBegin = QtCore.QRegularExpression(r'\"\"\"')
+        self.multiLineStringEnd = QtCore.QRegularExpression(r'\"\"\"')
 
-        self.rules.append((QtCore.QRegExp(r'\"[^\n]*\"'), self.quotationFormat1))
-        self.rules.append((QtCore.QRegExp(r"'[^\n]*'"), self.quotationFormat2))
+        self.rules.append((QtCore.QRegularExpression(r'\"[^\n]*\"'), self.quotationFormat1))
+        self.rules.append((QtCore.QRegularExpression(r"'[^\n]*'"), self.quotationFormat2))
 
     def updateHighlighter(self, font):
 
@@ -147,7 +150,7 @@ class QtQmlHighlighter(PythonHighlighter):
          'decodeURIComponent', 'encodeURI', 'encodeURIComponent',
          'escape', 'unescape', 'version', 'gc', 'Object',
          'Function', 'Number', 'Boolean', 'String', 'Date', 'Array',
-         'RegExp', 'Error', 'EvalError', 'RangeError', 'ReferenceError',
+         'RegularExpression', 'Error', 'EvalError', 'RangeError', 'ReferenceError',
          'SyntaxError', 'TypeError', 'URIError', 'eval', 'Math',
          'Enumeration', 'Variant', 'QObject', 'QMetaObject']
 
@@ -157,19 +160,19 @@ class QtQmlHighlighter(PythonHighlighter):
     def updateRules(self):
 
         self.rules = []
-        self.rules += map(lambda s: (QtCore.QRegExp(r"\b" + s + r"\b"),
+        self.rules += map(lambda s: (QtCore.QRegularExpression(r"\b" + s + r"\b"),
                                      self.keywordFormat), self.keywords)
 
-        self.rules.append((QtCore.QRegExp(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
-        # self.rules.append((QtCore.QRegExp(r"\b__[a-z]+__\b"), self.magicFormat))
-        self.rules.append((QtCore.QRegExp(r"\bthis\b"), self.selfFormat))
-        self.rules.append((QtCore.QRegExp(r"\bQ([A-Z][a-z]*)+\b"), self.qtFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\b[A-Za-z_]+\(.*\)"), self.callableFormat))
+        # self.rules.append((QtCore.QRegularExpression(r"\b__[a-z]+__\b"), self.magicFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\bthis\b"), self.selfFormat))
+        self.rules.append((QtCore.QRegularExpression(r"\bQ([A-Z][a-z]*)+\b"), self.qtFormat))
 
-        self.rules.append((QtCore.QRegExp(r"//[^\n]*"), self.singleLineCommentFormat))
+        self.rules.append((QtCore.QRegularExpression(r"//[^\n]*"), self.singleLineCommentFormat))
 
         # XXX quick hack to support QtQml syntax
-        self.multiLineStringBegin = QtCore.QRegExp(r'/\*')
-        self.multiLineStringEnd = QtCore.QRegExp(r'\*/')
+        self.multiLineStringBegin = QtCore.QRegularExpression(r'/\*')
+        self.multiLineStringEnd = QtCore.QRegularExpression(r'\*/')
         self.multiLineStringFormat = self.singleLineCommentFormat
-        self.rules.append((QtCore.QRegExp(r'\"[^\n]*\"'), self.quotationFormat1))
-        self.rules.append((QtCore.QRegExp(r"'[^\n]*'"), self.quotationFormat2))
+        self.rules.append((QtCore.QRegularExpression(r'\"[^\n]*\"'), self.quotationFormat1))
+        self.rules.append((QtCore.QRegularExpression(r"'[^\n]*'"), self.quotationFormat2))

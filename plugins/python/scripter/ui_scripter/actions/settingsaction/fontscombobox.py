@@ -3,9 +3,14 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 
 SPDX-License-Identifier: GPL-2.0-or-later
 """
-from PyQt5.QtWidgets import QComboBox, QCompleter
-from PyQt5.QtGui import QFontDatabase
-from PyQt5.QtCore import Qt
+try:
+    from PyQt6.QtWidgets import QComboBox, QCompleter
+    from PyQt6.QtGui import QFontDatabase
+    from PyQt6.QtCore import Qt, QLibraryInfo
+except:
+    from PyQt5.QtWidgets import QComboBox, QCompleter
+    from PyQt5.QtGui import QFontDatabase
+    from PyQt5.QtCore import Qt, QLibraryInfo
 
 
 class FontsComboBox(QComboBox):
@@ -15,15 +20,16 @@ class FontsComboBox(QComboBox):
 
         self.editor = editor
 
-        _fontDataBase = QFontDatabase()
-
-        self.addItems(_fontDataBase.families())
+        if QLibraryInfo.version().majorVersion() == 6: # PyQt6
+            self.addItems(QFontDatabase.families())
+        else: # PyQt5
+            self.addItems(QFontDatabase().families())
         self.setCurrentIndex(self.findText(self.editor.font))
 
         # Style sheet to set false on combobox-popup
         self.setMaxVisibleItems(10)
         self.setEditable(True)
-        self.setInsertPolicy(QComboBox.NoInsert)
+        self.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
         self.currentIndexChanged.connect(self._currentIndexChanged)
 
     def _currentIndexChanged(self, index):

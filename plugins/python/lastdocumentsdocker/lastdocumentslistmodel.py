@@ -1,7 +1,11 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtCore import QAbstractListModel, Qt, QSize
-from PyQt5.QtGui import QImage
+try:
+    from PyQt6.QtCore import QAbstractListModel, Qt, QSize
+    from PyQt6.QtGui import QImage
+except:
+    from PyQt5.QtCore import QAbstractListModel, Qt, QSize
+    from PyQt5.QtGui import QImage
 import krita
 import zipfile
 from pathlib import Path
@@ -24,7 +28,7 @@ class LastDocumentsListModel(QAbstractListModel):
         if index.row() >= len(self.recentDocuments):
             return None
 
-        if role == Qt.DecorationRole:
+        if role == Qt.ItemDataRole.DecorationRole:
             return self.recentDocuments[index.row()]
         else:
             return None
@@ -33,7 +37,7 @@ class LastDocumentsListModel(QAbstractListModel):
         return len(self.recentDocuments)
 
     def headerData(self, section, orientation, role):
-        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+        if orientation == Qt.Orientation.Horizontal and role == Qt.ItemDataRole.DisplayRole:
             return self.rootItem[section]
 
         return None
@@ -60,9 +64,9 @@ class LastDocumentsListModel(QAbstractListModel):
 
                 thumbSize = QSize(int(200*self.devicePixelRatioF), int(150*self.devicePixelRatioF))
                 if thumbnail.width() <= thumbSize.width() or thumbnail.height() <= thumbSize.height():
-                    thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    thumbnail = thumbnail.scaled(thumbSize, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.FastTransformation)
                 else:
-                    thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                    thumbnail = thumbnail.scaled(thumbSize, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
                 thumbnail.setDevicePixelRatio(self.devicePixelRatioF)
                 self.recentDocuments.append(thumbnail)
         self.modelReset.emit()

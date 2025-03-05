@@ -1,6 +1,9 @@
 # SPDX-License-Identifier: CC0-1.0
 
-from PyQt5.QtWidgets import QComboBox
+try:
+    from PyQt6.QtWidgets import QComboBox
+except:
+    from PyQt5.QtWidgets import QComboBox
 
 
 class ColorProfileComboBox(QComboBox):
@@ -9,4 +12,4 @@ class ColorProfileComboBox(QComboBox):
         super(ColorProfileComboBox, self).__init__(parent)
 
         self.uiColorSpace = uiColorSpace
-        self.setSizeAdjustPolicy(self.AdjustToContents)
+        self.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)

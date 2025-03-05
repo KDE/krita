@@ -15,13 +15,20 @@ you have to know about metaclasses in Python
 """
 
 import sys
+
 try:
-    from PyQt5 import sip  # Private sip module, used by modern PyQt5
-except ImportError:
-    import sip             # For older PyQt5 versions
-from PyQt5.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal
-from PyQt5.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
-from PyQt5.QtWidgets import qApp
+    from PyQt6 import sip  # Private sip module, used by modern PyQt6
+    from PyQt6.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal
+    from PyQt6.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
+    #from PyQt6.QtWidgets import qApp
+except:
+    try:
+        from PyQt5 import sip  # Private sip module, used by modern PyQt5
+    except ImportError:
+        import sip             # For older PyQt5 versions
+    from PyQt5.QtCore import QVariant, QMetaObject, Q_RETURN_ARG, Q_ARG, QObject, Qt, QMetaMethod, pyqtSignal
+    from PyQt5.QtGui import QBrush, QFont, QImage, QPalette, QPixmap
+    from PyQt5.QtWidgets import qApp
 
 
 variant_converter = {
@@ -327,7 +334,7 @@ class PyQtMethod(object):
         def wrapper(obj, *args):
             qargs = [Q_ARG(t, v) for t, v in zip(self.args, args)]
             invoke_args = [obj._instance, self.name]
-            invoke_args.append(Qt.DirectConnection)
+            invoke_args.append(Qt.ConnectionType.DirectConnection)
             rtype = self.returnType
             if rtype:
                 invoke_args.append(Q_RETURN_ARG(rtype))
@@ -367,7 +374,7 @@ def create_pyqt_class(metaobject):
     signals = attrs["__signals__"] = {}
     for i in range(metaobject.methodCount()):
         meta_method = metaobject.method(i)
-        if meta_method.methodType() != QMetaMethod.Signal:
+        if meta_method.methodType() != QMetaMethod.MethodType.Signal:
             method = PyQtMethod(meta_method)
             method_name = method.name
             if method_name in attrs:

@@ -103,6 +103,7 @@ struct KoFontGlyphModel::Private {
 
     static QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QMap<QString, KoOpenTypeFeatureInfo> previousFeatureInfo, bool gpos, bool samplesOnly, QStringList locales, QLatin1String lang = QLatin1String()) {
         // All of this was referenced from Inkscape's OpenTypeUtil.cpp::readOpenTypeGsubTable
+        // It has since been reworked to include language testing and alternates.
         QMap<QString, KoOpenTypeFeatureInfo> featureInfo = previousFeatureInfo;
         hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
         hb_tag_t table = gpos? HB_OT_TAG_GPOS: HB_OT_TAG_GSUB;
@@ -150,6 +151,11 @@ struct KoFontGlyphModel::Private {
                                                    k, &count, &features);
             if (count < 1) continue;
             tags.append(features);
+        }
+
+        QHash<quint32, int> glyphToCodepoint;
+        for (int i = 0; i< charMap.size(); i++) {
+            glyphToCodepoint.insert(charMap.at(i).glyphIndex, i);
         }
 
         KoOpenTypeFeatureInfoFactory factory;
@@ -245,7 +251,7 @@ struct KoFontGlyphModel::Private {
                 }
 
                 // https://github.com/harfbuzz/harfbuzz/issues/673 suggest against checking the lookups,
-                // but if we only check for alternates, features like small-caps etc. won't be found (being gpos type 1 instead of type 3)
+                // but if we don't know the input glyphs, initialization can get really slow.
                 // Given this is run only when the model is created, this should be fine for now.
 
                 hb_set_t_sp glyphsBefore (hb_set_create());
@@ -260,18 +266,20 @@ struct KoFontGlyphModel::Private {
                                                     glyphsAfter.data(),
                                                     glyphsOutput.data() );
 
-
                 GlyphInfo gci;
                 gci.type = OpenType;
                 gci.baseString = tagName;
 
-                for(auto it = charMap.begin(); it != charMap.end(); it++) {
-                    gci.ucs = it->ucs;
-                    hb_codepoint_t glyphIndex = it->glyphIndex;
+                hb_codepoint_t currentGlyph = HB_SET_VALUE_INVALID;
+                while(hb_set_next(glyphsInput.data(), &currentGlyph)) {
+                    if (!glyphToCodepoint.contains(currentGlyph)) continue;
+                    const int codePointLocation = glyphToCodepoint.value(currentGlyph);
+                    CodePointInfo codePointInfo = charMap.at(codePointLocation);
+                    gci.ucs = codePointInfo.ucs;
                     bool addSample = false;
 
                     uint alt_count = hb_ot_layout_lookup_get_glyph_alternates (hbFace.data(),
-                                                                               lookUpIndex, glyphIndex,
+                                                                               lookUpIndex, currentGlyph,
                                                                                0,
                                                                                nullptr, nullptr);
 
@@ -279,15 +287,16 @@ struct KoFontGlyphModel::Private {
                         // 0 is the default value.
                         for(uint j = 1; j < alt_count; ++j) {
                             gci.featureIndex = j;
-                            it->glyphs.append(gci);
+                            codePointInfo.glyphs.append(gci);
                         }
                         info.maxValue = qMax(int(alt_count), info.maxValue);
                         addSample = true;
-                    } else if (hb_set_has(glyphsInput.data(), glyphIndex)) {
+                    } else {
                         gci.featureIndex = 1;
-                        it->glyphs.append(gci);
+                        codePointInfo.glyphs.append(gci);
                         addSample = true;
                     }
+                    charMap[codePointLocation] = codePointInfo;
                     if (samples.size() < 6 && addSample) {
                         samples.append(QString::fromUcs4(&gci.ucs, 1));
                     }
@@ -295,6 +304,7 @@ struct KoFontGlyphModel::Private {
                         break;
                     }
                 }
+
                 lookUpsProcessed.append(lookUpIndex);
                 if (info.sample.isEmpty() && !samples.isEmpty()) {
                     info.sample = samples.join(" ");

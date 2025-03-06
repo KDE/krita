@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 02:23+0000\n"
+"POT-Creation-Date: 2025-03-06 01:59+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -18801,7 +18801,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Pool Bottom"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:341
+#: libs/flake/text/KoFontGlyphModel.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -44702,7 +44702,25 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optimalisearje"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "On"
+msgstr "&Iepenje"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "Off"
+msgstr "Kofje"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
+#, kde-format
+msgctxt "@title:column"
+msgid "OpenType Feature Tag"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Objekteigenskippen"

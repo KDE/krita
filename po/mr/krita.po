@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 02:23+0000\n"
+"POT-Creation-Date: 2025-03-06 01:59+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18965,7 +18965,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "पॅन डावा"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:341
+#: libs/flake/text/KoFontGlyphModel.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -45297,7 +45297,25 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "सुरेखीत करा"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "On"
+msgstr "उघडा (&O)"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "Off"
+msgstr "कट ऑफ :"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
+#, kde-format
+msgctxt "@title:column"
+msgid "OpenType Feature Tag"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, fuzzy, kde-format
 #| msgid "Effect Properties"
 msgid "Text Properties"

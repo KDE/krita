@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 02:23+0000\n"
+"POT-Creation-Date: 2025-03-06 01:59+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -18533,7 +18533,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Ukwenziwa kwemigca"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:341
+#: libs/flake/text/KoFontGlyphModel.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -43853,7 +43853,25 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Susa Itshanele"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "On"
+msgstr "Oluphezulu Lwangoku %1"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
+#, fuzzy, kde-format
+msgctxt "Feature value toggle"
+msgid "Off"
+msgstr "Iibrashi"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
+#, kde-format
+msgctxt "@title:column"
+msgid "OpenType Feature Tag"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Izinto zobumnini Zenjongo"

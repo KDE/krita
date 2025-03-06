@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 02:23+0000\n"
+"POT-Creation-Date: 2025-03-06 01:59+0000\n"
 "PO-Revision-Date: 2025-03-04 12:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -18475,7 +18475,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Blok Yok"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:341
+#: libs/flake/text/KoFontGlyphModel.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -44772,7 +44772,27 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optik boyut"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "Feature value toggle"
+msgid "On"
+msgstr "Aç"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
+#, fuzzy, kde-format
+#| msgid "off"
+msgctxt "Feature value toggle"
+msgid "Off"
+msgstr "kapalı"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
+#, kde-format
+msgctxt "@title:column"
+msgid "OpenType Feature Tag"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format
 msgid "Text Properties"
 msgstr "Metin Özellikleri"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-05 02:23+0000\n"
+"POT-Creation-Date: 2025-03-06 01:59+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -18606,7 +18606,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "両端揃え"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:341
+#: libs/flake/text/KoFontGlyphModel.cpp:361
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -44838,7 +44838,27 @@ msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "最適化"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:109
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
+#, fuzzy, kde-format
+#| msgid "Open"
+msgctxt "Feature value toggle"
+msgid "On"
+msgstr "開く"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
+#, fuzzy, kde-format
+#| msgid "off"
+msgctxt "Feature value toggle"
+msgid "Off"
+msgstr "オフ"
+
+#: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
+#, kde-format
+msgctxt "@title:column"
+msgid "OpenType Feature Tag"
+msgstr ""
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format
 msgid "Text Properties"
 msgstr "テキストのプロパティ"

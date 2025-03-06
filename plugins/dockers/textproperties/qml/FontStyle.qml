@@ -96,7 +96,7 @@ CollapsibleGroupProperty {
 
     titleItem: RowLayout{
         width: parent.width;
-        height: childrenRect.height;
+        height: implicitHeight;
         spacing: columnSpacing;
         Label {
             id: propertyTitle;
@@ -105,6 +105,7 @@ CollapsibleGroupProperty {
             color: sysPalette.text;
             elide: Text.ElideRight;
             Layout.maximumWidth: contentWidth;
+            Layout.preferredHeight: implicitHeight;
         }
 
         SqueezedComboBox {
@@ -112,6 +113,7 @@ CollapsibleGroupProperty {
         model: fontStylesModel;
         textRole: "display";
         Layout.fillWidth: true;
+        Layout.preferredHeight: implicitHeight;
         onActivated: {
             if (!blockSignals) {
                 // Because each change to propertiesModel causes signals to fire,

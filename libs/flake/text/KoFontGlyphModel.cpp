@@ -228,7 +228,7 @@ struct KoFontGlyphModel::Private {
             }
 
             featureInfo.insert(tagName, info);
-            if (!info.glyphPalette) {
+            if (!info.glyphPalette || (samplesOnly && !info.sample.isEmpty())) {
                 continue;
             }
 

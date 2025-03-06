@@ -16,10 +16,10 @@
 #include <resources/KoFontFamily.h>
 
 struct TagFilterProxyModelQmlWrapper::Private {
-    Private()
-        : tagFilterProxyModel(new FontFamilyTagFilterModel())
-        , tagModel(new KisTagModel(ResourceType::FontFamilies))
-        , compressor(KisSignalCompressor(100, KisSignalCompressor::POSTPONE))
+    Private(QObject *parent = nullptr)
+        : tagFilterProxyModel(new FontFamilyTagFilterModel(parent))
+        , tagModel(new KisTagModel(ResourceType::FontFamilies, parent))
+        , compressor(KisSignalCompressor(100, KisSignalCompressor::POSTPONE, parent))
     {
         allResourceModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
         tagFilterProxyModel->sort(KisAbstractResourceModel::Name);
@@ -35,7 +35,7 @@ struct TagFilterProxyModelQmlWrapper::Private {
 
 TagFilterProxyModelQmlWrapper::TagFilterProxyModelQmlWrapper(QObject *parent)
     : QObject(parent)
-    , d(new Private())
+    , d(new Private(parent))
 {
 
     connect(&d->compressor, SIGNAL(timeout()), this, SLOT(setSearchTextOnModel()));

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -19282,7 +19282,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Чапга текислаш"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

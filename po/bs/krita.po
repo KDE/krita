@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -19051,7 +19051,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Poravnaj oblike"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

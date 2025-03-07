@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
-"PO-Revision-Date: 2025-03-04 08:40+0200\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
+"PO-Revision-Date: 2025-03-06 08:43+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -18586,7 +18586,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Немає блоку"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -45467,24 +45467,22 @@ msgid "Optical Size"
 msgstr "Оптичний розмір"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Відкрити"
+msgstr "Увімкнено"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "вимкн."
+msgstr "Вимкнено"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "Мітка можливості OpenType"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format

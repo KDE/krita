@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -18434,7 +18434,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "无区段"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -44230,18 +44230,16 @@ msgid "Optical Size"
 msgstr "光学大小"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "打开"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "关闭"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format

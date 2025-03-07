@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18990,7 +18990,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Medencefenék"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
 "PO-Revision-Date: 2024-08-27 14:17+0200\n"
 "Last-Translator: tobi <onewayme001@posteo.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -19408,7 +19408,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Blocksatz"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-06 01:59+0000\n"
-"PO-Revision-Date: 2025-02-26 18:49+0100\n"
+"POT-Creation-Date: 2025-03-07 01:58+0000\n"
+"PO-Revision-Date: 2025-03-05 09:36+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -18602,7 +18602,7 @@ msgctxt "@title"
 msgid "No Block"
 msgstr "Aucun bloc"
 
-#: libs/flake/text/KoFontGlyphModel.cpp:361
+#: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
@@ -27187,7 +27187,7 @@ msgstr "Installer le profil de couleur"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1410
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
-msgstr ""
+msgstr "API pour les entrées de tablette (API actuellement active : « %1 »)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #, kde-format

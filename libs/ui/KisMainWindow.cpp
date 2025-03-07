@@ -368,10 +368,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     qApp->setStartDragDistance(25);     // 25 px is a distance that works well for Tablet and Mouse events
 
-#ifdef Q_OS_MACOS
-    setUnifiedTitleAndToolBarOnMac(true);
-#endif
-
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
     connect(this, SIGNAL(themeChanged()), KoToolManager::instance(), SLOT(themeChanged()));

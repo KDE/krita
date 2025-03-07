@@ -422,9 +422,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         KisOpenGL::setDefaultSurfaceConfig(config);
         KisOpenGL::setDebugSynchronous(openGLDebugSynchronous);
 
-#if defined Q_OS_WIN
+#if defined Q_OS_WIN || defined Q_OS_MACOS
     qputenv("QT_WIDGETS_RHI", "1");
     qputenv("QT_WIDGETS_RHI_BACKEND", "opengl");
+    qputenv("QSG_RHI_BACKEND", "opengl");
 #endif
 
 #ifdef Q_OS_WIN

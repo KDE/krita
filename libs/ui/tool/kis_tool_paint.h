@@ -126,7 +126,6 @@ private Q_SLOTS:
     void rotateBrushTipCounterClockwisePrecise();
 
 protected:
-    quint8 m_opacity {OPACITY_OPAQUE_U8};
     bool m_paintOutline {false};
     QPointF m_outlineDocPoint;
     KisOptimizedBrushOutline m_currentOutline;
@@ -135,7 +134,6 @@ protected:
 
 private:
     KisOptimizedBrushOutline tryFixBrushOutline(const KisOptimizedBrushOutline &originalOutline);
-    void setOpacity(qreal opacity);
     bool isSamplingAction(AlternateAction action);
 private:
 

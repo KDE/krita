@@ -231,6 +231,11 @@ public:
     bool maskSyntheticEvents() const;
 
     /**
+     * @return true if the tool uses preset opacity, false if it uses tool.
+     */
+    bool isOpacityPresetMode() const;
+
+    /**
      * get the identifier code from the KoToolFactoryBase that created this tool.
      * @return the toolId.
      * @see KoToolFactoryBase::id()
@@ -350,6 +355,10 @@ public:
      * @return the minimum thickness for decoration lines in pixels.
      */
     int decorationThickness() const;
+
+    void postSwitchOpacityResource();
+
+    void preSwitchOpacityResource();
 
 public Q_SLOTS:
 
@@ -529,6 +538,11 @@ protected:
      * Allows subclasses to specify whether synthetic mouse events should be accepted.
      */
     void setMaskSyntheticEvents(bool value);
+
+    /**
+     * Sets the opacity mode to either preset (true) or tool (false).
+     */
+    void setIsOpacityPresetMode(bool value);
 
     /**
      * Returns true if activate() has been called (more times than deactivate :) )

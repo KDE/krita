@@ -32,6 +32,7 @@ KisToolRectangle::KisToolRectangle(KoCanvasBase * canvas)
 {
     setSupportOutline(true);
     setObjectName("tool_rectangle");
+    setIsOpacityPresetMode(true);
 
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 

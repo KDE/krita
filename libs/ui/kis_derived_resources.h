@@ -46,10 +46,19 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
-class KisOpacityResourceConverter : public KoDerivedResourceConverter, public QObject
+class KisOpacityToPresetOpacityResourceConverter : public KoDerivedResourceConverter, public QObject
 {
 public:
-    KisOpacityResourceConverter();
+    KisOpacityToPresetOpacityResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
+
+class KisOpacityToGlobalOpacityResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisOpacityToGlobalOpacityResourceConverter();
 
     QVariant fromSource(const QVariant &value) override;
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;

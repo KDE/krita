@@ -528,6 +528,8 @@ void KoToolManager::Private::postSwitchTool()
         }
     }
 
+    Q_EMIT q->switchOpacityResource(canvasData->activeTool->isOpacityPresetMode());
+
     if (canvasData->canvas->canvas()) {
         // Caller of postSwitchTool expect this to be called to update the selected tool
         updateToolForProxy();

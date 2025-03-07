@@ -321,3 +321,17 @@ void KoResourceManager::removeActiveCanvasResourceDependency(int sourceKey, int 
         }
     }
 }
+
+bool KoResourceManager::updateConverter(KoDerivedResourceConverterSP converter)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_derivedResources.contains(converter->key()), false);
+    if (converter && hasDerivedResourceConverter(converter->key())) {
+        KoDerivedResourceConverterSP oldConverter = m_derivedResources[converter->key()];
+        if (oldConverter->sourceKey() != converter->sourceKey()) {
+            removeDerivedResourceConverter(converter->key());
+            addDerivedResourceConverter(converter);
+            return true;
+        }
+    }
+    return false;
+}

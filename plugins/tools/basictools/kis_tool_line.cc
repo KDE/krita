@@ -59,6 +59,8 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
 
     setSupportOutline(true);
 
+    setIsOpacityPresetMode(true);
+
     connect(&m_strokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
     connect(&m_longStrokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
 

@@ -20,6 +20,7 @@ KisToolPencil::KisToolPencil(KoCanvasBase * canvas)
     : DelegatedPencilTool(canvas, Qt::ArrowCursor,
                           new __KisToolPencilLocalTool(canvas, this))
 {
+    setIsOpacityPresetMode(true);
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 
     connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
@@ -94,7 +95,9 @@ QList<QPointer<QWidget> > KisToolPencil::createOptionWidgets()
 }
 
 __KisToolPencilLocalTool::__KisToolPencilLocalTool(KoCanvasBase * canvas, KisToolPencil* parentTool)
-    : KoPencilTool(canvas), m_parentTool(parentTool) {}
+    : KoPencilTool(canvas), m_parentTool(parentTool) {
+    setIsOpacityPresetMode(true);
+}
 
 void __KisToolPencilLocalTool::paint(QPainter &painter, const KoViewConverter &converter)
 {

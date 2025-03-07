@@ -247,6 +247,14 @@ void KoCanvasResourceProvider::removeActiveCanvasResourceDependency(int sourceKe
     d->manager.removeActiveCanvasResourceDependency(sourceKey, targetKey);
 }
 
+void KoCanvasResourceProvider::updateConverter(KoDerivedResourceConverterSP converter)
+{
+    Q_ASSERT(!converter.isNull());
+    if (d->manager.updateConverter(converter)) {
+        Q_EMIT converterUpdated(converter->key(), converter->sourceKey());
+    }
+}
+
 KoCanvasResourcesInterfaceSP KoCanvasResourceProvider::canvasResourcesInterface() const
 {
     return d->interfaceWrapper;

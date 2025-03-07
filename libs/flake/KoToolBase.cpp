@@ -446,6 +446,18 @@ void KoToolBase::setMaskSyntheticEvents(bool value)
     d->maskSyntheticEvents = value;
 }
 
+bool KoToolBase::isOpacityPresetMode() const
+{
+    Q_D(const KoToolBase);
+    return d->isOpacityPresetMode;
+}
+
+void KoToolBase::setIsOpacityPresetMode(bool value)
+{
+    Q_D(KoToolBase);
+    d->isOpacityPresetMode = value;
+}
+
 void KoToolBase::updateOptionsWidgetIcons()
 {
     Q_D(KoToolBase);

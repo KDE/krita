@@ -289,6 +289,15 @@ Q_SIGNALS:
      * @param inTextMode whether it is now in text mode.
      */
     void textModeChanged(bool text);
+
+    /**
+     * Emitted when the active tool is changed to switch the
+     * opacity resource.
+     * @param isOpacityPresetMode whether the preset opacity
+     * should be used for the current tool.
+     */
+    void switchOpacityResource(bool isOpacityPresetMode);
+
 private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);

@@ -27,6 +27,7 @@ KisToolEllipse::KisToolEllipse(KoCanvasBase * canvas)
 {
     setObjectName("tool_ellipse");
     setSupportOutline(true);
+    setIsOpacityPresetMode(true);
 
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 

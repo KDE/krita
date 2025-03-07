@@ -59,7 +59,6 @@ private Q_SLOTS:
     void slotSetReverse(bool);
     void slotSetDither(bool);
     void slotSetAntiAliasThreshold(qreal);
-    void setOpacity(qreal opacity);
 protected Q_SLOTS:
     void resetCursorStyle() override;
 

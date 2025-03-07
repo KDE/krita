@@ -99,6 +99,11 @@ public Q_SLOTS:
      */
     void setResource(int key, const KoUnit &unit);
 
+    /**
+     * @see KoResourceManager::updateConverter
+     */
+    void updateConverter(KoDerivedResourceConverterSP converter);
+
 public:
     /**
      * Returns a qvariant containing the specified resource or a standard one if the
@@ -299,6 +304,13 @@ Q_SIGNALS:
      * @see KoCanvasResource::CanvasResourceId
      */
     void canvasResourceChangeAttempted(int key, const QVariant &value);
+
+    /**
+     * This signal is emitted after an existing converter is replaced.
+     * @param key the identifying key for the resource
+     * @param sourceKey the sourceKey for the new converter
+     */
+    void converterUpdated(int key, int sourceKey);
 
 private:
     KoCanvasResourceProvider(const KoCanvasResourceProvider&);

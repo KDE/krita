@@ -1235,7 +1235,6 @@ void KisPaintopBox::sliderChanged(int n)
 
 
         KisLockedPropertiesProxySP propertiesProxy = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_resourceProvider->currentPreset()->settings());
-        propertiesProxy->setProperty("OpacityValue", opacity);
         propertiesProxy->setProperty("FlowValue", flow);
         propertiesProxy->setProperty("Texture/Pattern/Scale", patternsize);
         m_presetsEditor->readOptionSetting(m_resourceProvider->currentPreset()->settings());
@@ -1280,6 +1279,8 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
     QString  id   = KoToolManager::instance()->activeToolId();
     KisTool* tool = dynamic_cast<KisTool*>(KoToolManager::instance()->toolById(m_viewManager->canvasBase(), id));
 
+    setSliderValue("opacity", m_resourceProvider->opacity());
+
     if (tool) {
         int flags = tool->flags();
 
@@ -1291,12 +1292,6 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
 
             setSliderValue("size", m_resourceProvider->size());
             setAngleSliderValue("rotation", m_resourceProvider->brushRotation());
-
-            {
-                qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();
-                m_resourceProvider->setOpacity(opacity);
-                setSliderValue("opacity", opacity);
-            }
 
             {
                 setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());

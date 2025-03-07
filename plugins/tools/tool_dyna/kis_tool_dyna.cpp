@@ -38,6 +38,7 @@ KisToolDyna::KisToolDyna(KoCanvasBase * canvas)
         : KisToolFreehand(canvas, KisCursor::load("tool_freehand_cursor.xpm", 2, 2), kundo2_i18n("Dynamic Brush Stroke"), false)
 {
     setObjectName("tool_dyna");
+    setIsOpacityPresetMode(true);
     initDyna();
 }
 

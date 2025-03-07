@@ -23,6 +23,7 @@ KisToolPolyline::KisToolPolyline(KoCanvasBase * canvas)
 {
     setObjectName("tool_polyline");
     setSupportOutline(true);
+    setIsOpacityPresetMode(true);
 }
 
 KisToolPolyline::~KisToolPolyline()

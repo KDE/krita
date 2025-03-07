@@ -71,6 +71,7 @@ public:
     bool maskSyntheticEvents{false}; ///< Whether this tool masks synthetic events
     bool isActivated;
     QRectF lastDecorationsRect;
+    bool isOpacityPresetMode{false}; ///< Whether the opacity is preset or tool
 };
 
 #endif

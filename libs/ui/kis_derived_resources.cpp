@@ -124,22 +124,43 @@ QVariant KisEffectiveCompositeOpResourceConverter::toSource(const QVariant &valu
 }
 
 /*********************************************************************/
-/*          KisOpacityResourceConverter                              */
+/*          KisOpacityToGlobalOpacityResourceConverter               */
 /*********************************************************************/
 
-KisOpacityResourceConverter::KisOpacityResourceConverter()
+KisOpacityToGlobalOpacityResourceConverter::KisOpacityToGlobalOpacityResourceConverter()
+    : KoDerivedResourceConverter(KoCanvasResource::Opacity,
+                                 KoCanvasResource::GlobalOpacity)
+{
+}
+
+QVariant KisOpacityToGlobalOpacityResourceConverter::fromSource(const QVariant &value)
+{
+    return value;
+}
+
+QVariant KisOpacityToGlobalOpacityResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    Q_UNUSED(sourceValue);
+    return value;
+}
+
+/*********************************************************************/
+/*          KisOpacityToPresetOpacityResourceConverter               */
+/*********************************************************************/
+
+KisOpacityToPresetOpacityResourceConverter::KisOpacityToPresetOpacityResourceConverter()
     : KoDerivedResourceConverter(KoCanvasResource::Opacity,
                                  KoCanvasResource::CurrentPaintOpPreset)
 {
 }
 
-QVariant KisOpacityResourceConverter::fromSource(const QVariant &value)
+QVariant KisOpacityToPresetOpacityResourceConverter::fromSource(const QVariant &value)
 {
     KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
     return preset ? preset->settings()->paintOpOpacity() : QVariant(1.0);
 }
 
-QVariant KisOpacityResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+QVariant KisOpacityToPresetOpacityResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
 {
     KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
     if (!preset) return sourceValue;
@@ -199,7 +220,7 @@ QVariant KisFadeResourceConverter::toSource(const QVariant &value, const QVarian
 }
 
 /*********************************************************************/
-/*          KisScatterResourceConverter                                 */
+/*          KisScatterResourceConverter                              */
 /*********************************************************************/
 
 KisScatterResourceConverter::KisScatterResourceConverter()

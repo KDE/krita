@@ -209,6 +209,13 @@ public:
      */
     void removeActiveCanvasResourceDependency(int sourceKey, int targetKey);
 
+    /**
+     * Check if there is a derived resource converter with the same key
+     * and sourceKey. Remove existing converter with this key and add new
+     * converter if not.
+     */
+    bool updateConverter(KoDerivedResourceConverterSP converter);
+
 Q_SIGNALS:
     void resourceChanged(int key, const QVariant &value);
     void resourceChangeAttempted(int key, const QVariant &value);

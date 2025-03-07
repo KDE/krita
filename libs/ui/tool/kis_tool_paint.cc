@@ -122,7 +122,6 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
     switch(key) {
     case(KoCanvasResource::Opacity):
-        setOpacity(v.toDouble());
         break;
     case(KoCanvasResource::CurrentPaintOpPreset): {
         if (isActive()) {
@@ -160,25 +159,12 @@ void KisToolPaint::tryRestoreOpacitySnapshot()
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
 
-    boost::optional<qreal> opacityToRestore;
-
     KisPaintOpPresetSP newPreset = provider->currentPreset();
 
     if (newPreset) {
-        if (newPreset == m_oldPreset && newPreset->version() == m_oldPresetVersion
-            && (newPreset->isDirty() || !m_oldPresetIsDirty)) {
-
-            opacityToRestore = m_oldOpacity;
-        }
-
         m_oldPreset = newPreset;
         m_oldPresetIsDirty = newPreset->isDirty();
         m_oldPresetVersion = newPreset->version();
-        m_oldOpacity = provider->opacity();
-    }
-
-    if (opacityToRestore) {
-        provider->setOpacity(*opacityToRestore);
     }
 }
 
@@ -508,11 +494,6 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
     }
 }
 
-
-void KisToolPaint::setOpacity(qreal opacity)
-{
-    m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
-}
 
 void KisToolPaint::slotPopupQuickHelp()
 {

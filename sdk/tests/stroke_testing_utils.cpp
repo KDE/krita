@@ -103,6 +103,9 @@ KoCanvasResourceProvider* utils::createResourceManager(KisImageWSP image,
     manager->setResource(KoCanvasResource::MirrorVertical, i);
 
     i.setValue(1.0);
+    manager->setResource(KoCanvasResource::GlobalOpacity, i);
+
+    i.setValue(1.0);
     manager->setResource(KoCanvasResource::Opacity, i);
 
     i.setValue(1.0);

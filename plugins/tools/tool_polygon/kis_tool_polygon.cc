@@ -24,6 +24,7 @@ KisToolPolygon::KisToolPolygon(KoCanvasBase *canvas)
 {
     setObjectName("tool_polygon");
     setSupportOutline(true);
+    setIsOpacityPresetMode(true);
 }
 
 KisToolPolygon::~KisToolPolygon()

@@ -18,6 +18,7 @@ KisToolPath::KisToolPath(KoCanvasBase * canvas)
     : DelegatedPathTool(canvas, Qt::ArrowCursor,
                         new __KisToolPathLocalTool(canvas, this))
 {
+    setIsOpacityPresetMode(true);
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
 
     connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
@@ -124,7 +125,9 @@ QList<QPointer<QWidget> > KisToolPath::createOptionWidgets()
 
 __KisToolPathLocalTool::__KisToolPathLocalTool(KoCanvasBase * canvas, KisToolPath* parentTool)
     : KoCreatePathTool(canvas)
-    , m_parentTool(parentTool) {}
+    , m_parentTool(parentTool) {
+    setIsOpacityPresetMode(true);
+}
 
 void __KisToolPathLocalTool::paintPath(KoPathShape &pathShape, QPainter &painter, const KoViewConverter &converter)
 {

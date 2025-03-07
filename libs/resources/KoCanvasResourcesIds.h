@@ -47,6 +47,7 @@ enum CanvasResourceId {
     MirrorVerticalLock,
     MirrorVerticalHideDecorations,
     MirrorHorizontalHideDecorations,
+    GlobalOpacity,
     Opacity,
     Flow,
     Size,

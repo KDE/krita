@@ -58,6 +58,7 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
                       kundo2_i18n("Freehand Brush Stroke"))
 {
     setObjectName("tool_brush");
+    setIsOpacityPresetMode(true);
 
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 

@@ -332,9 +332,4 @@ void KisToolGradient::slotSetAntiAliasThreshold(qreal value)
     m_configGroup.writeEntry("antialiasThreshold", value);
 }
 
-void KisToolGradient::setOpacity(qreal opacity)
-{
-    m_opacity = opacity;
-}
-
 

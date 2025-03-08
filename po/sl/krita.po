@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-07 01:58+0000\n"
-"PO-Revision-Date: 2025-02-27 09:12+0100\n"
+"POT-Creation-Date: 2025-03-08 02:04+0000\n"
+"PO-Revision-Date: 2025-03-07 08:40+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -15964,13 +15964,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Delovne površine"
 
-#: krita/main.cc:586
+#: krita/main.cc:587
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Usodna napaka"
 
-#: krita/main.cc:587
+#: krita/main.cc:588
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15979,14 +15979,14 @@ msgstr ""
 "Krita ne podpira platforme Wayland. Uporabite XWayland za izvajanje Krite na "
 "Waylandu. Krita se bo zaprla."
 
-#: krita/main.cc:704 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:705 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:703
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:705
+#: krita/main.cc:706
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -17349,10 +17349,10 @@ msgid "High Surrogates"
 msgstr "Visoki nadomestki"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "Visoki nadomestki za zasebno uporabo"
+msgstr "Visoki nadomestki za zasebno rabo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
@@ -17883,10 +17883,10 @@ msgid "Warang Citi"
 msgstr "Varang citi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:260
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Dives Akuru"
-msgstr "Diveška Akuru"
+msgstr "Diveški akuru"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:261
 #, kde-format
@@ -18015,7 +18015,7 @@ msgid "Egyptian Hieroglyph Format Controls"
 msgstr "Egipčanska hieroglifna, kontrolniki oblike"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
 msgstr "Egipčanska hieroglifna, razširjena - A"
@@ -18027,7 +18027,7 @@ msgid "Anatolian Hieroglyphs"
 msgstr "Anatolska hieroglifna"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:284
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Gurung Khema"
 msgstr "Gurung Kema"
@@ -18063,7 +18063,7 @@ msgid "Pahawh Hmong"
 msgstr "Pahav hmong"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Kirat Rai"
 msgstr "Kirat-rajska"
@@ -18213,7 +18213,7 @@ msgid "Mathematical Alphanumeric Symbols"
 msgstr "Matematični številsko-črkovni simboli"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Sutton SignWriting"
 msgstr "Zapis znakovnega jezika"
@@ -18261,7 +18261,7 @@ msgid "Nag Mundari"
 msgstr "Nag-mundarijska"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ol Onal"
 msgstr "Ol Onal"
@@ -18483,7 +18483,7 @@ msgid "No Block"
 msgstr "Brez bloka"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:371
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
 msgstr "%1 različic glifov."
@@ -18529,18 +18529,17 @@ msgstr ""
 "besedilu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:37
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr "Kontekstualno preplavljanje"
+msgstr "Kontekstualno prelivanje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs with swashed glyphs depending on their context within a text."
-msgstr ""
-"Zamenja glife z preplavljenimi glifi glede na njihov kontekst v besedilu."
+msgstr "Zamenja glife z prelivnimi glifi glede na njihov kontekst v besedilu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
 #, kde-format
@@ -18557,16 +18556,16 @@ msgstr ""
 "Nadomešča zaporedja glifov z ligaturami, namenjenimi tipografskemu učinku."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:45
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr "Zadnji glif na nadomestnih črtah"
+msgstr "Nadomestki končnih znakov vrstic"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr "Nadomešča glife z njihovimi oblikami za konec vrstice."
+msgstr "Nadomesti glife z njihovimi oblikami za konec vrstice."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
@@ -18576,13 +18575,13 @@ msgid "Historical Forms"
 msgstr "Zgodovinski znaki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their historical forms."
-msgstr "Nadomešča glife z njihovimi zgodovinskimi oblikami."
+msgstr "Nadomesti glife z njihovimi zgodovinskimi oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:54
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences glyphs with ligatures that were in use in the past, but "
@@ -18592,13 +18591,13 @@ msgstr ""
 "danes pa so redke."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:57
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
 msgstr "Nadomestki za poravnavo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their alternates meant for justification."
 msgstr "Nadomešča glife z njihovimi nadomestki, namenjenimi poravnavi."
@@ -18610,10 +18609,10 @@ msgid "Standard Ligatures"
 msgstr "Običajne ligature"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr "Nadomešča glife zaporedij s skupnimi ligaturami."
+msgstr "Nadomešča glife zaporedij s običajnimi ligaturami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
@@ -18622,7 +18621,7 @@ msgid "Left Bounds"
 msgstr "Leve meje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "This adjusts glyphs so there is no space at the left side."
 msgstr "S tem prilagodite glife, da na levi strani ni prostora."
@@ -18634,7 +18633,7 @@ msgid "Localized Forms"
 msgstr "Jezikovno prilagojene oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
 msgstr "S tem glife nadomestite z različicami, ki so specifične za jezik."
@@ -18708,31 +18707,31 @@ msgstr ""
 "kategorijami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr "Preplavitev"
+msgstr "Znakovni prelivi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr "Nadomesti glife s preplavljenimi nadomestki."
+msgstr "Nadomesti glife s prelivnimi zamenjavami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr "Sestava / razgradnja glifov"
+msgstr "Sestavljivi / razstavljivi glifi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
-"To sestavlja ali razgrajuje grafeme, tako da se lahko nastali glifi pozneje "
+"To sestavlja ali razstavlja grafeme, tako da se lahko nastali glifi pozneje "
 "ponovno sestavijo. Običajno se uporablja za ravnanje z diakritičnimi znaki."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
@@ -18755,39 +18754,38 @@ msgid "Mark Positioning"
 msgstr "Označne postavitve"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "This controls the positioning of mark glyphs on base glyphs. Commonly used "
 "for diacritics."
 msgstr ""
-"S tem nadzirate umeščanje oznak glifov na osnovnih glifih. Pogosto se "
+"S tem nadzirate umeščanje glifov oznak na osnovnih glifih. Pogosto se "
 "uporablja za diakritične znake."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:112
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "This controls the positioning of mark glyphs onto other mark glyphs. "
 "Commonly used for diacritics."
 msgstr ""
-"To nadzoruje pozicioniranje oznak na drugih oznakah. Pogosto se uporablja za "
-"diakritične znake."
+"S tem nadzirate umeščanje glifov oznak na drugih glifih oznak. Pogosto se "
+"uporablja za diakritične znake."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr "Zahtevani kontekstualni nadomestki"
+msgstr "Zahtevane vsebinske zamenjave"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs contextually with alternates, required to make the font work."
 msgstr ""
-"Kontekstualno nadomesti glife z nadomestki, ki so potrebni za delovanje "
-"pisave."
+"Vsebinsko nadomesti glife z zamenjavami, ki so potrebne za delovanje pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:119
 #, kde-format
@@ -18824,7 +18822,7 @@ msgid "Optical size"
 msgstr "Optična velikost"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Indicates how much the font is suitable for its current size. Does nothing "
@@ -18846,16 +18844,16 @@ msgid "This controls vertical kerning on the font."
 msgstr "S tem nadzirate navpično spodsekavanje pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
 msgstr "Nadomestni ulomki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
-msgstr "Nadomešča številke, ločene s poševnico, z obliko ulomka matice."
+msgstr "Nadomesti številke, ločene s poševnico, s klasično obliko ulomka."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, kde-format
@@ -18864,7 +18862,7 @@ msgid "Denominators"
 msgstr "Imenovalci"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces figures with forms that are suited to represent the denominator in "
@@ -18896,7 +18894,7 @@ msgid "Flattened accent forms"
 msgstr "Ploske oblike preglasov"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
 msgstr "Nadomesti poudarke na velikih črkah s sploščenimi oblikami."
@@ -18908,7 +18906,7 @@ msgid "Fractions"
 msgstr "Ulomki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces figures separated by a slash with a proper diagonal fraction form. "
@@ -18917,8 +18915,8 @@ msgid ""
 "with numerators before the slash and denominators after the slash."
 msgstr ""
 "Nadomesti številke, ločene s poševnico, z ustrezno diagonalno obliko ulomka. "
-"Če ima pisava lastnosti števca in imenovalca, številke pa so ločene z "
-"\"poševnico ulomka\" (U+2044), bo to zamenjalo številke s števci pred "
+"Če ima pisava lastnosti števca in imenovalca, številke pa so ločene s "
+"»poševnico ulomka« (U+2044), bo to zamenjalo številke s števci pred "
 "poševnico in imenovalci za poševnico."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
@@ -18928,27 +18926,26 @@ msgid "Lining Figures"
 msgstr "Črtni znaki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces oldstyle figures with lining figures, which harmonize well with "
 "uppercase letters."
 msgstr ""
-"Nadomešča stare figure s podlogami, ki se dobro ujemajo z velikimi črkami."
+"Nadomesti stare oblike s podlogami, ki se dobro ujemajo z velikimi črkami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:161
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr "Matematična grščina"
+msgstr "Grški matematični znaki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
-msgstr ""
-"Nadomesti navadno grško pisavo z glifi, namenjenimi za matematično uporabo."
+msgstr "Nadomesti navadno grško pisavo z glifi, namenjenimi matematični rabi."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
@@ -18957,19 +18954,19 @@ msgid "Alternate Annotation Forms"
 msgstr "Nadomestni označevalni liki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr "Nadomesti števke in črke z notacijskimi oblikami, kot je obkroženo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Numeratorji"
+msgstr "Števci"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces figures with forms that are suited to represent the numerator in a "
@@ -18979,50 +18976,49 @@ msgstr ""
 "ulomku."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:173
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr "Figure v starem slogu"
+msgstr "Staroslogovni znaki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces lining figures with oldstyle figures, which harmonize well with "
 "lowercase letters."
 msgstr ""
-"Nadomešča črtne figure s starimi figurami, ki se dobro ujemajo z malimi "
-"črkami."
+"Nadomešča črtne figure s starimi znaki, ki se dobro ujemajo z malimi črkami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
 msgstr "Števniki"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces letters that follow figures with their ordinal forms."
 msgstr "Nadomešča črke, ki sledijo številkam, z njihovimi vrstnimi oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Sorazmerne sličice"
+msgstr "Sorazmerne številke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces tabular figures with proportional figures."
 msgstr "Nadomesti tabelarne številke s sorazmernimi številkami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:185
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr "Znanstveni podrejeni"
+msgstr "Znanstveni zapisi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19072,13 +19068,13 @@ msgid "Replaces glyphs with ones more suited for superscript."
 msgstr "Zamenja glife s tistimi, ki so bolj primerni za nadpisano besedilo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
 msgstr "Tabelarne številke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces proportional figures with tabular figures."
 msgstr "Nadomesti sorazmerne številke s tabelarnimi številkami."
@@ -19090,23 +19086,23 @@ msgid "Slashed Zero"
 msgstr "Prečrtana ničla"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces the number zero with one that has a slash in the middle, which can "
 "help prevent confusion with similar glyphs like the letter 'O'."
 msgstr ""
-"Zamenja številko nič s poševnico na sredini, kar lahko pomaga preprečiti "
-"zmedo s podobnimi glifi, kot je črka »O«."
+"Zamenja številko nič s takšno, ki ima poševnico na sredini, kar lahko pomaga "
+"preprečiti zmedo s podobnimi glifi, kot je črka »O«."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr "Oblike, ki razlikujejo med velikimi in malimi črkami"
+msgstr "Prilagoditve za velike črke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
@@ -19122,47 +19118,47 @@ msgid "Capital Spacing"
 msgstr "Razmik velikih črk"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts inter-glyph spacing for all-capital text."
 msgstr "Prilagodi razmik med glifi za besedilo z velikimi črkami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:219
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
 msgstr "Drobne velike črke iz velikih črk"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces uppercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
-"Nadomešča velike črke z majhnimi velikimi oblikami, ki so bližje višini X "
-"pisave kot majhne velike oblike."
+"Nadomešča velike črke z drobnimi oblikami velikih črk, ki so bližje višini X "
+"pisave kot male oblike velikih črk."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr "Male velike črke iz velikih črk"
+msgstr "Male velike črke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr "Nadomešča velike črke z majhnimi velikimi oblikami."
+msgstr "Nadomešča velike črke z oblikami majhnih velikih črk."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
 msgstr "Drobne velike črke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
@@ -19178,7 +19174,7 @@ msgid "Small Capitals"
 msgstr "Male velike črke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces lowercase letters with small capital forms."
 msgstr "Nadomesti male črke z majhnimi velikimi črkami."
@@ -19190,132 +19186,132 @@ msgid "Titling"
 msgstr "Naslavljanje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternate forms suited for header text."
 msgstr "Zamenja glife z nadomestnimi oblikami, primernimi za besedilo naslova."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Unicase"
 msgstr "Istovrstne črke"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
-msgstr "Nadomešča zgornje in male glife z enkratnimi glifi."
+msgstr "Nadomešča glife velikih in malih črk z glifi istovrstnih črk."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
 msgstr "Oblike nad osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
-"Nadzira zamenjavo oblik nad osnovnico  v kmerski in drugih indijskih pisavah"
+"Nadzira zamenjavo oblik nad osnovnico v kmerski in drugih indijskih pisavah."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Above-base Mark Positioning"
 msgstr "Umeščanje oznak nad osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
 msgstr "Nadzira umestitev oznak nad osnovnico za indijske pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr "Zamenjave nad osnovnico"
+msgstr "Zamenjave ligature nad osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
 msgstr "Nadzira ligature oznak nad osnovnico za indijske pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Akhand"
-msgstr "Akhand"
+msgstr "Akand"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:258
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr "Nadzira ligature Akhand za indijske pisave."
+msgstr "Nadzira akandske ligature za indijske pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
 msgstr "Oblike pod osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr "Nadzira zamenjavo oblik pod osnovnico v indijskih pisavah."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Below-base Mark Positioning"
 msgstr "Umeščanje oznak pod osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
-msgstr "Nadzira umeščanje pod oznako osnovnice za indijske pisave."
+msgstr "Nadzira umeščanje pod osnovnico za indijske pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr "Zamenjave pod osnovico"
+msgstr "Zamenjave ligature pod osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
-msgstr "Nadzira ligature pod oznako osnovnice za indijske pisave."
+msgstr "Nadzira ligature pod osnovnico za indijske pisave."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr "Konjunktna oblika po ro"
+msgstr "Združene oblike za znakom Ro"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
 msgstr "Nadzira glife, ki sledijo spojenemu Ro v kmerski pisavi."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr "Konjunktne oblike"
+msgstr "Konjugirane oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls conjunct forms in Indic scripts."
-msgstr "Nadzoruje konjunktne oblike v indijskih pisavah."
+msgstr "Nadzoruje konjugirane oblike v indijskih pisavah."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
 #, kde-format
@@ -19324,60 +19320,60 @@ msgid "Distances"
 msgstr "Razdalje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Controls distances in Indic scripts, to avoid collisions."
 msgstr "Nadzira razdalje v indijskih pisavah, da se izognete trkom."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:285
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Half Forms"
 msgstr "Polovične oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
 msgstr "Nadomesti soglasnike v indijskih pisavah z njihovimi pol-oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
 msgstr "Halantne oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
 msgstr ""
 "Nadomešča soglasnike v indijskih pisavah z njihovimi halantnimi oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
 msgstr "Oblike nukta"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
-"Nadomešča soglasnike v kombinaciji z Nukto v indijskih pisavah z njihovimi "
-"oblikami Nukta."
+"Nadomešča soglasnike v kombinaciji z nukto v indijskih pisavah z njihovimi "
+"oblikami nukta."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Pre-base Forms"
-msgstr "Predosnovnične oblike"
+msgstr "Oblike pred osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
@@ -19393,7 +19389,7 @@ msgid "Pre-base Substitutions"
 msgstr "Zamenjave ligature pred osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
 msgstr ""
@@ -19401,13 +19397,13 @@ msgstr ""
 "pisavah."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr "Oblike po osnovnici"
+msgstr "Oblike za osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces consonants with their post-base forms in Gurmukhi, Malayalam, and "
@@ -19417,13 +19413,13 @@ msgstr ""
 "malajalamščini in kmerščini."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:309
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr "Zamenjave po osnovnici"
+msgstr "Zamenjave ligature za osnovnico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
@@ -19431,13 +19427,13 @@ msgstr ""
 "Nadomesti osnovne glife in glife po osnovnici z ligaturo v indijskih pisavah."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr "Oblike Rakar"
+msgstr "Oblike rakar"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
@@ -19445,29 +19441,28 @@ msgstr ""
 "oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr "Oblika"
+msgstr "Oblike ref"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
-"Nadomešča oblike Reph v indijskih pisavah s soglasnikom in halantnim "
+"Nadomešča oblike ref v indijskih pisavah s soglasnikom in halantnim "
 "zaporedjem."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr "Inačice vattu"
+msgstr "Izpeljanke Vattu"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
@@ -19477,14 +19472,14 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Half-width Spacing"
 msgstr "Kontekstualni razmik polovične širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
@@ -19495,17 +19490,17 @@ msgstr ""
 "ločila."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr "Centrirana ločila CJK"
+msgstr "Usredinjeni ločilni znaki CJK"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
-"Prilagodi ločila, ki niso centrirana tako, da so centrirana v skriptih CJK."
+"Prilagodi ločila, ki niso usredinjena, tako da so usredinjena v pisavah CJK."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
 #, kde-format
@@ -19514,7 +19509,7 @@ msgid "Expert Forms"
 msgstr "Napredne oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
@@ -19527,13 +19522,13 @@ msgid "Full Widths"
 msgstr "Polne širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces or respaces proportional glyphs with full-width glyphs."
 msgstr "Nadomesti ali spremeni razmik sorazmernih glifov z glifi polne širine."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:344
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Respaces full-width glyphs to be half-width, common examples include CJK "
@@ -19565,7 +19560,7 @@ msgid "Hangul"
 msgstr "Hangulska"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
 msgstr "Nadomesti hanjo v korejščini z ustreznim hangulom. Zastarelo."
@@ -19593,7 +19588,7 @@ msgid "Half Widths"
 msgstr "Polovične širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces or respaces proportional or full-width glyphs with half-width "
@@ -19609,7 +19604,7 @@ msgid "Italics"
 msgstr "Ležeče"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces Latin glyphs in a CJK font with their italic forms."
 msgstr "Nadomesti latinične glife v pisavi CJK z njihovimi ležečimi oblikami."
@@ -19664,18 +19659,18 @@ msgstr ""
 "Nadomesti standardno obliko kanji v japonskih pisavah z obliko JIS2004."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
 msgstr "Vodilne oblike Jamo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
 msgstr ""
-"Nadomešča sekvence vodilnega razreda Hangul Jamo s kombinirano vodilno "
+"Nadomesti zaporedja vodilnega razreda Hangul Jamo s kombinirano vodilno "
 "obliko."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
@@ -19685,19 +19680,19 @@ msgid "NLC Kanji Forms"
 msgstr "Oblike Kanji NLC"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
 msgstr "Nadomesti standardno obliko kanji v japonskih pisavah z oblikami NLC."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
 msgstr "Sorazmerne nadomestne širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
@@ -19710,7 +19705,7 @@ msgid "Proportional Kana"
 msgstr "Sorazmerna Kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr "Nadomesti kano polne širine v japonskih pisavah s sorazmerno kano."
@@ -19722,7 +19717,7 @@ msgid "Proportional Widths"
 msgstr "Sorazmerna širina"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr "Nadomesti glife enakomerne širine s sorazmernimi glifi."
@@ -19734,13 +19729,13 @@ msgid "Quarter Widths"
 msgstr "Četrtinske širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with quarter-width glyphs."
 msgstr "Nadomesti glife z glifi četrtine širine."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:407
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
 msgstr "Oblike za fonetični zapis"
@@ -19768,19 +19763,19 @@ msgid "Replaces glyphs in CJK fonts with 'simplified' forms."
 msgstr "Zamenja glife v pisavah CJK s »poenostavljenimi« oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:415
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
 msgstr "Zaključne oblike Jamo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of trailing class Hangul Jamo with a combined trailing "
 "form."
 msgstr ""
-"Nadomesti zaporedja sledilnega razreda Hangul Jamo s kombinirano zaključno "
+"Nadomesti zaporedja zaključnega razreda Hangul Jamo s kombinirano zaključno "
 "obliko."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
@@ -19790,7 +19785,7 @@ msgid "Traditional Name Forms"
 msgstr "Tradicionalne oblike imen"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
@@ -19806,7 +19801,7 @@ msgid "Traditional Forms"
 msgstr "Tradicionalne oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr "Zamenja glife v pisavah CJK s »tradicionalnimi« oblikami."
@@ -19818,7 +19813,7 @@ msgid "Third Widths"
 msgstr "Tretjinske širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with third-width glyphs."
 msgstr "Nadomesti glife z glifi tretjinske širine."
@@ -19848,32 +19843,32 @@ msgid "Repositions glyphs so they look more appropriate in horizontal layout."
 msgstr "Premesti glife tako, da so videti primernejši v vodoravni postavitvi."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr "Navpični kontekstni razmik polovične širine"
+msgstr "Navpični kontekstualni razmik polovične širine"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Zamenjave za navpično pisanje"
+msgstr "Zamenjave znakov za navpično pisanje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
 "Zamenja glife v pisavah CJK s tistimi, ki so primerni za navpično pisanje."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr "Metrike nadomestnih navpičnih polovičnih širin"
+msgstr "Nadomestne širine za navpično pisanje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
@@ -19881,13 +19876,13 @@ msgstr ""
 "Premesti glife tako, da so v kontekstu navpičnega pisanja polovične širine."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
 msgstr "Samoglasniške oblike Jamo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
@@ -19902,7 +19897,7 @@ msgid "Vertical Kana Alternates"
 msgstr "Dodatni navpični znaki Kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for vertical "
@@ -19925,7 +19920,7 @@ msgid ""
 msgstr "Premesti glife, tako da so sorazmerni v kontekstu navpičnega pisanja."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
 msgstr "Zamenjave za navpično pisanje"
@@ -19938,10 +19933,10 @@ msgstr ""
 "Nadomesti podmnožico glifov z zasukanimi različicami za navpično postavitev."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "Pretvorbe znakov za navpično pisanje"
+msgstr "Zamenjave znakov za navpično pisanje in sukanje"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -19960,7 +19955,7 @@ msgid "Cursive Positioning"
 msgstr "Položajno prilagajanje kurzive"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts the position of glyphs so they cursively connect."
 msgstr "Prilagodi položaj glifov tako, da se v ležeči postavitvi povežejo."
@@ -19972,7 +19967,7 @@ msgid "Terminal Forms"
 msgstr "Zaključne oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces the final glyph in a sequence of glyphs in a joined script with its "
@@ -19987,7 +19982,7 @@ msgid "Terminal Form #2"
 msgstr "Zaključne oblike št. 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:482
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces the Alaph glyph at the end of Syriac words with its appropriate "
@@ -20018,7 +20013,7 @@ msgid "Initial Forms"
 msgstr "Začetne oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces the first glyph in a sequence of glyphs in a joined script with its "
@@ -20027,7 +20022,7 @@ msgstr ""
 "Nadomesti prvi glif v zaporedju glifov v spojeni pisavi z začetno obliko."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:494
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces a glyph in a sequence of glyphs in a joined script with its "
@@ -20037,13 +20032,13 @@ msgstr ""
 "obliko."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:497
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right glyph alternates"
-msgstr "Nadomestki glifov od leve proti desni"
+msgstr "Zamenjave glifov od leve proti desni"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:498
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right alternates."
 msgstr "Nadomesti glife z njihovimi nadomestki od leve proti desni."
@@ -20055,32 +20050,32 @@ msgid "Left-to-right mirrored forms"
 msgstr "Zrcaljene oblike z leve proti desni"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their left-to-right mirrored forms."
-msgstr "Nadomešča glify z njihovimi zrcalnimi oblikami od leve proti desni."
+msgstr "Nadomesti glife z njihovimi zrcalnimi oblikami od leve proti desni."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:505
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr "Medialne oblike"
+msgstr "Sredinske oblike"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Replaces glyphs in the middle of a sequence of glyphs in a joined script "
 "with their medial forms."
 msgstr ""
 "Nadomesti glife na sredini zaporedja glifov v združeni pisavi z njihovimi "
-"medialnimi oblikami."
+"sredinnskimi oblikami."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:509
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr "Medialne oblike #2"
+msgstr "Sredinske oblike 2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20091,13 +20086,13 @@ msgid ""
 msgstr "Nadomesti glif Alaf na sredini starosirskih besed z ustrezno obliko."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:513
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "mset"
 msgstr "mset"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:514
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Positions Arabic combining marks in fonts for Windows 95 using glyph "
@@ -20131,26 +20126,26 @@ msgid "Replaces glyphs with their right-to-left mirrored forms."
 msgstr "Nadomesti glife z njihovimi zrcalnimi oblikami od desne proti levi."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:525
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr "Raztezanje razgradnje glifov"
+msgstr "Razstavljanje raztezanja glifov"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs that need to stretch with stretchable glyphs."
-msgstr "Nadomešča glife, ki jih je potrebno raztegniti, z raztegljivimi glifi."
+msgstr "Nadomesti glife, ki jih je potrebno raztegniti, z raztegljivimi glifi."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:536
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
 msgstr "Slogovni sklop %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternates."
 msgstr "Zamenja glife z nadomestki."
@@ -21371,8 +21366,8 @@ msgid "Processing"
 msgstr "V obdelavi"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:382 libs/ui/KisMainWindow.cpp:1396
-#: libs/ui/KisMainWindow.cpp:1766 libs/ui/KisMainWindow.cpp:1779
+#: libs/ui/KisApplicationArguments.cpp:382 libs/ui/KisMainWindow.cpp:1392
+#: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -22118,8 +22113,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Slika RGBE Radiance"
 
-#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2137
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/libkis/Document.cpp:991 libs/ui/KisMainWindow.cpp:2133
+#: libs/ui/KisMainWindow.cpp:2212
 #, kde-format
 msgid "Import frames"
 msgstr "Uvozi sličice"
@@ -23463,11 +23458,11 @@ msgstr "Krajevni viri"
 #: libs/ui/KisApplication.cpp:1177 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
-#: libs/ui/KisMainWindow.cpp:978 libs/ui/KisMainWindow.cpp:1048
-#: libs/ui/KisMainWindow.cpp:1177 libs/ui/KisMainWindow.cpp:1274
-#: libs/ui/KisMainWindow.cpp:1997 libs/ui/KisMainWindow.cpp:2006
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2204
-#: libs/ui/KisMainWindow.cpp:2223 libs/ui/KisMainWindow.cpp:2846
+#: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
+#: libs/ui/KisMainWindow.cpp:1173 libs/ui/KisMainWindow.cpp:1270
+#: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
+#: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2842
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
@@ -23990,7 +23985,7 @@ msgid "Delete resource"
 msgstr "Izbriši vir"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2643
+#: libs/ui/KisMainWindow.cpp:2639
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -24465,7 +24460,7 @@ msgstr ""
 "Upodabljanje sličic animacije ni uspelo! Izhodne datoteke so nepopolne."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2245
+#: libs/ui/KisMainWindow.cpp:2241
 #, kde-format
 msgid "Render Animation"
 msgstr "Upodobi animacijo"
@@ -26538,7 +26533,7 @@ msgid "Numerical"
 msgstr "Številsko"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:142
-#: libs/ui/KisMainWindow.cpp:1142
+#: libs/ui/KisMainWindow.cpp:1138
 #, kde-format
 msgid "Import Images"
 msgstr "Uvozi slike"
@@ -26655,7 +26650,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Vnesite novo ime sloga"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2654
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2650
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26943,7 +26938,7 @@ msgstr "Namesti barvne profile"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1410
 #, kde-format
 msgid "Tablet Input API (currently active API: \"%1\")"
-msgstr ""
+msgstr "API za vnos tabličnega računalnika (trenutno aktivni API: »%1«)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1424
 #, kde-format
@@ -30680,7 +30675,7 @@ msgstr "Trenutna prednastavitev čopiča"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1023
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1019
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -35108,34 +35103,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Delovna povr&šina"
 
-#: libs/ui/KisMainWindow.cpp:594
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:320
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Pokaži orodno vrstico %1"
 
-#: libs/ui/KisMainWindow.cpp:596
+#: libs/ui/KisMainWindow.cpp:592
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:322
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Skrij orodno vrstico %1"
 
-#: libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/KisMainWindow.cpp:1016
 #, kde-format
 msgid "Save as %1"
 msgstr "Shrani kot %1"
 
-#: libs/ui/KisMainWindow.cpp:1048
+#: libs/ui/KisMainWindow.cpp:1044
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Datoteka %1 ne obstaja."
 
-#: libs/ui/KisMainWindow.cpp:1142
+#: libs/ui/KisMainWindow.cpp:1138
 #, kde-format
 msgid "Open Images"
 msgstr "Odpri slike"
 
-#: libs/ui/KisMainWindow.cpp:1275
+#: libs/ui/KisMainWindow.cpp:1271
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -35148,44 +35143,44 @@ msgstr ""
 "\n"
 "Izberite mesto, kjer prvotna datoteka ne bo prepisana!"
 
-#: libs/ui/KisMainWindow.cpp:1331
+#: libs/ui/KisMainWindow.cpp:1327
 #, kde-format
 msgid "Exporting"
 msgstr "Izvažanje"
 
-#: libs/ui/KisMainWindow.cpp:1331
+#: libs/ui/KisMainWindow.cpp:1327
 #, kde-format
 msgid "Saving As"
 msgstr "Shranjevanje pod drugim imenom"
 
-#: libs/ui/KisMainWindow.cpp:1745
+#: libs/ui/KisMainWindow.cpp:1741
 #, kde-format
 msgid "Create new document"
 msgstr "Ustvari nov dokument"
 
-#: libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1765
 #, kde-format
 msgid "Custom Document"
 msgstr "Dokument po meri"
 
-#: libs/ui/KisMainWindow.cpp:1781
+#: libs/ui/KisMainWindow.cpp:1777
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Ustvari iz odložišča"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1962
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Plasti/maske"
 
-#: libs/ui/KisMainWindow.cpp:1992
+#: libs/ui/KisMainWindow.cpp:1988
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Nimate omogočenih svežnjev virov."
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:1992
 #, kde-format
 msgid ""
 "\n"
@@ -35196,7 +35191,7 @@ msgstr ""
 "Prednastavitev čopiča ni na voljo. Pred nadaljevanjem omogočite sveženj, ki "
 "vsebuje prednastavitve.\n"
 
-#: libs/ui/KisMainWindow.cpp:2006
+#: libs/ui/KisMainWindow.cpp:2002
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -35207,7 +35202,7 @@ msgstr ""
 "\n"
 "Na voljo so samo vaši krajevni viri."
 
-#: libs/ui/KisMainWindow.cpp:2145 libs/ui/KisMainWindow.cpp:2223
+#: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2219
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -35216,40 +35211,40 @@ msgstr ""
 "Animacije ni bilo mogoče do konca uvoziti:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2200
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Ustvarjanje novega dokumenta ni uspelo. Uvoz animacije je prekinjen."
 
-#: libs/ui/KisMainWindow.cpp:2634
+#: libs/ui/KisMainWindow.cpp:2630
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Uvozi delovne površine ..."
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2645
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2653
+#: libs/ui/KisMainWindow.cpp:2649
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nova delovna površina ..."
 
-#: libs/ui/KisMainWindow.cpp:2697
+#: libs/ui/KisMainWindow.cpp:2693
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2700
+#: libs/ui/KisMainWindow.cpp:2696
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2869
+#: libs/ui/KisMainWindow.cpp:2865
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35258,19 +35253,19 @@ msgstr ""
 "Vstavek za upravljanje barv Krita LittleCMS ni nameščen. Krita se bo zdaj "
 "zaprla."
 
-#: libs/ui/KisMainWindow.cpp:2885
+#: libs/ui/KisMainWindow.cpp:2881
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Napaka pri namestitvi"
 
-#: libs/ui/KisMainWindow.cpp:2995
+#: libs/ui/KisMainWindow.cpp:2991
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teme"
 
-#: libs/ui/KisMainWindow.cpp:3054
+#: libs/ui/KisMainWindow.cpp:3050
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Razširitveni razmikalnik"
@@ -44829,24 +44824,22 @@ msgid "Optical Size"
 msgstr "Optična velikost"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Odpri"
+msgstr "Vključeno"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "izključeno"
+msgstr "Izključeno"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "Oznaka funkcije OpenType"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format
@@ -60673,7 +60666,6 @@ msgid "Mutator"
 msgstr "Mutator"
 
 #: plugins/python/mutator/mutator.py:166
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr ""
@@ -60685,7 +60677,6 @@ msgid "Size Mutation: "
 msgstr "Mutacija velikosti: "
 
 #: plugins/python/mutator/mutator.py:175
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr ""
@@ -60697,7 +60688,6 @@ msgid "Rotation Mutation: "
 msgstr "Mutacija sukanja: "
 
 #: plugins/python/mutator/mutator.py:184
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr ""
@@ -60709,7 +60699,6 @@ msgid "Opacity Mutation: "
 msgstr "Mutacija prekrivnosti: "
 
 #: plugins/python/mutator/mutator.py:193
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr ""
@@ -60720,7 +60709,6 @@ msgid "Flow Mutation: "
 msgstr "Mutacija toka: "
 
 #: plugins/python/mutator/mutator.py:202
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
@@ -60729,12 +60717,10 @@ msgstr ""
 "ospredja v Kriti."
 
 #: plugins/python/mutator/mutator.py:204
-#, fuzzy
 msgid "Hue Mutation: "
 msgstr "Mutacija odtenka: "
 
 #: plugins/python/mutator/mutator.py:211
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
@@ -60747,7 +60733,6 @@ msgid "Saturation Mutation: "
 msgstr "Mutacija nasičenosti: "
 
 #: plugins/python/mutator/mutator.py:220
-#, fuzzy
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
@@ -65733,52 +65718,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Krita Tablet Support"
-#~ msgstr "Podpora Krita za grafične tablice"
-
-#~ msgid ""
-#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
-#~ "you have a drawing tablet, please make sure the tablet driver is properly "
-#~ "installed."
-#~ msgstr ""
-#~ "Gonilnika WinTab ni mogoče naložiti in ni najdenih naprav s peresom za "
-#~ "Windows. Če imate grafično tablico, se prepričajte, da je gonilnik za "
-#~ "grafično tablico pravilno nameščen."
-
-#~ msgid ""
-#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-#~ "the tablet driver is properly installed."
-#~ msgstr ""
-#~ "Gonilnika WinTab ni mogoče naložiti. Če imate grafično tablico, se "
-#~ "prepričajte, da je gonilnik za grafično tablico pravilno nameščen."
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 odmik: %3,%4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Wintab)"
-#~ msgstr "%1 (Wintab)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Izberite ločljivost zaslona"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
-#~ "not agree on the size of the screen your tablet is connected to. Please "
-#~ "select the right option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Gonilnik za risalno tablico in sistem Windows se ne "
-#~ "strinjata glede velikosti zaslona, s katerim je povezana vaša tablica. "
-#~ "Izberite pravo možnost.</p></body></html>"
-
-#~ msgid "If both are wrong, enter the size manually:"
-#~ msgstr "Če sta obe napačni, vnesite velikost ročno:"
-
-#~ msgid "Do not ask again (hold Shift to ask again)"
-#~ msgstr "Ne sprašuj več (držite pritisnjeno dvigalko, da znova vprašate)"

@@ -44233,19 +44233,19 @@ msgstr "光学大小"
 #, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr ""
+msgstr "开"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
 #, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr ""
+msgstr "关"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "OpenType 功能标签"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format

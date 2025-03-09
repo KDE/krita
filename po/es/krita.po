@@ -1,4 +1,4 @@
-# Translation of krita to Spanish
+# Spanish translations for krita.po package.
 #
 # --- kritalibs
 # Spanish translations for kritalibs.po package.
@@ -54,7 +54,7 @@
 # SPDX-FileCopyrightText: 2006 Juan Manuel García Molina <juanma@superiodico.net>
 # SPDX-FileCopyrightText: 2007, 2009, 2010 Enrique Matias Sanchez (aka Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2007 Jaime Robles <jaime@kde.org>
-# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015, 2025 Eloy Cuadra <ecuadra@eloihr.net>
+# SPDX-FileCopyrightText: 2008, 2011, 2014, 2015 Eloy Cuadra <ecuadra@eloihr.net>
 # SPDX-FileCopyrightText: 2009 Enrique Matias Sanchez (Quique) <cronopios@gmail.com>
 # SPDX-FileCopyrightText: 2011 Cristina Yenyxe González García <the.blue.valkyrie@gmail.com>
 # SPDX-FileCopyrightText: 2011, 2012, 2013, 2014, 2015 Raul Gonzalez <raulgf83@gmail.com>
@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-08 02:04+0000\n"
-"PO-Revision-Date: 2025-03-01 12:25+0100\n"
+"PO-Revision-Date: 2025-03-09 02:06+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -17147,7 +17147,7 @@ msgstr "Radicales kangxi"
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Description Characters"
-msgstr "Caracteres de descripción de ideogramas"
+msgstr "Caracteres de descripción ideográfica"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
 #, kde-format
@@ -18143,7 +18143,7 @@ msgstr "Miao"
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Symbols and Punctuation"
-msgstr ""
+msgstr "Símbolos y puntuación ideográfica"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:294
 #, kde-format
@@ -18203,7 +18203,7 @@ msgstr "Nushu"
 #, kde-format
 msgctxt "@title"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployé"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:304
 #, kde-format
@@ -18215,7 +18215,7 @@ msgstr "Controles de formato taquigráfico"
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "Suplemento de símbolos para informática heredada"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
 #, kde-format
@@ -18248,11 +18248,10 @@ msgid "Kaktovik Numerals"
 msgstr "Numerales kaktovik"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
-#, fuzzy, kde-format
-#| msgid "Numerical"
+#, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr "Numérico"
+msgstr "Números mayas"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
@@ -18348,13 +18347,13 @@ msgstr "Ádlam"
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "Números siyaq índicos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "Números siyaq otomanos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
@@ -18384,19 +18383,19 @@ msgstr "Naipes"
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr ""
+msgstr "Suplemento alfanumérico rodeado"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Ideographic Supplement"
-msgstr ""
+msgstr "Suplemento ideográfico rodeado"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr ""
+msgstr "Símbolos y pictogramas diversos"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
 #, kde-format
@@ -18456,7 +18455,7 @@ msgstr "Símbolos y pictogramas extendidos A"
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "Símbolos para informática heredada"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:346
 #, kde-format
@@ -18498,7 +18497,7 @@ msgstr "Extensión I de ideogramas unificados CJK"
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "Suplemento de ideogramas de compatibilidad CJK"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
@@ -18528,13 +18527,13 @@ msgstr "Suplemento de selectores de variación"
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "Área de uso privado suplementario A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "Área de uso privado suplementario B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
 #, kde-format
@@ -18546,7 +18545,7 @@ msgstr "Sin bloque"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "%1 glyph variants."
-msgstr ""
+msgstr "%1 variantes de glifos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
 #, kde-format
@@ -18627,7 +18626,7 @@ msgstr ""
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with their line-end forms."
-msgstr ""
+msgstr "Sustituye glifos con sus formas de fin de línea."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
@@ -18663,18 +18662,16 @@ msgid "Replaces glyphs with their alternates meant for justification."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Luz normal A"
+msgstr "Ligaduras estándar"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces sequences glyphs with common ligatures."
-msgstr ""
+msgstr "Sustituye secuencias de glifos con ligaduras comunes."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
 #, kde-format
@@ -18689,17 +18686,16 @@ msgid "This adjusts glyphs so there is no space at the left side."
 msgstr "Esto ajusta los glifos para que no haya espacio en el lado izquierdo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
-#, fuzzy, kde-format
-#| msgid "Local Resources"
+#, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "Recursos locales"
+msgstr "Formas localizadas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
 msgctxt "@tooltip"
 msgid "This replaces glyphs with language specific versions."
-msgstr ""
+msgstr "Sustituye glifos con versiones específicas del idioma."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
 #, kde-format
@@ -18727,7 +18723,7 @@ msgstr "Ornamentos"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ornaments for decorative purposes."
-msgstr ""
+msgstr "Sustituye glifos con ornamentos con propósitos decorativos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
 #, kde-format
@@ -18766,24 +18762,26 @@ msgid ""
 "Replaces glyphs with stylistic alternates that do not fit in other "
 "categories."
 msgstr ""
+"Sustituye glifos con alternativas estilísticas que no se ajustan a otras "
+"categorías."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:93
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "Swash"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with swashed alternates."
-msgstr ""
+msgstr "Sustituye glifos con alternativas con swash."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:99
 #, kde-format
 msgctxt "@title"
 msgid "Glyph Composition/Decomposition"
-msgstr ""
+msgstr "Composición/descomposición de glifos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:100
 #, kde-format
@@ -18792,6 +18790,8 @@ msgid ""
 "This composes or decomposes graphemes so that the resulting glyphs can later "
 "be recomposed. Commonly used to handle diacritics."
 msgstr ""
+"Compone o descompone grafemas de modo que los glifos resultantes se puedan "
+"volver a recomponer. Se suele usar para manejar diacríticos."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
 #, kde-format
@@ -19521,13 +19521,14 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Puntuación CJK dentrada"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
 msgctxt "@tooltip"
 msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
+"Ajusta la puntuación no centrada para que esté centrada en escrituras CJK."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
 #, fuzzy, kde-format
@@ -65973,54 +65974,3 @@ msgstr "Herramienta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
-
-#~ msgid "Krita Tablet Support"
-#~ msgstr "Uso de tabletas en Krita"
-
-#~ msgid ""
-#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
-#~ "you have a drawing tablet, please make sure the tablet driver is properly "
-#~ "installed."
-#~ msgstr ""
-#~ "No se ha podido cargar el controlador WinTab ni se han encontrado "
-#~ "dispositivos de lápiz Windows Ink. Si tiene una tableta de dibujo, "
-#~ "asegúrese de que su controlador se ha instalado correctamente."
-
-#~ msgid ""
-#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-#~ "the tablet driver is properly installed."
-#~ msgstr ""
-#~ "No se ha podido cargar el controlador WinTab. Si tiene una tableta de "
-#~ "dibujo, asegúrese de que su controlador se ha instalado correctamente."
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 desplazamiento: %3,%4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Wintab)"
-#~ msgstr "%1 (Wintab)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Seleccionar la resolución de la pantalla"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
-#~ "not agree on the size of the screen your tablet is connected to. Please "
-#~ "select the right option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El controlador para su tableta de dibujo y Windows "
-#~ "no coinciden con el tamaño de la pantalla a la que está conectada su "
-#~ "tableta. Seleccione la opción correcta.</p></body></html>"
-
-#~ msgid "If both are wrong, enter the size manually:"
-#~ msgstr "Si ambos son erróneos, introduzca el tamaño manualmente:"
-
-#~ msgid "Do not ask again (hold Shift to ask again)"
-#~ msgstr ""
-#~ "No volver a preguntar (mantenga pulsada «Mayúsculas» para volver a "
-#~ "preguntar)"

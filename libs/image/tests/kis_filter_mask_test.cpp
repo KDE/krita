@@ -88,7 +88,12 @@ void KisFilterMaskTest::testProjectionSelected()
     mask->initSelection(layer);
     mask->select(qimage.rect(), MAX_SELECTED);
     mask->apply(projection, qimage.rect(), qimage.rect(), KisNode::N_FILTHY, KisRenderPassFlag::None);
-    QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+
+    if (f->needsTransparentPixels(kfc, image->colorSpace())) {
+        QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+    } else {
+        QVERIFY2(mask->exactBounds().contains(layer->exactBounds()), "The mask bounds are smaller than the layer bounds");
+    }
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {

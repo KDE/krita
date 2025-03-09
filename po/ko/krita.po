@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-01-15 03:22+0000\n"
+"POT-Creation-Date: 2025-03-09 03:20+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20430,7 +20430,7 @@ msgstr "로컬 리소스"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:738
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:739
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:334
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -24674,7 +24674,7 @@ msgid "Start"
 msgstr "시작"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:643
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:644
 #, kde-format
 msgid "DEV BUILD"
 msgstr "개발 빌드"
@@ -30802,14 +30802,14 @@ msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
 msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">최근 파일</span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:226
+#: libs/ui/kis_splash_screen.cpp:229
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/support-us/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Support Krita's Development!</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:229
+#: libs/ui/kis_splash_screen.cpp:233
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/en/user_manual/getting_started.html"
@@ -30817,21 +30817,21 @@ msgid ""
 "span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:230
+#: libs/ui/kis_splash_screen.cpp:234
 #, kde-format
 msgid ""
 "<p><a href=\"https://docs.krita.org/\"><span style=\" text-decoration: "
 "underline; color:%1;\">Manual</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:231
+#: libs/ui/kis_splash_screen.cpp:235
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Krita Website</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:233
+#: libs/ui/kis_splash_screen.cpp:237
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
@@ -30840,28 +30840,28 @@ msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
 msgstr ""
 "<html><head/><body><p><b><span style=\" color:%1;\">최근 파일</span></b></p>"
 
-#: libs/ui/kis_splash_screen.cpp:234
+#: libs/ui/kis_splash_screen.cpp:238
 #, kde-format
 msgid ""
 "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: "
 "underline; color:%1;\">User Community</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:235
+#: libs/ui/kis_splash_screen.cpp:239
 #, kde-format
 msgid ""
 "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Source Code</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:236
+#: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
 msgid ""
 "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" "
 "text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
 msgstr ""
 
-#: libs/ui/kis_splash_screen.cpp:237
+#: libs/ui/kis_splash_screen.cpp:241
 #, fuzzy, kde-format
 #| msgid ""
 #| "<html><head/><body><p>If you want to learn how to write Krita scripts, "
@@ -32625,23 +32625,23 @@ msgstr "언어"
 msgid "English news is always up to date."
 msgstr "영어 뉴스는 항상 최신 뉴스를 포함합니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:666
+#: libs/ui/KisWelcomePageWidget.cpp:667
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "\"%1\" 잊기"
 
-#: libs/ui/KisWelcomePageWidget.cpp:757
+#: libs/ui/KisWelcomePageWidget.cpp:758
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "새 Krita 버전을 사용할 수 있습니다."
 
-#: libs/ui/KisWelcomePageWidget.cpp:786
+#: libs/ui/KisWelcomePageWidget.cpp:787
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "업데이트 중 오류 발생"
 
-#: libs/ui/KisWelcomePageWidget.cpp:792
+#: libs/ui/KisWelcomePageWidget.cpp:793
 #, kde-format
 msgid "Restart is required."
 msgstr "다시 시작해야 합니다."
@@ -37287,17 +37287,17 @@ msgctxt "@info:tooltip of custom triple button"
 msgid "%1"
 msgstr "%1"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:33
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:37
 #, kde-format
 msgid "About KDE"
 msgstr "KDE 정보"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:36
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:40
 #, kde-format
 msgid "<html><font size=\"5\">KDE - Be Free!</font></html>"
 msgstr "<html><font size=\"5\">KDE - 자유롭게!</font></html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:50
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:54
 #, kde-format
 msgid ""
 "<html><b>KDE</b> is a world-wide network of software engineers, artists, "
@@ -37318,7 +37318,7 @@ msgstr ""
 "여할 수 있습니다.<br /><br /> <a href=\"%2\">%2</a>을 방문하셔서 KDE 커뮤니티"
 "와 소프트웨어에 대해 알아 보십시오.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:73
 #, kde-format
 msgid ""
 "<html>Software can always be improved, and the KDE team is ready to do so. "
@@ -37337,7 +37337,7 @@ msgstr ""
 "을  하고 싶으시다면 버그 보고 시스템을 통해서 알려 주십시오. 이 경우 심각성  "
 "항목에서 \"Wishlist\"를 선택하셔야 합니다.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:91
 #, kde-format
 msgid ""
 "<html>You do not have to be a software developer to be a member of the KDE "
@@ -37355,48 +37355,49 @@ msgstr ""
 "시오.<br /><br />더 많은 정보나 문서가 필요하면 <a href=\"%2\">%2</a> 사이트"
 "를 방문하여 알아보십시오.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:109
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:116
 #, kde-format
 msgid ""
-"<html>KDE software is and will always be available free of charge, however "
+"<p>KDE software is and will always be available free of charge, however "
 "creating it is not free.<br /><br />To support development the KDE community "
 "has formed the KDE e.V., a non-profit organization legally founded in "
 "Germany. KDE e.V. represents the KDE community in legal and financial "
-"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.<br /><br /"
-">KDE benefits from many kinds of contributions, including financial. We use "
-"the funds to reimburse members and others for expenses they incur when "
-"contributing. Further funds are used for legal support and organizing "
-"conferences and meetings. <br /> <br />We would like to encourage you to "
-"support our efforts with a financial donation, using one of the ways "
-"described at <a href=\"%2\">%2</a>.<br /><br />Thank you very much in "
-"advance for your support.</html>"
+"matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
-"<html>KDE는 무료로 사용 가능하지만, 만드는 것은 무료가 아닙니다.<br /><br />"
-"따라서 KDE 커뮤니티는 독일에 비영리 재단 KDE e.V.를 설립했습니다. KDE e.V.는 "
-"KDE 커뮤니티를 법적, 재정적인 면에서 후원합니다. <a href=\"%1\">%1</a>  사이"
-"트를 방문하셔서 KDE e.V.에 관한 정보를 확인하십시오.<br /><br />KDE는  재정적"
-"인 보조가 필요합니다. 대부분의 지원금은 구성원에게 대가를 지급하거나  KDE에 "
-"기여하는 데 드는 돈을 대는 데 사용됩니다. <a href=\"%2\">%2</a>에 있는  방법"
-"을 사용하여 재정적인 지원을 해 주십시오.<br /><br />여러분의 협조에  미리 감"
-"사드립니다.</html>"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
+#, kde-format
+msgid ""
+"<p>KDE benefits from many kinds of contributions, including financial. We "
+"use the funds to reimburse members and others for expenses they incur when "
+"contributing. Further funds are used for legal support and organizing "
+"conferences and meetings.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#, kde-format
+msgid ""
+"<p>We would like to encourage you to support our efforts with a financial "
+"donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
+msgstr ""
+
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format
 msgctxt "About KDE"
 msgid "&About"
 msgstr "정보(&A)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:143
 #, kde-format
 msgid "&Report Bugs or Wishes"
 msgstr "버그나 요구 사항 보고(&R)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:144
 #, kde-format
 msgid "&Join KDE"
 msgstr "KDE에 참여하기(&J)"
 
-#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:131
+#: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:145
 #, kde-format
 msgid "&Support KDE"
 msgstr "KDE 지원(&S)"
@@ -61974,6 +61975,29 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#~ msgid ""
+#~ "<html>KDE software is and will always be available free of charge, "
+#~ "however creating it is not free.<br /><br />To support development the "
+#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
+#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
+#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
+#~ "<br /><br />KDE benefits from many kinds of contributions, including "
+#~ "financial. We use the funds to reimburse members and others for expenses "
+#~ "they incur when contributing. Further funds are used for legal support "
+#~ "and organizing conferences and meetings. <br /> <br />We would like to "
+#~ "encourage you to support our efforts with a financial donation, using one "
+#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
+#~ "much in advance for your support.</html>"
+#~ msgstr ""
+#~ "<html>KDE는 무료로 사용 가능하지만, 만드는 것은 무료가 아닙니다.<br /"
+#~ "><br />따라서 KDE 커뮤니티는 독일에 비영리 재단 KDE e.V.를 설립했습니다. "
+#~ "KDE e.V.는 KDE 커뮤니티를 법적, 재정적인 면에서 후원합니다. <a href="
+#~ "\"%1\">%1</a>  사이트를 방문하셔서 KDE e.V.에 관한 정보를 확인하십시오."
+#~ "<br /><br />KDE는  재정적인 보조가 필요합니다. 대부분의 지원금은 구성원에"
+#~ "게 대가를 지급하거나  KDE에 기여하는 데 드는 돈을 대는 데 사용됩니다. <a "
+#~ "href=\"%2\">%2</a>에 있는  방법을 사용하여 재정적인 지원을 해 주십시오."
+#~ "<br /><br />여러분의 협조에  미리 감사드립니다.</html>"
 
 #, fuzzy
 #~| msgid ""

@@ -676,7 +676,7 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlap
             candidate = i;
             closest = distance;
             if (overlaps) {
-               *overlaps = res.finalTransform().map(res.boundingBox).containsPoint(point, Qt::WindingFill);
+               *overlaps = res.finalTransform().map(res.layoutBox()).containsPoint(point, Qt::WindingFill);
             }
         }
     }
@@ -1483,13 +1483,17 @@ QRectF KoSvgTextShape::boundingRect() const
         if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
             stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
         }
+        QRectF bb = it->associatedOutline.boundingRect();
+        QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
+        for (int i = 0; i < decorations.values().size(); ++i) {
+            bb |= decorations.values().at(i).boundingRect();
+        }
         if (stroke) {
-            QRectF bb = it->associatedOutline.boundingRect();
             KoInsets insets;
             stroke->strokeInsets(this, insets);
             result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
         } else {
-            result |= it->associatedOutline.boundingRect();
+            result |= bb;
         }
     }
     return this->absoluteTransformation().mapRect(result);

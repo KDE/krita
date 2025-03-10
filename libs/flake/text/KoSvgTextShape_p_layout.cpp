@@ -602,14 +602,13 @@ void KoSvgTextShape::Private::relayout()
         dummy.scaledHalfLeading = hardbreak.scaledHalfLeading;
         dummy.cssPosition = hardbreak.cssPosition + hardbreak.advance;
         dummy.finalPosition = dummy.cssPosition;
-        dummy.boundingBox = hardbreak.boundingBox;
-        dummy.lineHeightBox = hardbreak.lineHeightBox;
+        dummy.inkBoundingBox = hardbreak.inkBoundingBox;
         if (isHorizontal) {
-            dummy.boundingBox.setWidth(0);
-            dummy.lineHeightBox.setWidth(0);
+            dummy.advance.setX(0);
+            dummy.inkBoundingBox.setWidth(0);
         } else {
-            dummy.boundingBox.setHeight(0);
-            dummy.lineHeightBox.setHeight(0);
+            dummy.advance.setY(0);
+            dummy.inkBoundingBox.setHeight(0);
         }
         dummy.plaintTextIndex = hardbreak.cursorInfo.graphemeIndices.last();
         dummy.cursorInfo.caret = hardbreak.cursorInfo.caret;
@@ -794,7 +793,7 @@ void KoSvgTextShape::Private::relayout()
 
                 if (!result.at(i).hidden) {
                     const QTransform tf = result.at(i).finalTransform();
-                    chunk->associatedLeaf->associatedOutline.addRect(tf.mapRect(result.at(i).boundingBox));
+                    chunk->associatedLeaf->associatedOutline.addRect(tf.mapRect(result.at(i).inkBoundingBox));
                 }
             }
         }
@@ -812,7 +811,7 @@ void KoSvgTextShape::Private::relayout()
             pos.synthetic = true;
             cursorPos.append(pos);
             if (!textChunks.isEmpty()) {
-                textChunks.last().associatedLeaf->associatedOutline.addRect(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].boundingBox));
+                textChunks.last().associatedLeaf->associatedOutline.addRect(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].inkBoundingBox));
             }
         }
     }
@@ -983,7 +982,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
                         outlineGlyph->path = tf.map(outlineGlyph->path);
                     }
                     cr.advance = tf.map(cr.advance);
-                    cr.boundingBox = tf.mapRect(cr.boundingBox);
+                    cr.inkBoundingBox = tf.mapRect(cr.inkBoundingBox);
                 }
                 bool last = spacingAndGlyphs ? false : k == visualToLogical.keys().last();
 
@@ -1384,7 +1383,7 @@ KoSvgTextShape::Private::generateDecorationPaths(KisForest<KoSvgTextContentEleme
 
         currentFinalPos = charResult.finalPosition;
 
-        const QRectF bbox = charResult.boundingBox;
+        const QRectF bbox = charResult.layoutBox();
 
         top = isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
         bottom = isHorizontal ? qMax(bottom, bbox.bottom()) : qMin(bottom, bbox.left());

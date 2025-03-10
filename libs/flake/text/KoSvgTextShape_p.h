@@ -100,7 +100,8 @@ struct CharacterResult {
 
     Glyph::Variant glyph;
 
-    QRectF boundingBox;
+    QRectF inkBoundingBox; ///< The bounds of the drawn glyph. Different from the bounds the charresult takes up in the layout, @see layoutBox();
+    bool isHorizontal = true; ///< Whether the current glyph lays out horizontal or vertical. Currently same as paragraph, but in future may change.
     int visualIndex = -1;
     int plaintTextIndex = -1;
     QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
@@ -121,7 +122,25 @@ struct CharacterResult {
     qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
     qreal scaledAscent{}; ///< Ascender, in pt
     qreal scaledDescent{}; ///< Descender, in pt
-    QRectF lineHeightBox; ///< The box representing the line height of this char
+
+    /**
+     * @brief layoutBox
+     * @return a dynamically calculated layoutBox, this is different from the Ink bounding box.
+     */
+    QRectF layoutBox() const {
+        return isHorizontal? QRectF(0, advance.y()+scaledAscent, advance.x(), scaledDescent-scaledAscent)
+                         : QRectF(advance.x()-scaledDescent, 0, scaledDescent-scaledAscent, advance.y());
+    }
+    /**
+     * @brief lineHeightBox
+     * @return The box representing the line height of this char.
+     */
+    QRectF lineHeightBox () const {
+        QRectF lBox = layoutBox();
+        return isHorizontal? lBox.adjusted(0, -scaledHalfLeading, 0, scaledHalfLeading)
+                         : lBox.adjusted(-scaledHalfLeading, 0, scaledHalfLeading, 0);
+    }
+
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
 

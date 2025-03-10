@@ -77,9 +77,9 @@ void addWordToLine(QVector<CharacterResult> &result,
             if (result.at(j).lineStart == LineEdgeBehaviour::Collapse) {
                 result[j].advance = QPointF();
                 if (isHorizontal) {
-                    result[j].boundingBox.setWidth(0);
+                    result[j].inkBoundingBox.setWidth(0);
                 } else {
-                    result[j].boundingBox.setHeight(0);
+                    result[j].inkBoundingBox.setHeight(0);
                 }
                 result[j].hidden = true;
                 continue;
@@ -100,7 +100,7 @@ void addWordToLine(QVector<CharacterResult> &result,
         lineAdvance = currentPos;
 
         result[j] = cr;
-        currentChunk.boundingBox |= cr.boundingBox.translated(cr.cssPosition + cr.baselineOffset);
+        currentChunk.boundingBox |= cr.layoutBox().translated(cr.cssPosition + cr.baselineOffset);
     }
     currentPos = lineAdvance;
     currentChunk.chunkIndices += wordIndices;
@@ -213,9 +213,9 @@ handleCollapseAndHang(QVector<CharacterResult> &result, LineChunk &chunk, bool l
                 // still be possible to track it by cursor movement.
                 result[lastIndex].advance = QPointF();
                 if (isHorizontal) {
-                    result[lastIndex].boundingBox.setWidth(0);
+                    result[lastIndex].inkBoundingBox.setWidth(0);
                 } else {
-                    result[lastIndex].boundingBox.setHeight(0);
+                    result[lastIndex].inkBoundingBox.setHeight(0);
                 }
             } else if (result.at(lastIndex).lineEnd == LineEdgeBehaviour::ConditionallyHang) {
                 if (ltr) {

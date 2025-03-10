@@ -136,7 +136,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                      * Make sure the character touches the painter's clip rect,
                      * otherwise we can just skip it
                      */
-                            const QRectF boundingRect = tf.mapRect(result.at(i).boundingBox);
+                            const QRectF boundingRect = tf.mapRect(result.at(i).inkBoundingBox);
                             const QRectF clipRect = painter.clipBoundingRect();
                             if (boundingRect.isEmpty() ||
                                     (!clipRect.contains(boundingRect) &&
@@ -524,19 +524,19 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     penColor.setAlpha(192);
                     pen.setColor(penColor);
                     painter.setPen(pen);
-                    painter.drawPolygon(tf.map(result.at(i).boundingBox));
+                    painter.drawPolygon(tf.map(result.at(i).inkBoundingBox));
 
                     penColor.setAlpha(96);
                     pen.setColor(penColor);
                     pen.setWidth(1);
                     pen.setStyle(Qt::DotLine);
                     painter.setPen(pen);
-                    painter.drawPolygon(tf.map(result.at(i).lineHeightBox));
+                    painter.drawPolygon(tf.map(result.at(i).lineHeightBox()));
 
                     pen.setWidth(2);
                     pen.setStyle(Qt::SolidLine);
 
-                    const QPointF center = tf.mapRect(result.at(i).boundingBox).center();
+                    const QPointF center = tf.mapRect(result.at(i).layoutBox()).center();
                     QString text = "#";
                     text += QString::number(i);
                     {

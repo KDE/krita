@@ -626,23 +626,19 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                           ftTF.inverted().map(charResult.advance).y());
             bbox = glyphObliqueTf.mapRect(bbox);
         }
-        charResult.boundingBox = ftTF.mapRect(bbox);
+        charResult.isHorizontal = isHorizontal;
+        QRectF scaledBBox = ftTF.mapRect(bbox);
         charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
-        charResult.scaledAscent = isHorizontal? charResult.boundingBox.top(): charResult.boundingBox.right();
-        charResult.scaledDescent = isHorizontal? charResult.boundingBox.bottom(): charResult.boundingBox.left();
-        if (isHorizontal) {
-            charResult.lineHeightBox = charResult.boundingBox.adjusted(0, -charResult.scaledHalfLeading, 0, charResult.scaledHalfLeading);
-        } else {
-            charResult.lineHeightBox = charResult.boundingBox.adjusted(-charResult.scaledHalfLeading, 0, charResult.scaledHalfLeading, 0);
-        }
+        charResult.scaledAscent = isHorizontal? scaledBBox.top(): scaledBBox.right();
+        charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
 
         if (bitmapGlyph) {
-            charResult.boundingBox |= bitmapGlyph->drawRect;
+            charResult.inkBoundingBox |= bitmapGlyph->drawRect;
         } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&charResult.glyph)) {
-            charResult.boundingBox |= outlineGlyph->path.boundingRect();
+            charResult.inkBoundingBox |= outlineGlyph->path.boundingRect();
         } else if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&charResult.glyph)) {
             Q_FOREACH (const QPainterPath &p, colorGlyph->paths) {
-                charResult.boundingBox |= p.boundingRect();
+                charResult.inkBoundingBox |= p.boundingRect();
             }
         } else if (!std::holds_alternative<std::monostate>(charResult.glyph)) {
             warnFlake << "Unhandled glyph type" << charResult.glyph.index();

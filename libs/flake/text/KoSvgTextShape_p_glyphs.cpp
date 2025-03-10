@@ -425,8 +425,8 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
                 bitmapGlyph = &charResult.glyph.emplace<Glyph::Bitmap>();
             }
 
-            // TODO: Handle glyph clusters better...
-            bitmapGlyph->image = convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
+            QImage image = convertFromFreeTypeBitmap(currentGlyph.ftface->glyph);
+            bitmapGlyph->images.append(image);
 
             // Check whether we need to synthesize italic by shearing the glyph:
             if (charResult.fontStyle != QFont::StyleNormal
@@ -443,7 +443,7 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
                 } else {
                     shearTf.shear(0, SLANT_BITMAP);
                     glyphObliqueTf.shear(0, -SLANT_BITMAP);
-                    shearAt = QPoint(bitmapGlyph->image.width() / 2, 0);
+                    shearAt = QPoint(image.width() / 2, 0);
                 }
                 // We need to shear around the baseline, hence the translation.
                 bitmapTf = (QTransform::fromTranslate(-shearAt.x(), -shearAt.y()) * shearTf
@@ -451,10 +451,10 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
             }
 
             if (!bitmapTf.isIdentity()) {
-                const QSize srcSize = bitmapGlyph->image.size();
-                bitmapGlyph->image = std::move(bitmapGlyph->image).transformed(
+                const QSize srcSize = image.size();
+                bitmapGlyph->images.replace(bitmapGlyph->images.size()-1, std::move(image).transformed(
                     bitmapTf,
-                    this->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
+                    this->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation));
 
                 // This does the same as `QImage::trueMatrix` to get the image
                 // offset after transforming.
@@ -485,7 +485,6 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
-    const qreal ftFontUnitFactor = 1 / ftFontUnit;
 
     const int cluster = static_cast<int>(currentGlyph.cluster);
 
@@ -601,15 +600,17 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         Glyph::Bitmap *const bitmapGlyph = std::get_if<Glyph::Bitmap>(&charResult.glyph);
 
         if (bitmapGlyph) {
-            const int width = bitmapGlyph->image.width();
-            const int height = bitmapGlyph->image.height();
+            const int width = bitmapGlyph->images.last().width();
+            const int height = bitmapGlyph->images.last().height();
             const int left = currentGlyph.ftface->glyph->bitmap_left;
             const int top = currentGlyph.ftface->glyph->bitmap_top - height;
             QRect bboxPixel(left, top, width, height);
             if (!isHorizontal) {
                 bboxPixel.moveLeft(-(bboxPixel.width() / 2));
             }
-            bitmapGlyph->drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
+            QRectF drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
+            drawRect.translate(charResult.advance - ftTF.map(advance));
+            bitmapGlyph->drawRects.append(drawRect);
         }
 
         QRectF bbox;
@@ -633,7 +634,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
 
         if (bitmapGlyph) {
-            charResult.inkBoundingBox |= bitmapGlyph->drawRect;
+            charResult.inkBoundingBox |= bitmapGlyph->drawRects.last();
         } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&charResult.glyph)) {
             charResult.inkBoundingBox |= outlineGlyph->path.boundingRect();
         } else if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&charResult.glyph)) {

@@ -70,8 +70,8 @@ struct Outline {
 };
 
 struct Bitmap {
-    QImage image;
-    QRectF drawRect;
+    QVector<QImage> images;
+    QVector<QRectF> drawRects;
 };
 
 struct ColorLayers {

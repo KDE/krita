@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 03:20+0000\n"
-"PO-Revision-Date: 2025-01-25 18:28+0100\n"
+"PO-Revision-Date: 2025-03-07 21:59+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -36433,6 +36433,12 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Il software KDE è e sarà sempre disponibile gratuitamente, tuttavia il "
+"suo sviluppo non è gratuito.<br /><br />Per sostenere lo sviluppo, la "
+"comunità KDE ha creato KDE e.V., un'organizzazione senza scopo di lucro la "
+"cui sede legale è in Germania. KDE e.V. rappresenta la comunità KDE nelle "
+"questioni legali e finanziarie. Per informazioni su KDE e.V. vedi <a href="
+"\"%1\">%1</a></p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36442,6 +36448,11 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE beneficia di molti tipi di contribuzioni, anche finanziarie. "
+"Utilizziamo i fondi per rimborsare i membri e gli altri collaboratori per le "
+"spese sostenute durante le collaborazioni. Ulteriori fondi vengono "
+"utilizzati per il supporto legale e l'organizzazione di conferenze e meeting."
+"</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36449,6 +36460,9 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Vorremmo incoraggiarti a sostenere i nostri sforzi con una donazione "
+"finanziaria, utilizzando uno dei metodi descritti in <a href=\"%1\">%1</a>.</"
+"p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format

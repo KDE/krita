@@ -888,6 +888,14 @@ QDebug operator<<(QDebug dbg, const CssLengthPercentage &value)
         dbg.nospace() << value.value << "em";
     } else if (value.unit == CssLengthPercentage::Ex) {
         dbg.nospace() << value.value << "ex";
+    } else if (value.unit == CssLengthPercentage::Cap) {
+        dbg.nospace() << value.value << "cap";
+    } else if (value.unit == CssLengthPercentage::Ch) {
+        dbg.nospace() << value.value << "ch";
+    } else if (value.unit == CssLengthPercentage::Ic) {
+        dbg.nospace() << value.value << "ic";
+    } else if (value.unit == CssLengthPercentage::Lh) {
+        dbg.nospace() << value.value << "lh";
     } else {
         dbg.nospace() << value.value << "(pt)";
     }
@@ -907,20 +915,40 @@ QString writeLengthPercentage(const CssLengthPercentage &length, bool percentage
             val += "em";
         } else if (length.unit == CssLengthPercentage::Ex) {
             val += "ex";
+        } else if (length.unit == CssLengthPercentage::Cap) {
+            val += "cap";
+        } else if (length.unit == CssLengthPercentage::Ch) {
+            val += "ch";
+        } else if (length.unit == CssLengthPercentage::Ic) {
+            val += "ic";
+        } else if (length.unit == CssLengthPercentage::Lh) {
+            val += "lh";
         }
     }
     return val;
 }
 
-void CssLengthPercentage::convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const CssLengthPercentage::UnitType percentageUnit) {
+void CssLengthPercentage::convertToAbsolute(const KoSvgText::FontMetrics metrics, const qreal fontSize, const CssLengthPercentage::UnitType percentageUnit) {
     UnitType u = unit;
     if (u == Percentage) {
         u = percentageUnit;
     }
+    // FontMetrics is in freetype pixels, but we also don't know the resolution, which we need to calculate pt.
+    // So the first multiplier handles the potential resolution difference, the second multiplier the freetype pixel.
+    const qreal fontSizeMultiplier = 1/((metrics.fontSize/64.0)/fontSize);
+    const qreal ftMultiplier = fontSizeMultiplier/64.0;
     if (u == Em) {
-        value = value * fontSizeInPt;
+        value = value * fontSize;
     } else if (u == Ex) {
-        value = value * fontXHeightInPt;
+        value = value * metrics.xHeight * ftMultiplier;
+    } else if (u == Cap) {
+        value = value * metrics.capHeight * ftMultiplier;
+    } else if (u == Ch) {
+        value = value * metrics.zeroAdvance * ftMultiplier;
+    } else if (u == Ic) {
+        value = value * metrics.ideographicAdvance * ftMultiplier;
+    } else if (u == Lh) {
+        value = value * (metrics.ascender - metrics.descender + metrics.lineGap) * ftMultiplier;
     }
     unit = Absolute;
 }
@@ -1397,6 +1425,52 @@ FontMetrics::FontMetrics(qreal fontSizeInPt, bool isHorizontal)
 
     ideographicFaceUnderBaseline = descender;
     ideographicFaceOverBaseline = ascender;
+}
+
+bool FontMetrics::operator==(const FontMetrics &other) const {
+    return isVertical == other.isVertical
+            && fontSize == other.fontSize
+            && zeroAdvance == other.zeroAdvance
+            && spaceAdvance == other.spaceAdvance
+            && ideographicAdvance == other.ideographicAdvance
+            && xHeight == other.xHeight
+            && capHeight == other.capHeight
+            && subScriptOffset == other.subScriptOffset
+            && superScriptOffset == other.superScriptOffset
+            && ascender == other.ascender
+            && descender == other.descender
+            && lineGap == other.lineGap
+            && alphabeticBaseline == other.alphabeticBaseline
+            && ideographicUnderBaseline == other.ideographicUnderBaseline
+            && ideographicCenterBaseline == other.ideographicCenterBaseline
+            && ideographicOverBaseline == other.ideographicOverBaseline
+            && ideographicFaceUnderBaseline == other.ideographicFaceUnderBaseline
+            && ideographicFaceOverBaseline == other.ideographicFaceOverBaseline
+            && hangingBaseline == other.hangingBaseline;
+}
+
+int FontMetrics::valueForBaselineValue(Baseline baseline) const {
+    switch(baseline) {
+    case BaselineIdeographic:
+        return ideographicUnderBaseline;
+    case BaselineAlphabetic:
+        return alphabeticBaseline;
+    case BaselineHanging:
+        return hangingBaseline;
+    case BaselineMathematical:
+        return mathematicalBaseline;
+    case BaselineCentral:
+        return ideographicCenterBaseline;
+    case BaselineMiddle:
+        return xHeight/2;
+    case BaselineTextBottom:
+        return descender;
+    case BaselineTextTop:
+        return ascender;
+    default:
+        break;
+    }
+    return 0;
 }
 
 void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {

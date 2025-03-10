@@ -272,7 +272,6 @@ void KoSvgTextShape::Private::relayout()
             KoSvgText::TabSizeInfo tabInfo = properties.propertyOrDefault(KoSvgTextProperties::TabSizeId).value<KoSvgText::TabSizeInfo>();
             KoSvgText::AutoLengthPercentage letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoLengthPercentage>();
             KoSvgText::AutoLengthPercentage wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoLengthPercentage>();
-            KoSvgText::LineHeightInfo lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
 
             KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.bg.data());
@@ -377,7 +376,6 @@ void KoSvgTextShape::Private::relayout()
             QVector<int> lengths;
             QStringList fontFeatures = properties.fontFeaturesForText(start, length);
 
-            qreal fontSize = properties.fontSize().value;
             const KoSvgText::CssFontStyleData style = properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
             bool synthesizeWeight = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisBoldId).toBool();
             bool synthesizeStyle = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisItalicId).toBool();
@@ -442,19 +440,9 @@ void KoSvgTextShape::Private::relayout()
                     }
                     result[j].metrics = metricsList.value(currentScript);
 
-                    qreal leading = result[j].metrics.lineGap;
+                    const KoSvgText::FontMetrics currentMetrics = properties.applyLineHeight(result[j].metrics);
 
-                    if (!lineHeight.isNormal) {
-                        if (lineHeight.isNumber) {
-                            leading = (fontSize*scaleToPixel*ftFontUnit)*lineHeight.value;
-                            leading -= (result[j].metrics.ascender-result[j].metrics.descender);
-                        } else {
-                            QPointF val = ftTF.inverted().map(QPointF(lineHeight.length.value, lineHeight.length.value));
-                            leading = isHorizontal? val.x(): val.y();
-                            leading -= (result[j].metrics.ascender-result[j].metrics.descender);
-                        }
-                    }
-                    result[j].fontHalfLeading = leading * 0.5;
+                    result[j].fontHalfLeading = currentMetrics.lineGap / 2;
                     result[j].fontStyle = synthesizeStyle? style.style: QFont::StyleNormal;
                     result[j].fontWeight = synthesizeWeight? properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(): 400;
                 }

@@ -121,48 +121,52 @@ void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentPropertie
     }
 
     if (resolve) {
-        resolveRelativeValues(parentProperties.fontSize().value, parentProperties.xHeight());
+        resolveRelativeValues(parentProperties.metrics(), parentProperties.fontSize().value);
     }
 }
 
-void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qreal xHeight)
+void KoSvgTextProperties::resolveRelativeValues(const KoSvgText::FontMetrics metrics, const qreal fontSize)
 {
     // First resolve 'font-*' properties.
     // See https://www.w3.org/TR/css-values-4/#font-relative-lengths
-    // Note: if we ever support lh (lineheight unit) that needs to be resolved here first too.
     KoSvgText::CssLengthPercentage size = this->fontSize();
-    size.convertToAbsolute(fontSize, xHeight);
+    size.convertToAbsolute(metrics, fontSize);
     this->setFontSize(size);
-    qreal usedSize = size.value;
-    qreal usedXHeight = this->xHeight();
+    const qreal usedSize = size.value;
+    KoSvgText::LineHeightInfo lineHeight = this->propertyOrDefault(LineHeightId).value<KoSvgText::LineHeightInfo>();
+    if (!lineHeight.isNormal && !lineHeight.isNumber) {
+        if (lineHeight.length.unit == KoSvgText::CssLengthPercentage::Lh) {
+            lineHeight.length.convertToAbsolute(metrics, fontSize);
+        } else {
+            lineHeight.length.convertToAbsolute(this->metrics(false), usedSize);
+        }
+        setProperty(LineHeightId, QVariant::fromValue(lineHeight));
+    }
+
+    const KoSvgText::FontMetrics usedMetrics = this->metrics();
 
     for (auto it = this->m_d->properties.begin(); it != this->m_d->properties.end(); it++) {
+        if (it.key() == LineHeightId) continue;
         if (it.value().canConvert<KoSvgText::CssLengthPercentage>() && it.key() != KoSvgTextProperties::FontSizeId) {
             KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
-            length.convertToAbsolute(usedSize, usedXHeight);
+            length.convertToAbsolute(usedMetrics, usedSize);
             it.value() = QVariant::fromValue(length);
         } else if (it.value().canConvert<KoSvgText::AutoLengthPercentage>()) {
             KoSvgText::AutoLengthPercentage val = it.value().value<KoSvgText::AutoLengthPercentage>();
             if (!val.isAuto) {
-                val.length.convertToAbsolute(usedSize, usedXHeight);
+                val.length.convertToAbsolute(usedMetrics, usedSize);
                 it.value() = QVariant::fromValue(val);
-            }
-        } else if (it.key() == KoSvgTextProperties::LineHeightId) {
-            KoSvgText::LineHeightInfo lineHeight = it.value().value<KoSvgText::LineHeightInfo>();
-            if (!lineHeight.isNormal && !lineHeight.isNumber) {
-                lineHeight.length.convertToAbsolute(usedSize, usedXHeight);
-                it.value() = QVariant::fromValue(lineHeight);
             }
         } else if (it.key() == KoSvgTextProperties::TabSizeId) {
             KoSvgText::TabSizeInfo tabSize = it.value().value<KoSvgText::TabSizeInfo>();
             if (!tabSize.isNumber) {
-                tabSize.length.convertToAbsolute(usedSize, usedXHeight);
+                tabSize.length.convertToAbsolute(usedMetrics, usedSize);
                 it.value() = QVariant::fromValue(tabSize);
             }
         } else if (it.key() == KoSvgTextProperties::TextIndentId) {
             KoSvgText::TextIndentInfo indent = it.value().value<KoSvgText::TextIndentInfo>();
             if (indent.length.unit != KoSvgText::CssLengthPercentage::Percentage) {
-                indent.length.convertToAbsolute(usedSize, usedXHeight);
+                indent.length.convertToAbsolute(usedMetrics, usedSize);
             }
             it.value() = QVariant::fromValue(indent);
         }
@@ -1030,14 +1034,39 @@ QFont KoSvgTextProperties::generateFont() const
 
 qreal KoSvgTextProperties::xHeight() const
 {
-    const KoCSSFontInfo info = cssFontInfo();
+    const KoSvgText::FontMetrics metrics = this->metrics(false);
+
     const qreal fontSizeVal = fontSize().value;
-    const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
-    const KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
     if (metrics.xHeight > 0 && metrics.fontSize > 0) {
         return metrics.xHeight * fontSizeVal / metrics.fontSize;
     }
     return fontSizeVal * 0.5;
+}
+
+KoSvgText::FontMetrics KoSvgTextProperties::metrics(const bool withResolvedLineHeight) const
+{
+    const KoCSSFontInfo info = cssFontInfo();
+
+    const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
+    KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
+
+    return withResolvedLineHeight? applyLineHeight(metrics): metrics;
+}
+
+KoSvgText::FontMetrics KoSvgTextProperties::applyLineHeight(KoSvgText::FontMetrics metrics) const
+{
+    const qreal res = metrics.fontSize / this->fontSize().value;
+
+    KoSvgText::LineHeightInfo lineHeight = this->propertyOrDefault(LineHeightId).value<KoSvgText::LineHeightInfo>();
+    if (!lineHeight.isNormal) {
+        if (lineHeight.isNumber) {
+            metrics.lineGap = (metrics.fontSize)*lineHeight.value;
+        } else {
+            metrics.lineGap = lineHeight.length.value * res;
+        }
+        metrics.lineGap -= (metrics.ascender-metrics.descender);
+    }
+    return metrics;
 }
 
 QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) const

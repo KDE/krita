@@ -104,6 +104,10 @@ TextPropertyBase {
                 { text: i18nc("@label:inlistbox", "Pt"), value: LineHeightModel.Absolute},
                 { text: i18nc("@label:inlistbox", "Em"), value: LineHeightModel.Em},
                 { text: i18nc("@label:inlistbox", "Ex"), value: LineHeightModel.Ex},
+                { text: i18nc("@label:inlistbox", "Cap"), value: LineHeightModel.Cap},
+                { text: i18nc("@label:inlistbox", "Ch"), value: LineHeightModel.Ch},
+                { text: i18nc("@label:inlistbox", "Ic"), value: LineHeightModel.Ic},
+                { text: i18nc("@label:inlistbox", "Lh"), value: LineHeightModel.Lh},
                 { text: i18nc("@label:inlistbox", "%"), value: LineHeightModel.Percentage},
                 { text: i18nc("@label:inlistbox", "Lines"), value: LineHeightModel.Lines},
             ]

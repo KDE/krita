@@ -43,6 +43,14 @@ auto getUnit =  lager::lenses::getset (
             return LineHeightModel::LineHeightType::Em;
         case KoSvgText::CssLengthPercentage::Ex:
             return LineHeightModel::LineHeightType::Ex;
+        case KoSvgText::CssLengthPercentage::Cap:
+            return LineHeightModel::LineHeightType::Cap;
+        case KoSvgText::CssLengthPercentage::Ch:
+            return LineHeightModel::LineHeightType::Ch;
+        case KoSvgText::CssLengthPercentage::Ic:
+            return LineHeightModel::LineHeightType::Ic;
+        case KoSvgText::CssLengthPercentage::Lh:
+            return LineHeightModel::LineHeightType::Lh;
         case KoSvgText::CssLengthPercentage::Percentage:
             return LineHeightModel::LineHeightType::Percentage;
         }
@@ -62,6 +70,18 @@ auto getUnit =  lager::lenses::getset (
         break;
         case LineHeightModel::LineHeightType::Ex:
             data.length.unit = KoSvgText::CssLengthPercentage::Ex;
+        break;
+        case LineHeightModel::LineHeightType::Cap:
+            data.length.unit = KoSvgText::CssLengthPercentage::Cap;
+        break;
+        case LineHeightModel::LineHeightType::Ch:
+            data.length.unit = KoSvgText::CssLengthPercentage::Ch;
+        break;
+        case LineHeightModel::LineHeightType::Ic:
+            data.length.unit = KoSvgText::CssLengthPercentage::Ic;
+        break;
+        case LineHeightModel::LineHeightType::Lh:
+            data.length.unit = KoSvgText::CssLengthPercentage::Lh;
         break;
         case LineHeightModel::LineHeightType::Percentage:
             data.length.unit = KoSvgText::CssLengthPercentage::Percentage;

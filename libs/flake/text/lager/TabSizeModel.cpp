@@ -35,6 +35,14 @@ auto getUnit =  lager::lenses::getset (
             return TabSizeModel::TabSizeType::Em;
         case KoSvgText::CssLengthPercentage::Ex:
             return TabSizeModel::TabSizeType::Ex;
+        case KoSvgText::CssLengthPercentage::Cap:
+            return TabSizeModel::TabSizeType::Cap;
+        case KoSvgText::CssLengthPercentage::Ch:
+            return TabSizeModel::TabSizeType::Ch;
+        case KoSvgText::CssLengthPercentage::Ic:
+            return TabSizeModel::TabSizeType::Ic;
+        case KoSvgText::CssLengthPercentage::Lh:
+            return TabSizeModel::TabSizeType::Lh;
         default:
             break;
         }
@@ -54,6 +62,18 @@ auto getUnit =  lager::lenses::getset (
         break;
         case TabSizeModel::TabSizeType::Ex:
             data.length.unit = KoSvgText::CssLengthPercentage::Ex;
+        break;
+        case TabSizeModel::TabSizeType::Cap:
+            data.length.unit = KoSvgText::CssLengthPercentage::Cap;
+        break;
+        case TabSizeModel::TabSizeType::Ch:
+            data.length.unit = KoSvgText::CssLengthPercentage::Ch;
+        break;
+        case TabSizeModel::TabSizeType::Ic:
+            data.length.unit = KoSvgText::CssLengthPercentage::Ic;
+        break;
+        case TabSizeModel::TabSizeType::Lh:
+            data.length.unit = KoSvgText::CssLengthPercentage::Lh;
         break;
         default:
         break;

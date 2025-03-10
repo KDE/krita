@@ -19,6 +19,10 @@ SqueezedComboBox {
     property string ptString: i18nc("@label:inlistbox", "Pt");
     property string emString: i18nc("@label:inlistbox", "Em");
     property string exString: i18nc("@label:inlistbox", "Ex");
+    property string chString: i18nc("@label:inlistbox", "Ch");
+    property string capString: i18nc("@label:inlistbox", "Cap");
+    property string icString: i18nc("@label:inlistbox", "Ic");
+    property string lhString: i18nc("@label:inlistbox", "Lh");
     property string prcString: i18nc("@label:inlistbox", "%");
 
     Component.onCompleted: {
@@ -27,7 +31,11 @@ SqueezedComboBox {
             model = [
                         {text: ptString, value: 0},
                         {text: emString, value: 2},
-                        {text: exString, value: 3}
+                        {text: exString, value: 3},
+                        {text: capString, value: 4},
+                        {text: chString, value: 5},
+                        {text: icString, value: 6},
+                        {text: lhString, value: 7}
                     ];
         }
     }
@@ -36,6 +44,10 @@ SqueezedComboBox {
         {text: ptString, value: 0},
         {text: emString, value: 2},
         {text: exString, value: 3},
+        {text: capString, value: 4},
+        {text: chString, value: 5},
+        {text: icString, value: 6},
+        {text: lhString, value: 7},
         {text: prcString, value: 1}
     ]
     textRole: "text";

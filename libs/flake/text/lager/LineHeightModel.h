@@ -24,6 +24,10 @@ public:
         Absolute,
         Em,
         Ex,
+        Cap,
+        Ch,
+        Ic,
+        Lh,
         Percentage,
         Lines
     };

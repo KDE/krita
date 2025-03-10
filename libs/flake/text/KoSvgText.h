@@ -308,6 +308,59 @@ Q_DECLARE_FLAGS(HangingPunctuations, HangingPunctuation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
 
 /**
+ * @brief The FontMetrics class
+ * A class to keep track of a variety of font metrics.
+ * Note that values are in Freetype pixels and coordinates! (that is 64 times bigger than a regular pixel, and Y is swapped.)
+ */
+struct FontMetrics : public boost::equality_comparable<FontMetrics> {
+    bool isVertical = false; ///< Different fontMetrics count between vertical and horizontal.
+    qint32 fontSize; ///< Currently set size, CSS unit 'em'
+    qint32 zeroAdvance; ///< Advance of the character '0', CSS Unit 'ch', defaults to 0.5 em in horizontal and 1.0 em in vertical.
+    qint32 spaceAdvance;///< Advance of the character ' ', used by tabs.
+    qint32 ideographicAdvance; ///< Advance of the character '水' (U+6C34), CSS Unit ic, defaults to 1 em.
+
+    qint32 xHeight; ///< height of X, defaults to 0.5 fontsize.
+    qint32 capHeight; ///< Height of capital letters, defaults to ascender.
+    QPair<qint32, qint32> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
+    QPair<qint32, qint32> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd above alphabetic.
+
+    qint32 ascender; ///< distance from origin to top.
+    qint32 descender; ///< distance for origin to bottom.
+    qint32 lineGap; ///< additional linegap between consequetive lines.
+
+    qint32 alphabeticBaseline; ///< location of alphabetic baseline from origin.
+    qint32 mathematicalBaseline; ///< location of mathematical baseline from origin.
+
+    qint32 ideographicUnderBaseline; ///< location of ideographic under baseline from origin, may fall back to descender.
+    qint32 ideographicCenterBaseline; ///< location of ideographic center baseline from origin,
+                                   ///< default baseline for vertical, centered between over and under.
+    qint32 ideographicOverBaseline; ///< location of ideographic over baseline from origin.
+
+    qint32 ideographicFaceUnderBaseline; ///< location of ideographic face under baseline, that is, the bottom of the glyphs.
+    qint32 ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
+
+    qint32 hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
+
+    FontMetrics () {
+
+    }
+
+    // Generate fallback font metrics from a fontSize.
+    FontMetrics (qreal fontSizeInPt, bool isHorizontal);
+
+    bool operator==(const FontMetrics & other) const;
+
+    int valueForBaselineValue(Baseline baseline) const;
+
+    void setBaselineValueByTag(const QLatin1String &tag, int32_t value);
+
+    void setMetricsValueByTag(const QLatin1String &tag, int32_t value);
+
+    void scaleBaselines(const qreal multiplier);
+};
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontMetrics &metrics);
+
+/**
  * CssLengthPercentage is a struct that represents the CSS length-percentage,
  * which is Css' way of saying that an attribute can be either a length (which
  * are unit-based, including font-relative units) or a percentage (which is
@@ -332,6 +385,10 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
         Percentage, /// 0 to 1.0
         Em, /// multiply by Font-size
         Ex, /// multiply by font-x-height.
+        Cap,/// multiply by font cap height
+        Ch, /// multiply by width of "0", represents avarage proportional script advance.
+        Ic, /// multiply by width of "U+6C34", represents avarage full width script advance.
+        Lh, /// multiply by lineheight.
     };
 
     CssLengthPercentage() {}
@@ -340,7 +397,7 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
     qreal value = 0.0;
     UnitType unit = Absolute;
 
-    void convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const UnitType percentageUnit = Em);
+    void convertToAbsolute(const KoSvgText::FontMetrics metrics, const qreal fontSize, const UnitType percentageUnit = Em);
 
     bool operator==(const CssLengthPercentage & other) const {
         return qFuzzyCompare(value, other.value) && unit == other.unit;
@@ -980,100 +1037,7 @@ FontFeatureEastAsian parseFontFeatureEastAsian(const QString &value, FontFeature
 QString writeFontFeatureEastAsian(const FontFeatureEastAsian &feature);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureEastAsian &feature);
 
-/**
- * @brief The FontMetrics class
- * A class to keep track of a variety of font metrics.
- * Note that values are in Freetype pixels and coordinates! (that is 64 times bigger than a regular pixel, and Y is swapped.)
- */
-struct FontMetrics : public boost::equality_comparable<FontMetrics> {
-    bool isVertical = false; ///< Different fontMetrics count between vertical and horizontal.
-    qint32 fontSize; ///< Currently set size, CSS unit 'em'
-    qint32 zeroAdvance; ///< Advance of the character '0', CSS Unit 'ch', defaults to 0.5 em in horizontal and 1.0 em in vertical.
-    qint32 spaceAdvance;///< Advance of the character ' ', used by tabs.
-    qint32 ideographicAdvance; ///< Advance of the character '水' (U+6C34), CSS Unit ic, defaults to 1 em.
 
-    qint32 xHeight; ///< height of X, defaults to 0.5 fontsize.
-    qint32 capHeight; ///< Height of capital letters, defaults to ascender.
-    QPair<qint32, qint32> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
-    QPair<qint32, qint32> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd above alphabetic.
-
-    qint32 ascender; ///< distance from origin to top.
-    qint32 descender; ///< distance for origin to bottom.
-    qint32 lineGap; ///< additional linegap between consequetive lines.
-
-    qint32 alphabeticBaseline; ///< location of alphabetic baseline from origin.
-    qint32 mathematicalBaseline; ///< location of mathematical baseline from origin.
-
-    qint32 ideographicUnderBaseline; ///< location of ideographic under baseline from origin, may fall back to descender.
-    qint32 ideographicCenterBaseline; ///< location of ideographic center baseline from origin,
-                                   ///< default baseline for vertical, centered between over and under.
-    qint32 ideographicOverBaseline; ///< location of ideographic over baseline from origin.
-
-    qint32 ideographicFaceUnderBaseline; ///< location of ideographic face under baseline, that is, the bottom of the glyphs.
-    qint32 ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
-
-    qint32 hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
-
-    FontMetrics () {
-
-    }
-
-    // Generate fallback font metrics from a fontSize.
-    FontMetrics (qreal fontSizeInPt, bool isHorizontal);
-
-    bool operator==(const FontMetrics & other) const {
-        return isVertical == other.isVertical
-                && fontSize == other.fontSize
-                && zeroAdvance == other.zeroAdvance
-                && spaceAdvance == other.spaceAdvance
-                && ideographicAdvance == other.ideographicAdvance
-                && xHeight == other.xHeight
-                && capHeight == other.capHeight
-                && subScriptOffset == other.subScriptOffset
-                && superScriptOffset == other.superScriptOffset
-                && ascender == other.ascender
-                && descender == other.descender
-                && lineGap == other.lineGap
-                && alphabeticBaseline == other.alphabeticBaseline
-                && ideographicUnderBaseline == other.ideographicUnderBaseline
-                && ideographicCenterBaseline == other.ideographicCenterBaseline
-                && ideographicOverBaseline == other.ideographicOverBaseline
-                && ideographicFaceUnderBaseline == other.ideographicFaceUnderBaseline
-                && ideographicFaceOverBaseline == other.ideographicFaceOverBaseline
-                && hangingBaseline == other.hangingBaseline;
-    }
-
-    int valueForBaselineValue(Baseline baseline) const {
-        switch(baseline) {
-        case BaselineIdeographic:
-            return ideographicUnderBaseline;
-        case BaselineAlphabetic:
-            return alphabeticBaseline;
-        case BaselineHanging:
-            return hangingBaseline;
-        case BaselineMathematical:
-            return mathematicalBaseline;
-        case BaselineCentral:
-            return ideographicCenterBaseline;
-        case BaselineMiddle:
-            return xHeight/2;
-        case BaselineTextBottom:
-            return descender;
-        case BaselineTextTop:
-            return ascender;
-        default:
-            break;
-        }
-        return 0;
-    }
-
-    void setBaselineValueByTag(const QLatin1String &tag, int32_t value);
-
-    void setMetricsValueByTag(const QLatin1String &tag, int32_t value);
-
-    void scaleBaselines(const qreal multiplier);
-};
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontMetrics &metrics);
 
 } // namespace KoSvgText
 

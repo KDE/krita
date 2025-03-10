@@ -183,7 +183,7 @@ public:
      * @param fontSize -- fontsize to resolve 'em' to.
      * @param xHeight -- xHeight to resolve 'ex' to.
      */
-    void resolveRelativeValues(const qreal fontSize = 12.0, const qreal xHeight = 6.0);
+    void resolveRelativeValues(const KoSvgText::FontMetrics metrics = KoSvgText::FontMetrics(12.0, true), const qreal fontSize = 12.0);
 
     /**
      * Return true if the property \p id is inherited from \p parentProperties.
@@ -236,6 +236,22 @@ public:
     QFont generateFont() const;
 
     qreal xHeight() const;
+
+    /**
+     * @brief metrics
+     * Return the metrics of the first available font.
+     * @param withResolvedLineHeight -- apply the lineheight into the linegap property.
+     * @return metrics for the current font.
+     */
+    KoSvgText::FontMetrics metrics(const bool withResolvedLineHeight = true) const;
+
+    /**
+     * @brief applyLineHeight
+     * Calculate the linegap for the current linegap property.
+     * @param metrics the metrics to apply this to.
+     * @return metrics with the linegap adjusted for the lineheight.
+     */
+    KoSvgText::FontMetrics applyLineHeight(KoSvgText::FontMetrics metrics) const;
 
     /**
      * @brief fontFeaturesForText

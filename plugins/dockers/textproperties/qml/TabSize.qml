@@ -77,7 +77,11 @@ TextPropertyBase {
                 {text: i18nc("@label:inlistbox", "Spaces"), value: TabSizeModel.Spaces},
                 {text: i18nc("@label:inlistbox", "Pt"), value: TabSizeModel.Absolute},
                 {text: i18nc("@label:inlistbox", "Em"), value: TabSizeModel.Em},
-                {text: i18nc("@label:inlistbox", "Ex"), value: TabSizeModel.Ex}
+                {text: i18nc("@label:inlistbox", "Ex"), value: TabSizeModel.Ex},
+                {text: i18nc("@label:inlistbox", "Cap"), value: TabSizeModel.Cap},
+                {text: i18nc("@label:inlistbox", "Ch"), value: TabSizeModel.Ch},
+                {text: i18nc("@label:inlistbox", "Ic"), value: TabSizeModel.Ic},
+                {text: i18nc("@label:inlistbox", "Lh"), value: TabSizeModel.Lh}
             ]
             textRole: "text";
             valueRole: "value";

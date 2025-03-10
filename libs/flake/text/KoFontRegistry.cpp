@@ -768,19 +768,19 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     // Fontsize and advances.
     metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem*64.0: face.data()->size->metrics.x_ppem*64.0;
 
-    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags)) {
         metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags)) {
         metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(!FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags)) {
         metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.ideographicAdvance = metrics.fontSize;

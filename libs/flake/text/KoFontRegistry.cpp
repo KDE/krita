@@ -26,6 +26,7 @@
 #include "KoFontLibraryResourceUtils.h"
 #include "KoFFWWSConverter.h"
 #include "KoFontChangeTracker.h"
+#include "KoWritingSystemUtils.h"
 #include <KisResourceLocator.h>
 #include FT_TRUETYPE_TABLES_H
 
@@ -726,7 +727,7 @@ QFont::Style KoFontRegistry::slantMode(FT_FaceSP face)
 
 KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo info, const bool isHorizontal, const QString &text, quint32 xRes, quint32 yRes, bool disableFontMatching, const QString &language)
 {
-    const QString suggestedHash = info.families.join(",")+":"+modificationsString(info, xRes, yRes);
+    const QString suggestedHash = info.families.join(",")+":"+modificationsString(info, xRes, yRes)+language;
     KoSvgText::FontMetrics metrics;
     auto entry = d->fontMetrics().find(suggestedHash);
     if (entry != d->fontMetrics().end()) {
@@ -741,18 +742,24 @@ KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo inf
             yRes,
             disableFontMatching,
             language);
-        if (faces.empty()) return metrics;
-        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
+
+        if (faces.empty()) return KoSvgText::FontMetrics(info.size, isHorizontal);
+        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal, KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale(language).script()));
         d->fontMetrics().insert(suggestedHash, metrics);
     }
     return metrics;
 }
 
-KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool isHorizontal)
+KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool isHorizontal, QString script)
 {
     KoSvgText::FontMetrics metrics;
     hb_direction_t dir = isHorizontal? HB_DIRECTION_LTR: HB_DIRECTION_TTB;
-    hb_script_t script = HB_SCRIPT_UNKNOWN;
+    QLatin1String scriptLatin1(script.toLatin1());
+    hb_script_t scriptTag = hb_script_from_string(scriptLatin1.data(), scriptLatin1.size());
+    hb_tag_t otScriptTag;
+    hb_tag_t otLangTag;
+    uint maxCount = 1;
+    hb_ot_tags_from_script_and_language(scriptTag, nullptr, &maxCount, &otScriptTag, &maxCount, &otLangTag);
     hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
 
     FT_Int32 faceLoadFlags = loadFlagsForFace(face.data(), isHorizontal);
@@ -824,9 +831,9 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         const QLatin1String tagName(c, 4);
         hb_position_t origin = 0;
         if (useFallback) {
-            hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, script, HB_TAG_NONE, &origin);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, otScriptTag, otLangTag, &origin);
         } else {
-            hb_ot_layout_get_baseline(font.data(), *it, dir, script, HB_TAG_NONE, &origin);
+            hb_ot_layout_get_baseline(font.data(), *it, dir, otScriptTag, otLangTag, &origin);
         }
         metrics.setBaselineValueByTag(tagName, origin);
     }

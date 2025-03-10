@@ -105,7 +105,7 @@ public:
                                                    bool disableFontMatching = false,
                                                    const QString &language = QString());
 
-    static KoSvgText::FontMetrics generateFontMetrics(FT_FaceSP face, bool isHorizontal = true);
+    static KoSvgText::FontMetrics generateFontMetrics(FT_FaceSP face, bool isHorizontal = true, QString script = QString());
 
     static int32_t loadFlagsForFace(FT_Face face, bool isHorizontal = true, int32_t loadFlags = 0);
 private Q_SLOTS:

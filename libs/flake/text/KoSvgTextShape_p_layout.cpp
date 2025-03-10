@@ -14,6 +14,7 @@
 #include "KoFontRegistry.h"
 #include "KoSvgTextProperties.h"
 #include "KoColorBackground.h"
+#include "KoWritingSystemUtils.h"
 
 #include <FlakeDebug.h>
 #include <KoPathShape.h>
@@ -432,21 +433,25 @@ void KoSvgTextShape::Private::relayout()
                                                        static_cast<size_t>(length));
                 }
 
-                KoSvgText::FontMetrics metrics = KoFontRegistry::generateFontMetrics(face, isHorizontal);
-
+                QHash<QChar::Script, KoSvgText::FontMetrics> metricsList;
                 for (int j=start; j<start+length; j++) {
-                    result[j].fontAscent = metrics.ascender;
-                    result[j].fontDescent = metrics.descender;
-                    qreal leading = metrics.lineGap;
+                    //TODO: handle low/high surrogate...
+                    const QChar::Script currentScript = plainText.at(j).script();
+                    if (!metricsList.contains(currentScript)) {
+                        metricsList.insert(currentScript, KoFontRegistry::generateFontMetrics(face, isHorizontal, KoWritingSystemUtils::scriptTagForQCharScript(currentScript)));
+                    }
+                    result[j].metrics = metricsList.value(currentScript);
+
+                    qreal leading = result[j].metrics.lineGap;
 
                     if (!lineHeight.isNormal) {
                         if (lineHeight.isNumber) {
                             leading = (fontSize*scaleToPixel*ftFontUnit)*lineHeight.value;
-                            leading -= (metrics.ascender-metrics.descender);
+                            leading -= (result[j].metrics.ascender-result[j].metrics.descender);
                         } else {
                             QPointF val = ftTF.inverted().map(QPointF(lineHeight.length.value, lineHeight.length.value));
                             leading = isHorizontal? val.x(): val.y();
-                            leading -= (metrics.ascender-metrics.descender);
+                            leading -= (result[j].metrics.ascender-result[j].metrics.descender);
                         }
                     }
                     result[j].fontHalfLeading = leading * 0.5;

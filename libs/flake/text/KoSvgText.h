@@ -995,7 +995,7 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
     qint32 xHeight; ///< height of X, defaults to 0.5 fontsize.
     qint32 capHeight; ///< Height of capital letters, defaults to ascender.
     QPair<qint32, qint32> subScriptOffset; ///< subscript baseline height, defaults to 1/5th em below alphabetic.
-    QPair<qint32, qint32> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd about alphabetic.
+    QPair<qint32, qint32> superScriptOffset; ///< superscript baseline height, defaults to 2/3rd above alphabetic.
 
     qint32 ascender; ///< distance from origin to top.
     qint32 descender; ///< distance for origin to bottom.
@@ -1013,6 +1013,13 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
     qint32 ideographicFaceOverBaseline; ///< location of ideographic face over baseline, that is, the top of the glyphs.
 
     qint32 hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
+
+    FontMetrics () {
+
+    }
+
+    // Generate fallback font metrics from a fontSize.
+    FontMetrics (qreal fontSizeInPt, bool isHorizontal);
 
     bool operator==(const FontMetrics & other) const {
         return isVertical == other.isVertical

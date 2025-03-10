@@ -117,8 +117,7 @@ struct CharacterResult {
     bool overflowWrap = false;
 
     qreal fontHalfLeading; ///< Leading for both sides, can be either negative or positive.
-    int fontAscent; ///< Ascender, in scanline coordinates
-    int fontDescent; ///< Descender, in scanline coordinates
+    KoSvgText::FontMetrics metrics; ///< Fontmetrics for current font, in Freetype scanline coordinates.
     qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
     qreal scaledAscent{}; ///< Ascender, in pt
     qreal scaledDescent{}; ///< Descender, in pt

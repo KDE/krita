@@ -1352,6 +1352,53 @@ QStringList fontFeaturesCaps(const FontFeatureCaps &feature, const int start, co
     return list;
 }
 
+FontMetrics::FontMetrics(qreal fontSizeInPt, bool isHorizontal)
+    : isVertical(!isHorizontal)
+    , fontSize(fontSizeInPt * 64.0)
+{
+    ideographicAdvance = fontSize;
+    xHeight = fontSize/2;
+    capHeight = (fontSize / 5) * 4;
+
+    subScriptOffset.second = -(fontSize / 5);
+    superScriptOffset.second = (fontSize / 3);
+    if (isHorizontal) {
+        zeroAdvance = fontSize/2;
+        spaceAdvance = fontSize/2;
+
+        ascender = (fontSize / 5) * 4;
+        descender = ascender - fontSize;
+
+        mathematicalBaseline = xHeight/2;
+
+        ideographicUnderBaseline = descender;
+        ideographicOverBaseline = ascender;
+        ideographicCenterBaseline = (ascender+descender)/2;
+
+        hangingBaseline = (fontSize / 5) * 3;
+
+    } else {
+        zeroAdvance = fontSize;
+        spaceAdvance = fontSize;
+
+        ascender = fontSize /2;
+        descender = ascender - fontSize;
+
+        ideographicUnderBaseline = descender;
+        ideographicOverBaseline = ascender;
+        ideographicCenterBaseline = (ascender+descender)/2;
+
+        mathematicalBaseline = ideographicCenterBaseline;
+
+        alphabeticBaseline = ascender - (fontSize / 5) * 4;
+
+        hangingBaseline = alphabeticBaseline + ((fontSize / 5) * 3);
+    }
+
+    ideographicFaceUnderBaseline = descender;
+    ideographicFaceOverBaseline = ascender;
+}
+
 void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {
     if (tag == "romn") {
         alphabeticBaseline = value;

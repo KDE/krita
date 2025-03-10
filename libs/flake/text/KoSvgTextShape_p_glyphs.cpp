@@ -508,8 +508,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     if (charResult.visualIndex == -1) {
         hb_font_t_sp font(hb_ft_font_create_referenced(currentGlyph.ftface));
         CursorInfo cursorInfo = charResult.cursorInfo;
-        qreal lineHeight = (charResult.fontAscent-charResult.fontDescent) * bitmapScale;
-        qreal descender = charResult.fontDescent * bitmapScale;
+        qreal lineHeight = (charResult.metrics.ascender-charResult.metrics.descender) * bitmapScale;
+        qreal descender = charResult.metrics.descender * bitmapScale;
         if (isHorizontal) {
             hb_position_t run = 0;
             hb_position_t rise = 1;
@@ -615,14 +615,14 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         QRectF bbox;
         if (isHorizontal) {
             bbox = QRectF(0,
-                          charResult.fontDescent * bitmapScale,
+                          charResult.metrics.descender * bitmapScale,
                           ftTF.inverted().map(charResult.advance).x(),
-                          (charResult.fontAscent - charResult.fontDescent) * bitmapScale);
+                          (charResult.metrics.ascender - charResult.metrics.descender) * bitmapScale);
             bbox = glyphObliqueTf.mapRect(bbox);
         } else {
-            bbox = QRectF(charResult.fontDescent * bitmapScale,
+            bbox = QRectF(charResult.metrics.descender * bitmapScale,
                           0,
-                          (charResult.fontAscent - charResult.fontDescent) * bitmapScale,
+                          (charResult.metrics.ascender - charResult.metrics.descender) * bitmapScale,
                           ftTF.inverted().map(charResult.advance).y());
             bbox = glyphObliqueTf.mapRect(bbox);
         }

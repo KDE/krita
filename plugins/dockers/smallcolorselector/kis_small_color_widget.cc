@@ -117,7 +117,9 @@ KisSmallColorWidget::KisSmallColorWidget(QWidget* parent)
 
     }
 
-    const QSurfaceFormat::ColorSpace colorSpace = QSurfaceFormat::ColorSpace::DefaultColorSpace;
+    // default color space means that the colors will be passed through to the GPU directly
+    // without any conversion
+    const KisSurfaceColorSpaceWrapper colorSpace = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
 
     d->hueWidget = new KisClickableGLImageWidget(colorSpace, this);
     d->hueWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);

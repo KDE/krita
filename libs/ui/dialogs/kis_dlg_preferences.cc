@@ -79,7 +79,6 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_color_manager.h"
 #include "kis_config.h"
-#include "kis_cursor.h"
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
 #include "KisMainWindow.h"
@@ -1750,15 +1749,15 @@ void PerformanceTab::slotFrameClonesLimitChanged(int value)
 
 namespace {
 
-QString colorSpaceString(QSurfaceFormat::ColorSpace cs, int depth)
+QString colorSpaceString(const KisSurfaceColorSpaceWrapper &cs, int depth)
 {
     const QString csString =
 #ifdef HAVE_HDR
-        cs == QSurfaceFormat::ColorSpace::bt2020PQColorSpace ? "Rec. 2020 PQ" :
-        cs == QSurfaceFormat::ColorSpace::scRGBColorSpace ? "Rec. 709 Linear" :
+        cs == KisSurfaceColorSpaceWrapper::bt2020PQColorSpace ? "Rec. 2020 PQ" :
+        cs == KisSurfaceColorSpaceWrapper::scRGBColorSpace ? "Rec. 709 Linear" :
 #endif
-        cs == QSurfaceFormat::ColorSpace::sRGBColorSpace ? "sRGB" :
-        cs == QSurfaceFormat::ColorSpace::DefaultColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpaceWrapper::sRGBColorSpace ? "sRGB" :
+        cs == KisSurfaceColorSpaceWrapper::DefaultColorSpace ? "sRGB" :
         "Unknown Color Space";
 
     return QString("%1 (%2 bit)").arg(csString).arg(depth);
@@ -1886,10 +1885,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
     grpHDRWarning->setVisible(false);
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::sRGBColorSpace, 8));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpaceWrapper::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::bt2020PQColorSpace, 10));
-    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(QSurfaceFormat::ColorSpace::scRGBColorSpace, 16));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpaceWrapper::bt2020PQColorSpace, 10));
+    cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpaceWrapper::scRGBColorSpace, 16));
 #endif
     cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(KisConfig::BT709_G22));
     slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
@@ -1901,7 +1900,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
     if (context) {
-        QScreen *screen = QGuiApplication::screenAt(rect().center());
+        QScreen *screen = KisPart::instance()->currentMainwindow()->screen();
         KisScreenInformationAdapter adapter(context);
         if (screen && adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
@@ -1931,14 +1930,8 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         }
 
         const QSurfaceFormat currentFormat = KisOpenGLModeProber::instance()->surfaceformatInUse();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        QSurfaceFormat::ColorSpace colorSpace = currentFormat.colorSpace();
+        const auto colorSpace = KisSurfaceColorSpaceWrapper::fromQtColorSpace(currentFormat.colorSpace());
         lblCurrentRootSurfaceFormat->setText(colorSpaceString(colorSpace, currentFormat.redBufferSize()));
-#else
-        // FIXME QT6: find a way to get the namedcolorspace field out of QColorSpace.
-        QColorSpace colorspace = currentFormat.colorSpace();
-        lblCurrentRootSurfaceFormat->setText(colorspace.description());
-#endif
         cmbPreferedRootSurfaceFormat->setCurrentIndex(formatToIndex(cfg.rootSurfaceFormat()));
         connect(cmbPreferedRootSurfaceFormat, SIGNAL(currentIndexChanged(int)), SLOT(slotPreferredSurfaceFormatChanged(int)));
         slotPreferredSurfaceFormatChanged(cmbPreferedRootSurfaceFormat->currentIndex());
@@ -2080,13 +2073,13 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
 
     QOpenGLContext *context = QOpenGLContext::currentContext();
     if (context) {
-        QScreen *screen = QGuiApplication::screenAt(rect().center());
+        QScreen *screen = KisPart::instance()->currentMainwindow()->screen();
         KisScreenInformationAdapter adapter(context);
         if (adapter.isValid()) {
             KisScreenInformationAdapter::ScreenInfo info = adapter.infoForScreen(screen);
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
-                    info.colorSpace == QSurfaceFormat::ColorSpace::sRGBColorSpace) {
+                    info.colorSpace == KisSurfaceColorSpaceWrapper::sRGBColorSpace) {
                     grpHDRWarning->setVisible(true);
                     grpHDRWarning->setPixmap(
                         grpHDRWarning->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));

@@ -47,6 +47,7 @@
 #include <KisOcioConfiguration.h>
 
 #include <opengl/KisOpenGLModeProber.h>
+#include <KisSurfaceColorSpaceWrapper.h>
 
 #include "black_white_point_chooser.h"
 
@@ -229,13 +230,15 @@ bool LutDockerDock::canChangeExposureAndGamma() const
 
 
 #ifdef HAVE_HDR
-    QSurfaceFormat::ColorSpace currentColorSpace = KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace();
+    KisSurfaceColorSpaceWrapper currentColorSpace =
+        KisSurfaceColorSpaceWrapper::fromQtColorSpace(
+            KisOpenGLModeProber::instance()->surfaceformatInUse().colorSpace());
 #endif
 
     const bool exposureManagementEnabled =
         externalColorManagementEnabled
 #ifdef HAVE_HDR
-            || currentColorSpace == QSurfaceFormat::ColorSpace::scRGBColorSpace
+            || currentColorSpace == KisSurfaceColorSpaceWrapper::scRGBColorSpace
 #endif
             ;
 

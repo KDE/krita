@@ -21,6 +21,7 @@ kis_add_tests(
     kis_animation_frame_cache_test.cpp
     kis_shape_layer_test.cpp
     KisSafeDocumentLoaderTest.cpp
+    KisSurfaceColorSpaceWrapperTest.cpp
 
     LINK_LIBRARIES kritaui kritatestsdk
     NAME_PREFIX "libs-ui-"

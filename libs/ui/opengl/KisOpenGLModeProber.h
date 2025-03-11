@@ -12,22 +12,12 @@
 #include "kritaui_export.h"
 #include "kis_config.h"
 #include <QSurfaceFormat>
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-#include <QColorSpace>
-#endif
 #include <boost/optional.hpp>
 #include "kis_opengl.h"
 
 class KoColorProfile;
+class KisSurfaceColorSpaceWrapper;
 
-/**
- * WARNING WARNING WARNING!!!!
- *
- * The use of QColorSpace for HDR in this file after porting to Qt6 is GUARANTEED TO BE WRONG.
- *
- * This needs porting once we know how to integrate our HDR patches into Qt6
- *
- */
 class KRITAUI_EXPORT KisOpenGLModeProber
 {
 public:
@@ -46,13 +36,8 @@ public:
 
     boost::optional<Result> probeFormat(const KisOpenGL::RendererConfig &rendererConfig,
                                         bool adjustGlobalState = true);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    static bool fuzzyCompareColorSpaces(const QSurfaceFormat::ColorSpace &lhs,
-                                        const QSurfaceFormat::ColorSpace &rhs);
-#else
-    static bool fuzzyCompareColorSpaces(const QColorSpace &lhs,
-                                        const QColorSpace &rhs);
-#endif
+    static bool fuzzyCompareColorSpaces(const KisSurfaceColorSpaceWrapper &lhs,
+                                        const KisSurfaceColorSpaceWrapper &rhs);
     static QString angleRendererToString(KisOpenGL::AngleRenderer renderer);
 
 public:

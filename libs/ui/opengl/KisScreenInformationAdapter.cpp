@@ -225,19 +225,19 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
                 info.maxLuminance = desc.MaxLuminance;
                 info.maxFullFrameLuminance = desc.MaxFullFrameLuminance;
 
-                info.colorSpace = QSurfaceFormat::ColorSpace::DefaultColorSpace;
+                info.colorSpace = KisSurfaceColorSpaceWrapper::DefaultColorSpace;
 
                 if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
-                    info.colorSpace = QSurfaceFormat::ColorSpace::sRGBColorSpace;
+                    info.colorSpace = KisSurfaceColorSpaceWrapper::sRGBColorSpace;
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G22_NONE_P709) {
 #ifdef HAVE_HDR
-                    info.colorSpace = QSurfaceFormat::ColorSpace::scRGBColorSpace;
+                    info.colorSpace = KisSurfaceColorSpaceWrapper::scRGBColorSpace;
 #else
                     qWarning("WARNING: scRGB display color space is not supported by Qt's build");
 #endif
                 } else if (desc.ColorSpace == DXGI_COLOR_SPACE_RGB_FULL_G2084_NONE_P2020) {
 #ifdef HAVE_HDR
-                    info.colorSpace = QSurfaceFormat::ColorSpace::bt2020PQColorSpace;
+                    info.colorSpace = KisSurfaceColorSpaceWrapper::bt2020PQColorSpace;
 #else
                     qWarning("WARNING: bt2020-pq display color space is not supported by Qt's build");
 #endif

@@ -16,25 +16,25 @@ TextPropertyBase {
     searchTerms: i18nc("comma separated search terms for the fontsize property, matching is case-insensitive",
                        "size, small, big, medium");
 
-    property alias fontSize: fontSizeSpn.value;
-    property alias fontSizeUnit: fontSizeUnitCmb.comboBoxUnit;
+    property alias fontSize: fontSizeUnitCmb.dataValue;
+    property alias fontSizeUnit: fontSizeUnitCmb.dataUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        fontSize = properties.fontSize.value * fontSizeSpn.multiplier;
-        fontSizeUnit = properties.fontSize.unitType;
+        fontSizeUnitCmb.dpi = canvasDPI;
+        fontSizeUnitCmb.setTextProperties(properties);
+        fontSizeUnitCmb.setDataValueAndUnit(properties.fontSize.value, properties.fontSize.unitType);
         visible = properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onFontSizeChanged: {
         if (!blockSignals) {
-            properties.fontSize.value = fontSize / fontSizeSpn.multiplier;
+            properties.fontSize.value = fontSize;
         }
     }
     onFontSizeUnitChanged: {
-        fontSizeUnitCmb.currentIndex = fontSizeUnitCmb.indexOfValue(fontSizeUnit);
         if (!blockSignals) {
-            properties.fontSize.unitType = fontSizeUnitCmb.comboBoxUnit;
+            properties.fontSize.unitType = fontSizeUnit;
         }
     }
 
@@ -62,16 +62,21 @@ TextPropertyBase {
             Layout.fillWidth: true;
 
             from: 0;
-            to: 999 * multiplier;
+            to: 99999 * multiplier;
             stepSize: 100;
+
+            onValueChanged: fontSizeUnitCmb.userValue = value;
         }
 
         UnitComboBox {
             id: fontSizeUnitCmb;
             spinBoxControl: fontSizeSpn;
             isFontSize: true;
+            isLineHeight: false;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
+
+            onUserValueChanged: fontSizeSpn.value = userValue;
         }
     }
 }

@@ -15,29 +15,50 @@ TextPropertyBase {
                    "Tab Size allows defining the size of tabulation characters.");
     searchTerms: i18nc("comma separated search terms for the tab-size property, matching is case-insensitive",
                        "tab-size");
-    property alias tabSize: tabSizeSpn.value;
-    property int tabSizeUnit: TabSizeModel.Spaces;
+    property alias tabSize: converter.dataValue;
+    property alias tabSizeUnit: converter.dataUnit;
+
+    property var unitMap: [
+        { user: CssQmlUnitConverter.Pt, data: TabSizeModel.Absolute},
+        { user: CssQmlUnitConverter.Em, data: TabSizeModel.Em},
+        { user: CssQmlUnitConverter.Ex, data: TabSizeModel.Ex},
+        { user: CssQmlUnitConverter.Cap, data: TabSizeModel.Cap},
+        { user: CssQmlUnitConverter.Ch, data: TabSizeModel.Ch},
+        { user: CssQmlUnitConverter.Ic, data: TabSizeModel.Ic},
+        { user: CssQmlUnitConverter.Lh, data: TabSizeModel.Lh},
+        { user: CssQmlUnitConverter.Spaces, data: TabSizeModel.Spaces},
+    ]
+
+    CssQmlUnitConverter {
+        id: converter;
+        dpi: dpi;
+        dataMultiplier: tabSizeSpn.multiplier;
+        userValue: tabSizeSpn.value;
+        userUnit: tabSizeUnitCmb.currentValue;
+    }
 
     onPropertiesUpdated: {
         blockSignals = true;
-        tabSize = properties.tabSize.value * tabSizeSpn.multiplier;
-        tabSizeUnit = properties.tabSize.unit;
+        converter.dpi = canvasDPI;
+        converter.setFontMetricsFromTextPropertiesModel(properties);
+        converter.setDataValueAndUnit(properties.tabSize.unit, properties.tabSize.value);
         visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
     onTabSizeChanged: {
         if (!blockSignals) {
-            properties.tabSize.value = tabSize / tabSizeSpn.multiplier;
+            properties.tabSize.value = tabSize;
         }
     }
 
     onTabSizeUnitChanged: {
-        tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(tabSizeUnit);
         if (!blockSignals) {
             properties.tabSize.unit = tabSizeUnit;
         }
     }
+
+    Component.onCompleted: converter.setDataUnitMap(unitMap);
 
     onEnableProperty: properties.tabSizeState = KoSvgTextPropertiesModel.PropertySet;
 
@@ -70,51 +91,15 @@ TextPropertyBase {
             from: 0;
             to: 100 * multiplier;
         }
-        ComboBox {
+        SqueezedComboBox {
             id: tabSizeUnitCmb;
-            property QtObject spinBoxControl: tabSizeSpn;
-            model: [
-                {text: i18nc("@label:inlistbox", "Spaces"), value: TabSizeModel.Spaces},
-                {text: i18nc("@label:inlistbox", "Pt"), value: TabSizeModel.Absolute},
-                {text: i18nc("@label:inlistbox", "Em"), value: TabSizeModel.Em},
-                {text: i18nc("@label:inlistbox", "Ex"), value: TabSizeModel.Ex},
-                {text: i18nc("@label:inlistbox", "Cap"), value: TabSizeModel.Cap},
-                {text: i18nc("@label:inlistbox", "Ch"), value: TabSizeModel.Ch},
-                {text: i18nc("@label:inlistbox", "Ic"), value: TabSizeModel.Ic},
-                {text: i18nc("@label:inlistbox", "Lh"), value: TabSizeModel.Lh}
-            ]
-            textRole: "text";
+            model:converter.userUnitModel;
+            textRole: "description";
             valueRole: "value";
-            Layout.fillWidth: true;
+            displayText: converter.symbol;
             wheelEnabled: true;
-
-            onActivated: {
-                if (currentValue === TabSizeModel.Spaces) {
-                    tabSizeUnit = currentValue;
-                    spinBoxControl.value = properties.tabSize.value * tabSizeSpn.multiplier;
-                } else {
-
-                    var currentValueInPt = 0;
-                    if (tabSizeUnit === TabSizeModel.Absolute) {
-                        currentValueInPt = spinBoxControl.value;
-                    } else if (tabSizeUnit === TabSizeModel.Ex) {
-                        currentValueInPt = spinBoxControl.value * properties.resolvedXHeight(false);
-                    } else { // EM, Lines
-                        currentValueInPt = spinBoxControl.value * properties.resolvedFontSize(false);
-                    }
-
-                    var newValue = 0;
-                    if (currentValue === TabSizeModel.Absolute) {
-                        newValue = currentValueInPt
-                    } else if (currentValue === TabSizeModel.Ex) {
-                        newValue = currentValueInPt / properties.resolvedXHeight(false);
-                    } else { // Em
-                        newValue = currentValueInPt / properties.resolvedFontSize(false);
-                    }
-                    tabSizeUnit = currentValue;
-                    spinBoxControl.value = newValue;
-                }
-            }
+            Layout.preferredWidth: height+indicator.width;
+            Layout.maximumWidth: implicitWidth;
         }
 
     }

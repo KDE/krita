@@ -16,15 +16,16 @@ CollapsibleGroupProperty {
     searchTerms: i18nc("comma separated search terms for the text-indent property, matching is case-insensitive",
                        "text-indent");
 
-    property alias textIndentValue: textIndentSpn.value;
+    property alias textIndentValue: textIndentUnitCmb.dataValue;
     property alias hanging: indentHangingCkb.checked;
     property alias eachLine: eachLineCkb.checked;
-    property alias textIndentUnit: textIndentUnitCmb.comboBoxUnit;
+    property alias textIndentUnit: textIndentUnitCmb.dataUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        textIndentValue = properties.textIndent.length.value * textIndentSpn.multiplier;
-        textIndentUnit = properties.textIndent.length.unitType;
+        textIndentUnitCmb.dpi = canvasDPI;
+        textIndentUnitCmb.setTextProperties(properties);
+        textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.value, properties.textIndent.unitType);
         hanging = properties.textIndent.hanging;
         eachLine = properties.textIndent.eachLine;
         visible = properties.textIndentState !== KoSvgTextPropertiesModel.PropertyUnset;
@@ -33,12 +34,11 @@ CollapsibleGroupProperty {
 
     onTextIndentValueChanged: {
         if (!blockSignals) {
-            properties.textIndent.length.value = textIndentValue / textIndentSpn.multiplier;
+            properties.textIndent.length.value = textIndentValue;
         }
     }
 
     onTextIndentUnitChanged: {
-        textIndentUnitCmb.currentIndex = textIndentUnitCmb.indexOfValue(textIndentUnit);
         if (!blockSignals) {
             properties.textIndent.length.unitType = textIndentUnit;
         }
@@ -77,12 +77,14 @@ CollapsibleGroupProperty {
             Layout.fillWidth: true;
             from: 0;
             to: 999 * multiplier;
+            onValueChanged: textIndentUnitCmb.userValue = value;
         }
         /// Note: percentage calculation in the default unitcombobox isn't great for textIndent as it assumes 100% = fontsize,
         /// While spec-wise, it's the inline length that defines percentage.
         UnitComboBox {
             id: textIndentUnitCmb;
             spinBoxControl: textIndentSpn;
+            onUserValueChanged: textIndentSpn.value = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
         }

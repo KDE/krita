@@ -16,27 +16,27 @@ TextPropertyBase {
     searchTerms: i18nc("comma separated search terms for the baseline-shift property, matching is case-insensitive",
                        "baseline-shift, superscript, subscript");
 
-    property alias baselineShiftValue: baselineShiftSpn.value;
-    property alias baselineShiftUnit: baselineShiftUnitCmb.comboBoxUnit;
+    property alias baselineShiftValue: baselineShiftUnitCmb.dataValue;
+    property alias baselineShiftUnit: baselineShiftUnitCmb.dataUnit;
     property int baselineShiftMode;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        baselineShiftValue = properties.baselineShiftValue.value * baselineShiftSpn.multiplier;
         baselineShiftMode = properties.baselineShiftMode;
-        baselineShiftUnit = properties.baselineShiftValue.unitType;
+        baselineShiftUnitCmb.dpi = canvasDPI;
+        baselineShiftUnitCmb.setTextProperties(properties);
+        baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.unitType, properties.baselineShiftValue.value)
         visible = properties.baselineShiftState !== KoSvgTextPropertiesModel.PropertyUnset
         blockSignals = false;
     }
 
     onBaselineShiftValueChanged: {
         if (!blockSignals) {
-            properties.baselineShiftValue.value = baselineShiftValue / baselineShiftSpn.multiplier;
+            properties.baselineShiftValue.value = baselineShiftValue;
         }
     }
 
     onBaselineShiftUnitChanged: {
-        baselineShiftUnitCmb.currentIndex = baselineShiftUnitCmb.indexOfValue(baselineShiftUnit);
         if (!blockSignals) {
             properties.baselineShiftValue.unitType = baselineShiftUnit;
         }
@@ -107,18 +107,30 @@ TextPropertyBase {
             }
             Layout.fillWidth: true;
             Layout.fillHeight: true;
+            PaletteControl {
+                id: baselinePalette;
+                colorGroup: baselineShiftSpn.enabled? SystemPalette.Active: SystemPalette.Disabled;
+            }
             DoubleSpinBox {
                 id: baselineShiftSpn
                 width: parent.width;
-                enabled: baselineShiftMode == 3;
+                enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
                 from: -999 * multiplier;
                 to: 999 * multiplier;
+                onValueChanged: baselineShiftUnitCmb.userValue = value;
+                palette: baselinePalette.palette;
             }
         }
 
         UnitComboBox {
             id: baselineShiftUnitCmb;
             spinBoxControl: baselineShiftSpn;
+            palette: baselinePalette.palette;
+            Layout.preferredWidth: minimumUnitBoxWidth;
+            Layout.maximumWidth: implicitWidth;
+            enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
+            dpi:dpi;
+            onUserValueChanged: baselineShiftSpn.value = userValue;
         }
     }
 }

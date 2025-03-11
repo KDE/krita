@@ -15,24 +15,24 @@ TextPropertyBase {
                    "Letter spacing controls the spacing between visible clusters of characters.");
     searchTerms: i18nc("comma separated search terms for the letter-spacing property, matching is case-insensitive",
                        "letter-spacing, tracking, kerning");
-    property alias letterSpacing: letterSpacingSpn.value;
-    property alias letterSpacingUnit: letterSpacingUnitCmb.comboBoxUnit;
+    property alias letterSpacing: letterSpacingUnitCmb.dataValue;
+    property alias letterSpacingUnit: letterSpacingUnitCmb.dataUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        letterSpacing = properties.letterSpacing.value * letterSpacingSpn.multiplier;
-        letterSpacingUnit = properties.letterSpacing.unitType;
+        letterSpacingUnitCmb.dpi = canvasDPI;
+        letterSpacingUnitCmb.setTextProperties(properties);
+        letterSpacingUnitCmb.setDataValueAndUnit(properties.letterSpacing.value, properties.letterSpacing.unitType);
         visible = properties.letterSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onLetterSpacingChanged: {
         if (!blockSignals) {
-            properties.letterSpacing.value = letterSpacing / letterSpacingSpn.multiplier;
+            properties.letterSpacing.value = letterSpacing;
         }
     }
 
     onLetterSpacingUnitChanged: {
-        letterSpacingUnitCmb.currentIndex = letterSpacingUnitCmb.indexOfValue(letterSpacingUnit);
         if (!blockSignals) {
             properties.letterSpacing.unitType = letterSpacingUnit;
         }
@@ -62,12 +62,15 @@ TextPropertyBase {
                 Layout.fillWidth: true;
                 from: -999 * multiplier;
                 to: 999 * multiplier;
+                onValueChanged: letterSpacingUnitCmb.userValue = value;
             }
 
             UnitComboBox {
                 id: letterSpacingUnitCmb
                 spinBoxControl: letterSpacingSpn;
                 isFontSize: false;
+                dpi:dpi;
+                onUserValueChanged: letterSpacingSpn.value = userValue;
                 Layout.preferredWidth: minimumUnitBoxWidth;
                 Layout.maximumWidth: implicitWidth;
                 allowPercentage: false; // CSS-Text-4 has percentages for letter-spacing, but so does SVG 1.1, and they both are implemented differently.

@@ -15,25 +15,24 @@ TextPropertyBase {
                    "Word spacing controls the size of word-break characters, such as the space character.");
     searchTerms: i18nc("comma separated search terms for the word-spacing property, matching is case-insensitive",
                        "word-spacing, tracking, white space,");
-    property alias wordSpacing: wordSpacingSpn.value;
-    visible: properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
-    property alias wordSpacingUnit: wordSpacingUnitCmb.comboBoxUnit;
+    property alias wordSpacing: wordSpacingUnitCmb.dataValue;
+    property alias wordSpacingUnit: wordSpacingUnitCmb.dataUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        wordSpacing = properties.wordSpacing.value * wordSpacingSpn.multiplier;
-        wordSpacingUnit = properties.wordSpacing.unitType;
+        wordSpacingUnitCmb.dpi = canvasDPI;
+        wordSpacingUnitCmb.setTextProperties(properties);
+        wordSpacingUnitCmb.setDataValueAndUnit(properties.wordSpacing.value, properties.wordSpacing.unitType);
         visible = properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onWordSpacingChanged: {
         if (!blockSignals) {
-            properties.wordSpacing.value = wordSpacing / wordSpacingSpn.multiplier;
+            properties.wordSpacing.value = wordSpacing;
         }
     }
 
     onWordSpacingUnitChanged: {
-        wordSpacingUnitCmb.currentIndex = wordSpacingUnitCmb.indexOfValue(wordSpacingUnit);
         if (!blockSignals) {
             properties.wordSpacing.unitType = wordSpacingUnit;
         }
@@ -63,12 +62,16 @@ TextPropertyBase {
             Layout.fillWidth: true;
             from: -999 * multiplier;
             to: 999 * multiplier;
+
+            onValueChanged: wordSpacingUnitCmb.userValue = value;
         }
 
         UnitComboBox {
             id: wordSpacingUnitCmb
             spinBoxControl: wordSpacingSpn;
             isFontSize: false;
+            dpi: dpi;
+            onUserValueChanged: wordSpacingSpn.value = userValue;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
             allowPercentage: false; // CSS-Text-4 has percentages for word-spacing, but so does SVG 1.1, and they both are implemented differently.

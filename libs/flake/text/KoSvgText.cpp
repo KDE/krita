@@ -933,10 +933,8 @@ void CssLengthPercentage::convertToAbsolute(const KoSvgText::FontMetrics metrics
     if (u == Percentage) {
         u = percentageUnit;
     }
-    // FontMetrics is in freetype pixels, but we also don't know the resolution, which we need to calculate pt.
-    // So the first multiplier handles the potential resolution difference, the second multiplier the freetype pixel.
-    const qreal fontSizeMultiplier = 1/((metrics.fontSize/64.0)/fontSize);
-    const qreal ftMultiplier = fontSizeMultiplier/64.0;
+
+    const qreal ftMultiplier = fontSize / metrics.fontSize;
     if (u == Em) {
         value = value * fontSize;
     } else if (u == Ex) {

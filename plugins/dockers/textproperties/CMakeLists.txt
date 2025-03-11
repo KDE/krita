@@ -7,6 +7,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     TagFilterProxyModelQmlWrapper.cpp
     OpenTypeFeatureModel.cpp
     LocaleHandler.cpp
+    CssQmlUnitConverter.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

@@ -48,6 +48,7 @@
 #include "OpenTypeFeatureModel.h"
 #include "TagFilterProxyModelQmlWrapper.h"
 #include "LocaleHandler.h"
+#include "CssQmlUnitConverter.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -67,6 +68,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
     qmlRegisterType<OpenTypeFeatureModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureModel");
     qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
+    qmlRegisterType<CssQmlUnitConverter>("org.krita.flake.text", 1, 0, "CssQmlUnitConverter");
     qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
     qmlRegisterType<LocaleHandler>("org.krita.flake.text", 1, 0, "LocaleHandler");
 }
@@ -107,6 +109,8 @@ struct TextPropertiesDock::Private
     FontAxesModel axesModel;
     KisResourceModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
+
+    qreal currentDpi{72.0};
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -150,6 +154,7 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
+    m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -192,6 +197,10 @@ void TextPropertiesDock::setCanvas(KoCanvasBase *canvas)
     KIS_ASSERT(canvas);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (m_canvas && m_canvas->currentImage()) {
+        d->currentDpi = m_canvas->currentImage()->xRes() * 72.0;
+        m_quickWidget->rootContext()->setContextProperty("canvasDPI", QVariant::fromValue(d->currentDpi));
+    }
 }
 
 void TextPropertiesDock::unsetCanvas()

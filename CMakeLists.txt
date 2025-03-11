@@ -552,23 +552,52 @@ QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
     configure_file(config_qt5_has_wintab_switch.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_qt5_has_wintab_switch.h)
 endif ()
 
-set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 
 if (WIN32)
-    CHECK_CXX_SOURCE_COMPILES("
-    #include <QSurfaceFormat>
-    int main(int argc, char *argv[]) {
-    QSurfaceFormat fmt;
-    fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
-    fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
-    }
-    "
-    HAVE_HDR
-    )
+    if (QT_MAJOR_VERSION STREQUAL "5")
+        set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+        set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
+
+        CHECK_CXX_SOURCE_COMPILES("
+            #include <QSurfaceFormat>
+            int main(int argc, char *argv[]) {
+                QSurfaceFormat fmt;
+                fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
+                fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
+            }
+            "
+            HAVE_HDR
+        )
+
+        unset(CMAKE_REQUIRED_INCLUDES)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+
+    else()
+
+        set(CMAKE_REQUIRED_INCLUDES ${Qt6Core_INCLUDE_DIRS} ${Qt6Gui_INCLUDE_DIRS} ${Qt6Widgets_INCLUDE_DIRS} ${Qt6OpenGLWidgets_INCLUDE_DIRS})
+        set(CMAKE_REQUIRED_LIBRARIES ${Qt6Core_LIBRARIES} ${Qt6Gui_LIBRARIES} ${Qt6Widgets_LIBRARIES} ${Qt6OpenGLWidgets_LIBRARIES})
+
+        CHECK_CXX_SOURCE_COMPILES("
+            #include <QOpenGLWidget>
+            #include <QColorSpace>
+            int main(int argc, char *argv[]) {
+                QOpenGLWidget *w = nullptr;
+                w->setTextureColorSpace(QColorSpace());
+            }
+            "
+            HAVE_HDR
+        )
+
+        unset(CMAKE_REQUIRED_INCLUDES)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+
+    endif()
 endif()
 configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
+
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 CHECK_CXX_SOURCE_COMPILES("
 #include <QGuiApplication>

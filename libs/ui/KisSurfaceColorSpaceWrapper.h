@@ -83,6 +83,27 @@ public:
     }
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    /**
+     * Because both QSurfaceFormat::ColorSpace and KisSurfaceColorSpaceWrapper::ColorSpace are enums, there is an 
+     * ambiguity when trying to compare KisSurfaceColorSpaceWrapper to KisSurfaceColorSpaceWrapper::ColorSpace.
+     * We need to resolve this ambiguity manually by providing corresponding operators.
+     */ 
+    friend constexpr bool operator==(KisSurfaceColorSpaceWrapper::ColorSpace lhs, const KisSurfaceColorSpaceWrapper &rhs) {
+        return lhs == rhs.m_colorSpace;
+    }
+
+    friend constexpr bool operator==(const KisSurfaceColorSpaceWrapper &lhs, KisSurfaceColorSpaceWrapper::ColorSpace rhs) {
+        return lhs.m_colorSpace == rhs;
+    }
+
+    friend constexpr bool operator!=(KisSurfaceColorSpaceWrapper::ColorSpace lhs, const KisSurfaceColorSpaceWrapper &rhs) {
+        return !(lhs == rhs);
+    }
+
+    friend constexpr bool operator!=(const KisSurfaceColorSpaceWrapper &lhs, KisSurfaceColorSpaceWrapper::ColorSpace rhs) {
+        return !(lhs == rhs);
+    }
+
     constexpr operator QSurfaceFormat::ColorSpace() const {
         return static_cast<QSurfaceFormat::ColorSpace>(m_colorSpace);
     }

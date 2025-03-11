@@ -87,4 +87,17 @@ void KisSurfaceColorSpaceWrapperTest::testConstruction()
 #endif
 }
 
+void KisSurfaceColorSpaceWrapperTest::testIndirectComparisonToItself()
+{
+    KisSurfaceColorSpaceWrapper w3(KisSurfaceColorSpaceWrapper::sRGBColorSpace);
+
+    const KisSurfaceColorSpaceWrapper &wr3 = w3;
+
+    QVERIFY(w3 == KisSurfaceColorSpaceWrapper::sRGBColorSpace);
+    QVERIFY(wr3 == KisSurfaceColorSpaceWrapper::sRGBColorSpace);
+
+    QVERIFY(w3 != KisSurfaceColorSpaceWrapper::scRGBColorSpace);
+    QVERIFY(wr3 != KisSurfaceColorSpaceWrapper::scRGBColorSpace);
+}
+
 SIMPLE_TEST_MAIN(KisSurfaceColorSpaceWrapperTest)

@@ -15,6 +15,7 @@ class KisSurfaceColorSpaceWrapperTest : public QObject
 private Q_SLOTS:
     void test();
     void testConstruction();
+    void testIndirectComparisonToItself();
 };
 
 #endif /* __KISSURFACECOLORSPACEWRAPPERTEST_H */

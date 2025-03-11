@@ -25,7 +25,7 @@ CollapsibleGroupProperty {
         blockSignals = true;
         textIndentUnitCmb.dpi = canvasDPI;
         textIndentUnitCmb.setTextProperties(properties);
-        textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.value, properties.textIndent.unitType);
+        textIndentUnitCmb.setDataValueAndUnit(properties.textIndent.length.value, properties.textIndent.length.unitType);
         hanging = properties.textIndent.hanging;
         eachLine = properties.textIndent.eachLine;
         visible = properties.textIndentState !== KoSvgTextPropertiesModel.PropertyUnset;

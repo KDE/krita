@@ -45,7 +45,7 @@ TextPropertyBase {
         converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties, false, true);
         converter.percentageReference = properties.resolvedFontSize(false);
-        converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unitType);
+        converter.setDataValueAndUnit(properties.lineHeight.value, properties.lineHeight.unit);
         visible = properties.lineHeightState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
@@ -75,6 +75,7 @@ TextPropertyBase {
     Component.onCompleted: {
         mainWindow.connectAutoEnabler(lineHeightSpnArea);
         converter.setDataUnitMap(unitMap);
+        converter.setDataValueAndUnit(0, 0);
     }
 
     GridLayout {
@@ -147,7 +148,7 @@ TextPropertyBase {
                 palette: lineHeightPalette.palette;
                 wheelEnabled: true;
 
-                onCurrentValueChanged: if (currentValue !== undefined) {converter.userUnit = currentValue}
+                onCurrentValueChanged: converter.userUnit = currentValue;
             }
         }
     }

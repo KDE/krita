@@ -73,6 +73,7 @@ TextPropertyBase {
             spinBoxControl: fontSizeSpn;
             isFontSize: true;
             isLineHeight: false;
+            percentageReference: properties.resolvedFontSize(true);
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
 

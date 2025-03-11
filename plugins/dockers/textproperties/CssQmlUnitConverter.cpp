@@ -17,8 +17,8 @@ struct CssQmlUnitConverter::Private {
     qreal dpi{72.0};
     qreal dataMultiplier{1.0};
     qreal dataValue{0.0};
-    int dataUnit{0};
-    int userUnit{0};
+    int dataUnit{-1};
+    int userUnit{-1};
     qreal percentageReference;
 
     KoUnit absoluteUnitConverter;
@@ -78,16 +78,21 @@ void CssQmlUnitConverter::setDataUnitMap(const QVariantList &unitMap)
 void CssQmlUnitConverter::setFontMetricsFromTextPropertiesModel(KoSvgTextPropertiesModel *textPropertiesModel, bool isFontSize, bool isLineHeight)
 {
     KoSvgTextProperties main;
+    int parentLineHeight = -1;
     if (textPropertiesModel) {
         KoSvgTextPropertyData data = textPropertiesModel->textData.get();
-        main = data.commonProperties;
         // remove fontsize or lineheight for those specific properties, so the calculation is normal.
         if (isFontSize) {
-            main.removeProperty(KoSvgTextProperties::FontSizeId);
-        } else if (isLineHeight) {
-            main.removeProperty(KoSvgTextProperties::LineHeightId);
+            main = data.inheritedProperties;
+            main.inheritFrom(KoSvgTextProperties::defaultProperties());
+        } else {
+            main = data.commonProperties;
+            main.inheritFrom(data.inheritedProperties);
         }
-        main.inheritFrom(data.inheritedProperties);
+        if (isLineHeight) {
+            KoSvgText::FontMetrics m = main.metrics(true);
+            parentLineHeight = m.ascender-m.descender + m.lineGap;
+        }
     }
     KoCSSFontInfo info = main.cssFontInfo();
     if (info.size < 0) return;
@@ -97,7 +102,11 @@ void CssQmlUnitConverter::setFontMetricsFromTextPropertiesModel(KoSvgTextPropert
     d->fontInfo = main.cssFontInfo();
     d->metrics = main.metrics(false);
     d->fontLineGap = d->metrics.lineGap;
-    d->metrics = main.applyLineHeight(d->metrics);
+    if (isLineHeight) {
+        d->metrics = main.applyLineHeight(d->metrics);
+    } else {
+        d->metrics.lineGap = parentLineHeight - (d->metrics.ascender-d->metrics.descender);
+    }
 }
 
 void CssQmlUnitConverter::setFromNormalLineHeight()
@@ -109,16 +118,22 @@ void CssQmlUnitConverter::setFromNormalLineHeight()
 
 void CssQmlUnitConverter::setDataValueAndUnit(const qreal value, const int unit)
 {
-    if (qFuzzyCompare(d->dataValue, value) && d->dataUnit == unit) {
+    const bool updateVal = !qFuzzyCompare(d->dataValue, value);
+    const bool updateUnit = d->dataUnit != unit;
+    if (!updateVal && !updateUnit) {
         return;
     }
+
     d->dataUnit = unit;
     d->dataValue = value;
-    d->userUnit = d->dataUnitMap.key(d->dataUnit);
+    d->userUnit = d->dataUnitMap.key(d->dataUnit, UserUnits::Pt);
+    if (koUnitMap.values().contains(UserUnits(d->userUnit))) {
+        d->absoluteUnitConverter = KoUnit(koUnitMap.key(UserUnits(d->userUnit)), d->dpi * koUnitFactor);
+    }
 
-    emit dataValueChanged();
     emit dataUnitChanged();
     emit userUnitChanged();
+    emit dataValueChanged();
     emit userValueChanged();
 }
 
@@ -134,6 +149,7 @@ void CssQmlUnitConverter::setDpi(qreal newDpi)
     d->dpi = newDpi;
     d->absoluteUnitConverter.setFactor(newDpi * koUnitFactor);
     emit dpiChanged();
+    emit userValueChanged();
 }
 
 qreal CssQmlUnitConverter::dataMultiplier() const
@@ -188,7 +204,7 @@ void CssQmlUnitConverter::setUserValue(qreal newUserValue)
     if (qFuzzyCompare(userValue(), newUserValue))
         return;
     const bool isAbsolute = koUnitMap.values().contains(UserUnits(d->userUnit));
-    d->dataValue = (isAbsolute? d->absoluteUnitConverter.fromUserValue(newUserValue): newUserValue) / d->dataMultiplier;
+    d->dataValue = isAbsolute? d->absoluteUnitConverter.fromUserValue(newUserValue/d->dataMultiplier): (newUserValue/d->dataMultiplier);
     emit userValueChanged();
     emit dataValueChanged();
 }

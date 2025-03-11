@@ -16,7 +16,9 @@ SqueezedComboBox {
     property alias dataValue: converter.dataValue;
     property alias dpi: converter.dpi;
     property alias userValue: converter.userValue;
+
     property bool allowPercentage: true;
+    property alias percentageReference: converter.percentageReference;
 
     wheelEnabled: true;
 
@@ -25,12 +27,11 @@ SqueezedComboBox {
     displayText: converter.symbol;
 
     function setTextProperties(properties) {
-        converter.setFontMetricsFromTextPropertiesModel(properties, root.isFontSize, root.isLineHeight);
+        converter.setFontMetricsFromTextPropertiesModel(properties, isFontSize, isLineHeight);
     }
     function setDataValueAndUnit(value, unit) {
         converter.setDataValueAndUnit(value, unit);
     }
-
 
     CssQmlUnitConverter {
         id: converter;
@@ -54,10 +55,13 @@ SqueezedComboBox {
             userUnitModel.push( { user: CssQmlUnitConverter.Percentage, data: 1})
         }
         converter.setDataUnitMap(userUnitModel);
+        converter.setDataValueAndUnit(0, 0);
     }
 
     model: converter.userUnitModel;
     textRole: "description";
     valueRole: "value";
-    onCurrentValueChanged: converter.userUnit = currentValue;
+    onCurrentValueChanged: {
+        converter.userUnit = currentValue;
+    }
 }

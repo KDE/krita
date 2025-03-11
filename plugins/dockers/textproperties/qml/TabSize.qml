@@ -35,6 +35,9 @@ TextPropertyBase {
         dataMultiplier: tabSizeSpn.multiplier;
         userValue: tabSizeSpn.value;
         userUnit: tabSizeUnitCmb.currentValue;
+
+        onUserValueChanged: tabSizeSpn.value = userValue;
+        onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
     }
 
     onPropertiesUpdated: {
@@ -58,7 +61,10 @@ TextPropertyBase {
         }
     }
 
-    Component.onCompleted: converter.setDataUnitMap(unitMap);
+    Component.onCompleted: {
+        converter.setDataUnitMap(unitMap);
+        converter.setDataValueAndUnit(0, 0);
+    }
 
     onEnableProperty: properties.tabSizeState = KoSvgTextPropertiesModel.PropertySet;
 
@@ -100,6 +106,8 @@ TextPropertyBase {
             wheelEnabled: true;
             Layout.preferredWidth: height+indicator.width;
             Layout.maximumWidth: implicitWidth;
+
+            onCurrentValueChanged: converter.userUnit = currentValue;
         }
 
     }

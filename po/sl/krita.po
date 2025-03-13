@@ -15,15 +15,15 @@
 # Andrej Vernekar <andrej.vernekar@moj.net>, 2005, 2006, 2007, 2008, 2010, 2011, 2012, 2013.
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013.
 # Jure Repinc <jlp@holodeck1.com>, 2006, 2012.
-# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023 Matjaž Jeran <matjaz.jeran@amis.net>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2025 Matjaž Jeran <matjaz.jeran@amis.net>
 # Martin Srebotnjak <miles@filmsi.net>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 03:20+0000\n"
-"PO-Revision-Date: 2025-01-08 23:26+0100\n"
-"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
+"PO-Revision-Date: 2025-03-12 10:01+0100\n"
+"Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Martin Srebotnjak <miles@filmsi.net>\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -36288,6 +36288,11 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Programska oprema KDE je in vedno bo na voljo brezplačno, vendar njeno "
+"ustvarjanje ni brezplačno.<br /><br />Da bi podprla razvoj, je skupnost KDE "
+"ustanovila KDE e.V., neprofitno organizacijo, ki je zakonito ustanovljena v "
+"Nemčiji. KDE e.V. zastopa skupnost KDE v pravnih in finančnih zadevah. "
+"Glejte <a href=\"%1\">%1</a> za informacije o KDE e.V.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36297,6 +36302,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE ima koristi od številnih vrst prispevkov, vključno s finančnimi. "
+"Sredstva uporabljamo za povračilo članom in drugim za stroške, ki nastanejo "
+"pri prispevanju. Nadaljnja sredstva se uporabljajo za pravno podporo in "
+"organizacijo konferenc in srečanj.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36304,6 +36313,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Radi bi vas spodbudili, da podprete naša prizadevanja s finančno donacijo "
+"na enega od načinov, opisanih pod <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format

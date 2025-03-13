@@ -185,6 +185,11 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     //Presets was saved with nested cdata section
     preset.replace("<curve><![CDATA[", "<curve>");
     preset.replace("]]></curve>", "</curve>");
+    //Presets with non-base64 pattern md5
+    QRegularExpressionMatch patternMd5 = QRegularExpression("<param (?:type=\"string\" )?name=\"Texture/Pattern/PatternMD5\"(?: type=\"string\")?><!\\[CDATA\\[(.+?)\\]\\]></param>").match(preset);
+    if (patternMd5.hasMatch() && patternMd5.captured(1).contains(QRegularExpression("[^a-zA-Z0-9+/=]"))) {
+        preset.replace(patternMd5.captured(0), "");
+    }
 
     QDomDocument doc;
     if (!doc.setContent(preset)) {

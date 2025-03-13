@@ -20,7 +20,7 @@ KisEmbeddedTextureData KisEmbeddedTextureData::fromPattern(KoPatternSP pattern)
 {
     KisEmbeddedTextureData data;
 
-    data.md5Base64 = QByteArray::fromHex(pattern->md5Sum().toLatin1());
+    data.md5Base64 = QByteArray::fromHex(pattern->md5Sum().toLatin1()).toBase64();
     data.md5sum = pattern->md5Sum();
     data.fileName = pattern->filename();
     data.name = pattern->name();

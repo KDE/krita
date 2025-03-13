@@ -99,6 +99,10 @@ set(krita_QRCS
     CACHE INTERNAL "krita_QRCS"
 )
 
+if (QT_MAJOR_VERSION STREQUAL "6")
+    list(APPEND krita_QRCS ${CMAKE_SOURCE_DIR}/krita/data/mime-database/mime-database.qrc)
+endif()
+
 qt_add_resources(krita_SRCS ${krita_QRCS})
 
 if (ANDROID AND QT_MAJOR_VERSION STREQUAL "5")

@@ -1478,22 +1478,32 @@ QRectF KoSvgTextShape::outlineRect() const
 QRectF KoSvgTextShape::boundingRect() const
 {
     QRectF result;
-    KoShapeStrokeModelSP stroke = nullptr;
-    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-            stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
-        }
-        QRectF bb = it->associatedOutline.boundingRect();
-        QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
-        for (int i = 0; i < decorations.values().size(); ++i) {
-            bb |= decorations.values().at(i).boundingRect();
-        }
-        if (stroke) {
-            KoInsets insets;
-            stroke->strokeInsets(this, insets);
-            result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+    QList<KoShapeStrokeModelSP> parentStrokes;
+    for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
+        if (it.state() == KisForestDetail::Enter) {
+            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                parentStrokes.append(it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property);
+            }
         } else {
-            result |= bb;
+            KoShapeStrokeModelSP stroke = parentStrokes.size() > 0? parentStrokes.last(): nullptr;
+            QRectF bb = it->associatedOutline.boundingRect();
+            QMap<KoSvgText::TextDecoration, QPainterPath> decorations = it->textDecorations;
+            for (int i = 0; i < decorations.values().size(); ++i) {
+                bb |= decorations.values().at(i).boundingRect();
+            }
+            if (!bb.isEmpty()) {
+                if (stroke) {
+                    KoInsets insets;
+                    stroke->strokeInsets(this, insets);
+                    result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+                } else {
+                    result |= bb;
+                }
+            }
+            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                // reset stroke to use parent stroke.
+                parentStrokes.pop_back();
+            }
         }
     }
     return this->absoluteTransformation().mapRect(result);

@@ -69,6 +69,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     for (auto it = compositionBegin(textData); it != compositionEnd(textData); it++) {
         inheritPaintProperties(it, stroke, background, paintOrder);
 
+        KoInsets insets;
+        if (stroke) {
+            stroke->strokeInsets(rootShape, insets);
+        }
+
         if (it.state() == KisForestDetail::Enter) {
             QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
             QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
@@ -109,7 +114,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
             if (childCount(siblingCurrent(it)) == 0) {
                 const int j = currentIndex + it->numChars(true);
 
-                const QRect shapeGlobalClipRect = painter.transform().mapRect(it->associatedOutline.boundingRect()).toAlignedRect();
+                const QRect shapeGlobalClipRect = painter.transform().mapRect(it->associatedOutline.boundingRect()).toAlignedRect().adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+
 
                 if (shapeGlobalClipRect.isValid()) {
                     KoClipMaskPainter fillPainter(&painter, shapeGlobalClipRect);
@@ -134,9 +140,9 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
                             /**
                      * Make sure the character touches the painter's clip rect,
-                     * otherwise we can just skip it
+                     * otherwise we can just skip it. Adding insets to ensure the outline will not be skipped.
                      */
-                            const QRectF boundingRect = tf.mapRect(result.at(i).inkBoundingBox);
+                            const QRectF boundingRect = tf.mapRect(result.at(i).inkBoundingBox).adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
                             const QRectF clipRect = painter.clipBoundingRect();
                             if (boundingRect.isEmpty() ||
                                     (!clipRect.contains(boundingRect) &&
@@ -207,11 +213,13 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                 if (strokeSP) {
                                     if (strokeSP->lineBrush().gradient()) {
                                         KoClipMaskPainter strokePainter(&painter, shapeGlobalClipRect);
-                                        strokePainter.shapePainter()->fillRect(rootOutline.boundingRect(), strokeSP->lineBrush());
+                                        QPainterPath strokeOutline;
+                                        strokeOutline.addRect(rootOutline.boundingRect().adjusted(-insets.left, -insets.top, insets.right, insets.bottom));
+                                        strokePainter.shapePainter()->fillRect(strokeOutline.boundingRect(), strokeSP->lineBrush());
                                         maskStroke = KoShapeStrokeSP(new KoShapeStroke(*strokeSP.data()));
                                         maskStroke->setColor(Qt::white);
                                         maskStroke->setLineBrush(Qt::white);
-                                        strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
+                                        strokePainter.maskPainter()->fillPath(strokeOutline, Qt::black);
                                         if (textRendering != OptimizeSpeed && painter.testRenderHint(QPainter::Antialiasing)) {
                                             // also apply antialiasing only if antialiasing is active on provided target QPainter
                                             strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
@@ -351,6 +359,10 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         if (textDecorationColor.isValid()) {
             decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
         }
+        KoInsets insets;
+        if (stroke) {
+            stroke->strokeInsets(rootShape, insets);
+        }
 
         KoShape::PaintOrder first = paintOrder.at(0);
         KoShape::PaintOrder second = paintOrder.at(1);
@@ -455,7 +467,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
                                                                  shape->outlineRect()));
 
                 shape->setStroke(transformStrokeBgToNewBounds(stroke,
-                                                              rootShape->outlineRect(),
+                                                              rootShape->outlineRect().adjusted(-insets.left, -insets.top, insets.right, insets.bottom),
                                                               shape->outlineRect()));
                 shape->setZIndex(shapes.size());
                 shape->setFillRule(Qt::WindingFill);

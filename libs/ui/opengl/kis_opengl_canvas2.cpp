@@ -22,6 +22,7 @@
 
 #include <QPointer>
 #include "KisOpenGLModeProber.h"
+#include "KisOpenGLContextSwitchLock.h"
 
 static bool OPENGL_SUCCESS = false;
 
@@ -151,11 +152,13 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
+    KisOpenGLContextSwitchLock contextLock(this);
     d->renderer->setDisplayFilter(displayFilter);
 }
 
 void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
 {
+    KisOpenGLContextSwitchLock contextLock(this);
     d->renderer->notifyImageColorSpaceChanged(cs);
 }
 
@@ -343,6 +346,7 @@ void KisOpenGLCanvas2::showEvent(QShowEvent *e)
 
 void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
+    KisOpenGLContextSwitchLock contextLock(this);
     d->renderer->setDisplayColorConverter(colorConverter);
 }
 
@@ -354,6 +358,7 @@ void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)
 
 void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
+    KisOpenGLContextSwitchLock contextLock(this);
     d->renderer->finishResizingImage(w, h);
 }
 
@@ -370,31 +375,8 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 
 QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
 {
-#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
-    /**
-     * On OSX openGL different (shared) contexts have different execution queues.
-     * It means that the textures uploading and their painting can be easily reordered.
-     * To overcome the issue, we should ensure that the textures are uploaded in the
-     * same openGL context as the painting is done.
-     */
-
-    QOpenGLContext *oldContext = QOpenGLContext::currentContext();
-    QSurface *oldSurface = oldContext ? oldContext->surface() : 0;
-
-    this->makeCurrent();
-#endif
-
-    QVector<QRect> result = KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
-
-#if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
-    if (oldContext) {
-        oldContext->makeCurrent(oldSurface);
-    } else {
-        this->doneCurrent();
-    }
-#endif
-
-    return result;
+    KisOpenGLContextSwitchLock contextLock(this);
+    return KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
 }
 
 void KisOpenGLCanvas2::updateCanvasImage(const QRect &imageUpdateRect)

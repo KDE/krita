@@ -87,14 +87,19 @@ private:
 class CanvasPlaybackEnvironment : public QObject {
     Q_OBJECT
 public:
-    CanvasPlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
+    CanvasPlaybackEnvironment(int originFrame, KisCanvas2* canvas, KisCanvasAnimationState* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
+        , m_canvas(canvas)
     {
+        ENTER_FUNCTION();
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SIGNAL(sigCancelPlayback()));
+
+        prepare();
     }
 
     ~CanvasPlaybackEnvironment() {
+        ENTER_FUNCTION();
         restore();
     }
 
@@ -112,41 +117,41 @@ public:
         m_playbackRange = p_playbackRange;
     }
 
-    void prepare(KisCanvas2* canvas)
+    void prepare()
     {
-        KIS_ASSERT(canvas); // Sanity check...
-        m_canvas = canvas;
+        ENTER_FUNCTION();
+        KIS_ASSERT(m_canvas); // Sanity check...
 
-        const KisTimeSpan range = canvas->image()->animationInterface()->activePlaybackRange();
+        const KisTimeSpan range = m_canvas->image()->animationInterface()->activePlaybackRange();
         setPlaybackRange(range);
 
         // Initialize and optimize playback environment...
-        if (canvas->frameCache()) {
+        if (m_canvas->frameCache()) {
             KisImageConfig cfg(true);
 
             const int dimensionLimit = cfg.useAnimationCacheFrameSizeLimit() ?
                         cfg.animationCacheFrameSizeLimit() : std::numeric_limits<int>::max();
 
-            const int largestDimension = KisAlgebra2D::maxDimension(canvas->image()->bounds());
+            const int largestDimension = KisAlgebra2D::maxDimension(m_canvas->image()->bounds());
 
             const QRect regionOfInterest =
                         cfg.useAnimationCacheRegionOfInterest() && largestDimension > dimensionLimit ?
-                            canvas->regionOfInterest() : canvas->coordinatesConverter()->imageRectInImagePixels();
+                            m_canvas->regionOfInterest() : m_canvas->coordinatesConverter()->imageRectInImagePixels();
 
             const QRect minimalRect =
-                    canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
-                    canvas->coordinatesConverter()->imageRectInImagePixels();
+                    m_canvas->coordinatesConverter()->widgetRectInImagePixels().toAlignedRect() &
+                    m_canvas->coordinatesConverter()->imageRectInImagePixels();
 
-            canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalRect);
-            canvas->setRenderingLimit(regionOfInterest);
+            m_canvas->frameCache()->dropLowQualityFrames(range, regionOfInterest, minimalRect);
+            m_canvas->setRenderingLimit(regionOfInterest);
 
             // Preemptively cache all frames...
-            KisAsyncAnimationCacheRenderDialog dlg(canvas->frameCache(), range);
+            KisAsyncAnimationCacheRenderDialog dlg(m_canvas->frameCache(), range);
             dlg.setRegionOfInterest(regionOfInterest);
-            dlg.regenerateRange(canvas->viewManager());
+            dlg.regenerateRange(m_canvas->viewManager());
         } else {
-            KisImageBarrierLock lock(canvas->image());
-            KisLayerUtils::recursiveApplyNodes(canvas->image()->root(), [this](KisNodeSP node){
+            KisImageBarrierLock lock(m_canvas->image());
+            KisLayerUtils::recursiveApplyNodes(m_canvas->image()->root(), [this](KisNodeSP node){
                 KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(node.data());
                 if (decoratedNode && decoratedNode->decorationsVisible()) {
                     decoratedNode->setDecorationsVisible(false, false);
@@ -157,29 +162,33 @@ public:
 
         // Setup appropriate interrupt connections...
         m_cancelStrokeConnections.addConnection(
-                canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
+                m_canvas->image().data(), SIGNAL(sigUndoDuringStrokeRequested()),
                 &m_cancelTrigger, SLOT(tryFire()));
 
         m_cancelStrokeConnections.addConnection(
-                canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
+                m_canvas->image().data(), SIGNAL(sigStrokeCancellationRequested()),
                 &m_cancelTrigger, SLOT(tryFire()));
 
         // We only want to stop on stroke end when running on a system
         // without cache / opengl / graphics driver support!
-        if (canvas->frameCache()) {
+        if (m_canvas->frameCache()) {
             m_cancelStrokeConnections.addConnection(
-                    canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
+                    m_canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
     }
 
     void restore() {
+        ENTER_FUNCTION();
         m_cancelStrokeConnections.clear();
 
         if (m_canvas) {
+            qDebug() << "Has canvas.";
             if (m_canvas->frameCache()) {
+                qDebug() << "Has frame cache.";
                 m_canvas->setRenderingLimit(QRect());
             } else {
+                qDebug() << "No frame cache.";
                 KisImageBarrierLock lock(m_canvas->image());
                 Q_FOREACH(KisNodeWSP disabledNode, m_disabledDecoratedNodes) {
                     KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(disabledNode.data());
@@ -189,9 +198,9 @@ public:
                 }
                 m_disabledDecoratedNodes.clear();
             }
-
-            m_canvas = nullptr;
         }
+
+        qDebug() << "End restore.";
     }
 
 Q_SIGNALS:
@@ -237,6 +246,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     : QObject(canvas)
     , m_d(new Private(canvas))
 {
+    ENTER_FUNCTION();
     setPlaybackState(STOPPED);
 
     // Handle image-internal frame change case...
@@ -262,6 +272,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
 {
+    ENTER_FUNCTION();
 }
 
 PlaybackState KisCanvasAnimationState::playbackState()
@@ -360,24 +371,22 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
     if (m_d->state != p_state) {
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
-            if (!m_d->playbackEnvironment) {
-                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->activeFrame(), this));
+            if (m_d->playbackEnvironment) {
+                m_d->playbackEnvironment->prepare(); // re-prepare
+            } else {
+                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->activeFrame(), m_d->canvas, this));
+
                 connect(m_d->playbackEnvironment.data(), SIGNAL(sigPlaybackStatisticsUpdated()),
                         this, SIGNAL(sigPlaybackStatisticsUpdated()));
             }
 
-            m_d->playbackEnvironment->prepare(m_d->canvas);
-
             m_d->m_statsTimer.start();
             Q_EMIT sigPlaybackStatisticsUpdated();
-
         } else {
-            if (m_d->playbackEnvironment) {
-                m_d->playbackEnvironment->restore();
-            }
-
             if (m_d->state == STOPPED) {
                 m_d->playbackEnvironment.reset();
+            } else if(m_d->playbackEnvironment) {
+                m_d->playbackEnvironment->restore();
             }
 
             m_d->m_statsTimer.stop();

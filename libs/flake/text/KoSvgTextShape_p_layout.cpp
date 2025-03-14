@@ -138,6 +138,23 @@ void KoSvgTextShape::Private::relayout()
         }
     }
 
+    const auto getUcs4At = [](const QString &s, int i) -> char32_t {
+        const QChar high = s.at(i);
+        if (!high.isSurrogate()) {
+            return high.unicode();
+        }
+        if (high.isHighSurrogate() && s.length() > i + 1) {
+            const QChar low = s[i + 1];
+            if (low.isLowSurrogate()) {
+                return QChar::surrogateToUcs4(high, low);
+            }
+        }
+        // Don't return U+FFFD replacement character but return the
+        // unpaired surrogate itself, so that if we want to we can draw
+        // a tofu block for it.
+        return high.unicode();
+    };
+
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
@@ -433,8 +450,7 @@ void KoSvgTextShape::Private::relayout()
 
                 QHash<QChar::Script, KoSvgText::FontMetrics> metricsList;
                 for (int j=start; j<start+length; j++) {
-                    //TODO: handle low/high surrogate...
-                    const QChar::Script currentScript = plainText.at(j).script();
+                    const QChar::Script currentScript = QChar::script(getUcs4At(text, j));
                     if (!metricsList.contains(currentScript)) {
                         metricsList.insert(currentScript, KoFontRegistry::generateFontMetrics(face, isHorizontal, KoWritingSystemUtils::scriptTagForQCharScript(currentScript)));
                     }
@@ -487,22 +503,7 @@ void KoSvgTextShape::Private::relayout()
 
         const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(currentGlyph.ftface, isHorizontal, loadFlags);
 
-        const auto getUcs4At = [](const QString &s, int i) -> char32_t {
-            const QChar high = s.at(i);
-            if (!high.isSurrogate()) {
-                return high.unicode();
-            }
-            if (high.isHighSurrogate() && s.length() > i + 1) {
-                const QChar low = s[i + 1];
-                if (low.isLowSurrogate()) {
-                    return QChar::surrogateToUcs4(high, low);
-                }
-            }
-            // Don't return U+FFFD replacement character but return the
-            // unpaired surrogate itself, so that if we want to we can draw
-            // a tofu block for it.
-            return high.unicode();
-        };
+
         const char32_t codepoint = getUcs4At(text, cluster);
         debugFlake << "glyph" << i << "cluster" << cluster << currentGlyph.index << codepoint;
 

@@ -2488,9 +2488,9 @@ void TestSvgText::testFontMetrics_data()
     QTest::addColumn<qint32>("expectedSubscript");
     QTest::addColumn<qint32>("expectedSuperscript");
 
-    QTest::addRow("test Deja Vu Sans") << QString("Deja Vu Sans") << 12.0 << true << 768 << 420 << 559 << 256 << 584 << -185 << -181 << 460 << 107 << 369;
-    QTest::addRow("test Baseline test font") << QString("Baseline Test") << 12.0 << true << 768 << 384 << 538 << 448 << 614 << -154 << -154 << 460 << 58 << 269;
-    QTest::addRow("test Baseline test font vertical") << QString("Baseline Test") << 12.0 << false << 768 << 384 << 538 << 448 << 614 << -154 << -154 << 460 << 58 << 269;
+    QTest::addRow("test Deja Vu Sans") << QString("Deja Vu Sans") << 12.0 << true << 768 << 420 << 559 << 384 << 584 << -185 << -181 << 460 << 107 << 369;
+    QTest::addRow("test Baseline test font") << QString("Baseline Test") << 12.0 << true << 768 << 384 << 538 << 384 << 614 << -154 << -154 << 460 << 58 << 269;
+    QTest::addRow("test Baseline test font vertical") << QString("Baseline Test") << 12.0 << false << 768 << 384 << 538 << 384 << 614 << -154 << -154 << 460 << 58 << 269;
 }
 
 /**
@@ -2577,6 +2577,81 @@ void TestSvgText::testFontMetrics()
              QString("Superscript not returning as %1, instead %2")
              .arg(QString::number(expectedSuperscript))
              .arg(QString::number(metrics.superScriptOffset.second))
+             .toLatin1());
+}
+
+void TestSvgText::testFontRelativeUnits_data()
+{
+    QTest::addColumn<QString>("fontFamily");
+    QTest::addColumn<qreal>("parentSize");
+    QTest::addColumn<int>("parentProperty");
+    QTest::addColumn<int>("childProperty");
+    QTest::addColumn<int>("requestedUnit");
+    QTest::addColumn<qreal>("expectedSize");
+
+    QTest::addRow("test font-size em") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Em) << 6.0;
+    QTest::addRow("test font-size ex") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Ex) << 3.28125;
+    QTest::addRow("test font-size cap") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Cap) << 4.36719;
+    QTest::addRow("test font-size ch") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Ch) << 3.0;
+    QTest::addRow("test font-size ic") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Ic) << 6.0;
+    QTest::addRow("test font-size lh") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::FontSizeId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Lh) << 7.21094;
+
+    QTest::addRow("test line-height lh") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::LineHeightId) << int(KoSvgTextProperties::LineHeightId) << int(KoSvgText::CssLengthPercentage::Lh) << 6.0;
+    QTest::addRow("test line-height font-size lh") << "Deja Vu Sans" << 12.0 << int(KoSvgTextProperties::LineHeightId) << int(KoSvgTextProperties::FontSizeId) << int(KoSvgText::CssLengthPercentage::Lh) << 6.0;
+}
+
+void TestSvgText::testFontRelativeUnits()
+{
+    QFETCH(QString, fontFamily);
+    QFETCH(qreal, parentSize);
+    QFETCH(int, parentProperty);
+    QFETCH(int, childProperty);
+    QFETCH(int, requestedUnit);
+    QFETCH(qreal, expectedSize);
+
+    KoSvgTextProperties props;
+    const QStringList families = {fontFamily};
+    props.setProperty(KoSvgTextProperties::FontFamiliesId, families);
+    KoSvgText::CssLengthPercentage size(parentSize);
+
+    if (KoSvgTextProperties::PropertyId(parentProperty) == KoSvgTextProperties::LineHeightId) {
+        KoSvgText::LineHeightInfo lhInfo;
+        lhInfo.isNormal = false;
+        lhInfo.isNumber = false;
+        lhInfo.length = size;
+        props.setProperty(KoSvgTextProperties::PropertyId(parentProperty), QVariant::fromValue(lhInfo));
+    } else {
+        props.setProperty(KoSvgTextProperties::PropertyId(parentProperty), QVariant::fromValue(size));
+    }
+
+    KoSvgTextProperties childProps;
+    size.value = 0.5;
+    size.unit = KoSvgText::CssLengthPercentage::UnitType(requestedUnit);
+
+    const KoSvgTextProperties::PropertyId testProperty = KoSvgTextProperties::PropertyId(childProperty);
+    if (testProperty == KoSvgTextProperties::LineHeightId) {
+        KoSvgText::LineHeightInfo lhInfo;
+        lhInfo.isNormal = false;
+        lhInfo.isNumber = false;
+        lhInfo.length = size;
+        childProps.setProperty(testProperty, QVariant::fromValue(lhInfo));
+    } else {
+        childProps.setProperty(testProperty, QVariant::fromValue(size));
+    }
+
+    childProps.inheritFrom(props, true);
+    KoSvgText::CssLengthPercentage test;
+    if (testProperty == KoSvgTextProperties::LineHeightId) {
+        test = childProps.propertyOrDefault(testProperty).value<KoSvgText::LineHeightInfo>().length;
+    } else {
+        test = childProps.propertyOrDefault(testProperty).value<KoSvgText::CssLengthPercentage>();
+    }
+
+    // Using fabs(diff) here because qfuzzycompare and qdebug do not give enough info about the precise error.
+    QVERIFY2(fabs(test.value - expectedSize) < 0.00001,
+             QString("Inherited font size not returning as %1, instead %2")
+             .arg(QString::number(expectedSize))
+             .arg(QString::number(test.value))
              .toLatin1());
 }
 

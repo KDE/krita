@@ -98,6 +98,9 @@ private Q_SLOTS:
     void testFontMetrics_data();
     void testFontMetrics();
 
+    void testFontRelativeUnits_data();
+    void testFontRelativeUnits();
+
     void testCssShapeParsing();
     void testShapeInsideRender();
 

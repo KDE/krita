@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-13 01:56+0000\n"
-"PO-Revision-Date: 2025-03-06 15:17+0300\n"
+"PO-Revision-Date: 2025-03-13 15:48+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.03.70\n"
+"X-Generator: Lokalize 25.07.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -27746,7 +27746,7 @@ msgid ""
 "recently opened documents"
 msgstr ""
 "Son zamanlarda açılan bir\n"
-"dosya yok gibi görünüyor"
+"dosya yok gibi görünüyor."
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1247
@@ -28328,7 +28328,7 @@ msgstr "Mutlak Renkölçer"
 #: libs/ui/widgets/kis_color_space_selector.cc:55
 #, kde-format
 msgid "Import profile"
-msgstr "Profil içe aktar"
+msgstr "Profil İçe Aktar"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgcolorsettings.ui:268
@@ -28654,7 +28654,7 @@ msgstr "Tuval İvmelendirmesi"
 #: libs/ui/forms/wdgdisplaysettings.ui:58
 #, kde-format
 msgid "Canvas &Graphics Acceleration"
-msgstr "Tuval &Grafik İvmelendirmesi"
+msgstr "Tuval &grafik ivmelendirmesi"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseTextureBuffer)
 #: libs/ui/forms/wdgdisplaysettings.ui:73
@@ -28794,7 +28794,7 @@ msgstr "Tuval Dekorasyonları"
 #: libs/ui/forms/wdgdisplaysettings.ui:321
 #, kde-format
 msgid "Transparency Checkerboard:"
-msgstr "Saydamlık dama tahtası:"
+msgstr "Saydamlık Dama Tahtası"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
@@ -28833,7 +28833,7 @@ msgstr "Tuval kenarlık rengi:"
 #: libs/ui/forms/wdgdisplaysettings.ui:404
 #, kde-format
 msgid "Pixel Grid:"
-msgstr "Piksel ızgarası:"
+msgstr "Piksel Izgarası"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -28926,7 +28926,7 @@ msgstr "%"
 #: libs/ui/forms/wdgdisplaysettings.ui:447
 #, kde-format
 msgid "Selection Overlay:"
-msgstr "Seçim kaplaması:"
+msgstr "Seçim Kaplaması"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:459
@@ -29533,7 +29533,7 @@ msgstr "Dosya Kullanımı"
 #: libs/ui/forms/wdggeneralsettings.ui:878
 #, kde-format
 msgid "Enable Autosaving"
-msgstr "Kendiliğinden Kaydetmeyi Etkinleştir"
+msgstr "Kendiliğinden kaydetmeyi etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:887
@@ -29565,7 +29565,7 @@ msgstr "Adsız kendiliğinden kayıt dosyaları öntanımlı olarak gizlidir"
 #: libs/ui/forms/wdggeneralsettings.ui:929
 #, kde-format
 msgid "Create a Backup File on Saving"
-msgstr "Kaydederken Yedek Dosya Oluştur"
+msgstr "Kaydederken yedek dosya oluştur"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: libs/ui/forms/wdggeneralsettings.ui:938
@@ -29829,7 +29829,7 @@ msgstr "Oynatma erimini anahtar karelere uyarla"
 #: libs/ui/forms/wdggeneralsettings.ui:1433
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr "Font DPI’si Geçici Çözümü"
+msgstr "Yazıtipi DPI’si geçici çözümü"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1448
@@ -30873,8 +30873,8 @@ msgstr "&Anımsa"
 #, kde-format
 msgid "Note: Krita will need to be restarted for changes to take effect"
 msgstr ""
-"Not: Değişikliklerin etkili olabilmesi için Krita’nın yeniden başlatılması "
-"gerekecek"
+"Not: Değişikliklerin etkili olması için Krita’yı yeniden başlatmanız "
+"gerekecek."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgperformancesettings.ui:56
@@ -30996,7 +30996,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:283
 #, kde-format
 msgid "Frame Rendering Clones Limit"
-msgstr "Kare Sunumu Klonları Sınırı"
+msgstr "Kare sunumu klonları sınırı:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameClonesLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:296
@@ -31025,7 +31025,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:303
 #, kde-format
 msgid "Frame Rendering Timeout"
-msgstr "Kare Sunumu Zaman Aşımı"
+msgstr "Kare sunumu zaman aşımı:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
 #: libs/ui/forms/wdgperformancesettings.ui:316
@@ -31065,7 +31065,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:346
 #, kde-format
 msgid "Debug options"
-msgstr "Hata ayıklama seçenekleri"
+msgstr "Hata Ayıklama Seçenekleri"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkOpenGLFramerateLogging)
 #: libs/ui/forms/wdgperformancesettings.ui:352
@@ -31101,7 +31101,7 @@ msgstr "İlerleme raporlaması (başarımı etkileyebilir)"
 #: libs/ui/forms/wdgperformancesettings.ui:387
 #, kde-format
 msgid "Performance logging"
-msgstr "Performans günlüğü"
+msgstr "Başarım günlüklemesi"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgperformancesettings.ui:400
@@ -31311,7 +31311,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:576
 #, kde-format
 msgid "in Transform Tool"
-msgstr "Dönüşüm Aracında"
+msgstr "Dönüşüm aracında"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
@@ -31329,7 +31329,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:586
 #, kde-format
 msgid "in Move Tool"
-msgstr "Taşıma Aracında"
+msgstr "Taşıma aracında"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
@@ -37929,8 +37929,8 @@ msgid ""
 "space a little odd, at least at first, and so you have to weight the pros "
 "and cons of changing your workflow.</p>"
 msgstr ""
-"<p>Olası telif hakkı ihlali sorunlarından kaçınmak için, bu profillerin "
-"temel adı olarak “LargeRGB” (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
+"<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
+"adı olarak “LargeRGB” (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
 "p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamını yazdırılabilir ve en "
 "gerçek dünya renklerini içerecek şekilde tasarladı. Bazı hayali renkleri "
 "içerir ve sayısal kameralar tarafından yakalanabilecek gerçek dünya mavileri "
@@ -41651,7 +41651,7 @@ msgstr "Küçük Gölge Seçicisi"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:450
 #, kde-format
 msgid "Colo&r Patches"
-msgstr "Ren&k Yamaları"
+msgstr "Ren&k yamaları"
 
 #. i18n: ectx: property (text), widget (QRadioButton, minimalShadeSelectorAsGradient)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:457
@@ -45064,7 +45064,7 @@ msgstr "&Sürgü"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
 #, kde-format
 msgid "Color Pa&tches"
-msgstr "Ren&k Yamaları"
+msgstr "Ren&k yamaları"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
@@ -53707,8 +53707,8 @@ msgid ""
 msgstr ""
 "<p>Etkinleştirilirse Tüm RAW dosyalar, doğrusal gama eğrisi kullanılarak 16 "
 "bit renk derinliğine çözülür. Düzenleyici içinde koyu piksellerin oluşmasını "
-"engellemek için, bu kipte Renk Yönetimini kullanmanız önerilir.</p><p>Devre "
-"dışı bırakılırsa tüm RAW dosyalar bir BT.709 gama eğrisi ve bir 99.-yüzde "
+"engellemek için bu kipte Renk Yönetimini kullanmanız önerilir.</p><p>Devre "
+"dışı bırakılırsa tüm RAW dosyalar bir BT.709 gama eğrisi ve bir 99. yüzde "
 "beyaz nokta ile 8 bit renk derinliğinde çözülür. Bu kip, 16 bit kod çözme "
 "işleminden daha hızlıdır.</p>"
 
@@ -53760,8 +53760,8 @@ msgid ""
 "guarantees that each output pixel corresponds to one RAW pixel.</p>"
 msgstr ""
 "<title>Pikselleri sıkıştırma veya döndürme</title><p>Fuji Super CCD "
-"kameralar için, görüntüyü 45 derece eğimli olarak gösterin. Kare olmayan "
-"pikselli kameralar için, görseli doğru en–boy oranına kadar uzatmayın. Her "
+"kameralar için görüntüyü 45 derece eğimli olarak gösterin. Kare olmayan "
+"pikselli kameralar için görseli doğru en–boy oranına kadar uzatmayın. Her "
 "durumda, bu seçenek her çıktı pikselinin bir RAW piksele karşılık geldiğini "
 "garanti eder.</p>"
 

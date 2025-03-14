@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-13 01:56+0000\n"
-"PO-Revision-Date: 2025-03-11 02:01+0100\n"
+"PO-Revision-Date: 2025-03-14 00:35+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -18916,6 +18916,8 @@ msgstr "Fracciones alternativas"
 msgctxt "@tooltip"
 msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
+"Sustituye las cifras separadas por una barra con una forma de fracción "
+"vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
 #, kde-format
@@ -18937,7 +18939,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Formas sin punto"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
 #, kde-format
@@ -18946,20 +18948,20 @@ msgid ""
 "Replaces dotted letters such as i and j with dotless forms, for use in "
 "mathematical formula."
 msgstr ""
+"Sustituye las letras con punto, como la i y la j, con formas sin punto que "
+"se puedan usar en fórmulas matemáticas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten Layer"
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "Aplanar la capa"
+msgstr "Formas con acentos aplanados"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces accents on capital letters with flattened forms."
-msgstr ""
+msgstr "Sustituye los acentos de las letras mayúsculas con formas aplanadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
 #, kde-format
@@ -18976,6 +18978,11 @@ msgid ""
 "separated by a 'fraction slash' (U+2044), then this will replace the figures "
 "with numerators before the slash and denominators after the slash."
 msgstr ""
+"Sustituye las cifras separadas por una barra con una fracción diagonal "
+"adecuada. Si una tipografía dispone de funciones de numerador y de "
+"denominador, y los números están separados por una «barra de fracción» (U"
+"+2044), esto sustituirá las cifras con numeradores delante de la barra y con "
+"denominadores después de ella."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
 #, kde-format
@@ -19005,6 +19012,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces normal Greek script with glyphs intended for mathematical usage."
 msgstr ""
+"Sustituye la escritura griega normal con glifos destinados al uso matemático."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
 #, kde-format
@@ -19053,11 +19061,10 @@ msgstr ""
 "con letras minúsculas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "Original"
+msgstr "Ordinales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
@@ -19081,7 +19088,7 @@ msgstr "Sustituye cifras tabulares con cifras proporcionales."
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Inferiores científicos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19090,18 +19097,21 @@ msgid ""
 "Replaces glyphs with forms that are suited for displaying the number in "
 "chemical formulas."
 msgstr ""
+"Sustituye glifos con formas adecuadas para mostrar el número en fórmulas "
+"químicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Alternativas de estilo de escritura matemática"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
+"Sustituye glifos por otros más adecuados para superíndices y subíndices."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
 #, kde-format
@@ -19113,7 +19123,7 @@ msgstr "Subíndice"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for subscript."
-msgstr ""
+msgstr "Sustituye glifos con otros más adecuados para subíndices."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
 #, kde-format
@@ -19125,7 +19135,7 @@ msgstr "Superíndice"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with ones more suited for superscript."
-msgstr ""
+msgstr "Sustituye glifos con otros más adecuados para superíndices."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:201
 #, kde-format
@@ -19143,7 +19153,7 @@ msgstr "Sustituye cifras proporcionales con cifras tabulares."
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Cero con barra"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -19152,12 +19162,14 @@ msgid ""
 "Replaces the number zero with one that has a slash in the middle, which can "
 "help prevent confusion with similar glyphs like the letter 'O'."
 msgstr ""
+"Sustituye el número cero con uno que tiene una barra atravesándolo, que "
+"puede ayudar a evitar la confusión con glifos similares, como la letra «O»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Formas que distinguen entre mayúsculas y minúsculas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
 #, kde-format
@@ -19166,13 +19178,14 @@ msgid ""
 "Adjusts glyphs to work better with text that consists of only capitals or "
 "lining figures."
 msgstr ""
+"Ajusta los glifos para que funcionen mejor con texto que consta únicamente "
+"de mayúsculas o cifras alineadas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
-#, fuzzy, kde-format
-#| msgid "Cell Spacing:"
+#, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "Espaciado entre celdas:"
+msgstr "Espaciado de mayúsculas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
@@ -19193,6 +19206,8 @@ msgid ""
 "Replaces uppercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Sustituye letras mayúsculas con formas versalitas pequeñas, que están más "
+"próximas a la altura de la x de un tipo de letra que las formas versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:223
 #, kde-format
@@ -19204,7 +19219,7 @@ msgstr "Versalitas de mayúsculas"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces uppercase letters with small capital forms."
-msgstr ""
+msgstr "Sustituye letras mayúsculas con formas versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:227
 #, kde-format
@@ -19219,6 +19234,8 @@ msgid ""
 "Replaces lowercase letters with petite capital forms, which are closer to "
 "the x-height of a font than small capital forms."
 msgstr ""
+"Sustituye letras minúsculas con formas versalitas pequeñas, que están más "
+"próximas a la altura de la x de un tipo de letra que las formas versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
 #, kde-format
@@ -19230,20 +19247,20 @@ msgstr "Versalitas"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces lowercase letters with small capital forms."
-msgstr ""
+msgstr "Sustituye letras minúsculas con formas versalitas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "Título"
+msgstr "Títulos"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces glyphs with alternate forms suited for header text."
 msgstr ""
+"Sustituye glifos con formas alternativas adecuadas para textos de encabezado."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:239
 #, kde-format
@@ -19256,12 +19273,13 @@ msgstr "Unicaja"
 msgctxt "@tooltip"
 msgid "Replaces both upper and lowercase glyphs with unicase glyphs."
 msgstr ""
+"Sustituye glifos tanto en mayúscula como en minúscula con glifos unicaja."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Formas por encima de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
 #, kde-format
@@ -19269,30 +19287,35 @@ msgctxt "@tooltip"
 msgid ""
 "Controls substitution for above base forms in Khmer and other Indic scripts"
 msgstr ""
+"Controla la sustitución de las formas por encima de la base en jemer y otras "
+"escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:249
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Posición de marcas por encima de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark positioning for Indic scripts."
 msgstr ""
+"Controla la posición de las marcas por encima de la base en escrituras "
+"índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:253
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Sustituciones por encima de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls above-base mark ligatures for Indic scripts."
 msgstr ""
+"Controla las ligaduras de marcas por encima de la base en escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:257
 #, kde-format
@@ -19304,55 +19327,60 @@ msgstr "Akhand"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls Akhand ligatures for Indic scripts."
-msgstr ""
+msgstr "Controla las ligaduras akhand en escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:261
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Formas por debajo de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls substitution for below base forms in Indic scripts."
 msgstr ""
+"Controla la sustitución de formas por debajo de la base en escrituras "
+"índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Posición de marcas por debajo de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark positioning for Indic scripts."
 msgstr ""
+"Controla la posición de las marcas por debajo de la base en escrituras "
+"índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:269
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Sustituciones por debajo de la base"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls below-base mark ligatures for Indic scripts."
 msgstr ""
+"Controla las ligaduras de marcas por debajo de la base en escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Forma conjunta tras ro"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
 msgctxt "@tooltip"
 msgid "Controls glyphs following conjoined Ro in Khmer script."
-msgstr ""
+msgstr "Controlas los glifos que siguen a ro unico en la escritura jemer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:277
 #, kde-format
@@ -19382,13 +19410,13 @@ msgstr "Controla distancias en escrituras índicas para evitar colisiones."
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr ""
+msgstr "Formas medias"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their half forms."
-msgstr ""
+msgstr "Sustituye consonantes en escrituras índicas con sus formas medias."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:289
 #, kde-format
@@ -19400,7 +19428,7 @@ msgstr "Formas halant"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants in Indic scripts with their halant forms."
-msgstr ""
+msgstr "Sustituye consonantes en escrituras índicas con sus formas halant."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:293
 #, kde-format
@@ -19415,12 +19443,14 @@ msgid ""
 "Replaces consonants combined with Nukta in Indic scripts with their Nukta "
 "forms."
 msgstr ""
+"Sustituyes consonantes combinadas con nukta en escrituras índicas con sus "
+"formas nukta."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:297
 #, kde-format
 msgctxt "@title"
 msgid "Pre-base Forms"
-msgstr ""
+msgstr "Formas prebase"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:298
 #, kde-format
@@ -19429,26 +19459,26 @@ msgid ""
 "Replaces the pre-base form of a consonant in Khmer script, when a 'Coeng Ra' "
 "situation occurs."
 msgstr ""
+"Sustituye la forma prebase de una consonante en la escritura jemer en una "
+"situación «coeng ra»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr "Reducir saturación"
+msgstr "Sustituciones prebase"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces consonants with their pre-base forms in Indic scripts."
-msgstr ""
+msgstr "Sustituye consonantes con sus formas prebase en escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Formas postbase"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
 #, kde-format
@@ -19457,12 +19487,13 @@ msgid ""
 "Replaces consonants with their post-base forms in Gurmukhi, Malayalam, and "
 "Khmer."
 msgstr ""
+"Sustituye consonantes con sus formas postbase en gurmují, malabar y jemer."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Sustituciones postbase"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
 #, kde-format
@@ -19470,6 +19501,7 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces base glyphs and post-base glyphs with a ligature in Indic scripts."
 msgstr ""
+"Sustituye glifos base y postbase con una ligadura en escrituras índicas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:313
 #, kde-format
@@ -19482,6 +19514,7 @@ msgstr "Formas rakar"
 msgctxt "@tooltip"
 msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
+"Sustituye secuencias de glifos en escrituras índicas con sus formas rakar."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
 #, kde-format
@@ -19495,6 +19528,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces Reph forms in Indic scripts with a consonant and Halant sequence."
 msgstr ""
+"Sustituye formas reph en escrituras índicas con una secuencia de consonante "
+"y halant."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:321
 #, kde-format
@@ -19508,13 +19543,15 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces ligatures in Indic scripts with a base consonant and Vattu form."
 msgstr ""
+"Sustituye ligaduras de escrituras índicas con una consonante base y una "
+"forma vattu."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:327
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:343
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Half-width Spacing"
-msgstr ""
+msgstr "Espaciado contextual de media anchura"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:328
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:440
@@ -19524,6 +19561,9 @@ msgid ""
 "Respaces full-width glyphs to be half-width depending on the context, common "
 "examples include CJK full-width brackets and other punctuation marks."
 msgstr ""
+"Sustituye glifos de anchura completa para que tengan media anchura según el "
+"contexto. Los ejemplos típicos incluyen corchetes CJK de anchura completa y "
+"otros signos de puntuación."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:331
 #, kde-format
@@ -19549,6 +19589,7 @@ msgstr "Formas expertas"
 msgctxt "@tooltip"
 msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
+"Sustituye formas estándares en tipos de letra japoneses con formas expertas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
 #, kde-format
@@ -19561,6 +19602,8 @@ msgstr "Anchuras completas"
 msgctxt "@tooltip"
 msgid "Replaces or respaces proportional glyphs with full-width glyphs."
 msgstr ""
+"Sustituye o cambia el espaciado de glifos proporcionales con glifos de "
+"anchura completa."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:344
 #, kde-format
@@ -19569,6 +19612,9 @@ msgid ""
 "Respaces full-width glyphs to be half-width, common examples include CJK "
 "full-width brackets and other punctuation marks."
 msgstr ""
+"Cambia el espaciado de glifos de anchura completa para que tengan media "
+"anchura. Los ejemplos comunes incluyen los corchetes CJK de anchura completa "
+"y otros signos de puntuación."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
 #, kde-format
@@ -19583,6 +19629,8 @@ msgid ""
 "Replaces standard kana in Japanese fonts with ones suited for horizontal "
 "layout."
 msgstr ""
+"Sustituye kanas estándares en los tipos de letra japoneses con otros "
+"adecuados para una distribución horizontal."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
 #, kde-format
@@ -19594,7 +19642,7 @@ msgstr "Hangul"
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces hanja in Korean with the corresponding hangul. Deprecated."
-msgstr ""
+msgstr "Sustituye hanja del coreano con el correspondiente hangul. Obsoleto."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:355
 #, kde-format
@@ -19609,13 +19657,14 @@ msgid ""
 "Replaces 'JIS X 0213:2004' form kanji in Japanese fonts with the Hojo ('JIS "
 "X 0212-1990') forms."
 msgstr ""
+"Sustituye kanjis de forma «JIS X 0213:2004» en tipos de letra japoneses con "
+"las formas hojo («JIS X 0212-1990»)."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "Anchura"
+msgstr "Medias anchuras"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19624,18 +19673,21 @@ msgid ""
 "Replaces or respaces proportional or full-width glyphs with half-width "
 "glyphs."
 msgstr ""
+"Sustituye o cambia el espacio de glifos proporcionales o de anchura completa "
+"con glifos de media anchura."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
 #, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr "Cursiva"
+msgstr "Cursivas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces Latin glyphs in a CJK font with their italic forms."
 msgstr ""
+"Sustituye glifos latinos de un tipo de letra CJK con sus formas cursivas."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:367
 #, kde-format
@@ -19648,6 +19700,8 @@ msgstr "Formas JIS78"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS78 forms."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses con las "
+"formas JIS78."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:371
 #, kde-format
@@ -19660,6 +19714,8 @@ msgstr "Formas JIS83"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS83 forms."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses con las "
+"formas JIS83."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:375
 #, kde-format
@@ -19672,6 +19728,8 @@ msgstr "Formas JIS90"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS90 forms."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses con las "
+"formas JIS90."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:379
 #, kde-format
@@ -19684,12 +19742,14 @@ msgstr "Formas JIS2004"
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the JIS2004 forms."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses con las "
+"formas JIS2004."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:383
 #, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Formas jamo iniciales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
@@ -19697,30 +19757,35 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of leading class Hangul Jamo with a combined leading form."
 msgstr ""
+"Sustituye secuencias hangul jamo iniciales con una forma inicial combinada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:387
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Formas kanji NLC"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
 msgctxt "@tooltip"
 msgid "Replaces standard form kanji in Japanese fonts with the NLC forms."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses con las "
+"formas NLC."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:391
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Anchuras alternativas proporcionales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
 msgctxt "@tooltip"
 msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
+"Sustituye glifos de anchura completa para que se ajusten en un contexto "
+"proporcional."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
 #, kde-format
@@ -19764,7 +19829,7 @@ msgstr "Sustituye glifos con glifos de un cuarto de ancho."
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Formas de notación ruby"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -19773,6 +19838,8 @@ msgid ""
 "Replaces glyphs in CJK fonts with ones suited for the small text in ruby "
 "annotations."
 msgstr ""
+"Sustituye glifos en tipos de letra CJK con otros adecuados para el texto "
+"pequeño de anotaciones ruby."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
 #, kde-format
@@ -19790,7 +19857,7 @@ msgstr "Sustituye glifos de tipografías CJK con formas «simplificadas»."
 #, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Formas jamo finales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
 #, kde-format
@@ -19799,12 +19866,13 @@ msgid ""
 "Replaces sequences of trailing class Hangul Jamo with a combined trailing "
 "form."
 msgstr ""
+"Sustituye secuencias hangul jamo finales con una forma final combinada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:419
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Formas de nombres tradicionales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -19813,6 +19881,8 @@ msgid ""
 "Replaces standard form Kanji in Japanese fonts with the ones traditionally "
 "used in names."
 msgstr ""
+"Sustituye kanjis de forma estándar en tipos de letra japoneses por los que "
+"se usan tradicionalmente en nombres."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
 #, kde-format
@@ -19827,11 +19897,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr "Sustituye glifos de tipografías CJK con formas «tradicionales»."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Tercios"
+msgstr "Anchuras de tercios"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -19850,25 +19919,27 @@ msgstr "Métricas verticales alternativas"
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
+"Reposiciona glifos para que parezcan más apropiados en distribución vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternativo"
+msgstr "Medias anchuras alternativas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
 msgctxt "@tooltip"
 msgid "Repositions glyphs so they look more appropriate in horizontal layout."
 msgstr ""
+"Reposiciona glifos para que parezcan más apropiados en distribución "
+"horizontal."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:439
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Contextual Half-width Spacing"
-msgstr ""
+msgstr "Espaciado de media anchura en contextos verticales"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
 #, kde-format
@@ -19881,6 +19952,8 @@ msgstr "Alternativas verticales"
 msgctxt "@tooltip"
 msgid "Replaces glyphs in CJK fonts with ones suited for vertical writing."
 msgstr ""
+"Sustituye glifos en tipografías CJK con otros adecuados para escritura "
+"vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:447
 #, kde-format
@@ -19894,12 +19967,14 @@ msgctxt "@tooltip"
 msgid ""
 "Repositions glyphs so they are half-width in a vertical writing context."
 msgstr ""
+"Reposiciona glifos para que tengan media anchura en un contexto de escritura "
+"vertical."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:451
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Formas vocálicas jamo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -19907,6 +19982,8 @@ msgctxt "@tooltip"
 msgid ""
 "Replaces sequences of vowel class Hangul Jamo with a combined vowel form."
 msgstr ""
+"Sustituye secuencias de la clase vocálica hangul jamo con una forma vocálica "
+"combinada."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
 #, kde-format
@@ -19973,7 +20050,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Posicionamiento de cursiva"
+msgstr "Posición de cursivas"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format

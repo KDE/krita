@@ -92,14 +92,12 @@ public:
         , m_originFrame(originFrame)
         , m_canvas(canvas)
     {
-        ENTER_FUNCTION();
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SIGNAL(sigCancelPlayback()));
 
         prepare();
     }
 
     ~CanvasPlaybackEnvironment() {
-        ENTER_FUNCTION();
         restore();
     }
 
@@ -119,7 +117,6 @@ public:
 
     void prepare()
     {
-        ENTER_FUNCTION();
         KIS_ASSERT(m_canvas); // Sanity check...
 
         const KisTimeSpan range = m_canvas->image()->animationInterface()->activePlaybackRange();
@@ -179,16 +176,12 @@ public:
     }
 
     void restore() {
-        ENTER_FUNCTION();
         m_cancelStrokeConnections.clear();
 
         if (m_canvas) {
-            qDebug() << "Has canvas.";
             if (m_canvas->frameCache()) {
-                qDebug() << "Has frame cache.";
                 m_canvas->setRenderingLimit(QRect());
             } else {
-                qDebug() << "No frame cache.";
                 KisImageBarrierLock lock(m_canvas->image());
                 Q_FOREACH(KisNodeWSP disabledNode, m_disabledDecoratedNodes) {
                     KisDecoratedNodeInterface* decoratedNode = dynamic_cast<KisDecoratedNodeInterface*>(disabledNode.data());
@@ -199,8 +192,6 @@ public:
                 m_disabledDecoratedNodes.clear();
             }
         }
-
-        qDebug() << "End restore.";
     }
 
 Q_SIGNALS:
@@ -246,7 +237,6 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     : QObject(canvas)
     , m_d(new Private(canvas))
 {
-    ENTER_FUNCTION();
     setPlaybackState(STOPPED);
 
     // Handle image-internal frame change case...
@@ -272,7 +262,6 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
 {
-    ENTER_FUNCTION();
 }
 
 PlaybackState KisCanvasAnimationState::playbackState()

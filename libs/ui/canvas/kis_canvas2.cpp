@@ -139,6 +139,12 @@ public:
     ~KisCanvas2Private()
     {
         inputActionGroupsMaskInterface->m_canvasPrivateRef = nullptr;
+
+        // We need to make sure that the QScopedPointer gets freed within the scope
+        // of KisCanvas2Private's lifespan. For some reason, this isn't guaranteed
+        // and was causing a crash when closing a file when playback is happening
+        // and there are multiple images. See Bug: 499658
+        animationPlayer.reset();
     }
 
 

@@ -33,6 +33,8 @@
 #include "KisAnimAutoKey.h"
 #include "kis_sequential_iterator.h"
 #include "kis_selection_mask.h"
+#include "kis_transparency_mask.h"
+#include "kis_filter_mask.h"
 #include "kis_image_config.h"
 #include "kis_layer_utils.h"
 #include <QQueue>
@@ -633,6 +635,16 @@ void TransformStrokeStrategy::initStrokeCallback()
                     srcRect |= mask->sourceDataBounds();
                 } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
                     srcRect |= mask->selection()->selectedExactRect();
+                } else if (const KisTransparencyMask *mask = dynamic_cast<const KisTransparencyMask*>(node.data())) {
+                    srcRect |= mask->selection()->selectedExactRect();
+                } else if (const KisFilterMask *mask = dynamic_cast<const KisFilterMask*>(node.data())) {
+                    /// Filter masks have special handling of transparency. Their filter
+                    /// may declare if they affect transparent pixels or not. In case of
+                    /// transformations we don't care about that, we should just transform
+                    /// non-default area of the mask.
+                    if (mask->paintDevice()) {
+                        srcRect |= mask->paintDevice()->nonDefaultPixelArea();
+                    }
                 } else {
                     /// We shouldn't include masks or layer styles into the handles rect,
                     /// in the end, we process the paint device only

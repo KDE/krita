@@ -22,7 +22,13 @@ SqueezedComboBox {
 
     wheelEnabled: true;
 
-    property int minimumUnitBoxWidth: height+indicator.width;
+    TextMetrics {
+        id: symbolWidth;
+        font: root.font;
+        text: displayText;
+    }
+
+    property int minimumUnitBoxWidth: symbolWidth.width+leftPadding+rightPadding+spacing+indicator.width;
 
     displayText: converter.symbol;
 

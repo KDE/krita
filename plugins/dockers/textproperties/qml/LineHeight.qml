@@ -3,8 +3,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
@@ -138,7 +138,12 @@ TextPropertyBase {
                 displayText: converter.symbol;
                 enabled: !lineHeightNormalCbx.checked;
 
-                Layout.preferredWidth: height+indicator.width;
+                TextMetrics {
+                    id: symbolWidth;
+                    font: lineHeightUnitCmb.font;
+                    text: lineHeightUnitCmb.displayText;
+                }
+                Layout.preferredWidth: symbolWidth.width+leftPadding+rightPadding+spacing+indicator.width;
                 Layout.maximumWidth: implicitWidth;
 
                 PaletteControl {

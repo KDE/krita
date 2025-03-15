@@ -25,11 +25,12 @@ class KRITAIMAGE_EXPORT KisFilterMask : public KisEffectMask, public KisNodeFilt
     Q_OBJECT
 
 public:
-
     /**
      * Create an empty filter mask.
      */
     KisFilterMask(KisImageWSP image, const QString &name = QString());
+
+    KisFilterMask(const KisFilterMask& rhs);
 
     ~KisFilterMask() override;
 
@@ -41,8 +42,6 @@ public:
 
     bool accept(KisNodeVisitor &v) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;
-
-    KisFilterMask(const KisFilterMask& rhs);
 
     void setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true) override;
 

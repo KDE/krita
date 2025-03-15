@@ -22,9 +22,15 @@
 #include "kis_transaction.h"
 #include "kis_painter.h"
 
+struct KisFilterMask::Private
+{
+    bool needsTransparentPixels;
+};
+
 KisFilterMask::KisFilterMask(KisImageWSP image, const QString &name)
     : KisEffectMask(image, name),
       KisNodeFilterInterface(0)
+    , m_d(new Private())
 {
     setCompositeOpId(COMPOSITE_COPY);
 }
@@ -36,7 +42,9 @@ KisFilterMask::~KisFilterMask()
 KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
         : KisEffectMask(rhs)
         , KisNodeFilterInterface(rhs)
+        , m_d(new Private())
 {
+    *m_d = *rhs.m_d;
 }
 
 QIcon KisFilterMask::icon() const
@@ -47,6 +55,18 @@ QIcon KisFilterMask::icon() const
 void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig, bool checkCompareConfig)
 {
     KisNodeFilterInterface::setFilter(filterConfig, checkCompareConfig);
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+
+    m_d->needsTransparentPixels = filter->needsTransparentPixels(filterConfig, colorSpace());
+}
+
+void KisFilterMask::notifyColorSpaceChanged()
+{
+    KisFilterConfigurationSP filterConfig = filter();
+    KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+
+    m_d->needsTransparentPixels = filter->needsTransparentPixels(filterConfig, colorSpace());
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
@@ -97,6 +117,40 @@ bool KisFilterMask::accept(KisNodeVisitor &v)
 void KisFilterMask::accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter)
 {
     return visitor.visit(this, undoAdapter);
+}
+
+QRect KisFilterMask::extent() const
+{
+    KisNodeSP parentNode = parent();
+
+    if (!parentNode) {
+        return {};
+    }
+
+    QRect rect = KisEffectMask::extent();
+
+    if (!m_d->needsTransparentPixels) {
+        rect &= parentNode->extent();
+    }
+
+    return rect;
+}
+
+QRect KisFilterMask::exactBounds() const
+{
+    KisNodeSP parentNode = parent();
+
+    if (!parentNode) {
+        return {};
+    }
+
+    QRect rect = KisEffectMask::exactBounds();
+
+    if (!m_d->needsTransparentPixels) {
+        rect &= parentNode->exactBounds();
+    }
+
+    return rect;
 }
 
 /**

@@ -52,8 +52,17 @@ public:
                        PositionToFilthy maskPos,
                        KisRenderPassFlags flags) const override;
 
+    QRect extent() const override;
+    QRect exactBounds() const override;
+
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
+
+    void notifyColorSpaceChanged() override;
+
+private:
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif //_KIS_FILTER_MASK_

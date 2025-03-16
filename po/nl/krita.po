@@ -62,7 +62,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 03:20+0000\n"
-"PO-Revision-Date: 2025-03-10 12:23+0100\n"
+"PO-Revision-Date: 2025-03-15 12:07+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl\n"
@@ -34663,7 +34663,7 @@ msgstr "Huidige vensterindeling opslaan."
 #, kde-format
 msgctxt "Contrast enhancement section in auto levels"
 msgid "Shadows and Highlights"
-msgstr "Schaduwen en markeringen"
+msgstr "Schaduwen en highlights"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:62
@@ -34700,7 +34700,7 @@ msgstr "Schaduwen afknijpen:"
 msgctxt ""
 "Percentage of the histogram to clip in the highlights side in auto levels"
 msgid "Highlights clipping:"
-msgstr "Accentueringen afknijpen:"
+msgstr "Highlights afknijpen:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:97
@@ -34723,7 +34723,7 @@ msgstr "Schaduw kleur:"
 #, kde-format
 msgctxt "Output color used for the highlights in auto levels"
 msgid "Highlights color:"
-msgstr "Markeerkleur:"
+msgstr "Highlightkleur:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:136
@@ -41600,7 +41600,7 @@ msgstr "Magentatinten"
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:47
 #, kde-format
 msgid "Highlights"
-msgstr "Accentueringen"
+msgstr "Highlights"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonMidtones)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
@@ -44630,7 +44630,7 @@ msgstr "Middentonen resetten  "
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:335
 #, kde-format
 msgid "Reset Highlights"
-msgstr "Accentueringen resetten"
+msgstr "Highlights resetten"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreserveLuminosity)
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:362
@@ -49876,7 +49876,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Highlights:"
-msgstr "Accentueringen:"
+msgstr "Highlights:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:497
 #, kde-format
@@ -57638,7 +57638,7 @@ msgstr "Monsternemer van kleur"
 #, kde-format
 msgctxt "The color rate of sampled color setting slider"
 msgid "Blend: "
-msgstr "Vermengen: "
+msgstr "Mengen: "
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, blend)
 #: plugins/tools/basictools/wdgcolorsampler.ui:48

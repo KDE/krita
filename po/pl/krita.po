@@ -36410,6 +36410,12 @@ msgid ""
 "Germany. KDE e.V. represents the KDE community in legal and financial "
 "matters. See <a href=\"%1\">%1</a> for information on KDE e.V.</p>"
 msgstr ""
+"<p>Oprogramowanie KDE jest i zawsze będzie dostępne bezpłatnie, jednakże "
+"jego tworzenie nie jest bezpłatne.<br /><br />Aby wesprzeć rozwój, "
+"Społeczność KDE utworzyła KDE e.V., organizację non-profit prawnie założoną "
+"w Niemczech. KDE e.V. reprezentuje społeczność KDE w sprawach prawnych i "
+"finansowych. Po więcej szczegółów o KDE e.V. zajrzyj na <a href=\"%1\">%1</"
+"a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:122
 #, kde-format
@@ -36419,6 +36425,10 @@ msgid ""
 "contributing. Further funds are used for legal support and organizing "
 "conferences and meetings.</p>"
 msgstr ""
+"<p>KDE korzysta z wielu rodzajów pomocy, także finansowej. Używamy naszych "
+"środków na zwracanie członkom wydatków, które ponoszą tworząc dla nas. "
+"Pozostałe środki są wykorzystywane na wsparcie prawne, a także organizowanie "
+"konferencji i spotkań.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36426,6 +36436,8 @@ msgid ""
 "<p>We would like to encourage you to support our efforts with a financial "
 "donation, using one of the ways described at <a href=\"%1\">%1</a>.</p>"
 msgstr ""
+"<p>Chcielibyśmy zachęcić cię do wspierania naszego wysiłku wpłatami "
+"pieniężnymi na jeden ze sposobów pisanych na <a href=\"%1\">%1</a>.</p>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:142
 #, kde-format

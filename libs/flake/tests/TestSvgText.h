@@ -114,6 +114,9 @@ private Q_SLOTS:
     void testTextCleanUp();
 
     void testTextRichTextMerge();
+
+    void testBcp47Parsing_data();
+    void testBcp47Parsing();
 };
 
 #endif // TESTSVGTEXT_H

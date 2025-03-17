@@ -12,6 +12,7 @@
 #include <text/KoFontRegistry.h>
 #include <text/KoSvgText.h>
 #include <text/KoSvgTextProperties.h>
+#include <text/KoWritingSystemUtils.h>
 
 #include "KoSvgTextShapeMarkupConverter.h"
 #include "SvgParserTestingUtils.h"
@@ -2955,6 +2956,53 @@ void TestSvgText::testTextRichTextMerge()
 
     QVERIFY(test.hasProperty(KoSvgTextProperties::FontWeightId));
     QVERIFY(!test.hasProperty(KoSvgTextProperties::FillId));
+}
+
+void TestSvgText::testBcp47Parsing_data()
+{
+    QTest::addColumn<QString>("tag");
+    QTest::addColumn<QString>("language");
+    QTest::addColumn<QString>("script");
+    QTest::addColumn<QString>("region");
+    QTest::addColumn<QString>("variant");
+    QTest::addColumn<QString>("extension");
+    QTest::addColumn<QString>("privateuse");
+
+    QTest::addRow("basic english") << QString("en") << QString("en") << QString() << QString() << QString() << QString() << QString();
+
+    QTest::addRow("brazilian portuguese -- region") << QString("pt-BR") << QString("pt") << QString() << QString("BR") << QString() << QString() << QString();
+
+    QTest::addRow("spanish latin america -- number region") << QString("es-419") << QString("es") << QString() << QString("419") << QString() << QString() << QString();
+
+    QTest::addRow("romansh sursilvan -- variant") << QString("rm-sursilv") << QString("rm") << QString() << QString() << QString("sursilv") << QString() << QString();
+
+    QTest::addRow("treditional german orthography -- variant") << QString("de-1901") << QString("de") << QString() << QString() << QString("1901") << QString() << QString();
+
+    QTest::addRow("cantonese, traditional han, hongkong -- script and region") << QString("yue-Hant-HK") << QString("yue") << QString("Hant") << QString("HK") << QString() << QString() << QString();
+
+    QTest::addRow("swiss german, canton zurich -- extension") << QString("gsw-u-sd-chzh") << QString("gsw") << QString() << QString() << QString() << QString("u-sd-chzh") << QString();
+
+    QTest::addRow("dutch, blabla private tag -- private use") << QString("nl-x-blabla") << QString("nl") << QString() << QString() << QString() << QString() << QString("x-blabla");
+}
+
+void TestSvgText::testBcp47Parsing()
+{
+    QFETCH(QString, tag);
+    QFETCH(QString, language);
+    QFETCH(QString, script);
+    QFETCH(QString, region);
+    QFETCH(QString, variant);
+    QFETCH(QString, extension);
+    QFETCH(QString, privateuse);
+
+    const KoWritingSystemUtils::Bcp47Locale bcp = KoWritingSystemUtils::parseBcp47Locale(tag);
+
+    QVERIFY(bcp.languageTags.join("-") == language);
+    QVERIFY(bcp.scriptTag == script);
+    QVERIFY(bcp.regionTag == region);
+    QVERIFY(bcp.variantTags.join("-") == variant);
+    QVERIFY(bcp.extensionTags.join("-") == extension);
+    QVERIFY(bcp.privateUseTags.join("-") == privateuse);
 }
 
 #include "kistest.h"

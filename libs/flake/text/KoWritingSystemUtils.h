@@ -38,6 +38,36 @@ public:
     static QMap<QString, QString> samples();
 
     static QString sampleTagForQLocale(const QLocale &locale);
+
+    /**
+     * @brief The Bcp47Locale class
+     * This holds a parsed BCP47 locale. QLocale is primarily made for POSIX locale format,
+     * and even there ignores the @modifier tag. On top of that, many minority languages
+     * are not handled by QLocale. To keep track of that extra data we use this BCP Locale struct.
+     *
+     * @see ietf rfc5646
+     */
+    struct Bcp47Locale {
+        QStringList languageTags;
+        QString scriptTag;
+        QString regionTag;
+        QStringList variantTags;
+        QStringList extensionTags;
+        QStringList privateUseTags;
+
+        bool isValid() const;
+        QString toPosixLocaleFormat() const;
+        QString toString() const;
+    };
+
+    // Parse a BCP 47 string into a locale;
+    static Bcp47Locale parseBcp47Locale(const QString &locale);
+
+    // Return a QLocale for a bcp 47 locale struct.
+    static QLocale localeFromBcp47Locale(const Bcp47Locale &locale);
+
+    // Return a QLocale by parsing a BCP 47 string into a struct and constructing the QLocale from that.
+    static QLocale localeFromBcp47Locale(const QString &locale);
 };
 
 #endif // KOWRITINGSYSTEMUTILS_H

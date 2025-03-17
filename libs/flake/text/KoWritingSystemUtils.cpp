@@ -411,3 +411,134 @@ QString KoWritingSystemUtils::sampleTagForQLocale(const QLocale &locale)
 
     return "s_"+QLOCALE_SCRIPT_MAP.value(locale.script(), "Zyyy");
 }
+
+KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const QString &locale)
+{
+    Bcp47Locale bcp;
+
+    QStringList tags = locale.split("-");
+
+    if (tags.isEmpty()) return bcp;
+
+    const QRegExp alphas("[A-Z]+", Qt::CaseInsensitive);
+    const QRegExp digits("[\\d]+");
+
+    // Language -- single primary language, followed by optional 3 letter extended tags.
+    bcp.languageTags.append(tags.takeFirst());
+
+    while (!tags.isEmpty() && tags.first().size() == 3 && alphas.exactMatch(tags.first())) {
+        bcp.languageTags.append(tags.takeFirst());
+    }
+
+    if (tags.isEmpty()) return bcp;
+
+    // Script -- This is an 4 letter alpha only.
+
+    if (alphas.exactMatch(tags.first()) && tags.first().size() == 4) {
+        bcp.scriptTag = tags.takeFirst();
+    }
+
+    if (tags.isEmpty()) return bcp;
+
+    // Region -- 2 letter alpha only.
+
+    if ((alphas.exactMatch(tags.first()) && tags.first().size() == 2)
+            || (digits.exactMatch(tags.first()) && tags.first().size() == 3)) {
+        bcp.regionTag = tags.takeFirst();
+    }
+
+    if (tags.isEmpty()) return bcp;
+
+    // Variants -- [0+] alpha numerics, either between 5-8 char long, or 4 but starting with a digit.
+
+    const QRegExp variantAlphaNumeric("\\d[a-b-z0-9]{3}", Qt::CaseInsensitive);
+
+    while (!tags.isEmpty()
+           && ( (tags.first().size() >= 5 && tags.first().size() <= 8)
+               || (variantAlphaNumeric.exactMatch(tags.first()) && tags.first().size() == 4) )
+           ) {
+        bcp.variantTags.append(tags.takeFirst());
+    }
+
+    if (tags.isEmpty()) return bcp;
+    // extension and private use subtags. Each starts with a single letter to indicate the extension type.
+
+    QStringList currentExtension;
+    while (!tags.isEmpty()) {
+        if (!currentExtension.isEmpty() && tags.first().size() == 1) {
+            if (currentExtension.first() == "x") {
+                bcp.privateUseTags.append(currentExtension.join("-"));
+            } else {
+                bcp.extensionTags.append(currentExtension.join("-"));
+            }
+            currentExtension.clear();
+        }
+        currentExtension.append(tags.takeFirst());
+    }
+
+    if (!currentExtension.isEmpty()) {
+        if (currentExtension.first() == "x") {
+            bcp.privateUseTags.append(currentExtension.join("-"));
+        } else {
+            bcp.extensionTags.append(currentExtension.join("-"));
+        }
+    }
+
+    return bcp;
+}
+
+QLocale KoWritingSystemUtils::localeFromBcp47Locale(const Bcp47Locale &locale)
+{
+    return QLocale(locale.toPosixLocaleFormat());
+}
+
+QLocale KoWritingSystemUtils::localeFromBcp47Locale(const QString &locale)
+{
+    return localeFromBcp47Locale(parseBcp47Locale(locale));
+}
+
+bool KoWritingSystemUtils::Bcp47Locale::isValid() const
+{
+    return !languageTags.isEmpty();
+}
+
+QString KoWritingSystemUtils::Bcp47Locale::toPosixLocaleFormat() const
+{
+    // A Posix locale format is "language[_script][_territory][.codeset][@modifier]".
+
+    if (!isValid()) return QString();
+
+    QString posix;
+
+    posix = languageTags.first();
+
+    if (!scriptTag.isEmpty() && scriptTag.size() == 4) {
+        posix.append("_");
+        // Title case.
+        posix.append(scriptTag.at(0).toTitleCase());
+        posix.append(scriptTag.toLower().mid(1));
+    }
+
+    if (!regionTag.isEmpty() && regionTag.size() == 2) {
+        posix.append("_");
+        posix.append(regionTag.toUpper());
+    }
+
+    // Not writing @modifier for now...
+
+    return posix;
+}
+
+QString KoWritingSystemUtils::Bcp47Locale::toString() const
+{
+    QStringList total;
+
+    total.append(languageTags);
+    total.append(scriptTag);
+    total.append(regionTag);
+    total.append(variantTags);
+    total.append(extensionTags);
+    total.append(privateUseTags);
+
+    return total.join("-");
+}

@@ -148,6 +148,8 @@ ColumnLayout {
                 }
                 AlignmentBaseline {
                 }
+                Language {
+                }
             }
         }
     }

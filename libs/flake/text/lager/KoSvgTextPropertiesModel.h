@@ -197,6 +197,9 @@ public:
     LAGER_QT_CURSOR(bool, fontKerning);
     LAGER_QT_CURSOR(PropertyState, fontKerningState);
 
+    LAGER_QT_CURSOR(QString, language);
+    LAGER_QT_CURSOR(PropertyState, languageState);
+
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 

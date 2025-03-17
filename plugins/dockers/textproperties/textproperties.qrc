@@ -48,5 +48,6 @@
         <file alias="OpenTypeFeatureSettings.qml">qml/OpenTypeFeatureSettings.qml</file>
         <file alias="OpenTypeFeatureDelegate.qml">qml/OpenTypeFeatureDelegate.qml</file>
         <file alias="FontKerning.qml">qml/FontKerning.qml</file>
+        <file alias="Language.qml">qml/Language.qml</file>
     </qresource>
 </RCC>

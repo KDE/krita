@@ -499,7 +499,7 @@ QLocale KoWritingSystemUtils::localeFromBcp47Locale(const QString &locale)
 
 bool KoWritingSystemUtils::Bcp47Locale::isValid() const
 {
-    return !languageTags.isEmpty();
+    return !languageTags.isEmpty() && !languageTags.first().isEmpty();
 }
 
 QString KoWritingSystemUtils::Bcp47Locale::toPosixLocaleFormat() const
@@ -534,8 +534,12 @@ QString KoWritingSystemUtils::Bcp47Locale::toString() const
     QStringList total;
 
     total.append(languageTags);
-    total.append(scriptTag);
-    total.append(regionTag);
+    if (!scriptTag.isEmpty()) {
+        total.append(scriptTag);
+    }
+    if (!regionTag.isEmpty()) {
+        total.append(regionTag);
+    }
     total.append(variantTags);
     total.append(extensionTags);
     total.append(privateUseTags);

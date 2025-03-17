@@ -248,6 +248,8 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontFeatureSettingsState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontFeatureSettingsId))}
     , LAGER_QT(fontKerning) {textData.zoom(createTextProperty(KoSvgTextProperties::KerningId)).zoom(autoValueToBool)}
     , LAGER_QT(fontKerningState) {textData.zoom(propertyModifyState(KoSvgTextProperties::KerningId))}
+    , LAGER_QT(language) {textData.zoom(createTextProperty(KoSvgTextProperties::TextLanguage)).zoom(variant_to<QString>)}
+    , LAGER_QT(languageState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextLanguage))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

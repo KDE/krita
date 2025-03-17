@@ -47,6 +47,7 @@
 #include "KoShapeQtQuickLabel.h"
 #include "OpenTypeFeatureModel.h"
 #include "TagFilterProxyModelQmlWrapper.h"
+#include "LocaleHandler.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -67,6 +68,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<OpenTypeFeatureModel>("org.krita.flake.text", 1, 0, "OpenTypeFeatureModel");
     qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
     qmlRegisterType<TagFilterProxyModelQmlWrapper>("org.krita.flake.text", 1, 0, "TagFilterProxyModelQmlWrapper");
+    qmlRegisterType<LocaleHandler>("org.krita.flake.text", 1, 0, "LocaleHandler");
 }
 
 

@@ -225,7 +225,6 @@ FavoriteLocaleModel::FavoriteLocaleModel(QObject *parent)
     : QAbstractListModel(parent)
     , d(new Private ())
 {
-    connect(this, SIGNAL(favoritesUpdated()), this, SLOT(updateConfig()));
 }
 
 FavoriteLocaleModel::~FavoriteLocaleModel()
@@ -256,22 +255,34 @@ QVariant FavoriteLocaleModel::data(const QModelIndex &index, int role) const
     }
     return QVariant();
 }
-
+#include <QDebug>
 bool FavoriteLocaleModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()) return false;
 
     const QString code = d->locales.at(index.row());
     if (role == Favorite) {
+
         const bool fav = value.toBool();
-        if (fav && !d->favorites.contains(code)) {
-            d->favorites.append(code);
+        bool updated = false;
+
+        if (fav) {
+            if (!d->favorites.contains(code)) {
+                d->favorites.append(code);
+                updated = true;
+            }
         } else {
-            d->favorites.removeAll(code);
+            const int i = d->favorites.indexOf(code);
+            if (i > 0) {
+                d->favorites.removeAt(i);
+                updated = true;
+            }
         }
-        emit dataChanged(index, index, {role});
-        emit favoritesUpdated();
-        return true;
+        if (updated) {
+            updateConfig();
+            emit dataChanged(index, index, {role});
+            return true;
+        }
     }
     return false;
 }

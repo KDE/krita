@@ -130,7 +130,7 @@ TextPropertyBase {
 
 
             }
-            delegate: CheckDelegate {
+            delegate: ItemDelegate {
                 id: favoriteDelegate;
                 required property var model;
                 required property var index;
@@ -141,13 +141,31 @@ TextPropertyBase {
                 highlighted: hovered;
 
                 text: model.display + " ("+favoriteDelegate.model.code+")";
-                checked: favoriteDelegate.model.favorite;
+
+                contentItem: RowLayout {
+                    CheckBox {
+                        Component.onCompleted: {
+                            checked = favoriteDelegate.model.favorite;
+                        }
+                        onCheckedChanged: favoriteDelegate.model.favorite = checked;
+                        palette: favoriteDelegate.palette;
+                        hoverEnabled: true;
+                        padding: 0;
+                    }
+                    Label {
+                        text: favoriteDelegate.model.display + " ("+favoriteDelegate.model.code+")";
+                        palette: favoriteDelegate.palette;
+                        color: favoriteDelegate.highlighted? palette.highlightedText: palette.text;
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter;
+                        Layout.fillWidth: true;
+                    }
+                }
 
                 background: Rectangle {
                     color: favoriteDelegate.highlighted? favoriteDelegate.palette.highlight: "transparent";
                 }
-
                 onClicked: languageCmb.currentIndex = index;
+
             }
 
             onCurrentValueChanged: localeHandler.language = currentValue;

@@ -51,6 +51,7 @@ void LocaleHandler::setBcp47Tag(const QString &newBcp47Tag)
         return;
     d->locale = KoWritingSystemUtils::parseBcp47Locale(newBcp47Tag);
 
+
     d->favorites->addCode(language());
     emit bcp47TagChanged();
     emit languageChanged();
@@ -85,9 +86,10 @@ void LocaleHandler::setLanguage(const QString &newLanguage)
     if (langOnly.toString() == newLanguage)
         return;
     langOnly = KoWritingSystemUtils::parseBcp47Locale(newLanguage);
+
+    d->favorites->addCode(langOnly.toString());
     langOnly.scriptTag = d->locale.scriptTag;
     d->locale = langOnly;
-    d->favorites->addCode(langOnly.toString());
     emit languageChanged();
     emit bcp47TagChanged();
 }

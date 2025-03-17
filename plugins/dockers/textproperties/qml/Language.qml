@@ -70,6 +70,8 @@ TextPropertyBase {
 
                 property bool blockSignals: false;
 
+                selectByMouse: true;
+
                 onTextChanged: {
                     if (!blockSignals) {
                         localeHandler.searchString = text;
@@ -128,26 +130,24 @@ TextPropertyBase {
 
 
             }
-            delegate: ItemDelegate {
+            delegate: CheckDelegate {
                 id: favoriteDelegate;
                 required property var model;
+                required property var index;
                 palette: languageCmb.palette;
 
                 width: languageCmb.width;
-                height: contentItem.implicitHeight;
                 hoverEnabled: true;
                 highlighted: hovered;
 
-                contentItem: CheckBox {
-                    text: favoriteDelegate.model.display + " ("+favoriteDelegate.model.code+")";
-                    checked: favoriteDelegate.model.favorite;
-                    onCheckedChanged: favoriteDelegate.model.favorite = checked;
-                    palette: favoriteDelegate.palette;
-                }
+                text: model.display + " ("+favoriteDelegate.model.code+")";
+                checked: favoriteDelegate.model.favorite;
 
                 background: Rectangle {
                     color: favoriteDelegate.highlighted? favoriteDelegate.palette.highlight: "transparent";
                 }
+
+                onClicked: languageCmb.currentIndex = index;
             }
 
             onCurrentValueChanged: localeHandler.language = currentValue;
@@ -158,7 +158,7 @@ TextPropertyBase {
             height: 1;
         }
 
-        SqueezedComboBox {
+        ComboBox {
             id: scriptCmb;
             model: localeHandler.scriptModel();
             textRole: "name";
@@ -166,6 +166,8 @@ TextPropertyBase {
             Layout.fillWidth: true;
 
             enabled: localeHandler.localeValid;
+
+            editable: true;
 
             PaletteControl {
                 id: scriptPalette;

@@ -12,6 +12,35 @@
 
 #include "LocaleHandler.h"
 
+const QString localeName (const KoWritingSystemUtils::Bcp47Locale &locale) {
+    if (!locale.isValid()) return i18nc("Empty locale", "Empty");
+
+    QString name;
+    const QLocale l = KoWritingSystemUtils::localeFromBcp47Locale(locale);
+    const QString lang = QLocale::languageToString(l.language());
+    const QString region = QLocale::countryToString(l.country());
+
+    if (!lang.isEmpty() && lang != "C") {
+        if (!locale.regionTag.isEmpty()) {
+            if (!locale.variantTags.isEmpty()) {
+                name = i18nc("language, region, variant", "%1, %2, variant: %3").arg(lang).arg(region).arg(locale.variantTags.join("-"));
+            } else {
+                name = i18nc("language, region", "%1, %2").arg(lang).arg(region);
+            }
+        } else {
+            if (!locale.variantTags.isEmpty()) {
+                name = i18nc("language, variant", "%1, variant: %3").arg(lang).arg(locale.variantTags.join("-"));
+            } else {
+                name = lang;
+            }
+        }
+    } else {
+        name = locale.toString();
+    }
+
+    return name;
+}
+
 struct LocaleHandler::Private {
     Private(QObject *parent = nullptr) {
         allLanguages = new AllLanguagesModel(parent);
@@ -194,9 +223,7 @@ QVariant AllLanguagesModel::data(const QModelIndex &index, int role) const
         const QString code = d->locales.at(index.row());
         if (role == Qt::DisplayRole) {
             KoWritingSystemUtils::Bcp47Locale bcp47 = KoWritingSystemUtils::parseBcp47Locale(code);
-            const QLocale locale = KoWritingSystemUtils::localeFromBcp47Locale(bcp47);
-            if (bcp47.regionTag.isEmpty()) return QLocale::languageToString(locale.language());
-            return QString("%1, %2").arg(QLocale::languageToString(locale.language())).arg(QLocale::countryToString(locale.country()));
+            return localeName(bcp47);
         } else if (role == Code) {
             return code;
         }
@@ -219,10 +246,8 @@ struct FavoriteLocaleModel::Private {
             const QString code = locale.bcp47Name().split("_").join("-");
             locales.append(code);
         }
-        if (locales.isEmpty()) {
-            locales.append("");
-        }
         favorites = locales;
+        locales.insert(0, ""); // Add empty locale...
     }
 
     QStringList locales;
@@ -254,9 +279,7 @@ QVariant FavoriteLocaleModel::data(const QModelIndex &index, int role) const
         const QString code = d->locales.at(index.row());
         if (role == Qt::DisplayRole) {
             KoWritingSystemUtils::Bcp47Locale bcp47 = KoWritingSystemUtils::parseBcp47Locale(code);
-            const QLocale locale = KoWritingSystemUtils::localeFromBcp47Locale(bcp47);
-            if (bcp47.regionTag.isEmpty()) return QLocale::languageToString(locale.language());
-            return QString("%1, %2").arg(QLocale::languageToString(locale.language())).arg(QLocale::countryToString(locale.country()));
+            return localeName(bcp47);
         } else if (role == Code) {
             return code;
         } else if (role == Favorite) {

@@ -412,11 +412,39 @@ QString KoWritingSystemUtils::sampleTagForQLocale(const QLocale &locale)
     return "s_"+QLOCALE_SCRIPT_MAP.value(locale.script(), "Zyyy");
 }
 
+// There's a number of tags that are kept around for compatibility.
+const QMap<QString, QString> grandFathered = {
+    {"art-lojban", "jbo"},
+    {"cel-gaulish", "xcg"}, // could also be xga or xtg
+    {"en-GB-oed", "en-GB-oxendict"},
+    {"i-ami", "ami"},
+    {"i-default", ""},
+    {"i-enochian", "i-enochian"},
+    {"i-hak", "hak"},
+    {"i-lux", "lb"},
+    {"i-mingo", "i-mingo"},
+    {"i-navajo", "nv"},
+    {"i-pwn", "pwn"},
+    {"i-tao", "tao"},
+    {"i-tay", "tay"},
+    {"i-tsu", "tsu"},
+    {"no-bok", "nb"},
+    {"no-nyn", "nn"},
+    {"sgn-BE-FR", "sfb"},
+    {"sgn-BE-NL", "vgt"},
+    {"sgn-CH-DE", "sgg"},
+    {"zh-guoyu", "cmn"},
+    {"zh-hakka", "hak"},
+    {"zh-min", "cdo"}, // This one could also be cpx, czo, mnp, or nan
+    {"zh-min-nan", "nan"},
+    {"zh-xiang", "hsn"},
+};
+
 KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const QString &locale)
 {
     Bcp47Locale bcp;
 
-    QStringList tags = locale.split("-");
+    QStringList tags = grandFathered.value(locale, locale).split("-");
 
     if (tags.isEmpty()) return bcp;
 
@@ -424,10 +452,20 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
     const QRegExp digits("[\\d]+");
 
     // Language -- single primary language, followed by optional 3 letter extended tags.
-    bcp.languageTags.append(tags.takeFirst().toLower());
-
-    while (!tags.isEmpty() && tags.first().size() == 3 && alphas.exactMatch(tags.first())) {
+    if (tags.first().size() == 2 || tags.first().size() == 3) {
         bcp.languageTags.append(tags.takeFirst().toLower());
+
+        // extensions only happen when first tag is 2 or 3 long.
+        while (!tags.isEmpty() && tags.first().size() == 3 && alphas.exactMatch(tags.first())) {
+            bcp.languageTags.append(tags.takeFirst().toLower());
+        }
+    } else if (tags.first().size() >= 4 || tags.first().size() <= 8) {
+        // 4 alpha is reserved for future use and 5-8 is also legit, but practically doesn't exist...
+        bcp.languageTags.append(tags.takeFirst().toLower());
+    } else if (tags.first() == "i" && tags.size() > 0) {
+        QString total = tags.takeFirst();
+        total += "-"+tags.takeFirst();
+        bcp.languageTags.append(total.toLower());
     }
 
     if (tags.isEmpty()) return bcp;

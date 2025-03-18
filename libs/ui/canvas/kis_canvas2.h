@@ -318,6 +318,7 @@ public:
 private:
     Q_DISABLE_COPY(KisCanvas2)
 
+    void requestCanvasUpdateMaybeCompressed();
     void connectCurrentCanvas();
     void createCanvas(bool useOpenGL);
     void createQPainterCanvas();

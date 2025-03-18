@@ -520,11 +520,40 @@ endif()
 unset(CMAKE_REQUIRED_INCLUDES)
 unset(CMAKE_REQUIRED_LIBRARIES)
 
+
+if (QT_MAJOR_VERSION STREQUAL "5")
+    # in Qt5 we didn't have a separate definition for key-press/release patch
+    set(KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH FALSE)
+else()
+    set(CMAKE_REQUIRED_INCLUDES ${Qt6Gui_INCLUDE_DIRS} ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
+    set(CMAKE_REQUIRED_LIBRARIES ${Qt6Gui_LIBRARIES})
+
+    CHECK_CXX_SOURCE_COMPILES("
+#include <QtGui/rhi/qrhi.h>
+int main(int, char *[]) {
+bool (QRhi::*x)() const;
+x = &QRhi::isLastFrameCompletedOnGPU;
+Q_UNUSED(x);
+return 0;
+}
+"
+    KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH
+    )
+
+    unset(CMAKE_REQUIRED_INCLUDES)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+
+endif()
+
 option(KRITA_QT_HAS_ENTER_LEAVE_PATCH "Qt has a custom patch for unbalanced enter/leave events" ON)
 add_feature_info("Qt: Unbalanced Enter/Leave patch" KRITA_QT_HAS_ENTER_LEAVE_PATCH "Krita will disable internal workarounds for unbalanced Enter/Leave")
 
 option(KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH "Qt has a custom patch for unbalanced KeyPress/KeyRelease events in non-latin layouts" ON)
 add_feature_info("Qt: Unbalanced KeyPress/KeyRelease in non-latin layout patch" KRITA_QT_HAS_UNBALANCED_KEY_PRESS_RELEASE_PATCH "Krita will disable internal workarounds for unbalanced KeyPress/KeyRelease events")
+
+option(KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH "Qt has a custom patch for limiting FPS to the screen framerate" ON)
+add_feature_info("Qt: Compressed updates patch" KRITA_QT_HAS_UPDATE_COMPRESSION_PATCH "Krita will compress the screen updates to the maximum FPS of available displays")
+
 
 configure_file(config-qt-patches-present.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qt-patches-present.h)
 

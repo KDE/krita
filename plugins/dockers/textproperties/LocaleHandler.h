@@ -56,6 +56,8 @@ public:
 
     bool localeValid() const;
 
+    Q_INVOKABLE bool validBcp47Tag(const QString &tag) const;
+
 Q_SIGNALS:
 
     void bcp47TagChanged();

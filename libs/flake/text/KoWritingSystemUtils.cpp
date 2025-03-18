@@ -424,10 +424,10 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
     const QRegExp digits("[\\d]+");
 
     // Language -- single primary language, followed by optional 3 letter extended tags.
-    bcp.languageTags.append(tags.takeFirst());
+    bcp.languageTags.append(tags.takeFirst().toLower());
 
     while (!tags.isEmpty() && tags.first().size() == 3 && alphas.exactMatch(tags.first())) {
-        bcp.languageTags.append(tags.takeFirst());
+        bcp.languageTags.append(tags.takeFirst().toLower());
     }
 
     if (tags.isEmpty()) return bcp;
@@ -435,7 +435,8 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
     // Script -- This is an 4 letter alpha only.
 
     if (alphas.exactMatch(tags.first()) && tags.first().size() == 4) {
-        bcp.scriptTag = tags.takeFirst();
+        bcp.scriptTag = tags.takeFirst().toLower();
+        bcp.scriptTag = bcp.scriptTag.at(0).toUpper()+bcp.scriptTag.mid(1);
     }
 
     if (tags.isEmpty()) return bcp;
@@ -444,20 +445,20 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
 
     if ((alphas.exactMatch(tags.first()) && tags.first().size() == 2)
             || (digits.exactMatch(tags.first()) && tags.first().size() == 3)) {
-        bcp.regionTag = tags.takeFirst();
+        bcp.regionTag = tags.takeFirst().toUpper();
     }
 
     if (tags.isEmpty()) return bcp;
 
     // Variants -- [0+] alpha numerics, either between 5-8 char long, or 4 but starting with a digit.
 
-    const QRegExp variantAlphaNumeric("\\d[a-b-z0-9]{3}", Qt::CaseInsensitive);
+    const QRegExp variantAlphaNumeric("\\d[a-z0-9]{3}", Qt::CaseInsensitive);
 
     while (!tags.isEmpty()
            && ( (tags.first().size() >= 5 && tags.first().size() <= 8)
                || (variantAlphaNumeric.exactMatch(tags.first()) && tags.first().size() == 4) )
            ) {
-        bcp.variantTags.append(tags.takeFirst());
+        bcp.variantTags.append(tags.takeFirst().toLower());
     }
 
     if (tags.isEmpty()) return bcp;
@@ -473,7 +474,7 @@ KoWritingSystemUtils::Bcp47Locale KoWritingSystemUtils::parseBcp47Locale(const Q
             }
             currentExtension.clear();
         }
-        currentExtension.append(tags.takeFirst());
+        currentExtension.append(tags.takeFirst().toLower());
     }
 
     if (!currentExtension.isEmpty()) {
@@ -515,11 +516,10 @@ QString KoWritingSystemUtils::Bcp47Locale::toPosixLocaleFormat() const
     if (!scriptTag.isEmpty() && scriptTag.size() == 4) {
         posix.append("_");
         // Title case.
-        posix.append(scriptTag.at(0).toTitleCase());
-        posix.append(scriptTag.toLower().mid(1));
+        posix.append(scriptTag);
     }
 
-    if (!regionTag.isEmpty() && regionTag.size() == 2) {
+    if (!regionTag.isEmpty()) {
         posix.append("_");
         posix.append(regionTag.toUpper());
     }

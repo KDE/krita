@@ -38,13 +38,20 @@ TextPropertyBase {
 
     onEnableProperty: properties.languageState = KoSvgTextPropertiesModel.PropertySet;
     GridLayout {
-        columns: 2;
+        columns: 3;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
             revertState: properties.languageState;
             onClicked: properties.languageState = KoSvgTextPropertiesModel.PropertyUnset;
+        }
+
+        Label {
+            text: propertyName + ":";
+            elide: Text.ElideRight;
+            Layout.alignment: Qt.AlignRight;
+            font.italic: properties.lineHeightState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         ComboBox {
@@ -83,9 +90,16 @@ TextPropertyBase {
 
                 onAccepted: {
                     blockSignals = true;
+                    if (localeHandler.validBcp47Tag(text)) {
+                        localeHandler.language = text;
+                    }
+                    finalize();
+                    blockSignals = false;
+                }
+
+                function finalize() {
                     localeHandler.searchString = "";
                     filterPopup.close();
-                    blockSignals = false;
                 }
 
                 Popup {
@@ -116,9 +130,13 @@ TextPropertyBase {
                             }
                             palette: filterPopup.palette;
 
+                            ToolTip.text: text;
+                            ToolTip.visible: hovered;
+                            ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+
                             onClicked: {
                                 localeHandler.language = model.code;
-                                languageTxtEdit.accepted();
+                                languageTxtEdit.finalize();
                                 filterPopup.close();
                             }
                         }
@@ -151,6 +169,10 @@ TextPropertyBase {
                         palette: favoriteDelegate.palette;
                         hoverEnabled: true;
                         padding: 0;
+
+                        ToolTip.text: i18nc("@info:tooltip", "Store this language between sessions.");
+                        ToolTip.visible: hovered;
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
                     }
                     Label {
                         text: favoriteDelegate.model.display + " ("+favoriteDelegate.model.code+")";
@@ -174,6 +196,13 @@ TextPropertyBase {
         Item {
             width: 1;
             height: 1;
+        }
+
+        Label {
+            text: i18nc("@label:listbox", "Script:");
+            elide: Text.ElideRight;
+            Layout.alignment: Qt.AlignRight;
+
         }
 
         ComboBox {

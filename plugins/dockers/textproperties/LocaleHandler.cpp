@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-
+#include <QDebug>
 
 #include <text/KoWritingSystemUtils.h>
 #include <KLocalizedString>
@@ -85,11 +85,16 @@ void LocaleHandler::setLanguage(const QString &newLanguage)
     langOnly.scriptTag.clear();
     if (langOnly.toString() == newLanguage)
         return;
+
     langOnly = KoWritingSystemUtils::parseBcp47Locale(newLanguage);
+    langOnly.scriptTag.clear();
+    if (!langOnly.isValid()) return;
 
     d->favorites->addCode(langOnly.toString());
+
     langOnly.scriptTag = d->locale.scriptTag;
     d->locale = langOnly;
+
     emit languageChanged();
     emit bcp47TagChanged();
 }
@@ -138,6 +143,11 @@ bool LocaleHandler::localeValid() const
     return d->locale.isValid();
 }
 
+bool LocaleHandler::validBcp47Tag(const QString &tag) const
+{
+    return KoWritingSystemUtils::parseBcp47Locale(tag).isValid();
+}
+
 struct AllLanguagesModel::Private {
     Private() {
         for (int i = 0; i < QLocale::LastLanguage; i++) {
@@ -148,7 +158,7 @@ struct AllLanguagesModel::Private {
             }
             Q_FOREACH(const QLocale::Country region, QLocale::countriesForLanguage(lang)) {
                 const QLocale locale(lang, region);
-                const QString bcp = locale.bcp47Name().split("_").join("-");
+                const QString bcp = locale.name().split("_").join("-");
                 if (!locales.contains(bcp)) {
                     locales.append(bcp);
                 }

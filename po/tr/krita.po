@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 03:20+0000\n"
-"PO-Revision-Date: 2025-03-13 15:48+0300\n"
+"PO-Revision-Date: 2025-03-18 13:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -44512,7 +44512,7 @@ msgstr "Ton/Doygunluk/Luma"
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:79
 #, kde-format
 msgid "Blue Chroma/Red Chroma/Luma"
-msgstr "Mavi Kroma/Kırmızı Kroma/Parlaklık"
+msgstr "Mavi Kroma/Kırmızı Kroma/Luma"
 
 #. i18n: ectx: property (text), widget (QLabel, hLabel)
 #: plugins/filters/colorsfilters/wdg_hsv_adjustment.ui:93
@@ -48248,7 +48248,7 @@ msgstr "Grup sırası"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr "Parlaklıktan Kroma"
+msgstr "Lumadan Kroma"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558

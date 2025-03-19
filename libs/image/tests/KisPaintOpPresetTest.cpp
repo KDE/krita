@@ -38,6 +38,12 @@ void KisPaintOpPresetTest::testLoadingEmbeddedResources_data()
         << QStringList{"9a90b42a7bb2e7cef22689bf3abcdba6", "dc4e9099acb7c3cd33293a48f75c6ff7"}
         << QStringList{"9a90b42a7bb2e7cef22689bf3abcdba6", "dc4e9099acb7c3cd33293a48f75c6ff7"}
         << QStringList{};
+
+        QTest::newRow("bad-md5")
+            << "test-embedded-resources-bad-md5.kpp"
+            << QStringList{"9a90b42a7bb2e7cef22689bf3abcdba6", "59bd2f6763fd9b1669c532a7c99ae781"}
+            << QStringList{"9a90b42a7bb2e7cef22689bf3abcdba6", "59bd2f6763fd9b1669c532a7c99ae781"}
+            << QStringList{};
 }
 
 void KisPaintOpPresetTest::testLoadingEmbeddedResources()

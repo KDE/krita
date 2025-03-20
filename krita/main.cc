@@ -325,7 +325,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
  * plugins from the **build environment** location.
  */
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
-
     // APPIMAGE SOUND ADDITIONS
     // MLT needs a few environment variables set to properly function in an appimage context.
     // The following code should be configured to **only** run when we detect that Krita is being
@@ -337,11 +336,14 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
         {   // MLT
             //Plugins Path is where mlt should expect to find its plugin libraries.
-            qputenv("MLT_REPOSITORY", appimageMountDir.append(QFile::encodeName("/usr/lib/mlt-7/")).toUtf8());
-            qputenv("MLT_DATA", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/")).toUtf8());
-            qputenv("MLT_ROOT_DIR", appimageMountDir.append(QFile::encodeName("/usr/")).toUtf8());
-            qputenv("MLT_PROFILES_PATH", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/profiles/")).toUtf8());
-            qputenv("MLT_PRESETS_PATH", appimageMountDir.append(QFile::encodeName("/usr/share/mlt-7/presets/")).toUtf8());
+            const QString mltLibs = "/usr/lib/mlt-7";
+            const QString mltData = "/usr/share/mlt-7";
+
+            qputenv("MLT_ROOT_DIR", (appimageMountDir + "/usr").toUtf8());
+            qputenv("MLT_REPOSITORY", (appimageMountDir + mltLibs).toUtf8());
+            qputenv("MLT_DATA", (appimageMountDir + mltData).toUtf8());
+            qputenv("MLT_PROFILES_PATH", (appimageMountDir + mltData + "/profiles").toUtf8());
+            qputenv("MLT_PRESETS_PATH", (appimageMountDir + mltData + "/presets").toUtf8());
         }
 
         {

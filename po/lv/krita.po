@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 01:56+0000\n"
+"POT-Creation-Date: 2025-03-20 02:00+0000\n"
 "PO-Revision-Date: 2008-12-27 19:32+0200\n"
 "Last-Translator: Viesturs Zarins <viesturs.zarins@mii.lu.lv>\n"
 "Language-Team: Lavtian <locale@laka.lv>\n"
@@ -16056,27 +16056,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Krāsu telpa:"
 
-#: krita/main.cc:587
+#: krita/main.cc:589
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Vertikāli Vilnītis"
 
-#: krita/main.cc:588
+#: krita/main.cc:590
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:705 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:703
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Brīdinājums!"
 
-#: krita/main.cc:706
+#: krita/main.cc:708
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

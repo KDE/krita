@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 01:56+0000\n"
+"POT-Creation-Date: 2025-03-20 02:00+0000\n"
 "PO-Revision-Date: 2025-01-22 12:45+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -16099,13 +16099,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Languneak"
 
-#: krita/main.cc:587
+#: krita/main.cc:589
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Errore larria"
 
-#: krita/main.cc:588
+#: krita/main.cc:590
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16114,14 +16114,14 @@ msgstr ""
 "Kritak ez du Wayland plataforma onartzen. Erabili XWayland, Krita Wayland-en "
 "exekutatzeko. Krita orain itxiko da."
 
-#: krita/main.cc:705 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:703
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Abisua"
 
-#: krita/main.cc:706
+#: krita/main.cc:708
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

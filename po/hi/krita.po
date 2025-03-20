@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 01:56+0000\n"
+"POT-Creation-Date: 2025-03-20 02:00+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16082,13 +16082,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्र"
 
-#: krita/main.cc:587
+#: krita/main.cc:589
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "गंभीर त्रुटि"
 
-#: krita/main.cc:588
+#: krita/main.cc:590
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16097,14 +16097,14 @@ msgstr ""
 "क्रिता को वैलैंड प्लेटफॉर्म समर्थन नहीं है। वैलैंड पर क्रिता को चलाने के लिए XWayland का "
 "उपयोग करें। क्रिता अब बंद होगा।"
 
-#: krita/main.cc:705 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:703
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "क्रिता : चेतावनी"
 
-#: krita/main.cc:706
+#: krita/main.cc:708
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"

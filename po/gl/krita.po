@@ -79,8 +79,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-13 01:56+0000\n"
-"PO-Revision-Date: 2025-03-05 06:59+0100\n"
+"POT-Creation-Date: 2025-03-20 02:00+0000\n"
+"PO-Revision-Date: 2025-03-19 13:21+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.gal>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.12.2\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16039,13 +16039,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espazos de traballo"
 
-#: krita/main.cc:587
+#: krita/main.cc:589
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Erro fatal"
 
-#: krita/main.cc:588
+#: krita/main.cc:590
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16054,14 +16054,14 @@ msgstr ""
 "Krita non permite a plataforma Wayland. Use XWayland para executar Krita en "
 "Wayland. Krita pecharase."
 
-#: krita/main.cc:705 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:703
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Aviso — Krita"
 
-#: krita/main.cc:706
+#: krita/main.cc:708
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -44948,24 +44948,22 @@ msgid "Optical Size"
 msgstr "Tamaño óptico"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Abrir"
+msgstr "Activada"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "desactivado"
+msgstr "Desactivada"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
 msgctxt "@title:column"
 msgid "OpenType Feature Tag"
-msgstr ""
+msgstr "Etiqueta de funcionalidade de OpenType"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
 #, kde-format

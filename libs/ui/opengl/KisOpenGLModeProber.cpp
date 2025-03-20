@@ -108,7 +108,7 @@ struct EnvironmentSetter
     EnvironmentSetter(const QLatin1String &env, const QString &value)
         : m_env(env)
     {
-        if (qEnvironmentVariableIsEmpty(m_env.latin1())) {
+        if (!qEnvironmentVariableIsEmpty(m_env.latin1())) {
             m_oldValue = qgetenv(env.latin1());
         }
         if (!value.isEmpty()) {
@@ -163,7 +163,9 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
             glesSetter.reset(new AppAttributeSetter(Qt::AA_UseOpenGLES, format.renderableType() == QSurfaceFormat::OpenGLES));
         }
 
-        rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
+        if (!qEnvironmentVariableIsSet("QT_ANGLE_PLATFORM")) {
+            rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
+        }
         portalSetter.reset(new EnvironmentSetter(QLatin1String("QT_NO_XDG_DESKTOP_PORTAL"), QLatin1String("1")));
         formatSetter.reset(new SurfaceFormatSetter(format));
 

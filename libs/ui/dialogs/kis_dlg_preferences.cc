@@ -1801,7 +1801,10 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     const QString rendererOpenGLText = i18nc("canvas renderer", "OpenGL");
     const QString rendererSoftwareText = i18nc("canvas renderer", "Software Renderer (very slow)");
 #ifdef Q_OS_WIN
-    const QString rendererOpenGLESText = i18nc("canvas renderer", "Direct3D 11 via ANGLE");
+    const QString rendererOpenGLESText =
+        qEnvironmentVariable("QT_ANGLE_PLATFORM") != "opengl"
+        ? i18nc("canvas renderer", "Direct3D 11 via ANGLE")
+        : i18nc("canvas renderer", "OpenGL via ANGLE");
 #else
     const QString rendererOpenGLESText = i18nc("canvas renderer", "OpenGL ES");
 #endif

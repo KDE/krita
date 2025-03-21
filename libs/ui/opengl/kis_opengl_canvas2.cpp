@@ -152,13 +152,13 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
 
 void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
-    KisOpenGLContextSwitchLock contextLock(this);
+    KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
     d->renderer->setDisplayFilter(displayFilter);
 }
 
 void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
 {
-    KisOpenGLContextSwitchLock contextLock(this);
+    KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
     d->renderer->notifyImageColorSpaceChanged(cs);
 }
 
@@ -346,7 +346,7 @@ void KisOpenGLCanvas2::showEvent(QShowEvent *e)
 
 void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
-    KisOpenGLContextSwitchLock contextLock(this);
+    KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
     d->renderer->setDisplayColorConverter(colorConverter);
 }
 
@@ -358,7 +358,7 @@ void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)
 
 void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
 {
-    KisOpenGLContextSwitchLock contextLock(this);
+    KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
     d->renderer->finishResizingImage(w, h);
 }
 
@@ -375,7 +375,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
 
 QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
 {
-    KisOpenGLContextSwitchLock contextLock(this);
+    KisOpenGLContextSwitchLockSkipOnQt5 contextLock(this);
     return KisCanvasWidgetBase::updateCanvasProjection(infoObjects);
 }
 

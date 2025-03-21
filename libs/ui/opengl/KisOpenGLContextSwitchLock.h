@@ -25,9 +25,19 @@ public:
 private:
     QOpenGLWidget *m_targetWidget {nullptr};
     QOpenGLContext *m_oldContext {nullptr};
-    QSurface *m_oldSurface = {nullptr};
+    QSurface *m_oldSurface {nullptr};
+};
+
+class KRITAUI_EXPORT KisOpenGLContextSwitchLockAdapterSkipOnQt5 : public KisOpenGLContextSwitchLockAdapter
+{
+public:
+    using KisOpenGLContextSwitchLockAdapter::KisOpenGLContextSwitchLockAdapter;
+
+    void lock();
+    void unlock();
 };
 
 KIS_DECLARE_ADAPTED_LOCK(KisOpenGLContextSwitchLock, KisOpenGLContextSwitchLockAdapter)
+KIS_DECLARE_ADAPTED_LOCK(KisOpenGLContextSwitchLockSkipOnQt5, KisOpenGLContextSwitchLockAdapterSkipOnQt5)
 
 #endif // KISOPENGLCONTEXTSWITCHLOCK_H

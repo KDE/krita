@@ -89,18 +89,47 @@ void KisFilterMaskTest::testProjectionSelected()
     mask->select(qimage.rect(), MAX_SELECTED);
     mask->apply(projection, qimage.rect(), qimage.rect(), KisNode::N_FILTHY, KisRenderPassFlag::None);
 
-    if (f->needsTransparentPixels(kfc, image->colorSpace())) {
-        QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
-    } else {
-        QVERIFY2(mask->exactBounds().contains(layer->exactBounds()), "The mask bounds are smaller than the layer bounds");
-    }
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, qimage.width(), qimage.height()));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
         projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest2.png");
         QFAIL(QString("Failed to create inverted image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
+}
 
+void KisFilterMaskTest::testProjectionSelectedTransparentPixels()
+{
+    TestUtil::MaskParent p(QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+    KisImageSP image = p.image;
+    KisPaintLayerSP layer = p.layer;
+    KisPaintDeviceSP projection = layer->paintDevice();
+
+    QImage qimage(QString(FILES_DATA_DIR) + '/' + "transparency_mask_test_3.png");
+    projection->convertFromQImage(qimage, 0, 0, 0);
+
+    KisFilterSP f = KisFilterRegistry::instance()->value("resettransparent");
+    Q_ASSERT(f);
+    KisFilterConfigurationSP  kfc = f->defaultConfiguration(KisGlobalResourcesInterface::instance());
+    Q_ASSERT(kfc);
+
+    KisFilterMaskSP mask = new KisFilterMask(image, "mask");
+    image->addNode(mask, layer);
+
+    mask->setFilter(kfc->cloneWithResourcesSnapshot());
+    mask->createNodeProgressProxy();
+
+    mask->initSelection(layer);
+    mask->select(qimage.rect(), MAX_SELECTED);
+    mask->apply(projection, qimage.rect(), qimage.rect(), KisNode::N_FILTHY, KisRenderPassFlag::None);
+
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
+
+    QPoint errpoint;
+    if (!TestUtil::compareQImages(errpoint, qimage, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
+        projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()).save("filtermasktest3.png");
+        QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
+    }
 }
 
 SIMPLE_TEST_MAIN(KisFilterMaskTest)

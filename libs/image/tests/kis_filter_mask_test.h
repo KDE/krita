@@ -19,6 +19,7 @@ private Q_SLOTS:
 
     void testProjectionNotSelected();
     void testProjectionSelected();
+    void testProjectionSelectedTransparentPixels();
 
 };
 

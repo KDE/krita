@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-20 02:00+0000\n"
+"POT-Creation-Date: 2025-03-21 02:00+0000\n"
 "PO-Revision-Date: 2024-11-23 12:48+0000\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -23860,8 +23860,8 @@ msgstr "Metadata"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1924
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24668,7 +24668,7 @@ msgstr ""
 "will be reduced to 50 frames per second"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1948
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
 #, kde-format
 msgid "Warning(s):"
 msgstr "Warning(s):"
@@ -25632,8 +25632,8 @@ msgstr "Master Display:"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2234
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2236
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25733,8 +25733,8 @@ msgstr "Video Animation Import"
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2204
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2206
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26720,8 +26720,8 @@ msgstr "Layer Properties"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1497
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1501
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1584
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1999
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2057 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2060 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -27156,164 +27156,172 @@ msgctxt "canvas renderer"
 msgid "Software Renderer (very slow)"
 msgstr "Software Renderer (very slow)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1804
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 via ANGLE"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1807
+#, fuzzy, kde-format
+#| msgctxt "canvas renderer"
+#| msgid "OpenGL ES"
+msgctxt "canvas renderer"
+msgid "OpenGL via ANGLE"
+msgstr "OpenGL ES"
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr "OpenGL ES"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1813
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr "Unknown"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1833
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1836
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr "Auto (%1)"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1910
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
 #, kde-format
 msgid "Display Id: %1"
 msgstr "Display Id: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1911
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr "Display Name: %1 %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1912
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr "Min Luminance: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr "Max Luminance: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr "Max Full Frame Luminance: %1"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr "Red Primary: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr "Green Primary: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1920
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr "Blue Primary: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr "White Point: %1, %2"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2086
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2089
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr "<b>Warning:</b> current display does not support HDR rendering"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2197
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2200
 #, kde-format
 msgid "Configure Krita"
 msgstr "Configure Krita"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2214
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Keyboard Shortcuts"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2216
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr "Shortcuts"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2226
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Canvas Input Settings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2227
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #, kde-format
 msgid "Canvas Input"
 msgstr "Canvas Input"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2244
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Colour Management"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2246
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Colour"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2254
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2256
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
 #, kde-format
 msgid "Performance"
 msgstr "Performance"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2264
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2267
 #, kde-format
 msgid "Tablet settings"
 msgstr "Tablet settings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2266
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
 #, kde-format
 msgid "Tablet"
 msgstr "Tablet"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2274
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Canvas-only settings"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2276
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
 #, kde-format
 msgid "Canvas-only"
 msgstr "Canvas-only"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2284
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2286
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2287
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
 #, kde-format
 msgid "Pop-up Palette"
 msgstr "Pop-up Palette"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2294
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2297
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Author"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2296
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Author"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2303
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"

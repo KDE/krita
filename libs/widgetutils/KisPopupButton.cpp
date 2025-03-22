@@ -54,16 +54,10 @@ public:
         if (detach) {
             setWindowFlags(Qt::Dialog);
             setFrameStyle(QFrame::NoFrame);        
-            setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-            // setting the size policy to fixed sets the maximum size, somehow
-            setMaximumSize(0xFFFFFF, 0xFFFFFF);
-            frameLayout->setSizeConstraint(QLayout::SizeConstraint::SetDefaultConstraint);
         }
         else {
             setWindowFlags(Qt::Popup);
             setFrameStyle(QFrame::Box | QFrame::Plain);
-            setSizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Fixed);
-            frameLayout->setSizeConstraint(QLayout::SizeConstraint::SetFixedSize);
         }
 
         updateGeometry();

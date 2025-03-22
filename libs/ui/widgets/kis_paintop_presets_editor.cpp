@@ -71,7 +71,6 @@ struct KisPaintOpPresetsEditor::Private
 
     bool ignoreHideEvents;
     bool isCreatingBrushFromScratch = false;
-    QSize minimumSettingsWidgetSize;
 
     KisSignalAutoConnectionsStore widgetConnections;
 
@@ -281,7 +280,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
     m_d->ignoreHideEvents = false;
-    m_d->minimumSettingsWidgetSize = QSize(0, 0);
 
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetCheckBox->setChecked(cfg.useDirtyPresets());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
@@ -456,10 +454,6 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
 
         widget->setFont(m_d->smallFont);
 
-        QSize hint = widget->sizeHint();
-        m_d->minimumSettingsWidgetSize = QSize(qMax(hint.width(), m_d->minimumSettingsWidgetSize.width()),
-                                               qMax(hint.height(), m_d->minimumSettingsWidgetSize.height()));
-        widget->setMinimumSize(m_d->minimumSettingsWidgetSize);
         m_d->layout->addWidget(widget);
 
         // hook up connections that will monitor if our preset is dirty or not. Show a notification if it is

@@ -26811,12 +26811,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 - 通过 ANGLE 转译"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1807
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #, kde-format

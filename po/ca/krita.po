@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-21 02:00+0000\n"
-"PO-Revision-Date: 2025-03-06 09:38+0100\n"
+"PO-Revision-Date: 2025-03-21 09:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -27167,12 +27167,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 via ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1807
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL mitjançant ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #, kde-format

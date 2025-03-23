@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-21 02:00+0000\n"
+"POT-Creation-Date: 2025-03-23 01:55+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -23861,7 +23861,7 @@ msgstr "Миниатюра"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:607
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
@@ -36626,7 +36626,7 @@ msgstr "Инструменти"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:142
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:74
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:175
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -37870,7 +37870,7 @@ msgid "Mid-gray level:"
 msgstr ""
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:45
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:154
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
@@ -37879,7 +37879,7 @@ msgid "Display"
 msgstr "Показване"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:51
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:158
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
@@ -37888,7 +37888,7 @@ msgstr "Миниатюри"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:56
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:166
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -37896,38 +37896,38 @@ msgstr "Миниатюри"
 msgid "Details"
 msgstr "Подробен"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "Презареждане на  настройка на четка"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:111
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "Преименуване на  настройка на четка"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:211
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:210
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr ""
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:545
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:539
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"

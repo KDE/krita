@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-21 02:00+0000\n"
-"PO-Revision-Date: 2025-03-06 09:38+0100\n"
+"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"PO-Revision-Date: 2025-03-21 09:34+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -24013,7 +24013,7 @@ msgstr "Miniatura"
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllGuidesButton)
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:613
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:607
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:454
 #: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:721
@@ -27167,12 +27167,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 via ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1807
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL mitjançant ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #, kde-format
@@ -37165,7 +37163,7 @@ msgstr "Quadro d'eines"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:142
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:74
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:175
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:174
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:345
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:200
 #, kde-format
@@ -38576,7 +38574,7 @@ msgid "Mid-gray level:"
 msgstr "Nivell del gris mitjà:"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:45
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:154
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:153
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:169
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:30
 #, kde-format
@@ -38585,7 +38583,7 @@ msgid "Display"
 msgstr "Visualitza"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:51
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:158
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:177
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:42
 #, kde-format
@@ -38594,7 +38592,7 @@ msgstr "Miniatures"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:56
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:166
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:165
 #: plugins/dockers/gamutmask/KisGamutMaskChooser.cpp:183
 #: plugins/extensions/resourcemanager/KisResourceItemViewer.cpp:48
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:206
@@ -38602,7 +38600,7 @@ msgstr "Miniatures"
 msgid "Details"
 msgstr "Detalls"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:104
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:103
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:47
 #, kde-format
 msgid "The settings for this preset have changed from their default."
@@ -38610,32 +38608,32 @@ msgstr ""
 "Les opcions de configuració d'este predefinit han canviat dels seus valors "
 "predeterminats."
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:106
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:105
 #, kde-format
 msgid "Toggle showing presets"
 msgstr "Canvia el fet de mostrar els predefinits"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:108
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
 msgstr "Canvia mostrant el bloc de proves"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
 msgid "Reload the brush preset"
 msgstr "Torna a carregar el pinzell predefinit"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:111
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:110
 #, kde-format
 msgid "Rename the brush preset"
 msgstr "Canvia el nom del pinzell predefinit"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:211
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:210
 #, kde-format
 msgid "Detach Brush Editor"
 msgstr "Separa l'editor de pinzells"
 
-#: libs/ui/widgets/kis_paintop_presets_editor.cpp:545
+#: libs/ui/widgets/kis_paintop_presets_editor.cpp:539
 #, kde-format
 msgctxt "%1 is the name of a brush engine"
 msgid "%1 Engine"
@@ -57801,7 +57799,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "Luminosity of the brush tip image is used as alpha channel for the stroke"
 msgstr ""
-"Lluminositat de la imatge de la punta del pinzell que s'utilitza com a canal "
+"Brillantor de la imatge de la punta del pinzell que s'utilitza com a canal "
 "alfa per al traç"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
@@ -57828,7 +57826,7 @@ msgid ""
 "painting color. Alpha channel of the brush tip image is used as alpha for "
 "the final stroke"
 msgstr ""
-"La lluminositat de la imatge de la punta de pinzell que s'utilitza com a "
+"La brillantor de la imatge de la punta de pinzell que s'utilitza com a "
 "correcció de la claredat per al color del pintat. El canal alfa de la imatge "
 "de la punta del pinzell s'utilitza com a l'alfa del traç final"
 

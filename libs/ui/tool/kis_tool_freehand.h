@@ -15,6 +15,7 @@
 #include "kis_tool_paint.h"
 #include "kis_smoothing_options.h"
 #include "kis_signal_compressor_with_param.h"
+#include "KoPointerEvent.h"
 
 #include "kritaui_export.h"
 
@@ -120,6 +121,8 @@ private:
 
     bool m_paintopBasedSamplingInAction {false};
     KisSignalCompressorWithParam<qreal> m_brushResizeCompressor;
+
+    std::optional<KoPointerEventWrapper> m_beginAlternateActionEvent;
 };
 
 

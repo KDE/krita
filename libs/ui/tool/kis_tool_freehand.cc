@@ -335,6 +335,9 @@ void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateActio
 
     m_lastDocumentPoint = event->point;
     m_lastPaintOpSize = currentPaintOpPreset()->settings()->paintOpSize();
+
+    m_beginAlternateActionEvent = event->deepCopyEvent();
+    requestUpdateOutline(m_initialGestureDocPoint, &m_beginAlternateActionEvent->event);
 }
 
 void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -379,7 +382,9 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
 
         settings->setPaintOpSize(newSize);
 
-        requestUpdateOutline(m_initialGestureDocPoint, 0);
+        requestUpdateOutline(
+            m_initialGestureDocPoint,
+            m_beginAlternateActionEvent.has_value() ? &m_beginAlternateActionEvent->event : nullptr);
         //m_brushResizeCompressor.start(newSize);
 
         m_lastDocumentPoint = event->point;
@@ -403,6 +408,8 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
     requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);
+
+    m_beginAlternateActionEvent.reset();
 }
 
 bool KisToolFreehand::wantsAutoScroll() const

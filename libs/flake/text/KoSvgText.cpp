@@ -1439,6 +1439,7 @@ bool FontMetrics::operator==(const FontMetrics &other) const {
             && descender == other.descender
             && lineGap == other.lineGap
             && alphabeticBaseline == other.alphabeticBaseline
+            && mathematicalBaseline == other.mathematicalBaseline
             && ideographicUnderBaseline == other.ideographicUnderBaseline
             && ideographicCenterBaseline == other.ideographicCenterBaseline
             && ideographicOverBaseline == other.ideographicOverBaseline

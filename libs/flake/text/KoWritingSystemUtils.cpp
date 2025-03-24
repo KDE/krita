@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoWritingSystemUtils.h"
+#include <QRegExp>
 
 static QMap<QFontDatabase::WritingSystem, QString> WRITINGSYSTEM_SCRIPT_MAP {
     {{QFontDatabase::Any},{"Zyyy"}},

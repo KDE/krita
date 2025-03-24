@@ -156,12 +156,12 @@ QAbstractItemModel *LocaleHandler::favoritesModel() const
 
 QString LocaleHandler::searchString() const
 {
-    return d->filteredLanguagesModel->filterRegExp().pattern();
+    return d->filteredLanguagesModel->filterRegularExpression().pattern();
 }
 
 void LocaleHandler::setSearchString(const QString &newSearchString)
 {
-    if (d->filteredLanguagesModel->filterRegExp().pattern() == newSearchString)
+    if (d->filteredLanguagesModel->filterRegularExpression().pattern() == newSearchString)
         return;
     d->filteredLanguagesModel->setFilterFixedString(newSearchString);
     emit searchStringChanged();
@@ -354,7 +354,7 @@ bool LanguagesFilterModel::filterAcceptsRow(int source_row, const QModelIndex &s
     const QString name = sourceModel()->data(idx).toString();
     const QString code = sourceModel()->data(idx, AllLanguagesModel::Code).toString();
 
-    return (name.contains(filterRegExp()) || code.contains(filterRegExp()));
+    return (name.contains(filterRegularExpression()) || code.contains(filterRegularExpression()));
 }
 
 

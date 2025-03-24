@@ -19,7 +19,7 @@ struct CssQmlUnitConverter::Private {
     qreal dataValue{0.0};
     int dataUnit{-1};
     int userUnit{-1};
-    qreal percentageReference;
+    qreal percentageReference {12.0}; ///< 12.0 pt is the default we use for font-size, which most css text properties' % resolve against.
 
     KoUnit absoluteUnitConverter;
 

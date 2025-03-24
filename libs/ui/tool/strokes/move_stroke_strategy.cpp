@@ -261,12 +261,18 @@ void MoveStrokeStrategy::initStrokeCallback()
             m_nodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(m_nodes, true);
         }
 
-        KritaUtils::filterContainer<KisNodeList>(m_nodes,
-                                                 [this](KisNodeSP node) {
+        KritaUtils::filterContainer<KisNodeList>(m_nodes, [this](KisNodeSP node) {
+            /**
+             * We shouldn't try to transform standalone fully empty filter masks. That 
+             * just doesn't make sense.
+             */
+            const bool isEmptyFilterMask = node->inherits("KisFilterMask") && node->paintDevice()
+                && node->paintDevice()->nonDefaultPixelArea().isEmpty();
+
             // TODO: check isolation
-            return
-                    !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
-                    node->isEditable(true);
+            return !isEmptyFilterMask &&
+                !KisLayerUtils::checkIsCloneOf(node, m_nodes) &&
+                node->isEditable(true);
         });
         Q_FOREACH(KisNodeSP subtree, m_nodes) {
             KisLayerUtils::recursiveApplyNodes(
@@ -316,8 +322,20 @@ void MoveStrokeStrategy::initStrokeCallback()
          * Collect handles rect
          */
         recursiveApplyNodes(m_nodes,
-            [&handlesRect] (KisNodeSP node) {
-                handlesRect |= node->projectionPlane()->tightUserVisibleBounds();
+            [&handlesRect, this] (KisNodeSP node) {
+                if (node->inherits("KisFilterMask") && m_nodes.contains(node)) {
+                    /**
+                     * Since the mask is contained in `m_nodes`, we are explicitly
+                     * asked to transform it by the user, we should show all the non-
+                     * default pixels it has (since that is exactly what we are
+                     * transforming)
+                     */
+                    if (node->paintDevice()) {
+                        handlesRect |= node->paintDevice()->nonDefaultPixelArea();
+                    }
+                } else {
+                    handlesRect |= node->projectionPlane()->tightUserVisibleBounds();
+                }
             });
 
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();

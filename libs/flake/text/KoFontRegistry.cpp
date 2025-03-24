@@ -29,6 +29,7 @@
 #include "KoWritingSystemUtils.h"
 #include <KisResourceLocator.h>
 #include FT_TRUETYPE_TABLES_H
+#include FT_FREETYPE_H
 
 
 static unsigned int firstCharUcs4(const QStringView qsv)
@@ -768,19 +769,19 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     // Fontsize and advances.
     metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem*64.0: face.data()->size->metrics.x_ppem*64.0;
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags) == FT_Err_Ok) {
         metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags) == FT_Err_Ok) {
         metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags)) {
+    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags) == FT_Err_Ok) {
         metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.ideographicAdvance = metrics.fontSize;

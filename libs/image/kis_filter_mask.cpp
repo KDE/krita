@@ -25,6 +25,7 @@ struct KisFilterMask::Private
         bool value {false};
         const KoColorSpace *colorSpace {nullptr};
     };
+    QMutex transparentPixelsCacheLock;
     std::optional<NeedsTransparentPixelsCache> needsTransparentPixelsCache;
 };
 
@@ -39,7 +40,7 @@ KisFilterMask::KisFilterMask(KisImageWSP image, const QString &name)
 KisFilterMask::KisFilterMask(const KisFilterMask& rhs)
     : KisEffectMask(rhs)
     , KisNodeFilterInterface(rhs)
-    , m_d(new Private(*rhs.m_d))
+    , m_d(new Private())
 {
 }
 
@@ -55,6 +56,8 @@ bool KisFilterMask::filterNeedsTransparentPixels() const
     const KoColorSpace *cs = this->colorSpace();
     if (!cs) return false;
 
+    QMutexLocker l(&m_d->transparentPixelsCacheLock);
+    
     if (m_d->needsTransparentPixelsCache) {
         if (*m_d->needsTransparentPixelsCache->colorSpace != *cs) {
             m_d->needsTransparentPixelsCache = std::nullopt;
@@ -63,11 +66,16 @@ bool KisFilterMask::filterNeedsTransparentPixels() const
         }
     }
 
+    l.unlock();
+
     KisFilterConfigurationSP filterConfig = filter();
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
+    const bool needsTransparentPixelsValue = filter->needsTransparentPixels(filterConfig, cs);
 
-    m_d->needsTransparentPixelsCache = {filter->needsTransparentPixels(filterConfig, cs), cs};
-    return m_d->needsTransparentPixelsCache->value;
+    l.relock();
+
+    m_d->needsTransparentPixelsCache = {needsTransparentPixelsValue, cs};
+    return needsTransparentPixelsValue;
 }
 
 void KisFilterMask::setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig)

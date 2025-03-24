@@ -69,6 +69,8 @@ bool KisFilterMask::filterNeedsTransparentPixels() const
     l.unlock();
 
     KisFilterConfigurationSP filterConfig = filter();
+    if (!filterConfig) return false;
+
     KisFilterSP filter = KisFilterRegistry::instance()->value(filterConfig->name());
     const bool needsTransparentPixelsValue = filter->needsTransparentPixels(filterConfig, cs);
 

@@ -10,7 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Dominant Baseline")
-    propertyType: TextPropertyBase.Paragraph;
+    propertyType: TextPropertyBase.Mixed;
     toolTip: i18nc("@info:tooltip",
                    "Dominant Baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
     searchTerms: i18nc("comma separated search terms for the dominant-baseline property, matching is case-insensitive",
@@ -57,7 +57,7 @@ TextPropertyBase {
         }
         ComboBox {
             model: [
-                {text: i18nc("@label:inlistbox", "Baseline"), value: KoSvgText.BaselineAuto},
+                {text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.BaselineAuto},
                 {text: i18nc("@label:inlistbox", "Alphabetic"), value: KoSvgText.BaselineAlphabetic},
                 {text: i18nc("@label:inlistbox", "Ideographic"), value: KoSvgText.BaselineIdeographic},
                 {text: i18nc("@label:inlistbox", "Central"), value: KoSvgText.BaselineCentral},

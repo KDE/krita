@@ -624,8 +624,9 @@ void KoSvgTextShape::Private::relayout()
     }
 
     // Handle baseline alignment.
-    globalIndex = 0;
-    this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
+    //later
+    //globalIndex = 0;
+    //this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
 
     if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
@@ -1062,16 +1063,18 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
 
-    KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
+    KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::DominantBaselineId).toInt());
 
-    hb_position_t baseline = 0;
-    hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     KoSvgText::Baseline defaultBaseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
     KoSvgText::FontMetrics metrics;
-    if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
+
+    // In SVG 2, reset-size always happens whenever the font-size changes.
+    if ((dominantBaseline == KoSvgText::BaselineResetSize || !qFuzzyCompare(parentFontSize, fontSize)) && parentFontSize > 0) {
         metrics = parentBaselineTable;
-        metrics.scaleBaselines(1.0 / parentFontSize * fontSize);
-        dominantBaseline = KoSvgText::BaselineAuto;
+        metrics.scaleBaselines(1.0* fontSize / parentFontSize);
+        if (dominantBaseline == KoSvgText::BaselineResetSize) {
+            dominantBaseline = KoSvgText::BaselineAuto;
+        }
     } else if (dominantBaseline == KoSvgText::BaselineNoChange) {
         metrics = parentBaselineTable;
         dominantBaseline = KoSvgText::BaselineAuto;
@@ -1082,6 +1085,10 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     // Get underline and super/subscripts.
     QPointF newSuperScript = QPointF(metrics.superScriptOffset.first * freetypePixelsToPt, metrics.superScriptOffset.second * -freetypePixelsToPt);;
     QPointF newSubScript = QPointF(metrics.subScriptOffset.first * freetypePixelsToPt, metrics.subScriptOffset.second * freetypePixelsToPt);
+
+    /* text decor */
+    hb_position_t baseline = 0;
+    hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
 
     hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
     qreal width = baseline;
@@ -1102,13 +1109,14 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
     parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, lineOffset);
+    /* text decor */
 
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         computeFontMetrics(child, properties, metrics, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
     }
 
-    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::AlignmentBaselineId).toInt());
 
     if (baselineAdjust == KoSvgText::BaselineDominant) {
         baselineAdjust = dominantBaseline;
@@ -1118,30 +1126,29 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         baselineAdjust = defaultBaseline;
     }
 
-    LineBox relevantLine;
-    Q_FOREACH(LineBox lineBox, lineBoxes) {
-        Q_FOREACH(LineChunk chunk, lineBox.chunks) {
-            if (chunk.chunkIndices.contains(i)) {
-                relevantLine = lineBox;
-            }
-        }
-    }
+    bool applyGlyphAlignment = KisForestDetail::childBegin(parent) == KisForestDetail::childEnd(parent);
+    const int boxOffset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
+    const QPointF shift = isHorizontal? QPointF(0, boxOffset * -freetypePixelsToPt): QPointF(boxOffset * freetypePixelsToPt, 0);
 
-    const int offset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
-    QPointF shift = QPointF();
-
-    if (baselineAdjust != KoSvgText::BaselineTextTop && baselineAdjust != KoSvgText::BaselineTextBottom) {
-        if (isHorizontal) {
-            shift = QPointF(0, offset * -freetypePixelsToPt);
-        } else {
-            shift = QPointF(offset * freetypePixelsToPt, 0);
-        }
-    }
-
-    shift += baselineShiftTotal;
-
+    /*
+     * The actual alignment process.
+     * What the CSS-inline-3 spec wants us to do is to have inline-boxes aligned to their parent by their alignment-baseline
+     * (which defaults to dominant baseline), while glyphs are aligned to their parent by the dominant baseline. This means
+     * alignment baseline can nest, which makes sense since it does not inherit.
+     * Glyphs' parent is the inline box they're in, so we're using the main metrics of the inline box to align them via their
+     * per-glyph metrics to the inline box. This only happens if we're at a text-content element.
+     * The inline box itself is then aligned to the parent inline box with the alignment baseline, using the parent
+     * and inline main metrics.
+     * Then, finally baseline shift is applied, if any.
+     */
     for (int k = i; k < j; k++) {
+        if (applyGlyphAlignment) {
+            const int offset = metrics.valueForBaselineValue(dominantBaseline) - result[k].metrics.valueForBaselineValue(dominantBaseline);
+            const QPointF uniqueShift = isHorizontal? QPointF(0, offset * -freetypePixelsToPt): QPointF(offset * freetypePixelsToPt, 0);
+            result[k].baselineOffset += uniqueShift;
+        }
         result[k].baselineOffset += shift;
+        result[k].baselineOffset += baselineShiftTotal;
     }
 
     currentIndex = j;
@@ -1172,6 +1179,7 @@ void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentE
         }
     }
     QPointF shift = QPointF();
+    /* Handle later. */
     if (baselineAdjust == KoSvgText::BaselineTextTop || baselineAdjust == KoSvgText::BaselineTextBottom) {
         double ascent = 0.0;
         double descent = 0.0;

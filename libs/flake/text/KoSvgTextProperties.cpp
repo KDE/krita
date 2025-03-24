@@ -1188,7 +1188,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(UnicodeBidiId, BidiNormal);
         s_defaultProperties->setProperty(TextAnchorId, AnchorStart);
         s_defaultProperties->setProperty(DominantBaselineId, BaselineAuto);
-        s_defaultProperties->setProperty(AlignmentBaselineId, BaselineAuto);
+        s_defaultProperties->setProperty(AlignmentBaselineId, BaselineDominant);
         s_defaultProperties->setProperty(BaselineShiftModeId, ShiftNone);
         s_defaultProperties->setProperty(BaselineShiftValueId, QVariant::fromValue(KoSvgText::CssLengthPercentage()));
         s_defaultProperties->setProperty(KerningId, fromAutoValue(AutoValue()));

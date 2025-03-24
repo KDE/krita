@@ -57,7 +57,8 @@ public:
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
 
-    void notifyColorSpaceChanged() override;
+private:
+    bool filterNeedsTransparentPixels() const;
 
 private:
     struct Private;

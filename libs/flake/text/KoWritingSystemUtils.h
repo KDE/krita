@@ -47,7 +47,7 @@ public:
      *
      * @see ietf rfc5646
      */
-    struct Bcp47Locale {
+    struct KRITAFLAKE_EXPORT Bcp47Locale {
         QStringList languageTags;
         QString scriptTag;
         QString regionTag;

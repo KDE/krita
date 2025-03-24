@@ -329,7 +329,7 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
         }
         FcStrListDone(list);
         FcCharSet *charSet = nullptr;
-        if (!FcPatternGetCharSet(pattern, FC_CHARSET, 0, &charSet) == FcResultMatch) {
+        if (FcPatternGetCharSet(pattern, FC_CHARSET, 0, &charSet) != FcResultMatch) {
             return success;
         }
         addSupportedLanguagesByFile(filename, indexValue, languages, charSet);

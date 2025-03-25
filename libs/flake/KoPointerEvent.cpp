@@ -352,7 +352,7 @@ qreal KoPointerEvent::tangentialPressure() const
     return visit(Visitor(), d->eventPtr);
 }
 
-int KoPointerEvent::xTilt() const
+qreal KoPointerEvent::xTilt() const
 {
     struct Visitor {
         int operator() (const QTabletEvent *event) {
@@ -367,7 +367,7 @@ int KoPointerEvent::xTilt() const
 }
 
 
-int KoPointerEvent::yTilt() const
+qreal KoPointerEvent::yTilt() const
 {
     struct Visitor {
         int operator() (const QTabletEvent *event) {

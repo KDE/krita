@@ -152,7 +152,7 @@ public:
      * towards the tablet's physical right. The angle is in the range -60
      * to +60 degrees. The default value is 0.
      */
-    int xTilt() const;
+    qreal xTilt() const;
 
     /**
      * Return the y position in widget coordinates.
@@ -166,7 +166,7 @@ public:
      * towards the tablet's physical right. The angle is in the range -60
      * to +60 degrees. The default value is 0.
      */
-    int yTilt() const;
+    qreal yTilt() const;
 
     /**
      * Returns the z position of the device. Typically this is represented

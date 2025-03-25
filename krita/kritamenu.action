@@ -388,7 +388,7 @@
       <iconText>Paste into Active Layer</iconText>
       <activationFlags>100000000000</activationFlags>
       <activationConditions>10</activationConditions>
-      <shortcut></shortcut>
+      <shortcut>Ctrl+Shift+V</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>

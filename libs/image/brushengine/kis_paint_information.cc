@@ -652,8 +652,23 @@ qreal KisPaintInformation::tiltDirection(const KisPaintInformation& info, bool n
 {
     qreal xTilt = info.xTilt();
     qreal yTilt = info.yTilt();
+
     // radians -PI, PI
-    qreal tiltDirection = atan2(-xTilt, yTilt);
+    qreal tiltDirection = 0.0;
+
+    if (qFuzzyIsNull(xTilt) && qFuzzyIsNull(yTilt)) {
+        /**
+         * When the stylus is in fully vertical position, stick it
+         * to a "neutral position", which is a 3 o'clock tilt of the stylus
+         * as defined in the Krita documentation.
+         *
+         * The normal 0 deg position as returned from Qt is at 6 o'clock
+         * tilt of the stylus
+         */
+        tiltDirection = - KisAlgebra2D::signPZ(xTilt) * KisAlgebra2D::signPZ(yTilt) * M_PI_2;
+    } else {
+        tiltDirection = atan2(-xTilt, yTilt);
+    }
 
     if (!qFuzzyIsNull(info.d->tiltDirectionOffset)) {
         tiltDirection += kisDegreesToRadians(info.d->tiltDirectionOffset);

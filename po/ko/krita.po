@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21170,7 +21170,7 @@ msgid "Character Variant %1"
 msgstr "가변형(%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -21178,24 +21178,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>텍스트를 입력하십시오</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 텍스트 모양"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -46098,12 +46098,105 @@ msgstr "작업 세트 저장"
 msgid "Delete the taskset"
 msgstr "작업 세트 삭제"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Font Size"
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "글꼴 크기"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "높이:"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "R8 Heightmap"
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "R8 Heightmap"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "비례"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+#| msgid "Line Height: "
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "줄 높이: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, fuzzy, kde-format
+#| msgctxt "Space"
+#| msgid "Space"
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr "스페이스"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+#| msgctxt "Line color"
+#| msgid "Lines: "
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "선: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "백분율(%)"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, fuzzy, kde-format
 #| msgid "Optimize"
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "최적화"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, fuzzy, kde-format
+#| msgid "Empty slot"
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr "빈 슬롯"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, fuzzy, kde-format
+#| msgctxt "@info mouse position (x, y)"
+#| msgid "%1, %2"
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, kde-format
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, fuzzy, kde-format
@@ -46125,7 +46218,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, kde-format
 msgid "Text Properties"
 msgstr "텍스트 속성"
@@ -66731,8 +66824,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "레이어 또는 선택 영역 변형"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "변형"
@@ -69106,10 +69199,6 @@ msgstr "참조 이미지 도구"
 
 #~ msgid "Could not add storage %1 to the cache database"
 #~ msgstr "저장소 %1을(를) 캐시 데이터베이스에 추가할 수 없음"
-
-#~ msgctxt "@info mouse position (x, y)"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"
 
 #, fuzzy
 #~| msgctxt "@title:dialog"
@@ -100129,13 +100218,6 @@ msgstr "참조 이미지 도구"
 #~ msgctxt "(qtundo-format) Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "탭 1"
-
-#, fuzzy
-#~| msgctxt "Space"
-#~| msgid "Space"
-#~ msgctxt "(qtundo-format) Space"
-#~ msgid "Space"
-#~ msgstr "스페이스"
 
 #, fuzzy
 #~| msgctxt "None"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -20580,33 +20580,33 @@ msgid "Character Variant %1"
 msgstr "व्हेरियंट (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -45297,12 +45297,96 @@ msgstr "वर्तमान फ्लिपबूक साठवा"
 msgid "Delete the taskset"
 msgstr "पान काढून टाका"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "छपाई आकार"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "उंची :"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "उंची"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "प्रमाणबद्ध"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "छपाई उंची :"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, fuzzy, kde-format
+#| msgctxt "Space"
+#| msgid "Space"
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr "जागा"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+#| msgid "Line"
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "रेषा"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "प्रतिशत (%)"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, fuzzy, kde-format
 #| msgid "Optimize"
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "सुरेखीत करा"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, fuzzy, kde-format
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr "रिकामी"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, kde-format
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, kde-format
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, fuzzy, kde-format
@@ -45322,7 +45406,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, fuzzy, kde-format
 #| msgid "Effect Properties"
 msgid "Text Properties"
@@ -66242,8 +66326,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "स्तर किंवा निवड रूपांतरित करा"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "रूपांतरित करा"
@@ -91441,13 +91525,6 @@ msgstr "25%"
 #~ msgctxt "(qtundo-format) Text alignment"
 #~ msgid "Centered"
 #~ msgstr "केंद्रीत"
-
-#, fuzzy
-#~| msgctxt "Space"
-#~| msgid "Space"
-#~ msgctxt "(qtundo-format) Space"
-#~ msgid "Space"
-#~ msgstr "जागा"
 
 #, fuzzy
 #~| msgctxt "None"

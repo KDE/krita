@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2025-03-22 13:10+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -20267,30 +20267,30 @@ msgid "Character Variant %1"
 msgstr "Tekenvariant (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Tekst van plaatshouder"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -45010,11 +45010,107 @@ msgstr "De set taken opslaan"
 msgid "Delete the taskset"
 msgstr "De set taken verwijderen"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Font Size"
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "Tekengrootte"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height: "
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "Hoogte: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "R8 Heightmap"
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "R8 hoogtemap"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+#| msgctxt "@title"
+#| msgid "Proportional Kana"
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "Proportioneel Kana"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+#| msgid "Line Height: "
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "Lijnhoogte: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, fuzzy, kde-format
+#| msgctxt "Space"
+#| msgid "Space"
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr "Spatie"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+#| msgctxt "Line color"
+#| msgid "Lines: "
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "Lijnen: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "Percentage (%)"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optische grootte"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, fuzzy, kde-format
+#| msgid "Empty slot"
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr "Leeg slot"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, fuzzy, kde-format
+#| msgctxt "@info mouse position (x, y)"
+#| msgid "%1, %2"
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "%1 glyph variants."
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr "%1 glyph-varianten."
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -45034,7 +45130,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Tag voor mogelijkheid Opentype"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksteigenschappen"
@@ -65405,8 +65501,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformeer een laag of selectie"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformeren"
@@ -67705,10 +67801,6 @@ msgstr "Referentie-afbeeldingen"
 
 #~ msgid "Could not add storage %1 to the cache database"
 #~ msgstr "Kon opslag %1 niet toevoegen aan de cachedatabase"
-
-#~ msgctxt "@info mouse position (x, y)"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"
 
 #, fuzzy
 #~| msgctxt "@title:dialog"
@@ -92786,13 +92878,6 @@ msgstr "Referentie-afbeeldingen"
 #~ msgctxt "(qtundo-format) Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "Tabstop"
-
-#, fuzzy
-#~| msgctxt "Space"
-#~| msgid "Space"
-#~ msgctxt "(qtundo-format) Space"
-#~ msgid "Space"
-#~ msgstr "Spatie"
 
 #~ msgctxt "(qtundo-format) None"
 #~ msgid "Nothing"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2025-03-21 09:12+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -20280,30 +20280,30 @@ msgid "Character Variant %1"
 msgstr "Варіант символу %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Текст-замінник"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма-текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, kde-format
 msgid "SVG Text"
 msgstr "Текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -45466,11 +45466,105 @@ msgstr "Зберегти набір завдань"
 msgid "Delete the taskset"
 msgstr "Вилучити набір завдань"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Font Size"
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "Розмір шрифту"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height: "
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "Висота: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+#| msgctxt "description of a file type"
+#| msgid "R8 Heightmap"
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "карта висот R8"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+#| msgctxt "@title"
+#| msgid "Proportional Kana"
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "Пропорційна кана"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+#| msgid "Line Height: "
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "Висота рядка: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+#| msgctxt "Line color"
+#| msgid "Lines: "
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "Лінії: "
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "Відсотки (%)"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Оптичний розмір"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, fuzzy, kde-format
+#| msgid "Empty slot"
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr "Порожній слот"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, fuzzy, kde-format
+#| msgctxt "@info mouse position (x, y)"
+#| msgid "%1, %2"
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr "%1, %2"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, fuzzy, kde-format
+#| msgctxt "@info:tooltip"
+#| msgid "%1 glyph variants."
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr "%1 варіантів гліфу."
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -45490,7 +45584,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Мітка можливості OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, kde-format
 msgid "Text Properties"
 msgstr "Властивості тексту"
@@ -65986,8 +66080,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Перетворити шар або вибране"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr ""
@@ -68324,10 +68418,6 @@ msgstr "Інструмент еталонних зображень"
 
 #~ msgid "Could not add storage %1 to the cache database"
 #~ msgstr "Не вдалося додати сховище %1 до бази даних кешу"
-
-#~ msgctxt "@info mouse position (x, y)"
-#~ msgid "%1, %2"
-#~ msgstr "%1, %2"
 
 #~ msgctxt "action"
 #~ msgid "Add a new &Group Layer"

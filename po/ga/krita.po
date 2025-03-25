@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -20433,32 +20433,32 @@ msgid "Character Variant %1"
 msgstr "Athraitheas 2:"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Giuirléid Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Téacs"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -44889,12 +44889,94 @@ msgstr "Scrios an gníomh reatha"
 msgid "Delete the taskset"
 msgstr "Scrios Leathanach"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "Méid Phriontála"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "Airde:"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "Airde"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+#| msgid "Proportional"
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "Comhréireach"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "Airde picteilíní"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+#| msgid "Line"
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "Líne"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+#| msgid "Percent (%)"
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "Céatadán (%)"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, fuzzy, kde-format
 #| msgid "Optimize"
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optamaigh"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, fuzzy, kde-format
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr "Folamh"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, kde-format
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, kde-format
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, fuzzy, kde-format
@@ -44914,7 +44996,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, kde-format
 msgid "Text Properties"
 msgstr "Airíonna Téacs"
@@ -65493,8 +65575,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr ""
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Transform"

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-25 01:55+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -20209,31 +20209,31 @@ msgid "Character Variant %1"
 msgstr "&Foiz:"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Matn"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, fuzzy, kde-format
 msgid "SVG Text Shape"
 msgstr "Shakl:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "Matn:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -44121,11 +44121,90 @@ msgstr "Joriy qatlamni oʻchirish"
 msgid "Delete the taskset"
 msgstr "Matnni oʻchirish"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr "Bosib chiqarish oʻlchami"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, fuzzy, kde-format
+#| msgid "Height:"
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr "Uzunasi:"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr "Uzunasi:"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr "Uskuna:"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr "Piksel balandligi"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr "Boʻsh joy"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr "Chiziq"
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, fuzzy, kde-format
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr "&Foiz:"
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, fuzzy, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
 msgstr "Optimallashtirish"
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, kde-format
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, kde-format
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, kde-format
+msgctxt "language, variant"
+msgid "%1, variant: %3"
+msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, fuzzy, kde-format
@@ -44145,7 +44224,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "Obʼektning xossalari"
@@ -64229,8 +64308,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Tanlanganni chizish"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Transform"
@@ -86924,11 +87003,6 @@ msgstr "Rasmning nomini oʻzgartirish"
 #~ msgctxt "(qtundo-format) Tab follows the bullet or number"
 #~ msgid "Tab Stop"
 #~ msgstr "Tosh"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) Space"
-#~ msgid "Space"
-#~ msgstr "Boʻsh joy"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) None"

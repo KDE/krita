@@ -143,7 +143,7 @@ static int producer_generate_silent_audio(mlt_frame frame,
         int size = 0;
         *channels = *channels <= 0 ? 2 : *channels;
         *frequency = pdata->audio_sample_rate > 0 ? pdata->audio_sample_rate : 44100;
-        *samples = mlt_audio_calculate_frame_samples(fps, *frequency, position);
+        *samples = mlt_audio_calculate_frame_samples(fps, *frequency, position); //NOTE: Audio BUFFER_SIZE
         *format = *format == mlt_audio_none ? mlt_audio_s16 : *format;
 
         size = mlt_audio_format_size(*format, *samples, *channels);

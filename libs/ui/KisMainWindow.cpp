@@ -2447,6 +2447,7 @@ void KisMainWindow::slotUpdateWidgetStyle()
             qApp->setStyle(key);
 
             // When switching to a style that uses system colors, reset the theme
+#ifndef Q_OS_HAIKU
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             if (qApp->style()->objectName() == "macintosh") {
                 d->themeManager->setCurrentTheme("System");
@@ -2455,6 +2456,7 @@ void KisMainWindow::slotUpdateWidgetStyle()
             if (qApp->style()->name() == "macos") {
                 d->themeManager->setCurrentTheme("System");
             }
+#endif
 #endif
          }
      }

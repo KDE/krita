@@ -453,8 +453,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         qputenv("XDG_DATA_DIRS", QString(QFile::encodeName(root + "share") + ":" + originalXdgDataDirs).toUtf8());
     }
 #elif defined(Q_OS_HAIKU)
-	qputenv("KRITA_PLUGIN_PATH", QFile::encodeName(root + "lib"));
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
+	qputenv("KRITA_PLUGIN_PATH", QString(QFile::encodeName(root + "lib")).toUtf8());
+    qputenv("XDG_DATA_DIRS", QString(QFile::encodeName(root + "share") + ":" + qgetenv("XDG_DATA_DIRS")).toUtf8());
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(QDir(root + "share").absolutePath()));
 #endif

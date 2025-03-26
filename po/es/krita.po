@@ -65,7 +65,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-25 01:55+0000\n"
-"PO-Revision-Date: 2025-03-23 02:46+0100\n"
+"PO-Revision-Date: 2025-03-26 02:33+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -45025,66 +45025,55 @@ msgid "Delete the taskset"
 msgstr "Borrar el conjunto de tareas"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Tamaño del tipo de letra"
+msgstr "Tamaño del tipo de letra (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Altura: "
+msgstr "Altura de X (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "Mapa de alturas R8"
+msgstr "Altura de mayúsculas (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Proportional Kana"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Kanas proporcionales"
+msgstr "Avance proporcional (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "Avance ideográfico (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Altura de línea:"
+msgstr "Altura de línea (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr ""
+msgstr "Espacios (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Líneas: "
+msgstr "Líneas (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Porcentaje (%)"
@@ -45096,32 +45085,28 @@ msgid "Optical Size"
 msgstr "Tamaño óptico"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Ranura vacía"
+msgstr "En blanco"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1, %2, variante: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clone %1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr "Clonar %1, %2"
+msgstr "%1, %2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "%1 glyph variants."
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr "%1 variantes de glifos."
+msgstr "%1, variante: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format

@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-25 01:55+0000\n"
-"PO-Revision-Date: 2025-03-21 09:34+0100\n"
+"PO-Revision-Date: 2025-03-25 09:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -45019,66 +45019,55 @@ msgid "Delete the taskset"
 msgstr "Suprimeix el conjunt de tasques"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Mida del tipus de lletra"
+msgstr "Mida de la lletra (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Alçada: "
+msgstr "Alçada X (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "Mapa d'alçades R8"
+msgstr "Alçada majúscules (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Proportional Kana"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Kana proporcional"
+msgstr "Avanç proporcional (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "Avanç ideogràfic (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Alçada de la línia: "
+msgstr "Alçada de línia (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr ""
+msgstr "Espais (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Línies: "
+msgstr "Línies (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Percentatge (%)"
@@ -45090,32 +45079,28 @@ msgid "Optical Size"
 msgstr "Mida òptica"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Ranura buida"
+msgstr "Buit"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1, %2, variant: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clone %1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr "Clona %1, %2"
+msgstr "%1, %2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "%1 glyph variants."
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr "%1 variants de glif."
+msgstr "%1, variant: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format
@@ -66125,499 +66110,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Krita Tablet Support"
-#~ msgstr "Suport de tauleta del Krita"
-
-#~ msgid ""
-#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
-#~ "you have a drawing tablet, please make sure the tablet driver is properly "
-#~ "installed."
-#~ msgstr ""
-#~ "No s'ha pogut carregar el controlador WinTab i no s'ha trobat cap "
-#~ "dispositiu de llapis de Windows Ink. Si teniu una tauleta de dibuix, "
-#~ "assegureu-vos que el controlador de la tauleta estigui instal·lat "
-#~ "correctament."
-
-#~ msgid ""
-#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-#~ "the tablet driver is properly installed."
-#~ msgstr ""
-#~ "No s'han pogut carregar el controlador WinTab. Si teniu una tauleta de "
-#~ "dibuix, assegureu-vos que el controlador de la tauleta estigui instal·lat "
-#~ "correctament."
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 desplaçament: %3,%4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Wintab)"
-#~ msgstr "%1 (Wintab)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Seleccioneu la resolució de la pantalla"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
-#~ "not agree on the size of the screen your tablet is connected to. Please "
-#~ "select the right option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>El controlador per a la tauleta de dibuix i el "
-#~ "Windows no estan d'acord en la mida de la pantalla a la qual està "
-#~ "connectada la tauleta. Seleccioneu l'opció correcta.</p></body></html>"
-
-#~ msgid "If both are wrong, enter the size manually:"
-#~ msgstr "Si ambdues són incorrectes, introduïu manualment la mida:"
-
-#~ msgid "Do not ask again (hold Shift to ask again)"
-#~ msgstr ""
-#~ "No ho tornis a preguntar (manteniu premuda «Majús» per a tornar-ho a "
-#~ "preguntar)"
-
-#~ msgctxt ""
-#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-#~ msgid "Distance:"
-#~ msgstr "Distància:"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "botó esquerre"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "botó central"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "botó dret"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "botó no vàlid"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Premeu i aguanteu el %1, llavors premeu el %2"
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>El KDE és i sempre serà disponible sense càrrecs, però la seva "
-#~ "creació no és de franc.<br /><br />Per a donar suport al desenvolupament "
-#~ "la comunitat KDE va formar la KDE e.V., una organització sense ànim de "
-#~ "lucre, fundada legalment a Alemanya. La KDE e.V. representa la comunitat "
-#~ "KDE en qüestions legals i financeres. Consulteu a <a href=\"%1\">%1</a> "
-#~ "la informació quant al KDE e.V.<br /><br />El KDE es beneficia de molts "
-#~ "tipus de col·laboracions, inclosa la financera. Els fons obtinguts "
-#~ "s'empraran per a tornar als seus membres i altres persones les despeses "
-#~ "incorregudes a col·laborar amb el KDE. Altres fons s'empren per al suport "
-#~ "legal i per a organitzar conferències i reunions. <br /> <br />Us animem "
-#~ "a ajudar al KDE mitjançant donacions monetàries, usant un dels mitjans "
-#~ "descrits a <a href=\"%2\">%2</a>.<br /><br />Moltes gràcies per endavant "
-#~ "per la vostra ajuda.</html>"
-
-#~ msgid "Proofing Rendering Intent:"
-#~ msgstr "Propòsit de la representació de la provatura:"
-
-#~ msgid "Add a Color Overlay Mask for inking"
-#~ msgstr "Afegeix una màscara de superposició de color per a la tinta"
-
-#~ msgid "Editor Widget Control:"
-#~ msgstr "Control del giny editor:"
-
-#~ msgid "Fit View Width"
-#~ msgstr "Ajusta l'amplada de la vista"
-
-#~ msgid "Actual Pixels"
-#~ msgstr "Píxels reals"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "Ajusta l'amplada del text"
-
-#~ msgid "Fit View Height"
-#~ msgstr "Ajusta l'alçada de la vista"
-
-#~ msgid "&Open..."
-#~ msgstr "&Obre..."
-
-#~ msgid "Open an existing document"
-#~ msgstr "Obre un document existent"
-
-#~ msgid "Open &Recent"
-#~ msgstr "Obre'n un de &recent"
-
-#~ msgid "Open a document which was recently opened"
-#~ msgstr "Obre un document que s'ha obert recentment"
-
-#~ msgid "Save document"
-#~ msgstr "Desa el document"
-
-#~ msgid "Save &As..."
-#~ msgstr "Desa &com a..."
-
-#~ msgid "Save document under a new name"
-#~ msgstr "Desa el document amb un nom nou"
-
-#~ msgid "Re&vert"
-#~ msgstr "Re&verteix"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "Reverteix els canvis efectuats sense desar en el document"
-
-#~ msgid "Close document"
-#~ msgstr "Tanca el document"
-
-#~ msgid "&Print..."
-#~ msgstr "Im&primeix..."
-
-#~ msgid "Print document"
-#~ msgstr "Imprimeix el document"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "&Vista prèvia d'impressió"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "Mostra una vista prèvia d'impressió del document"
-
-#~ msgid "&Mail..."
-#~ msgstr "&Correu..."
-
-#~ msgid "Send document by mail"
-#~ msgstr "Envia un document per correu"
-
-#~ msgid "&Quit"
-#~ msgstr "&Surt"
-
-#~ msgid "Quit application"
-#~ msgstr "Surt de l'aplicació"
-
-#~ msgid "&Undo"
-#~ msgstr "&Desfés"
-
-#~ msgid "Undo last action"
-#~ msgstr "Desfà l'última acció"
-
-#~ msgid "Re&do"
-#~ msgstr "Re&fés"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "Refà l'última acció desfeta"
-
-#~ msgid "Cu&t"
-#~ msgstr "Re&talla"
-
-#~ msgid "Cut selection to clipboard"
-#~ msgstr "Retalla la selecció al porta-retalls"
-
-#~ msgid "&Copy"
-#~ msgstr "&Copia"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Copia la selecció al porta-retalls"
-
-#~ msgid "&Paste"
-#~ msgstr "&Enganxa"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "Enganxa el contingut del porta-retalls"
-
-#~ msgid "C&lear"
-#~ msgstr "&Neteja"
-
-#~ msgid "Select &All"
-#~ msgstr "Seleccion&a-ho tot"
-
-#~ msgid "Dese&lect"
-#~ msgstr "Desse&lecciona"
-
-#~ msgid "&Find..."
-#~ msgstr "&Cerca..."
-
-#~ msgid "Find &Next"
-#~ msgstr "Cerca la següe&nt"
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "Cerca l'a&nterior"
-
-#~ msgid "&Replace..."
-#~ msgstr "&Substitueix..."
-
-#~ msgid "&Actual Size"
-#~ msgstr "Mida re&al"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "Visualitza el document en la seva mida real"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "&Ajusta a la pàgina"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "Zoom fins a ajustar la pàgina a la finestra"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "Ajusta a l'a&mplada de la pàgina"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "Zoom fins a ajustar l'amplada de la pàgina a la finestra"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "Ajusta a l'a&lçada de la pàgina"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "Zoom fins a ajustar l'alçada de la pàgina a la finestra"
-
-#~ msgid "Zoom &In"
-#~ msgstr "&Amplia"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "Red&ueix"
-
-#~ msgid "&Zoom..."
-#~ msgstr "&Zoom..."
-
-#~ msgid "Select zoom level"
-#~ msgstr "Selecció del nivell de zoom"
-
-#~ msgid "&Redisplay"
-#~ msgstr "&Redibuixa"
-
-#~ msgid "Redisplay document"
-#~ msgstr "Redibuixa el document"
-
-#~ msgid "&Up"
-#~ msgstr "&Amunt"
-
-#~ msgid "Go up"
-#~ msgstr "Puja"
-
-#~ msgid "&Previous Page"
-#~ msgstr "&Pàgina anterior"
-
-#~ msgid "Go to previous page"
-#~ msgstr "Va a la pàgina anterior"
-
-#~ msgid "&Next Page"
-#~ msgstr "Pàgina següe&nt"
-
-#~ msgid "Go to next page"
-#~ msgstr "Va a la pàgina següent"
-
-#~ msgid "&Go To..."
-#~ msgstr "&Ves a..."
-
-#~ msgid "&Go to Page..."
-#~ msgstr "&Ves a la pàgina..."
-
-#~ msgid "&Go to Line..."
-#~ msgstr "&Ves a la línia..."
-
-#~ msgid "&First Page"
-#~ msgstr "P&rimera pàgina"
-
-#~ msgid "Go to first page"
-#~ msgstr "Va a la primera pàgina"
-
-#~ msgid "&Last Page"
-#~ msgstr "Ú&ltima pàgina"
-
-#~ msgid "Go to last page"
-#~ msgstr "Va a l'última pàgina"
-
-#~ msgid "&Back"
-#~ msgstr "E&nrere"
-
-#~ msgid "Go back in document"
-#~ msgstr "Va enrere en el document"
-
-#~ msgid "&Forward"
-#~ msgstr "En&davant"
-
-#~ msgid "Go forward in document"
-#~ msgstr "Va endavant en el document"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "&Afegeix una adreça d'interès"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "&Edita les adreces d'interès..."
-
-#~ msgid "&Spelling..."
-#~ msgstr "&Ortografia..."
-
-#~ msgid "Check spelling in document"
-#~ msgstr "Verificació de l'ortografia en el document"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "Mostra o oculta la barra de menús"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "Mostra la barra d'&eines"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Mostra o oculta la barra d'eines"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Mostra o oculta la barra d'estat"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "&Mode de pantalla completa"
-
-#~ msgid "&Save Settings"
-#~ msgstr "De&sa la configuració"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "Configura les &dreceres..."
-
-#~ msgid "&Configure %1..."
-#~ msgstr "&Configura el %1..."
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "Configura les &barres d'eines..."
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "Configura les &notificacions..."
-
-#~ msgid "Reset Configurations"
-#~ msgstr "Reinicia les configuracions"
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "&Manual del %1"
-
-#~ msgid "What's &This?"
-#~ msgstr "Què és &això?"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "Consell del &dia"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "&Informeu d'un error..."
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "Canvia l'i&dioma de l'aplicació..."
-
-#~ msgid "&About %1"
-#~ msgstr "&Quant al %1"
-
-#~ msgid "About &KDE"
-#~ msgstr "Quant al &KDE"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- separador ---"
-
-#~ msgid ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#~ "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#~ "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#~ "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#~ "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#~ "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#~ "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#~ "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#~ "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#~ "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#~ "p><p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span "
-#~ "style=\" text-decoration: underline; color:%1;\">Scripting API</span></"
-#~ "a></p><p><a href=\"https://scripting.krita.org/lessons/introduction"
-#~ "\"><span style=\" text-decoration: underline; color:%1;\">Scripting "
-#~ "School</span></a></p></td></table></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><table width=\"100%\" cellpadding="
-#~ "\"30\"><tr><td><p><span style=\"color:%1;\"><b>Usar el Krita</b></span></"
-#~ "p><p><a href=\"https://krita.org/support-us/\"><span style=\"text-"
-#~ "decoration: underline; color:%1;\">Dona suport al desenvolupament del "
-#~ "Krita!</span></a></p><p><a href=\"https://docs.krita.org/en/user_manual/"
-#~ "getting_started.html\"><span style=\"text-decoration: underline; color:%1;"
-#~ "\">Com començar</span></a></p><p> <a href=\"https://docs.krita.org/"
-#~ "\"><span style=\"text-decoration: underline; color:%1;\">Manual</span></"
-#~ "a></p><p><a href=\"https://krita.org/\"><span style=\"text-decoration: "
-#~ "underline; color:%1;\">Lloc web del Krita</span></a></p></td><td><p><span "
-#~ "style=\"color:%1;\"><b>Codificació del Krita</b></span></p><p><a href="
-#~ "\"https://krita-artists.org\"><span style=\"text-decoration: underline; "
-#~ "color:%1;\">Comunitat d'usuaris</span></a></p><p><a href=\"https://invent."
-#~ "kde.org/graphics/krita\"><span style=\"text-decoration: underline; color:"
-#~ "%1;\">Codi font</span></a></p><p><a href=\"https://api.kde.org/krita/html/"
-#~ "classKrita.html\"><span style=\"text-decoration: underline; color:%1;"
-#~ "\">API de creació de scripts</span></a></p><p><a href=\"https://scripting."
-#~ "krita.org/lessons/introduction\"><span style=\"text-decoration: "
-#~ "underline; color:%1;\">Escola de creació de scripts</span></a></p></td></"
-#~ "table></body></html>"
-
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Convert to an animated layer"
-#~ msgstr "Converteix a una capa animada"
-
-#~ msgid "Icon files (*.png, *.svg)"
-#~ msgstr "Fitxers d'icona (*.png, *.svg)"
-
-#~ msgid "Select backround color:"
-#~ msgstr "Seleccioneu el color de fons:"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "Regulador de la CPU"
-
-#~ msgid "Button Actions"
-#~ msgstr "Accions dels botons"
-
-#~ msgid "Click"
-#~ msgstr "Clic"
-
-#~ msgid "Double Click"
-#~ msgstr "Doble clic"
-
-#~ msgid "Configure Popup Palette dockers"
-#~ msgstr "Configuració dels acobladors de la paleta emergent"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Ajudeu el Krita!"
-
-#~ msgid "Antialiased"
-#~ msgstr "Amb antialiàsing"
-
-#~ msgid "Div Style:"
-#~ msgstr "Estil del «div»:"
-
-#~ msgid "3d Rotation:"
-#~ msgstr "Gir en 3D:"
-
-#~ msgid "X-Rotation:"
-#~ msgstr "Gir X:"
-
-#~ msgid "Y-Rotation:"
-#~ msgstr "Gir Y:"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><p align=\"center\"><b>Ajudat per</b></p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ ".</p><p><i>Gràcies! Tots sou <b>magnífics</b>!</i></p></body></html>"
-
-#~ msgid "Backers"
-#~ msgstr "Han ajudat"
-
-#~ msgctxt "action"
-#~ msgid "to &File Layer..."
-#~ msgstr "a una capa de &fitxer..."

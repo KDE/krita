@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-25 01:55+0000\n"
-"PO-Revision-Date: 2025-03-21 13:43+0300\n"
+"PO-Revision-Date: 2025-03-25 21:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -44773,66 +44773,55 @@ msgid "Delete the taskset"
 msgstr "Görev kümesini sil"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Yazıtipi Boyutu"
+msgstr "Yazıtipi boyutu (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Yükseklik: "
+msgstr "X yüksekligi (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "R8 Yükselti Eşlemi"
+msgstr "BÜYÜK harf yüksekliği (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgctxt "@title"
-#| msgid "Proportional Kana"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Orantılı Kana"
+msgstr "Orantısal genişlik (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "İdeografik genişlik (IC)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "Çizgi yüksekliği: "
+msgstr "Çizgi yüksekliği (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr ""
+msgstr "Boşluklar (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Çizgiler:"
+msgstr "Çizgiler (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Yüzde (%)"
@@ -44844,32 +44833,28 @@ msgid "Optical Size"
 msgstr "Optik boyut"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Boş yuva"
+msgstr "Boş"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1, %2, varyant: %3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clone %1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr "Klonla: %1, %2"
+msgstr "%1, %2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "%1 glyph variants."
+#, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr "%1 glif varyantı"
+msgstr "%1, varyant: %3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format

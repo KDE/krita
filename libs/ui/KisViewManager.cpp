@@ -409,6 +409,11 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->setHandleRadius(handleRadius);
 }
 
+void KisViewManager::testingInitializeOpacityToPresetResourceConverter(KoCanvasResourceProvider *resourceManager)
+{
+    resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityToPresetOpacityResourceConverter));
+}
+
 KisKActionCollection *KisViewManager::actionCollection() const
 {
     return d->actionCollection;

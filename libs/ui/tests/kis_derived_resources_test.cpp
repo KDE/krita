@@ -34,6 +34,10 @@ void KisDerivedResourcesTest::test()
     QScopedPointer<KoCanvasResourceProvider> manager(new KoCanvasResourceProvider());
     KisViewManager::initializeResourceManager(manager.data());
 
+    /// the opacity resource converter is usually added by the tool manager, which
+    /// is missing in the unittest, so add it manually
+    KisViewManager::testingInitializeOpacityToPresetResourceConverter(manager.data());
+
     QApplication::processEvents();
 
     QString presetFileName = "autobrush_300px.kpp";

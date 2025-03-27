@@ -201,6 +201,7 @@ public:
     void setQtMainWindow(QMainWindow* newMainWindow);
 
     static void initializeResourceManager(KoCanvasResourceProvider *resourceManager);
+    static void testingInitializeOpacityToPresetResourceConverter(KoCanvasResourceProvider *resourceManager);
 
 public Q_SLOTS:
 

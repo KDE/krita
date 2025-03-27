@@ -11,7 +11,7 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 
-#include "kritaimage_export.h"
+#include "kritaglobal_export.h"
 
 /**
  * KisRandomSource is a special object that wraps around random number
@@ -29,7 +29,7 @@
  * 3) Copying of a KisRandomSource object is fast. It uses Tauss88
  *    algorithm to achieve this.
  */
-class KRITAIMAGE_EXPORT KisRandomSource : public KisShared
+class KRITAGLOBAL_EXPORT KisRandomSource : public KisShared
 {
 public:
     KisRandomSource();

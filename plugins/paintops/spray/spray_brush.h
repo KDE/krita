@@ -12,7 +12,7 @@
 #include "kis_types.h"
 #include "kis_painter.h"
 
-#include <brushengine/kis_random_source.h>
+#include <kis_random_source.h>
 #include "KisColorOptionData.h"
 #include "KisSprayOpOptionData.h"
 #include "KisSprayOpOption.h"

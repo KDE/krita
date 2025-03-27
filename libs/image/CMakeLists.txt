@@ -57,7 +57,6 @@ set(kritaimage_LIB_SRCS
    kis_progress_updater.cpp
    KisAnimatedOpacityProperty.cpp
    brushengine/kis_paint_information.cc
-   brushengine/kis_random_source.cpp
    brushengine/KisPerStrokeRandomSource.cpp
    brushengine/kis_stroke_random_source.cpp
    brushengine/kis_paintop.cc

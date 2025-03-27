@@ -43,6 +43,7 @@ set(kritaglobal_LIB_SRCS
     KisBackup.cpp
     KisSampleRectIterator.cpp
     KisCursorOverrideLock.cpp
+    kis_random_source.cpp
 )
 
 if(WIN32)

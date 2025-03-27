@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-25 01:55+0000\n"
+"POT-Creation-Date: 2025-03-27 01:58+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -24896,7 +24896,7 @@ msgstr "Kohalikud ressurssid"
 #: libs/ui/KisMainWindow.cpp:1173 libs/ui/KisMainWindow.cpp:1270
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
-#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2842
+#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
@@ -25449,7 +25449,7 @@ msgid "Delete resource"
 msgstr "Ressursi kustutamine"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -28200,7 +28200,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Uue stiili nimi"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2650
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2652
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -36962,37 +36962,37 @@ msgstr ""
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Animatsioonikaadrite renderdamine nurjus!"
 
-#: libs/ui/KisMainWindow.cpp:2630
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Impordi tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2645
+#: libs/ui/KisMainWindow.cpp:2647
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Uus tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2651
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Uus tööruum ..."
 
-#: libs/ui/KisMainWindow.cpp:2693
+#: libs/ui/KisMainWindow.cpp:2695
 #, fuzzy, kde-format
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2696
+#: libs/ui/KisMainWindow.cpp:2698
 #, fuzzy, kde-format
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2865
+#: libs/ui/KisMainWindow.cpp:2867
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -37001,19 +37001,19 @@ msgstr ""
 "Krita LittleCMS-i värvihalduse plugin ei ole paigaldatud. Krita lõpetab nüüd "
 "töö."
 
-#: libs/ui/KisMainWindow.cpp:2881
+#: libs/ui/KisMainWindow.cpp:2883
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Paigaldusviga"
 
-#: libs/ui/KisMainWindow.cpp:2991
+#: libs/ui/KisMainWindow.cpp:2993
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teemad"
 
-#: libs/ui/KisMainWindow.cpp:3050
+#: libs/ui/KisMainWindow.cpp:3052
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Laienev eraldaja"

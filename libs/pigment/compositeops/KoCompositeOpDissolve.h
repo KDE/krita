@@ -11,6 +11,7 @@
 #include <KoCompositeOp.h>
 
 #include <QRandomGenerator>
+#include <QThreadStorage>
 
 template<class Traits>
 class KoCompositeOpDissolve: public KoCompositeOp
@@ -45,13 +46,24 @@ class KoCompositeOpDissolve: public KoCompositeOp
         return randomValues[i];
     }
 
+    mutable QThreadStorage<QRandomGenerator> m_randomGenerator;
+
 public:
     KoCompositeOpDissolve(const KoColorSpace* cs, const QString& category)
-        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, category) { }
+        : KoCompositeOp(cs, COMPOSITE_DISSOLVE, category)
+    {
+    }
 
     using KoCompositeOp::composite;
 
     void composite(const KoCompositeOp::ParameterInfo& params) const override {
+        /**
+         * Initialize local per-thread random generator from the global one, it will
+         * reduce contestion over the global generator in the main compositing loop.
+         */
+        if (!m_randomGenerator.hasLocalData()) {
+            m_randomGenerator.setLocalData(QRandomGenerator(QRandomGenerator::global()->generate()));
+        }
 
         const QBitArray& flags       = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
         bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
@@ -80,7 +92,7 @@ public:
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask), srcAlpha) : mul(opacity, srcAlpha);
 
-                if (QRandomGenerator::global()->bounded(256) <= scale<quint8>(blend)
+                if (m_randomGenerator.localData().bounded(256) <= scale<quint8>(blend)
                     && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
                     for(qint32 i=0; i <channels_nb; i++) {
                         if(i != alpha_pos && flags.testBit(i))

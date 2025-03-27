@@ -11,6 +11,7 @@
 #include "kis_tool_brush.h"
 #include <kis_icon.h>
 #include "kis_tool_multihand_config.h"
+#include <QRandomGenerator>
 
 class QPushButton;
 class QCheckBox;
@@ -82,6 +83,7 @@ private:
 
     int m_intervalX;
     int m_intervalY;
+    QRandomGenerator m_randomGenerator;
 
     KisToolMultiHandConfigWidget* customUI;
 };

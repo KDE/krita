@@ -23,7 +23,7 @@
 #include "kis_tool_multihand_helper.h"
 
 #include <QtGlobal>
-#include <QRandomGenerator>
+
 
 static const int MAXIMUM_BRUSHES = 50;
 
@@ -40,6 +40,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
       m_addSubbrushesMode(false),
       m_intervalX(0),
       m_intervalY(0)
+    , m_randomGenerator(QRandomGenerator::global()->generate())
     , customUI(0)
 {
 
@@ -381,8 +382,8 @@ void KisToolMultihand::initTransformations()
          * strokes
          */
         for (int i = 0; i < m_handsCount; i++){
-            const qreal angle = QRandomGenerator::global()->bounded(2.0 * M_PI);
-            const qreal length = QRandomGenerator::global()->bounded(1.0);
+            const qreal angle = m_randomGenerator.bounded(2.0 * M_PI);
+            const qreal length = m_randomGenerator.bounded(1.0);
 
             // convert the Polar coordinates to Cartesian coordinates
             qreal nx = (m_translateRadius * cos(angle) * length);

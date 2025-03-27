@@ -7,7 +7,12 @@
 
 
 from krita import (Document, GuidesConfig)
-from PyQt5.Qt import *
+try:
+    from PyQt6.QtCore import qFuzzyCompare, qDebug, qWarning
+    from PyQt6.QtGui import QColor
+except:
+    from PyQt5.QtCore import qFuzzyCompare, qDebug, qWarning
+    from PyQt5.QtGui import QColor
 
 import tempfile
 import os.path

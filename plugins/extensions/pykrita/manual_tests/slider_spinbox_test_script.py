@@ -8,7 +8,10 @@
 # of the SliderSpinBox and DoubleSliderSpinBox.
 
 from krita import SliderSpinBox, DoubleSliderSpinBox
-from PyQt5.QtWidgets import QDialog, QHBoxLayout, QFormLayout, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox
+try:
+    from PyQt6.QtWidgets import QDialog, QHBoxLayout, QFormLayout, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox
+except:
+    from PyQt5.QtWidgets import QDialog, QHBoxLayout, QFormLayout, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox
 
 dialog = QDialog()
 hLayout = QHBoxLayout()

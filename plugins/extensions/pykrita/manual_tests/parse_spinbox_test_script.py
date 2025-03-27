@@ -8,7 +8,10 @@
 # of the IntParseSpinBox and DoubleParseSpinBox.
 
 from krita import IntParseSpinBox, DoubleParseSpinBox
-from PyQt5.QtWidgets import QDialog, QFormLayout, QHBoxLayout, QSpinBox, QDoubleSpinBox, QLabel, QCheckBox
+try:
+    from PyQt6.QtWidgets import QDialog, QFormLayout, QHBoxLayout, QSpinBox, QDoubleSpinBox, QLabel, QCheckBox
+except:
+    from PyQt5.QtWidgets import QDialog, QFormLayout, QHBoxLayout, QSpinBox, QDoubleSpinBox, QLabel, QCheckBox
 
 dialog = QDialog()
 hLayout = QHBoxLayout()

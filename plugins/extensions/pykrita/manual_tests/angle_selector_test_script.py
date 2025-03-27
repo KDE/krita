@@ -7,8 +7,12 @@
 # This script creates a dialog for manually testing the functions of the AngleSelector.
 
 from krita import AngleSelector
-from PyQt5.QtWidgets import QDialog, QFormLayout, QLabel, QSpinBox, QPushButton, QDoubleSpinBox, QLineEdit, QCheckBox
-from PyQt5.Qt import Qt
+try:
+    from PyQt6.QtWidgets import QDialog, QFormLayout, QLabel, QSpinBox, QPushButton, QDoubleSpinBox, QLineEdit, QCheckBox
+    from PyQt6.QtCore import Qt
+except:
+    from PyQt5.QtWidgets import QDialog, QFormLayout, QLabel, QSpinBox, QPushButton, QDoubleSpinBox, QLineEdit, QCheckBox
+    from PyQt5.QtCore import Qt
 
 dialog = QDialog()
 layout = QFormLayout()

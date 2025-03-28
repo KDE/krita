@@ -30,6 +30,7 @@
 #include "KisViewManager.h"
 #include "KisImportExportManager.h"
 #include "KoDocumentInfo.h"
+#include "KisUsageLogger.h"
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
@@ -722,6 +723,8 @@ void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
     // of the emitted signal
     QScopedPointer backup(p_playbackEngine);
     d->playbackEngine.swap(backup);
+
+    KisUsageLogger::log("Audio Playback Engine: " + QString(p_playbackEngine->metaObject()->className()));
 
     Q_EMIT playbackEngineChanged(p_playbackEngine);
 }

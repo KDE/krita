@@ -619,19 +619,23 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                           charResult.metrics.descender * bitmapScale,
                           ftTF.inverted().map(charResult.advance).x(),
                           (charResult.metrics.ascender - charResult.metrics.descender) * bitmapScale);
-            bbox = glyphObliqueTf.mapRect(bbox);
+
         } else {
             bbox = QRectF(charResult.metrics.descender * bitmapScale,
                           0,
                           (charResult.metrics.ascender - charResult.metrics.descender) * bitmapScale,
                           ftTF.inverted().map(charResult.advance).y());
-            bbox = glyphObliqueTf.mapRect(bbox);
         }
+        bbox = glyphObliqueTf.mapRect(bbox);
         charResult.isHorizontal = isHorizontal;
         QRectF scaledBBox = ftTF.mapRect(bbox);
         charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
         charResult.scaledAscent = isHorizontal? scaledBBox.top(): scaledBBox.right();
         charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
+
+        if(!qFuzzyCompare(bitmapScale, 1.0)) {
+            charResult.metrics.scaleBaselines(bitmapScale);
+        }
 
         if (bitmapGlyph) {
             charResult.inkBoundingBox |= bitmapGlyph->drawRects.last();

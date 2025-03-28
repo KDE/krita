@@ -141,6 +141,35 @@ struct CharacterResult {
                          : lBox.adjusted(-scaledHalfLeading, 0, scaledHalfLeading, 0);
     }
 
+    /**
+     * @brief translateOrigin
+     * For dominant baseline, we want to move the glyph origin.
+     * This encompassed the glyph, the ascent and descent, and the metrics.
+     */
+    void translateOrigin(QPointF newOrigin) {
+        if (newOrigin == QPointF()) return;
+        if (Glyph::Outline *outlineGlyph = std::get_if<Glyph::Outline>(&glyph)) {
+            outlineGlyph->path.translate(-newOrigin);
+        } else if (Glyph::Bitmap *bitmapGlyph = std::get_if<Glyph::Bitmap>(&glyph)) {
+            for (int i = 0; i< bitmapGlyph->drawRects.size(); i++) {
+                bitmapGlyph->drawRects[i].translate(-newOrigin);
+            }
+        } else if  (Glyph::ColorLayers *colorGlyph = std::get_if<Glyph::ColorLayers>(&glyph)) {
+            for (int i = 0; i< colorGlyph->paths.size(); i++) {
+                colorGlyph->paths[i].translate(-newOrigin);
+            }
+        }
+        cursorInfo.caret.translate(-newOrigin);
+        inkBoundingBox.translate(-newOrigin);
+        if (isHorizontal) {
+            scaledDescent -= newOrigin.y();
+            scaledAscent -= newOrigin.y();
+        } else {
+            scaledDescent += newOrigin.x();
+            scaledAscent += newOrigin.x();
+        }
+    }
+
     QFont::Style fontStyle = QFont::StyleNormal;
     int fontWeight = 400;
 
@@ -402,16 +431,15 @@ public:
                                            qreal offset,
                                            bool isClosed);
     static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
-    void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
+    static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
                             const KoSvgText::FontMetrics &parentBaselineTable,
-                            qreal parentFontSize,
-                            QPointF superScript,
-                            QPointF subScript,
+                            const QPointF superScript,
+                            const QPointF subScript,
                             QVector<CharacterResult> &result,
                             int &currentIndex,
-                            qreal res,
-                            bool isHorizontal,
-                            bool disableFontMatching);
+                            const qreal res,
+                            const bool isHorizontal,
+                            const bool disableFontMatching);
     void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
                             QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
                             int &currentIndex,

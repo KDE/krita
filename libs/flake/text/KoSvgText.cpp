@@ -1449,27 +1449,36 @@ bool FontMetrics::operator==(const FontMetrics &other) const {
 }
 
 int FontMetrics::valueForBaselineValue(Baseline baseline) const {
+    qint32 baselineVal = 0;
     switch(baseline) {
     case BaselineIdeographic:
-        return ideographicUnderBaseline;
+        baselineVal =  ideographicUnderBaseline;
+        break;
     case BaselineAlphabetic:
-        return alphabeticBaseline;
+        baselineVal = alphabeticBaseline;
+        break;
     case BaselineHanging:
-        return hangingBaseline;
+        baselineVal = hangingBaseline;
+        break;
     case BaselineMathematical:
-        return mathematicalBaseline;
+        baselineVal = mathematicalBaseline;
+        break;
     case BaselineCentral:
-        return ideographicCenterBaseline;
+        baselineVal = ideographicCenterBaseline;
+        break;
     case BaselineMiddle:
-        return xHeight/2;
+        baselineVal = isVertical? ideographicCenterBaseline: xHeight/2;
+        break;
     case BaselineTextBottom:
-        return descender;
+        baselineVal = descender;
+        break;
     case BaselineTextTop:
-        return ascender;
+        baselineVal = ascender;
+        break;
     default:
         break;
     }
-    return 0;
+    return isVertical? baselineVal - ideographicCenterBaseline: baselineVal - alphabeticBaseline;
 }
 
 void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {
@@ -1518,6 +1527,20 @@ void FontMetrics::scaleBaselines(const qreal multiplier)
     ideographicOverBaseline *= multiplier;
     ideographicCenterBaseline *= multiplier;
     ideographicUnderBaseline *= multiplier;
+    xHeight *= multiplier;
+    capHeight *= multiplier;
+    subScriptOffset.first *= multiplier;
+    subScriptOffset.second *= multiplier;
+    superScriptOffset.first *= multiplier;
+    superScriptOffset.second *= multiplier;
+    fontSize *= multiplier;
+    ascender *= multiplier;
+    descender *= multiplier;
+    lineGap *= multiplier;
+
+    zeroAdvance *= multiplier;
+    spaceAdvance *= multiplier;
+    ideographicAdvance *= multiplier;
 }
 
 QDebug operator<<(QDebug dbg, const FontMetrics &metrics)

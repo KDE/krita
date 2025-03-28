@@ -612,7 +612,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
@@ -1019,18 +1019,17 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
  * This function handles computing the baselineOffsets
  */
 
-void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
+void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-cognitive-complexity)
     KisForest<KoSvgTextContentElement>::child_iterator parent,
     const KoSvgTextProperties &parentProps,
     const KoSvgText::FontMetrics &parentBaselineTable,
-    qreal parentFontSize,
-    QPointF superScript,
-    QPointF subScript,
+    const QPointF superScript,
+    const QPointF subScript,
     QVector<CharacterResult> &result,
     int &currentIndex,
-    qreal res,
-    bool isHorizontal,
-    bool disableFontMatching)
+    const qreal res,
+    const bool isHorizontal,
+    const bool disableFontMatching)
 {
     const int i = currentIndex;
     const int j = qMin(i + numChars(parent, true), result.size());
@@ -1065,21 +1064,17 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::DominantBaselineId).toInt());
 
-    KoSvgText::Baseline defaultBaseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
+    const KoSvgText::Baseline defaultBaseline = isHorizontal? KoSvgText::BaselineAlphabetic: KoSvgText::BaselineCentral;
     KoSvgText::FontMetrics metrics;
 
-    // In SVG 2, reset-size always happens whenever the font-size changes.
-    if ((dominantBaseline == KoSvgText::BaselineResetSize || !qFuzzyCompare(parentFontSize, fontSize)) && parentFontSize > 0) {
-        metrics = parentBaselineTable;
-        metrics.scaleBaselines(1.0* fontSize / parentFontSize);
-        if (dominantBaseline == KoSvgText::BaselineResetSize) {
-            dominantBaseline = KoSvgText::BaselineAuto;
-        }
-    } else if (dominantBaseline == KoSvgText::BaselineNoChange) {
-        metrics = parentBaselineTable;
+    // In SVG 2 and CSS-inline-3, metrics are always recalculated per box.
+    metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
+    if (dominantBaseline == KoSvgText::BaselineResetSize || dominantBaseline == KoSvgText::BaselineNoChange) {
         dominantBaseline = KoSvgText::BaselineAuto;
-    } else {
-        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal);
+    }
+
+    if (dominantBaseline == KoSvgText::BaselineAuto) {
+        dominantBaseline = defaultBaseline;
     }
 
     // Get underline and super/subscripts.
@@ -1113,7 +1108,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, metrics, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
+        computeFontMetrics(child, properties, metrics, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::AlignmentBaselineId).toInt());
@@ -1128,7 +1123,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     bool applyGlyphAlignment = KisForestDetail::childBegin(parent) == KisForestDetail::childEnd(parent);
     const int boxOffset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
-    const QPointF shift = isHorizontal? QPointF(0, boxOffset * -freetypePixelsToPt): QPointF(boxOffset * freetypePixelsToPt, 0);
+    const QPointF shift = isHorizontal? QPointF(0, (boxOffset) * -freetypePixelsToPt): QPointF((boxOffset) * freetypePixelsToPt, 0);
 
     /*
      * The actual alignment process.
@@ -1143,12 +1138,17 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
      */
     for (int k = i; k < j; k++) {
         if (applyGlyphAlignment) {
-            const int offset = metrics.valueForBaselineValue(dominantBaseline) - result[k].metrics.valueForBaselineValue(dominantBaseline);
-            const QPointF uniqueShift = isHorizontal? QPointF(0, offset * -freetypePixelsToPt): QPointF(offset * freetypePixelsToPt, 0);
-            result[k].baselineOffset += uniqueShift;
+            // We offset the whole glyph so that the origin is at the dominant baseline.
+            // This will simplify having svg per-char transforms apply as per spec.
+            const int originOffset = result[k].metrics.valueForBaselineValue(dominantBaseline);
+            const QPointF newOrigin = isHorizontal? QPointF(0, originOffset * -freetypePixelsToPt): QPointF(originOffset * freetypePixelsToPt, 0);
+            const int uniqueOffset = metrics.valueForBaselineValue(dominantBaseline);
+            const QPointF uniqueShift = isHorizontal? QPointF(0, uniqueOffset * -freetypePixelsToPt): QPointF(uniqueOffset * freetypePixelsToPt, 0);
+            result[k].translateOrigin(newOrigin);
+            result[k].baselineOffset = uniqueShift;
         }
         result[k].baselineOffset += shift;
-        result[k].baselineOffset += baselineShiftTotal;
+        result[k].baselineOffset += (baselineShiftTotal);
     }
 
     currentIndex = j;

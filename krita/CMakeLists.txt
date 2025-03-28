@@ -176,7 +176,11 @@ install(DIRECTORY DESTINATION ${KDE_INSTALL_DATADIR}/krita/shortcuts)
 
 if (WIN32)
     configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
-    configure_file(krita.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        configure_file(krita6.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
+    else()
+        configure_file(krita.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
+    endif()
     if (MINGW)
         # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
         file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc "1 24 \"krita.exe.manifest\"\n")

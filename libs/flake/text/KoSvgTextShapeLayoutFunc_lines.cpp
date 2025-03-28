@@ -28,7 +28,7 @@ namespace KoSvgTextShapeLayoutFunc
  */
 void calculateLineHeight(CharacterResult cr, double &ascent, double &descent, bool isHorizontal, bool compare)
 {
-    double offset = isHorizontal? cr.baselineOffset.y(): cr.baselineOffset.x();
+    double offset = isHorizontal? cr.totalBaselineOffset().y(): cr.totalBaselineOffset().x();
     double offsetAsc = 0.0;
     double offsetDsc = 0.0;
     if (cr.scaledAscent <= 0) {
@@ -100,7 +100,7 @@ void addWordToLine(QVector<CharacterResult> &result,
         lineAdvance = currentPos;
 
         result[j] = cr;
-        currentChunk.boundingBox |= cr.layoutBox().translated(cr.cssPosition + cr.baselineOffset);
+        currentChunk.boundingBox |= cr.layoutBox().translated(cr.cssPosition + cr.totalBaselineOffset());
     }
     currentPos = lineAdvance;
     currentChunk.chunkIndices += wordIndices;
@@ -174,7 +174,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         for (LineChunk &chunk : currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition += lineTop;
-                result[j].cssPosition += result[j].baselineOffset;
+                result[j].cssPosition += result[j].totalBaselineOffset();
                 result[j].finalPosition = result.at(j).cssPosition;
             }
             chunk.length.translate(lineTop);
@@ -185,7 +185,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         for (LineChunk &chunk : currentLine.chunks) {
             Q_FOREACH (int j, chunk.chunkIndices) {
                 result[j].cssPosition -= correctionOffset;
-                result[j].cssPosition +=  result[j].baselineOffset;
+                result[j].cssPosition +=  result[j].totalBaselineOffset();
                 result[j].finalPosition = result.at(j).cssPosition;
             }
             chunk.length.translate(-correctionOffset);

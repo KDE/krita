@@ -615,7 +615,7 @@ void KoSvgTextShape::Private::relayout()
     this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
-    QPointF startPos = resolvedTransforms[0].absolutePos();
+    QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
     if (!this->shapesInside.isEmpty()) {
         QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
         this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos);
@@ -1145,7 +1145,7 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
             const int uniqueOffset = metrics.valueForBaselineValue(dominantBaseline);
             const QPointF uniqueShift = isHorizontal? QPointF(0, uniqueOffset * -freetypePixelsToPt): QPointF(uniqueOffset * freetypePixelsToPt, 0);
             result[k].translateOrigin(newOrigin);
-            result[k].baselineOffset = uniqueShift;
+            result[k].dominantBaselineOffset = uniqueShift;
         }
         result[k].baselineOffset += shift;
         result[k].baselineOffset += (baselineShiftTotal);

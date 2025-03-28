@@ -105,6 +105,7 @@ struct CharacterResult {
     int visualIndex = -1;
     int plaintTextIndex = -1;
     QPointF cssPosition = QPointF(); ///< the position in accordance with the CSS specs, as opossed to the SVG spec.
+    QPointF dominantBaselineOffset = QPointF(); // Shift caused by aligning glyphs to dominant baseline.
     QPointF baselineOffset = QPointF(); ///< The computed baseline offset, will be applied
                                         ///< when calculating the line-offset during line breaking.
     QPointF advance;
@@ -168,6 +169,10 @@ struct CharacterResult {
             scaledDescent += newOrigin.x();
             scaledAscent += newOrigin.x();
         }
+    }
+
+    QPointF totalBaselineOffset() const {
+        return baselineOffset+dominantBaselineOffset;
     }
 
     QFont::Style fontStyle = QFont::StyleNormal;

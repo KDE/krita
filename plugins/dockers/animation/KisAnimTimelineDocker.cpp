@@ -503,6 +503,10 @@ void KisAnimTimelineDocker::updateFrameRegister()
 
 void KisAnimTimelineDocker::updatePlaybackStatistics()
 {
+    if (!m_d->playbackEngine) return;
+
+    QString playbackEngineClass = m_d->playbackEngine->metaObject()->className();
+
     qreal effectiveFps = 0.0;
     qreal realFps = 0.0;
     qreal framesDropped = 0.0;
@@ -516,7 +520,6 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
         isPlaying = effectiveFps > 0.0;
     }
 
-
     KisConfig cfg(true);
     const bool shouldDropFrames = cfg.animationDropFrames();
 
@@ -526,20 +529,25 @@ void KisAnimTimelineDocker::updatePlaybackStatistics()
 
     QString actionText;
     if (!isPlaying) {
-        actionText = QString("%1 (%2) \n%3")
+        actionText = QString("%1 (%2)\n"
+                             "%3\n"
+                             "[PlaybackEngine: %4]")
             .arg(KisAnimUtils::dropFramesActionName)
             .arg(KritaUtils::toLocalizedOnOff(shouldDropFrames))
-            .arg(i18n("Enable to preserve playback timing."));
+            .arg(i18n("Enable to preserve playback timing."))
+            .arg(playbackEngineClass);
     } else {
         actionText = QString("%1 (%2)\n"
                        "%3\n"
                        "%4\n"
-                       "%5")
+                       "%5\n"
+                       "[PlaybackEngine: %6]")
             .arg(KisAnimUtils::dropFramesActionName)
             .arg(KritaUtils::toLocalizedOnOff(shouldDropFrames))
                          .arg(i18n("Effective FPS:\t%1", QString::number(effectiveFps, 'f', 1)))
             .arg(i18n("Real FPS:\t%1", QString::number(realFps, 'f', 1)))
-            .arg(i18n("Frames dropped:\t%1\%", QString::number(framesDropped * 100, 'f', 1)));
+            .arg(i18n("Frames dropped:\t%1\%", QString::number(framesDropped * 100, 'f', 1)))
+            .arg(playbackEngineClass);
     }
 
     /**

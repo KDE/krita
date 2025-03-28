@@ -316,8 +316,8 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const KoColorSpace *cs) const
         return nullptr;
     }
 
-    const auto *mimedata = qobject_cast<const KisMimeData *>(data);
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(mimedata, nullptr);
+    const KisMimeData *mimedata = qobject_cast<const KisMimeData *>(data);
+    if (!mimedata) return 0;
 
     KisNodeList nodes = mimedata->nodes();
 

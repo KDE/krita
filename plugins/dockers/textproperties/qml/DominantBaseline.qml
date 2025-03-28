@@ -55,22 +55,34 @@ TextPropertyBase {
             width: firstColumnWidth;
             height: 1;
         }
-        ComboBox {
+        SqueezedComboBox {
             model: [
-                {text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.BaselineAuto},
-                {text: i18nc("@label:inlistbox", "Alphabetic"), value: KoSvgText.BaselineAlphabetic},
-                {text: i18nc("@label:inlistbox", "Ideographic"), value: KoSvgText.BaselineIdeographic},
-                {text: i18nc("@label:inlistbox", "Central"), value: KoSvgText.BaselineCentral},
-                {text: i18nc("@label:inlistbox", "Hanging"), value: KoSvgText.BaselineHanging},
-                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.BaselineMiddle},
-                {text: i18nc("@label:inlistbox", "Mathematical"), value: KoSvgText.BaselineMathematical},
-                {text: i18nc("@label:inlistbox", "Text-Top"), value: KoSvgText.BaselineTextTop},
-                {text: i18nc("@label:inlistbox", "Text-Bottom"), value: KoSvgText.BaselineTextBottom}
+                {text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.BaselineAuto, icon: "",
+                    toolTip: i18nc("@info:tooltip", "Aligns to alphabetic baseline when laying out horizontally, aligns to central baseline when laying out vertically.")},
+                {text: i18nc("@label:inlistbox", "Alphabetic"), value: KoSvgText.BaselineAlphabetic, icon: "qrc:///baseline-alphabetic.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the baseline for scripts that align at the bottom.")},
+                {text: i18nc("@label:inlistbox", "Ideographic"), value: KoSvgText.BaselineIdeographic, icon: "qrc:///baseline-ideo-embox-bottom.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the ideographic em box bottom.")},
+                {text: i18nc("@label:inlistbox", "Central"), value: KoSvgText.BaselineCentral, icon: "qrc:///baseline-ideo-embox-horizontal-center.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the ideographic em box center.")},
+                {text: i18nc("@label:inlistbox", "Hanging"), value: KoSvgText.BaselineHanging, icon: "qrc:///baseline-hanging.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the headstroke of north-brahmic scripts.")},
+                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.BaselineMiddle, icon: "qrc:///baseline-x-middle.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the center between the alphabetic baseline and x-height when laying out horizontally, in vertical this is the central baseline.")},
+                {text: i18nc("@label:inlistbox", "Mathematical"), value: KoSvgText.BaselineMathematical, icon: "qrc:///baseline-math.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the mathematical baseline, so that operator symbols align.")},
+                {text: i18nc("@label:inlistbox", "Text Top"), value: KoSvgText.BaselineTextTop, icon: "qrc:///baseline-text-top.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the ascender.")},
+                {text: i18nc("@label:inlistbox", "Text Bottom"), value: KoSvgText.BaselineTextBottom, icon: "qrc:///baseline-text-bottom.svg",
+                    toolTip: i18nc("@info:tooltip", "Align to the descender.")}
             ]
             Layout.fillWidth: true;
             id: baselineCmb;
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 16;
+            toolTipRole: "toolTip";
             onActivated: baselineSelection = currentValue;
             wheelEnabled: true;
         }

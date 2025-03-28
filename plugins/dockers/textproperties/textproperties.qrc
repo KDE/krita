@@ -49,5 +49,13 @@
         <file alias="OpenTypeFeatureDelegate.qml">qml/OpenTypeFeatureDelegate.qml</file>
         <file alias="FontKerning.qml">qml/FontKerning.qml</file>
         <file alias="Language.qml">qml/Language.qml</file>
+        <file alias="baseline-math.svg">icons/baseline-math.svg</file>
+        <file alias="baseline-alphabetic.svg">icons/baseline-alphabetic.svg</file>
+        <file alias="baseline-text-top.svg">icons/baseline-text-top.svg</file>
+        <file alias="baseline-text-bottom.svg">icons/baseline-text-bottom.svg</file>
+        <file alias="baseline-x-middle.svg">icons/baseline-x-middle.svg</file>
+        <file alias="baseline-hanging.svg">icons/baseline-hanging.svg</file>
+        <file alias="baseline-ideo-embox-bottom.svg">icons/baseline-ideo-embox-bottom.svg</file>
+        <file alias="baseline-ideo-embox-horizontal-center.svg">icons/baseline-ideo-embox-horizontal-center.svg</file>
     </qresource>
 </RCC>

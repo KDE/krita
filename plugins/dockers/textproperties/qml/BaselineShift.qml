@@ -25,7 +25,7 @@ TextPropertyBase {
         baselineShiftMode = properties.baselineShiftMode;
         baselineShiftUnitCmb.dpi = canvasDPI;
         baselineShiftUnitCmb.setTextProperties(properties);
-        baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.unitType, properties.baselineShiftValue.value)
+        baselineShiftUnitCmb.setDataValueAndUnit(properties.baselineShiftValue.value, properties.baselineShiftValue.unitType)
         visible = properties.baselineShiftState !== KoSvgTextPropertiesModel.PropertyUnset
         blockSignals = false;
     }
@@ -79,18 +79,20 @@ TextPropertyBase {
             height: 1;
         }
 
-        ComboBox {
+        SqueezedComboBox {
             Layout.columnSpan: 2;
             Layout.fillWidth: true;
             model: [
-                { text: i18nc("@label:inlistbox", "None"), value: KoSvgText.ShiftNone},
-                { text: i18nc("@label:inlistbox", "Length"), value: KoSvgText.ShiftLengthPercentage},
-                { text: i18nc("@label:inlistbox", "Super"), value: KoSvgText.ShiftSuper},
-                { text: i18nc("@label:inlistbox", "Sub"), value: KoSvgText.ShiftSub}
+                { text: i18nc("@label:inlistbox", "None"), value: KoSvgText.ShiftNone, icon: ""},
+                { text: i18nc("@label:inlistbox", "Length"), value: KoSvgText.ShiftLengthPercentage, icon: ""},
+                { text: i18nc("@label:inlistbox", "Super"), value: KoSvgText.ShiftSuper, icon: "qrc:///16_light_format-text-superscript.svg"},
+                { text: i18nc("@label:inlistbox", "Sub"), value: KoSvgText.ShiftSub, icon: "qrc:///16_light_format-text-subscript.svg"}
             ]
             id: baselineShiftCmb;
             textRole: "text";
             valueRole: "value";
+            iconRole: "icon";
+            iconSize: 16;
             onActivated: baselineShiftMode = currentValue;
             wheelEnabled: true;
         }
@@ -128,6 +130,7 @@ TextPropertyBase {
             palette: baselinePalette.palette;
             Layout.preferredWidth: minimumUnitBoxWidth;
             Layout.maximumWidth: implicitWidth;
+            isFontSize: false;
             enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
             dpi:dpi;
             onUserValueChanged: baselineShiftSpn.value = userValue;

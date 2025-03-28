@@ -445,10 +445,10 @@ public:
                             const qreal res,
                             const bool isHorizontal,
                             const bool disableFontMatching);
-    void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
-                            QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
+    static void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
+                            QVector<CharacterResult> &result, const QVector<LineBox> lineBoxes,
                             int &currentIndex,
-                            bool isHorizontal);
+                            const bool isHorizontal);
     void computeTextDecorations(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                 const QVector<CharacterResult>& result,
                                 const QMap<int, int>& logicalToVisual,

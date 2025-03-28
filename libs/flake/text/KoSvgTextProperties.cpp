@@ -323,7 +323,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
 #endif
 
 
-            if (param == "sub" || param == "super" || paramContains) {
+            if (param == "sub" || param == "super" || param == "top" || param == "bottom" || paramContains) {
                 parseSvgTextAttribute(context, "baseline-shift", param);
             } else {
                 parseSvgTextAttribute(context, "alignment-baseline", param);
@@ -635,7 +635,15 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         result.insert("dominant-baseline", writeDominantBaseline(Baseline(property(DominantBaselineId).toInt())));
     }
 
-    if (svg1_1) {
+    bool writeSeparate = true;
+    if (hasProperty(BaselineShiftModeId) && !svg1_1) {
+        BaselineShiftMode mode = BaselineShiftMode(property(BaselineShiftModeId).toInt());
+        if (mode == ShiftLineTop || mode == ShiftLineBottom) {
+            writeSeparate = false;
+        }
+    }
+
+    if (writeSeparate) {
         if (hasProperty(AlignmentBaselineId)) {
             result.insert("alignment-baseline", writeAlignmentBaseline(Baseline(property(AlignmentBaselineId).toInt())));
         }

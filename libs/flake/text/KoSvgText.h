@@ -239,7 +239,9 @@ enum BaselineShiftMode {
     ShiftNone, ///< No shift.
     ShiftSub, ///< Use parent font metric for 'subscript'.
     ShiftSuper, ///< Use parent font metric for 'superscript'.
-    ShiftLengthPercentage ///< Css Length Percentage, percentage is em.
+    ShiftLengthPercentage, ///< Css Length Percentage, percentage is lh.
+    ShiftLineTop, ///< this handles css-inline-3 vertical-align:top. Not exposed to ui
+    ShiftLineBottom ///< this handles css-inline-3 vertical-align:bottom. Not exposed to ui
 };
 Q_ENUM_NS(BaselineShiftMode)
 

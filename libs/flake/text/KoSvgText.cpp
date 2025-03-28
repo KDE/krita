@@ -184,6 +184,8 @@ BaselineShiftMode parseBaselineShiftMode(const QString &value)
     return value == "baseline" ? ShiftNone :
            value == "sub" ? ShiftSub :
            value == "super" ? ShiftSuper :
+           value == "top" ? ShiftLineTop :
+           value == "bottom" ? ShiftLineBottom :
            ShiftLengthPercentage;
 }
 
@@ -270,6 +272,8 @@ QString writeBaselineShiftMode(BaselineShiftMode value, CssLengthPercentage shif
     return value == ShiftNone ? "baseline" :
            value == ShiftSub ? "sub" :
            value == ShiftSuper ? "super" :
+           value == ShiftLineTop ? "top" :
+           value == ShiftLineBottom ? "bottom" :
            writeLengthPercentage(shift);
 }
 

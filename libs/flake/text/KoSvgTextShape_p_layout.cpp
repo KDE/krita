@@ -624,9 +624,8 @@ void KoSvgTextShape::Private::relayout()
     }
 
     // Handle baseline alignment.
-    //later
     //globalIndex = 0;
-    //this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
+    this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
 
     if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
@@ -1156,31 +1155,32 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
 
 void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
                                                      QVector<CharacterResult> &result,
-                                                     QVector<LineBox> lineBoxes,
+                                                     const QVector<LineBox> lineBoxes,
                                                      int &currentIndex,
-                                                     bool isHorizontal)
+                                                     const bool isHorizontal)
 {
 
     const int i = currentIndex;
     const int j = qMin(i + numChars(parent, true), result.size());
 
     KoSvgTextProperties properties = parent->properties;
-    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+    KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         handleLineBoxAlignment(child, result, lineBoxes, currentIndex, isHorizontal);
     }
-    LineBox relevantLine;
-    Q_FOREACH(LineBox lineBox, lineBoxes) {
-        Q_FOREACH(LineChunk chunk, lineBox.chunks) {
-            if (chunk.chunkIndices.contains(i)) {
-                relevantLine = lineBox;
+
+    if (baselineShiftMode == KoSvgText::ShiftLineTop || baselineShiftMode == KoSvgText::ShiftLineBottom) {
+
+        LineBox relevantLine;
+        Q_FOREACH(LineBox lineBox, lineBoxes) {
+            Q_FOREACH(LineChunk chunk, lineBox.chunks) {
+                if (chunk.chunkIndices.contains(i)) {
+                    relevantLine = lineBox;
+                }
             }
         }
-    }
-    QPointF shift = QPointF();
-    /* Handle later. */
-    if (baselineAdjust == KoSvgText::BaselineTextTop || baselineAdjust == KoSvgText::BaselineTextBottom) {
+        QPointF shift = QPointF();
         double ascent = 0.0;
         double descent = 0.0;
         for (int k = i; k < j; k++) {
@@ -1189,20 +1189,21 @@ void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentE
             calculateLineHeight(result[k], ascent, descent, isHorizontal, true);
         }
 
-        if (baselineAdjust == KoSvgText::BaselineTextTop) {
+        if (baselineShiftMode == KoSvgText::ShiftLineTop) {
             shift = relevantLine.baselineTop;
             shift -= isHorizontal? QPointF(0, ascent):QPointF(ascent, 0);
-        } else if (baselineAdjust == KoSvgText::BaselineTextBottom) {
+        } else if (baselineShiftMode == KoSvgText::ShiftLineBottom) {
             shift = relevantLine.baselineBottom;
             shift -= isHorizontal? QPointF(0, descent):QPointF(descent, 0);
         }
-    }
 
-    for (int k = i; k < j; k++) {
-        CharacterResult cr = result[k];
-        cr.cssPosition += shift;
-        cr.finalPosition = cr.cssPosition;
-        result[k] = cr;
+
+        for (int k = i; k < j; k++) {
+            CharacterResult cr = result[k];
+            cr.cssPosition += shift;
+            cr.finalPosition = cr.cssPosition;
+            result[k] = cr;
+        }
     }
 
     currentIndex = j;

@@ -19,7 +19,11 @@ set(kritarunner_PRIVATE_LINK_LIBS
 )
 
 if(WIN32)
-    configure_file(kritarunner.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)
+    if (QT_MAJOR_VERSION STREQUAL "6")
+        configure_file(kritarunner.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)
+    else()
+        configure_file(kritarunner6.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)
+    endif()
     if (MINGW)
         # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
         file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc "1 24 \"kritarunner.exe.manifest\"\n")

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-27 01:58+0000\n"
+"POT-Creation-Date: 2025-03-28 01:58+0000\n"
 "PO-Revision-Date: 2025-03-25 21:14+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -16424,7 +16424,7 @@ msgstr "Bir basit bir yol şekli"
 msgid "%1 Options"
 msgstr "%1 Seçenekleri"
 
-#: libs/flake/KoToolManager.cpp:570
+#: libs/flake/KoToolManager.cpp:606
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Etkin araç: %1"
@@ -20646,15 +20646,15 @@ msgstr "Boyut"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:493
+#: plugins/tools/basictools/kis_tool_brush.cc:494
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:482
-#: plugins/tools/basictools/kis_tool_multihand.cpp:493
-#: plugins/tools/basictools/kis_tool_multihand.cpp:495
+#: plugins/tools/basictools/kis_tool_multihand.cpp:483
+#: plugins/tools/basictools/kis_tool_multihand.cpp:494
+#: plugins/tools/basictools/kis_tool_multihand.cpp:496
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -24401,7 +24401,7 @@ msgstr "Şekilleri Vektör Seçime Dönüştür"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr "Süren Çizgi Çiz"
@@ -33802,8 +33802,8 @@ msgstr "Çalışma alanını seç"
 msgid "Brush composite"
 msgstr "Kompozit fırça"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1339 libs/ui/kis_paintop_box.cc:1361
+#: libs/ui/kis_paintop_box.cc:1375
 #, kde-format
 msgid ""
 "%1\n"
@@ -35661,35 +35661,35 @@ msgstr "Ancak Ekran Provası hâlâ kapalı."
 msgid "Gamut Warnings turned off."
 msgstr "Gam Uyarıları kapalı."
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:796
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Etkin Çizer Profili"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:926
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopya)"
 
-#: libs/ui/KisViewManager.cpp:1075 libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1082 libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternatif adlar tükendi, yüksek bir sayı ile el ile kaydetmeyi deneyin"
 
-#: libs/ui/KisViewManager.cpp:1075
+#: libs/ui/KisViewManager.cpp:1082
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Artımlı sürüm kaydedilemedi"
 
-#: libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Artımlı yedek kaydedilemedi"
 
-#: libs/ui/KisViewManager.cpp:1416
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -35698,13 +35698,13 @@ msgstr ""
 "Yalnızca Tuval kipine geçiliyor.\n"
 "Geri gitmek için %1 düğmesine basın."
 
-#: libs/ui/KisViewManager.cpp:1475
+#: libs/ui/KisViewManager.cpp:1482
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Özkaynak Klasörünü Aç"
 
-#: libs/ui/KisViewManager.cpp:1479
+#: libs/ui/KisViewManager.cpp:1486
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -35728,19 +35728,19 @@ msgstr ""
 "<p><b>Özel uygulama konumu</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1494
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "&Kullanıcı AppData Klasöründe Aç"
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Ö&zel Uygulama Konumunda Aç"
 
-#: libs/ui/KisViewManager.cpp:1608 libs/ui/KisViewManager.cpp:1626
+#: libs/ui/KisViewManager.cpp:1615 libs/ui/KisViewManager.cpp:1633
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -36869,16 +36869,16 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_line.cc:211
-#: plugins/tools/basictools/kis_tool_path.cc:90
-#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/basictools/kis_tool_line.cc:213
+#: plugins/tools/basictools/kis_tool_path.cc:91
+#: plugins/tools/basictools/kis_tool_pencil.cc:64
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "Bu renk uzayı için MyPaint Fırça İşletkesi kullanılabilir değil"
 
-#: libs/ui/tool/kis_tool_paint.cc:591
+#: libs/ui/tool/kis_tool_paint.cc:572
 #, kde-format
 msgid "Brush Size: %1 px"
 msgstr "Fırça boyutu: %1 pks"
@@ -36905,8 +36905,8 @@ msgstr ""
 "Yükseklik: %2 pks"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:546
+#: plugins/tools/basictools/kis_tool_line.cc:295
+#: plugins/tools/basictools/kis_tool_multihand.cpp:547
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -61501,97 +61501,97 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Serbest Fırça Vuruşu"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:215
+#: plugins/tools/basictools/kis_tool_brush.cc:216
 #, kde-format
 msgid "Sample Count at Max Speed:"
 msgstr "En yüksek hızda örneklem sayısı:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:225
+#: plugins/tools/basictools/kis_tool_brush.cc:226
 #, kde-format
 msgid "Sample Count at Min Speed:"
 msgstr "En düşük hızda örneklem sayısı:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:235
+#: plugins/tools/basictools/kis_tool_brush.cc:236
 #, kde-format
 msgid "Distance at Max Speed:"
 msgstr "En yüksek hızdaki uzaklık:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:245
+#: plugins/tools/basictools/kis_tool_brush.cc:246
 #, kde-format
 msgid "Distance at Min Speed:"
 msgstr "En düşük hızdaki uzaklık:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Yok"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Temel"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Ağırlıklı"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:417
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Dengeleyici"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Piksel"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:420
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Fırça pürüzsüzleştirme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:482
 #, kde-format
 msgid "Delay:"
 msgstr "Gecikme:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:487
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Çizgiyi pürüzsüzleştirmek için fırça darbesini geciktir"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:490
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Fırçanın engellendiği yarıçap"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:497
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #, kde-format
 msgid "Finish line:"
 msgstr "Bitiş çizgisi:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:509
+#: plugins/tools/basictools/kis_tool_brush.cc:510
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Algılayıcıları dengele:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:517
+#: plugins/tools/basictools/kis_tool_brush.cc:518
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Vuruş sonu:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:523
+#: plugins/tools/basictools/kis_tool_brush.cc:524
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pürüzsüz Basınç"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:529
+#: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61601,38 +61601,38 @@ msgstr ""
 "Ölçeklenebilir uzaklık yakınlaştırma düzeyini dikkate alır ve hangi "
 "yakınlaştırma düzeyi seçili olursa olsun uzaklığı görsel olarak sabit yapar"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:534
+#: plugins/tools/basictools/kis_tool_brush.cc:535
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Ölçeklenebilir Uzaklık"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:549
-#: plugins/tools/basictools/kis_tool_line.cc:110
+#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_line.cc:112
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Yardımcılara tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:551
+#: plugins/tools/basictools/kis_tool_brush.cc:552
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Bu aracın çalışmasından önce bir Yardımcı eklemelisiniz."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:556
+#: plugins/tools/basictools/kis_tool_brush.cc:557
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Yardımcı Mıknatıslık"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:562
+#: plugins/tools/basictools/kis_tool_brush.cc:563
 #, kde-format
 msgid "Magnetism:"
 msgstr "Mıknatıslık:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:565
+#: plugins/tools/basictools/kis_tool_brush.cc:566
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Tek Çizgiye Tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:568
+#: plugins/tools/basictools/kis_tool_brush.cc:569
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -61642,13 +61642,13 @@ msgstr ""
 "Onu yalnızca tek bir yardımcı çizgisine tutturulacak biçimde yapmak, sayısız "
 "yardımcılar kullanılırken sığdırma karmaşasını önler."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:573
-#: plugins/tools/basictools/kis_tool_line.cc:113
+#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_line.cc:115
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Silgi Tuttur"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:576
+#: plugins/tools/basictools/kis_tool_brush.cc:577
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -61669,7 +61669,7 @@ msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
 msgid "Color Sampler Tool"
 msgstr "Renk Örnekleyicisi Aracı"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:63
+#: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Elips Çiz"
@@ -61969,7 +61969,7 @@ msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Titret"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:107
+#: plugins/tools/basictools/kis_tool_gradient.h:106
 #, kde-format
 msgid "Gradient Tool"
 msgstr "Geçiş Aracı"
@@ -61979,27 +61979,27 @@ msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Çizgi Çiz"
 
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:103
 #, kde-format
 msgid "Use sensors"
 msgstr "Algılayıcı kullan"
 
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:106
 #, kde-format
 msgid "Show Preview"
 msgstr "Önizleme göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:107
+#: plugins/tools/basictools/kis_tool_line.cc:109
 #, kde-format
 msgid "Show Guideline"
 msgstr "Kılavuz çizgisi göster"
 
-#: plugins/tools/basictools/kis_tool_line.cc:445
+#: plugins/tools/basictools/kis_tool_line.cc:447
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Uzunluk: %1 pks"
 
-#: plugins/tools/basictools/kis_tool_line.cc:463
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -62051,43 +62051,43 @@ msgstr "Seçili alanda piksel yok"
 msgid "Move Tool"
 msgstr "Taşıma Aracı"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:50
+#: plugins/tools/basictools/kis_tool_multihand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Çoklu Fırça Vuruşu"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Symmetry"
 msgstr "Simetri"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Yansıt"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Translate"
 msgstr "Çokla"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:453
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Snowflake"
 msgstr "Kar Tanesi"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgid "Copy Translate"
 msgstr "Noktalara Çokla"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Aralıklarla Noktalara Çokla"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:566
+#: plugins/tools/basictools/kis_tool_multihand.cpp:567
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
@@ -62095,7 +62095,7 @@ msgstr ""
 "Çoklu Fırça Aracı, %1 fırçadan fazlasını desteklemez; daha geniş bir aralık "
 "kullanın."
 
-#: plugins/tools/basictools/kis_tool_multihand.h:97
+#: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Çoklu Fırça Aracı"
@@ -62105,7 +62105,7 @@ msgstr "Çoklu Fırça Aracı"
 msgid "Pan Tool"
 msgstr "Kaydırma Aracı"
 
-#: plugins/tools/basictools/kis_tool_path.cc:142
+#: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr "Bézier Eğrisi Çiz"
@@ -62115,7 +62115,7 @@ msgstr "Bézier Eğrisi Çiz"
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr "Bézier eğrisi aracı: Üst Karakter + Tık, eğriyi sonlandırır."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:130
+#: plugins/tools/basictools/kis_tool_pencil.cc:133
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "Serbest Yol Çiz"
@@ -62125,7 +62125,7 @@ msgstr "Serbest Yol Çiz"
 msgid "Freehand Path Tool"
 msgstr "Serbest Yol Aracı"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:65
+#: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Dikdörtgen Çiz"
@@ -62938,13 +62938,13 @@ msgid "Caps:"
 msgstr "Yuvarlama:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:277
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
 #, kde-format
 msgid "Mass:"
 msgstr "Kütle:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:284
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, kde-format
 msgid "Drag:"
 msgstr "Direnç:"
@@ -64437,17 +64437,17 @@ msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
 msgstr "Devingen Fırça Vuruşu"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:293
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, kde-format
 msgid "Fixed angle:"
 msgstr "Sabit açı:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:314
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
 #, kde-format
 msgid "Initial width:"
 msgstr "Başlangıç genişliği:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, kde-format
 msgid "Width range:"
 msgstr "Genişlik erimi:"
@@ -64771,7 +64771,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Saydam"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:51
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Çokgen Çiz"

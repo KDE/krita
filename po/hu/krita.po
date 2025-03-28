@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-27 01:58+0000\n"
+"POT-Creation-Date: 2025-03-28 01:58+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16858,7 +16858,7 @@ msgstr "Egy egyszerű útvonal alakzat"
 msgid "%1 Options"
 msgstr "%1 opciók"
 
-#: libs/flake/KoToolManager.cpp:570
+#: libs/flake/KoToolManager.cpp:606
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktív eszköz: %1"
@@ -21087,15 +21087,15 @@ msgstr "Méret"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:493
+#: plugins/tools/basictools/kis_tool_brush.cc:494
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:482
-#: plugins/tools/basictools/kis_tool_multihand.cpp:493
-#: plugins/tools/basictools/kis_tool_multihand.cpp:495
+#: plugins/tools/basictools/kis_tool_multihand.cpp:483
+#: plugins/tools/basictools/kis_tool_multihand.cpp:494
+#: plugins/tools/basictools/kis_tool_multihand.cpp:496
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -25065,7 +25065,7 @@ msgstr "Átalakítás vektor kijelöléssé"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -34504,8 +34504,8 @@ msgstr "Munkaterület kiválasztása"
 msgid "Brush composite"
 msgstr "Ecset összetétel"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1339 libs/ui/kis_paintop_box.cc:1361
+#: libs/ui/kis_paintop_box.cc:1375
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -36340,34 +36340,34 @@ msgstr "Az egyszerű ellenőrzés még mindig ki van kapcsolva."
 msgid "Gamut Warnings turned off."
 msgstr "Figyelem"
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:796
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Színprofil megnyitása"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:926
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Másolás"
 
-#: libs/ui/KisViewManager.cpp:1075 libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1082 libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1075
+#: libs/ui/KisViewManager.cpp:1082
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nem sikerült menteni növekményes verziót"
 
-#: libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nem sikerült menteni növekményes biztonsági másolatot"
 
-#: libs/ui/KisViewManager.cpp:1416
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36376,13 +36376,13 @@ msgstr ""
 "Átlépés csak vászon módba.\n"
 "A visszatéréshez nyomja meg: %1."
 
-#: libs/ui/KisViewManager.cpp:1475
+#: libs/ui/KisViewManager.cpp:1482
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Erőforrásmappa megnyitása"
 
-#: libs/ui/KisViewManager.cpp:1479
+#: libs/ui/KisViewManager.cpp:1486
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36397,19 +36397,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1494
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1608 libs/ui/KisViewManager.cpp:1626
+#: libs/ui/KisViewManager.cpp:1615 libs/ui/KisViewManager.cpp:1633
 #, fuzzy, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -37534,16 +37534,16 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_line.cc:211
-#: plugins/tools/basictools/kis_tool_path.cc:90
-#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/basictools/kis_tool_line.cc:213
+#: plugins/tools/basictools/kis_tool_path.cc:91
+#: plugins/tools/basictools/kis_tool_pencil.cc:64
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:591
+#: libs/ui/tool/kis_tool_paint.cc:572
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
@@ -37567,8 +37567,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:546
+#: plugins/tools/basictools/kis_tool_line.cc:295
+#: plugins/tools/basictools/kis_tool_multihand.cpp:547
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -62855,106 +62855,106 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Szabadkézi vonal"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:215
+#: plugins/tools/basictools/kis_tool_brush.cc:216
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample Count at Max Speed:"
 msgstr "Minták"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:225
+#: plugins/tools/basictools/kis_tool_brush.cc:226
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample Count at Min Speed:"
 msgstr "Minták"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:235
+#: plugins/tools/basictools/kis_tool_brush.cc:236
 #, fuzzy, kde-format
 #| msgid "Distance to paragraph:"
 msgid "Distance at Max Speed:"
 msgstr "Távolság a bekezdéstől:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:245
+#: plugins/tools/basictools/kis_tool_brush.cc:246
 #, fuzzy, kde-format
 #| msgid "Distance range:"
 msgid "Distance at Min Speed:"
 msgstr "Távolság tartomány:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Nincs"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, fuzzy, kde-format
 #| msgid "Basic"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Alap"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Magasság:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:417
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, fuzzy, kde-format
 #| msgid "Stabilizer"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Stabilizátor"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #, fuzzy, kde-format
 #| msgid "Pixel"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Képpont"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:420
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "Ecset beállítások"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:482
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "Megjelenítés"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:487
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:490
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:497
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "Sokszögvonal"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:509
+#: plugins/tools/basictools/kis_tool_brush.cc:510
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Stabilizátor"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:517
+#: plugins/tools/basictools/kis_tool_brush.cc:518
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Ecsetvonás végződés:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:523
+#: plugins/tools/basictools/kis_tool_brush.cc:524
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Simítás nyomás"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:529
+#: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -62962,41 +62962,41 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:534
+#: plugins/tools/basictools/kis_tool_brush.cc:535
 #, fuzzy, kde-format
 msgid "Scalable Distance"
 msgstr "A tárgy távolsága:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:549
-#: plugins/tools/basictools/kis_tool_line.cc:110
+#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_line.cc:112
 #, fuzzy, kde-format
 #| msgid "Save Assistant"
 msgid "Snap to Assistants"
 msgstr "Mentési asszisztens"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:551
+#: plugins/tools/basictools/kis_tool_brush.cc:552
 #, fuzzy, kde-format
 #| msgid "You need to add Ruler Assistants before this tool will work."
 msgid "You need to add Assistants before this tool will work."
 msgstr "Az eszköz működéséhez szükséges a vonalzó asszisztens hozzáadása."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:556
+#: plugins/tools/basictools/kis_tool_brush.cc:557
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Mágnesesség asszisztens"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:562
+#: plugins/tools/basictools/kis_tool_brush.cc:563
 #, fuzzy, kde-format
 #| msgid "Magnetify"
 msgid "Magnetism:"
 msgstr "Mágnesesség"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:565
+#: plugins/tools/basictools/kis_tool_brush.cc:566
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "Nyírási szög (X):"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:568
+#: plugins/tools/basictools/kis_tool_brush.cc:569
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -63004,14 +63004,14 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:573
-#: plugins/tools/basictools/kis_tool_line.cc:113
+#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_line.cc:115
 #, fuzzy, kde-format
 #| msgid "Eraser"
 msgid "Snap Eraser"
 msgstr "Radír"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:576
+#: plugins/tools/basictools/kis_tool_brush.cc:577
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -63032,7 +63032,7 @@ msgstr "Nem sikerült írni a paletta-fájlba: %1. Elképzelhető, hogy írásv�
 msgid "Color Sampler Tool"
 msgstr "Színválasztó"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:63
+#: plugins/tools/basictools/kis_tool_ellipse.cc:64
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
@@ -63340,7 +63340,7 @@ msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Egyéb"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:107
+#: plugins/tools/basictools/kis_tool_gradient.h:106
 #, fuzzy, kde-format
 msgid "Gradient Tool"
 msgstr "Színátmenetes kitöltés"
@@ -63351,28 +63351,28 @@ msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Szaggatott vonalak"
 
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:103
 #, fuzzy, kde-format
 msgid "Use sensors"
 msgstr "OpenColorIO használata"
 
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:106
 #, fuzzy, kde-format
 msgid "Show Preview"
 msgstr "Előnézet"
 
-#: plugins/tools/basictools/kis_tool_line.cc:107
+#: plugins/tools/basictools/kis_tool_line.cc:109
 #, fuzzy, kde-format
 msgid "Show Guideline"
 msgstr "Segédvonalak megjelenítése"
 
-#: plugins/tools/basictools/kis_tool_line.cc:445
+#: plugins/tools/basictools/kis_tool_line.cc:447
 #, fuzzy, kde-format
 #| msgid "Length: "
 msgid "Length: %1 px"
 msgstr "Hossz: "
 
-#: plugins/tools/basictools/kis_tool_line.cc:463
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -63424,53 +63424,53 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Elmozgatás"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:50
+#: plugins/tools/basictools/kis_tool_multihand.cpp:51
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Ecset"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Symmetry"
 msgstr "Szimmetria"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, fuzzy, kde-format
 #| msgid "Mirror"
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Tükrözés"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Translate"
 msgstr "Eltolás"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:453
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, fuzzy, kde-format
 #| msgid "Translate"
 msgid "Copy Translate"
 msgstr "Eltolás"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, fuzzy, kde-format
 #| msgid "Translate"
 msgid "Copy Translate at Intervals"
 msgstr "Eltolás"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:566
+#: plugins/tools/basictools/kis_tool_multihand.cpp:567
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:97
+#: plugins/tools/basictools/kis_tool_multihand.h:99
 #, fuzzy, kde-format
 msgid "Multibrush Tool"
 msgstr "Ecset"
@@ -63480,7 +63480,7 @@ msgstr "Ecset"
 msgid "Pan Tool"
 msgstr "Szabadkézi útvonal"
 
-#: plugins/tools/basictools/kis_tool_path.cc:142
+#: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -63491,7 +63491,7 @@ msgstr "Bézier-görbe"
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr "Sokszögvonal rajzolása. Shift-egérklikk befejezi a sokszögvonalat."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:130
+#: plugins/tools/basictools/kis_tool_pencil.cc:133
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
@@ -63502,7 +63502,7 @@ msgstr "Szabadkézi útvonal rajzolása."
 msgid "Freehand Path Tool"
 msgstr "Szabadkézi útvonal"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:65
+#: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
@@ -64356,13 +64356,13 @@ msgid "Caps:"
 msgstr "Vonalvég:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:277
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
 #, kde-format
 msgid "Mass:"
 msgstr "Tömeg:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:284
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, kde-format
 msgid "Drag:"
 msgstr "Húzás:"
@@ -65899,17 +65899,17 @@ msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
 msgstr "A - 2 dinamikus ecset"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:293
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, kde-format
 msgid "Fixed angle:"
 msgstr "Rögzített szög:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:314
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
 #, kde-format
 msgid "Initial width:"
 msgstr "Kezdőszélesség:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, kde-format
 msgid "Width range:"
 msgstr "Szélességi tartomány:"
@@ -66254,7 +66254,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Átlátszó"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:51
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"

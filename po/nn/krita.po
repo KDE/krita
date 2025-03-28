@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-23 01:55+0000\n"
+"POT-Creation-Date: 2025-03-27 01:58+0000\n"
 "PO-Revision-Date: 2024-08-27 20:27+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -20079,30 +20079,30 @@ msgid "Character Variant %1"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1634
+#: libs/flake/text/KoSvgTextShape.cpp:1648
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1613
+#: libs/flake/text/KoSvgTextShape.cpp:1627
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1615
-#: libs/flake/text/KoSvgTextShape.cpp:1623
+#: libs/flake/text/KoSvgTextShape.cpp:1629
+#: libs/flake/text/KoSvgTextShape.cpp:1637
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstfigur"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1621
+#: libs/flake/text/KoSvgTextShape.cpp:1635
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-basert tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1658
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23394,7 +23394,7 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisMainWindow.cpp:1173 libs/ui/KisMainWindow.cpp:1270
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
-#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2842
+#: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
 #: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
@@ -23918,7 +23918,7 @@ msgid "Delete resource"
 msgstr "Slett ressurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2641
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -26573,7 +26573,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Skriv inn nytt namn på stil"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2650
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2652
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -35107,35 +35107,35 @@ msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Klarte ikkje oppretta nytt dokument. Animasjonsimporteringa vart avbroten."
 
-#: libs/ui/KisMainWindow.cpp:2630
+#: libs/ui/KisMainWindow.cpp:2632
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2645
+#: libs/ui/KisMainWindow.cpp:2647
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2649
+#: libs/ui/KisMainWindow.cpp:2651
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbeidsflate …"
 
-#: libs/ui/KisMainWindow.cpp:2693
+#: libs/ui/KisMainWindow.cpp:2695
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2696
+#: libs/ui/KisMainWindow.cpp:2698
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2865
+#: libs/ui/KisMainWindow.cpp:2867
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -35144,19 +35144,19 @@ msgstr ""
 "LittleCMS-programtillegget for fargestyring i Krita er ikkje installert. "
 "Programmet vert derfor avslutta."
 
-#: libs/ui/KisMainWindow.cpp:2881
+#: libs/ui/KisMainWindow.cpp:2883
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installasjonsfeil"
 
-#: libs/ui/KisMainWindow.cpp:2991
+#: libs/ui/KisMainWindow.cpp:2993
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema"
 
-#: libs/ui/KisMainWindow.cpp:3050
+#: libs/ui/KisMainWindow.cpp:3052
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Utvidande mellomrom"
@@ -44643,10 +44643,88 @@ msgstr "Lagra oppgåvesettet"
 msgid "Delete the taskset"
 msgstr "Slett oppgåvesettet"
 
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Font Size (em)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "X Height (ex)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Cap Height (cap)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Proportional Advance (ch)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Ideographic Advance (ic)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Line Height (lh)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Spaces (Sp)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Lines (Ln)"
+msgstr ""
+
+#: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
+#, kde-format
+msgctxt "@label:inlistbox"
+msgid "Percentage (%)"
+msgstr ""
+
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:16
+#, kde-format
+msgctxt "Empty locale"
+msgid "Empty"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:26
+#, kde-format
+msgctxt "language, region, variant"
+msgid "%1, %2, variant: %3"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:28
+#, kde-format
+msgctxt "language, region"
+msgid "%1, %2"
+msgstr ""
+
+#: plugins/dockers/textproperties/LocaleHandler.cpp:32
+#, kde-format
+msgctxt "language, variant"
+msgid "%1, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
@@ -44667,7 +44745,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:111
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
 #, kde-format
 msgid "Text Properties"
 msgstr "Teksteigenskapar"
@@ -64895,8 +64973,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:150
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformer"

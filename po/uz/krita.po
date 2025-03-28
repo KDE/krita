@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-27 01:58+0000\n"
+"POT-Creation-Date: 2025-03-28 01:58+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -16575,7 +16575,7 @@ msgstr "Namunani yaratish"
 msgid "%1 Options"
 msgstr "Qoidadan tashqari holat"
 
-#: libs/flake/KoToolManager.cpp:570
+#: libs/flake/KoToolManager.cpp:606
 #, fuzzy, kde-format
 #| msgid "No Active Tool"
 msgid "Active tool: %1"
@@ -20681,15 +20681,15 @@ msgstr "Oʻlchami"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:493
+#: plugins/tools/basictools/kis_tool_brush.cc:494
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:482
-#: plugins/tools/basictools/kis_tool_multihand.cpp:493
-#: plugins/tools/basictools/kis_tool_multihand.cpp:495
+#: plugins/tools/basictools/kis_tool_multihand.cpp:483
+#: plugins/tools/basictools/kis_tool_multihand.cpp:494
+#: plugins/tools/basictools/kis_tool_multihand.cpp:496
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -24483,7 +24483,7 @@ msgstr "Hech narsa tanlanmagan"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -33583,8 +33583,8 @@ msgstr "Ranglar boʻshligʻi"
 msgid "Brush composite"
 msgstr "Boʻyoqning oʻlchami"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1339 libs/ui/kis_paintop_box.cc:1361
+#: libs/ui/kis_paintop_box.cc:1375
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -35359,47 +35359,47 @@ msgstr "Alfa moslamalari"
 msgid "Gamut Warnings turned off."
 msgstr "chizma"
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:796
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "Profil yoʻq"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:926
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "Yashildan nusxa olish"
 
-#: libs/ui/KisViewManager.cpp:1075 libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1082 libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1075
+#: libs/ui/KisViewManager.cpp:1082
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Bosib chiqarish oʻlchami"
 
-#: libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1166
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Bosib chiqarish oʻlchami"
 
-#: libs/ui/KisViewManager.cpp:1416
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1475
+#: libs/ui/KisViewManager.cpp:1482
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Qatlamni &olib tashlash"
 
-#: libs/ui/KisViewManager.cpp:1479
+#: libs/ui/KisViewManager.cpp:1486
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -35414,19 +35414,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1494
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1608 libs/ui/KisViewManager.cpp:1626
+#: libs/ui/KisViewManager.cpp:1615 libs/ui/KisViewManager.cpp:1633
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -36534,16 +36534,16 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_line.cc:211
-#: plugins/tools/basictools/kis_tool_path.cc:90
-#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/basictools/kis_tool_line.cc:213
+#: plugins/tools/basictools/kis_tool_path.cc:91
+#: plugins/tools/basictools/kis_tool_pencil.cc:64
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:591
+#: libs/ui/tool/kis_tool_paint.cc:572
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
@@ -36567,8 +36567,8 @@ msgid ""
 msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:546
+#: plugins/tools/basictools/kis_tool_line.cc:295
+#: plugins/tools/basictools/kis_tool_multihand.cpp:547
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -60690,99 +60690,99 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "Oldindan aniqlangan boʻyoqlar"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:215
+#: plugins/tools/basictools/kis_tool_brush.cc:216
 #, fuzzy, kde-format
 msgid "Sample Count at Max Speed:"
 msgstr "Toʻrtburcha&k"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:225
+#: plugins/tools/basictools/kis_tool_brush.cc:226
 #, fuzzy, kde-format
 msgid "Sample Count at Min Speed:"
 msgstr "Toʻrtburcha&k"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:235
+#: plugins/tools/basictools/kis_tool_brush.cc:236
 #, fuzzy, kde-format
 msgid "Distance at Max Speed:"
 msgstr "Oʻrnini almashtirishmoq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:245
+#: plugins/tools/basictools/kis_tool_brush.cc:246
 #, fuzzy, kde-format
 msgid "Distance at Min Speed:"
 msgstr "Oʻrnini almashtirishmoq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Yoʻq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Qora"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, fuzzy, kde-format
 #| msgid "Height:"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Uzunasi:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:417
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Toʻrtburcha&k"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Piksellash"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:420
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, fuzzy, kde-format
 msgid "Brush Smoothing:"
 msgstr "Moslamalar"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:482
 #, fuzzy, kde-format
 msgid "Delay:"
 msgstr "Displey"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:487
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:490
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:497
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "&Siniq chiziq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:509
+#: plugins/tools/basictools/kis_tool_brush.cc:510
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Toʻrtburcha&k"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:517
+#: plugins/tools/basictools/kis_tool_brush.cc:518
 #, fuzzy, kde-format
 msgid "Stroke Ending:"
 msgstr "Toʻyintirish"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:523
+#: plugins/tools/basictools/kis_tool_brush.cc:524
 #, fuzzy, kde-format
 msgid "Smooth Pressure"
 msgstr "Bosim"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:529
+#: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -60790,38 +60790,38 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:534
+#: plugins/tools/basictools/kis_tool_brush.cc:535
 #, fuzzy, kde-format
 msgid "Scalable Distance"
 msgstr "Oʻrnini almashtirishmoq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:549
-#: plugins/tools/basictools/kis_tool_line.cc:110
+#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_line.cc:112
 #, fuzzy, kde-format
 msgid "Snap to Assistants"
 msgstr "Oʻrnini almashtirishmoq"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:551
+#: plugins/tools/basictools/kis_tool_brush.cc:552
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:556
+#: plugins/tools/basictools/kis_tool_brush.cc:557
 #, fuzzy, kde-format
 msgid "Assistant Magnetism"
 msgstr "Qizgʻish-qoʻngʻir"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:562
+#: plugins/tools/basictools/kis_tool_brush.cc:563
 #, fuzzy, kde-format
 msgid "Magnetism:"
 msgstr "Qizgʻish-qoʻngʻir"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:565
+#: plugins/tools/basictools/kis_tool_brush.cc:566
 #, fuzzy, kde-format
 msgid "Snap to Single Line"
 msgstr "Yangi rasm"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:568
+#: plugins/tools/basictools/kis_tool_brush.cc:569
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -60829,13 +60829,13 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:573
-#: plugins/tools/basictools/kis_tool_line.cc:113
+#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_line.cc:115
 #, fuzzy, kde-format
 msgid "Snap Eraser"
 msgstr "Tozalash"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:576
+#: plugins/tools/basictools/kis_tool_brush.cc:577
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -60857,7 +60857,7 @@ msgstr ""
 msgid "Color Sampler Tool"
 msgstr "Tanlanganni koʻrsatish"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:63
+#: plugins/tools/basictools/kis_tool_ellipse.cc:64
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
@@ -61152,7 +61152,7 @@ msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Boshqa"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:107
+#: plugins/tools/basictools/kis_tool_gradient.h:106
 #, fuzzy, kde-format
 msgid "Gradient Tool"
 msgstr "Gradient vositasi"
@@ -61163,28 +61163,28 @@ msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "Chiziq chizish"
 
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:103
 #, fuzzy, kde-format
 msgid "Use sensors"
 msgstr "Rang"
 
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:106
 #, fuzzy, kde-format
 msgid "Show Preview"
 msgstr "Koʻrib chiqish"
 
-#: plugins/tools/basictools/kis_tool_line.cc:107
+#: plugins/tools/basictools/kis_tool_line.cc:109
 #, fuzzy, kde-format
 msgid "Show Guideline"
 msgstr "Toʻrni koʻrsatish"
 
-#: plugins/tools/basictools/kis_tool_line.cc:445
+#: plugins/tools/basictools/kis_tool_line.cc:447
 #, fuzzy, kde-format
 #| msgid "Strength:"
 msgid "Length: %1 px"
 msgstr "Kuch:"
 
-#: plugins/tools/basictools/kis_tool_line.cc:463
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -61233,50 +61233,50 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Koʻchirish vositasi"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:50
+#: plugins/tools/basictools/kis_tool_multihand.cpp:51
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Boʻyoq"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, fuzzy, kde-format
 msgid "Symmetry"
 msgstr "Geometriya moslamalari"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, fuzzy, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Rasmni kesish"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, fuzzy, kde-format
 msgid "Translate"
 msgstr "Burchak"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:453
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, fuzzy, kde-format
 msgid "Copy Translate"
 msgstr "Burchak"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, fuzzy, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Burchak"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:566
+#: plugins/tools/basictools/kis_tool_multihand.cpp:567
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:97
+#: plugins/tools/basictools/kis_tool_multihand.h:99
 #, fuzzy, kde-format
 msgid "Multibrush Tool"
 msgstr "Boʻyoq vositasi"
@@ -61286,7 +61286,7 @@ msgstr "Boʻyoq vositasi"
 msgid "Pan Tool"
 msgstr "Matn vositasi"
 
-#: plugins/tools/basictools/kis_tool_path.cc:142
+#: plugins/tools/basictools/kis_tool_path.cc:145
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
@@ -61297,7 +61297,7 @@ msgstr "Filter vositasi"
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:130
+#: plugins/tools/basictools/kis_tool_pencil.cc:133
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
@@ -61308,7 +61308,7 @@ msgstr "Erkin qoʻl bilan chizish"
 msgid "Freehand Path Tool"
 msgstr "Boʻyoq vositasi"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:65
+#: plugins/tools/basictools/kis_tool_rectangle.cc:66
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
@@ -62106,13 +62106,13 @@ msgid "Caps:"
 msgstr ""
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:277
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
 #, fuzzy, kde-format
 msgid "Mass:"
 msgstr "Asosiy:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:284
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, fuzzy, kde-format
 msgid "Drag:"
 msgstr "Soat koʻrsatgichi boʻyicha burish"
@@ -63620,17 +63620,17 @@ msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
 msgstr "Choʻtkani koʻpaytirish"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:293
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, fuzzy, kde-format
 msgid "Fixed angle:"
 msgstr "Burchak"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:314
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
 #, fuzzy, kde-format
 msgid "Initial width:"
 msgstr "Piksel eni"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, fuzzy, kde-format
 msgid "Width range:"
 msgstr "Oʻrnini almashtirishmoq"
@@ -63954,7 +63954,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Shaffof"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:51
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"

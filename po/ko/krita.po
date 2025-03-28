@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-27 01:58+0000\n"
+"POT-Creation-Date: 2025-03-28 01:58+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17376,7 +17376,7 @@ msgstr "간단한 경로 도형"
 msgid "%1 Options"
 msgstr "%1 옵션"
 
-#: libs/flake/KoToolManager.cpp:570
+#: libs/flake/KoToolManager.cpp:606
 #, kde-format
 msgid "Active tool: %1"
 msgstr "활성 도구: %1"
@@ -21645,15 +21645,15 @@ msgstr "크기"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:493
+#: plugins/tools/basictools/kis_tool_brush.cc:494
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:482
-#: plugins/tools/basictools/kis_tool_multihand.cpp:493
-#: plugins/tools/basictools/kis_tool_multihand.cpp:495
+#: plugins/tools/basictools/kis_tool_multihand.cpp:483
+#: plugins/tools/basictools/kis_tool_multihand.cpp:494
+#: plugins/tools/basictools/kis_tool_multihand.cpp:496
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -25453,7 +25453,7 @@ msgstr "모양을 벡터 선택으로 변환"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr "폴리라인 그리기"
@@ -35027,8 +35027,8 @@ msgstr "작업 공간 선택"
 msgid "Brush composite"
 msgstr "브러시 합성"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1339 libs/ui/kis_paintop_box.cc:1361
+#: libs/ui/kis_paintop_box.cc:1375
 #, kde-format
 msgid ""
 "%1\n"
@@ -36912,35 +36912,35 @@ msgstr "그러나 소프트 프루핑은 아직 꺼져 있습니다."
 msgid "Gamut Warnings turned off."
 msgstr "색역 경고가 꺼졌습니다."
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:796
 #, kde-format
 msgid "Active Author Profile"
 msgstr "활성 작가 프로필"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:926
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1(사본)"
 
-#: libs/ui/KisViewManager.cpp:1075 libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1082 libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "더 이상 대체할 이름이 없습니다. 수동으로 더 큰 숫자를 지정하여 저장하십시오"
 
-#: libs/ui/KisViewManager.cpp:1075
+#: libs/ui/KisViewManager.cpp:1082
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "증분 버전을 저장할 수 없음"
 
-#: libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "증분 백업을 저장할 수 없음"
 
-#: libs/ui/KisViewManager.cpp:1416
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -36949,13 +36949,13 @@ msgstr ""
 "캔버스만 보기 모드로 전환합니다.\n"
 "%1 키를 누르면 돌아갑니다."
 
-#: libs/ui/KisViewManager.cpp:1475
+#: libs/ui/KisViewManager.cpp:1482
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "리소스 폴더 열기"
 
-#: libs/ui/KisViewManager.cpp:1479
+#: libs/ui/KisViewManager.cpp:1486
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -36970,19 +36970,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1494
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1608 libs/ui/KisViewManager.cpp:1626
+#: libs/ui/KisViewManager.cpp:1615 libs/ui/KisViewManager.cpp:1633
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38099,16 +38099,16 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_line.cc:211
-#: plugins/tools/basictools/kis_tool_path.cc:90
-#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/basictools/kis_tool_line.cc:213
+#: plugins/tools/basictools/kis_tool_path.cc:91
+#: plugins/tools/basictools/kis_tool_pencil.cc:64
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr "이 색 공간에서는 MyPaint 브러시 엔진을 사용할 수 없음"
 
-#: libs/ui/tool/kis_tool_paint.cc:591
+#: libs/ui/tool/kis_tool_paint.cc:572
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
@@ -38136,8 +38136,8 @@ msgstr ""
 "높이: %2픽셀"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:546
+#: plugins/tools/basictools/kis_tool_line.cc:295
+#: plugins/tools/basictools/kis_tool_multihand.cpp:547
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -63053,103 +63053,103 @@ msgctxt "(qtundo-format)"
 msgid "Freehand Brush Stroke"
 msgstr "자유형 브러시 획 그리기"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:215
+#: plugins/tools/basictools/kis_tool_brush.cc:216
 #, fuzzy, kde-format
 #| msgid "Sample count:"
 msgid "Sample Count at Max Speed:"
 msgstr "샘플 개수:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:225
+#: plugins/tools/basictools/kis_tool_brush.cc:226
 #, fuzzy, kde-format
 #| msgid "Sample count:"
 msgid "Sample Count at Min Speed:"
 msgstr "샘플 개수:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:235
+#: plugins/tools/basictools/kis_tool_brush.cc:236
 #, fuzzy, kde-format
 #| msgid "Distance to paragraph:"
 msgid "Distance at Max Speed:"
 msgstr "문단으로부터의 거리:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:245
+#: plugins/tools/basictools/kis_tool_brush.cc:246
 #, fuzzy, kde-format
 #| msgctxt "EXIF: autofocus"
 #| msgid "D&istance range:"
 msgid "Distance at Min Speed:"
 msgstr "거리 범위(&I):"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "없음"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "기본"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "가중치 있음"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:417
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "안정화 도구"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #, fuzzy, kde-format
 #| msgid "Pixel"
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "픽셀"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:420
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "손떨림 보정:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:482
 #, kde-format
 msgid "Delay:"
 msgstr "지연:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:487
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "브러시 획 긋기를 지연시켜 선을 부드럽게 합니다"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:490
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "다음 반지름 내에서 브러시 동작 방지"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:497
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #, kde-format
 msgid "Finish line:"
 msgstr "선 닫기:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:509
+#: plugins/tools/basictools/kis_tool_brush.cc:510
 #, kde-format
 msgid "Stabilize Sensors:"
 msgstr "센서 안정화:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:517
+#: plugins/tools/basictools/kis_tool_brush.cc:518
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "선 끝내기:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:523
+#: plugins/tools/basictools/kis_tool_brush.cc:524
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "부드러운 압력"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:529
+#: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -63159,39 +63159,39 @@ msgstr ""
 "거리 자동 조정은 확대/축소 단계를 고려하여 선택한 확대/축소 단계에 관계 없이 "
 "시각적으로 거리를 일정하게 만듭니다"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:534
+#: plugins/tools/basictools/kis_tool_brush.cc:535
 #, kde-format
 msgid "Scalable Distance"
 msgstr "거리 자동 조정"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:549
-#: plugins/tools/basictools/kis_tool_line.cc:110
+#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_line.cc:112
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "도우미에 스냅"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:551
+#: plugins/tools/basictools/kis_tool_brush.cc:552
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "이 도구를 사용하기 전에 도우미를 추가해야 합니다."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:556
+#: plugins/tools/basictools/kis_tool_brush.cc:557
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "도우미 자력"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:562
+#: plugins/tools/basictools/kis_tool_brush.cc:563
 #, kde-format
 msgid "Magnetism:"
 msgstr "자력:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:565
+#: plugins/tools/basictools/kis_tool_brush.cc:566
 #, fuzzy, kde-format
 #| msgid "Snap Single:"
 msgid "Snap to Single Line"
 msgstr "단독 스냅:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:568
+#: plugins/tools/basictools/kis_tool_brush.cc:569
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid ""
@@ -63205,14 +63205,14 @@ msgstr ""
 "단 하나의 도우미에게만 스냅할 수 있도록 하고, 무한 도우미를 사용하는 동안 스"
 "냅이 지저분해지는 것을 방지합니다."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:573
-#: plugins/tools/basictools/kis_tool_line.cc:113
+#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_line.cc:115
 #, fuzzy, kde-format
 #| msgid "Eraser"
 msgid "Snap Eraser"
 msgstr "지우개"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:576
+#: plugins/tools/basictools/kis_tool_brush.cc:577
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -63233,7 +63233,7 @@ msgstr "팔레트 파일 %1에 쓸 수 없습니다. 읽기 전용인 것 같습
 msgid "Color Sampler Tool"
 msgstr "색상 표본 추출기 도구"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:63
+#: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "타원 그리기"
@@ -63556,7 +63556,7 @@ msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "디더링"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:107
+#: plugins/tools/basictools/kis_tool_gradient.h:106
 #, kde-format
 msgid "Gradient Tool"
 msgstr "그라디언트 도구"
@@ -63566,27 +63566,27 @@ msgctxt "(qtundo-format)"
 msgid "Draw Line"
 msgstr "선 그리기"
 
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:103
 #, kde-format
 msgid "Use sensors"
 msgstr "센서 사용"
 
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:106
 #, kde-format
 msgid "Show Preview"
 msgstr "미리 보기 표시"
 
-#: plugins/tools/basictools/kis_tool_line.cc:107
+#: plugins/tools/basictools/kis_tool_line.cc:109
 #, kde-format
 msgid "Show Guideline"
 msgstr "가이드라인 표시"
 
-#: plugins/tools/basictools/kis_tool_line.cc:445
+#: plugins/tools/basictools/kis_tool_line.cc:447
 #, kde-format
 msgid "Length: %1 px"
 msgstr "길이: %1픽셀"
 
-#: plugins/tools/basictools/kis_tool_line.cc:463
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -63641,50 +63641,50 @@ msgstr "선택한 영역에 픽셀 없음"
 msgid "Move Tool"
 msgstr "이동 도구"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:50
+#: plugins/tools/basictools/kis_tool_multihand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "다중 브러시 획 그리기"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Symmetry"
 msgstr "대칭"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "반전"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Translate"
 msgstr "변환"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:453
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Snowflake"
 msgstr "눈꽃"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgid "Copy Translate"
 msgstr "복사 변환"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, fuzzy, kde-format
 #| msgid "Copy Translate"
 msgid "Copy Translate at Intervals"
 msgstr "복사 변환"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:566
+#: plugins/tools/basictools/kis_tool_multihand.cpp:567
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:97
+#: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "다중 브러시 도구"
@@ -63694,7 +63694,7 @@ msgstr "다중 브러시 도구"
 msgid "Pan Tool"
 msgstr "팬 도구"
 
-#: plugins/tools/basictools/kis_tool_path.cc:142
+#: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr "베지어 곡선 그리기"
@@ -63706,7 +63706,7 @@ msgstr ""
 "베지어 곡선 도구: Shift 키를 누르면서 마우스 단추를 클릭하면 곡선을 종료합니"
 "다."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:130
+#: plugins/tools/basictools/kis_tool_pencil.cc:133
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr "자유형 경로 그리기"
@@ -63716,7 +63716,7 @@ msgstr "자유형 경로 그리기"
 msgid "Freehand Path Tool"
 msgstr "자유형 경로 도구"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:65
+#: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "사각형 그리기"
@@ -64550,13 +64550,13 @@ msgid "Caps:"
 msgstr "둥글게:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:277
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
 #, kde-format
 msgid "Mass:"
 msgstr "질량:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:284
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, kde-format
 msgid "Drag:"
 msgstr "드래그:"
@@ -66084,17 +66084,17 @@ msgctxt "(qtundo-format)"
 msgid "Dynamic Brush Stroke"
 msgstr "동적 브러시 선 긋기"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:293
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, kde-format
 msgid "Fixed angle:"
 msgstr "고정 각도:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:314
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
 #, kde-format
 msgid "Initial width:"
 msgstr "초기 폭:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, kde-format
 msgid "Width range:"
 msgstr "폭 범위:"
@@ -66451,7 +66451,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "투명"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:51
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "다각형 그리기"

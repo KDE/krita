@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-27 01:58+0000\n"
+"POT-Creation-Date: 2025-03-28 01:58+0000\n"
 "PO-Revision-Date: 2024-11-21 09:19+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17519,7 +17519,7 @@ msgstr "Yksinkertainen polkumuoto"
 msgid "%1 Options"
 msgstr "Asetukset: %1"
 
-#: libs/flake/KoToolManager.cpp:570
+#: libs/flake/KoToolManager.cpp:606
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktiivinen työkalu: %1"
@@ -21756,15 +21756,15 @@ msgstr "Koko"
 #: plugins/paintops/spray/KisSprayShapeOptionModel.cpp:88
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
-#: plugins/tools/basictools/kis_tool_brush.cc:493
+#: plugins/tools/basictools/kis_tool_brush.cc:494
 #: plugins/tools/basictools/kis_tool_fill.cc:582
 #: plugins/tools/basictools/kis_tool_fill.cc:598
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:482
-#: plugins/tools/basictools/kis_tool_multihand.cpp:493
-#: plugins/tools/basictools/kis_tool_multihand.cpp:495
+#: plugins/tools/basictools/kis_tool_multihand.cpp:483
+#: plugins/tools/basictools/kis_tool_multihand.cpp:494
+#: plugins/tools/basictools/kis_tool_multihand.cpp:496
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -25834,7 +25834,7 @@ msgstr "Vektorivalinta"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:635
 #: libs/ui/actions/kis_selection_action_factories.cpp:694
-#: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
+#: plugins/tools/tool_polyline/kis_tool_polyline.cc:55
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
 msgstr ""
@@ -35638,8 +35638,8 @@ msgstr "Valitse työtila"
 msgid "Brush composite"
 msgstr "Pensselit"
 
-#: libs/ui/kis_paintop_box.cc:1344 libs/ui/kis_paintop_box.cc:1366
-#: libs/ui/kis_paintop_box.cc:1380
+#: libs/ui/kis_paintop_box.cc:1339 libs/ui/kis_paintop_box.cc:1361
+#: libs/ui/kis_paintop_box.cc:1375
 #, fuzzy, kde-format
 msgid ""
 "%1\n"
@@ -37592,37 +37592,37 @@ msgstr "Näyttövedostus pois päältä."
 msgid "Gamut Warnings turned off."
 msgstr "Toistoalavaroitus pois päältä."
 
-#: libs/ui/KisViewManager.cpp:789
+#: libs/ui/KisViewManager.cpp:796
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktiivinen tekijäprofiili"
 
-#: libs/ui/KisViewManager.cpp:919
+#: libs/ui/KisViewManager.cpp:926
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "%1 (Qt)"
 msgid "%1 (Copy)"
 msgstr "%1 (Qt)"
 
-#: libs/ui/KisViewManager.cpp:1075 libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1082 libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Vaihtoehtoiset nimet lopussa: yritä tallentaa itse suuremmalle numerolle"
 
-#: libs/ui/KisViewManager.cpp:1075
+#: libs/ui/KisViewManager.cpp:1082
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Ei voitu tallentaa täydentävää versiota"
 
-#: libs/ui/KisViewManager.cpp:1159
+#: libs/ui/KisViewManager.cpp:1166
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Ei voitu tallentaa täydentävää varmuuskopiota"
 
-#: libs/ui/KisViewManager.cpp:1416
+#: libs/ui/KisViewManager.cpp:1423
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -37631,14 +37631,14 @@ msgstr ""
 "Siirrytään vain kangas -tilaan.\n"
 "Palaa takaisin painamalla %1."
 
-#: libs/ui/KisViewManager.cpp:1475
+#: libs/ui/KisViewManager.cpp:1482
 #, fuzzy, kde-format
 #| msgid "Open Resource Folder"
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Avaa resurssikansio"
 
-#: libs/ui/KisViewManager.cpp:1479
+#: libs/ui/KisViewManager.cpp:1486
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -37653,19 +37653,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1494
+#: libs/ui/KisViewManager.cpp:1501
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1495
+#: libs/ui/KisViewManager.cpp:1502
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1608 libs/ui/KisViewManager.cpp:1626
+#: libs/ui/KisViewManager.cpp:1615 libs/ui/KisViewManager.cpp:1633
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -38811,16 +38811,16 @@ msgstr ""
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
 #: libs/ui/tool/KisToolOutlineBase.cpp:169
-#: plugins/tools/basictools/kis_tool_line.cc:211
-#: plugins/tools/basictools/kis_tool_path.cc:90
-#: plugins/tools/basictools/kis_tool_pencil.cc:63
+#: plugins/tools/basictools/kis_tool_line.cc:213
+#: plugins/tools/basictools/kis_tool_path.cc:91
+#: plugins/tools/basictools/kis_tool_pencil.cc:64
 #: plugins/tools/tool_enclose_and_fill/subtools/KisPathEnclosingProducer.cpp:130
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:71
 #, kde-format
 msgid "The MyPaint Brush Engine is not available for this colorspace"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_paint.cc:591
+#: libs/ui/tool/kis_tool_paint.cc:572
 #, fuzzy, kde-format
 #| msgid "Brush size"
 msgid "Brush Size: %1 px"
@@ -38851,8 +38851,8 @@ msgid ""
 msgstr "X: %1 px, Y: %2 px"
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
-#: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:546
+#: plugins/tools/basictools/kis_tool_line.cc:295
+#: plugins/tools/basictools/kis_tool_multihand.cpp:547
 #, fuzzy, kde-format
 #| msgctxt "floating message in move tool"
 #| msgid "X: %1 px, Y: %2 px"
@@ -63960,102 +63960,102 @@ msgstr ""
 "Vapaan käden sivellinveto\n"
 "vapaan käden sivellinveto"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:215
+#: plugins/tools/basictools/kis_tool_brush.cc:216
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample Count at Max Speed:"
 msgstr "Näytteet"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:225
+#: plugins/tools/basictools/kis_tool_brush.cc:226
 #, fuzzy, kde-format
 #| msgid "Samples"
 msgid "Sample Count at Min Speed:"
 msgstr "Näytteet"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:235
+#: plugins/tools/basictools/kis_tool_brush.cc:236
 #, fuzzy, kde-format
 #| msgid "Distance to paragraph:"
 msgid "Distance at Max Speed:"
 msgstr "Etäisyys kappaleeseen:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:245
+#: plugins/tools/basictools/kis_tool_brush.cc:246
 #, fuzzy, kde-format
 #| msgctxt "EXIF: autofocus"
 #| msgid "D&istance range:"
 msgid "Distance at Min Speed:"
 msgstr "&Etäisyysalue:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:414
+#: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
 msgstr "Ei mitään"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:415
+#: plugins/tools/basictools/kis_tool_brush.cc:416
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
 msgstr "Tavallinen"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:416
+#: plugins/tools/basictools/kis_tool_brush.cc:417
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
 msgstr "Painotettu"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:417
+#: plugins/tools/basictools/kis_tool_brush.cc:418
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
 msgstr "Vakautin"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:418
+#: plugins/tools/basictools/kis_tool_brush.cc:419
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "Kuvapiste"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:420
+#: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Brush Smoothing:"
 msgstr "Siveltimen tasoitus:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:481
+#: plugins/tools/basictools/kis_tool_brush.cc:482
 #, kde-format
 msgid "Delay:"
 msgstr "Viive:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:486
+#: plugins/tools/basictools/kis_tool_brush.cc:487
 #, kde-format
 msgid "Delay the brush stroke to make the line smoother"
 msgstr "Viivytä siveltimen vetoa jotta viiva olisi tasaisempi"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:490
+#: plugins/tools/basictools/kis_tool_brush.cc:491
 #, kde-format
 msgid "Radius where the brush is blocked"
 msgstr "Säde, jossa sivellin torjutaan"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:497
+#: plugins/tools/basictools/kis_tool_brush.cc:498
 #, fuzzy, kde-format
 msgid "Finish line:"
 msgstr "&Lopeta moniviiva"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:509
+#: plugins/tools/basictools/kis_tool_brush.cc:510
 #, fuzzy, kde-format
 msgid "Stabilize Sensors:"
 msgstr "Vakaa"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:517
+#: plugins/tools/basictools/kis_tool_brush.cc:518
 #, kde-format
 msgid "Stroke Ending:"
 msgstr "Vedon lopetus:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:523
+#: plugins/tools/basictools/kis_tool_brush.cc:524
 #, kde-format
 msgid "Smooth Pressure"
 msgstr "Pehmennä paine"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:529
+#: plugins/tools/basictools/kis_tool_brush.cc:530
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -64063,38 +64063,38 @@ msgid ""
 "visually constant whatever zoom level is chosen"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:534
+#: plugins/tools/basictools/kis_tool_brush.cc:535
 #, kde-format
 msgid "Scalable Distance"
 msgstr "Skaalattava etäisyys"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:549
-#: plugins/tools/basictools/kis_tool_line.cc:110
+#: plugins/tools/basictools/kis_tool_brush.cc:550
+#: plugins/tools/basictools/kis_tool_line.cc:112
 #, kde-format
 msgid "Snap to Assistants"
 msgstr "Kiinnity avustajiin"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:551
+#: plugins/tools/basictools/kis_tool_brush.cc:552
 #, kde-format
 msgid "You need to add Assistants before this tool will work."
 msgstr "Avustajia on ensin lisättävä, jotta tämä työkalu toimisi."
 
-#: plugins/tools/basictools/kis_tool_brush.cc:556
+#: plugins/tools/basictools/kis_tool_brush.cc:557
 #, kde-format
 msgid "Assistant Magnetism"
 msgstr "Avustajien vetovoima"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:562
+#: plugins/tools/basictools/kis_tool_brush.cc:563
 #, kde-format
 msgid "Magnetism:"
 msgstr "Magnetismi:"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:565
+#: plugins/tools/basictools/kis_tool_brush.cc:566
 #, kde-format
 msgid "Snap to Single Line"
 msgstr "Kiinnity yksittäiseen viivaan"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:568
+#: plugins/tools/basictools/kis_tool_brush.cc:569
 #, kde-format
 msgctxt "@info:tooltip"
 msgid ""
@@ -64102,13 +64102,13 @@ msgid ""
 "using the infinite assistants."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_brush.cc:573
-#: plugins/tools/basictools/kis_tool_line.cc:113
+#: plugins/tools/basictools/kis_tool_brush.cc:574
+#: plugins/tools/basictools/kis_tool_line.cc:115
 #, kde-format
 msgid "Snap Eraser"
 msgstr "Kiinnityksen pyyhin"
 
-#: plugins/tools/basictools/kis_tool_brush.cc:576
+#: plugins/tools/basictools/kis_tool_brush.cc:577
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
@@ -64130,7 +64130,7 @@ msgstr ""
 msgid "Color Sampler Tool"
 msgstr "Värivalitsintyökalu"
 
-#: plugins/tools/basictools/kis_tool_ellipse.cc:63
+#: plugins/tools/basictools/kis_tool_ellipse.cc:64
 msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr ""
@@ -64430,7 +64430,7 @@ msgctxt "the gradient will be dithered"
 msgid "Dither"
 msgstr "Muu"
 
-#: plugins/tools/basictools/kis_tool_gradient.h:107
+#: plugins/tools/basictools/kis_tool_gradient.h:106
 #, kde-format
 msgid "Gradient Tool"
 msgstr "Liukuvärityökalu"
@@ -64442,27 +64442,27 @@ msgstr ""
 "Piirrä viiva\n"
 "viivan piirto"
 
-#: plugins/tools/basictools/kis_tool_line.cc:101
+#: plugins/tools/basictools/kis_tool_line.cc:103
 #, fuzzy, kde-format
 msgid "Use sensors"
 msgstr "Väri"
 
-#: plugins/tools/basictools/kis_tool_line.cc:104
+#: plugins/tools/basictools/kis_tool_line.cc:106
 #, kde-format
 msgid "Show Preview"
 msgstr "Näytä esikatselu"
 
-#: plugins/tools/basictools/kis_tool_line.cc:107
+#: plugins/tools/basictools/kis_tool_line.cc:109
 #, kde-format
 msgid "Show Guideline"
 msgstr "Näytä apuviiva"
 
-#: plugins/tools/basictools/kis_tool_line.cc:445
+#: plugins/tools/basictools/kis_tool_line.cc:447
 #, kde-format
 msgid "Length: %1 px"
 msgstr "Pituus: %1 px"
 
-#: plugins/tools/basictools/kis_tool_line.cc:463
+#: plugins/tools/basictools/kis_tool_line.cc:465
 #, kde-format
 msgid ""
 "Alt+Drag will move the origin of the currently displayed line around, Shift"
@@ -64514,50 +64514,50 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Siirtotyökalu"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:50
+#: plugins/tools/basictools/kis_tool_multihand.cpp:51
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Monisivellinveto"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:450
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Symmetry"
 msgstr "Symmetria"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:451
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Peilaa"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:452
+#: plugins/tools/basictools/kis_tool_multihand.cpp:453
 #, kde-format
 msgid "Translate"
 msgstr "Käännä"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:453
+#: plugins/tools/basictools/kis_tool_multihand.cpp:454
 #, kde-format
 msgid "Snowflake"
 msgstr "Lumihiutale"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:455
 #, kde-format
 msgid "Copy Translate"
 msgstr "Kopioi käännös"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:456
 #, fuzzy, kde-format
 #| msgid "Copy Translate"
 msgid "Copy Translate at Intervals"
 msgstr "Kopioi käännös"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:566
+#: plugins/tools/basictools/kis_tool_multihand.cpp:567
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.h:97
+#: plugins/tools/basictools/kis_tool_multihand.h:99
 #, kde-format
 msgid "Multibrush Tool"
 msgstr "Monisivellintyökalu"
@@ -64567,7 +64567,7 @@ msgstr "Monisivellintyökalu"
 msgid "Pan Tool"
 msgstr "Panorointityökalu"
 
-#: plugins/tools/basictools/kis_tool_path.cc:142
+#: plugins/tools/basictools/kis_tool_path.cc:145
 msgctxt "(qtundo-format)"
 msgid "Draw Bezier Curve"
 msgstr ""
@@ -64579,7 +64579,7 @@ msgstr ""
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
 msgstr "Bézier-käyrätyökalu: Vaihto-napsautus päättää käyrän."
 
-#: plugins/tools/basictools/kis_tool_pencil.cc:130
+#: plugins/tools/basictools/kis_tool_pencil.cc:133
 msgctxt "(qtundo-format)"
 msgid "Draw Freehand Path"
 msgstr ""
@@ -64591,7 +64591,7 @@ msgstr ""
 msgid "Freehand Path Tool"
 msgstr "Vapaan käden polkutyökalu"
 
-#: plugins/tools/basictools/kis_tool_rectangle.cc:65
+#: plugins/tools/basictools/kis_tool_rectangle.cc:66
 msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr ""
@@ -65387,13 +65387,13 @@ msgid "Caps:"
 msgstr "Päät:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:129
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:277
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:278
 #, kde-format
 msgid "Mass:"
 msgstr "Massa:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:138
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:284
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:285
 #, kde-format
 msgid "Drag:"
 msgstr "Vastus:"
@@ -66895,17 +66895,17 @@ msgstr ""
 "Dynaaminen sivellinveto\n"
 "dynaaminen sivellinveto"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:293
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:294
 #, kde-format
 msgid "Fixed angle:"
 msgstr "Kiinteä kulma:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:314
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:315
 #, kde-format
 msgid "Initial width:"
 msgstr "Alkuleveys:"
 
-#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
+#: plugins/tools/tool_dyna/kis_tool_dyna.cpp:320
 #, kde-format
 msgid "Width range:"
 msgstr "Leveysalue:"
@@ -67234,7 +67234,7 @@ msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "Läpinäkyvä"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.cc:50
+#: plugins/tools/tool_polygon/kis_tool_polygon.cc:51
 msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr ""

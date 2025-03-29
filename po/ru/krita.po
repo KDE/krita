@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-28 01:58+0000\n"
+"POT-Creation-Date: 2025-03-29 01:55+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -23916,7 +23916,7 @@ msgstr "Локальные источники"
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
 #: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:580 libs/ui/KisPart.cpp:583
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36048,7 +36048,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "Новая группа %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:580
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36057,7 +36057,7 @@ msgstr ""
 "Не удалось создать документ из шаблона\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:583
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -42796,22 +42796,22 @@ msgstr "Пустой AutoKey"
 msgid "AutoKey Duplicate"
 msgstr "Дубликат AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Включить для сохранения времени воспроизведения."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Эффективная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Реальная частота кадров:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:542
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Кадров пропущено:\t%1%"

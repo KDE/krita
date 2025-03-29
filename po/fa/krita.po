@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-28 01:58+0000\n"
+"POT-Creation-Date: 2025-03-29 01:55+0000\n"
 "PO-Revision-Date: 2024-08-14 00:39+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
@@ -23708,7 +23708,7 @@ msgstr "پرونده‌های متن:"
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
 #: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:580 libs/ui/KisPart.cpp:583
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -35400,14 +35400,14 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "برنامه جدید %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:580
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
 "%1"
 msgstr "نتوانست برای ذخیره پرونده ایجاد کند"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:583
 #, fuzzy, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -41811,22 +41811,22 @@ msgstr ""
 msgid "AutoKey Duplicate"
 msgstr "تکثیر"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:542
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""

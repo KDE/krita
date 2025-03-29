@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-28 01:58+0000\n"
+"POT-Creation-Date: 2025-03-29 01:55+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23295,7 +23295,7 @@ msgstr "本地资源"
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
 #: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:580 libs/ui/KisPart.cpp:583
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -35038,7 +35038,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "新色块组 %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:580
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -35047,7 +35047,7 @@ msgstr ""
 "无法用模板新建图像\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:583
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -41563,22 +41563,22 @@ msgstr "自动关键帧 - 空白"
 msgid "AutoKey Duplicate"
 msgstr "自动关键帧 - 重复"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "用于在低性能环境下保持正常播放速度。"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "有效帧频：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "真实帧频：%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:542
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "跳过帧数：%1%"
@@ -44233,55 +44233,55 @@ msgstr "删除操作流程"
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr ""
+msgstr "字体大小 (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr ""
+msgstr "x 字高 (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr ""
+msgstr "大写字高 (cap)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr ""
+msgstr "比例字宽 (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Ideographic Advance (ic)"
-msgstr ""
+msgstr "表意字宽 (ic)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr ""
+msgstr "行高 (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Spaces (Sp)"
-msgstr ""
+msgstr "空格宽度 (Sp)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr ""
+msgstr "行单位 (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
 #, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
-msgstr ""
+msgstr "百分比 (%)"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
 #, kde-format
@@ -44293,25 +44293,25 @@ msgstr "光学大小"
 #, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr ""
+msgstr "空"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
 msgctxt "language, region, variant"
 msgid "%1, %2, variant: %3"
-msgstr ""
+msgstr "%1，%2，变体：%3"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
 #, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1，%2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #, kde-format
 msgctxt "language, variant"
 msgid "%1, variant: %3"
-msgstr ""
+msgstr "%1，变体：%3"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
 #, kde-format

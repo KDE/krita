@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-28 01:58+0000\n"
+"POT-Creation-Date: 2025-03-29 01:55+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -24505,7 +24505,7 @@ msgstr "로컬 리소스"
 #: libs/ui/KisMainWindow.cpp:1993 libs/ui/KisMainWindow.cpp:2002
 #: libs/ui/KisMainWindow.cpp:2141 libs/ui/KisMainWindow.cpp:2200
 #: libs/ui/KisMainWindow.cpp:2219 libs/ui/KisMainWindow.cpp:2844
-#: libs/ui/KisPart.cpp:579 libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:580 libs/ui/KisPart.cpp:583
 #: libs/ui/KisReferenceImage.cpp:176 libs/ui/KisRemoteFileFetcher.cpp:38
 #: libs/ui/KisRemoteFileFetcher.cpp:62 libs/ui/KisRemoteFileFetcher.cpp:89
 #: libs/ui/KisTemplateCreateDia.cpp:284 libs/ui/KisTemplateCreateDia.cpp:390
@@ -36652,7 +36652,7 @@ msgctxt "Default new group name"
 msgid "New Group %1"
 msgstr "새 그룹 %1"
 
-#: libs/ui/KisPart.cpp:579
+#: libs/ui/KisPart.cpp:580
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -36661,7 +36661,7 @@ msgstr ""
 "서식에서 문서를 만들 수 없음\n"
 "%1"
 
-#: libs/ui/KisPart.cpp:582
+#: libs/ui/KisPart.cpp:583
 #, kde-format
 msgid ""
 "Could not create document from template\n"
@@ -43349,22 +43349,22 @@ msgstr "AutoKey 공백"
 msgid "AutoKey Duplicate"
 msgstr "AutoKey 복제"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:532
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "재생 시간을 유지하려면 활성화하십시오."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:540
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "유효 FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:541
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "실제 FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:542
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "손실된 프레임:\t%1\\%"

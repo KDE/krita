@@ -671,7 +671,8 @@ qreal KisPaintInformation::tiltDirection(const KisPaintInformation& info, bool n
     }
 
     if (!qFuzzyIsNull(info.d->tiltDirectionOffset)) {
-        tiltDirection += kisDegreesToRadians(info.d->tiltDirectionOffset);
+        // Subtract the offset to get a counter-clockwise rotation
+        tiltDirection -= kisDegreesToRadians(info.d->tiltDirectionOffset);
         // ensure we stay in the -PI, PI range
         if (tiltDirection < -M_PI) {
             tiltDirection += 2 * M_PI;

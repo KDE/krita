@@ -215,7 +215,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KisSliderSpinBox" name="intTiltDirectionOffset" native="true">
+    <widget class="KisAngleSelector" name="tiltDirectionOffsetAngle" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -260,6 +260,12 @@
    <class>KisCurveWidget</class>
    <extends>QWidget</extends>
    <header>widgets/kis_curve_widget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisAngleSelector</class>
+   <extends>QWidget</extends>
+   <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

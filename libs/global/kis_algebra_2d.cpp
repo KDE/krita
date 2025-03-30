@@ -1562,77 +1562,15 @@ qreal pointToLineDistSquared(const QPointF &pt, const QLineF &line)
 }
 
 QList<QLineF> getParallelLines(const QLineF& line, const qreal distance) {
-    if (qFuzzyIsNull(line.length())) {
+
+    QPointF lineNormalVector = QPointF(line.dy(), -line.dx());
+    QLineF line1 = QLineF(movePointInTheDirection(line.p1(), lineNormalVector, distance), movePointInTheDirection(line.p2(), lineNormalVector, distance));
+    QLineF line2 = QLineF(movePointInTheDirection(line.p1(), -lineNormalVector, distance), movePointInTheDirection(line.p2(), -lineNormalVector, distance));
+
+    if (line1.isNull() || line2.isNull()) {
         return QList<QLineF>();
     }
-    if (qFuzzyIsNull(distance)) {
-        return QList<QLineF>() << line << line;
-    }
-    QPointF lineVector = line.p2() - line.p1();
-    //lineVector /= line.length();
-    // dist(P, l) = |Ax + By + C|/(sqrt(A^2 + B^2))
-    // dist(P, l) = |Vy*x - Vx*y + (p2x*p1y - p2y*p1x)|/(line.length())
-    // |Vy*x - Vx*y + M| = distance*sqrt(line.length())
-    // // that gives us two line equations:
-    // Vy*x - Vx*y + M +/- distance*sqrt(line.length()) = 0
-    // -> Vy*x = Vx*y - M +/- distance*sqrt(line.length()) = 0 => x = (Vx*y - N)/Vy
-    // -> Vx*y = Vy*x + M +/- distance*sqrt(line.length()) = 0 => y = (Vy*x + N)/Vx
-
-    // if Vy != 0:
-    // x = (Vx*y + N)/Vy // where N = M +/- distance*line.length()
-    // else:
-    // y = (Vy*x + N)/Vx // where N = M +/- distance*line.length()
-
-    qreal M = line.p2().x()*line.p1().y() - line.p2().y()*line.p1().x();
-    qreal N1 = M - distance*line.length();
-    qreal N2 = M + distance*line.length();
-
-    qreal Vx = lineVector.x();
-    qreal Vy = lineVector.y();
-
-    qCritical() << "Question was: " << ppVar(line) << ppVar(distance);
-    qCritical() << "Values: " << ppVar(lineVector) << ppVar(M) << ppVar(N1) << ppVar(N2) << ppVar(Vx) << ppVar(Vy);
-    qCritical() << "So in theory: dist(P, l) = |" << Vy << "*x - " << Vx << "*y + " << M << "|/line.length()";
-    qCritical() << "So in theory: dist(P, l)*line.length() = +/-" << Vy << "*x - " << Vx << "*y + " << M << "";
-
-
-    auto calculateSecondDimension = [](qreal dim1, qreal N, qreal V1, qreal V2) {
-        //(Vx*y + N)/Vy
-        //(Vy*x + N)/Vx
-        //(V2*dim1 + N)/V1
-        qCritical() << "Calculate second dimension, values: " << ppVar(dim1) << ppVar(N) << ppVar(V1) << ppVar(V2);
-        qCritical() << "Calculate second dimension, equation: (" << dim1 << "*" << V2 << " + " << N << ")/" << V1 <<  " = " << (dim1*V2 + N)/V1;
-
-        return (dim1*V2 + N)/V1;
-    };
-
-    QList<QLineF> responses;
-
-    if (lineVector.x() != 0) {
-        qCritical() << "Case 1.";
-        // y = (Vx*y + N)/Vx // where N = M +/- distance*sqrt(line.length())
-
-        qreal x1 = line.p1().x();
-        qreal x2 = line.p2().x();
-        //qreal y1 = (lineVector.y()*x1 + N1
-        responses << QLineF(x1, calculateSecondDimension(x1, N1, Vx, Vy), x2, calculateSecondDimension(x2, N1, Vx, Vy));
-        responses << QLineF(x1, calculateSecondDimension(x1, N2, Vx, Vy), x2, calculateSecondDimension(x2, N2, Vx, Vy));
-
-    } else { // Vx == 0
-
-        qCritical() << "Case 2.";
-        qreal y1 = line.p1().y();
-        qreal y2 = line.p2().y();
-        //qreal y1 = (lineVector.y()*x1 - N1
-        responses << QLineF(calculateSecondDimension(y1, -N1, Vy, Vx), y1, calculateSecondDimension(y2, -N1, Vy, Vx), y2);
-        responses << QLineF(calculateSecondDimension(y1, -N2, Vy, Vx), y1, calculateSecondDimension(y2, -N2, Vy, Vx), y2);
-    }
-
-    qCritical() << "Response 1: " << responses[0];
-    qCritical() << "Response 2: " << responses[1];
-
-
-    return responses;
+    return {line1, line2};
 }
 
 

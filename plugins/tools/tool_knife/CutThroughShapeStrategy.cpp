@@ -201,6 +201,8 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     QList<KoShape*> shapesToRemove;
 
+    QTransform booleanWorkaroundTransformInverted = booleanWorkaroundTransform.inverted();
+
     for (int i = 0; i < srcOutlines.size(); i++) {
 
         KoShape* referenceShape = m_allShapes[i];
@@ -221,11 +223,11 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;
 
-        QList<QPainterPath> paths;
-        paths << leftPath << rightPath;
+        QList<QPainterPath> bothSides;
+        bothSides << leftPath << rightPath;
 
 
-        Q_FOREACH(QPainterPath path, paths) {
+        Q_FOREACH(QPainterPath path, bothSides) {
             if (path.isEmpty()) {
                 continue;
             }
@@ -236,7 +238,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             path.closeSubpath();
             // this is needed because Qt linearize curves; this allows for a
             // "sane" linearization instead of a very blocky appearance
-            path = booleanWorkaroundTransform.inverted().map(path);
+            path = booleanWorkaroundTransformInverted.map(path);
             KoPathShape* shape = KoPathShape::createShapeFromPainterPath(path);
 
             if (shape->boundingRect().isEmpty()) {

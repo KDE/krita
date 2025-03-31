@@ -18,7 +18,7 @@ class KoSelection;
 class RemoveGutterStrategy : public KoInteractionStrategy
 {
 public:
-    RemoveGutterStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint);
+    RemoveGutterStrategy(KoToolBase *tool, KoSelection *selection, const QList<KoShape*> &shapes, QPointF startPoint);
     ~RemoveGutterStrategy() override;
 
     KUndo2Command *createCommand() override;
@@ -31,7 +31,10 @@ private:
     QPointF m_startPoint = QPointF();
     QPointF m_endPoint = QPointF();
     QRectF m_previousLineDirtyRect = QRectF();
+
+    QList<KoShape *> m_allShapes;
     QList<KoShape *> m_selectedShapes;
+
 };
 
 #endif // REMOVEGUTTERSTRATEGY_H

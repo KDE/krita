@@ -27,12 +27,13 @@
 
 
 
-RemoveGutterStrategy::RemoveGutterStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint)
+RemoveGutterStrategy::RemoveGutterStrategy(KoToolBase *tool, KoSelection *selection, const QList<KoShape *> &shapes, QPointF startPoint)
     : KoInteractionStrategy(tool)
     , m_startPoint(startPoint)
     , m_endPoint(startPoint)
 {
     m_selectedShapes = selection->selectedEditableShapes();
+    m_allShapes = shapes;
 }
 
 RemoveGutterStrategy::~RemoveGutterStrategy()
@@ -128,9 +129,15 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     //QRectF outlineRect;
 
-    if (m_selectedShapes.length() == 0) {
-        qCritical() << "No shapes are selected";
+    if (m_allShapes.length() == 0) {
+        qCritical() << "No shapes on the layer";
         return;
+    }
+
+    QList<bool> isSelected = QList<bool>();
+    isSelected.reserve(m_allShapes.length());
+    for (int i = 0; i < m_allShapes.length(); i++) {
+        isSelected.append(m_selectedShapes.contains(m_allShapes[i]));
     }
 
     QLineF mouseLine = QLineF(m_startPoint, m_endPoint);
@@ -152,8 +159,8 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QList<int> indexes;
     QList<int> indexesOutside;
 
-    for (int i = 0; i < m_selectedShapes.length(); i++) {
-        KoShape* shape = m_selectedShapes[i];
+    for (int i = 0; i < m_allShapes.length(); i++) {
+        KoShape* shape = m_allShapes[i];
         QPainterPath outlineHere =
             booleanWorkaroundTransform.map(
             shape->absoluteTransformation().map(
@@ -234,14 +241,14 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         newLineShape = booleanWorkaroundTransform.inverted().map(newLineShape);
         KoPathShape* newLineShapeToAdd = KoPathShape::createShapeFromPainterPath(newLineShape);
 
-        newLineShapeToAdd->setBackground(m_selectedShapes[0]->background());
-        newLineShapeToAdd->setStroke(m_selectedShapes[0]->stroke());
-        newLineShapeToAdd->setZIndex(m_selectedShapes[0]->zIndex() + 100);
+        newLineShapeToAdd->setBackground(m_allShapes[0]->background());
+        newLineShapeToAdd->setStroke(m_allShapes[0]->stroke());
+        newLineShapeToAdd->setZIndex(m_allShapes[0]->zIndex() + 100);
 
 
 
         KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes"));
-        tool()->canvas()->shapeController()->addShapeDirect(newLineShapeToAdd, m_selectedShapes[0]->parent(), cmd);
+        tool()->canvas()->shapeController()->addShapeDirect(newLineShapeToAdd, m_allShapes[0]->parent(), cmd);
         tool()->canvas()->addCommand(cmd);
 
         return;
@@ -268,7 +275,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     convertShapeToDebugArray(result);
     qCritical() << ppVar(result.toFillPolygon());
 
-    QList<KoShape*> resultShapes;
+    QList<KoShape*> resultSelectedShapes;
 
     qCritical() << "Indexes that are supposed to be left:";
     Q_FOREACH(int index, indexesOutside) {
@@ -276,11 +283,13 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
     qCritical() << "End.";
     qCritical() << "Indexes that compose the result shape: " << shapeOrigIndexes[0] << shapeOrigIndexes[1];
-    qCritical() << "All indexes are up to: " << m_selectedShapes.length();
+    qCritical() << "All indexes are up to: " << m_allShapes.length();
 
 
     Q_FOREACH(int index, indexesOutside) {
-        resultShapes << m_selectedShapes[index];
+        if (isSelected[index]) {
+            resultSelectedShapes << m_allShapes[index];
+        }
     }
 
     // since we can't really decide which style to use, we're gonna use the style of the first found shape.
@@ -301,7 +310,7 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     new KoKeepShapesSelectedCommand(m_selectedShapes, {}, tool()->canvas()->selectedShapesProxy(), false, cmd);
 
 
-    KoShape* referenceShape = m_selectedShapes[shapeOrigIndexes[0]];
+    KoShape* referenceShape = m_allShapes[shapeOrigIndexes[0]];
     KoPathShape* koPathReferenceShape = dynamic_cast<KoPathShape*>(referenceShape);
     resultShape->setBackground(referenceShape->background());
     resultShape->setStroke(referenceShape->stroke());
@@ -314,12 +323,14 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     KoShapeContainer *parent = referenceShape->parent();
     tool()->canvas()->shapeController()->addShapeDirect(resultShape, parent, cmd);
 
-    resultShapes << resultShape;
+    if (isSelected[shapeOrigIndexes[0]] || isSelected[shapeOrigIndexes[1]]) { // if either is selected
+        resultSelectedShapes << resultShape;
+    }
 
     QList<KoShape*> shapesToRemove;
-    shapesToRemove << m_selectedShapes[shapeOrigIndexes[0]];
+    shapesToRemove << m_allShapes[shapeOrigIndexes[0]];
     if (shapeOrigIndexes[0] != shapeOrigIndexes[1]) { // there is a good reason in the workflow to allow doing this operation on the same shape
-        shapesToRemove << m_selectedShapes[shapeOrigIndexes[1]];
+        shapesToRemove << m_allShapes[shapeOrigIndexes[1]];
     }
 
 
@@ -327,10 +338,9 @@ void RemoveGutterStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     tool()->canvas()->shapeController()->removeShapes(shapesToRemove, cmd);
 
-    new KoKeepShapesSelectedCommand({}, resultShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
+    new KoKeepShapesSelectedCommand({}, resultSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
 
 
-    // this line sometimes causes a segfault for some reason???
     tool()->canvas()->addCommand(cmd);
 
 

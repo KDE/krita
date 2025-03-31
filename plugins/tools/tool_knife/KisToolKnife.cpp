@@ -40,6 +40,8 @@
 #include "kis_paint_layer.h"
 #include "kis_algebra_2d.h"
 #include "kis_resources_snapshot.h"
+#include <KoSelection.h>
+#include <KoShapeManager.h>
 
 
 struct KisToolKnife::Private {
@@ -312,12 +314,12 @@ void KisToolKnife::mouseReleaseEvent(KoPointerEvent *event)
 KoInteractionStrategy *KisToolKnife::createStrategy(KoPointerEvent *event)
 {
     qCritical() << "Creating a strategy for " << event->point << event->buttons();
-    KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapes();
 
     if (m_d->optionsWidget->getToolMode() == KisToolKnifeOptionsWidget::ToolMode::AddGutter) {
         return new CutThroughShapeStrategy(this, canvas()->selectedShapesProxy()->selection(), event->point, m_d->optionsWidget->getCurrentWidthsConfig());
     } else {
-        return new RemoveGutterStrategy(this, selection, event->point);
+        return new RemoveGutterStrategy(this, canvas()->selectedShapesProxy()->selection(), shapes, event->point);
     }
 
     //return NULL;

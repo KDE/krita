@@ -125,7 +125,7 @@ TextPropertyBase {
                     from: 0;
                     to: 999 * multiplier;
 
-                    onValueChanged: converter.userValue = value;
+                    onValueChanged:if (enabled)  converter.userValue = value;
                     palette: lineHeightPalette.palette;
                 }
             }

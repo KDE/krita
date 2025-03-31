@@ -119,7 +119,7 @@ TextPropertyBase {
                 enabled: baselineShiftMode === KoSvgText.ShiftLengthPercentage;
                 from: -999 * multiplier;
                 to: 999 * multiplier;
-                onValueChanged: baselineShiftUnitCmb.userValue = value;
+                onValueChanged: if (enabled) baselineShiftUnitCmb.userValue = value;
                 palette: baselinePalette.palette;
             }
         }

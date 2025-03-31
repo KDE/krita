@@ -55,18 +55,74 @@ struct KisToolKnifeOptionsWidget::Private {
         return ui->customGapWidth->value();
     }
 
-    KisToolKnifeOptionsWidget::GapWidthType getWidthType()
+    KisToolKnifeOptionsWidget::GapWidthType getCurrentWidthType()
     {
         if (ui->thickGapWidthRadioButton->isChecked()) {
             return KisToolKnifeOptionsWidget::Thick;
         } else if (ui->thinGapWidthRadioButton->isChecked()) {
             return KisToolKnifeOptionsWidget::Thin;
-        } else if (ui->customWidthRadioButton->isChecked()) {
+        } else if (ui->specialGapWidthRadioButton->isChecked()) {
             return KisToolKnifeOptionsWidget::Special;
         } else { // if (ui->automaticGapWidthRadioButton->isChecked())
             return KisToolKnifeOptionsWidget::Automatic;
         }
     }
+
+    KisToolKnifeOptionsWidget::GapWidthType widthTypeFromString(QString type) {
+        if (type == "thick") {
+            return KisToolKnifeOptionsWidget::Thick;
+        } else if (type == "thin") {
+            return KisToolKnifeOptionsWidget::Thin;
+        } else if (type == "special") {
+            return KisToolKnifeOptionsWidget::Special;
+        } else if (type == "automatic") {
+            return KisToolKnifeOptionsWidget::Automatic;
+        } else {
+            // default
+            return KisToolKnifeOptionsWidget::Thick;
+        }
+    }
+
+    QString widthTypeToString(KisToolKnifeOptionsWidget::GapWidthType type) {
+        switch(type) {
+            case KisToolKnifeOptionsWidget::Thick:
+                return "thick";
+                break;
+            case KisToolKnifeOptionsWidget::Thin:
+                return "thin";
+                break;
+            case KisToolKnifeOptionsWidget::Special:
+                return "special";
+                break;
+            case KisToolKnifeOptionsWidget::Automatic:
+                return "automatic";
+                break;
+            default:
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, "thick");
+        }
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, "thick");
+        return "thick";
+    }
+
+
+
+    void setWidthTypeFromString(QString typeStr) {
+        KisToolKnifeOptionsWidget::GapWidthType type = widthTypeFromString(typeStr);
+        if (type == KisToolKnifeOptionsWidget::Thick) {
+            ui->thickGapWidthRadioButton->setChecked(true);
+        } else if (type == KisToolKnifeOptionsWidget::Thin) {
+            ui->thinGapWidthRadioButton->setChecked(true);
+        } else if (type == KisToolKnifeOptionsWidget::Special) {
+            ui->specialGapWidthRadioButton->setChecked(true);
+        } else if (type == KisToolKnifeOptionsWidget::Automatic) {
+            ui->automaticGapWidthRadioButton->setChecked(true);
+        } else {
+            // default
+            ui->thickGapWidthRadioButton->setChecked(true);
+        }
+    }
+
+
 
     qreal getWidthForType(KisToolKnifeOptionsWidget::GapWidthType type) {
         switch(type) {
@@ -98,15 +154,15 @@ struct KisToolKnifeOptionsWidget::Private {
     GutterWidthsConfig getCurrentWidthsConfig(KisToolKnifeOptionsWidget::GapWidthType type) {
         switch(type) {
             case KisToolKnifeOptionsWidget::Thick:
-                return GutterWidthsConfig(currentUnit(), resolution, getThickGapWidth(), ui->gutterWidthAngleSpinBox->value());
+                return GutterWidthsConfig(getCurrentUnit(), resolution, getThickGapWidth(), ui->gutterWidthAngleSpinBox->value());
             case KisToolKnifeOptionsWidget::Thin:
-                return GutterWidthsConfig(currentUnit(), resolution, getThinGapWidth(), ui->gutterWidthAngleSpinBox->value());
+                return GutterWidthsConfig(getCurrentUnit(), resolution, getThinGapWidth(), ui->gutterWidthAngleSpinBox->value());
             case KisToolKnifeOptionsWidget::Special:
-                return GutterWidthsConfig(currentUnit(), resolution, getSpecialGapWidth(), ui->gutterWidthAngleSpinBox->value());
+                return GutterWidthsConfig(getCurrentUnit(), resolution, getSpecialGapWidth(), ui->gutterWidthAngleSpinBox->value());
             case KisToolKnifeOptionsWidget::Automatic:
-                return GutterWidthsConfig(currentUnit(), resolution, getWidthHorizontal(), getWidthVertical(), getWidthDiagonal(), ui->gutterWidthAngleSpinBox->value());
+                return GutterWidthsConfig(getCurrentUnit(), resolution, getWidthHorizontal(), getWidthVertical(), getWidthDiagonal(), ui->gutterWidthAngleSpinBox->value());
             default:
-                return GutterWidthsConfig(currentUnit(), resolution, getSpecialGapWidth(), ui->gutterWidthAngleSpinBox->value());
+                return GutterWidthsConfig(getCurrentUnit(), resolution, getSpecialGapWidth(), ui->gutterWidthAngleSpinBox->value());
         }
     }
 
@@ -125,16 +181,23 @@ struct KisToolKnifeOptionsWidget::Private {
         }
     }
 
-    KoUnit currentUnit() {
+    KoUnit getCurrentUnit() {
         return KoUnit::fromSymbol(ui->thickGapWidth->suffix().trimmed());
     }
 
     void setUnit(QString unit) {
+        if (ui->unitsCombobox->currentData() != unit) {
+            int index = ui->unitsCombobox->findData(unit);
+            if (index != -1) {
+                ui->unitsCombobox->setCurrentIndex(index);
+            }
+        }
 
         KoUnit unitBefore = KoUnit::fromSymbol(ui->thickGapWidth->suffix().trimmed());
-        KoUnit unitNow = KoUnit::fromSymbol(unit.trimmed());
+        bool success;
+        KoUnit unitNow = KoUnit::fromSymbol(unit.trimmed(), &success);
 
-        if (unitNow.type() == unitBefore.type()) {
+        if (!success || unit.trimmed() == "" || unitNow.type() == unitBefore.type()) {
             return;
         }
 
@@ -148,9 +211,61 @@ struct KisToolKnifeOptionsWidget::Private {
 
     }
 
-    void readFromConfig(QString toolId) {
-        //
+    void setTypeToCombobox(KisToolKnifeOptionsWidget::GapWidthType type, QComboBox* combobox) {
+        int index = combobox->findData(type);
+        if (index >= 0) {
+            combobox->setCurrentIndex(index);
+        }
     }
+
+    void readFromConfig(QString groupId) {
+
+        KConfigGroup configGroup = KSharedConfig::openConfig()->group(groupId);
+
+        QString unitSymbol = configGroup.readEntry("gutter_unit_symbol", "px");
+        bool conversionSuccess;
+        KoUnit::fromSymbol(unitSymbol, &conversionSuccess);
+        if (!conversionSuccess) {
+            unitSymbol = "px";
+        }
+        setUnit(unitSymbol);
+
+        setWidthTypeFromString(configGroup.readEntry("current_gutter_width_type", "thick"));
+
+        ui->thickGapWidth->setValue(configGroup.readEntry("thick_gutter_width", 40.0f));
+        ui->thinGapWidth->setValue(configGroup.readEntry("thin_gutter_width", 15.0f));
+        ui->customGapWidth->setValue(configGroup.readEntry("special_gutter_width", 70.0f));
+
+        ui->gutterWidthAngleSpinBox->setValue(configGroup.readEntry("automatic_gutter_angle", 2.0f));
+
+        KisToolKnifeOptionsWidget::GapWidthType horizontalType = widthTypeFromString(configGroup.readEntry("automatic_horizontal_type", "thick"));
+        KisToolKnifeOptionsWidget::GapWidthType verticalType = widthTypeFromString(configGroup.readEntry("automatic_vertical_type", "thin"));
+        KisToolKnifeOptionsWidget::GapWidthType diagonalType = widthTypeFromString(configGroup.readEntry("automatic_diagonal_type", "thin"));
+
+        setTypeToCombobox(horizontalType, ui->automaticHorizontalCombobox);
+        setTypeToCombobox(verticalType, ui->automaticVerticalCombobox);
+        setTypeToCombobox(diagonalType, ui->automaticDiagonalCombobox);
+
+    }
+
+    void writeToConfig(QString groupId) {
+
+        KConfigGroup configGroup = KSharedConfig::openConfig()->group(groupId);
+
+        configGroup.writeEntry("gutter_unit_symbol", getCurrentUnit().symbol());
+        configGroup.writeEntry("current_gutter_width_type", widthTypeToString(getCurrentWidthType()));
+
+        configGroup.writeEntry("thick_gutter_width", ui->thickGapWidth->value());
+        configGroup.writeEntry("thin_gutter_width", ui->thinGapWidth->value());
+        configGroup.writeEntry("special_gutter_width", ui->customGapWidth->value());
+
+        configGroup.writeEntry("automatic_gutter_angle", ui->gutterWidthAngleSpinBox->value());
+
+        configGroup.writeEntry("automatic_horizontal_type", widthTypeToString(ui->automaticHorizontalCombobox->currentData().value<KisToolKnifeOptionsWidget::GapWidthType>()));
+        configGroup.writeEntry("automatic_vertical_type", widthTypeToString(ui->automaticVerticalCombobox->currentData().value<KisToolKnifeOptionsWidget::GapWidthType>()));
+        configGroup.writeEntry("automatic_diagonal_type", widthTypeToString(ui->automaticDiagonalCombobox->currentData().value<KisToolKnifeOptionsWidget::GapWidthType>()));
+    }
+
 };
 
 KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider */*provider*/, QWidget *parent, QString toolId, qreal resolution)
@@ -181,8 +296,8 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     m_d->buttonModeRemoveGutter->setIconSize(QSize(28, 28));
     m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
     m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
-    m_d->ui->unitsCombobox->addItem(i18n("Pixels"), QVariant(" px"));
-    m_d->ui->unitsCombobox->addItem(i18n("Millimeters"), QVariant(" mm"));
+    m_d->ui->unitsCombobox->addItem(i18n("Pixels"), QVariant("px"));
+    m_d->ui->unitsCombobox->addItem(i18n("Millimeters"), QVariant("mm"));
 
     m_d->ui->automaticHorizontalCombobox->addItem(i18nc("Thick type of gutter (in comics); keep consistent with the label in the GUI", "Thick"), QVariant(KisToolKnifeOptionsWidget::Thick));
     m_d->ui->automaticHorizontalCombobox->addItem(i18nc("Thin type of gutter (in comics); keep consistent with the label in the GUI", "Thin"), QVariant(KisToolKnifeOptionsWidget::Thin));
@@ -208,13 +323,14 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
 
 KisToolKnifeOptionsWidget::~KisToolKnifeOptionsWidget()
 {
+    m_d->writeToConfig(m_d->toolId);
     delete m_d->ui;
     m_d->ui = nullptr;
 }
 
 GutterWidthsConfig KisToolKnifeOptionsWidget::getCurrentWidthsConfig()
 {
-    return m_d->getCurrentWidthsConfig(m_d->getWidthType());
+    return m_d->getCurrentWidthsConfig(m_d->getCurrentWidthType());
 }
 
 KisToolKnifeOptionsWidget::ToolMode KisToolKnifeOptionsWidget::getToolMode()

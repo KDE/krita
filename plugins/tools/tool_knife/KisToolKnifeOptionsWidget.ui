@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QRadioButton" name="customWidthRadioButton">
+      <widget class="QRadioButton" name="specialGapWidthRadioButton">
        <property name="text">
         <string>Special gap:</string>
        </property>
@@ -139,7 +139,7 @@
       </widget>
      </item>
      <item row="4" column="0">
-      <widget class="QRadioButton" name="radioButton">
+      <widget class="QRadioButton" name="automaticGapWidthRadioButton">
        <property name="text">
         <string>Automatic</string>
        </property>

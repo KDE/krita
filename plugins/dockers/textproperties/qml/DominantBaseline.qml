@@ -66,7 +66,7 @@ TextPropertyBase {
                 {text: i18nc("@label:inlistbox", "Central"), value: KoSvgText.BaselineCentral, icon: "qrc:///baseline-ideo-embox-horizontal-center.svg",
                     toolTip: i18nc("@info:tooltip", "Align to the ideographic em box center.")},
                 {text: i18nc("@label:inlistbox", "Hanging"), value: KoSvgText.BaselineHanging, icon: "qrc:///baseline-hanging.svg",
-                    toolTip: i18nc("@info:tooltip", "Align to the headstroke of north-brahmic scripts.")},
+                    toolTip: i18nc("@info:tooltip", "Align to the headstroke as used by North-Brahmic scripts.")},
                 {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.BaselineMiddle, icon: "qrc:///baseline-x-middle.svg",
                     toolTip: i18nc("@info:tooltip", "Align to the center between the alphabetic baseline and x-height when laying out horizontally, in vertical this is the central baseline.")},
                 {text: i18nc("@label:inlistbox", "Mathematical"), value: KoSvgText.BaselineMathematical, icon: "qrc:///baseline-math.svg",

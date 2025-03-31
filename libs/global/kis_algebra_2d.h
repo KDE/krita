@@ -318,6 +318,15 @@ createRectFromCorners(Point corner1, Point corner2)
     return typename PointTypeTraits<Point>::rect_type(qMin(corner1.x(), corner2.x()), qMin(corner1.y(), corner2.y()), qAbs(corner1.x() - corner2.x()), qAbs(corner1.y() - corner2.y()));
 }
 
+inline QRectF createRectFromCorners(QLineF line)
+{
+    QPointF a = line.p1();
+    QPointF b = line.p2();
+    return createRectFromCorners(a, b);
+}
+
+
+
 template <class Size>
 auto maxDimension(Size size) -> decltype(size.width()) {
     return qMax(size.width(), size.height());

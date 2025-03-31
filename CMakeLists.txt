@@ -154,16 +154,47 @@ message(STATUS "Krita version: ${KRITA_VERSION_STRING}")
 
 # Define the generic version of the Krita libraries here
 # This makes it easy to advance it when the next Krita release comes.
-# 14 was the last GENERIC_KRITA_LIB_VERSION_MAJOR of the previous Krita series
-# (2.x) so we're starting with 15 in 3.x series, 16 in 4.x series, 17 in 5.x
-# and 18 in 6.x
-if(KRITA_STABLE_VERSION_MAJOR EQUAL 5)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
-elseif(KRITA_STABLE_VERSION_MAJOR EQUAL 6)
-    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 18")
-else()
-    # let's make sure we won't forget to update the "16"
-    message(FATAL_ERROR "Reminder: please update offset == 16 used to compute GENERIC_KRITA_LIB_VERSION_MAJOR to something bigger")
+#
+# In general Krita does **not** guarantee any binary compatibility over C++
+# libraries between the releases, so there is not reason to update SOVERSION
+# too often.
+#
+# The only reason why we use SOVERSION is to allow multiple **major** versions
+# of Krita to coexist in the same installation, e.g. Krita 5 and Krita 6.
+#
+# We don't support simultaneous installations of, say, Krita 5.1 and Krita 5.2
+# (one should use AppImage for things like that)
+#
+# Historical note:
+# 
+# We had a mess with versions previously, we used to increase the versions with
+# every minor release only. It caused multiple problems: 1) the soversions of 
+# different major releases did overlap; 2) the soversions of different bugfix
+# releases were the same, even tough they were not binary compatible.
+#
+# In Krita 6 we just stop updating SOVERSION on minor releases and declare that
+# we have no binary compatibility between releases.
+#
+# Krita 5.0: SOVERSION -> 17
+# Krita 5.1: SOVERSION -> 18
+# Krita 5.2: SOVERSION -> 19
+# Krita 5.3: SOVERSION -> 20
+#
+# Krita 6.x: SOVERSION -> 21
+# Krita 7.x: SOVERSION -> 22
+#
+if(KRITA_STABLE_VERSION_MAJOR EQUAL 5) 
+    # In Krita 5 days we increased the SOVERSION with every minor release
+    if(KRITA_STABLE_VERSION_MINOR LESS_EQUAL 3)
+        math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MINOR} + 17")
+    else()
+        set(GENERIC_KRITA_LIB_VERSION_MAJOR 20)
+    endif()
+elseif(KRITA_STABLE_VERSION_MAJOR GREATER_EQUAL 6)
+    # In Krita 6 days we increased the SOVERSION only with every **major** release.
+    # We don't guarantee any ABI compatibility between the releases, so there is no
+    # use increasing SOVERSION too often
+    math(EXPR GENERIC_KRITA_LIB_VERSION_MAJOR "${KRITA_STABLE_VERSION_MAJOR} - 6 + 21")
 endif()
 
 set(GENERIC_KRITA_LIB_VERSION "${GENERIC_KRITA_LIB_VERSION_MAJOR}.0.0")

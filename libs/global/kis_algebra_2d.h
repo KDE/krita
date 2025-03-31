@@ -624,7 +624,7 @@ public:
     VectorPath reversed() const;
 
 
-    bool fuzzyCompareCyclic(const VectorPath& path, qreal eps = 0.00001f) const;
+    bool fuzzyComparePointsCyclic(const VectorPath& path, qreal eps = 0.0f) const;
 
 
     QPainterPath asPainterPath() const;

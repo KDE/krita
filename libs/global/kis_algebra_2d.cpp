@@ -2610,10 +2610,58 @@ VectorPath VectorPath::reversed() const
     return VectorPath(response);
 }
 
-bool VectorPath::fuzzyCompareCyclic(const VectorPath &path, qreal eps) const
+bool VectorPath::fuzzyComparePointsCyclic(const VectorPath &path, qreal eps) const
 {
-    //
-    return true;
+    using VPoint = VectorPath::VectorPathPoint;
+
+    if (segmentsCount() != path.segmentsCount()) {
+        return false;
+    }
+
+    bool fuzzy = qFuzzyIsNull(eps);
+
+    auto comparePoints = [fuzzy, eps] (QPointF left, QPointF right) {
+        if (fuzzy) {
+            return fuzzyPointCompare(left, right);
+        } else {
+            return fuzzyPointCompare(left, right, eps);
+        }
+    };
+
+
+    VPoint leftStart = path.pointAt(0);
+    QList<int> rightStartingPoints;
+    for (int i = 0; i < path.pointsCount(); i++) {
+        if (comparePoints(leftStart.endPoint, path.pointAt(i).endPoint)) {
+            rightStartingPoints << i;
+        }
+    }
+
+    Q_FOREACH(int startId, rightStartingPoints) {
+        bool isEqual = true;
+        for (int i = 0; i < pointsCount(); i++) {
+            int rightId = wrapValue(i + startId, 0, pointsCount());
+            if (!comparePoints(pointAt(i).endPoint, path.pointAt(rightId).endPoint)) {
+                isEqual = false;
+                break;
+            }
+        }
+        if (isEqual) {
+            return true;
+        }
+        for (int i = 0; i < pointsCount(); i++) {
+            int rightId = wrapValue(startId - i, 0, pointsCount());
+            if (!comparePoints(pointAt(i).endPoint, path.pointAt(rightId).endPoint)) {
+                isEqual = false;
+                break;
+            }
+        }
+        if (isEqual) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 QPainterPath VectorPath::asPainterPath() const

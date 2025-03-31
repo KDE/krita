@@ -676,11 +676,11 @@ void KoSvgTextShape::Private::relayout()
                 KoSvgText::CharTransformation transform = resolvedTransforms[i];
                 CharacterResult charResult = result[i];
                 if (transform.xPos) {
-                    const qreal delta = transform.dxPos ? *transform.dxPos : 0.0;
+                    const qreal delta = charResult.baselineOffset.x() + (transform.dxPos ? *transform.dxPos : 0.0);
                     shift.setX(*transform.xPos + (delta - charResult.finalPosition.x()));
                 }
                 if (transform.yPos) {
-                    const qreal delta = transform.dyPos ? *transform.dyPos : 0.0;
+                    const qreal delta = charResult.baselineOffset.y() + (transform.dyPos ? *transform.dyPos : 0.0);
                     shift.setY(*transform.yPos + (delta - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
@@ -1123,6 +1123,10 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     bool applyGlyphAlignment = KisForestDetail::childBegin(parent) == KisForestDetail::childEnd(parent);
     const int boxOffset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
     const QPointF shift = isHorizontal? QPointF(0, (boxOffset) * -freetypePixelsToPt): QPointF((boxOffset) * freetypePixelsToPt, 0);
+    if (baselineShiftMode == KoSvgText::ShiftSuper || baselineShiftMode == KoSvgText::ShiftSub) {
+        // We need to remove the additional alignment shift to ensure that super and sub shifts don't get too dramatic.
+        baselineShiftTotal -= shift;
+    }
 
     /*
      * The actual alignment process.
@@ -1146,8 +1150,8 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
             result[k].translateOrigin(newOrigin);
             result[k].dominantBaselineOffset = uniqueShift;
         }
-        result[k].baselineOffset += shift;
-        result[k].baselineOffset += (baselineShiftTotal);
+        result[k].dominantBaselineOffset += shift;
+        result[k].baselineOffset += baselineShiftTotal;
     }
 
     currentIndex = j;

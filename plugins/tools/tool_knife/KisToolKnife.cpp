@@ -317,7 +317,7 @@ KoInteractionStrategy *KisToolKnife::createStrategy(KoPointerEvent *event)
     QList<KoShape*> shapes = canvas()->shapeManager()->shapes();
 
     if (m_d->optionsWidget->getToolMode() == KisToolKnifeOptionsWidget::ToolMode::AddGutter) {
-        return new CutThroughShapeStrategy(this, canvas()->selectedShapesProxy()->selection(), event->point, m_d->optionsWidget->getCurrentWidthsConfig());
+        return new CutThroughShapeStrategy(this, canvas()->selectedShapesProxy()->selection(), shapes, event->point, m_d->optionsWidget->getCurrentWidthsConfig());
     } else {
         return new RemoveGutterStrategy(this, canvas()->selectedShapesProxy()->selection(), shapes, event->point);
     }

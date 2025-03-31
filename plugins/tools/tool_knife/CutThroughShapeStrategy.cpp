@@ -26,7 +26,7 @@
 #include <QtMath>
 
 
-CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, const GutterWidthsConfig &width)
+CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, const QList<KoShape *> &shapes, QPointF startPoint, const GutterWidthsConfig &width)
     : KoInteractionStrategy(tool)
     , m_startPoint(startPoint)
     , m_endPoint(startPoint)
@@ -36,6 +36,8 @@ CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *
 
     m_selectedShapes = selection->selectedEditableShapes();
     qCritical() << "Amount of selected shapes: " << m_selectedShapes.length();
+    m_allShapes = shapes;
+    qCritical() << "Amount of all shapes: " << m_allShapes.length();
 }
 
 CutThroughShapeStrategy::~CutThroughShapeStrategy()
@@ -107,12 +109,12 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QList<QPainterPath> srcOutlines;
     QRectF outlineRect;
 
-    if (m_selectedShapes.length() == 0) {
-        qCritical() << "No shapes are selected";
+    if (m_allShapes.length() == 0) {
+        qCritical() << "No shapes are available";
         return;
     }
 
-    Q_FOREACH (KoShape *shape, m_selectedShapes) {
+    Q_FOREACH (KoShape *shape, m_allShapes) {
 
         QPainterPath outlineHere =
             booleanWorkaroundTransform.map(
@@ -132,7 +134,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QRectF outlineRectBigger = kisGrowRect(outlineRect, 10);
     QRect outlineRectBiggerInt = outlineRectBigger.toRect();
 
-    // TODO: two lines, for both sides of the gap
     QLineF gapLine = QLineF(m_startPoint, m_endPoint);
     qreal eps = 0.0000001;
     if (gapLine.length() < eps) {
@@ -177,7 +178,7 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         KIS_SAFE_ASSERT_RECOVER_RETURN(gapLine.length() != 0 && gapLines[0].length() != 0 && gapLines[1].length() != 0 && "Original gap lines shouldn't be empty at this point");
         // looks like *all* shapes need to be cut out
 
-        tool()->canvas()->shapeController()->removeShapes(m_selectedShapes, cmd);
+        tool()->canvas()->shapeController()->removeShapes(m_allShapes, cmd);
         tool()->canvas()->addCommand(cmd);
         return;
     }
@@ -202,15 +203,18 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     for (int i = 0; i < srcOutlines.size(); i++) {
 
-        KoShape* referenceShape = m_selectedShapes[i];
+        KoShape* referenceShape = m_allShapes[i];
+        bool wasSelected = m_selectedShapes.contains(referenceShape);
 
         if ((srcOutlines[i].boundingRect() & leftOpposite.boundingRect()).isEmpty()
                 || (srcOutlines[i].boundingRect() & rightOpposite.boundingRect()).isEmpty()) {
             // there is nothing on one side
             // everything is on the other, far away from the gap line
-            // it just makes it a bit fast when there is a whole lot of shapes
+            // it just makes it a bit faster when there is a whole lot of shapes
 
-            newSelectedShapes << referenceShape;
+            if (wasSelected) {
+                newSelectedShapes << referenceShape;
+            }
             continue;
         }
 
@@ -246,13 +250,16 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             KoShapeContainer *parent = referenceShape->parent();
             tool()->canvas()->shapeController()->addShapeDirect(shape, parent, cmd);
 
-            newSelectedShapes << shape;
+            if (wasSelected) {
+                newSelectedShapes << shape;
+            }
+
 
         }
 
         // that happens no matter if there was any non-empty shape
         // because if there is none, maybe they just were underneath the gap
-        shapesToRemove << m_selectedShapes[i];
+        shapesToRemove << m_allShapes[i];
 
     }
 
@@ -260,7 +267,6 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     new KoKeepShapesSelectedCommand({}, newSelectedShapes, tool()->canvas()->selectedShapesProxy(), true, cmd);
 
 
-    // this line sometimes causes a segfault for some reason???
     tool()->canvas()->addCommand(cmd);
 
 

@@ -28,6 +28,7 @@
 #ifdef Q_OS_WIN
 #include "KisWindowsPackageUtils.h"
 #include <windows.h>
+#include <versionhelpers.h>
 #endif
 
 #ifdef Q_OS_ANDROID
@@ -148,6 +149,8 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
 
     systemInfo.append("\n  Appimage build: ").append(qEnvironmentVariableIsSet("APPIMAGE") ? "Yes" : "No");
+#elif defined(Q_OS_WIN)
+    systemInfo.append("\n  Result of IsWindows10OrGreater(): ").append(IsWindows10OrGreater() ? "Yes" : "No");
 #endif
     systemInfo.append("\n\n");
 

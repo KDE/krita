@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-29 01:55+0000\n"
-"PO-Revision-Date: 2025-02-12 07:16+0100\n"
+"PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -16464,20 +16464,16 @@ msgstr ""
 "plu kongruos kun Krita 4.x"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_mix.kpp"
-#| msgid "Basic mix"
+#, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "Baza miksaĵo"
+msgstr "Baza latina"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Latin-1 Suplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
 #, kde-format
@@ -16492,11 +16488,10 @@ msgid "Latin Extended-B"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr "Etendo"
+msgstr "IPA-Etendoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
 #, kde-format
@@ -16565,11 +16560,10 @@ msgid "Thaana"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:37
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgctxt "@title"
 msgid "NKo"
-msgstr "Ne"
+msgstr "Nko"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:38
 #, kde-format
@@ -16620,12 +16614,10 @@ msgid "Gurmukhi"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - category Quadratic"
-#| msgid "Quadratic"
+#, kde-format
 msgctxt "@title"
 msgid "Gujarati"
-msgstr "Kvadratika"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:47
 #, kde-format
@@ -16670,11 +16662,10 @@ msgid "Thai"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
-#, fuzzy, kde-format
-#| msgid "Lasso"
+#, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr "Laso"
+msgstr "Lao"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
 #, kde-format
@@ -16737,11 +16728,10 @@ msgid "Runic"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:65
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr "Dialogo"
+msgstr "Tagaloga"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
@@ -16792,11 +16782,10 @@ msgid "Tai Le"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
-#, fuzzy, kde-format
-#| msgid "New Text"
+#, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr "Nova Teksto"
+msgstr "Nova Tai Lue"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, kde-format
@@ -16805,12 +16794,10 @@ msgid "Khmer Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "Category of brush engines"
-#| msgid "Brush engines"
+#, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr "Penikmotoroj"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
@@ -16825,11 +16812,10 @@ msgid "Combining Diacritical Marks Extended"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
-#, fuzzy, kde-format
-#| msgid "BSpline"
+#, kde-format
 msgctxt "@title"
 msgid "Balinese"
-msgstr "BSpline"
+msgstr "Balinesa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:80
 #, kde-format
@@ -16862,12 +16848,10 @@ msgid "Cyrillic Extended-C"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr "OpenEXR (Plilongigita)"
+msgstr "Kartvela (Etendita)"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
 #, kde-format
@@ -16876,19 +16860,16 @@ msgid "Sundanese Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:87
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr "Etendo"
+msgstr "Vedaj Etendoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "Snap Etendo"
+msgstr "Fonetikaj Etendoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
 #, kde-format
@@ -16909,16 +16890,13 @@ msgid "Latin Extended Additional"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Greek Extended"
-msgstr "OpenEXR (Plilongigita)"
+msgstr "Greka Etendita"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgid "General settings"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
 msgstr "Ĝeneralaj Agordoj"
@@ -16930,11 +16908,10 @@ msgid "Superscripts and Subscripts"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:95
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr "Aktuala kolormoduso:"
+msgstr "Valutaj Simboloj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
 #, kde-format
@@ -16949,40 +16926,34 @@ msgid "Letterlike Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "@label:spinbox"
-#| msgid "Number of frames:"
+#, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "Nombro da kadroj:"
+msgstr "Nombroformoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgctxt "@title"
 msgid "Arrows"
-msgstr "Sago"
+msgstr "Sagoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
-#| msgid "Logical Operations"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr "Logikaj Operacioj"
+msgstr "Matematikaj Operacioj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Technical"
-msgstr "Diversaj"
+msgstr "Diversaj Teknikaj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:102
-#, fuzzy, kde-format
-#| msgid "Could not load picture."
+#, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr "Ne eblis legi la bildon."
+msgstr "Kontrolbildoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
@@ -16997,34 +16968,28 @@ msgid "Enclosed Alphanumerics"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "drawing"
+#, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "desegno"
+msgstr "Skatoldesegnado"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
-#, fuzzy, kde-format
-#| msgid "- Elements"
+#, kde-format
 msgctxt "@title"
 msgid "Block Elements"
-msgstr "- Elementoj"
+msgstr "Blok-Elementoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "Geometria Mezo"
+msgstr "Geometriaj Formoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols"
-msgstr "Diversaj"
+msgstr "Diversaj Simboloj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:109
 #, kde-format
@@ -17045,11 +17010,10 @@ msgid "Supplemental Arrows-A"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
-#, fuzzy, kde-format
-#| msgid "Fill Patterns"
+#, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr "Plenigŝablonoj"
+msgstr "Braille-Ŝablonoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
@@ -17076,11 +17040,10 @@ msgid "Miscellaneous Symbols and Arrows"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:117
-#, fuzzy, kde-format
-#| msgid "Politics"
+#, kde-format
 msgctxt "@title"
 msgid "Glagolitic"
-msgstr "Politiko"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:118
 #, kde-format
@@ -17185,11 +17148,10 @@ msgid "Bopomofo Extended"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:135
-#, fuzzy, kde-format
-#| msgid "Key Strokes"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "Klavopremoj"
+msgstr "CJK-Strekoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
@@ -17234,11 +17196,10 @@ msgid "Yi Syllables"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr "Radiala"
+msgstr "Yi-Radikaloj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
@@ -17265,11 +17226,10 @@ msgid "Bamum"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
-#, fuzzy, kde-format
-#| msgid "Modifiers"
+#, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "Modifiloj"
+msgstr "Modifiltonaj Literoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
 #, kde-format
@@ -17374,12 +17334,10 @@ msgid "Latin Extended-E"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr "Ŝanĝi Segmenton"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
@@ -17406,11 +17364,10 @@ msgid "High Surrogates"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
-#, fuzzy, kde-format
-#| msgid "High Pressure"
+#, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "Alta Premo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
@@ -17443,26 +17400,22 @@ msgid "Arabic Presentation Forms-A"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
-#, fuzzy, kde-format
-#| msgid "Artistic Color Selector"
+#, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "Arta Koloro-Selektilo"
+msgstr "Elektiloj de Variado"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "Vertikala limo:"
+msgstr "Vertikalaj Formoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Combine Normal Map"
-#| msgid "Combine Normal Map"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "Kombini Normalan Mapon"
+msgstr "Kombinaj Duonmarkoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
@@ -17489,34 +17442,28 @@ msgid "Halfwidth and Fullwidth Forms"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr "Plenigi Speciala"
+msgstr "Specialoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Linear Burn"
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "Lineara Brulvundo"
+msgstr "Lineara B-Silabaro"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Linear Burn"
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "Lineara Brulvundo"
+msgstr "Linearaj B-Ideogramoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "Nombro"
+msgstr "Egeaj Nombroj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
@@ -17543,11 +17490,10 @@ msgid "Lycian"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgid "Caricature"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "Karikaturo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
@@ -17556,17 +17502,16 @@ msgid "Coptic Epact Numbers"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "Kursiva"
+msgstr "Malnova Itala"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr ""
+msgstr "Gotika"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
@@ -17575,11 +17520,10 @@ msgid "Old Permic"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "Logaritma"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
@@ -17588,11 +17532,10 @@ msgid "Old Persian"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
-#, fuzzy, kde-format
-#| msgid "Deselect"
+#, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "Malelekti"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
@@ -17637,12 +17580,10 @@ msgid "Todhri"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "Lineara"
+msgstr "Lineara A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
@@ -17735,11 +17676,10 @@ msgid "Avestan"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "Pravalorizo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
@@ -17856,11 +17796,10 @@ msgid "Mahajani"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
-#, fuzzy, kde-format
-#| msgid "&Shared area"
+#, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr "&Komuna areo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
@@ -17875,12 +17814,10 @@ msgid "Khojki"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Multiply"
-#| msgid "Multiply"
+#, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "Multobligi"
+msgstr "Multani"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
@@ -17920,10 +17857,10 @@ msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
 #, fuzzy, kde-format
-#| msgid "Modified:"
+#| msgid "Modi"
 msgctxt "@title"
 msgid "Modi"
-msgstr "Modifita:"
+msgstr "Modi"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
@@ -18016,11 +17953,10 @@ msgid "Bhaiksuki"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr "Serĉi"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
@@ -18059,12 +17995,10 @@ msgid "Tamil Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "Uniform distribution in spray engine"
-#| msgid "Uniform"
+#, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr "Uniformo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
@@ -18121,12 +18055,10 @@ msgid "Bamum Supplement"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus - distance range"
-#| msgid "Macro"
+#, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr "Makroo"
+msgstr "Mro"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
@@ -18177,58 +18109,46 @@ msgid "Tangut"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr "Komponantoj:"
+msgstr "Tangut-Komponantoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
-#, fuzzy, kde-format
-#| msgid "Enable Script"
+#, kde-format
 msgctxt "@title"
 msgid "Khitan Small Script"
-msgstr "Ebligi Skripton"
+msgstr "Khitan-Etskripto"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "Ŝanĝi Segmenton"
+msgstr "Tangut-Suplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr "OpenEXR (Plilongigita)"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "Ŝanĝi Segmenton"
+msgstr "Kana-Suplemento"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "OpenEXR (Extended)"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr "OpenEXR (Plilongigita)"
+msgstr "Kana Plilongigita-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "Snap Etendo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
@@ -18285,11 +18205,10 @@ msgid "Kaktovik Numerals"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
-#, fuzzy, kde-format
-#| msgid "Numerical"
+#, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr "Nombra"
+msgstr "Majaaj Ciferoj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
@@ -18346,11 +18265,10 @@ msgid "Toto"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "Ankro:"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
@@ -18407,11 +18325,10 @@ msgid "Mahjong Tiles"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "Malgrandaj Kaheloj"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
 #, kde-format
@@ -18438,12 +18355,10 @@ msgid "Miscellaneous Symbols and Pictographs"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "icon"
+#, kde-format
 msgctxt "@title"
 msgid "Emoticons"
-msgstr "piktogramo"
+msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:337
 #, kde-format
@@ -18464,14 +18379,10 @@ msgid "Alchemical Symbols"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
-#| "t)_Shapes_Rounded.kpp"
-#| msgid "t) Shapes Rounded"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "t) Formoj Rondigitaj"
+msgstr "Geometriaj Formoj Etenditaj"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
@@ -18558,8 +18469,7 @@ msgid "CJK Unified Ideographs Extension H"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgctxt "@title"
 msgid "Tags"
 msgstr "Etikedoj"
@@ -18583,12 +18493,10 @@ msgid "Supplementary Private Use Area-B"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Block"
+#, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr "Vicigi Blokon"
+msgstr "Neniu Bloko"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
@@ -18597,11 +18505,10 @@ msgid "%1 glyph variants."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "Alternate"
+msgstr "Aliri Ĉiujn Alternaĵojn"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
@@ -18610,11 +18517,10 @@ msgid "Access any possible substitutions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "Alternate"
+msgstr "Kuntekstaj Alternaĵoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18650,11 +18556,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
-#, fuzzy, kde-format
-#| msgid "Direction Filter"
+#, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "Direkta Filtrilo"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18677,11 +18582,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgid "Histogram"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "Histogramo"
+msgstr "Historiaj Formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18710,12 +18614,10 @@ msgid "Replaces glyphs with their alternates meant for justification."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "Norma lumo A"
+msgstr "Normaj Ligaturoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
@@ -18724,11 +18626,10 @@ msgid "Replaces sequences glyphs with common ligatures."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "Bildaj Limoj"
+msgstr "Maldekstraj Limoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
@@ -18737,11 +18638,10 @@ msgid "This adjusts glyphs so there is no space at the left side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
-#, fuzzy, kde-format
-#| msgid "Local Resources"
+#, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "Lokaj Rimedoj"
+msgstr "Lokigitaj Formdoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
@@ -18750,11 +18650,10 @@ msgid "This replaces glyphs with language specific versions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "Opcioj"
+msgstr "Opcitaj Limoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18765,11 +18664,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
-#, fuzzy, kde-format
-#| msgid "Gradients"
+#, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "Kolortransiroj"
+msgstr "Ornamoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
@@ -18778,11 +18676,10 @@ msgid "Replaces glyphs with ornaments for decorative purposes."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
-#| msgid "Randomize"
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
-msgstr "Randomigi"
+msgstr "Hazardigi"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:82
 #, kde-format
@@ -18791,11 +18688,10 @@ msgid "Replaces glyphs with random alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "Bildaj Limoj"
+msgstr "Dekstraj Limoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
@@ -18804,11 +18700,10 @@ msgid "This adjusts glyphs so there is no space at the right side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "Alternate"
+msgstr "Stilecaj Alternaĵoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18845,12 +18740,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
-msgstr "Kerning"
+msgstr "Kunŝovo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:104
 #, kde-format
@@ -18860,11 +18753,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "Pozicio"
+msgstr "Poziciigo de Markoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18922,12 +18814,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "@info:label"
-#| msgid "Optical Size"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "Optika Grandeco"
+msgstr "Optika grandeco"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18938,25 +18828,22 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "Vertikalaj Linioj"
+msgstr "Vertikala Kunŝovo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
-#, fuzzy, kde-format
-#| msgid "Text flows vertical, right to left."
+#, kde-format
 msgctxt "@tooltip"
 msgid "This controls vertical kerning on the font."
-msgstr "Teksto fluas vertikale, de dekstre maldekstren."
+msgstr "Tio regas vertikalan kunŝovon sur la tiparo."
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
-#| msgid "Alternative array"
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "Alternativa tabelo"
+msgstr "Alternativaj Frakcioj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
@@ -18965,11 +18852,10 @@ msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
-#| msgid "Illuminator"
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "Lumigilo"
+msgstr "Nomantoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -18994,12 +18880,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten Layer"
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "Platigi Tavolon"
+msgstr "Platigitaj akĉentformoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
@@ -19008,11 +18892,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "Agoj"
+msgstr "Frakcioj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -19025,11 +18908,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
-#, fuzzy, kde-format
-#| msgid "Winding Fill"
+#, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "Sinbenda Plenigo"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -19053,11 +18935,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:165
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr "Alterna Alvoko"
+msgstr "Alternaj Prinotformoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
@@ -19066,11 +18947,10 @@ msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "Kuratoro"
+msgstr "Numerantoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -19095,11 +18975,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "Origina"
+msgstr "Ordaj Numeraloj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
@@ -19108,11 +18987,10 @@ msgid "Replaces letters that follow figures with their ordinal forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "Proporcia"
+msgstr "Proporciaj Ciferoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19147,12 +19025,10 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr "Subskribo"
+msgstr "Suba Indico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
@@ -19161,12 +19037,10 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr "Superskribo"
+msgstr "Supra Indico"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
@@ -19215,11 +19089,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
-#, fuzzy, kde-format
-#| msgid "Cell Spacing:"
+#, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "Ĉela interspaco:"
+msgstr "Majuskla Interspaco"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
@@ -19268,11 +19141,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
-#, fuzzy, kde-format
-#| msgid "Small Tiles"
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "Malgrandaj Kaheloj"
+msgstr "Malgrandaj Majuskloj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
@@ -19281,11 +19153,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "Titolo"
+msgstr "Titolado"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19415,11 +19286,10 @@ msgid "Controls conjunct forms in Indic scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "Distanco"
+msgstr "Distancoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -19480,12 +19350,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr "Malpliigi Saturacion"
+msgstr "Antaŭbazaj Anstataŭigoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
@@ -19533,11 +19401,10 @@ msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr "Formo"
+msgstr "Reph-Formo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
@@ -19588,11 +19455,10 @@ msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
-#, fuzzy, kde-format
-#| msgid "Expert"
+#, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "Sperta"
+msgstr "Spertulaj Formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -19601,11 +19467,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "Larĝo"
+msgstr "Plenaj Larĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -19622,11 +19487,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "Horizontalaj Linioj"
+msgstr "Horizontalaj Kana-Alternaĵoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19637,8 +19501,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:351
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt "@title"
 msgid "Hangul"
 msgstr "Angula"
@@ -19664,11 +19527,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "Larĝo"
+msgstr "Duon-Larĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19679,11 +19541,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr "Kursiva"
+msgstr "Kursivoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
@@ -19777,11 +19638,10 @@ msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "Proporcia"
+msgstr "Proporcia Kana"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -19790,11 +19650,10 @@ msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "Proporcia"
+msgstr "Proporciaj Larĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -19803,11 +19662,10 @@ msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr "Kvarono"
+msgstr "Kvaronlarĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
@@ -19830,11 +19688,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:411
-#, fuzzy, kde-format
-#| msgid "Simplex Noise"
+#, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr "Simplex Bruo"
+msgstr "Simpligitaj Formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -19871,11 +19728,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:423
-#, fuzzy, kde-format
-#| msgid "Gradient Colors"
+#, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr "Gradientaj Koloroj"
+msgstr "Tradiciaj Formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -19884,11 +19740,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "Trionoj"
+msgstr "Trionaj Larĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -19897,11 +19752,10 @@ msgid "Replaces glyphs with third-width glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:431
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr "Alterna Alvoko"
+msgstr "Alternaj Vertikalaj Metrikoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -19910,11 +19764,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "Alternate"
+msgstr "Alternaj Duonlarĝoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -19929,11 +19782,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "Vertikalaj Linioj"
+msgstr "Vertikalaj Alternaĵoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -19968,11 +19820,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "Vertikala Tradukado"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -19996,11 +19847,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:463
-#, fuzzy, kde-format
-#| msgid "Vertical Translation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr "Vertikala Tradukado"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
@@ -20009,11 +19859,10 @@ msgid "Replaces a subset of glyphs with rotated variants for vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:467
-#, fuzzy, kde-format
-#| msgid "Alternate Invocation"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr "Alterna Alvoko"
+msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -20024,11 +19873,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "Teksta Pozicio"
+msgstr "Kursiva Poziciigo"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -20080,11 +19928,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "Komencliteroj:"
+msgstr "Komencaj Formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20115,12 +19962,10 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Left-to-right"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "Ma&ldekstre-dekstren"
+msgstr "Maldekstre-dekstren spegulitaj formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
@@ -20183,12 +20028,10 @@ msgid "Replaces glyphs with their right-to-left alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Right-to-left"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "Dekst&re-maldekstren"
+msgstr "Dekstre-maldekstren spegulitaj formoj"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
@@ -20222,11 +20065,10 @@ msgid "Replaces glyphs with alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "Variaĵo (%1)"
+msgstr "Signa Variaĵo %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1648
@@ -27081,12 +26923,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11 per ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1807
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL per ANGLE"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1809
 #, kde-format
@@ -44773,34 +44613,28 @@ msgid "Delete the taskset"
 msgstr "Forigi la taskaron"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "Tiparo Grandeco"
+msgstr "Tipara Grandeco (em)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "Alteco:"
+msgstr "X-Alteco (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "R8 Heightmap"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Cap Height (cap)"
-msgstr "R8 Altmapo"
+msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "Proporcia"
+msgstr "Proporcia Antaŭeniĝo (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
@@ -44809,11 +44643,10 @@ msgid "Ideographic Advance (ic)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "LinioAlteco:"
+msgstr "Linio-Alteco (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
@@ -44822,16 +44655,13 @@ msgid "Spaces (Sp)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "Linioj:"
+msgstr "Linioj (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "Procento (%)"
@@ -44843,11 +44673,10 @@ msgid "Optical Size"
 msgstr "Optika Grandeco"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "Malplena fendo"
+msgstr "Malplena"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
@@ -44856,11 +44685,10 @@ msgid "%1, %2, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:28
-#, fuzzy, kde-format
-#| msgid "Clone %1, %2"
+#, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr "Kloni %1, %2"
+msgstr "%1, %2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #, kde-format
@@ -44869,18 +44697,16 @@ msgid "%1, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "Malfermi"
+msgstr "Ŝaltita"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "for"
+msgstr "Malŝaltita"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
@@ -60679,31 +60505,25 @@ msgstr "Nombro da glitilaj linioj:"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Curator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "Kuratoro"
+msgstr ""
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "Rotacii"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:122
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "Komencante"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:152
-#, fuzzy
-#| msgid "Curator"
 msgid "Mutator"
-msgstr "Kuratoro"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:166
 msgid ""
@@ -60711,10 +60531,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:168
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "Saturiĝo:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:175
 msgid ""
@@ -60722,10 +60540,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:177
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Rotation Mutation: "
-msgstr "Saturiĝo:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:184
 msgid ""
@@ -60733,10 +60549,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:186
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "Opakeco:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:193
 msgid ""
@@ -60744,10 +60558,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:195
-#, fuzzy
-#| msgid "Rotation:"
 msgid "Flow Mutation: "
-msgstr "Rotacio:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:202
 msgid ""
@@ -60756,10 +60568,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:204
-#, fuzzy
-#| msgid "Fixed rotation:"
 msgid "Hue Mutation: "
-msgstr "Fiksa rotacio:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:211
 msgid ""
@@ -60768,10 +60578,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:213
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Saturation Mutation: "
-msgstr "Saturiĝo:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:220
 msgid ""
@@ -60780,16 +60588,12 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:222
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "Daŭro de video:"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:232
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "Rotacii"
+msgstr ""
 
 #: plugins/python/mutator/mutator.py:233
 msgid ""
@@ -61521,30 +61325,24 @@ msgid "Freehand Brush Stroke"
 msgstr "Libermana Penikostreko"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:216
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Max Speed:"
-msgstr "Ekzempla nombro:"
+msgstr "Specimena Nombro je Maks Rapido:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:226
-#, fuzzy, kde-format
-#| msgid "Sample count:"
+#, kde-format
 msgid "Sample Count at Min Speed:"
-msgstr "Ekzempla nombro:"
+msgstr "Specimena Nombro je Min Rapido:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:236
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Max Speed:"
-msgstr "D&istanca gamo:"
+msgstr "Distanco je Maks Rapido:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:246
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus"
-#| msgid "D&istance range:"
+#, kde-format
 msgid "Distance at Min Speed:"
-msgstr "D&istanca gamo:"
+msgstr "Distanco je Min Rapido:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:415
 #, kde-format
@@ -63504,18 +63302,16 @@ msgid "Similar Color Selection Tool"
 msgstr "Simila Kolora Elekta Ilo"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "Paletro"
+msgstr "Signobilda Paletro"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
-#, fuzzy, kde-format
-#| msgid "All pa&ges"
+#, kde-format
 msgctxt "@title"
 msgid "All glyphs"
-msgstr "Ĉiuj p&aĝoj"
+msgstr "Ĉiuj signobildoj"
 
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
@@ -64204,10 +64000,9 @@ msgstr "Redakti SVG-Fonton"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Glyph Palette"
-msgstr "Paletro"
+msgstr "Signobilda Paletro"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -65761,79 +65556,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "Krita Tablet Support"
-#~ msgstr "Krita Tabuleta Subteno"
-
-#~ msgid ""
-#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
-#~ "you have a drawing tablet, please make sure the tablet driver is properly "
-#~ "installed."
-#~ msgstr ""
-#~ "Ne povas ŝargi WinTab-pelilon kaj neniuj aparatoj de Windows Ink plumo "
-#~ "estas trovitaj. Se vi havas desegnan tabuleton, bonvolu certigi, ke la "
-#~ "tabuleta pelilo estas ĝuste instalita."
-
-#~ msgid ""
-#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-#~ "the tablet driver is properly installed."
-#~ msgstr ""
-#~ "Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tabuleton, bonvolu "
-#~ "certigi, ke la tabuleta pelilo estas ĝuste instalita."
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1x%2 deŝovo: %3,%4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Wintab)"
-#~ msgstr "%1 (Wintab)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Elekti ekranan distingivon"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
-#~ "not agree on the size of the screen your tablet is connected to. Please "
-#~ "select the right option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>La pelilo por via desegna tabuleto kaj Vindozo ne "
-#~ "konsentas pri la grandeco de la ekrano al kiu via tabuleto estas "
-#~ "konektita. Bonvolu elekti la ĝustan opcion.</p></body></html>"
-
-#~ msgid "If both are wrong, enter the size manually:"
-#~ msgstr "Se ambaŭ estas malĝustaj, enigu la grandecon permane:"
-
-#~ msgid "Do not ask again (hold Shift to ask again)"
-#~ msgstr "Ne demandi denove (premu Shift por demandi denove)"
-
-#~ msgctxt ""
-#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-#~ msgid "Distance:"
-#~ msgstr "Distanco:"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "maldekstra butono"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "meza butono"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "dekstra butono"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "nevalida butono"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Tenu %1, tiam premu %2"

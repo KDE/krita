@@ -15,13 +15,14 @@
 
 class KisCanvasResourceProvider;
 class KoColor;
+class KoUnit;
 
 
 class KisToolKnifeOptionsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KisToolKnifeOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
+    KisToolKnifeOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent, QString toolId, qreal resolution);
     ~KisToolKnifeOptionsWidget() override;
 
     enum GapWidthType {
@@ -44,6 +45,9 @@ public:
     int getWidthForType(GapWidthType type);
 
     ToolMode getToolMode();
+
+public Q_SLOTS:
+    void unitForWidthChanged(int index);
 
 
 private:

@@ -18,6 +18,7 @@
 #include <kis_icon_utils.h>
 #include <KoGroupButton.h>
 
+#include <KoUnit.h>
 
 struct KisToolKnifeOptionsWidget::Private {
     Private()
@@ -28,6 +29,9 @@ struct KisToolKnifeOptionsWidget::Private {
     KoGroupButton* buttonModeAddGutter {nullptr};
     KoGroupButton* buttonModeRemoveGutter {nullptr};
     KoGroupButton* buttonModeMoveGutterEndPoint {nullptr};
+    qreal resolution {1.0};
+
+    QString toolId {""};
     //KoGroupButton* m_buttonModeAddGutter {nullptr};
 
 
@@ -84,14 +88,41 @@ struct KisToolKnifeOptionsWidget::Private {
         }
     }
 
+    KoUnit currentUnit() {
+        return KoUnit::fromSymbol(ui->thickGapWidth->suffix().trimmed());
+    }
+
+    void setUnit(QString unit) {
+
+        KoUnit unitBefore = KoUnit::fromSymbol(ui->thickGapWidth->suffix().trimmed());
+        KoUnit unitNow = KoUnit::fromSymbol(unit.trimmed());
+
+        if (unitNow.type() == unitBefore.type()) {
+            return;
+        }
+
+        ui->thickGapWidth->setSuffix(" " + unitNow.symbol());
+        ui->thinGapWidth->setSuffix(" " + unitNow.symbol());
+        ui->customGapWidth->setSuffix(" " + unitNow.symbol());
+
+        ui->thickGapWidth->setValue(KoUnit::convertFromUnitToUnit(ui->thickGapWidth->value(), unitBefore, unitNow, resolution));
+        ui->thinGapWidth->setValue(KoUnit::convertFromUnitToUnit(ui->thinGapWidth->value(), unitBefore, unitNow, resolution));
+        ui->customGapWidth->setValue(KoUnit::convertFromUnitToUnit(ui->customGapWidth->value(), unitBefore, unitNow, resolution));
+
+    }
 };
 
-KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider */*provider*/, QWidget *parent)
+KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider */*provider*/, QWidget *parent, QString toolId, qreal resolution)
     : QWidget(parent),
       m_d(new Private)
 {
     m_d->ui = new Ui_KisToolKnifeOptionsWidget();
     m_d->ui->setupUi(this);
+
+    m_d->toolId = toolId;
+    m_d->resolution = resolution;
+
+
     //m_d->ui->optionButtonStripToolMode->addButton(KisIconUtils::loadIcon("tool_comic_panel_scissors"));
     //KisOptionButtonStrip *optionButtonStripToolMode =
     //    new KisOptionButtonStrip;
@@ -109,6 +140,10 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
     m_d->buttonModeRemoveGutter->setIconSize(QSize(28, 28));
     m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
     m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
+    m_d->ui->unitsCombobox->addItem(i18n("Pixels"), QVariant(" px"));
+    m_d->ui->unitsCombobox->addItem(i18n("Millimeters"), QVariant(" mm"));
+
+    connect(m_d->ui->unitsCombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(unitForWidthChanged(int)));
 
 
 
@@ -157,6 +192,9 @@ KisToolKnifeOptionsWidget::ToolMode KisToolKnifeOptionsWidget::getToolMode()
     return m_d->getToolMode();
 }
 
-
-
+void KisToolKnifeOptionsWidget::unitForWidthChanged(int index)
+{
+    QString selected = m_d->ui->unitsCombobox->itemData(index).toString();
+    m_d->setUnit(selected);
+}
 

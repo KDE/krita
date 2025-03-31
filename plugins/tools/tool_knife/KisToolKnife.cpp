@@ -327,8 +327,13 @@ QWidget * KisToolKnife::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT(kiscanvas);
+    qreal resolution = 1.0;
+    if (kiscanvas->image()) {
+        // we're going to assume isotropic image
+        resolution = kiscanvas->image()->xRes();
+    }
 
-    m_d->optionsWidget = new KisToolKnifeOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
+    m_d->optionsWidget = new KisToolKnifeOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0, toolId(), resolution);
     m_d->optionsWidget->setObjectName(toolId() + "option widget");
 
     return m_d->optionsWidget;

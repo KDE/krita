@@ -13,6 +13,8 @@
 #include <KoInteractionStrategy.h>
 #include <KoShape.h>
 
+#include "GutterWidthsConfig.h"
+
 class KoSelection;
 
 
@@ -20,7 +22,7 @@ class KoSelection;
 class CutThroughShapeStrategy : public KoInteractionStrategy
 {
 public:
-    CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, qreal width);
+    CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, const GutterWidthsConfig &width);
     ~CutThroughShapeStrategy() override;
 
 
@@ -32,7 +34,8 @@ public:
 
 private:
 
-    qreal gutterWidthInDocumentCoordinates();
+    qreal gutterWidthInDocumentCoordinates(qreal lineAngle);
+    qreal calculateLineAngle(QPointF start, QPointF end);
 
 
 private:
@@ -41,7 +44,7 @@ private:
     QPointF m_endPoint = QPointF();
     QRectF m_previousLineDirtyRect = QRectF();
     QList<KoShape *> m_selectedShapes;
-    qreal m_width {10};
+    GutterWidthsConfig m_width;
 };
 
 

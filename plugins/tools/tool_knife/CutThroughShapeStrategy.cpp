@@ -23,9 +23,10 @@
 #include <KoShapeController.h>
 #include <kundo2command.h>
 #include <KoKeepShapesSelectedCommand.h>
+#include <QtMath>
 
 
-CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, qreal width)
+CutThroughShapeStrategy::CutThroughShapeStrategy(KoToolBase *tool, KoSelection *selection, QPointF startPoint, const GutterWidthsConfig &width)
     : KoInteractionStrategy(tool)
     , m_startPoint(startPoint)
     , m_endPoint(startPoint)
@@ -77,7 +78,7 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     QRectF dirtyRect;
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
-    dirtyRect = kisGrowRect(dirtyRect, gutterWidthInDocumentCoordinates()); // twice as much as it should need to account for lines showing the effect
+    dirtyRect = kisGrowRect(dirtyRect, gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint))); // twice as much as it should need to account for lines showing the effect
     //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
     //qCritical() << "And the dirty rect is: " << dirtyRect;
 
@@ -138,7 +139,8 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
         return;
     }
 
-    qreal gutterWidth = gutterWidthInDocumentCoordinates();
+    qCritical() << "line angle = " << calculateLineAngle(m_startPoint, m_endPoint);
+    qreal gutterWidth = gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint));
 
 
     QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gapLine, gutterWidth/2);
@@ -276,7 +278,7 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
 
     painter.setRenderHint(QPainter::RenderHint::Antialiasing, true);
 
-    qreal gutterWidth = gutterWidthInDocumentCoordinates();
+    qreal gutterWidth = gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint));
 
     QLineF gutterCenterLine = QLineF(m_startPoint, m_endPoint);
     gutterCenterLine = converter.documentToView().map(gutterCenterLine);
@@ -309,11 +311,18 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
     painter.restore();
 }
 
-qreal CutThroughShapeStrategy::gutterWidthInDocumentCoordinates()
+qreal CutThroughShapeStrategy::gutterWidthInDocumentCoordinates(qreal lineAngle)
 {
     KisCanvas2 *kisCanvas = static_cast<KisCanvas2 *>(tool()->canvas());
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, m_width);
-    QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width));
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, m_width.widthForAngleInPixels(lineAngle));
+    QLineF helperGapWidthLine = QLineF(QPointF(0, 0), QPointF(0, m_width.widthForAngleInPixels(lineAngle)));
     QLineF helperGapWidthLineTransformed = kisCanvas->coordinatesConverter()->imageToDocument(helperGapWidthLine);
     return helperGapWidthLineTransformed.length();
+}
+
+qreal CutThroughShapeStrategy::calculateLineAngle(QPointF start, QPointF end)
+{
+    QPointF vec = end - start;
+    qreal angleDegrees = KisAlgebra2D::wrapValue(kisRadiansToDegrees(std::atan2(vec.y(), vec.x())), 0.0, 360.0);
+    return angleDegrees;
 }

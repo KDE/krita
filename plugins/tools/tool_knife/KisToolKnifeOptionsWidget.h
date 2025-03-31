@@ -12,6 +12,7 @@
 #include <QModelIndex>
 
 #include "kis_types.h"
+#include "GutterWidthsConfig.h"
 
 class KisCanvasResourceProvider;
 class KoColor;
@@ -28,7 +29,8 @@ public:
     enum GapWidthType {
         Thick,
         Thin,
-        Special
+        Special,
+        Automatic,
     };
 
     enum ToolMode {
@@ -37,12 +39,7 @@ public:
         MoveGutterEndPoint,
     };
 
-    int getThickGapWidth(void);
-    int getThinGapWidth(void);
-    int getSpecialGapWidth(void);
-    GapWidthType getWidthType();
-    int getCurrentWidth();
-    int getWidthForType(GapWidthType type);
+    GutterWidthsConfig getCurrentWidthsConfig();
 
     ToolMode getToolMode();
 

@@ -81,6 +81,9 @@ void CutThroughShapeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::
     KisAlgebra2D::accumulateBounds(m_startPoint, &dirtyRect);
     KisAlgebra2D::accumulateBounds(m_endPoint, &dirtyRect);
     dirtyRect = kisGrowRect(dirtyRect, gutterWidthInDocumentCoordinates(calculateLineAngle(m_startPoint, m_endPoint))); // twice as much as it should need to account for lines showing the effect
+
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(tool()->canvas());
+    //dirtyRect = kisCanvas->viewManager()->
     //dirtyRect = canvas()->viewConverter()->viewToDocument(dirtyRect);
     //qCritical() << "And the dirty rect is: " << dirtyRect;
 
@@ -161,9 +164,13 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QLineF leftLine = gapLines[0];
     QLineF rightLine = gapLines[1];
 
+    QLineF leftLineLong = leftLine;
+    QLineF rightLineLong = rightLine;
 
-    KisAlgebra2D::cropLineToRect(leftLine, outlineRectBiggerInt, true, true);
-    KisAlgebra2D::cropLineToRect(rightLine, outlineRectBiggerInt, true, true);
+
+
+    KisAlgebra2D::cropLineToRect(leftLineLong, outlineRectBiggerInt, true, true);
+    KisAlgebra2D::cropLineToRect(rightLineLong, outlineRectBiggerInt, true, true);
 
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Knife tool: cut through shapes"));
 
@@ -184,11 +191,11 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     }
 
 
-    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLine, rightLine);
+    QList<QPainterPath> paths = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), leftLineLong, rightLineLong);
     QPainterPath left = paths[0];
     QPainterPath right = paths[1];
 
-    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLine, leftLine);
+    QList<QPainterPath> pathsOpposite = KisAlgebra2D::getPathsFromRectangleCutThrough(QRectF(outlineRectBiggerInt), rightLineLong, leftLineLong);
     QPainterPath leftOpposite = pathsOpposite[0];
     QPainterPath rightOpposite = pathsOpposite[1];
 
@@ -202,6 +209,10 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
     QList<KoShape*> shapesToRemove;
 
     QTransform booleanWorkaroundTransformInverted = booleanWorkaroundTransform.inverted();
+
+    QRectF gapLineLeftRect = KisAlgebra2D::createRectFromCorners(leftLine);
+    QRectF gapLineRightRect = KisAlgebra2D::createRectFromCorners(rightLine);
+
 
     for (int i = 0; i < srcOutlines.size(); i++) {
 
@@ -219,6 +230,32 @@ void CutThroughShapeStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
             }
             continue;
         }
+
+        if ((srcOutlines[i].boundingRect() & gapLineLeftRect).isEmpty()
+                || (srcOutlines[i].boundingRect() & gapLineRightRect).isEmpty()) {
+            // the gap lines can't cross the shape since their bounding rects don't cross
+            if (wasSelected) {
+                newSelectedShapes << referenceShape;
+            }
+            continue;
+        }
+
+        // either one of the points is inside the path, or the line crosses one of the segments
+        bool containsGapLinePoint = srcOutlines[i].contains(leftLine.p1()) || srcOutlines[i].contains(leftLine.p2())
+                || srcOutlines[i].contains(rightLine.p1()) || srcOutlines[i].contains(rightLine.p2());
+        bool crossesGapLine = KisAlgebra2D::getLineSegmentCrossingLineIndexes(leftLine, srcOutlines[i]).count() > 0
+                || KisAlgebra2D::getLineSegmentCrossingLineIndexes(rightLine, srcOutlines[i]).count() > 0;
+        if (!containsGapLinePoint && !crossesGapLine) {
+            //
+            qCritical() << "it doesn't cross the line!";
+            if (wasSelected) {
+                newSelectedShapes << referenceShape;
+            }
+            continue;
+        }
+
+
+
 
         QPainterPath leftPath = srcOutlines[i] & left;
         QPainterPath rightPath = srcOutlines[i] & right;

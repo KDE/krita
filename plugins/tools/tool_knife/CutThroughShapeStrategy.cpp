@@ -332,16 +332,10 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
 
     gutterWidth = gutterWidthHelperLine.length();
 
+    QList<QLineF> gutterLines = KisAlgebra2D::getParallelLines(gutterCenterLine, gutterWidth/2);
 
-    QList<QLineF> gapLines = KisAlgebra2D::getParallelLines(gutterCenterLine, gutterWidth/2);
-
-
-    QPointF gutterLineNormalVector = QPointF(-gutterCenterLine.dy(), gutterCenterLine.dx());
-
-
-    QLineF gutterLine1 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), gutterLineNormalVector, gutterWidth/2));
-    QLineF gutterLine2 = QLineF(KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p1(), -gutterLineNormalVector, gutterWidth/2), KisAlgebra2D::movePointInTheDirection(gutterCenterLine.p2(), -gutterLineNormalVector, gutterWidth/2));
-
+    QLineF gutterLine1 = gutterLines.length() > 0 ? gutterLines[0] : gutterCenterLine;
+    QLineF gutterLine2 = gutterLines.length() > 1 ? gutterLines[1] : gutterCenterLine;
 
 
     painter.drawLine(gutterLine1);
@@ -350,8 +344,42 @@ void CutThroughShapeStrategy::paint(QPainter &painter, const KoViewConverter &co
     QRectF arcRect1 = QRectF(gutterCenterLine.p1() - QPointF(gutterWidth/2, gutterWidth/2), gutterCenterLine.p1() + QPointF(gutterWidth/2, gutterWidth/2));
     QRectF arcRect2 = QRectF(gutterCenterLine.p2() - QPointF(gutterWidth/2, gutterWidth/2), gutterCenterLine.p2() + QPointF(gutterWidth/2, gutterWidth/2));
 
-    painter.drawArc(arcRect1, -16*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p1(), gutterLine1.p1(), 0)), -16*180);
-    painter.drawArc(arcRect2, -16*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p2(), gutterLine1.p2(), 0)), 16*180);
+    int qtAngleFactor = 16;
+    int qtHalfCircle = qtAngleFactor*180;
+
+    painter.drawArc(arcRect1, -qtAngleFactor*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p1(), gutterLine1.p1(), 0)), qtHalfCircle);
+    painter.drawArc(arcRect2, -qtAngleFactor*kisRadiansToDegrees(KisAlgebra2D::directionBetweenPoints(gutterCenterLine.p2(), gutterLine1.p2(), 0)), -qtHalfCircle);
+
+
+    int xLength = 3;
+    qreal xLengthEllipse = 2*qSqrt(2);
+
+    if (false) { // drawing X
+    painter.drawLine({QLineF(gutterCenterLine.p1() - QPointF(xLength, xLength), gutterCenterLine.p1() + QPointF(xLength, xLength))});
+    painter.drawLine({QLineF(gutterCenterLine.p2() - QPointF(xLength, xLength), gutterCenterLine.p2() + QPointF(xLength, xLength))});
+
+    painter.drawLine({QLineF(gutterCenterLine.p1() - QPointF(xLength, -xLength), gutterCenterLine.p1() + QPointF(xLength, -xLength))});
+    painter.drawLine({QLineF(gutterCenterLine.p2() - QPointF(xLength, -xLength), gutterCenterLine.p2() + QPointF(xLength, -xLength))});
+    }
+
+    // ellipse at the both ends of the gutter center line
+    painter.drawEllipse(gutterCenterLine.p1(), xLengthEllipse, xLengthEllipse);
+    painter.drawEllipse(gutterCenterLine.p2(), xLengthEllipse, xLengthEllipse);
+
+
+
+    pen.setWidth(1);
+    semitransparentGray.setAlphaF(0.2);
+    pen.setColor(semitransparentGray);
+
+    painter.setPen(pen);
+
+    //QLineF gutterLineExtended1 = gutterLine1;
+    //QLineF gutterLineExtended2 = gutterLine2;
+    //KisAlgebra2D::cropLineToRect(gutterLineExtended1, painter.viewport(), true, true);
+    //KisAlgebra2D::cropLineToRect(gutterLineExtended2, painter.viewport(), true, true);
+
+    painter.drawLine(gutterCenterLine);
 
     painter.restore();
 }

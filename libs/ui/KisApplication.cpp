@@ -644,18 +644,24 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     doc->setFileBatchMode(true);
                     int sequenceStart = 0;
 
+
+                    qDebug() << ppVar(exportFileName);
                     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
                                                doc->image()->animationInterface()->documentPlaybackRange(),
                                                exportFileName,
                                                sequenceStart,
                                                false,
                                                0);
+
                     exporter.setBatchMode(d->batchRun);
-                    KisAsyncAnimationFramesSaveDialog::Result result =
-                        exporter.regenerateRange(0);
+
+                    KisAsyncAnimationFramesSaveDialog::Result result = exporter.regenerateRange(nullptr);
+                    qDebug() << ppVar(result);
+
                     if (result != KisAsyncAnimationFramesSaveDialog::RenderComplete) {
                         errKrita << i18n("Failed to render animation frames!") << Qt::endl;
                     }
+
                     QTimer::singleShot(0, this, SLOT(quit()));
                     return true;
                 }

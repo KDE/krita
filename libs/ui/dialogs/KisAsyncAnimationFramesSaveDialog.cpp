@@ -74,30 +74,25 @@ KisAsyncAnimationFramesSaveDialog::~KisAsyncAnimationFramesSaveDialog()
 
 KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::regenerateRange(KisViewManager *viewManager)
 {
-    QFileInfo info(savedFilesMaskWildcard());
-
-    QDir dir(info.absolutePath());
+    QFileInfo fileInfo(savedFilesMaskWildcard());
+    QDir dir(fileInfo.absolutePath());
 
     if (!dir.exists()) {
-        dir.mkpath(info.absolutePath());
+        dir.mkpath(fileInfo.absolutePath());
     }
     KIS_SAFE_ASSERT_RECOVER_NOOP(dir.exists());
 
-    QStringList filesList = dir.entryList({ info.fileName() });
-
-    if (!filesList.isEmpty()) {
-        if (batchMode()) {
-            return RenderFailed;
-        }
-
-        QStringList truncatedList = filesList;
+    // Check for overwrite. (Batch mode always overwrites.)
+    QStringList preexistingFileNames = dir.entryList({ fileInfo.fileName() });
+    if (!preexistingFileNames.isEmpty() && !batchMode()) {
+        QStringList truncatedList = preexistingFileNames;
 
         while (truncatedList.size() > 3) {
             truncatedList.takeLast();
         }
 
         QString exampleFiles = truncatedList.join(", ");
-        if (truncatedList.size() != filesList.size()) {
+        if (truncatedList.size() != preexistingFileNames.size()) {
             exampleFiles += QString(", ...");
         }
 
@@ -110,35 +105,40 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
                                           "deleted, continue?\n\n"
                                           "Directory: %1\n"
                                           "Files: %2",
-                                          info.absolutePath(), exampleFiles),
+                                          fileInfo.absolutePath(), exampleFiles),
                                      QMessageBox::Yes | QMessageBox::No,
                                      QMessageBox::No);
 
-        if (result == QMessageBox::Yes) {
-            Q_FOREACH (const QString &file, filesList) {
-                if (!dir.remove(file)) {
-                    QMessageBox::critical(qApp->activeWindow(),
-                                          i18n("Failed to delete"),
-                                          i18n("Failed to delete an old frame file:\n\n"
-                                               "%1\n\n"
-                                               "Rendering cancelled.", dir.absoluteFilePath(file)));
-
-                    return RenderFailed;
-                }
-            }
-        } else {
+        if (result == QMessageBox::No) {
             return RenderCancelled;
         }
     }
 
+    // Remove any preexisting files.
+    Q_FOREACH (const QString &file, preexistingFileNames) {
+        if (!dir.remove(file)) {
+            if (!batchMode()) {
+                QMessageBox::critical(qApp->activeWindow(),
+                                      i18n("Failed to delete"),
+                                      i18n("Failed to delete an old frame file:\n\n"
+                                           "%1\n\n"
+                                           "Rendering cancelled.", dir.absoluteFilePath(file)));
+            }
+
+            qWarning() << "WARNING: KisAsyncAnimFramesSaveDialog: Failed to delete old frame file(s):" << dir.absoluteFilePath(file);
+            return RenderFailed;
+        }
+    }
+
+    // Save new frame files.
     KisAsyncAnimationRenderDialogBase::Result renderingResult = KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
 
-    filesList = savedFiles();
-
-    // If we cancel rendering or fail rendering process, lets clean up any files that may have been created
+    // If we cancel rendering or fail rendering process,
+    // lets clean up any files that may have been created
     // to keep the next render from having artifacts.
+    preexistingFileNames = savedFiles();
     if (renderingResult != RenderComplete) {
-        Q_FOREACH (const QString &file, filesList) {
+        Q_FOREACH (const QString &file, preexistingFileNames) {
             if (dir.exists(file)) {
                 (void)dir.remove(file);
             }

@@ -15,7 +15,15 @@
 
 #include <opengl/kis_opengl.h>
 
-extern "C" int main(int argc, char **argv)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+/**
+ * Qt6 overrides main via its own implementation in Qt6::EntryPointPrivate
+ * and then calls it via a qMain definition. We shouldn't declare main
+ * as extern "C" to let Qt call it.
+ */
+extern "C"
+#endif
+int main(int argc, char **argv)
 {
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);

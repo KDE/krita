@@ -9,7 +9,7 @@ from itertools import groupby, product, starmap, tee
 from pathlib import Path
 
 from krita import Krita
-from PyQt5.QtCore import QSize
+from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QColor, QImage, QPainter
 
 from .Utils import flip, kickstart
@@ -128,6 +128,15 @@ class WNode:
             return False
         else:
             return trim
+
+    @property
+    def bilinear(self):
+        bilinear = self.meta_safe_get("b")
+
+        if bilinear[0].lower() in ["false", "no"]:
+            return False
+        else:
+            return bilinear
 
     @property
     def parent(self):
@@ -280,6 +289,7 @@ class WNode:
 
         margin, scale = meta["m"], meta["s"]
         extension, path = meta["e"], meta["p"][0]
+        bilinear = meta["b"][0].lower() not in ["no", "false"]
 
         dirPath = (
             exportPath(self.cfg, path, dirname, userDefined=True)
@@ -316,6 +326,7 @@ class WNode:
             lambda scale, margin, extension, path: (
                 [int(1e-2 * wh * scale) for wh in self.size],
                 100 - scale != 0,
+                Qt.SmoothTransformation if bilinear else Qt.FastTransformation,
                 margin,
                 extension,
                 path,
@@ -323,8 +334,8 @@ class WNode:
             it,
         )
         it = starmap(
-            lambda width_height, should_scale, margin, extension, path: (
-                img.smoothScaled(*width_height) if should_scale else img,
+            lambda width_height, should_scale, transform_mode, margin, extension, path: (
+                img.scaled(*width_height, transformMode=transform_mode) if should_scale else img,
                 margin,
                 extension in ("jpg", "jpeg"),
                 path,

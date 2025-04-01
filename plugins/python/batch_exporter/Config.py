@@ -12,6 +12,6 @@ CONFIG = {
     "error": {"msg": "ERROR: {}", "timeout": 8000},
     "done": {"msg": "DONE: {}", "timeout": 5000},
     "delimiters": OrderedDict((("assign", "="), ("separator", ","))),  # yapf: disable
-    "meta": {"c": [""], "e": ["png"], "m": [0], "p": [""], "t": [""], "s": [100], "i": [""]},
+    "meta": {"c": [""], "e": ["png"], "m": [0], "p": [""], "t": [""], "s": [100], "i": [""], "b": [""]},
 }
 CONFIG["sym"] = re.compile(CONFIG["sym"])

@@ -14,13 +14,13 @@ the layer name. The supported options are:
 
 - `[e=jpg,png]` - supported export image extensions
 - `[s=20,33.333,100,150]` - size in `%`.
+- `[b=false]` or `[b=no]` - disable bilinear filtering when scaling layers.
 - `[p=path/to/custom/export/directory]` or `[p="path with spaces"]` - custom output path.
   Paths can be absolute or relative to the Krita document.
 - `[m=20,30,100]` - extra margin in `px`. The layer is trimmed to the
   smallest bounding box by default. This option adds extra padding around the
   layer.
-- `[t=false]` or `[t=no]` - disable trimming the exported layer to the bounding box of
-  the content.
+- `[t=false]` or `[t=no]` - disable trimming the exported layer to the bounding box of the content. This option is not inherited from parent layers.
 - `[i=false]` or `[i=no]` - disable parent metadata inheritance for a layer. More info [below](#layer-inheritance).
 
 A typical layer name with metadata looks like: `CharacterTorso e=png m=30 s=50,100`. This exports

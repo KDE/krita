@@ -898,7 +898,6 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
     QPersistentModelIndex index = indexAt(event->pos());
 
     if (m_d->modifiersCatcher->modifierPressed("pan-zoom")) {
-
         if (event->button() == Qt::RightButton) {
             // TODO: try calculate index under mouse cursor even when
             //       it is outside any visible row
@@ -913,7 +912,6 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
         event->accept();
 
     } else if (event->button() == Qt::RightButton) {
-
         int numSelectedItems = selectionModel()->selectedIndexes().size();
 
         if (index.isValid() &&

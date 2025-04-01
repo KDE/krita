@@ -101,6 +101,7 @@ public:
     void setPlaybackEngine(KisPlaybackEngine *playbackEngine);
 
 public Q_SLOTS:
+    void togglePlayback();
     void setAutoKey(bool value);
 
     void handleFrameRateChange();

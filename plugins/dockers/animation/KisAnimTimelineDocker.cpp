@@ -618,7 +618,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->playPause();
+        togglePlayback(); //TODO: bind normally
     });
 
     action = actionManager->createAction("stop_playback");
@@ -724,7 +724,7 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     connect(m_d->titlebar->transport, SIGNAL(skipBack()), playbackEngine, SLOT(previousKeyframe()));
     connect(m_d->titlebar->transport, SIGNAL(back()), playbackEngine, SLOT(previousFrame()));
     connect(m_d->titlebar->transport, SIGNAL(stop()), playbackEngine, SLOT(stop()));
-    connect(m_d->titlebar->transport, SIGNAL(playPause()), playbackEngine, SLOT(playPause()));
+    connect(m_d->titlebar->transport, SIGNAL(playPause()), this, SLOT(togglePlayback()));
     connect(m_d->titlebar->transport, SIGNAL(forward()), playbackEngine, SLOT(nextFrame()));
     connect(m_d->titlebar->transport, SIGNAL(skipForward()), playbackEngine, SLOT(nextKeyframe()));
 
@@ -733,6 +733,30 @@ void KisAnimTimelineDocker::setPlaybackEngine(KisPlaybackEngine *playbackEngine)
     m_d->controlsModel.connectPlaybackEngine(playbackEngine);
 
     m_d->playbackEngine = playbackEngine;
+}
+
+void KisAnimTimelineDocker::togglePlayback()
+{
+    m_d->playbackEngine->playPause();
+
+    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+    KisCanvasAnimationState *animState = m_d->canvas->animationState();
+
+    if (!animInterface || !animState) return;
+
+    if (animState->playbackState() == PlaybackState::PAUSED) {
+        QModelIndexList selectedIndices = m_d->framesView->selectionModel()->selectedIndexes();
+        QModelIndex currentIndex = m_d->framesView->currentIndex();
+        const int pausedTime = animInterface->currentTime();
+
+        QModelIndex pauseIndex = m_d->framesModel->index(currentIndex.row(), pausedTime);
+
+        if (!pauseIndex.isValid()) return;
+
+        if (!selectedIndices.contains(pauseIndex)) {
+            m_d->framesView->setCurrentIndex(pauseIndex);
+        }
+    }
 }
 
 void KisAnimTimelineDocker::setAutoKey(bool value)

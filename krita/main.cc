@@ -245,9 +245,12 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
-#if defined HAVE_X11
-    qputenv("QT_QPA_PLATFORM", "xcb");
-#elif defined Q_OS_WIN
+    // Default to running under XWayland, but allow Wayland when KRITA_FORCE_WAYLAND=1
+    if (qEnvironmentVariable("XDG_SESSION_TYPE") == QLatin1String("wayland") && !qEnvironmentVariableIsSet("KRITA_FORCE_WAYLAND")) {
+        qputenv("QT_QPA_PLATFORM", "xcb");
+    }
+
+#if defined Q_OS_WIN
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
         qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
     }
@@ -583,13 +586,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 
     installTranslators(app);
-
-    if (KisApplication::platformName() == "wayland") {
-        QMessageBox::critical(nullptr,
-                              i18nc("@title:window", "Fatal Error"),
-                              i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
-        return -1;
-    }
 
     KisUsageLogger::writeHeader();
     KisOpenGL::initialize();

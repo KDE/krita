@@ -94,7 +94,6 @@ struct KisExtendedModifiersMapper::Private
     int maxKeyCode = 0;
 
     bool checkKeyCodePressedX11(KeyCode key);
-    bool checkKeySymPressedX11(KeySym sym);
 #endif /* HAVE_X11 */
 };
 
@@ -156,16 +155,6 @@ bool KisExtendedModifiersMapper::Private::checkKeyCodePressedX11(KeyCode key)
     char mask = 1 << (key % 8);
 
     return keysState[byte] & mask;
-}
-
-bool KisExtendedModifiersMapper::Private::checkKeySymPressedX11(KeySym sym)
-{
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    KeyCode key = XKeysymToKeycode(QX11Info::display(), sym);
-#else
-    KeyCode key = XKeysymToKeycode(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), sym);
-#endif
-    return key != 0 ? checkKeyCodePressedX11(key) : false;
 }
 
 #else /* HAVE_X11 */

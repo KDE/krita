@@ -101,51 +101,52 @@ struct KisExtendedModifiersMapper::Private
 
 KisExtendedModifiersMapper::Private::Private()
 {
-
+    if (QGuiApplication::platformName() == QLatin1String("xcb")) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    XDisplayKeycodes(QX11Info::display(), &minKeyCode, &maxKeyCode);
-    XQueryKeymap(QX11Info::display(), keysState);
+        XDisplayKeycodes(QX11Info::display(), &minKeyCode, &maxKeyCode);
+        XQueryKeymap(QX11Info::display(), keysState);
 #else
-    XDisplayKeycodes(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(),
+        XDisplayKeycodes(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(),
                      &minKeyCode, &maxKeyCode);
-    XQueryKeymap(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), keysState);
+        XQueryKeymap(qGuiApp->nativeInterface<QNativeInterface::QX11Application>()->display(), keysState);
 #endif
 
-    mapping.append(KeyMapping(XK_Shift_L, Qt::Key_Shift));
-    mapping.append(KeyMapping(XK_Shift_R, Qt::Key_Shift));
+        mapping.append(KeyMapping(XK_Shift_L, Qt::Key_Shift));
+        mapping.append(KeyMapping(XK_Shift_R, Qt::Key_Shift));
 
-    mapping.append(KeyMapping(XK_Control_L, Qt::Key_Control));
-    mapping.append(KeyMapping(XK_Control_R, Qt::Key_Control));
+        mapping.append(KeyMapping(XK_Control_L, Qt::Key_Control));
+        mapping.append(KeyMapping(XK_Control_R, Qt::Key_Control));
 
-    mapping.append(KeyMapping(XK_Meta_L, Qt::Key_Alt));
-    mapping.append(KeyMapping(XK_Meta_R, Qt::Key_Alt));
-    mapping.append(KeyMapping(XK_Mode_switch, Qt::Key_AltGr));
-    mapping.append(KeyMapping(XK_ISO_Level3_Shift, Qt::Key_AltGr));
+        mapping.append(KeyMapping(XK_Meta_L, Qt::Key_Alt));
+        mapping.append(KeyMapping(XK_Meta_R, Qt::Key_Alt));
+        mapping.append(KeyMapping(XK_Mode_switch, Qt::Key_AltGr));
+        mapping.append(KeyMapping(XK_ISO_Level3_Shift, Qt::Key_AltGr));
 
-    mapping.append(KeyMapping(XK_Alt_L, Qt::Key_Alt));
-    mapping.append(KeyMapping(XK_Alt_R, Qt::Key_Alt));
+        mapping.append(KeyMapping(XK_Alt_L, Qt::Key_Alt));
+        mapping.append(KeyMapping(XK_Alt_R, Qt::Key_Alt));
 
-    mapping.append(KeyMapping(XK_Super_L, Qt::Key_Meta));
-    mapping.append(KeyMapping(XK_Super_R, Qt::Key_Meta));
+        mapping.append(KeyMapping(XK_Super_L, Qt::Key_Meta));
+        mapping.append(KeyMapping(XK_Super_R, Qt::Key_Meta));
 
-    mapping.append(KeyMapping(XK_Hyper_L, Qt::Key_Hyper_L));
-    mapping.append(KeyMapping(XK_Hyper_R, Qt::Key_Hyper_R));
+        mapping.append(KeyMapping(XK_Hyper_L, Qt::Key_Hyper_L));
+        mapping.append(KeyMapping(XK_Hyper_R, Qt::Key_Hyper_R));
 
 
-    mapping.append(KeyMapping(XK_space, Qt::Key_Space));
+        mapping.append(KeyMapping(XK_space, Qt::Key_Space));
 
-    for (int qtKey = Qt::Key_0, x11Sym = XK_0;
-         qtKey <= Qt::Key_9;
-         qtKey++, x11Sym++) {
+        for (int qtKey = Qt::Key_0, x11Sym = XK_0;
+            qtKey <= Qt::Key_9;
+            qtKey++, x11Sym++) {
 
-        mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
-    }
+            mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
+        }
 
-    for (int qtKey = Qt::Key_A, x11Sym = XK_a;
-         qtKey <= Qt::Key_Z;
-         qtKey++, x11Sym++) {
+        for (int qtKey = Qt::Key_A, x11Sym = XK_a;
+            qtKey <= Qt::Key_Z;
+            qtKey++, x11Sym++) {
 
-        mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
+            mapping.append(KeyMapping(x11Sym, Qt::Key(qtKey)));
+        }
     }
 }
 
@@ -190,7 +191,7 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
 #ifdef HAVE_X11
 
-    {
+    if (QGuiApplication::platformName() == QLatin1String("xcb")) {
         for (int keyCode = m_d->minKeyCode; keyCode <= m_d->maxKeyCode; keyCode++) {
             if (m_d->checkKeyCodePressedX11(keyCode)) {
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))

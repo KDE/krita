@@ -78,7 +78,7 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
 
     QRect fillRect = m_resources->image()->bounds();
 
-    KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device);
+    KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device, KisAutoKey::AllowBlankMode);
     if (autoKeyframeCommand) {
         undoAdapter->addCommand(autoKeyframeCommand);
     }

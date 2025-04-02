@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-29 01:55+0000\n"
+"POT-Creation-Date: 2025-04-02 01:54+0000\n"
 "PO-Revision-Date: 2025-03-25 08:37+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -15982,7 +15982,7 @@ msgstr ""
 "Wayland скористайтеся XWayland. Зараз Krita завершить роботу."
 
 #: krita/main.cc:707 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23713,7 +23713,7 @@ msgid "Local Resources"
 msgstr "Локальні ресурси"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
@@ -23734,10 +23734,10 @@ msgstr "Локальні ресурси"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1087 libs/ui/KisApplication.cpp:1103
-#: libs/ui/KisApplication.cpp:1135 libs/ui/KisApplication.cpp:1149
-#: libs/ui/KisApplication.cpp:1177 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -24423,12 +24423,12 @@ msgstr ""
 "старого ресурсу і користуватися тою самою назвою для декількох ресурсів?\n"
 "Якщо ви скасуєте дію, внесені вами зміни не буде збережено."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:168
 #, kde-format
 msgid "All bundles have been deactivated."
 msgstr "Усі пакунки було деактивовано."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:162
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:174
 #, kde-format
 msgid ""
 "\n"
@@ -27539,12 +27539,12 @@ msgstr "Повторно створюємо кеш…"
 msgid "Saving frames..."
 msgstr "Зберігаємо кадри…"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:101
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Вилучити старі кадри?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:102
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -27559,12 +27559,12 @@ msgstr ""
 "Каталог: %1\n"
 "Файли: %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid "Failed to delete"
 msgstr "Неможливо вилучити"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -34733,30 +34733,30 @@ msgstr "Триває запуск…"
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Не знайдено тип mime, спробуйте параметр -mimetype"
 
-#: libs/ui/KisApplication.cpp:657
+#: libs/ui/KisApplication.cpp:662
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Не вдалося обробити кадри анімації!"
 
-#: libs/ui/KisApplication.cpp:684 libs/ui/KisApplication.cpp:956
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:962
 #, kde-format
 msgid "File layer"
 msgstr "Файловий шар"
 
-#: libs/ui/KisApplication.cpp:692 libs/ui/KisApplication.cpp:697
-#: libs/ui/KisApplication.cpp:950 libs/ui/KisApplication.cpp:964
-#: libs/ui/KisApplication.cpp:969
+#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:956 libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: попередження"
 
-#: libs/ui/KisApplication.cpp:693 libs/ui/KisApplication.cpp:965
+#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:971
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Не вдалося додати %1 як файловий шар: файла не існує."
 
-#: libs/ui/KisApplication.cpp:698
+#: libs/ui/KisApplication.cpp:704
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34778,7 +34778,7 @@ msgstr ""
 "Krita» у параметрах програми (Параметри → Налаштувати Krita → Загальне → "
 "Вікно)."
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34789,32 +34789,32 @@ msgstr ""
 "Ви можете створити документ за допомогою параметра --new-image або відкрити "
 "наявний файл."
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:957
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не вдалося відкрити файл %1"
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Неможливо додати файловий шар: не відкрито жодного документа."
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1091
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не знайдено шаблон для: %1"
 
-#: libs/ui/KisApplication.cpp:1088
+#: libs/ui/KisApplication.cpp:1094
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Знайдено забагато шаблонів для: %1"
 
-#: libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1110
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Не вдалось завантажити шаблон %1."
 
-#: libs/ui/KisApplication.cpp:1136
+#: libs/ui/KisApplication.cpp:1142
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34829,7 +34829,7 @@ msgstr ""
 "\n"
 "Перезапустіть Krita, щоб зміни набули чинності."
 
-#: libs/ui/KisApplication.cpp:1150
+#: libs/ui/KisApplication.cpp:1156
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34841,7 +34841,7 @@ msgstr ""
 "Будь ласка, переконайтеся, що з файлом не працюють інші програми, і "
 "повторіть спробу."
 
-#: libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1184
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ви дійсно хочете спорожнити файл параметрів?"
@@ -42736,30 +42736,30 @@ msgstr ""
 "Змінити масштаб на монтажному столі. Натисніть і перетягніть ліворуч або "
 "праворуч."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Вставлення або вилучення кадрів затримки"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Вкажіть кількість кадрів"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Редагувати кадри:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ключові кадри"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

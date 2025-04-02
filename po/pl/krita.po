@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-29 01:55+0000\n"
+"POT-Creation-Date: 2025-04-02 01:54+0000\n"
 "PO-Revision-Date: 2025-02-15 11:29+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16062,7 +16062,7 @@ msgstr ""
 "Waylandzie. Krita zakończy teraz swoje działanie."
 
 #: krita/main.cc:707 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23598,7 +23598,7 @@ msgid "Local Resources"
 msgstr "Miejscowe zasoby"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
@@ -23619,10 +23619,10 @@ msgstr "Miejscowe zasoby"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1087 libs/ui/KisApplication.cpp:1103
-#: libs/ui/KisApplication.cpp:1135 libs/ui/KisApplication.cpp:1149
-#: libs/ui/KisApplication.cpp:1177 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -24308,12 +24308,12 @@ msgstr ""
 "nazwy dla wielu zasobów?\n"
 "Jeśli anulujesz, to twoje zmiany zostaną porzucone."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:168
 #, kde-format
 msgid "All bundles have been deactivated."
 msgstr "Wyłączono wszystkie warstwy."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:162
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:174
 #, kde-format
 msgid ""
 "\n"
@@ -27386,12 +27386,12 @@ msgstr "Ponowne wypełnianie pamięci podręcznej..."
 msgid "Saving frames..."
 msgstr "Zapisywanie klatek..."
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:101
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Usunąć stare klatki?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:102
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -27406,12 +27406,12 @@ msgstr ""
 "Katalog: %1\n"
 "Pliki: %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid "Failed to delete"
 msgstr "Nie udało się usunąć"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -34460,30 +34460,30 @@ msgstr "Uruchamianie..."
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Nie znaleziono typu mime, spróbuj użyć opcji -mimetype"
 
-#: libs/ui/KisApplication.cpp:657
+#: libs/ui/KisApplication.cpp:662
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Nie udało się wyrenderować klatek animacji!"
 
-#: libs/ui/KisApplication.cpp:684 libs/ui/KisApplication.cpp:956
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:962
 #, kde-format
 msgid "File layer"
 msgstr "Wypełnij warstwę"
 
-#: libs/ui/KisApplication.cpp:692 libs/ui/KisApplication.cpp:697
-#: libs/ui/KisApplication.cpp:950 libs/ui/KisApplication.cpp:964
-#: libs/ui/KisApplication.cpp:969
+#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:956 libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita: Ostrzeżenie"
 
-#: libs/ui/KisApplication.cpp:693 libs/ui/KisApplication.cpp:965
+#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:971
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Nie można dodać %1 jako warstwy pliku, bo plik nie istnieje."
 
-#: libs/ui/KisApplication.cpp:698
+#: libs/ui/KisApplication.cpp:704
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34504,7 +34504,7 @@ msgstr ""
 "uruchomionym wystąpieniu Krity, to zaznacz pole \"Zezwól tylko na jedno "
 "wystapienie Krity\" w ustawieniach (Ustawienia -> Ogólne -> Okno)."
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34515,32 +34515,32 @@ msgstr ""
 "Możesz utworzyć nowy plik poprzez argument --new-image lub otworzyć "
 "istniejący plik."
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:957
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Nie udało się otworzyć pliku %1"
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Nie można dodać warstwy pliku: żaden dokument nie jest otwarty."
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1091
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Nie znaleziono wzorca dla: %1"
 
-#: libs/ui/KisApplication.cpp:1088
+#: libs/ui/KisApplication.cpp:1094
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Znaleziono zbyt dużo wzorców dla: %1"
 
-#: libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1110
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Nie można załadować wzorca %1."
 
-#: libs/ui/KisApplication.cpp:1136
+#: libs/ui/KisApplication.cpp:1142
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34555,7 +34555,7 @@ msgstr ""
 "\n"
 "Uruchom Kritę ponownie, aby zastosować zmiany."
 
-#: libs/ui/KisApplication.cpp:1150
+#: libs/ui/KisApplication.cpp:1156
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34566,7 +34566,7 @@ msgstr ""
 "\n"
 "Upewnij się, że żaden inny program nie używa pliku i spróbuj ponownie."
 
-#: libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1184
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Czy na pewno chcesz wyczyścić plik ustawień?"
@@ -42360,30 +42360,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Powiększanie osi czasu. Przytrzymaj i przeciągnij w lewo lub prawo."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Wstaw lub usuń klatki zatrzymania"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Podaj liczbę klatek"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edytuj klatki:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Klatki kluczowe"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

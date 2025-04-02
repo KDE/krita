@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-29 01:55+0000\n"
+"POT-Creation-Date: 2025-04-02 01:54+0000\n"
 "PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -16000,7 +16000,7 @@ msgstr ""
 "Wayland. Krita fermos nun."
 
 #: krita/main.cc:707 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -23340,7 +23340,7 @@ msgid "Local Resources"
 msgstr "Lokaj Rimedoj"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
@@ -23361,10 +23361,10 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1087 libs/ui/KisApplication.cpp:1103
-#: libs/ui/KisApplication.cpp:1135 libs/ui/KisApplication.cpp:1149
-#: libs/ui/KisApplication.cpp:1177 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -24049,12 +24049,12 @@ msgstr ""
 "la saman nomon por pluraj rimedoj?\n"
 "Se vi nuligas, viaj ŝanĝoj ne estos konservitaj."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:168
 #, kde-format
 msgid "All bundles have been deactivated."
 msgstr "Ĉiuj pakaĵoj estas malaktivigitaj."
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:162
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:174
 #, kde-format
 msgid ""
 "\n"
@@ -27101,12 +27101,12 @@ msgstr "Regenerante kaŝmemoron..."
 msgid "Saving frames..."
 msgstr "Konservante kadrojn..."
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:101
 #, kde-format
 msgid "Delete old frames?"
 msgstr "Ĉu forigi malnovajn kadrojn?"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:102
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -27121,12 +27121,12 @@ msgstr ""
 "Dosierujo: %1\n"
 "Dosieroj: %2"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, kde-format
 msgid "Failed to delete"
 msgstr "Malsukcesis forigi"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -34129,30 +34129,30 @@ msgstr "Lanĉante..."
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Mimetype ne trovita, provu uzi la -mimetype opcion"
 
-#: libs/ui/KisApplication.cpp:657
+#: libs/ui/KisApplication.cpp:662
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Malsukcesis bildigi animaciajn kadrojn!"
 
-#: libs/ui/KisApplication.cpp:684 libs/ui/KisApplication.cpp:956
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:962
 #, kde-format
 msgid "File layer"
 msgstr "Dosiera tavolo"
 
-#: libs/ui/KisApplication.cpp:692 libs/ui/KisApplication.cpp:697
-#: libs/ui/KisApplication.cpp:950 libs/ui/KisApplication.cpp:964
-#: libs/ui/KisApplication.cpp:969
+#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:956 libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Krita:Averto"
 
-#: libs/ui/KisApplication.cpp:693 libs/ui/KisApplication.cpp:965
+#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:971
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Ne povas aldoni %1 kiel dosiertavolon: la dosiero ne ekzistas."
 
-#: libs/ui/KisApplication.cpp:698
+#: libs/ui/KisApplication.cpp:704
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34173,7 +34173,7 @@ msgstr ""
 "funkcianta kazo de Krita, marku la markokeston \"Permesi nur unu ekzemplon "
 "de Krita\" en la agordoj (Agordoj -> Ĝenerala -> Fenestro)."
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34184,32 +34184,32 @@ msgstr ""
 "Vi povas aŭ krei novan dosieron uzante la opcion --new-image, aŭ vi povas "
 "malfermi ekzistantan dosieron."
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:957
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Ne eblis malfermi la dosieron %1"
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Ne povas aldoni la dosiertavolon: neniu dokumento estas malfermita."
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1091
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Neniu ŝablono trovita por: %1"
 
-#: libs/ui/KisApplication.cpp:1088
+#: libs/ui/KisApplication.cpp:1094
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Tro da ŝablonoj trovitaj por: %1"
 
-#: libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1110
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Ŝablono %1 malsukcesis ŝargi."
 
-#: libs/ui/KisApplication.cpp:1136
+#: libs/ui/KisApplication.cpp:1142
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34224,7 +34224,7 @@ msgstr ""
 "\n"
 "Rekomencu Krita por ke ŝanĝoj efektiviĝu."
 
-#: libs/ui/KisApplication.cpp:1150
+#: libs/ui/KisApplication.cpp:1156
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34235,7 +34235,7 @@ msgstr ""
 "\n"
 "Bonvolu certigi, ke neniu alia programo uzas la dosieron kaj provu denove."
 
-#: libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1184
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Ĉu vi volas forigi la agordan dosieron?"
@@ -41963,30 +41963,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Zoma Templinio. Tenu kaj trenu maldekstren aŭ dekstren."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Enmeti aŭ Forigi Teni Kadrojn"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Enigi nombron da kadroj"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Redakti Kadrojn:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ŝlosilkadroj"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

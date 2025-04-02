@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-29 01:55+0000\n"
+"POT-Creation-Date: 2025-04-02 01:54+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -16382,7 +16382,7 @@ msgid ""
 msgstr ""
 
 #: krita/main.cc:707 libs/ui/KisApplication.cpp:431
-#: libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
@@ -24018,7 +24018,7 @@ msgid "Local Resources"
 msgstr "مەنبەلەر(&R)"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:179
 #: libs/ui/animation/KisAnimationRender.cpp:48
 #: libs/ui/animation/KisAnimationRender.cpp:116
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:747
@@ -24039,10 +24039,10 @@ msgstr "مەنبەلەر(&R)"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1087 libs/ui/KisApplication.cpp:1103
-#: libs/ui/KisApplication.cpp:1135 libs/ui/KisApplication.cpp:1149
-#: libs/ui/KisApplication.cpp:1177 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
+#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
+#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
+#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -24757,12 +24757,12 @@ msgid ""
 "If you cancel, your changes won't be saved."
 msgstr ""
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:168
 #, kde-format
 msgid "All bundles have been deactivated."
 msgstr ""
 
-#: libs/resourcewidgets/KisStorageChooserWidget.cpp:162
+#: libs/resourcewidgets/KisStorageChooserWidget.cpp:174
 #, kde-format
 msgid ""
 "\n"
@@ -27803,12 +27803,12 @@ msgstr ""
 msgid "Saving frames..."
 msgstr "نۇر ئۆتۈش"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:101
 #, fuzzy, kde-format
 msgid "Delete old frames?"
 msgstr "ئىسىم قىستۇر"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:107
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:102
 #, kde-format
 msgid ""
 "Frames with the same naming scheme exist in the destination directory. They "
@@ -27818,12 +27818,12 @@ msgid ""
 "Files: %2"
 msgstr ""
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:121
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
 #, fuzzy, kde-format
 msgid "Failed to delete"
 msgstr "سۈرەتلەر"
 
-#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:122
+#: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:123
 #, kde-format
 msgid ""
 "Failed to delete an old frame file:\n"
@@ -34753,30 +34753,30 @@ msgstr "تەڭشەكلەر"
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:657
+#: libs/ui/KisApplication.cpp:662
 #, fuzzy, kde-format
 msgid "Failed to render animation frames!"
 msgstr "سۈرەتلەر"
 
-#: libs/ui/KisApplication.cpp:684 libs/ui/KisApplication.cpp:956
+#: libs/ui/KisApplication.cpp:690 libs/ui/KisApplication.cpp:962
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "ھۆججەت …"
 
-#: libs/ui/KisApplication.cpp:692 libs/ui/KisApplication.cpp:697
-#: libs/ui/KisApplication.cpp:950 libs/ui/KisApplication.cpp:964
-#: libs/ui/KisApplication.cpp:969
+#: libs/ui/KisApplication.cpp:698 libs/ui/KisApplication.cpp:703
+#: libs/ui/KisApplication.cpp:956 libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:975
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "ئاگاھلاندۇرۇش"
 
-#: libs/ui/KisApplication.cpp:693 libs/ui/KisApplication.cpp:965
+#: libs/ui/KisApplication.cpp:699 libs/ui/KisApplication.cpp:971
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:698
+#: libs/ui/KisApplication.cpp:704
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34789,7 +34789,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:704
+#: libs/ui/KisApplication.cpp:710
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -34797,35 +34797,35 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:957
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Couldn't open file %1"
 msgstr "%1 نى تاپقىلى بولمىدى"
 
-#: libs/ui/KisApplication.cpp:970
+#: libs/ui/KisApplication.cpp:976
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1091
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "No template found for: %1"
 msgstr "ھۆججەتتىن شەكىل تېپىلمىدى: %1"
 
-#: libs/ui/KisApplication.cpp:1088
+#: libs/ui/KisApplication.cpp:1094
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "Too many templates found for: %1"
 msgstr "ھۆججەتتىن شەكىل تېپىلمىدى: %1"
 
-#: libs/ui/KisApplication.cpp:1104
+#: libs/ui/KisApplication.cpp:1110
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "مۇندەرىجە تاللاش"
 
-#: libs/ui/KisApplication.cpp:1136
+#: libs/ui/KisApplication.cpp:1142
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34835,7 +34835,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1150
+#: libs/ui/KisApplication.cpp:1156
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34843,7 +34843,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1178
+#: libs/ui/KisApplication.cpp:1184
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -42419,32 +42419,32 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
 #, fuzzy, kde-format
 #| msgid "Insert name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "ئىسىم قىستۇر"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
 #, fuzzy, kde-format
 #| msgid "Number of characters:"
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "ھەرپ سانى:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "بىرىنچى بەت(&F)"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "ئىسىم قىستۇر"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

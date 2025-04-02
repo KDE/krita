@@ -93,8 +93,8 @@ struct Q_DECL_HIDDEN InlineSizeInfo {
             }
             break;
         }
-        const double xPos = shape->initialTextPosition().x();
-        const double yPos = shape->initialTextPosition().y();
+        const double xPos = writingMode == KoSvgText::WritingMode::HorizontalTB? shape->initialTextPosition().x(): shape->initialTextPosition().y();
+        const double yPos = writingMode == KoSvgText::WritingMode::HorizontalTB? shape->initialTextPosition().y(): shape->initialTextPosition().x();
 
         const double baseline = yPos;
         double left{};

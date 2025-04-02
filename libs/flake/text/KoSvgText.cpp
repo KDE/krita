@@ -1473,11 +1473,12 @@ int FontMetrics::valueForBaselineValue(Baseline baseline) const {
     case BaselineMiddle:
         baselineVal = isVertical? ideographicCenterBaseline: xHeight/2;
         break;
+        // Because we normalize ascender and descender in vertical, we need to add ideographic-central to ensure that they stay the same.
     case BaselineTextBottom:
-        baselineVal = descender;
+        baselineVal = isVertical? descender + ideographicCenterBaseline: descender;
         break;
     case BaselineTextTop:
-        baselineVal = ascender;
+        baselineVal = isVertical? ascender + ideographicCenterBaseline: descender;
         break;
     default:
         break;

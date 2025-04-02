@@ -101,6 +101,75 @@ void drawCoordsStart(QPainter &painter, const KoViewConverter &converter)
 
 }
 
+
+void paintSelectedEdge(QPainter &painter, const KoViewConverter &converter, const QLineF &lineSegment)
+{
+    QLineF lineInView = converter.documentToView().map(lineSegment);
+    QList<QLineF> parallels = KisAlgebra2D::getParallelLines(lineInView, 5);
+
+    painter.save();
+    qreal width = 2;
+    QColor color = Qt::blue;
+    color.setAlphaF(0.8);
+    QColor white = Qt::white;
+    white.setAlphaF(0.75);
+
+    QPen pen = QPen(color, width);
+    QPen alternative = QPen(white, width);
+
+    alternative.setStyle(Qt::CustomDashLine);
+    qreal dashLength = 6;
+    alternative.setDashPattern({dashLength - 1, dashLength + 1});
+    alternative.setCapStyle(Qt::RoundCap);
+
+    pen.setCosmetic(true);
+    painter.setPen(pen);
+
+    //painter.drawLines(parallels.toVector());
+    painter.drawLine(lineInView);
+
+    alternative.setCosmetic(true);
+    painter.setPen(alternative);
+    //painter.drawLines(parallels.toVector());
+    painter.drawLine(lineInView);
+
+
+    painter.restore();
+
+}
+
+QPolygonF createDiamond(int size, QPointF location = QPointF())
+{
+    QPolygonF polygon;
+    polygon << QPointF(-size, 0);
+    polygon << QPointF(0, size);
+    polygon << QPointF(size, 0);
+    polygon << QPointF(0, -size);
+    polygon.translate(location);
+    return polygon;
+}
+
+void paintSelectedPoint(QPainter &painter, const KoViewConverter &converter, const QPointF &point)
+{
+    QPointF p = point;
+    p = converter.documentToView().map(p);
+    QPolygonF diamond = createDiamond(6, p);
+    painter.save();
+    QColor color = Qt::blue;
+    color.setAlphaF(0.9);
+    QColor white = Qt::white;
+    white.setAlphaF(0.75);
+
+    QPen pen = QPen(color, 2);
+    pen.setCosmetic(true);
+    QBrush brush = QBrush(white);
+    painter.setPen(pen);
+    painter.setBrush(brush);
+
+    painter.drawPolygon(diamond);
+    painter.restore();
+}
+
 void KisToolKnife::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
@@ -114,9 +183,35 @@ void KisToolKnife::paint(QPainter &painter, const KoViewConverter &converter)
 
     painter.restore();
 
+    KoInteractionTool::paint(painter, converter);
 
 
+    bool paintSelection = false;
+    if (paintSelection) {
 
+        KIS_SAFE_ASSERT_RECOVER_RETURN(canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(canvas()->selectedShapesProxy());
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(canvas()->selectedShapesProxy()->selection());
+
+        KoSelection *selection = canvas()->selectedShapesProxy()->selection();
+
+        QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+        Q_FOREACH(KoShape* shape, shapes) {
+            KisAlgebra2D::VectorPath vector = KisAlgebra2D::VectorPath(shape->outline());
+            painter.save();
+            painter.setTransform(painter.transform());
+            for (int i = 0; i < vector.segmentsCount(); i++) {
+                paintSelectedEdge(painter, converter, shape->absoluteTransformation().map(vector.segmentAtAsLine(i)));
+            }
+            for (int i =  0; i < vector.pointsCount(); i++) {
+                paintSelectedPoint(painter, converter, shape->absoluteTransformation().map(vector.pointAt(i).endPoint));
+            }
+            painter.restore();
+
+        }
+    }
 
 
 

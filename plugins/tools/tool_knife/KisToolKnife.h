@@ -51,16 +51,10 @@ public Q_SLOTS:
 
     KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 private:
-    //QRect inpaintImage(KisPaintDeviceSP maskDev, KisPaintDeviceSP imageDev);
-    QPainterPath getBrushOutlinePath(const QPointF &documentPos, const KoPointerEvent *event);
-    QPainterPath brushOutline();
-
+    //friend class KisToolKnifeOptionsWidget;
 private:
     struct Private;
-    class InpaintCommand;
     const QScopedPointer<Private> m_d;
-
-    void addMaskPath(KoPointerEvent *event);
 };
 
 
@@ -75,7 +69,7 @@ public:
         setToolTip(i18n("Knife Tool"));
 
         setSection(ToolBoxSection::Main);
-        setIconName(koIconNameCStr("select"));
+        setIconName(koIconNameCStr("tool_comic_panel_editing"));
         setPriority(7);
         setActivationShapeId("flake/always,KoPathShape");
     }

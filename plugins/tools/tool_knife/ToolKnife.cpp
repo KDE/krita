@@ -5,15 +5,12 @@
  */
 
 #include "ToolKnife.h"
-#include <QStringList>
 
-#include <kis_debug.h>
 #include <kpluginfactory.h>
 
 #include <kis_tool.h>
 #include <KoToolRegistry.h>
 
-#include "kis_paint_device.h"
 #include "KisToolKnife.h"
 
 

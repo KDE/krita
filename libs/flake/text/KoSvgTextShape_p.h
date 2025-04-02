@@ -192,8 +192,8 @@ struct CharacterResult {
 };
 
 struct LineChunk {
-    QLineF length;
-    QVector<int> chunkIndices;
+    QLineF length; ///< Used to measure how long the current line is allowed to be.
+    QVector<int> chunkIndices; ///< charResult indices that belong to this chunk.
     QRectF boundingBox;
     QPointF conditionalHangEnd = QPointF();
 };

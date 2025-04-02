@@ -256,7 +256,7 @@ static bool pointLessThanVertical(const QPointF &a, const QPointF &b)
 }
 
 static QVector<QLineF>
-findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, QRectF wordBox, KoSvgText::WritingMode writingMode)
+findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, const QRectF wordBox, KoSvgText::WritingMode writingMode)
 {
     QVector<QLineF> lines;
 
@@ -378,10 +378,15 @@ findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, QRectF wordBox, K
     return lines;
 }
 
+/**
+ * @brief getEstimatedHeight
+ * Adjust the wordbox with the estimated height.
+ */
+
 static void getEstimatedHeight(QVector<CharacterResult> &result,
-                               int index,
+                               const int index,
                                QRectF &wordBox,
-                               QRectF boundingBox,
+                               const QRectF boundingBox,
                                KoSvgText::WritingMode writingMode)
 {
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
@@ -552,11 +557,12 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             bool foundFirst = false;
             bool needNewLine = true;
             // add text indent to wordbox.
-            getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
             if (!currentShape.isEmpty()) {
                 // we're going to try and get an offset line first before trying get first pos.
                 // This gives more stable results on curved shapes.
+                getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
                 currentPos -= writingMode == KoSvgText::VerticalRL? wordBox.topRight(): wordBox.topLeft();
+
                 currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
                 qreal length = isHorizontal? wordBox.width(): wordBox.height();
                 for (int i = 0; i < currentLine.chunks.size(); i++) {
@@ -581,6 +587,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                     break;
                 }
                 currentShape = shapesIt.next();
+                getEstimatedHeight(result, index, wordBox, currentShape.boundingRect(), writingMode);
                 bool indentPercent = textIndentInfo.length.unit == KoSvgText::CssLengthPercentage::Percentage;
                 qreal textIdentValue = textIndentInfo.length.value;
                 if (isHorizontal) {
@@ -610,15 +617,18 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
             }
 
             if (foundFirst) {
+
                 if (needNewLine) {
                     currentLine = LineBox(findLineBoxesForFirstPos(currentShape, currentPos, wordBox, writingMode), ltr, indent);
                     // We could set this to find the first fitting width, but it's better to try and improve the precision of the firstpos algorithm,
                     // as this gives more stable results.
                     currentLine.setCurrentChunkForPos(currentPos, isHorizontal);
                 }
+                const qreal expectedLineT = isHorizontal? wordBox.top():
+                                                          writingMode == KoSvgText::VerticalRL? wordBox.right(): wordBox.left();
+
                 currentLine.firstLine = firstLine;
-                currentLine.expectedLineTop = isHorizontal? -wordBox.top():
-                                                            writingMode == KoSvgText::VerticalRL? wordBox.right(): wordBox.left();
+                currentLine.expectedLineTop = expectedLineT;
                 currentLine.justifyLine = align == KoSvgText::AlignJustify;
                 currentPos = currentLine.chunk().length.p1() + indent;
                 lineOffset = currentPos;

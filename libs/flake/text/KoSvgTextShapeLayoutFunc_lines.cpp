@@ -112,6 +112,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     QPointF lineBottom;
     QPointF correctionOffset; ///< This is for determining the difference between
                               ///< a predicted line-height (for text-in-shape) and the actual line-height.
+                              ///< Note: this is required to be positive.
 
     if (currentLine.chunks.isEmpty()) {
         return QPointF();
@@ -135,19 +136,18 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     }
 
     // We do qmin/qmax here so that later, the correction offset will not go below either value.
-    qreal expectedLineTop = writingMode == KoSvgText::HorizontalTB? qMin(currentLine.expectedLineTop, currentLine.actualLineTop):
-                                                                    qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
-
+    const qreal expectedLineTop = writingMode == KoSvgText::HorizontalTB? qMin(currentLine.expectedLineTop, currentLine.actualLineTop):
+                                                                          qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
     if (writingMode == KoSvgText::HorizontalTB) {
         currentLine.baselineTop = QPointF(0, currentLine.actualLineTop);
         currentLine.baselineBottom = QPointF(0, currentLine.actualLineBottom);
-        correctionOffset = QPointF(0, expectedLineTop) - currentLine.baselineTop;
+        correctionOffset = QPointF(0, -expectedLineTop) + currentLine.baselineTop;
         lineTop = -currentLine.baselineTop;
         lineBottom = currentLine.baselineBottom;
     } else if (writingMode == KoSvgText::VerticalLR) {
         currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
         currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(expectedLineTop, 0) - currentLine.baselineTop;
+        correctionOffset = QPointF(-expectedLineTop, 0) + currentLine.baselineTop;
         // Note: while Vertical LR goes left-to-right in its lines, its lines themselves are
         // oriented with the top pointed in the positive x direction.
         lineBottom = currentLine.baselineTop;
@@ -155,7 +155,7 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
     } else {
         currentLine.baselineTop = QPointF(currentLine.actualLineTop, 0);
         currentLine.baselineBottom = QPointF(currentLine.actualLineBottom, 0);
-        correctionOffset = QPointF(-expectedLineTop, 0) + currentLine.baselineTop;
+        correctionOffset = QPointF(expectedLineTop, 0) - currentLine.baselineTop;
         lineTop = -currentLine.baselineTop;
         lineBottom = currentLine.baselineBottom;
     }

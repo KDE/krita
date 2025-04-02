@@ -1478,7 +1478,7 @@ int FontMetrics::valueForBaselineValue(Baseline baseline) const {
         baselineVal = isVertical? descender + ideographicCenterBaseline: descender;
         break;
     case BaselineTextTop:
-        baselineVal = isVertical? ascender + ideographicCenterBaseline: descender;
+        baselineVal = isVertical? ascender + ideographicCenterBaseline: ascender;
         break;
     default:
         break;

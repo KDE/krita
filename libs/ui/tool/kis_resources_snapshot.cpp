@@ -360,6 +360,12 @@ void KisResourcesSnapshot::setOpacity(qreal opacity)
     m_d->opacity = opacity;
 }
 
+void KisResourcesSnapshot::setMirroring(bool horizontal, bool vertical)
+{
+    m_d->mirrorMaskHorizontal = horizontal;
+    m_d->mirrorMaskVertical = vertical;
+}
+
 qreal KisResourcesSnapshot::opacity() const
 {
     return m_d->opacity;

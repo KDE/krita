@@ -65,6 +65,7 @@ public:
     bool needsSpacingUpdates() const;
 
     void setOpacity(qreal opacity);
+    void setMirroring(bool horizontal, bool vertical);
     qreal opacity() const;
     QString compositeOpId() const;
 

@@ -289,6 +289,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                      0, {},
                                      proxy_preset);
     resources->setOpacity(settings->paintOpOpacity());
+    resources->setMirroring(false, false); // ignore mirroring in toolbar
 
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();

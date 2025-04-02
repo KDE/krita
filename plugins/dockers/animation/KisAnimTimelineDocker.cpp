@@ -617,63 +617,43 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     // Connect playback-related actions..
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        togglePlayback(); //TODO: bind normally
-    });
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(togglePlayback()));
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->stop();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(stop()));
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousFrame();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousFrame()));
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextFrame();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextFrame()));
 
     action = actionManager->createAction("previous_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousKeyframe()));
 
     action = actionManager->createAction("next_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextKeyframe()));
 
     action = actionManager->createAction("previous_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousMatchingKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousMatchingKeyframe()));
 
     action = actionManager->createAction("next_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextMatchingKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextMatchingKeyframe()));
 
     action = actionManager->createAction("previous_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->previousUnfilteredKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(previousUnfilteredKeyframe()));
 
     action = actionManager->createAction("next_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, this, [this](bool){
-        m_d->playbackEngine->nextUnfilteredKeyframe();
-    });
+    connect(action, SIGNAL(triggered(bool)), m_d->playbackEngine, SLOT(nextUnfilteredKeyframe()));
 
     action = actionManager->createAction("first_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);

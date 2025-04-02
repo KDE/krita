@@ -286,16 +286,18 @@ KisToolKnifeOptionsWidget::KisToolKnifeOptionsWidget(KisCanvasResourceProvider *
         KisIconUtils::loadIcon("tool_comic_panel_scissors"));
     m_d->buttonModeRemoveGutter = m_d->ui->optionButtonStripToolMode->addButton(
         KisIconUtils::loadIcon("tool_comic_panel_zipper"));
-    m_d->buttonModeMoveGutterEndPoint = m_d->ui->optionButtonStripToolMode->addButton(
-        KisIconUtils::loadIcon("tool_comic_panel_move_point"));
+    //m_d->buttonModeMoveGutterEndPoint = m_d->ui->optionButtonStripToolMode->addButton(
+    //    KisIconUtils::loadIcon("tool_comic_panel_move_point"));
 
     m_d->buttonModeAddGutter->setChecked(true);
     m_d->buttonModeAddGutter->setMinimumSize(QSize(36, 36));
     m_d->buttonModeRemoveGutter->setMinimumSize(QSize(36, 36));
     m_d->buttonModeAddGutter->setIconSize(QSize(28, 28));
     m_d->buttonModeRemoveGutter->setIconSize(QSize(28, 28));
-    m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
-    m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
+    //m_d->buttonModeMoveGutterEndPoint->setMinimumSize(QSize(36, 36));
+    //m_d->buttonModeMoveGutterEndPoint->setIconSize(QSize(28, 28));
+
+
     m_d->ui->unitsCombobox->addItem(i18n("Pixels"), QVariant("px"));
     m_d->ui->unitsCombobox->addItem(i18n("Millimeters"), QVariant("mm"));
 

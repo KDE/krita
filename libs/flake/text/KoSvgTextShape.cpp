@@ -1533,6 +1533,15 @@ void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements)
                 pen.setColor(QColor(255, 128, 0, 128));
                 painter.setPen(pen);
                 painter.drawRect(chunk.boundingBox);
+
+                pen.setColor(QColor(255, 0, 0, 128));
+                pen.setStyle(Qt::DashDotDotLine);
+                painter.setPen(pen);
+                painter.drawLine(chunk.length.translated(lineBox.baselineTop));
+                pen.setColor(QColor(0, 128, 0, 128));
+                pen.setStyle(Qt::DashDotLine);
+                painter.setPen(pen);
+                painter.drawLine(chunk.length.translated(lineBox.baselineBottom));
             }
         }
     }

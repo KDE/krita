@@ -545,7 +545,7 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
                     penColor.setAlpha(192);
                     pen.setColor(penColor);
                     painter.setPen(pen);
-                    painter.drawPolygon(tf.map(result.at(i).inkBoundingBox));
+                    painter.drawPolygon(tf.map(result.at(i).layoutBox()));
 
                     penColor.setAlpha(96);
                     pen.setColor(penColor);

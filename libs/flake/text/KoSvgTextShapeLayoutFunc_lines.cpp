@@ -28,24 +28,15 @@ namespace KoSvgTextShapeLayoutFunc
  */
 void calculateLineHeight(CharacterResult cr, double &ascent, double &descent, bool isHorizontal, bool compare)
 {
-    double offset = isHorizontal? cr.totalBaselineOffset().y(): cr.totalBaselineOffset().x();
-    double offsetAsc = 0.0;
-    double offsetDsc = 0.0;
-    if (cr.scaledAscent <= 0) {
-        offsetAsc = cr.scaledAscent - cr.scaledHalfLeading;
-        offsetDsc = cr.scaledDescent + cr.scaledHalfLeading;
-    } else {
-        offsetAsc = cr.scaledAscent + cr.scaledHalfLeading;
-        offsetDsc = cr.scaledDescent - cr.scaledHalfLeading;
-    }
-    offsetAsc += offset;
-    offsetDsc += offset;
+    QRectF lineHeightBox = cr.lineHeightBox().translated(cr.totalBaselineOffset());
+    double offsetAsc = isHorizontal? lineHeightBox.top(): lineHeightBox.right();
+    double offsetDsc = isHorizontal? lineHeightBox.bottom(): lineHeightBox.left();
 
     if (!compare) {
         ascent = offsetAsc;
         descent = offsetDsc;
     } else {
-        if (cr.scaledAscent <= 0) {
+        if (isHorizontal) {
             ascent = qMin(offsetAsc, ascent);
             descent = qMax(offsetDsc, descent);
         } else {
@@ -104,6 +95,7 @@ void addWordToLine(QVector<CharacterResult> &result,
     }
     currentPos = lineAdvance;
     currentChunk.chunkIndices += wordIndices;
+    currentChunk.length.setP2(lineAdvance);
     currentLine.setCurrentChunk(currentChunk);
     wordIndices.clear();
 }
@@ -143,8 +135,9 @@ static QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
         }
     }
 
-    qreal expectedLineTop = currentLine.actualLineTop > 0? qMax(currentLine.expectedLineTop, currentLine.actualLineTop):
-                                                       qMin(currentLine.expectedLineTop, currentLine.actualLineTop);
+    // We do qmin/qmax here so that later, the correction offset will not go below either value.
+    qreal expectedLineTop = writingMode == KoSvgText::HorizontalTB? qMin(currentLine.expectedLineTop, currentLine.actualLineTop):
+                                                                    qMax(currentLine.expectedLineTop, currentLine.actualLineTop);
 
     if (writingMode == KoSvgText::HorizontalTB) {
         currentLine.baselineTop = QPointF(0, currentLine.actualLineTop);

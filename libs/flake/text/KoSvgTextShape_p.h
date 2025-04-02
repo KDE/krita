@@ -130,7 +130,7 @@ struct CharacterResult {
      */
     QRectF layoutBox() const {
         return isHorizontal? QRectF(0, advance.y()+scaledAscent, advance.x(), scaledDescent-scaledAscent)
-                         : QRectF(advance.x()-scaledDescent, 0, scaledDescent-scaledAscent, advance.y());
+                         : QRectF(advance.x()+scaledDescent, 0, scaledAscent-scaledDescent, advance.y());
     }
     /**
      * @brief lineHeightBox
@@ -166,8 +166,8 @@ struct CharacterResult {
             scaledDescent -= newOrigin.y();
             scaledAscent -= newOrigin.y();
         } else {
-            scaledDescent += newOrigin.x();
-            scaledAscent += newOrigin.x();
+            scaledDescent -= newOrigin.x();
+            scaledAscent -= newOrigin.x();
         }
     }
 
@@ -249,12 +249,12 @@ struct LineBox {
     QVector<LineChunk> chunks;
     int currentChunk = -1;
 
-    qreal expectedLineTop = 0;
+    qreal expectedLineTop = 0; ///< Because fonts can affect lineheight mid-line, and this affects wrapping, this estimates the line-height.
     qreal actualLineTop = 0;
     qreal actualLineBottom = 0;
 
-    QPointF baselineTop = QPointF();
-    QPointF baselineBottom = QPointF();
+    QPointF baselineTop = QPointF(); ///< Used to identify the top of the line for baseline-alignment.
+    QPointF baselineBottom = QPointF(); ///< Used to identify the bottom of the line for baseline-alignment.
 
     QPointF textIndent = QPointF();
     bool firstLine = false;

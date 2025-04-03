@@ -38,6 +38,7 @@
         <file>dark_tool_rect_selection.svg</file>
         <file>dark_tool_similar_selection.svg</file>
         <file>dark_tool_zoom.svg</file>
+        <file>dark_tool_comic_panel_editing.svg</file>
         <file>dark_tool_comic_panel_scissors.svg</file>
         <file>dark_tool_comic_panel_zipper.svg</file>
         <file>dark_tool_comic_panel_move_point.svg</file>
@@ -75,6 +76,7 @@
         <file>light_tool_rect_selection.svg</file>
         <file>light_tool_similar_selection.svg</file>
         <file>light_tool_zoom.svg</file>
+        <file>light_tool_comic_panel_editing.svg</file>
         <file>light_tool_comic_panel_scissors.svg</file>
         <file>light_tool_comic_panel_zipper.svg</file>
         <file>light_tool_comic_panel_move_point.svg</file>

@@ -685,6 +685,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
 #endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
+    app.setDesktopFileName(QStringLiteral("org.kde.krita"));
 
     if (!args.noSplash()) {
         QWidget *splash = new KisSplashScreen();

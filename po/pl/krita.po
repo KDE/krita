@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2025-02-15 11:29+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16046,29 +16046,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Przestrzenie pracy"
 
-#: krita/main.cc:589
-#, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Błąd krytyczny"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-"Krita nie obsługuje platformy Wayland. Użyj XWayland, aby uruchomić Kritę na "
-"Waylandzie. Krita zakończy teraz swoje działanie."
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Ostrzeżenie"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -66070,6 +66055,17 @@ msgstr "Narzędzie powiększania"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Narzędzie obrazów wzorcowych"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Błąd krytyczny"
+
+#~ msgid ""
+#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
+#~ "Wayland. Krita will close now."
+#~ msgstr ""
+#~ "Krita nie obsługuje platformy Wayland. Użyj XWayland, aby uruchomić Kritę "
+#~ "na Waylandzie. Krita zakończy teraz swoje działanie."
 
 #~ msgid "Krita Tablet Support"
 #~ msgstr "Obsługa tabletu Krity"

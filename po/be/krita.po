@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -15966,27 +15966,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Колеравая прастора:"
 
-#: krita/main.cc:589
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Вяршыні:"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Увага!"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -64449,6 +64436,11 @@ msgstr "Маштабаванне"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інтэрферэнцыйны бэзавы"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Вяршыні:"
 
 #, fuzzy
 #~ msgid "Krita Tablet Support"

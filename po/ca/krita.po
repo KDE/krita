@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2025-03-25 09:50+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -15999,29 +15999,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espais de treball"
 
-#: krita/main.cc:589
-#, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Error fatal"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-"El Krita no admet la plataforma Wayland. Useu XWayland per a executar el "
-"Krita a Wayland. El Krita tancarà ara."
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Avís"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -66110,3 +66095,14 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Error fatal"
+
+#~ msgid ""
+#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
+#~ "Wayland. Krita will close now."
+#~ msgstr ""
+#~ "El Krita no admet la plataforma Wayland. Useu XWayland per a executar el "
+#~ "Krita a Wayland. El Krita tancarà ara."

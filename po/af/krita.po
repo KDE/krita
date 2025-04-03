@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2002-11-07 11:41+0200\n"
 "Last-Translator: WEB-Translator <http://kde.af.org.za>\n"
 "Language-Team: AFRIKAANS <AF@lia.org.za>\n"
@@ -15950,27 +15950,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Kleur Kieser"
 
-#: krita/main.cc:589
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Driehoekvormige Golf"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -64420,6 +64407,11 @@ msgstr "Zoem Program"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herbenaam Beeld..."
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Driehoekvormige Golf"
 
 #, fuzzy
 #~ msgid "Krita Tablet Support"

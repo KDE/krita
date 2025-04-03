@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -17147,21 +17147,7 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 
-#: krita/main.cc:589
-#, fuzzy, kde-format
-#| msgid "Change Connection"
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 #| msgid "Page"
@@ -17169,7 +17155,7 @@ msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "ਸਫ਼ਾ"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -70403,6 +70389,12 @@ msgstr "ਜ਼ੂਮ"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "ਤਬਦੀਲ"
+
+#, fuzzy
+#~| msgid "Change Connection"
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #, fuzzy
 #~| msgid "Copy"

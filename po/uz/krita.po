@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -16078,27 +16078,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Ranglar boʻshligʻi"
 
-#: krita/main.cc:589
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Uskuna:"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Diqqat!"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -64923,6 +64910,11 @@ msgstr "Kattalashtirish vositasi"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Rasmning nomini oʻzgartirish"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Uskuna:"
 
 #, fuzzy
 #~ msgid "Krita Tablet Support"

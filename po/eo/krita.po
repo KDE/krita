@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2025-03-30 23:35+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -15984,29 +15984,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Laborspacoj"
 
-#: krita/main.cc:589
-#, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "Grava eraro"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-"Krita ne subtenas la Wayland-platformon. Uzu XWayland por ruli Krita sur "
-"Wayland. Krita fermos nun."
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Averto"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -65556,3 +65541,14 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "Grava eraro"
+
+#~ msgid ""
+#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
+#~ "Wayland. Krita will close now."
+#~ msgstr ""
+#~ "Krita ne subtenas la Wayland-platformon. Uzu XWayland por ruli Krita sur "
+#~ "Wayland. Krita fermos nun."

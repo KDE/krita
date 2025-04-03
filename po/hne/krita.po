@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-02 01:54+0000\n"
+"POT-Creation-Date: 2025-04-03 01:55+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -16182,27 +16182,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कलरस्पेस"
 
-#: krita/main.cc:589
-#, fuzzy, kde-format
-msgctxt "@title:window"
-msgid "Fatal Error"
-msgstr "खड़ा लहर"
-
-#: krita/main.cc:590
-#, kde-format
-msgid ""
-"Krita does not support the Wayland platform. Use XWayland to run Krita on "
-"Wayland. Krita will close now."
-msgstr ""
-
-#: krita/main.cc:707 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "चेतावनी!"
 
-#: krita/main.cc:708
+#: krita/main.cc:704
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -65813,6 +65800,11 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#, fuzzy
+#~ msgctxt "@title:window"
+#~ msgid "Fatal Error"
+#~ msgstr "खड़ा लहर"
 
 #, fuzzy
 #~ msgid "Krita Tablet Support"

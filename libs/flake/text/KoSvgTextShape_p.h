@@ -437,7 +437,7 @@ public:
                                            bool isClosed);
     static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
     static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
-                            const KoSvgText::FontMetrics &parentBaselineTable,
+                            const KoSvgText::FontMetrics &parentBaselineTable, const KoSvgText::Baseline parentBaseline,
                             const QPointF superScript,
                             const QPointF subScript,
                             QVector<CharacterResult> &result,

@@ -612,7 +612,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
@@ -624,7 +624,7 @@ void KoSvgTextShape::Private::relayout()
     }
 
     // Handle baseline alignment.
-    //globalIndex = 0;
+    globalIndex = 0;
     this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
 
     if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
@@ -1022,6 +1022,7 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     KisForest<KoSvgTextContentElement>::child_iterator parent,
     const KoSvgTextProperties &parentProps,
     const KoSvgText::FontMetrics &parentBaselineTable,
+    const KoSvgText::Baseline parentBaseline,
     const QPointF superScript,
     const QPointF subScript,
     QVector<CharacterResult> &result,
@@ -1107,13 +1108,13 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
 
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, metrics, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
+        computeFontMetrics(child, properties, metrics, dominantBaseline, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::AlignmentBaselineId).toInt());
 
     if (baselineAdjust == KoSvgText::BaselineDominant) {
-        baselineAdjust = dominantBaseline;
+        baselineAdjust = parentBaseline;
     }
     if (baselineAdjust == KoSvgText::BaselineAuto || baselineAdjust == KoSvgText::BaselineUseScript) {
         // UseScript got deprecated in CSS-Inline-3.

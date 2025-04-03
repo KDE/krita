@@ -24,8 +24,11 @@ target_link_libraries(
     ${PYTHON_LIBRARY}
     kritaui
     kritalibkis
-    KF6::ColorScheme
   )
+
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(KF6::ColorScheme)
+endif()
 
 kis_add_library(kritapykrita MODULE
     plugin.cpp

@@ -24,6 +24,7 @@ target_link_libraries(
     ${PYTHON_LIBRARY}
     kritaui
     kritalibkis
+    KF6::ColorScheme
   )
 
 kis_add_library(kritapykrita MODULE

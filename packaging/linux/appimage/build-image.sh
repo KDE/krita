@@ -346,6 +346,13 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     rm -f $TEMPFILE
 fi
 
+EXTRA_PLUGINS_LIST="$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so"
+
+if [ -f $DEPS_INSTALL_PREFIX/plugins/platforms/libqwayland-generic.so ]; then
+  EXTRA_PLATFORM_PLUGINS="platforms/libqwayland-generic.so,wayland-shell-integration/libxdg-shell.so,wayland-graphics-integration-client/libqt-plugin-wayland-egl.so"
+  EXTRA_PLUGINS_LIST="$EXTRA_PLUGINS_LIST,$EXTRA_PLATFORM_PLUGINS"
+fi
+
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
@@ -354,7 +361,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so  \
+  -extra-plugins=$EXTRA_PLUGINS_LIST \
   -updateinformation="${ZSYNC_URL}" \
   -appimage
 

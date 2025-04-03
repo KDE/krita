@@ -585,14 +585,31 @@ void TestSvgText::testTextBaselineShift()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    SvgRenderTester t(file.readAll());
-
-    t.setCheckQImagePremultiplied(true);
-    t.test_standard("text_baseline_shift", QSize(180, 40), 72);
+    SvgTester t(file.readAll());
+    t.parser().setResolution(QRectF(0, 0, 180, 40) /* px */, 72 /* ppi */);
+    t.run();
 
     KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
 
+    QLineF caret;
+    QColor color;
+
+    baseShape->cursorForPos(0, caret, color);
+
+    QLine testCaret = QLine(QPoint(4,25),QPoint(4,10));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 0, normal").toLatin1());
+
+    baseShape->cursorForPos(7, caret, color);
+    testCaret = QLine(QPoint(60,17),QPoint(60,2));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 7, superscript").toLatin1());
+
+    baseShape->cursorForPos(17, caret, color);
+    testCaret = QLine(QPoint(141,27),QPoint(141,12));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 17, subscript").toLatin1());
 }
 /**
  * @brief TestSvgText::testTextSpacing
@@ -2454,9 +2471,10 @@ void TestSvgText::testTextWrap()
     }
 }
 /**
- * Test baseline alignment. Within CSS text this is defined in CSS3-Inline,
- * however, it was originally part of SVG 1.1, and we implement that version
- * as it has the clearest implementation explanation.
+ * Test baseline alignment. Within CSS text this is defined in CSS3-Inline-3,
+ * and we now implement this version. The main difference between the two is that
+ * SVG 1.1/XSL 1.1 there is one baseline table over the whole paragraph, while in
+ * CSS-inline, the baseline-table is calculated per-span.
  *
  * This relies on different font-sizes, because otherwise all the baseline tables
  * are exactly the same.
@@ -2467,9 +2485,36 @@ void TestSvgText::testTextBaselineAlignment()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    SvgRenderTester t(file.readAll());
-    t.setFuzzyThreshold(5);
-    t.test_standard("test-text-baseline-alignment", QSize(90, 51), 72.0);
+    SvgTester t(file.readAll());
+    t.parser().setResolution(QRectF(0, 0, 90, 51) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
+
+    QVERIFY(textShape);
+
+    QLineF caret;
+    QColor color;
+    textShape->cursorForPos(0, caret, color);
+
+    QLine testCaret = QLine(QPoint(6,38),QPoint(6,23));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 0").toLatin1());
+
+    textShape->cursorForPos(3, caret, color);
+    testCaret = QLine(QPoint(56,38),QPoint(56,8));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 3").toLatin1());
+
+    textShape->cursorForPos(5, caret, color);
+    testCaret = QLine(QPoint(80,28),QPoint(80,23));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 5").toLatin1());
+
+    textShape->cursorForPos(7, caret, color);
+    testCaret = QLine(QPoint(86,31),QPoint(86,26));
+    QVERIFY2(caret.toLine() == testCaret,
+             QString("Wrong caret for position 7").toLatin1());
 }
 
 void TestSvgText::testFontMetrics_data()

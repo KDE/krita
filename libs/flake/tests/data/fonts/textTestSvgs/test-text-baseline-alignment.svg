@@ -8,7 +8,7 @@
             fill="none" stroke="red"/>
 
         <text id="testRect" x="6" y="35"
-            font-family="Baseline Test" font-size="15" fill="blue" >道道<tspan alignment-baseline="ideographic" font-size="30">LL</tspan><tspan alignment-baseline="text-top" font-size="5">LL</tspan>
+            font-family="Baseline Test" font-size="15" fill="blue" >道道<tspan alignment-baseline="ideographic" font-size="30">LL</tspan><tspan alignment-baseline="text-top" font-size="5">LL</tspan><tspan baseline-shift="super" font-size="5">LL</tspan>
         </text>
 
     </g>

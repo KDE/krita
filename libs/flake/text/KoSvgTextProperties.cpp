@@ -146,15 +146,20 @@ void KoSvgTextProperties::resolveRelativeValues(const KoSvgText::FontMetrics met
     const KoSvgText::FontMetrics usedMetrics = this->metrics();
 
     for (auto it = this->m_d->properties.begin(); it != this->m_d->properties.end(); it++) {
+
+        KoSvgText::CssLengthPercentage::UnitType percentageUnit = KoSvgText::CssLengthPercentage::Em;
+        if (it.key() == KoSvgTextProperties::BaselineShiftValueId) percentageUnit = KoSvgText::CssLengthPercentage::Lh;
+
         if (it.key() == LineHeightId) continue;
         if (it.value().canConvert<KoSvgText::CssLengthPercentage>() && it.key() != KoSvgTextProperties::FontSizeId) {
             KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
-            length.convertToAbsolute(usedMetrics, usedSize);
+            length.convertToAbsolute(usedMetrics, usedSize, percentageUnit);
             it.value() = QVariant::fromValue(length);
         } else if (it.value().canConvert<KoSvgText::AutoLengthPercentage>()) {
             KoSvgText::AutoLengthPercentage val = it.value().value<KoSvgText::AutoLengthPercentage>();
+
             if (!val.isAuto) {
-                val.length.convertToAbsolute(usedMetrics, usedSize);
+                val.length.convertToAbsolute(usedMetrics, usedSize, percentageUnit);
                 it.value() = QVariant::fromValue(val);
             }
         } else if (it.key() == KoSvgTextProperties::TabSizeId) {

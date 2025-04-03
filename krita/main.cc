@@ -245,12 +245,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
-    // Default to running under XWayland, but allow Wayland when KRITA_FORCE_WAYLAND=1
-    if (qEnvironmentVariable("XDG_SESSION_TYPE") == QLatin1String("wayland") && !qEnvironmentVariableIsSet("KRITA_FORCE_WAYLAND")) {
+#if defined Q_OS_LINUX
+    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
         qputenv("QT_QPA_PLATFORM", "xcb");
     }
-
-#if defined Q_OS_WIN
+#elif defined Q_OS_WIN
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
         qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
     }

@@ -168,6 +168,7 @@ void KisOpenGL::initialize()
     debugOut << "OpenGL Info\n";
 
     if (openGLCheckResult) {
+        debugOut << "\n  Qt Platform Name: " << QGuiApplication::platformName();
         debugOut << "\n  Vendor: " << openGLCheckResult->vendorString();
         debugOut << "\n  Renderer: " << openGLCheckResult->rendererString();
         debugOut << "\n  Driver version: " << openGLCheckResult->driverVersionString();

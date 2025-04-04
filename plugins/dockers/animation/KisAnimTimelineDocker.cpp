@@ -33,10 +33,12 @@
 #include "animation/KisFrameDisplayProxy.h"
 #include "KisAnimUtils.h"
 #include "kis_image_config.h"
+#include "commands_new/KisImageAnimSettingCommand.h"
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
 #include "KisPart.h"
 #include "KisPlaybackEngine.h"
+#include "kis_processing_applicator.h"
 
 #include "KisAnimTimelineFramesModel.h"
 #include "KisAnimTimelineFramesView.h"
@@ -437,11 +439,11 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         m_d->titlebar->volumeSlider->setValue(m_d->framesModel->audioVolume() * 100.0);
 
-        connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), SLOT(handleFrameRateChange()));
 
-        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
-        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));
+        connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), this, SLOT(setImageAnimSettings()));
+        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), this, SLOT(setImageAnimSettings()));
+        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), this, SLOT(setImageAnimSettings()));
 
         connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigDocumentRangeChanged, this, [this]() {
             if (!m_d->canvas || !m_d->canvas->image()) return;
@@ -482,6 +484,28 @@ void KisAnimTimelineDocker::handleThemeChange()
     if (m_d->framesView) {
         m_d->framesView->slotUpdateIcons();
     }
+}
+
+void KisAnimTimelineDocker::setImageAnimSettings()
+{
+    if (!m_d->canvas || !m_d->canvas->image()) return;
+
+    KisImageAnimSettingCommand::Settings settings = {
+        m_d->titlebar->sbFrameRate->value(),
+        m_d->titlebar->sbStartFrame->value(),
+        m_d->titlebar->sbEndFrame->value()
+    };
+
+    QScopedPointer<KUndo2Command> parentUndoCommand(new KUndo2Command(kundo2_i18n("Update Animation Settings")));
+
+    KisImageAnimSettingCommand *undoCommand = new KisImageAnimSettingCommand(m_d->canvas->image()->animationInterface(),
+                                                                             settings,
+                                                                             parentUndoCommand.data());
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->canvas->image(),
+                                                    parentUndoCommand.take(),
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisAnimTimelineDocker::updateFrameCache()

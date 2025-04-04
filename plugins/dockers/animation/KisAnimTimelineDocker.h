@@ -112,6 +112,8 @@ public Q_SLOTS:
 
     void handleThemeChange();
 
+    void setImageAnimSettings();
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

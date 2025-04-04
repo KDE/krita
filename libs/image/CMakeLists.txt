@@ -112,6 +112,7 @@ set(kritaimage_LIB_SRCS
    commands_new/kis_activate_selection_mask_command.cpp
    commands_new/kis_transaction_based_command.cpp
    commands_new/KisHoldUIUpdatesCommand.cpp
+   commands_new/KisImageAnimSettingCommand.cpp
    commands_new/KisChangeChannelFlagsCommand.cpp
    commands_new/KisChangeChannelLockFlagsCommand.cpp
    commands_new/KisMergeLabeledLayersCommand.cpp

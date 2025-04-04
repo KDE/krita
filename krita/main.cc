@@ -31,6 +31,7 @@
 #include <QString>
 #include <QThread>
 #include <QTranslator>
+#include <QImageReader>
 
 #include <KisApplication.h>
 #include <KisMainWindow.h>
@@ -268,6 +269,12 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+
+    // In Qt6, QImageReader has an allocation limit to prevent large memory allocations.
+    // However in Qt5 this doesn't exist, and can easily trigger in KisFileIconCreator while creating icons on large thumbnails.
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QImageReader::setAllocationLimit(0);
+#endif
 
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     // This rounding policy depends on a series of patches to Qt related to

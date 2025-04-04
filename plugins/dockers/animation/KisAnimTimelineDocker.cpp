@@ -501,6 +501,7 @@ void KisAnimTimelineDocker::setImageAnimSettings()
     KisImageAnimSettingCommand *undoCommand = new KisImageAnimSettingCommand(m_d->canvas->image()->animationInterface(),
                                                                              settings,
                                                                              parentUndoCommand.data());
+    Q_UNUSED(undoCommand);
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->canvas->image(),
                                                     parentUndoCommand.take(),

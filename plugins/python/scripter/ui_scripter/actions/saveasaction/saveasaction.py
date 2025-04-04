@@ -25,7 +25,7 @@ class SaveAsAction(QAction):
 
         self.setText(i18n("Save As"))
         self.setObjectName('saveas')
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_Shift + Qt.Key.Key_S))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Modifier.SHIFT | Qt.Key.Key_S))
 
     @property
     def parent(self):

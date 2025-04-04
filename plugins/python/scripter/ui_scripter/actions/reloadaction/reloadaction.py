@@ -26,7 +26,7 @@ class ReloadAction(QAction):
 
         self.setText(i18n("Reload File"))
         self.setObjectName('reloadfile')
-        self.setShortcut(QKeySequence(Qt.Key.Key_Alt+ Qt.Key.Key_R))
+        self.setShortcut(QKeySequence(Qt.Modifier.ALT | Qt.Key.Key_R))
 
         self.setToolTip(i18n('Reload File Alt+R'))
         self.setIcon(utils.getThemedIcon(':/icons/reload_script.svg'))

@@ -26,7 +26,7 @@ class OpenAction(QAction):
 
         self.setText(i18n("Open"))
         self.setObjectName('open')
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_O))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_O))
 
     @property
     def parent(self):

@@ -24,7 +24,7 @@ class CloseAction(QAction):
 
         self.setText(i18n("Close"))
         self.setObjectName('close')
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_Q))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_Q))
 
     @property
     def parent(self):

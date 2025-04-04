@@ -24,7 +24,7 @@ class NewAction(QAction):
 
         self.setText(i18n("New"))
         self.setObjectName('new')
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_N))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_N))
 
     @property
     def parent(self):

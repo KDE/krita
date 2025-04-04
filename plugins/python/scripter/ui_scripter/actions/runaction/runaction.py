@@ -42,7 +42,7 @@ class RunAction(QAction):
 
         self.setText(i18n("Run"))
         self.setToolTip(i18n('Run Ctrl+R'))
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_R))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_R))
         self.setIcon(utils.getThemedIcon(':/icons/run.svg'))
 
     @property

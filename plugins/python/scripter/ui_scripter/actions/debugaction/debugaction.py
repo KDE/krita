@@ -28,7 +28,7 @@ class DebugAction(QAction):
         self.setToolTip(i18n("Debug Ctrl+D"))
         self.setIcon(utils.getThemedIcon(":/icons/debug.svg"))
 
-        self.setShortcut(QKeySequence(Qt.Key.Key_Control + Qt.Key.Key_D))
+        self.setShortcut(QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_D))
 
     @property
     def parent(self):

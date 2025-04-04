@@ -509,6 +509,14 @@ find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
         Sql
 )
 
+# Krita uses QtGuiPrivate headers
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(Qt${QT_MAJOR_VERSION}Gui ${MIN_QT_VERSION}
+        REQUIRED COMPONENTS
+        Private
+    )
+endif()
+
 if (ANDROID)
     if (QT_MAJOR_VERSION STREQUAL "5")
         find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
@@ -525,6 +533,7 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         OpenGL
         OpenGLWidgets
         SvgWidgets
+        GuiPrivate
     )
 
     find_package(KF6 ${MIN_FRAMEWORKS_VERSION}

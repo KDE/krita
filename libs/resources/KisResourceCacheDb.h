@@ -148,6 +148,14 @@ private:
     static bool updateMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
     static bool addMetaDataForId(const QMap<QString, QVariant> map, int id, const QString &tableName);
 
+    /**
+     * @brief removeOrphanedMetaData
+     * Previous versions of Krita never removed metadata, so this function doublechecks and
+     * removes any orphaned metadata for either storages or resources from the database.
+     * @return true if successful, false if not
+     */
+    static bool removeOrphanedMetaData();
+
     static bool s_valid;
     static QString s_lastError;
 };

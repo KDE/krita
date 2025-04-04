@@ -37,6 +37,8 @@
 #include <KisCppQuirks.h>
 
 const QString dbDriver = "QSQLITE";
+const QString METADATA_RESOURCES = "resources";
+const QString METADATA_STORAGES = "storages";
 
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
 const QString KisResourceCacheDb::databaseVersion { "0.0.18" };
@@ -917,6 +919,26 @@ bool KisResourceCacheDb::removeResourceCompletely(int resourceId)
         }
     }
 
+    {
+        QSqlQuery q;
+        r = q.prepare("DELETE FROM metadata \n"
+                      "WHERE foreign_id = :resource_id\n"
+                      "AND    table_name = :table;");
+
+        if (!r) {
+            qWarning() << "Could not prepare removeResourceCompletely4 statement" << q.lastError();
+            return r;
+        }
+
+        q.bindValue(":resource_id", resourceId);
+        q.bindValue(":table", METADATA_RESOURCES);
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute removeResourceCompletely4 statement" << q.lastError() << resourceId;
+            return r;
+        }
+    }
+
     return r;
 }
 
@@ -1134,7 +1156,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     if (!resource->metadata().isEmpty()) {
-        return addMetaDataForId(resource->metadata(), resource->resourceId(), "resources");
+        return addMetaDataForId(resource->metadata(), resource->resourceId(), METADATA_RESOURCES);
     }
 
     return true;
@@ -1622,7 +1644,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
                 metadata[key] = storage->metaData(key);
             }
 
-            addMetaDataForId(metadata, id, "storages");
+            addMetaDataForId(metadata, id, METADATA_STORAGES);
         }
     }
 
@@ -1720,6 +1742,24 @@ bool KisResourceCacheDb::deleteStorage(QString location)
         q.bindValue(":location", changeToEmptyIfNull(location));
         if (!q.exec()) {
             qWarning() << "Could not execute delete versioned_resources query" << q.lastError();
+            return false;
+        }
+    }
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("DELETE FROM metadata\n"
+                       "WHERE foreign_id = (SELECT storages.id\n"
+                       "                    FROM   storages\n"
+                       "                    WHERE  storages.location = :location)"
+                       "AND    table_name = :table;")) {
+            qWarning() << "Could not prepare delete metadata query" << q.lastError();
+            return false;
+        }
+        q.bindValue(":location", changeToEmptyIfNull(location));
+        q.bindValue(":table", METADATA_STORAGES);
+        if (!q.exec()) {
+            qWarning() << "Could not execute delete metadata query" << q.lastError();
             return false;
         }
     }
@@ -2048,7 +2088,9 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
         }
     }
 
+
     QSqlDatabase::database().commit();
+    removeOrphanedMetaData();
     debugResource << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
 
     return success;
@@ -2266,5 +2308,50 @@ bool KisResourceCacheDb::addMetaDataForId(const QMap<QString, QVariant> map, int
         }
         ++iter;
     }
+    return true;
+}
+
+bool KisResourceCacheDb::removeOrphanedMetaData()
+{
+    QSqlDatabase::database().transaction();
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("DELETE FROM metadata\n"
+                       "WHERE  foreign_id NOT IN (SELECT id FROM resources)\n"
+                       "AND    table_name = :table\n")) {
+            qWarning() << "Could not prepare delete oprhaned metadata query for resources" << q.lastError();
+            return false;
+        }
+
+        q.bindValue(":table", METADATA_RESOURCES);
+
+        if (!q.exec()) {
+            QSqlDatabase::database().rollback();
+            qWarning() << "Could not execute delete oprhaned metadata query for resources" << q.lastError();
+            return false;
+
+        }
+    }
+
+    {
+        QSqlQuery q;
+        if (!q.prepare("DELETE FROM metadata\n"
+                       "WHERE  foreign_id NOT IN (SELECT id FROM storages)\n"
+                       "AND    table_name = :table\n")) {
+            qWarning() << "Could not prepare delete oprhaned metadata query for storages" << q.lastError();
+            return false;
+        }
+
+        q.bindValue(":table", METADATA_STORAGES);
+
+        if (!q.exec()) {
+            QSqlDatabase::database().rollback();
+            qWarning() << "Could not execute delete oprhaned metadata query for storages" << q.lastError();
+            return false;
+
+        }
+    }
+    QSqlDatabase::database().commit();
     return true;
 }

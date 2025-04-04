@@ -22,6 +22,8 @@ class TenBrushesExtension(krita.Extension):
         # Indicates whether we want to select the freehand brush tool
         # on the press of a preset shortcut
         self.autoBrush = False
+        # Indicates whether to show an on-canvas message when changing preset
+        self.showMessage = True
         self.oldPreset = None
 
     def setup(self):
@@ -61,6 +63,10 @@ class TenBrushesExtension(krita.Extension):
             "", "tenbrushesAutoBrushOnPress", "False")
         self.autoBrush = setting == 'True'
 
+        setting = Application.readSetting(
+            "", "tenbrushesShowMessage", "True")
+        self.showMessage = setting == 'True'
+
     def writeSettings(self):
         presets = []
 
@@ -73,6 +79,8 @@ class TenBrushesExtension(krita.Extension):
                                  str(self.activatePrev))
         Application.writeSetting("", "tenbrushesAutoBrushOnPress",
                                  str(self.autoBrush))
+        Application.writeSetting("", "tenbrushesShowMessage",
+                                 str(self.showMessage))
 
     def loadActions(self, window):
         allPresets = Application.resources("preset")
@@ -108,7 +116,9 @@ class TenBrushesExtension(krita.Extension):
                 window.views()[0].activateResource(allPresets[preset])
 
         preset = window.views()[0].currentBrushPreset()
-        window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
-                                              QIcon(QPixmap.fromImage(preset.image())),
-                                              1000, 1)
+
+        if self.showMessage:
+            window.activeView().showFloatingMessage(str(i18n("{}\nselected")).format(preset.name()),
+                                                QIcon(QPixmap.fromImage(preset.image())),
+                                                1000, 1)
 

@@ -34,6 +34,10 @@ class UITenBrushes(object):
             i18n("&Select freehand brush tool when pressing a shortcut"),
             self.mainDialog)
 
+        self.checkBoxShowMessage = QCheckBox(
+            i18n("Show on-canvas &popup message when activating brush preset"),
+            self.mainDialog)
+
         self.buttonBox.accepted.connect(self.mainDialog.accept)
         self.buttonBox.rejected.connect(self.mainDialog.reject)
 
@@ -66,6 +70,10 @@ class UITenBrushes(object):
         self.checkBoxAutoBrush.toggled.connect(self.setAutoBrush)
         self.vbox.addWidget(self.checkBoxAutoBrush)
 
+        self.checkBoxShowMessage.setChecked(self.tenbrushes.showMessage)
+        self.checkBoxShowMessage.toggled.connect(self.setShowMessage)
+        self.vbox.addWidget(self.checkBoxShowMessage)
+
         self.vbox.addWidget(self.buttonBox)
 
         self.mainDialog.show()
@@ -77,6 +85,9 @@ class UITenBrushes(object):
 
     def setAutoBrush(self, checked):
         self.tenbrushes.autoBrush = checked
+
+    def setShowMessage(self, checked):
+        self.tenbrushes.showMessage = checked
 
     def loadButtons(self):
         self.tenbrushes.buttons = []

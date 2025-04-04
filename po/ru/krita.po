@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-03 01:55+0000\n"
+"POT-Creation-Date: 2025-04-04 02:01+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -13117,7 +13117,7 @@ msgid "&Help"
 msgstr "&Справка"
 
 #: krita/krita5.xmlgui:426 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:94
+#: plugins/python/scripter/uicontroller.py:102
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
@@ -16063,14 +16063,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Рабочие пространства"
 
-#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Предупреждение Krita"
 
-#: krita/main.cc:704
+#: krita/main.cc:703
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20703,14 +20703,14 @@ msgstr "У&меньшить масштаб"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
-#: plugins/python/exportlayers/uiexportlayers.py:29
+#: plugins/python/exportlayers/uiexportlayers.py:37
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:59
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
+#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -20800,7 +20800,7 @@ msgstr "по умолчанию"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:53
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:59
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
@@ -20933,14 +20933,14 @@ msgstr " пикс."
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:54
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
 #, kde-format
 msgid "Opacity"
 msgstr "Непрозрачность"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:55
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
 #, kde-format
 msgid "Flow"
 msgstr "Нажим"
@@ -21565,7 +21565,7 @@ msgid "Locked"
 msgstr "Заблокирован"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: plugins/python/channels2layers/channels2layers.py:78
+#: plugins/python/channels2layers/channels2layers.py:110
 #, kde-format
 msgid "Visible"
 msgstr "Видимый"
@@ -21637,7 +21637,7 @@ msgid "Open File"
 msgstr "Открыть файл"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#: plugins/python/plugin_importer/plugin_importer_extension.py:79
+#: plugins/python/plugin_importer/plugin_importer_extension.py:83
 #, kde-format
 msgid "Error"
 msgstr "Ошибка"
@@ -22755,7 +22755,7 @@ msgstr "RGB (8 бит на канал, неуправляемый)"
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:31
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:352
-#: plugins/python/channels2layers/channels2layers.py:1374
+#: plugins/python/channels2layers/channels2layers.py:1406
 #, kde-format
 msgid "Blue"
 msgstr "Синий"
@@ -22771,7 +22771,7 @@ msgstr "Синий"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:113
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:235
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:406
-#: plugins/python/channels2layers/channels2layers.py:1372
+#: plugins/python/channels2layers/channels2layers.py:1404
 #, kde-format
 msgid "Green"
 msgstr "Зелёный"
@@ -22781,7 +22781,7 @@ msgstr "Зелёный"
 #: plugins/color/lcms2engine/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:26
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:33
-#: plugins/python/channels2layers/channels2layers.py:1370
+#: plugins/python/channels2layers/channels2layers.py:1402
 #, kde-format
 msgid "Red"
 msgstr "Красный"
@@ -24050,8 +24050,8 @@ msgstr "Идентификатор хранилища"
 #: libs/resources/KisStorageModel.cpp:489
 #: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Name"
 msgstr "Название"
@@ -24163,7 +24163,7 @@ msgstr "Метаданные"
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
-#: plugins/python/channels2layers/channels2layers.py:853
+#: plugins/python/channels2layers/channels2layers.py:885
 #, kde-format
 msgid "Unknown"
 msgstr "Неизвестно"
@@ -24295,8 +24295,8 @@ msgstr "Шрифт"
 #: libs/widgets/KoConfigAuthorPage.cpp:90
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Type"
 msgstr "Тип"
@@ -24318,7 +24318,7 @@ msgstr "Предустановлено"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
 #, kde-format
 msgid "Thumbnail"
 msgstr "Миниатюра"
@@ -26059,7 +26059,7 @@ msgstr "Импорт анимации видео"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
 #: plugins/impex/webp/kis_wdg_options_webp.ui:31
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
 #, kde-format
 msgid "General"
 msgstr "Общие"
@@ -26226,10 +26226,10 @@ msgstr "Документ"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:98
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:68
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:181
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:34
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:40
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:73
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:186
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
@@ -26265,10 +26265,10 @@ msgstr "Ширина:"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:69
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:185
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:41
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:74
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:190
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:45
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
@@ -26285,7 +26285,7 @@ msgstr "Масштаб импортированного видео"
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:43
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize intepolation method list label"
 msgid "Filter:"
@@ -27661,7 +27661,7 @@ msgstr "Автор"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2299
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "Автор"
@@ -28449,7 +28449,7 @@ msgstr "Инициалы:"
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 #, kde-format
 msgid "Title:"
 msgstr "Название:"
@@ -28492,7 +28492,7 @@ msgstr "Вертикальное разрешение:"
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
 #: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:42
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:46
 #, kde-format
 msgid "Resolution:"
 msgstr "Разрешение:"
@@ -28681,7 +28681,7 @@ msgstr "Удалить"
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
 #: libs/ui/forms/wdgsessionmanager.ui:94
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:25
 #, kde-format
 msgid "Close"
 msgstr "Закрыть"
@@ -29091,7 +29091,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 #, kde-format
 msgid "Source:"
 msgstr "Источник:"
@@ -29834,7 +29834,7 @@ msgstr "Режим вложенного окна"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
 #: plugins/dockers/lut/wdglut.ui:241
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:21
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
 #, kde-format
 msgid "Clear"
 msgstr "Очистить"
@@ -30360,8 +30360,8 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1451
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:66
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:177
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
 #, kde-format
 msgid "DPI:"
 msgstr "DPI:"
@@ -30677,7 +30677,7 @@ msgstr "Добавить изображения..."
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
-#: plugins/python/channels2layers/channels2layers.py:80
+#: plugins/python/channels2layers/channels2layers.py:112
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
 msgid "Remove"
@@ -31155,7 +31155,7 @@ msgstr "Сохранить новое расположение окон"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:414
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 #, kde-format
 msgid "Name:"
 msgstr "Имя:"
@@ -31206,7 +31206,7 @@ msgstr "Текущий профиль кисти"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:21
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
 msgstr "Сохранить"
@@ -32499,7 +32499,7 @@ msgstr "Масштабирование выделения"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgCanvasSize)
 #: libs/ui/imagesize/wdg_canvassize.ui:24
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:12
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:16
 #, kde-format
 msgid "Canvas Size"
 msgstr "Изменение размера холста"
@@ -34699,7 +34699,7 @@ msgstr ""
 "\t\tПопробуйте выделить для Krita больше памяти в диалоге настройки."
 
 #: libs/ui/kis_statusbar.cc:376
-#: plugins/python/channels2layers/channels2layers.py:79
+#: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "не показывать"
@@ -36094,7 +36094,7 @@ msgid "Could not download %1."
 msgstr "Не удалось загрузить %1."
 
 #: libs/ui/KisTemplateCreateDia.cpp:87
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:91
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:96
 #, kde-format
 msgid "Create Template"
 msgstr "Создать шаблон"
@@ -36394,7 +36394,7 @@ msgstr ""
 "требуется интернет-соединение"
 
 #: libs/ui/KisWelcomePageWidget.cpp:166
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Language"
 msgstr "Язык"
@@ -37407,13 +37407,13 @@ msgstr ""
 "Буферы текстур явным образом отключены для обработчика ANGLE из-за проблем с "
 "производительностью."
 
-#: libs/ui/opengl/kis_opengl.cpp:658
+#: libs/ui/opengl/kis_opengl.cpp:659
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr ""
 "Известно, что используемый графический драйвер Intel имеет проблемы с OpenGL."
 
-#: libs/ui/opengl/kis_opengl.cpp:660
+#: libs/ui/opengl/kis_opengl.cpp:661
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -37424,7 +37424,7 @@ msgstr ""
 "поэтому по умолчанию будет использоваться ANGLE. Возможно переключиться на "
 "OpenGL вручную, но корректная работа не гарантирована."
 
-#: libs/ui/opengl/kis_opengl.cpp:1057
+#: libs/ui/opengl/kis_opengl.cpp:1058
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -37433,7 +37433,7 @@ msgstr ""
 "Предпочитаемое средство визуализации не поддерживает запрошенный формат "
 "поверхности. Выбрано другое средство визуализации."
 
-#: libs/ui/opengl/kis_opengl.cpp:1059
+#: libs/ui/opengl/kis_opengl.cpp:1060
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -39268,7 +39268,7 @@ msgid "Back"
 msgstr "Назад"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:21
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:24
 #, kde-format
 msgid "Stop"
 msgstr "Остановить"
@@ -40174,8 +40174,8 @@ msgstr ""
 "Другое"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Email"
 msgstr "Адрес электронной почты"
@@ -40186,8 +40186,8 @@ msgid "Fax"
 msgstr "Факс"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Homepage"
 msgstr "Веб-сайт"
@@ -40779,7 +40779,7 @@ msgstr ""
 "версии, прежде чем посылать отчет об ошибке."
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:134
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:305
 #, kde-format
 msgid "Version:"
 msgstr "Версия:"
@@ -41855,7 +41855,7 @@ msgstr "Точка схода"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:147
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:249
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:372
-#: plugins/python/channels2layers/channels2layers.py:1362
+#: plugins/python/channels2layers/channels2layers.py:1394
 #, kde-format
 msgid "Cyan"
 msgstr "Бирюзовый"
@@ -41869,7 +41869,7 @@ msgstr "Бирюзовый"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:96
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:273
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:430
-#: plugins/python/channels2layers/channels2layers.py:1364
+#: plugins/python/channels2layers/channels2layers.py:1396
 #, kde-format
 msgid "Magenta"
 msgstr "Пурпурный"
@@ -41883,7 +41883,7 @@ msgstr "Пурпурный"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:123
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:283
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:382
-#: plugins/python/channels2layers/channels2layers.py:1366
+#: plugins/python/channels2layers/channels2layers.py:1398
 #, kde-format
 msgid "Yellow"
 msgstr "Жёлтый"
@@ -41891,7 +41891,7 @@ msgstr "Жёлтый"
 #: plugins/color/lcms2engine/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:26
-#: plugins/python/channels2layers/channels2layers.py:1368
+#: plugins/python/channels2layers/channels2layers.py:1400
 #, kde-format
 msgid "Black"
 msgstr "Чёрный"
@@ -42294,7 +42294,7 @@ msgstr "Выбор оттенков"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
-#: plugins/python/colorspace/uicolorspace.py:60
+#: plugins/python/colorspace/uicolorspace.py:68
 #, kde-format
 msgid "Color model:"
 msgstr "Цветовая модель:"
@@ -43058,7 +43058,7 @@ msgstr "Фильтровать луковую кожу по цвету кадр�
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:68
+#: plugins/python/palette_docker/palette_docker.py:76
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -43193,7 +43193,7 @@ msgstr "Показывать нумерованную шкалу значени�
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:44
 #: plugins/filters/palettize/palettize.ui:56
 #: plugins/python/colorspace/colorspace.py:16
-#: plugins/python/colorspace/uicolorspace.py:74
+#: plugins/python/colorspace/uicolorspace.py:82
 #, kde-format
 msgid "Color Space"
 msgstr "Цветовое пространство"
@@ -43692,7 +43692,7 @@ msgid "Undo History"
 msgstr "Журнал отмены"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:161
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, kde-format
 msgid "Layers"
 msgstr "Слои"
@@ -45521,7 +45521,7 @@ msgstr "Комментарии"
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1076
+#: plugins/python/channels2layers/channels2layers.py:1108
 #, kde-format
 msgid "Mode"
 msgstr "Режим"
@@ -45945,7 +45945,7 @@ msgstr "Диапазон:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:146
 #: plugins/filters/asccdl/wdg_asccdl.ui:35
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:42
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:36
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:40
 #, kde-format
 msgid "Offset:"
 msgstr "Смещение:"
@@ -46599,7 +46599,7 @@ msgstr "Префикс"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFileType)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:127
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:64
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:69
 #, kde-format
 msgid "File Type"
 msgstr "Тип файла"
@@ -46746,7 +46746,7 @@ msgstr "Права:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:416
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 #, kde-format
 msgid "Date:"
 msgstr "Дата:"
@@ -47735,25 +47735,25 @@ msgstr[3] ""
 msgid "Offset by x/2, y/2"
 msgstr "Сместить на x/2, y/2"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:72
+#: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr "Не удалось загрузить библиотеку Python"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:75
+#: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr "Не удалось установить пути Python"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:78
+#: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr "Не удалось загрузить встроенный модуль pykrita"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:81
+#: plugins/extensions/pykrita/kritarunner/main.cpp:89
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -48435,7 +48435,7 @@ msgstr "Сохранить как:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 #, kde-format
 msgid "Summary:"
 msgstr "Краткое описание:"
@@ -48480,7 +48480,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 #, kde-format
 msgid "License:"
 msgstr "Лицензия:"
@@ -50133,7 +50133,7 @@ msgstr "Независимые каналы"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
-#: plugins/python/highpass/highpass.py:53
+#: plugins/python/highpass/highpass.py:66
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
@@ -50270,9 +50270,9 @@ msgstr "Уровни индексации"
 # Фильтры
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Other"
 msgstr "Другие"
@@ -51881,7 +51881,7 @@ msgstr "На основе пикселов"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:26
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:31
 #, kde-format
 msgid "Inches"
 msgstr "Дюймы"
@@ -59205,7 +59205,7 @@ msgid "Density"
 msgstr "Плотность"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:334
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:339
 #, kde-format
 msgid "Sketch"
 msgstr "Эскизная"
@@ -59407,8 +59407,8 @@ msgstr "Случайный размер"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:24
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:17
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
 msgstr "Настройка"
@@ -59800,90 +59800,90 @@ msgstr "Чувствительность к углу склонения"
 msgid "Direction/Tilt Mix Value"
 msgstr "Значение смешивания наклона и направления"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:19
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:24
 msgid "Assign Profile"
 msgstr "Назначить профиль"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:20
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "There is no active document."
 msgstr "Нет активного документа."
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:53
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:58
 msgid "Assign Profile to Image"
 msgstr "Указать профиль для изображения"
 
-#: plugins/python/channels2layers/channels2layers.py:58
-#: plugins/python/channels2layers/channels2layers.py:59
+#: plugins/python/channels2layers/channels2layers.py:90
+#: plugins/python/channels2layers/channels2layers.py:91
 msgid "Channels to layers"
 msgstr "Каналы в слои"
 
-#: plugins/python/channels2layers/channels2layers.py:67
+#: plugins/python/channels2layers/channels2layers.py:99
 msgid "RGB Colors"
 msgstr "Цвета RGB"
 
-#: plugins/python/channels2layers/channels2layers.py:68
+#: plugins/python/channels2layers/channels2layers.py:100
 msgid "CMY Colors"
 msgstr "Цвета CMY"
 
-#: plugins/python/channels2layers/channels2layers.py:69
+#: plugins/python/channels2layers/channels2layers.py:101
 msgid "CMYK Colors"
 msgstr "Цвета CMYK"
 
-#: plugins/python/channels2layers/channels2layers.py:70
+#: plugins/python/channels2layers/channels2layers.py:102
 msgid "RGB Grayscale levels"
 msgstr "Градации серого RGB"
 
-#: plugins/python/channels2layers/channels2layers.py:71
+#: plugins/python/channels2layers/channels2layers.py:103
 msgid "CMY Grayscale levels"
 msgstr "Градации серого CMY"
 
-#: plugins/python/channels2layers/channels2layers.py:72
+#: plugins/python/channels2layers/channels2layers.py:104
 msgid "CMYK Grayscale levels"
 msgstr "Градации серого CMYK"
 
-#: plugins/python/channels2layers/channels2layers.py:77
+#: plugins/python/channels2layers/channels2layers.py:109
 msgid "Unchanged"
 msgstr "Без изменений"
 
-#: plugins/python/channels2layers/channels2layers.py:1012
+#: plugins/python/channels2layers/channels2layers.py:1044
 msgid "Processing layer"
 msgstr "Обработка слоя"
 
-#: plugins/python/channels2layers/channels2layers.py:1042
+#: plugins/python/channels2layers/channels2layers.py:1074
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
 msgstr "Название новой группы слоёв"
 
-#: plugins/python/channels2layers/channels2layers.py:1047
+#: plugins/python/channels2layers/channels2layers.py:1079
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
 msgstr "Название цвета новых слоёв"
 
-#: plugins/python/channels2layers/channels2layers.py:1058
+#: plugins/python/channels2layers/channels2layers.py:1090
 msgid "Original layer"
 msgstr "Исходный слой"
 
-#: plugins/python/channels2layers/channels2layers.py:1117
+#: plugins/python/channels2layers/channels2layers.py:1149
 msgctxt "the original layer"
 msgid "Original"
 msgstr "Исходный"
 
-#: plugins/python/channels2layers/channels2layers.py:1130
+#: plugins/python/channels2layers/channels2layers.py:1162
 msgid "<i>Cyan</i>"
 msgstr "<i>Голубой</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1142
+#: plugins/python/channels2layers/channels2layers.py:1174
 msgid "<i>Magenta</i>"
 msgstr "<i>Пурпурный</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1154
+#: plugins/python/channels2layers/channels2layers.py:1186
 msgid "<i>Yellow</i>"
 msgstr "<i>Жёлтый</i>"
 
-#: plugins/python/channels2layers/channels2layers.py:1166
+#: plugins/python/channels2layers/channels2layers.py:1198
 msgid "<i>Black</i>"
 msgstr "<i>Чёрный</i>"
 
@@ -59891,86 +59891,86 @@ msgstr "<i>Чёрный</i>"
 msgid "Plugin to change color space of selected documents."
 msgstr "Модуль для изменения цветового пространства выделенных документов."
 
-#: plugins/python/colorspace/uicolorspace.py:26
-#: plugins/python/documenttools/uidocumenttools.py:19
-#: plugins/python/exportlayers/uiexportlayers.py:26
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:16
+#: plugins/python/colorspace/uicolorspace.py:34
+#: plugins/python/documenttools/uidocumenttools.py:25
+#: plugins/python/exportlayers/uiexportlayers.py:34
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:19
 msgid "Refresh"
 msgstr "Обновить"
 
-#: plugins/python/colorspace/uicolorspace.py:59
-#: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/colorspace/uicolorspace.py:67
+#: plugins/python/documenttools/uidocumenttools.py:50
+#: plugins/python/exportlayers/uiexportlayers.py:104
 msgid "Documents:"
 msgstr "Документы:"
 
-#: plugins/python/colorspace/uicolorspace.py:61
+#: plugins/python/colorspace/uicolorspace.py:69
 msgid "Color depth:"
 msgstr "Глубина цвета:"
 
-#: plugins/python/colorspace/uicolorspace.py:62
+#: plugins/python/colorspace/uicolorspace.py:70
 msgid "Color profile:"
 msgstr "Цветовой профиль:"
 
-#: plugins/python/colorspace/uicolorspace.py:129
+#: plugins/python/colorspace/uicolorspace.py:137
 msgid "The selected documents have been converted."
 msgstr "Выбранные документы были преобразованы."
 
-#: plugins/python/colorspace/uicolorspace.py:131
-#: plugins/python/documenttools/uidocumenttools.py:106
+#: plugins/python/colorspace/uicolorspace.py:139
+#: plugins/python/documenttools/uidocumenttools.py:112
 msgid "Select at least one document."
 msgstr "Выберите хотя бы один документ."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:32
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:37
 msgid "Adjust Working File"
 msgstr "Настроить рабочий файл"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:35
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:40
 msgid "Crop files before resize"
 msgstr "Обрезать файлы перед сохранением"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Percentage"
 msgstr "Проценты"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "DPI"
 msgstr "DPI"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Maximum Width"
 msgstr "Максимальная ширина"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Maximum Height"
 msgstr "Максимальная высота"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:43
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:48
 msgid " DPI"
 msgstr " DPI"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:65
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:70
 msgid "Method:"
 msgstr "Метод:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:67
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:72
 msgid "Percentage:"
 msgstr "Проценты:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:272
 msgid "Export Settings"
 msgstr "Параметры экспорта"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:227
 msgid "Crop Settings"
 msgstr "Параметры кадрирования"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:225
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:230
 msgid "Crop to outmost guides"
 msgstr "Кадрировать до внешних направляющих"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:227
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:232
 msgid ""
 "This will crop to the outmost guides if possible and otherwise use the "
 "underlying crop settings."
@@ -59978,39 +59978,39 @@ msgstr ""
 "Если возможно, использовать для кадрирования внешние направляющие, в "
 "противном случае использовать дополнительные параметры кадрирования."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:229
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:234
 msgid "Set Margins from Active Selection"
 msgstr "Установить поля из активного выделения"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:236
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:207
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:241
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:212
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:241
 msgid "Left:"
 msgstr "Слева:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:240
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:210
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:239
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:215
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:244
 msgid "Top:"
 msgstr "Сверху:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:244
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:213
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:242
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:218
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:247
 msgid "Right:"
 msgstr "Справа:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:248
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:216
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:250
 msgid "Bottom:"
 msgstr "Снизу:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
 msgid "Label for removal:"
 msgstr "Ярлык для удаления:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:255
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:260
 msgid ""
 "These are keywords that can be used to identify text layers. A layer only "
 "needs to contain the keyword to be recognized. Keywords should be comma "
@@ -60020,7 +60020,7 @@ msgstr ""
 "слоёв. Слою достаточно содержать ключевое слово, чтобы программа смогла его "
 "распознать. Ключевые слова должны разделяться запятыми."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:257
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:262
 msgid ""
 "These are keywords that can be used to identify panel layers. A layer only "
 "needs to contain the keyword to be recognized. Keywords should be comma "
@@ -60030,32 +60030,32 @@ msgstr ""
 "слоёв. Слою достаточно содержать ключевое слово, чтобы программа смогла его "
 "распознать. Ключевые слова должны разделяться запятыми."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
 msgid "Text Layer Key:"
 msgstr "Ключ текстового слоя:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:259
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:264
 msgid "Panel Layer Key:"
 msgstr "Ключ панельного слоя:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
 msgid "Export to CBZ"
 msgstr "Экспорт в CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:278
 msgid "Metadata to Add"
 msgstr "Метаданные для добавления"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:277
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:282
 msgid "CBZ"
 msgstr "CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:284
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:289
 msgid "ACBF Document Info"
 msgstr "Сведения о документе ACBF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:412
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -60070,15 +60070,15 @@ msgstr ""
 "помощью непосредственного редактирования JSON-файла, но обычному "
 "пользователю можно этим не заниматься."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:297
 msgid "Add History Entry"
 msgstr "Добавить запись в журнал"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:295
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 msgid "Include translator's comments"
 msgstr "Включить комментарии переводчиков"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:296
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
 msgid ""
 "A PO file can contain translator's comments. If this is checked, the "
 "translations comments will be added as references into the ACBF file."
@@ -60087,53 +60087,53 @@ msgstr ""
 "вариант, комментарии переводчиков будут добавлены со справочной целью в файл "
 "ACBF."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:299
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
 msgid "ACBF UID:"
 msgstr "ACBF UID:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:306
 msgid "Version history:"
 msgstr "Журнал версий:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:309
 msgid "Translator header:"
 msgstr "Заголовок переводчиков:"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:308
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:313
 msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "Ответственные за создание файлов CBZ/ACBF."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Nick Name"
 msgstr "Псевдоним"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Given Name"
 msgstr "Имя"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Middle Name"
 msgstr "Отчество"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Family Name"
 msgstr "Фамилия"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:367
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:372
 msgid "Add Author"
 msgstr "Добавить автора"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:369
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:374
 msgid "Remove Author"
 msgstr "Удалить автора"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
 msgstr "Использовать шрифт"
 
@@ -60142,7 +60142,7 @@ msgstr "Использовать шрифт"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:357
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
@@ -60157,7 +60157,7 @@ msgstr "Полужирный"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
@@ -60167,79 +60167,79 @@ msgstr "Полужирный"
 msgid "Italic"
 msgstr "Курсив"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:365
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"
 msgstr "Цвета текста"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:369
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:374
 msgid "Regular Text"
 msgstr "Обычный текст"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:371
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
 msgid "Inverted Text"
 msgstr "Инвертированный текст"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:386
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
 msgstr "Сведения о документе"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:387
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:392
 msgid "Author Info"
 msgstr "Сведения об авторе"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:393
 msgid "Style Sheet"
 msgstr "Таблица стилей"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:390
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "ACBF"
 msgstr "ACBF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "Export to EPUB"
 msgstr "Экспорт в EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "EPUB"
 msgstr "EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "Export to TIFF"
 msgstr "Экспорт в TIFF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:415
 msgid "TIFF"
 msgstr "TIFF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:423
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:428
 #, python-brace-format
 msgid "v{version}-in this version..."
 msgstr "v{version}-в этой версии..."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
 msgid "Anon"
 msgstr "Аноним"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:447
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:536
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:541
 msgid "John"
 msgstr "Иван"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:449
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:538
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:454
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:543
 msgid "Doe"
 msgstr "Иванов"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:143
 msgid "Preparing export."
 msgstr "Подготовка к экспорту."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Exporting Comic..."
 msgstr "Экспорт комикса..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:162
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
@@ -60247,21 +60247,21 @@ msgstr ""
 "Сохранение файла ACBF\n"
 "и отдельного ACBF"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Saving out EPUB"
 msgstr "Сохранение EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:178
+#: plugins/python/comics_project_management_tools/comics_exporter.py:212
+#: plugins/python/comics_project_management_tools/comics_exporter.py:371
 msgid "Export not Possible"
 msgstr "Экспорт невозможен"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:178
 msgid "Nothing to export, URL not set."
 msgstr "Нечего экспортировать, не указан URL."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -60269,7 +60269,7 @@ msgstr ""
 "Сохранение файла\n"
 "метаданных CoMet"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:196
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -60277,12 +60277,12 @@ msgstr ""
 "Сохранение файла\n"
 "метаданных Comicrack"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:212
 msgid "Export failed because there's no export settings configured."
 msgstr ""
 "Не удалось выполнить экспорт, поскольку не настроены параметры экспорта."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:229
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -60291,29 +60291,29 @@ msgstr ""
 "Прошло времени: {passedString}\n"
 " Оценка продолжительности: {estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:232
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pages} из {pagesTotal} готово."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:243
 msgid "Opening next page"
 msgstr "Открытие следующей страницы"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:251
 msgid "Cleaning up page"
 msgstr "Очистка страницы"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:285
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "Экспорт в {key}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:371
 msgid "Export not happening because there are no pages."
 msgstr "Экспорт невозможен, потому что нет страниц."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:636
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -60321,190 +60321,190 @@ msgstr ""
 "Сохранение комикса\n"
 "в файл метаданных"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:646
 msgid "Packaging CBZ"
 msgstr "Создание пакетов CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Science Fiction"
 msgstr "Научная фантастика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Fantasy"
 msgstr "Фентези"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Adventure"
 msgstr "Приключения"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Horror"
 msgstr "Ужасы"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Mystery"
 msgstr "Мистика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Crime"
 msgstr "Криминал"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Military"
 msgstr "Военная тематика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Real Life"
 msgstr "Реальная жизнь"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Superhero"
 msgstr "Супергерои"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Humor"
 msgstr "Юмор"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Western"
 msgstr "Вестерн"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Manga"
 msgstr "Манга"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Politics"
 msgstr "Политика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Caricature"
 msgstr "Карикатура"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Sports"
 msgstr "Спорт"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "History"
 msgstr "История"
 
 # https://bugs.kde.org/show_bug.cgi?id=253461
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Biography"
 msgstr "Биография"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Education"
 msgstr "Образование"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Computer"
 msgstr "Компьютер"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Religion"
 msgstr "Религия"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Romance"
 msgstr "Романтика"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Children"
 msgstr "Дети"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Non Fiction"
 msgstr "Нехудожественная литература"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Adult"
 msgstr "Взрослые"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Alternative"
 msgstr "Альтернатива"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Artbook"
 msgstr "Художественный альбом"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Writer"
 msgstr "Писатель"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Adapter"
 msgstr "Автор адаптации"
 
 # Фильтры
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Artist"
 msgstr "Художник"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Penciller"
 msgstr "Рисовальщик"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Inker"
 msgstr "Художник чернилами"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Colorist"
 msgstr "Художник-колорист"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Letterer"
 msgstr "Художник шрифта"
 
 # Фильтры
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Cover Artist"
 msgstr "Художник обложки"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Photographer"
 msgstr "Фотограф"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Editor"
 msgstr "Редактор"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Assistant Editor"
 msgstr "Помощник редактора"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Designer"
 msgstr "Дизайнер"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Translator"
 msgstr "Переводчик"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:255
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
 msgid "Comic Metadata"
 msgstr "Метаданные комикса"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:272
 msgid "The proper title of the comic."
 msgstr "Подходящее название комикса."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:270
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
 msgid "What will you tell others to entice them to read your comic?"
 msgstr ""
 "Что вы скажете читателям, чтобы пробудить в них интерес к прочтению вашего "
 "комикса?"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:277
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:282
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -60514,27 +60514,27 @@ msgstr ""
 "жанр. Записи жанров следует отделять запятыми. Старайтесь указывать не более "
 "двух-трёх жанров."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:285
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:290
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr ""
 "Имена персонажей, вокруг которых строится сюжет комикса. Должны разделяться "
 "запятой."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:304
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:309
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "Если это часть серии, введите название серии и номер."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:311
 msgid "No. "
 msgstr "Номер "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:313
 msgid "Vol. "
 msgstr "Серия "
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
@@ -60542,62 +60542,62 @@ msgstr ""
 "Другие ключевые слова, которые не подходят под указанные выше категории. Как "
 "и всегда, разделяются запятыми."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:326
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
 msgid "Left to Right"
 msgstr "Слева направо"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
 msgid "Right to Left"
 msgstr "Справа налево"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr ""
 "Какая страница является обложкой? Здесь будет пусто, если не указать "
 "страницу."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 msgid "Cover page:"
 msgstr "Обложка:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
 msgid "Language:"
 msgstr "Язык:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Reading direction:"
 msgstr "Направление чтения:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Genre:"
 msgstr "Жанр:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 msgid "Characters:"
 msgstr "Персонажи:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Format:"
 msgstr "Формат:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 msgid "Rating:"
 msgstr "Рейтинг:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
 msgid "Series:"
 msgstr "Серия:"
 
 # Фильтры
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:348
 msgid "Other:"
 msgstr "Другое:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
 msgid "Work"
 msgstr "Работа"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:355
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -60608,15 +60608,15 @@ msgstr ""
 "(например, художник эскизов, графический художник), адреса электронной почты "
 "и домашние страницы."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Role"
 msgstr "Роль"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:376
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:381
 msgid "Authors"
 msgstr "Авторы"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
@@ -60624,15 +60624,15 @@ msgstr ""
 "Название компании, группы лиц или имя лица, ответственного за окончательную "
 "версию, которую получит читатель."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Set Today"
 msgstr "Установить текущую дату"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
 msgid "Sets the publish date to the current date."
 msgstr "Устанавливает текущую дату в качестве даты публикации."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:398
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
@@ -60640,7 +60640,7 @@ msgstr ""
 "Традиционных издателей всегда указывают вместе с городом, где находится их "
 "офис."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:400
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -60650,7 +60650,7 @@ msgstr ""
 "добавить сюда. Маловероятно, что у комикса, созданного «с нуля», будет такая "
 "запись, но это поле полезно для адаптированных уже существующих комиксов."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -60660,89 +60660,89 @@ msgstr ""
 "найти информацию об этом ресурсе. Например, если речь идёт об адаптированном "
 "веб-комиксе, здесь следует вставить ссылку на его официальный веб-сайт."
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:415
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 msgid "City:"
 msgstr "Город:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:417
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
 msgid "ISBN:"
 msgstr "Международный номер (ISBN):"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
 msgid "UUID:"
 msgstr "UUID:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:426
 msgid "Database:"
 msgstr "База данных:"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:428
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Publisher"
 msgstr "Издатель"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:112
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:118
 msgid "No keywords"
 msgstr "Нет ключевых слов"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:126
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:132
 msgid "No last edit timestamp"
 msgstr "Не указано время последнего редактирования"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:146
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:152
 msgid "No description"
 msgstr "Нет описания"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:191
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:197
 msgid "Comics Manager"
 msgstr "Редактор комиксов"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:254
 msgid "New Project"
 msgstr "Создать проект"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:256
 msgid "Open Project"
 msgstr "Открыть проект"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:268
 msgid "Project Settings"
 msgstr "Параметры проекта"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:270
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:127
 msgid "Meta Data"
 msgstr "Метаданные"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Add Page"
 msgstr "Добавить страницу"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Add Page from Template"
 msgstr "Добавить страницу из шаблона"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
 msgid "Add Existing Pages"
 msgstr "Добавить существующие страницы"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
 msgid "Remove Page"
 msgstr "Удалить страницу"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid "Batch Resize"
 msgstr "Пакетное изменение размера"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:299
 msgid "View Page In Window"
 msgstr "Просмотр страницы в окне"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid "Scrape Author Info"
 msgstr "Собрать данные автора"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:302
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
@@ -60750,19 +60750,19 @@ msgstr ""
 "Искать в документах данные об авторах и добавлять из в список авторов. "
 "Программа не будет выполнять проверку наличия дубликатов записи."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:304
 msgid "Scrape Text for Translation"
 msgstr "Собрать текст для перевода"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid "Export Comic"
 msgstr "Экспорт комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid "Copy Location"
 msgstr "Копировать расположение"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:331
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
@@ -60770,19 +60770,19 @@ msgstr ""
 "Копирует расположение проекта в буфер обмена. Полезно для быстрого "
 "копирования данных в файловый менеджер."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
 msgid "Please select the JSON comic config file."
 msgstr "Выберите файл конфигурации комикса в формате JSON."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
 msgid "JSON files"
 msgstr "Файлы JSON"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
 msgid "Config cannot be used"
 msgstr "Невозможно использовать конфигурацию"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -60792,55 +60792,55 @@ msgstr ""
 "параметры доступа к папке или переместите проект в папку с соответствующими "
 "параметрами доступа."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:385
 msgid "Loading Pages..."
 msgstr "Загрузка страниц..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
 msgstr "Файлы Krita"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
 msgid "Which existing pages to add?"
 msgstr "Какие существующие страницы нужно добавить?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:598
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:617
 msgid "Where are the templates located?"
 msgstr "Где находятся шаблоны?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:641
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
 msgid "Where should the pages go?"
 msgstr "Куда следует сохранять страницы?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
 msgid "Which image should be the basis the new page?"
 msgstr "Какое изображение должно быть основой новой страницы?"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
 msgid "Export success"
 msgstr "Экспорт завершён успешно"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
 msgid "The files have been written to the export folder."
 msgstr "Файлы были записаны в папку экспорта."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:890
 msgid "Resize all Pages"
 msgstr "Изменить размер всех страниц"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
 msgid "Resizing pages..."
 msgstr "Изменение размера страниц..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:902
 msgid "Resizing Pages"
 msgstr "Изменение размера страниц"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:916
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -60851,44 +60851,44 @@ msgstr ""
 "Прошло времени: {passedString}:\n"
 " Оценка продолжительности:{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
 msgid "Scraping success"
 msgstr "Данные успешно собраны"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "POT-файл был записан в: {file}"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:24
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:29
 msgid "Which folder?"
 msgstr "Какая папка?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:55
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:60
 msgid "Change Folder"
 msgstr "Изменить папку"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:104
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:109
 msgid "Comic Project Settings"
 msgstr "Параметры проекта комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:114
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 msgid "Where should the export go?"
 msgstr "Куда следует экспортировать данные?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:115
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where are the templates?"
 msgstr "Где находятся шаблоны?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:116
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 msgid "Where are the translations?"
 msgstr "Где находятся переводы?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:117
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 msgid "Where are the extra auto-completion keys located?"
 msgstr "Где хранятся дополнительные ключи автоматического дополнения?"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 msgid ""
 "The location for extra autocompletion keys in the metadata editor. Point "
 "this at a folder containing key_characters/key_format/key_genre/key_rating/"
@@ -60903,48 +60903,48 @@ msgstr ""
 "дополнения, по одному на каждую строку. Этот путь сохраняется в параметрах "
 "Krita, а не в параметрах проекта."
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Project name:"
 msgstr "Название проекта:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
 msgid "Project concept:"
 msgstr "Концепция проекта:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 msgid "Pages folder:"
 msgstr "Папка со страницами:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 msgid "Export folder:"
 msgstr "Папка экспорта:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:125
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 msgid "Template folder:"
 msgstr "Папка шаблонов:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 msgid "Translation folder:"
 msgstr "Папка переводов:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 msgid "Default template:"
 msgstr "Шаблон по умолчанию:"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Extra keys folder:"
 msgstr "Папка дополнительных ключей:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:54
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
 msgid "Where should the comic project go?"
 msgstr "Куда следует сохранить проект комикса?"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
 msgid "Folder cannot be used"
 msgstr "Невозможно использовать папку"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
@@ -60952,23 +60952,23 @@ msgstr ""
 "Не удаётся создать файлы, так как у Krita нет доступа к этой папке. Выберите "
 "другую папку."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:68
 msgid "Comic Project Setup"
 msgstr "Параметры проекта комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:74
 msgid "Basic Comic Project Settings"
 msgstr "Основные параметры проекта комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:80
 msgid "A Project name. This can be different from the eventual title"
 msgstr "Название проекта. Оно может отличаться от заголовка"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:82
 msgid "Generate"
 msgstr "Создать"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
@@ -60976,7 +60976,7 @@ msgstr ""
 "Если не получается придумать название для проекта, помочь сможет встроенный "
 "генератор названий Krita."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:88
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
@@ -60984,15 +60984,15 @@ msgstr ""
 "О чём ваш комикс? Это поле отражает информацию для вас, поэтому не "
 "переживайте, если здесь окажется мало текста."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:90
 msgid "The main language the comic is in"
 msgstr "Основной язык комикса"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:103
 msgid "Make a new directory with the project name."
 msgstr "Создать новый каталог с названием проекта."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
@@ -61000,11 +61000,11 @@ msgstr ""
 "Этот пункт позволяет выбрать название общего каталога проектов комиксов, в "
 "котором будет создана папка на основе указанного названия проекта."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid "pages"
 msgstr "страницы"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
@@ -61012,90 +61012,90 @@ msgstr ""
 "Имя папки, содержащей страницы. Если такой папки не существует, она будет "
 "создана."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "export"
 msgstr "экспорт"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr ""
 "Имя папки для экспорта. Если такой папки не существует, она будет создана."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "templates"
 msgstr "шаблоны"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "The name for the folder where the page templates are sought in."
 msgstr "Имя папки, где программа будет искать шаблоны страниц."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "translations"
 msgstr "переводы"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
 msgid "Comic concept:"
 msgstr "Концепция комикса:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
 msgid "Main language:"
 msgstr "Основной язык:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
 msgid "Folder names and other."
 msgstr "Имена папок и прочее."
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Project directory:"
 msgstr "Каталог проекта:"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:138
 msgid "Pages directory"
 msgstr "Каталог страниц"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 msgid "Export directory"
 msgstr "Каталог экспорта"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 msgid "Template directory"
 msgstr "Каталог шаблона"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 msgid "Translation directory"
 msgstr "Каталог переводов"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:25
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
 msgid "Pixels"
 msgstr "Пикселы"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:27
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:32
 msgid "Centimeter"
 msgstr "Сантиметр"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:28
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:33
 msgid "millimeter"
 msgstr "миллиметры"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:76
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:81
 msgid "Add new Template"
 msgstr "Добавить новый шаблон"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:93
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:98
 msgid "Import Templates"
 msgstr "Импорт шаблонов"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Which files should be added to the template folder?"
 msgstr "Какие файлы следует добавить в папку с шаблонами?"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:135
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:140
 msgid "Create new Template"
 msgstr "Создать новый шаблон"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:146
 msgid ""
 "This allows you to make a template document with guides.\n"
 "The width and height are the size of the live-area, the safe area is the "
@@ -61107,260 +61107,260 @@ msgstr ""
 "это рабочая область без полей, а все изображения — это рабочая область и "
 "обрезка для иллюстраций."
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:161
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:166
 msgid "Select background color"
 msgstr "Выбрать цвет фона"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:219
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:224
 msgid "Margins"
 msgstr "Поля"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:254
 msgid "Bleeds"
 msgstr "Обрезка для иллюстраций"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:302
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:307
 msgid "Background"
 msgstr "Фон"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:325
 msgid "Creating template"
 msgstr "Создание шаблона"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Abridger"
 msgstr "Обрезчик"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Art copyist"
 msgstr "Копировальщик"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Actor"
 msgstr "Действующее лицо"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Art director"
 msgstr "Арт-директор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Annotator"
 msgstr "Комментатор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bibliographic antecedent"
 msgstr "Библиографический предшественник"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Architect"
 msgstr "Архитектор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Artistic director"
 msgstr "Художественный руководитель"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Associated name"
 msgstr "Связанное имя"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Autographer"
 msgstr "Автографер"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Attributed name"
 msgstr "Присвоенное имя"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Author of dialog"
 msgstr "Автор диалогов"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Binding designer"
 msgstr "Дизайнер переплёта"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookjacket designer"
 msgstr "Дизайнер суперобложки"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Book designer"
 msgstr "Оформитель книги"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Book producer"
 msgstr "Производитель книги"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Blurb writer"
 msgstr "Автор аннотации"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Binder"
 msgstr "Переплётчик"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookplate designer"
 msgstr "Дизайнер экслибриса"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookseller"
 msgstr "Распространитель книги"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Calligrapher"
 msgstr "Каллиграф"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Censor"
 msgstr "Цензор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Cover designer"
 msgstr "Дизайнер обложки"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Copyright holder"
 msgstr "Правообладатель"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Creator"
 msgstr "Создатель"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Contributor"
 msgstr "Участник проекта"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Curator"
 msgstr "Куратор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Commentator for written text"
 msgstr "Комментатор письменного текста"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Draftsman"
 msgstr "Автор чертежей"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Dubious author"
 msgstr "Возможный автор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Etcher"
 msgstr "Гравёр"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Expert"
 msgstr "Эксперт"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Funder"
 msgstr "Инвестор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Illustrator"
 msgstr "Иллюстратор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Illuminator"
 msgstr "Осветитель"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Inscriber"
 msgstr "Устройство записи"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Licensee"
 msgstr "Лицензиат"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Licensor"
 msgstr "Лицензиар"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Lithographer"
 msgstr "Литограф"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Metadata contact"
 msgstr "Ответственный за метаданные"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Owner"
 msgstr "Владелец"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Patron"
 msgstr "Покровитель"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Publishing director"
 msgstr "Директор издательства"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Printer"
 msgstr "Типограф"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Scenarist"
 msgstr "Сценарист"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Scribe"
 msgstr "Книжник"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Sponsor"
 msgstr "Спонсор"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Storyteller"
 msgstr "Рассказчик"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Transcriber"
 msgstr "Адаптация"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Type designer"
 msgstr "Художник шрифта"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Typographer"
 msgstr "Типограф"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added commentary"
 msgstr "Автор добавленных комментариев"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added lyrics"
 msgstr "Автор добавленных текстов"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of accompanying material"
 msgstr "Автор сопроводительных материалов"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added text"
 msgstr "Автор добавленного текста"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of introduction"
 msgstr "Автор введения"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of preface"
 msgstr "Автор предисловия"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of supplementary textual content"
 msgstr "Автор дополнительного текстового содержимого"
 
 #: plugins/python/documenttools/documenttools.py:16
-#: plugins/python/documenttools/uidocumenttools.py:56
+#: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
 msgstr "Управление документами"
 
@@ -61369,35 +61369,35 @@ msgid "Plugin to manipulate properties of selected documents."
 msgstr "Модуль для изменения свойств выделенных документов."
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:15
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1864
 #, kde-format
 msgid "Rotate"
 msgstr "Вращение"
 
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:24
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:27
 msgid "Negative degrees will rotate the image to the left"
 msgstr "Отрицательные значения вращают изображение влево"
 
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:26
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:29
 msgid "Degrees:"
 msgstr "Градусы:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:12
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:16
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:926
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1886
 #, kde-format
 msgid "Scale"
 msgstr "Масштаб"
 
-#: plugins/python/documenttools/uidocumenttools.py:104
+#: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "Выделенные документы были изменены."
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:113
+#: plugins/python/exportlayers/uiexportlayers.py:121
 msgid "Export Layers"
 msgstr "Экспорт слоёв"
 
@@ -61405,76 +61405,76 @@ msgstr "Экспорт слоёв"
 msgid "Plugin to export layers from a document."
 msgstr "Модуль экспорта слоёв из документа."
 
-#: plugins/python/exportlayers/uiexportlayers.py:31
+#: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Export filter layers"
 msgstr "Экспорт фильтрующих слоёв"
 
-#: plugins/python/exportlayers/uiexportlayers.py:32
+#: plugins/python/exportlayers/uiexportlayers.py:40
 msgid "Export in batchmode"
 msgstr "Экспорт в пакетном режиме"
 
-#: plugins/python/exportlayers/uiexportlayers.py:33
+#: plugins/python/exportlayers/uiexportlayers.py:41
 msgid "Group as layer"
 msgstr "Группировать как слой"
 
-#: plugins/python/exportlayers/uiexportlayers.py:35
+#: plugins/python/exportlayers/uiexportlayers.py:43
 msgid "Ignore invisible layers"
 msgstr "Игнорировать невидимые слои"
 
-#: plugins/python/exportlayers/uiexportlayers.py:37
+#: plugins/python/exportlayers/uiexportlayers.py:45
 msgid "Adjust export size to layer content"
 msgstr "Привести размер экспорта к размеру слоя"
 
-#: plugins/python/exportlayers/uiexportlayers.py:39
+#: plugins/python/exportlayers/uiexportlayers.py:47
 msgid "Add incrementing prefix"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:74
+#: plugins/python/exportlayers/uiexportlayers.py:82
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:75
+#: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:90
+#: plugins/python/exportlayers/uiexportlayers.py:98
 msgid "dpi:"
 msgstr "dpi:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:98
+#: plugins/python/exportlayers/uiexportlayers.py:106
 msgid "Initial directory:"
 msgstr "Начальный каталог:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:107
 msgid "Export options:"
 msgstr "Параметры экспорта:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:100
+#: plugins/python/exportlayers/uiexportlayers.py:108
 msgid "Export size:"
 msgstr "Размер экспорта:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:102
+#: plugins/python/exportlayers/uiexportlayers.py:110
 msgid "Images extensions:"
 msgstr "Расширения изображений:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:159
+#: plugins/python/exportlayers/uiexportlayers.py:167
 msgid "Select one document."
 msgstr "Выделите один документ."
 
-#: plugins/python/exportlayers/uiexportlayers.py:161
+#: plugins/python/exportlayers/uiexportlayers.py:169
 msgid "Select the initial directory."
 msgstr "Выберите начальный каталог."
 
-#: plugins/python/exportlayers/uiexportlayers.py:165
+#: plugins/python/exportlayers/uiexportlayers.py:173
 msgid "All layers have been exported."
 msgstr "Все слои были экспортированы."
 
-#: plugins/python/exportlayers/uiexportlayers.py:235
+#: plugins/python/exportlayers/uiexportlayers.py:243
 msgid "Select a Folder"
 msgstr "Выбрать папку"
 
 #: plugins/python/filtermanager/filtermanager.py:16
-#: plugins/python/filtermanager/uifiltermanager.py:54
+#: plugins/python/filtermanager/uifiltermanager.py:59
 msgid "Filter Manager"
 msgstr "Управление фильтрами"
 
@@ -61482,32 +61482,32 @@ msgstr "Управление фильтрами"
 msgid "Plugin to filters management."
 msgstr "Модуль управления фильтрами"
 
-#: plugins/python/filtermanager/uifiltermanager.py:37
+#: plugins/python/filtermanager/uifiltermanager.py:42
 msgid "Document Tree Model"
 msgstr "Иерархическая модель документа"
 
-#: plugins/python/filtermanager/uifiltermanager.py:42
+#: plugins/python/filtermanager/uifiltermanager.py:47
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "Фильтры:"
 
-#: plugins/python/highpass/highpass.py:26
+#: plugins/python/highpass/highpass.py:39
 msgid "High Pass"
 msgstr "Высокая частота"
 
-#: plugins/python/highpass/highpass.py:34
+#: plugins/python/highpass/highpass.py:47
 msgid "High Pass Filter"
 msgstr "Фильтр высоких частот"
 
-#: plugins/python/highpass/highpass.py:35
+#: plugins/python/highpass/highpass.py:48
 msgid "There is no active image."
 msgstr "Нет активного изображения."
 
-#: plugins/python/highpass/highpass.py:49
+#: plugins/python/highpass/highpass.py:62
 msgid "Keep original layer"
 msgstr "Сохранить исходный слой"
 
-#: plugins/python/highpass/highpass.py:52
+#: plugins/python/highpass/highpass.py:65
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "Радиус фильтра:"
@@ -61616,19 +61616,19 @@ msgstr "Включить сценарий"
 msgid "Create Script"
 msgstr "Создать сценарий"
 
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:32
 msgid "Last Documents Docker"
 msgstr "Панель последних открытых документов"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:45
 msgid "Change settings"
 msgstr "Изменить параметры"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:62
 msgid "Mixer Slider Docker"
 msgstr "Боковая панель ползунка микшера"
 
-#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
+#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:41
 msgid "Number of slider lines: "
 msgstr "Количество строк с ползунком: "
 
@@ -61648,188 +61648,188 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "Вращение"
 
-#: plugins/python/mutator/mutator.py:122
+#: plugins/python/mutator/mutator.py:127
 #, fuzzy
 #| msgid "Getting Started"
 msgid "Settings mutated!"
 msgstr "Начало работы"
 
-#: plugins/python/mutator/mutator.py:152
+#: plugins/python/mutator/mutator.py:157
 #, fuzzy
 #| msgid "Curator"
 msgid "Mutator"
 msgstr "Куратор"
 
-#: plugins/python/mutator/mutator.py:166
+#: plugins/python/mutator/mutator.py:171
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:168
+#: plugins/python/mutator/mutator.py:173
 #, fuzzy
 #| msgid "Saturation: "
 msgid "Size Mutation: "
 msgstr "Насыщенность: "
 
-#: plugins/python/mutator/mutator.py:175
+#: plugins/python/mutator/mutator.py:180
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:177
+#: plugins/python/mutator/mutator.py:182
 #, fuzzy
 #| msgid "Rotation: "
 msgid "Rotation Mutation: "
 msgstr "Вращение: "
 
-#: plugins/python/mutator/mutator.py:184
+#: plugins/python/mutator/mutator.py:189
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:186
+#: plugins/python/mutator/mutator.py:191
 #, fuzzy
 #| msgid "Opacity: "
 msgid "Opacity Mutation: "
 msgstr "Непрозрачность: "
 
-#: plugins/python/mutator/mutator.py:193
+#: plugins/python/mutator/mutator.py:198
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:195
+#: plugins/python/mutator/mutator.py:200
 #, fuzzy
 #| msgid "Rotation: "
 msgid "Flow Mutation: "
 msgstr "Вращение: "
 
-#: plugins/python/mutator/mutator.py:202
+#: plugins/python/mutator/mutator.py:207
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:204
+#: plugins/python/mutator/mutator.py:209
 #, fuzzy
 #| msgid "Rotation: "
 msgid "Hue Mutation: "
 msgstr "Вращение: "
 
-#: plugins/python/mutator/mutator.py:211
+#: plugins/python/mutator/mutator.py:216
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:213
+#: plugins/python/mutator/mutator.py:218
 #, fuzzy
 msgid "Saturation Mutation: "
 msgstr "Кругов насыщенности:"
 
-#: plugins/python/mutator/mutator.py:220
+#: plugins/python/mutator/mutator.py:225
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
 msgstr ""
 
-#: plugins/python/mutator/mutator.py:222
+#: plugins/python/mutator/mutator.py:227
 #, fuzzy
 #| msgid "Video duration:"
 msgid "Value Mutation: "
 msgstr "Длительность видеозаписи:"
 
-#: plugins/python/mutator/mutator.py:232
+#: plugins/python/mutator/mutator.py:237
 #, fuzzy
 #| msgid "Rotate"
 msgid "Mutate"
 msgstr "Вращение"
 
-#: plugins/python/mutator/mutator.py:233
+#: plugins/python/mutator/mutator.py:238
 msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:37
+#: plugins/python/palette_docker/palette_docker.py:45
 msgid "Python Palette Docker"
 msgstr "Панель палитры Python"
 
-#: plugins/python/palette_docker/palette_docker.py:63
+#: plugins/python/palette_docker/palette_docker.py:71
 msgid "Set"
 msgstr "Установить"
 
-#: plugins/python/palette_docker/palette_docker.py:72
+#: plugins/python/palette_docker/palette_docker.py:80
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Добавить группу"
 
-#: plugins/python/palette_docker/palette_docker.py:75
+#: plugins/python/palette_docker/palette_docker.py:83
 msgid "Remove Entry"
 msgstr "Удалить запись"
 
-#: plugins/python/palette_docker/palette_docker.py:91
+#: plugins/python/palette_docker/palette_docker.py:99
 msgid "Edit Palette Settings"
 msgstr "Изменить параметры палитры"
 
-#: plugins/python/palette_docker/palette_docker.py:97
+#: plugins/python/palette_docker/palette_docker.py:105
 msgid "Export as GIMP Palette File"
 msgstr "Экспортировать как файл палитры GIMP"
 
-#: plugins/python/palette_docker/palette_docker.py:101
+#: plugins/python/palette_docker/palette_docker.py:109
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "Экспортировать как SVG Inkscape с образцами"
 
-#: plugins/python/palette_docker/palette_docker.py:105
+#: plugins/python/palette_docker/palette_docker.py:113
 msgid "Sort Colors"
 msgstr "Упорядочить цвета"
 
-#: plugins/python/palette_docker/palette_docker.py:215
+#: plugins/python/palette_docker/palette_docker.py:223
 msgid "Edit Palette Data"
 msgstr "Изменить данные палитры"
 
-#: plugins/python/palette_docker/palette_docker.py:220
+#: plugins/python/palette_docker/palette_docker.py:228
 msgid "Palette Data"
 msgstr "Данные палитры"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:26
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:31
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:29
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
 msgid "Export Successful"
 msgstr "Экспорт прошёл успешно"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:28
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:33
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
 #, python-brace-format
 msgid "{input} has been exported to {output}."
 msgstr "{input} экспортирован в {output}."
 
-#: plugins/python/photobash_images/photobash_images_docker.py:73
+#: plugins/python/photobash_images/photobash_images_docker.py:76
 msgctxt "@title:window"
 msgid "Photobash Images"
 msgstr "Изображения Photobash"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:141
-#: plugins/python/photobash_images/photobash_images_docker.py:471
+#: plugins/python/photobash_images/photobash_images_docker.py:144
+#: plugins/python/photobash_images/photobash_images_docker.py:474
 msgid "Change References Folder"
 msgstr "Изменить папку для эталонов"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:147
-#: plugins/python/photobash_images/photobash_images_docker.py:219
+#: plugins/python/photobash_images/photobash_images_docker.py:150
+#: plugins/python/photobash_images/photobash_images_docker.py:222
 #, python-brace-format
 msgid "Image Scale: {0}%"
 msgstr "Масштаб изображения: {0}%"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:321
+#: plugins/python/photobash_images/photobash_images_docker.py:324
 #, python-brace-format
 msgid "Page: {0}/{1}"
 msgstr "Страница: {0}/{1}"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:460
+#: plugins/python/photobash_images/photobash_images_docker.py:463
 msgid "Change Directory for Images"
 msgstr "Изменить каталог для изображений"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:469
+#: plugins/python/photobash_images/photobash_images_docker.py:472
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, kde-format
 msgid "Set References Folder"
@@ -61880,40 +61880,40 @@ msgstr "Файл .desktop"
 msgid "No plugins found in archive"
 msgstr "Не удалось найти ни одного модуля в архиве"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:32
+#: plugins/python/plugin_importer/plugin_importer_extension.py:36
 msgid "Import Python Plugin from File..."
 msgstr "Импортировать модуль Python из файла..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:37
+#: plugins/python/plugin_importer/plugin_importer_extension.py:41
 msgid "Import Python Plugin from Web..."
 msgstr "Импортировать модуль Python из Интернета..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:44
+#: plugins/python/plugin_importer/plugin_importer_extension.py:48
 msgid "Overwrite Plugin"
 msgstr "Заменить модуль"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:45
+#: plugins/python/plugin_importer/plugin_importer_extension.py:49
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
 msgstr "Модуль «%s» уже существует. Заменить его?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:53
+#: plugins/python/plugin_importer/plugin_importer_extension.py:57
 msgid "The following plugins were imported:"
 msgstr "Были импортированы следующие модули:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:63
+#: plugins/python/plugin_importer/plugin_importer_extension.py:67
 msgid "Enable plugins now? (Requires restart)"
 msgstr "Включить модули? (Требует перезапуска)"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:68
+#: plugins/python/plugin_importer/plugin_importer_extension.py:72
 msgid "Activate Plugins?"
 msgstr "Включить модуль?"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:75
+#: plugins/python/plugin_importer/plugin_importer_extension.py:79
 msgid "Error during import:"
 msgstr "При импорте произошла ошибка:"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:94
+#: plugins/python/plugin_importer/plugin_importer_extension.py:98
 msgid ""
 "<p><strong>Enter download URL</strong></p><p>For example:<ul><li>Zip "
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
@@ -61923,16 +61923,16 @@ msgstr ""
 "<ul><li>Ссылка для скачивания Zip (http://example.com/plugin.zip)</"
 "li><li>Github репозиторий (https://github.com/test/plugin)</li>"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:102
-#: plugins/python/plugin_importer/plugin_importer_extension.py:116
+#: plugins/python/plugin_importer/plugin_importer_extension.py:106
+#: plugins/python/plugin_importer/plugin_importer_extension.py:120
 msgid "Import Plugin"
 msgstr "Импорт модулей"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:118
+#: plugins/python/plugin_importer/plugin_importer_extension.py:122
 msgid "Zip Archives"
 msgstr "Архивы Zip"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:29
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:35
 msgid "Quick Settings Docker"
 msgstr "Панель быстрой настройки"
 
@@ -61950,128 +61950,128 @@ msgid "Script {0}"
 msgstr "Сценарий {0}"
 
 #: plugins/python/scripter/debugcontroller.py:63
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:34
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:16
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:41
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:20
 msgid "Debugger"
 msgstr "Отладчик"
 
-#: plugins/python/scripter/scripter.py:20
-#: plugins/python/scripter/uicontroller.py:86
+#: plugins/python/scripter/scripter.py:23
+#: plugins/python/scripter/uicontroller.py:94
 msgid "Scripter"
 msgstr "Скриптер"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:31
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
 msgid "Do you want to save the current document?"
 msgstr "Сохранить текущий документ?"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:27
 msgid "Debug"
 msgstr "Отладка"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:23
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:28
 msgid "Debug Ctrl+D"
 msgstr "Отладка Ctrl+D"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:20
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
 msgid "New"
 msgstr "Создать"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:31
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
 msgid "The document has been modified."
 msgstr "Документ был изменён."
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:32
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
 msgid "Do you want to save your changes?"
 msgstr "Сохранить изменения?"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:27
 msgid "Open"
 msgstr "Открыть"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:32
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 msgid "Python Files (*.py)"
 msgstr "Файлы Python (*.py)"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:45
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:50
 msgid "Invalid File"
 msgstr "Некорректный файл"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:46
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Open files with .py extension"
 msgstr "Открыть файлы с расширением .py"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:27
 msgid "Reload File"
 msgstr "Перезагрузить файл"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:31
 msgid "Reload File Alt+R"
 msgstr "Перезагрузить файл Alt+R"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:44
 msgid "No existing document"
 msgstr "Нет существующего документа"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:45
 msgid "Please specify a document by opening it before reloading"
 msgstr "Укажите документ, открыв его перед перезагрузкой"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:35
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:57
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:16
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:61
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:20
 msgid "Output"
 msgstr "Вывод"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:43
 msgid "Run"
 msgstr "Запустить"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:44
 msgid "Run Ctrl+R"
 msgstr "Запустить Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:35
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:33
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 msgid "Save Python File"
 msgstr "Сохранить файл Python"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:36
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:34
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Python File (*.py)"
 msgstr "Файл Python (*.py)"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:21
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
 msgid "Save As"
 msgstr "Сохранить как"
 
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:19
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:22
 msgid "Syntax highlighter:"
 msgstr "Подсветка синтаксиса:"
 
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
 msgid "Fonts:"
 msgstr "Шрифты:"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
 msgstr "Область"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "Значение"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:25
 msgid "Step Over"
 msgstr "Перейти"
 
-#: plugins/python/scripter/uicontroller.py:165
+#: plugins/python/scripter/uicontroller.py:173
 msgid "Error Running Script"
 msgstr "Ошибка выполнения сценария"
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
-#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
+#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:25
 msgid "Selections Bag"
 msgstr "Выделение"
 
@@ -62162,20 +62162,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Активировать профиль кисти 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:28
+#: plugins/python/tenbrushes/tenbrushes.py:31
 msgid "Ten Brushes"
 msgstr "Десять кистей"
 
-#: plugins/python/tenbrushes/tenbrushes.py:29
+#: plugins/python/tenbrushes/tenbrushes.py:32
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "Назначить десяти профилям кистей десять комбинаций клавиш."
 
-#: plugins/python/tenbrushes/tenbrushes.py:81
+#: plugins/python/tenbrushes/tenbrushes.py:84
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Задействовать профиль кисти {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:108
+#: plugins/python/tenbrushes/tenbrushes.py:111
 msgid ""
 "{}\n"
 "selected"
@@ -62183,7 +62183,7 @@ msgstr ""
 "{}\n"
 "выбрано"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:23
+#: plugins/python/tenbrushes/uitenbrushes.py:29
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
@@ -62191,11 +62191,11 @@ msgstr ""
 "&Активировать предыдущий профиль кистей, если комбинация клавиш нажата ещё "
 "раз"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:28
+#: plugins/python/tenbrushes/uitenbrushes.py:34
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Выбрать инструмент рисования от руки при нажатии комбинации клавиш"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:47
+#: plugins/python/tenbrushes/uitenbrushes.py:53
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -62203,8 +62203,8 @@ msgstr ""
 "Выберите профиль кисти, затем нажмите комбинацию клавиш, которую следует "
 "связать с этим профилем."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:50
-#: plugins/python/tenscripts/uitenscripts.py:46
+#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -62289,195 +62289,195 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "Выполнить сценарий 10"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:30
 msgid "Ten Scripts"
 msgstr "Десять сценариев"
 
-#: plugins/python/tenscripts/tenscripts.py:28
+#: plugins/python/tenscripts/tenscripts.py:31
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "Установить десять сценариев десяти комбинациям клавиш"
 
-#: plugins/python/tenscripts/tenscripts.py:54
+#: plugins/python/tenscripts/tenscripts.py:57
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "Выполнить сценарий {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:80
+#: plugins/python/tenscripts/tenscripts.py:83
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "Сценарий {0} выполнен"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:73
 msgid "Selected path"
 msgstr "Выделенный контур"
 
-#: plugins/python/tenscripts/uitenscripts.py:67
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 msgid "Select the script"
 msgstr "Выбрать сценарий"
 
-#: plugins/python/tenscripts/uitenscripts.py:99
+#: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Файлы Python (*.py)"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 #, fuzzy
 #| msgid "Custom options"
 msgid "Custom icon"
 msgstr "Нестандартные параметры"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 #, fuzzy
 #| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "Значок инструмента"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 #, fuzzy
 #| msgid "Brush presets"
 msgid "Brush preset icon"
 msgstr "Профили кистей"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
 #, fuzzy
 #| msgid "Group settings"
 msgid "Workflow Buttons settings"
 msgstr "Параметры группы"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
 #, fuzzy
 #| msgctxt "left mouse button"
 #| msgid "left button"
 msgid "Selected button:"
 msgstr "левая кнопка"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
 msgid "Add a workflow button"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:124
 msgid "Move selected workflow button to the left"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:130
 msgid "Move selected workflow button to the right"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
 #, fuzzy
 #| msgid "Delete selected mask"
 msgid "Delete selected workflow button"
 msgstr "Удалить выделенную маску"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
 #, fuzzy
 #| msgid "Selection mode:"
 msgid "Select icon mode:"
 msgstr "Режим выделения:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
 #, fuzzy
 msgid "Select a custom icon:"
 msgstr "Выделение по схожим цветам"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
 #, fuzzy
 #| msgid "Custom Input"
 msgid "Custom icon path"
 msgstr "Другие входные данные"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
 #, fuzzy
 msgid "Select the custom icon"
 msgstr "Удалить текущее действие"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
 #, fuzzy
 #| msgid "Internal Pool:"
 msgid "Enter a Tooltip:"
 msgstr "Внутренний буфер:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
 #, fuzzy
 #| msgid "Tooltip"
 msgid "Tooltip text"
 msgstr "Подсказка"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
 #, fuzzy
 #| msgid "Select a Color"
 msgid "Select a tool:"
 msgstr "Выберите цвет"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
 #, fuzzy
 msgid "Select a brush preset:"
 msgstr "Текущий профиль кисти"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
 #, fuzzy
 #| msgid "Brush presets"
 msgid "Brush preset name"
 msgstr "Профили кистей"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 #, fuzzy
 msgid "Select the brush preset"
 msgstr "Текущий профиль кисти"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
 #, fuzzy
 #| msgid "Select background color"
 msgid "Select foreground color:"
 msgstr "Выбрать цвет фона"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
 #, fuzzy
 #| msgid "Add foreground color"
 msgid "Load current foreground color"
 msgstr "Добавить цвет переднего плана"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
 #, fuzzy
 #| msgid "Add foreground color"
 msgid "Clear foreground color"
 msgstr "Добавить цвет переднего плана"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
 #, fuzzy
 #| msgid "Select background color"
 msgid "Select background color:"
 msgstr "Выбрать цвет фона"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
 #, fuzzy
 #| msgid "Select background color"
 msgid "Load current background color"
 msgstr "Выбрать цвет фона"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
 #, fuzzy
 #| msgid "Select background color"
 msgid "Clear background color"
 msgstr "Выбрать цвет фона"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 #, fuzzy
 #| msgid "Select the script"
 msgid "Select a script file:"
 msgstr "Выбрать сценарий"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
 #, fuzzy
 #| msgid "Select path"
 msgid "Script path"
 msgstr "Выделение контура"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
 #, fuzzy
 #| msgctxt ""
 #| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
@@ -62487,52 +62487,52 @@ msgstr "Выделение контура"
 msgid "Buttons size:"
 msgstr "%1 кнопка мыши"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
 #, fuzzy
 #| msgid "Sort by position"
 msgid "Settings button position:"
 msgstr "Сортировать по расположению"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
 #, fuzzy
 #| msgid "Bottom"
 msgid "Bottom bar"
 msgstr "Внизу"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 #, fuzzy
 #| msgctxt "@item:inmenu Layers Docker settings, checkbox"
 #| msgid "Inline"
 msgid "Inline"
 msgstr "В строке"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:460
 #, fuzzy
 #| msgid "Action file"
 msgid "Icon files "
 msgstr "Файл действия"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:516
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:549
 #, fuzzy
 #| msgid "Coloring:"
 msgid "Color info: "
 msgstr "Окраска:"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:586
 #, fuzzy
 #| msgid "Python files (*.py)"
 msgid "Script files "
 msgstr "Файлы Python (*.py)"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#: plugins/python/workflow_buttons/workflow_buttons.py:25
 #, fuzzy
 #| msgid "Group settings"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
 msgstr "Параметры группы"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:59
+#: plugins/python/workflow_buttons/workflow_buttons.py:64
 msgid "Open workflow buttons settings dialog"
 msgstr ""
 

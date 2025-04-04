@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-03 01:55+0000\n"
+"POT-Creation-Date: 2025-04-04 02:01+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12994,7 +12994,7 @@ msgid "&Help"
 msgstr "帮助(&H)"
 
 #: krita/krita5.xmlgui:426 libs/ui/kis_file_layer.cpp:129
-#: plugins/python/scripter/uicontroller.py:94
+#: plugins/python/scripter/uicontroller.py:102
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
@@ -15924,14 +15924,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "工作区"
 
-#: krita/main.cc:703 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:704
+#: krita/main.cc:703
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -20279,14 +20279,14 @@ msgstr "缩小(&M)"
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:36
 #: plugins/filters/palettize/palettize.ui:49
 #: plugins/paintops/libpaintop/forms/wdgtextbrush.ui:91
-#: plugins/python/exportlayers/uiexportlayers.py:29
+#: plugins/python/exportlayers/uiexportlayers.py:37
 #: plugins/python/photobash_images/photobash_images_docker.ui:439
 #: plugins/python/photobash_images/photobash_images_docker.ui:461
 #: plugins/python/scriptdocker/scriptdocker.py:33
-#: plugins/python/tenscripts/uitenscripts.py:59
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
+#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:168
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:210
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:289
 #, kde-format
 msgid "..."
 msgstr "..."
@@ -20374,7 +20374,7 @@ msgstr "默认"
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:18
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:53
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:59
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1541
 #, kde-format
 msgid "Size"
@@ -20507,14 +20507,14 @@ msgstr " 像素"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:301
 #: plugins/paintops/hairy/wdgInkOptions.ui:62
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:17
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:54
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:60
 #, kde-format
 msgid "Opacity"
 msgstr "不透明度"
 
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.h:20
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:28
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:55
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:61
 #, kde-format
 msgid "Flow"
 msgstr "流量"
@@ -21026,7 +21026,7 @@ msgid "Locked"
 msgstr "锁定"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
-#: plugins/python/channels2layers/channels2layers.py:78
+#: plugins/python/channels2layers/channels2layers.py:110
 #, kde-format
 msgid "Visible"
 msgstr "可见"
@@ -21098,7 +21098,7 @@ msgid "Open File"
 msgstr "打开图像"
 
 #: libs/image/kis_layer_properties_icons.cpp:37
-#: plugins/python/plugin_importer/plugin_importer_extension.py:79
+#: plugins/python/plugin_importer/plugin_importer_extension.py:83
 #, kde-format
 msgid "Error"
 msgstr "错误"
@@ -22140,7 +22140,7 @@ msgstr "RGB (8 位整数/通道，无色彩管理)"
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:24
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:31
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:352
-#: plugins/python/channels2layers/channels2layers.py:1374
+#: plugins/python/channels2layers/channels2layers.py:1406
 #, kde-format
 msgid "Blue"
 msgstr "蓝"
@@ -22156,7 +22156,7 @@ msgstr "蓝"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:113
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:235
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:406
-#: plugins/python/channels2layers/channels2layers.py:1372
+#: plugins/python/channels2layers/channels2layers.py:1404
 #, kde-format
 msgid "Green"
 msgstr "绿"
@@ -22166,7 +22166,7 @@ msgstr "绿"
 #: plugins/color/lcms2engine/colorspaces/rgb_f32/RgbF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/rgb_u16/RgbU16ColorSpace.cpp:26
 #: plugins/color/lcms2engine/colorspaces/rgb_u8/RgbU8ColorSpace.cpp:33
-#: plugins/python/channels2layers/channels2layers.py:1370
+#: plugins/python/channels2layers/channels2layers.py:1402
 #, kde-format
 msgid "Red"
 msgstr "红"
@@ -23428,8 +23428,8 @@ msgstr "存储项 ID"
 #: libs/resources/KisStorageModel.cpp:489
 #: libs/resources/KisTagResourceModel.cpp:630
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:107
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Name"
 msgstr "名称"
@@ -23541,7 +23541,7 @@ msgstr "元数据"
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
-#: plugins/python/channels2layers/channels2layers.py:853
+#: plugins/python/channels2layers/channels2layers.py:885
 #, kde-format
 msgid "Unknown"
 msgstr "未知"
@@ -23672,8 +23672,8 @@ msgstr "字体系列"
 #: libs/widgets/KoConfigAuthorPage.cpp:90
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:104
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:97
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 #, kde-format
 msgid "Type"
 msgstr "类型"
@@ -23695,7 +23695,7 @@ msgstr "预装"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:111
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:75
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:163
-#: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
+#: plugins/python/filtermanager/components/filtermanagertreemodel.py:22
 #, kde-format
 msgid "Thumbnail"
 msgstr "缩略图"
@@ -25394,7 +25394,7 @@ msgstr "视频动画导入"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:49
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:31
 #: plugins/impex/webp/kis_wdg_options_webp.ui:31
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
 #, kde-format
 msgid "General"
 msgstr "常规"
@@ -25558,10 +25558,10 @@ msgstr "新建文档选项"
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:98
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:68
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:181
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:34
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:40
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:73
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:186
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:38
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:44
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:80
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:323
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:960
@@ -25597,10 +25597,10 @@ msgstr "宽度："
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:69
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:185
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:35
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:41
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:74
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:190
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:39
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:45
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:225
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1020
 #, kde-format
@@ -25617,7 +25617,7 @@ msgstr "导入视频缩放选项"
 #. i18n: ectx: property (text), widget (QLabel, scaleFilterLabel)
 #: libs/ui/animation/VideoImportDialog.ui:585
 #: libs/ui/animation/wdg_animationrenderer.ui:188
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:43
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:47
 #, kde-format
 msgctxt "Resize intepolation method list label"
 msgid "Filter:"
@@ -26947,7 +26947,7 @@ msgstr "作者档案"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2299
 #: libs/ui/KoDocumentInfoDlg.cpp:114
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "作者"
@@ -27720,7 +27720,7 @@ msgstr "缩写："
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:89
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:77
 #: plugins/extensions/pykrita/plugin/info.ui:178
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
 #, kde-format
 msgid "Title:"
 msgstr "名称："
@@ -27763,7 +27763,7 @@ msgstr "Y 分辨率："
 #: libs/ui/forms/wdg_resolution.ui:110 libs/ui/forms/wdgimageproperties.ui:94
 #: libs/ui/forms/wdgnewimage.ui:128 libs/ui/imagesize/wdg_imagesize.ui:244
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:301
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:42
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:46
 #, kde-format
 msgid "Resolution:"
 msgstr "分辨率："
@@ -27945,7 +27945,7 @@ msgstr "删除"
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonClose)
 #: libs/ui/forms/wdgbookmarkedconfigurationseditor.ui:75
 #: libs/ui/forms/wdgsessionmanager.ui:94
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:20
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:25
 #, kde-format
 msgid "Close"
 msgstr "关闭"
@@ -28327,7 +28327,7 @@ msgstr "Krita 会根据来源和目标的特性文件的信息来自动勾选或
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: libs/ui/forms/wdgcustompattern.ui:23
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:418
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
 #, kde-format
 msgid "Source:"
 msgstr "来源："
@@ -29060,7 +29060,7 @@ msgstr "子窗口模式"
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:43
 #: plugins/dockers/lut/wdglut.ui:241
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:105
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:21
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/clearaction.py:24
 #, kde-format
 msgid "Clear"
 msgstr "清除"
@@ -29568,8 +29568,8 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1451
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:66
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:177
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:71
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:182
 #, kde-format
 msgid "DPI:"
 msgstr "DPI："
@@ -29874,7 +29874,7 @@ msgstr "添加图像..."
 #: libs/ui/forms/wdgimportimagesequence.ui:44
 #: libs/ui/input/config/kis_edit_profiles_dialog.ui:44
 #: libs/widgetutils/xmlgui/kswitchlanguagedialog_p.cpp:405
-#: plugins/python/channels2layers/channels2layers.py:80
+#: plugins/python/channels2layers/channels2layers.py:112
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
 msgid "Remove"
@@ -30340,7 +30340,7 @@ msgstr "保存新窗口布局"
 #: plugins/impex/brush/wdg_export_gih.ui:41
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:117
 #: plugins/paintops/libpaintop/forms/wdgcustombrush.ui:99
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:414
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
 #, kde-format
 msgid "Name:"
 msgstr "名称："
@@ -30391,7 +30391,7 @@ msgstr "当前笔刷预设"
 #: plugins/generators/seexpr/wdgseexpr.ui:172
 #: plugins/paintops/libpaintop/kis_clipboard_brush_widget.cpp:164
 #: plugins/paintops/libpaintop/kis_custom_brush_widget.cpp:139
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:21
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:26
 #, kde-format
 msgid "Save"
 msgstr "保存"
@@ -31633,7 +31633,7 @@ msgstr "缩放选区"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgCanvasSize)
 #: libs/ui/imagesize/wdg_canvassize.ui:24
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:12
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:16
 #, kde-format
 msgid "Canvas Size"
 msgstr "画布大小"
@@ -33728,7 +33728,7 @@ msgstr ""
 "\t\t请在设置对话框的性能页面为 Krita 分配更多内存。"
 
 #: libs/ui/kis_statusbar.cc:376
-#: plugins/python/channels2layers/channels2layers.py:79
+#: plugins/python/channels2layers/channels2layers.py:111
 #, kde-format
 msgid "Hidden"
 msgstr "隐藏"
@@ -35082,7 +35082,7 @@ msgid "Could not download %1."
 msgstr "无法下载 %1。"
 
 #: libs/ui/KisTemplateCreateDia.cpp:87
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:91
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:96
 #, kde-format
 msgid "Create Template"
 msgstr "新建模板"
@@ -35378,7 +35378,7 @@ msgstr ""
 "动或手动在网站右上角切换中文。"
 
 #: libs/ui/KisWelcomePageWidget.cpp:166
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Language"
 msgstr "语言"
@@ -36366,12 +36366,12 @@ msgid ""
 "issues."
 msgstr "由于性能问题，纹理缓冲在 ANGLE 渲染器下已被禁用。"
 
-#: libs/ui/opengl/kis_opengl.cpp:658
+#: libs/ui/opengl/kis_opengl.cpp:659
 #, kde-format
 msgid "The Intel graphics driver in use is known to have issues with OpenGL."
 msgstr "当前使用的 Intel 核芯显卡驱动程序对 OpenGL 的支持存在问题。"
 
-#: libs/ui/opengl/kis_opengl.cpp:660
+#: libs/ui/opengl/kis_opengl.cpp:661
 #, kde-format
 msgid ""
 "Intel graphics drivers tend to have issues with OpenGL so ANGLE will be used "
@@ -36381,14 +36381,14 @@ msgstr ""
 "Intel 核芯显卡的驱动程序与 OpenGL 的兼容性不好，Krita 将默认使用 Direct3D 11 "
 "模式。您也可以手动切换成 OpenGL 模式，但是它不一定能正常工作。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1057
+#: libs/ui/opengl/kis_opengl.cpp:1058
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1059
+#: libs/ui/opengl/kis_opengl.cpp:1060
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"
@@ -38136,7 +38136,7 @@ msgid "Back"
 msgstr "上一帧"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:21
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:24
 #, kde-format
 msgid "Stop"
 msgstr "停止"
@@ -39016,8 +39016,8 @@ msgstr ""
 "师,纹理画师,像素画师,像素动画师,修图员,艺术家,艺术总监,作家,作者,助理,其他"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Email"
 msgstr "电子邮箱"
@@ -39028,8 +39028,8 @@ msgid "Fax"
 msgstr "传真"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 #, kde-format
 msgid "Homepage"
 msgstr "网站"
@@ -39611,7 +39611,7 @@ msgid ""
 msgstr "此应用程序的版本。请在发送缺陷报告前确定你使用的是最新版本。"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:134
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:305
 #, kde-format
 msgid "Version:"
 msgstr "程序版本："
@@ -40643,7 +40643,7 @@ msgstr "灭点"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:147
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:249
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:372
-#: plugins/python/channels2layers/channels2layers.py:1362
+#: plugins/python/channels2layers/channels2layers.py:1394
 #, kde-format
 msgid "Cyan"
 msgstr "青"
@@ -40657,7 +40657,7 @@ msgstr "青"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:96
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:273
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:430
-#: plugins/python/channels2layers/channels2layers.py:1364
+#: plugins/python/channels2layers/channels2layers.py:1396
 #, kde-format
 msgid "Magenta"
 msgstr "品红"
@@ -40671,7 +40671,7 @@ msgstr "品红"
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:123
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:283
 #: plugins/filters/colorsfilters/wdg_color_balance.ui:382
-#: plugins/python/channels2layers/channels2layers.py:1366
+#: plugins/python/channels2layers/channels2layers.py:1398
 #, kde-format
 msgid "Yellow"
 msgstr "黄"
@@ -40679,7 +40679,7 @@ msgstr "黄"
 #: plugins/color/lcms2engine/colorspaces/cmyk_f32/CmykF32ColorSpace.cpp:30
 #: plugins/color/lcms2engine/colorspaces/cmyk_u16/CmykU16ColorSpace.cpp:25
 #: plugins/color/lcms2engine/colorspaces/cmyk_u8/CmykU8ColorSpace.cpp:26
-#: plugins/python/channels2layers/channels2layers.py:1368
+#: plugins/python/channels2layers/channels2layers.py:1400
 #, kde-format
 msgid "Black"
 msgstr "黑"
@@ -41084,7 +41084,7 @@ msgstr "过渡色调拾色器"
 
 #. i18n: ectx: property (text), widget (QLabel, myPaintColorModelLabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:367
-#: plugins/python/colorspace/uicolorspace.py:60
+#: plugins/python/colorspace/uicolorspace.py:68
 #, kde-format
 msgid "Color model:"
 msgstr "色彩模型："
@@ -41754,7 +41754,7 @@ msgstr "按帧的颜色标签过滤显示绘图纸"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:68
+#: plugins/python/palette_docker/palette_docker.py:76
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -41876,7 +41876,7 @@ msgstr "显示明度尺数值"
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:44
 #: plugins/filters/palettize/palettize.ui:56
 #: plugins/python/colorspace/colorspace.py:16
-#: plugins/python/colorspace/uicolorspace.py:74
+#: plugins/python/colorspace/uicolorspace.py:82
 #, kde-format
 msgid "Color Space"
 msgstr "色彩空间"
@@ -42373,7 +42373,7 @@ msgid "Undo History"
 msgstr "撤销历史"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:161
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:254
 #, kde-format
 msgid "Layers"
 msgstr "图层"
@@ -44161,7 +44161,7 @@ msgstr "注释"
 #. i18n: ectx: property (text), widget (QToolButton, btnArrange)
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:76
 #: plugins/filters/dodgeburn/DodgeBurnConfigurationBaseWidget.ui:21
-#: plugins/python/channels2layers/channels2layers.py:1076
+#: plugins/python/channels2layers/channels2layers.py:1108
 #, kde-format
 msgid "Mode"
 msgstr "模式"
@@ -44569,7 +44569,7 @@ msgstr "范围："
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:146
 #: plugins/filters/asccdl/wdg_asccdl.ui:35
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:42
-#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:36
+#: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:40
 #, kde-format
 msgid "Offset:"
 msgstr "偏移："
@@ -45216,7 +45216,7 @@ msgstr "前缀"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFileType)
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:127
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:64
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:69
 #, kde-format
 msgid "File Type"
 msgstr "文件类型"
@@ -45354,7 +45354,7 @@ msgstr "版权："
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/dublincore.ui:60
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:416
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
 #, kde-format
 msgid "Date:"
 msgstr "日期："
@@ -46326,25 +46326,25 @@ msgstr[0] "偏移 %1 个图层"
 msgid "Offset by x/2, y/2"
 msgstr "按 x/2, y/2 偏移"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:72
+#: plugins/extensions/pykrita/kritarunner/main.cpp:80
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr "无法加载 Python 库"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:75
+#: plugins/extensions/pykrita/kritarunner/main.cpp:83
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr "无法设置 Python 路径"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:78
+#: plugins/extensions/pykrita/kritarunner/main.cpp:86
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr "无法加载内置 pykrita 模块"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:81
+#: plugins/extensions/pykrita/kritarunner/main.cpp:89
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -47007,7 +47007,7 @@ msgstr "保存到："
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:334
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
 #, kde-format
 msgid "Summary:"
 msgstr "摘要："
@@ -47052,7 +47052,7 @@ msgstr "http://"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:185
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:337
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:425
 #, kde-format
 msgid "License:"
 msgstr "许可证："
@@ -48655,7 +48655,7 @@ msgstr "独立色彩通道"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
 #: plugins/filters/halftone/KisHalftoneConfigWidget.ui:50
-#: plugins/python/highpass/highpass.py:53
+#: plugins/python/highpass/highpass.py:66
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1969
 #, kde-format
 msgid "Mode:"
@@ -48788,9 +48788,9 @@ msgstr "索引要素"
 
 #. i18n: ectx: property (title), widget (QGroupBox, otherBox)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:294
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Other"
 msgstr "其他"
@@ -50362,7 +50362,7 @@ msgstr "基于像素"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:26
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:31
 #, kde-format
 msgid "Inches"
 msgstr "英寸"
@@ -57478,7 +57478,7 @@ msgid "Density"
 msgstr "密度"
 
 #: plugins/paintops/sketch/sketch_paintop_plugin.cpp:29
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:334
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:339
 #, kde-format
 msgid "Sketch"
 msgstr "草图"
@@ -57665,8 +57665,8 @@ msgstr "随机大小"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:46
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:24
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:17
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsaction.py:28
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
 #, kde-format
 msgid "Settings"
 msgstr "设置"
@@ -58055,90 +58055,90 @@ msgstr "笔身倾角灵敏度"
 msgid "Direction/Tilt Mix Value"
 msgstr "笔画方向/笔身倾角混合比例"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:19
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:24
 msgid "Assign Profile"
 msgstr "分配色彩特性文件"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:20
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:25
 msgid "There is no active document."
 msgstr "无活动图像。"
 
-#: plugins/python/assignprofiledialog/assignprofiledialog.py:53
+#: plugins/python/assignprofiledialog/assignprofiledialog.py:58
 msgid "Assign Profile to Image"
 msgstr "图像色彩特性文件分配对话框"
 
-#: plugins/python/channels2layers/channels2layers.py:58
-#: plugins/python/channels2layers/channels2layers.py:59
+#: plugins/python/channels2layers/channels2layers.py:90
+#: plugins/python/channels2layers/channels2layers.py:91
 msgid "Channels to layers"
 msgstr "色彩通道转换为图层"
 
-#: plugins/python/channels2layers/channels2layers.py:67
+#: plugins/python/channels2layers/channels2layers.py:99
 msgid "RGB Colors"
 msgstr "RGB 颜色"
 
-#: plugins/python/channels2layers/channels2layers.py:68
+#: plugins/python/channels2layers/channels2layers.py:100
 msgid "CMY Colors"
 msgstr "CMY 颜色"
 
-#: plugins/python/channels2layers/channels2layers.py:69
+#: plugins/python/channels2layers/channels2layers.py:101
 msgid "CMYK Colors"
 msgstr "CMYK 颜色"
 
-#: plugins/python/channels2layers/channels2layers.py:70
+#: plugins/python/channels2layers/channels2layers.py:102
 msgid "RGB Grayscale levels"
 msgstr "RGB 灰阶"
 
-#: plugins/python/channels2layers/channels2layers.py:71
+#: plugins/python/channels2layers/channels2layers.py:103
 msgid "CMY Grayscale levels"
 msgstr "CMY 灰阶"
 
-#: plugins/python/channels2layers/channels2layers.py:72
+#: plugins/python/channels2layers/channels2layers.py:104
 msgid "CMYK Grayscale levels"
 msgstr "CMYK 灰阶"
 
-#: plugins/python/channels2layers/channels2layers.py:77
+#: plugins/python/channels2layers/channels2layers.py:109
 msgid "Unchanged"
 msgstr "保持原样"
 
-#: plugins/python/channels2layers/channels2layers.py:1012
+#: plugins/python/channels2layers/channels2layers.py:1044
 msgid "Processing layer"
 msgstr "处理图层"
 
-#: plugins/python/channels2layers/channels2layers.py:1042
+#: plugins/python/channels2layers/channels2layers.py:1074
 msgctxt ""
 "The name for a new group layer; the generated layers will be placed in this "
 "group."
 msgid "New layer group name"
 msgstr "新图层组名称"
 
-#: plugins/python/channels2layers/channels2layers.py:1047
+#: plugins/python/channels2layers/channels2layers.py:1079
 msgctxt ""
 "Defines how the name for each layer created from the channel is generated."
 msgid "New layers color name"
 msgstr "新图层颜色名称"
 
-#: plugins/python/channels2layers/channels2layers.py:1058
+#: plugins/python/channels2layers/channels2layers.py:1090
 msgid "Original layer"
 msgstr "原始图层"
 
-#: plugins/python/channels2layers/channels2layers.py:1117
+#: plugins/python/channels2layers/channels2layers.py:1149
 msgctxt "the original layer"
 msgid "Original"
 msgstr "原始"
 
-#: plugins/python/channels2layers/channels2layers.py:1130
+#: plugins/python/channels2layers/channels2layers.py:1162
 msgid "<i>Cyan</i>"
 msgstr "<b>青</b>"
 
-#: plugins/python/channels2layers/channels2layers.py:1142
+#: plugins/python/channels2layers/channels2layers.py:1174
 msgid "<i>Magenta</i>"
 msgstr "<b>品红</b>"
 
-#: plugins/python/channels2layers/channels2layers.py:1154
+#: plugins/python/channels2layers/channels2layers.py:1186
 msgid "<i>Yellow</i>"
 msgstr "<b>黄</b>"
 
-#: plugins/python/channels2layers/channels2layers.py:1166
+#: plugins/python/channels2layers/channels2layers.py:1198
 msgid "<i>Black</i>"
 msgstr "<b>黑</b>"
 
@@ -58146,124 +58146,124 @@ msgstr "<b>黑</b>"
 msgid "Plugin to change color space of selected documents."
 msgstr "用于更改所选图像色彩空间的插件。"
 
-#: plugins/python/colorspace/uicolorspace.py:26
-#: plugins/python/documenttools/uidocumenttools.py:19
-#: plugins/python/exportlayers/uiexportlayers.py:26
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:16
+#: plugins/python/colorspace/uicolorspace.py:34
+#: plugins/python/documenttools/uidocumenttools.py:25
+#: plugins/python/exportlayers/uiexportlayers.py:34
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:19
 msgid "Refresh"
 msgstr "刷新"
 
-#: plugins/python/colorspace/uicolorspace.py:59
-#: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:96
+#: plugins/python/colorspace/uicolorspace.py:67
+#: plugins/python/documenttools/uidocumenttools.py:50
+#: plugins/python/exportlayers/uiexportlayers.py:104
 msgid "Documents:"
 msgstr "图像："
 
-#: plugins/python/colorspace/uicolorspace.py:61
+#: plugins/python/colorspace/uicolorspace.py:69
 msgid "Color depth:"
 msgstr "色彩深度："
 
-#: plugins/python/colorspace/uicolorspace.py:62
+#: plugins/python/colorspace/uicolorspace.py:70
 msgid "Color profile:"
 msgstr "色彩特性文件："
 
-#: plugins/python/colorspace/uicolorspace.py:129
+#: plugins/python/colorspace/uicolorspace.py:137
 msgid "The selected documents have been converted."
 msgstr "所选图像已被转换。"
 
-#: plugins/python/colorspace/uicolorspace.py:131
-#: plugins/python/documenttools/uidocumenttools.py:106
+#: plugins/python/colorspace/uicolorspace.py:139
+#: plugins/python/documenttools/uidocumenttools.py:112
 msgid "Select at least one document."
 msgstr "请至少选择一个图像。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:32
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:37
 msgid "Adjust Working File"
 msgstr "调整工作文件"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:35
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:40
 msgid "Crop files before resize"
 msgstr "调整大小前裁剪文件"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Percentage"
 msgstr "百分比"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "DPI"
 msgstr "DPI"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Maximum Width"
 msgstr "最大宽度"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:39
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:44
 msgid "Maximum Height"
 msgstr "最大高度"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:43
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:48
 msgid " DPI"
 msgstr " DPI"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:65
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:70
 msgid "Method:"
 msgstr "方式："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:67
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:72
 msgid "Percentage:"
 msgstr "百分比："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:209
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:266
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:214
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:272
 msgid "Export Settings"
 msgstr "导出设置"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:227
 msgid "Crop Settings"
 msgstr "裁剪设置"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:225
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:230
 msgid "Crop to outmost guides"
 msgstr "按最外侧参考线裁剪"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:227
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:232
 msgid ""
 "This will crop to the outmost guides if possible and otherwise use the "
 "underlying crop settings."
 msgstr "尽可能按照最外侧参考线裁剪，否则使用基本的裁剪设置。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:229
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:234
 msgid "Set Margins from Active Selection"
 msgstr "按活动选区设置页面边距"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:236
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:207
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:236
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:241
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:212
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:241
 msgid "Left:"
 msgstr "左侧："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:240
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:210
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:239
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:215
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:244
 msgid "Top:"
 msgstr "顶端："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:244
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:213
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:242
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:218
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:247
 msgid "Right:"
 msgstr "右侧："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:248
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:216
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:245
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:221
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:250
 msgid "Bottom:"
 msgstr "底端："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:253
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
 msgid "Label for removal:"
 msgstr "移除标签："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:255
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:260
 msgid ""
 "These are keywords that can be used to identify text layers. A layer only "
 "needs to contain the keyword to be recognized. Keywords should be comma "
@@ -58272,7 +58272,7 @@ msgstr ""
 "这些是可被用于标记文字图层的关键词。每个图层只需包含这些关键词即可被识别。用"
 "半角逗号分隔不同关键词。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:257
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:262
 msgid ""
 "These are keywords that can be used to identify panel layers. A layer only "
 "needs to contain the keyword to be recognized. Keywords should be comma "
@@ -58281,32 +58281,32 @@ msgstr ""
 "这些是可被用于标记对话框图层的关键词。每个图层只需包含这些关键词即可被识别。"
 "用半角逗号分隔不同关键词。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:258
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
 msgid "Text Layer Key:"
 msgstr "文字图层关键词："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:259
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:264
 msgid "Panel Layer Key:"
 msgstr "对话框图层关键词："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:268
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
 msgid "Export to CBZ"
 msgstr "导出为 CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:273
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:278
 msgid "Metadata to Add"
 msgstr "要添加的元数据"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:277
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:282
 msgid "CBZ"
 msgstr "CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:284
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:289
 msgid "ACBF Document Info"
 msgstr "ACBF 图像信息"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:287
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:407
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:412
 msgid ""
 "By default this will be filled with a generated universal unique identifier. "
 "The ID by itself is merely so that comic book library management programs "
@@ -58318,15 +58318,15 @@ msgstr ""
 "漫画管理程序判断该漫画是否已在其数据库中和是否已被评分。该 UUID 也可以通过手"
 "动更改 JSON 来进行改动，但这属于高级操作。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:297
 msgid "Add History Entry"
 msgstr "添加历史记录项"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:295
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:300
 msgid "Include translator's comments"
 msgstr "包含翻译人员的注释"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:296
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
 msgid ""
 "A PO file can contain translator's comments. If this is checked, the "
 "translations comments will be added as references into the ACBF file."
@@ -58334,53 +58334,53 @@ msgstr ""
 "PO 文件可以包含翻译人员的注释。如果选中此项, 翻译注释将作为参考资料添加到 "
 "ACBF 文件中。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:299
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
 msgid "ACBF UID:"
 msgstr "ACBF UUID："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:301
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:306
 msgid "Version history:"
 msgstr "版本历史："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:304
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:309
 msgid "Translator header:"
 msgstr "译者报头："
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:308
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:313
 msgid "The people responsible for the generation of the CBZ/ACBF files."
 msgstr "负责生成 CBZ/ACBF 文件的人员。"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Nick Name"
 msgstr "昵称"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Given Name"
 msgstr "姓名"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Middle Name"
 msgstr "中间名"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:317
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Family Name"
 msgstr "姓氏"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:367
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:372
 msgid "Add Author"
 msgstr "添加作者"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:369
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:374
 msgid "Remove Author"
 msgstr "移除作者"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:343
 msgid "Use font"
 msgstr "使用字体"
 
@@ -58389,7 +58389,7 @@ msgstr "使用字体"
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldAttribute)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkBoldComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:357
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:362
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:43
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:71
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:99
@@ -58404,7 +58404,7 @@ msgstr "粗体"
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicAttribute)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicValue)
 #. i18n: ectx: property (text), widget (QCheckBox, chkItalicComment)
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:358
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:363
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:50
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:78
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:106
@@ -58414,99 +58414,99 @@ msgstr "粗体"
 msgid "Italic"
 msgstr "斜体"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:365
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:370
 msgid "Text Colors"
 msgstr "文字颜色"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:369
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:374
 msgid "Regular Text"
 msgstr "常规文字"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:371
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:376
 msgid "Inverted Text"
 msgstr "反转文字"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:386
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:391
 msgid "Document Info"
 msgstr "图像信息"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:387
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:392
 msgid "Author Info"
 msgstr "作者信息"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:393
 msgid "Style Sheet"
 msgstr "样式表"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:390
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "ACBF"
 msgstr "ACBF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "Export to EPUB"
 msgstr "导出为 EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "EPUB"
 msgstr "EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "Export to TIFF"
 msgstr "导出为 TIFF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:415
 msgid "TIFF"
 msgstr "TIFF"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:423
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:428
 #, python-brace-format
 msgid "v{version}-in this version..."
 msgstr "v{version}-在此版本中..."
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:535
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:451
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:540
 msgid "Anon"
 msgstr "匿名"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:447
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:536
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:452
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:541
 msgid "John"
 msgstr "张"
 
-#: plugins/python/comics_project_management_tools/comics_export_dialog.py:449
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:538
+#: plugins/python/comics_project_management_tools/comics_export_dialog.py:454
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:543
 msgid "Doe"
 msgstr "三"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:138
+#: plugins/python/comics_project_management_tools/comics_exporter.py:143
 msgid "Preparing export."
 msgstr "正在准备导出。"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:139
+#: plugins/python/comics_project_management_tools/comics_exporter.py:144
 msgid "Exporting Comic..."
 msgstr "正在导出漫画..."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:157
+#: plugins/python/comics_project_management_tools/comics_exporter.py:162
 msgid ""
 "Saving out ACBF and\n"
 "ACBF standalone"
 msgstr "正在保存 ACBF 和 ACBF 独立文件"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:168
+#: plugins/python/comics_project_management_tools/comics_exporter.py:173
 msgid "Saving out EPUB"
 msgstr "正在保存到 EPUB"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:178
+#: plugins/python/comics_project_management_tools/comics_exporter.py:212
+#: plugins/python/comics_project_management_tools/comics_exporter.py:371
 msgid "Export not Possible"
 msgstr "无法导出"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:173
+#: plugins/python/comics_project_management_tools/comics_exporter.py:178
 msgid "Nothing to export, URL not set."
 msgstr "无可导出内容，未设置 URL"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:186
+#: plugins/python/comics_project_management_tools/comics_exporter.py:191
 msgid ""
 "Saving out CoMet\n"
 "metadata file"
@@ -58514,7 +58514,7 @@ msgstr ""
 "正在保存到 CoMet\n"
 "元文件"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:191
+#: plugins/python/comics_project_management_tools/comics_exporter.py:196
 msgid ""
 "Saving out Comicrack\n"
 "metadata file"
@@ -58522,11 +58522,11 @@ msgstr ""
 "正在保存到 Comicrack\n"
 "元文件"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:207
+#: plugins/python/comics_project_management_tools/comics_exporter.py:212
 msgid "Export failed because there's no export settings configured."
 msgstr "导出失败，因为导出设置尚未配置。"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:224
+#: plugins/python/comics_project_management_tools/comics_exporter.py:229
 #, python-brace-format
 msgid ""
 "Time passed: {passedString}\n"
@@ -58535,29 +58535,29 @@ msgstr ""
 "已用时间：{passedString}\n"
 "预计时间：{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_exporter.py:232
 #, python-brace-format
 msgid "{pages} of {pagesTotal} done."
 msgstr "{pages} 页已完成，共 {pagesTotal} 页。"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:238
+#: plugins/python/comics_project_management_tools/comics_exporter.py:243
 msgid "Opening next page"
 msgstr "正在打开下一页"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:246
+#: plugins/python/comics_project_management_tools/comics_exporter.py:251
 msgid "Cleaning up page"
 msgstr "正在清理页面"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:280
+#: plugins/python/comics_project_management_tools/comics_exporter.py:285
 #, python-brace-format
 msgid "Exporting for {key}"
 msgstr "为 {key} 导出"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:366
+#: plugins/python/comics_project_management_tools/comics_exporter.py:371
 msgid "Export not happening because there are no pages."
 msgstr "导出未被执行，因为没有页面。"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:631
+#: plugins/python/comics_project_management_tools/comics_exporter.py:636
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -58565,185 +58565,185 @@ msgstr ""
 "正在保存到 Comicbook\n"
 "信息元文件"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:641
+#: plugins/python/comics_project_management_tools/comics_exporter.py:646
 msgid "Packaging CBZ"
 msgstr "正在打包 CBZ"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Science Fiction"
 msgstr "科幻"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Fantasy"
 msgstr "玄幻"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Adventure"
 msgstr "冒险"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Horror"
 msgstr "恐怖"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Mystery"
 msgstr "悬疑"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Crime"
 msgstr "犯罪"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Military"
 msgstr "军事"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Real Life"
 msgstr "现实"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Superhero"
 msgstr "超级英雄"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Humor"
 msgstr "幽默"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Western"
 msgstr "欧美"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Manga"
 msgstr "日式漫画"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Politics"
 msgstr "政治"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Caricature"
 msgstr "夸张"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Sports"
 msgstr "运动"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "History"
 msgstr "历史"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Biography"
 msgstr "传记"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Education"
 msgstr "教育"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Computer"
 msgstr "计算机"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Religion"
 msgstr "宗教"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Romance"
 msgstr "言情"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Children"
 msgstr "儿童"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Non Fiction"
 msgstr "非虚构"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Adult"
 msgstr "成人"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Alternative"
 msgstr "另类"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:230
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:235
 msgid "Artbook"
 msgstr "画册"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Writer"
 msgstr "作家"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Adapter"
 msgstr "改编者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Artist"
 msgstr "作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Penciller"
 msgstr "修图员"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Inker"
 msgstr "描线员"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Colorist"
 msgstr "上色员"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Letterer"
 msgstr "排字员"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Cover Artist"
 msgstr "封面作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Photographer"
 msgstr "摄影师"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Editor"
 msgstr "编辑"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
 msgid "Assistant Editor"
 msgstr "助理编辑"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Designer"
 msgstr "设计师"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:231
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:236
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Translator"
 msgstr "译者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:255
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:260
 msgid "Comic Metadata"
 msgstr "漫画元数据"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:267
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:272
 msgid "The proper title of the comic."
 msgstr "漫画的正式标题。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:270
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:275
 msgid "What will you tell others to entice them to read your comic?"
 msgstr "您将如何介绍该作品以吸引读者兴趣？"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:277
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:282
 msgid ""
 "The genre of the work. Prefilled values are from the ACBF, but you can fill "
 "in your own. Separate genres with commas. Try to limit the amount to about "
@@ -58752,83 +58752,83 @@ msgstr ""
 "作品的类型。预设值来自 ACBF，您也可以填写自定义类别。用半角逗号分隔不同类别。"
 "最好将类别数量控制在两三个以内。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:285
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:290
 msgid ""
 "The names of the characters that this comic revolves around. Comma-separated."
 msgstr "漫画中提及的人物名字，用半角逗号分隔不同名字。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:304
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:309
 msgid ""
 "If this is part of a series, enter the name of the series and the number."
 msgstr "如果这是系列作品的其中一集，请输入系列的名称和集数。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:306
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:311
 msgid "No. "
 msgstr "编号"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:308
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:313
 msgid "Vol. "
 msgstr "集数"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:325
 msgid ""
 "Other keywords that do not fit in the previously mentioned sets. As always, "
 "comma-separated."
 msgstr "不属于前面所述分类的其他关键词，用半角逗号分隔不同关键词。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:326
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:331
 msgid "Left to Right"
 msgstr "从左到右"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:327
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:332
 msgid "Right to Left"
 msgstr "从右到左"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:330
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
 msgid "Which page is the cover page? This will be empty if there are no pages."
 msgstr "哪一页是封面？如果没有页面则此项为空。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:333
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
 msgid "Cover page:"
 msgstr "封面页："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
 msgid "Language:"
 msgstr "语言："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:337
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
 msgid "Reading direction:"
 msgstr "阅读方向："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:338
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Genre:"
 msgstr "类型："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:339
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:344
 msgid "Characters:"
 msgstr "人物："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
 msgid "Format:"
 msgstr "格式："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:341
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:346
 msgid "Rating:"
 msgstr "评分："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:342
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:347
 msgid "Series:"
 msgstr "系列："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:348
 msgid "Other:"
 msgstr "其他："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:345
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
 msgid "Work"
 msgstr "作品"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:350
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:355
 msgid ""
 "The following is a table of the authors that contributed to this comic. You "
 "can set their nickname, proper names (first, middle, last), role (penciller, "
@@ -58837,35 +58837,35 @@ msgstr ""
 "下面是为本漫画做过贡献的作者表格。您可以设置他们的昵称、真实姓名、职责、电"
 "邮、网站等。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:353
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:358
 msgid "Role"
 msgstr "职责"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:376
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:381
 msgid "Authors"
 msgstr "作者"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:383
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
 msgid ""
 "The name of the company, group or person who is responsible for the final "
 "version the reader gets."
 msgstr "负责制作读者获取的最终版本的公司、集体或个人。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:387
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:392
 msgid "Set Today"
 msgstr "设置为今天"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:388
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
 msgid "Sets the publish date to the current date."
 msgstr "将发布日期设置为当前日期。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:393
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:398
 msgid ""
 "Traditional publishers are always mentioned in source with the city they are "
 "located."
 msgstr "传统出版社在出处中应标明它们所在的城市。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:400
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid ""
 "If there is an entry in a comics data base, that should be added here. It is "
 "unlikely to be a factor for comics from scratch, but useful when doing a "
@@ -58874,7 +58874,7 @@ msgstr ""
 "如果在漫画数据库中存在该条目，它应该被添加至此。全新作品一般不必考虑此因素，"
 "但它适用于改编作品的场合。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:410
 msgid ""
 "Whether the comic is an adaptation of an existing source, and if so, how to "
 "find information about that source. So for example, for an adapted webcomic, "
@@ -58883,125 +58883,125 @@ msgstr ""
 "漫画是否改编自其他作品，如果是，如何找到原作信息。例如，对于一组改编自其他作"
 "品的网络漫画，应将原作官方网站的 URL 填入此处。"
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:415
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:420
 msgid "City:"
 msgstr "城市："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:417
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:422
 msgid "ISBN:"
 msgstr "ISBN："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:419
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:424
 msgid "UUID:"
 msgstr "UUID："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:421
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:426
 msgid "Database:"
 msgstr "数据库："
 
-#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:423
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:428
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Publisher"
 msgstr "出版社"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:112
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:118
 msgid "No keywords"
 msgstr "无关键词"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:126
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:132
 msgid "No last edit timestamp"
 msgstr "无上次编辑时间戳"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:146
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:152
 msgid "No description"
 msgstr "无说明"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:191
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:197
 msgid "Comics Manager"
 msgstr "漫画项目管理"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:248
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:254
 msgid "New Project"
 msgstr "新建项目"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:256
 msgid "Open Project"
 msgstr "打开项目"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:268
 msgid "Project Settings"
 msgstr "项目设置"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:270
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:127
 msgid "Meta Data"
 msgstr "元数据"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:282
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
 msgid "Add Page"
 msgstr "添加页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:284
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
 msgid "Add Page from Template"
 msgstr "从模板添加页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:286
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:292
 msgid "Add Existing Pages"
 msgstr "添加已有页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:288
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:294
 msgid "Remove Page"
 msgstr "移除页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:290
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
 msgid "Batch Resize"
 msgstr "批量调整大小"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:293
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:299
 msgid "View Page In Window"
 msgstr "在窗口中查看页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:295
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:301
 msgid "Scrape Author Info"
 msgstr "清除作者信息"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:296
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:302
 msgid ""
 "Search for author information in documents and add it to the author list. "
 "This does not check for duplicates."
 msgstr "在图像信息中查找作者信息并将其添加到作者列表中。不检查是否存在重复。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:298
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:304
 msgid "Scrape Text for Translation"
 msgstr "清除待译文字"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:319
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
 msgid "Export Comic"
 msgstr "导出漫画"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:324
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:330
 msgid "Copy Location"
 msgstr "复制地址"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:325
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:331
 msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr "将项目的路径复制到剪贴板。方便快速粘贴到文件管理器。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
 msgid "Please select the JSON comic config file."
 msgstr "请选择 JSON 漫画配置文件。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:348
 msgid "JSON files"
 msgstr "JSON 文件"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
 msgid "Config cannot be used"
 msgstr "配置无法使用"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:345
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:351
 msgid ""
 "Krita doesn't have write access to this folder, so new files cannot be made. "
 "Please configure the folder access or move the project to a folder that can "
@@ -59010,55 +59010,55 @@ msgstr ""
 "Krita 没有此文件夹的写入权限，因此无法创建新文件。请配置文件夹的访问权限或者"
 "把漫画项目移动到一个可以写入的文件夹。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:385
 msgid "Loading Pages..."
 msgstr "正在加载页面..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Krita files"
 msgstr "Krita 文件"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:538
 msgid "Which existing pages to add?"
 msgstr "要添加哪张已有页面？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:592
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:611
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:598
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:617
 msgid "Where are the templates located?"
 msgstr "模板位于哪个文件夹？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:635
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:113
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:641
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
 msgid "Where should the pages go?"
 msgstr "页面应该保存在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:658
 msgid "Which image should be the basis the new page?"
 msgstr "哪张图像应该成为新页面的基础？"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
 msgid "Export success"
 msgstr "导出成功"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:807
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:813
 msgid "The files have been written to the export folder."
 msgstr "文件已写入导出文件夹。"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:884
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:890
 msgid "Resize all Pages"
 msgstr "调整所有页面的大小"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:901
 msgid "Resizing pages..."
 msgstr "正在调整页面大小..."
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:902
 msgid "Resizing Pages"
 msgstr "正在调整页面大小"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:910
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:916
 #, python-brace-format
 msgid ""
 "{pages} of {pagesTotal} done. \n"
@@ -59069,44 +59069,44 @@ msgstr ""
 "已用时间：{passedString}\n"
 "预计时间：{estimated}"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
 msgid "Scraping success"
 msgstr "清除成功"
 
-#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:958
+#: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:964
 #, python-brace-format
 msgid "POT file has been written to: {file}"
 msgstr "已将 POT 文件写入：{file}"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:24
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:29
 msgid "Which folder?"
 msgstr "哪个文件夹？"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:55
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:60
 msgid "Change Folder"
 msgstr "更改文件夹"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:104
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:109
 msgid "Comic Project Settings"
 msgstr "漫画项目设置"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:114
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:119
 msgid "Where should the export go?"
 msgstr "导出文件应该保存在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:115
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:120
 msgid "Where are the templates?"
 msgstr "模板在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:116
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
 msgid "Where are the translations?"
 msgstr "翻译在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:117
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
 msgid "Where are the extra auto-completion keys located?"
 msgstr "附加的自动填充关键词在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
 msgid ""
 "The location for extra autocompletion keys in the metadata editor. Point "
 "this at a folder containing key_characters/key_format/key_genre/key_rating/"
@@ -59119,188 +59119,188 @@ msgstr ""
 "key_other 等项的文本文件 (csv 用于评分)，每行一个附加自动完成关键词。此路径存"
 "储在 Krita 配置中，而不是项目配置中。"
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:119
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
 msgid "Project name:"
 msgstr "项目名称："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:122
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
 msgid "Project concept:"
 msgstr "项目概念："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:123
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
 msgid "Pages folder:"
 msgstr "页面文件夹："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:124
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:129
 msgid "Export folder:"
 msgstr "导出文件夹："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:125
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:130
 msgid "Template folder:"
 msgstr "模板文件夹："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:126
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:131
 msgid "Translation folder:"
 msgstr "翻译文件夹："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:127
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:132
 msgid "Default template:"
 msgstr "默认模板："
 
-#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
+#: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:133
 msgid "Extra keys folder:"
 msgstr "附加关键词文件夹："
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:54
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
 msgid "Where should the comic project go?"
 msgstr "漫画项目应该保存在哪里？"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
 msgid "Folder cannot be used"
 msgstr "文件夹无法使用"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:58
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:62
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
 msgstr "Krita 没有此文件夹的写入权限，因此无法创建文件。请选择另一个文件夹。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:68
 msgid "Comic Project Setup"
 msgstr "漫画项目设置"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:70
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:74
 msgid "Basic Comic Project Settings"
 msgstr "基本漫画项目设置"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:80
 msgid "A Project name. This can be different from the eventual title"
 msgstr "项目名称。这可能与正式标题不同"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:82
 msgid "Generate"
 msgstr "随机生成"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:79
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:83
 msgid ""
 "If you cannot come up with a project name, our highly sophisticated project "
 "name generator will serve to give a classy yet down to earth name."
 msgstr "点击此按钮将随机生成一个名字。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:84
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:88
 msgid ""
 "What is your comic about? This is mostly for your own convenience so do not "
 "worry about what it says too much."
 msgstr "您的漫画是关于什么内容的？此项主要是方便您自己识别，不必考虑太多。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:86
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:90
 msgid "The main language the comic is in"
 msgstr "漫画使用的主要语言"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:99
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:103
 msgid "Make a new directory with the project name."
 msgstr "使用项目名称创建一个新目录。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:101
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:105
 msgid ""
 "This allows you to select a generic comics project directory, in which a new "
 "folder will be made for the project using the given project name."
 msgstr "您可选择一个通用的项目目录，以项目名称命名的新文件夹将创建到该处。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:106
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
 msgid "pages"
 msgstr "页面"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:107
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:111
 msgid ""
 "The name for the folder where the pages are contained. If it does not exist, "
 "it will be created."
 msgstr "页面所在的文件夹的名称。如果该文件夹不存在，则创建它。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:109
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
 msgid "export"
 msgstr "导出"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:110
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:114
 msgid ""
 "The name for the folder where the export is put. If it does not exist, it "
 "will be created."
 msgstr "导出文件所在的文件夹名称。如果该文件夹不存在，则创建它。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:112
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
 msgid "templates"
 msgstr "模板"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:113
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:117
 msgid "The name for the folder where the page templates are sought in."
 msgstr "页面模板所在的文件夹名称。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:116
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
 msgid "translations"
 msgstr "翻译"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:118
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:122
 msgid "Comic concept:"
 msgstr "漫画概述："
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:120
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:124
 msgid "Main language:"
 msgstr "主要语言："
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:133
 msgid "Folder names and other."
 msgstr "文件夹名称和其他。"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
 msgid "Project directory:"
 msgstr "项目目录："
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:134
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:138
 msgid "Pages directory"
 msgstr "页面目录"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:135
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:139
 msgid "Export directory"
 msgstr "导出目录"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:136
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:140
 msgid "Template directory"
 msgstr "模板目录"
 
-#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:137
+#: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:141
 msgid "Translation directory"
 msgstr "翻译目录"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:25
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:30
 msgid "Pixels"
 msgstr "像素"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:27
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:32
 msgid "Centimeter"
 msgstr "厘米"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:28
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:33
 msgid "millimeter"
 msgstr "毫米"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:76
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:81
 msgid "Add new Template"
 msgstr "添加新模板"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:93
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:98
 msgid "Import Templates"
 msgstr "导入模板"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:118
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:123
 msgid "Which files should be added to the template folder?"
 msgstr "应将哪些文件添加到模板文件夹中？"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:135
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:140
 msgid "Create new Template"
 msgstr "新建模板"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:141
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:146
 msgid ""
 "This allows you to make a template document with guides.\n"
 "The width and height are the size of the live-area, the safe area is the "
@@ -59311,260 +59311,260 @@ msgstr ""
 "宽度和高度用于定义内容区域，安全区域是内容区域减去页边距，完整图像是内容区域"
 "加上出血区域。"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:161
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:166
 msgid "Select background color"
 msgstr "选择背景色"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:219
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:224
 msgid "Margins"
 msgstr "页边距"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:249
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:254
 msgid "Bleeds"
 msgstr "出血"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:302
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:307
 msgid "Background"
 msgstr "背景"
 
-#: plugins/python/comics_project_management_tools/comics_template_dialog.py:320
+#: plugins/python/comics_project_management_tools/comics_template_dialog.py:325
 msgid "Creating template"
 msgstr "正在创建模板"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Abridger"
 msgstr "删减员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Art copyist"
 msgstr "抄图师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Actor"
 msgstr "参与者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Art director"
 msgstr "美术总监"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Annotator"
 msgstr "注解员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bibliographic antecedent"
 msgstr "前情参考书目"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Architect"
 msgstr "建筑师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Artistic director"
 msgstr "艺术总监"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Associated name"
 msgstr "相关人名"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Autographer"
 msgstr "签名人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Attributed name"
 msgstr "参与人名"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Author of dialog"
 msgstr "对话作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Binding designer"
 msgstr "装订设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookjacket designer"
 msgstr "书套设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Book designer"
 msgstr "图书设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Book producer"
 msgstr "图书制作人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Blurb writer"
 msgstr "导语作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Binder"
 msgstr "装订员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookplate designer"
 msgstr "藏书票设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Bookseller"
 msgstr "书店"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Calligrapher"
 msgstr "书法家"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Censor"
 msgstr "审查员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Cover designer"
 msgstr "封面设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Copyright holder"
 msgstr "版权持有人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Creator"
 msgstr "作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Contributor"
 msgstr "贡献者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Curator"
 msgstr "策划人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Commentator for written text"
 msgstr "文案评论员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Draftsman"
 msgstr "草图师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Dubious author"
 msgstr "存疑作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Etcher"
 msgstr "蚀刻员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Expert"
 msgstr "专家"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Funder"
 msgstr "投资人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Illustrator"
 msgstr "插画师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Illuminator"
 msgstr "光影师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Inscriber"
 msgstr "题字人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Licensee"
 msgstr "被许可人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Licensor"
 msgstr "许可人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Lithographer"
 msgstr "版画师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Metadata contact"
 msgstr "元数据联系人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Owner"
 msgstr "所有者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Patron"
 msgstr "赞助人"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Publishing director"
 msgstr "出版总监"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Printer"
 msgstr "印刷厂"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Scenarist"
 msgstr "编剧"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Scribe"
 msgstr "抄写员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Sponsor"
 msgstr "赞助商"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Storyteller"
 msgstr "故事讲述者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Transcriber"
 msgstr "转写员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Type designer"
 msgstr "字体设计师"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Typographer"
 msgstr "排版员"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added commentary"
 msgstr "附加评论作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added lyrics"
 msgstr "附加歌词作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of accompanying material"
 msgstr "附属材料作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of added text"
 msgstr "附加文字作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of introduction"
 msgstr "引言作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of preface"
 msgstr "前言作者"
 
-#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
+#: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 msgid "Writer of supplementary textual content"
 msgstr "补充文案作者"
 
 #: plugins/python/documenttools/documenttools.py:16
-#: plugins/python/documenttools/uidocumenttools.py:56
+#: plugins/python/documenttools/uidocumenttools.py:62
 msgid "Document Tools"
 msgstr "图像参数编辑工具"
 
@@ -59573,35 +59573,35 @@ msgid "Plugin to manipulate properties of selected documents."
 msgstr "用于编辑选定文档属性的插件。"
 
 #. i18n: ectx: property (text), widget (QToolButton, liquifyRotate)
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:12
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:15
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1864
 #, kde-format
 msgid "Rotate"
 msgstr "旋转"
 
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:24
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:27
 msgid "Negative degrees will rotate the image to the left"
 msgstr "负值将把图像向左旋转"
 
-#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:26
+#: plugins/python/documenttools/tools/rotatetool/rotatetool.py:29
 msgid "Degrees:"
 msgstr "度数："
 
 #. i18n: ectx: property (title), widget (QGroupBox, scaleGroup)
 #. i18n: ectx: property (text), widget (QToolButton, liquifyScale)
-#: plugins/python/documenttools/tools/scaletool/scaletool.py:12
+#: plugins/python/documenttools/tools/scaletool/scaletool.py:16
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:926
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1886
 #, kde-format
 msgid "Scale"
 msgstr "缩放"
 
-#: plugins/python/documenttools/uidocumenttools.py:104
+#: plugins/python/documenttools/uidocumenttools.py:110
 msgid "The selected documents has been modified."
 msgstr "所选文档已被修改。"
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:113
+#: plugins/python/exportlayers/uiexportlayers.py:121
 msgid "Export Layers"
 msgstr "图层导出工具"
 
@@ -59609,76 +59609,76 @@ msgstr "图层导出工具"
 msgid "Plugin to export layers from a document."
 msgstr "从图像中导出图层的插件。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:31
+#: plugins/python/exportlayers/uiexportlayers.py:39
 msgid "Export filter layers"
 msgstr "导出滤镜图层"
 
-#: plugins/python/exportlayers/uiexportlayers.py:32
+#: plugins/python/exportlayers/uiexportlayers.py:40
 msgid "Export in batchmode"
 msgstr "批量导出模式"
 
-#: plugins/python/exportlayers/uiexportlayers.py:33
+#: plugins/python/exportlayers/uiexportlayers.py:41
 msgid "Group as layer"
 msgstr "图层组作为图层"
 
-#: plugins/python/exportlayers/uiexportlayers.py:35
+#: plugins/python/exportlayers/uiexportlayers.py:43
 msgid "Ignore invisible layers"
 msgstr "忽略不可见图层"
 
-#: plugins/python/exportlayers/uiexportlayers.py:37
+#: plugins/python/exportlayers/uiexportlayers.py:45
 msgid "Adjust export size to layer content"
 msgstr "按图层内容调整导出大小"
 
-#: plugins/python/exportlayers/uiexportlayers.py:39
+#: plugins/python/exportlayers/uiexportlayers.py:47
 msgid "Add incrementing prefix"
 msgstr "添加递增前缀"
 
-#: plugins/python/exportlayers/uiexportlayers.py:74
+#: plugins/python/exportlayers/uiexportlayers.py:82
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:75
+#: plugins/python/exportlayers/uiexportlayers.py:83
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:90
+#: plugins/python/exportlayers/uiexportlayers.py:98
 msgid "dpi:"
 msgstr "DPI："
 
-#: plugins/python/exportlayers/uiexportlayers.py:98
+#: plugins/python/exportlayers/uiexportlayers.py:106
 msgid "Initial directory:"
 msgstr "导出位置："
 
-#: plugins/python/exportlayers/uiexportlayers.py:99
+#: plugins/python/exportlayers/uiexportlayers.py:107
 msgid "Export options:"
 msgstr "导出选项："
 
-#: plugins/python/exportlayers/uiexportlayers.py:100
+#: plugins/python/exportlayers/uiexportlayers.py:108
 msgid "Export size:"
 msgstr "导出大小："
 
-#: plugins/python/exportlayers/uiexportlayers.py:102
+#: plugins/python/exportlayers/uiexportlayers.py:110
 msgid "Images extensions:"
 msgstr "图像扩展名："
 
-#: plugins/python/exportlayers/uiexportlayers.py:159
+#: plugins/python/exportlayers/uiexportlayers.py:167
 msgid "Select one document."
 msgstr "选择一个图像。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:161
+#: plugins/python/exportlayers/uiexportlayers.py:169
 msgid "Select the initial directory."
 msgstr "选择导出的图层目录所在的位置。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:165
+#: plugins/python/exportlayers/uiexportlayers.py:173
 msgid "All layers have been exported."
 msgstr "已导出所有图层。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:235
+#: plugins/python/exportlayers/uiexportlayers.py:243
 msgid "Select a Folder"
 msgstr "选择文件夹"
 
 #: plugins/python/filtermanager/filtermanager.py:16
-#: plugins/python/filtermanager/uifiltermanager.py:54
+#: plugins/python/filtermanager/uifiltermanager.py:59
 msgid "Filter Manager"
 msgstr "图像滤镜管理工具"
 
@@ -59686,32 +59686,32 @@ msgstr "图像滤镜管理工具"
 msgid "Plugin to filters management."
 msgstr "用于管理滤镜的插件。"
 
-#: plugins/python/filtermanager/uifiltermanager.py:37
+#: plugins/python/filtermanager/uifiltermanager.py:42
 msgid "Document Tree Model"
 msgstr "文档树模型"
 
-#: plugins/python/filtermanager/uifiltermanager.py:42
+#: plugins/python/filtermanager/uifiltermanager.py:47
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "滤镜："
 
-#: plugins/python/highpass/highpass.py:26
+#: plugins/python/highpass/highpass.py:39
 msgid "High Pass"
 msgstr "高通滤镜"
 
-#: plugins/python/highpass/highpass.py:34
+#: plugins/python/highpass/highpass.py:47
 msgid "High Pass Filter"
 msgstr "高通滤镜"
 
-#: plugins/python/highpass/highpass.py:35
+#: plugins/python/highpass/highpass.py:48
 msgid "There is no active image."
 msgstr "无活动图像。"
 
-#: plugins/python/highpass/highpass.py:49
+#: plugins/python/highpass/highpass.py:62
 msgid "Keep original layer"
 msgstr "保留原始图层"
 
-#: plugins/python/highpass/highpass.py:52
+#: plugins/python/highpass/highpass.py:65
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "过滤半径："
@@ -59816,19 +59816,19 @@ msgstr "启用脚本"
 msgid "Create Script"
 msgstr "创建脚本"
 
-#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
+#: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:32
 msgid "Last Documents Docker"
 msgstr "最近图像列表"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:45
 msgid "Change settings"
 msgstr "更改设置"
 
-#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
+#: plugins/python/mixer_slider_docker/mixer_slider_docker.py:62
 msgid "Mixer Slider Docker"
 msgstr "过渡色调混合器"
 
-#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
+#: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:41
 msgid "Number of slider lines: "
 msgstr "过渡色调混合器条数："
 
@@ -59846,170 +59846,170 @@ msgctxt "action"
 msgid "Mutate"
 msgstr "随机调整"
 
-#: plugins/python/mutator/mutator.py:122
+#: plugins/python/mutator/mutator.py:127
 msgid "Settings mutated!"
 msgstr "设置已随机变化"
 
-#: plugins/python/mutator/mutator.py:152
+#: plugins/python/mutator/mutator.py:157
 msgid "Mutator"
 msgstr "绘制参数随机变化器"
 
-#: plugins/python/mutator/mutator.py:166
+#: plugins/python/mutator/mutator.py:171
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush size."
 msgstr "控制随机变化对 Krita 全局笔刷大小影响的程度。"
 
-#: plugins/python/mutator/mutator.py:168
+#: plugins/python/mutator/mutator.py:173
 msgid "Size Mutation: "
 msgstr "大小变化："
 
-#: plugins/python/mutator/mutator.py:175
+#: plugins/python/mutator/mutator.py:180
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush rotation."
 msgstr "控制随机变化对 Krita 全局笔刷旋转影响的程度。"
 
-#: plugins/python/mutator/mutator.py:177
+#: plugins/python/mutator/mutator.py:182
 msgid "Rotation Mutation: "
 msgstr "旋转变化："
 
-#: plugins/python/mutator/mutator.py:184
+#: plugins/python/mutator/mutator.py:189
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush opacity."
 msgstr "控制随机变化对 Krita 全局笔刷不透明度影响的程度。"
 
-#: plugins/python/mutator/mutator.py:186
+#: plugins/python/mutator/mutator.py:191
 msgid "Opacity Mutation: "
 msgstr "不透明度变化："
 
-#: plugins/python/mutator/mutator.py:193
+#: plugins/python/mutator/mutator.py:198
 msgid ""
 "Controls the degree to which mutation affects Krita's global brush flow."
 msgstr "控制随机变化对 Krita 全局笔刷流量影响的程度。"
 
-#: plugins/python/mutator/mutator.py:195
+#: plugins/python/mutator/mutator.py:200
 msgid "Flow Mutation: "
 msgstr "流量变化："
 
-#: plugins/python/mutator/mutator.py:202
+#: plugins/python/mutator/mutator.py:207
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color hue."
 msgstr "控制随机变化对 Krita 全局前景色色相影响的程度。"
 
-#: plugins/python/mutator/mutator.py:204
+#: plugins/python/mutator/mutator.py:209
 msgid "Hue Mutation: "
 msgstr "色相变化："
 
-#: plugins/python/mutator/mutator.py:211
+#: plugins/python/mutator/mutator.py:216
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color saturation."
 msgstr "控制随机变化对 Krita 全局前景色饱和度影响的程度。"
 
-#: plugins/python/mutator/mutator.py:213
+#: plugins/python/mutator/mutator.py:218
 msgid "Saturation Mutation: "
 msgstr "饱和度变化："
 
-#: plugins/python/mutator/mutator.py:220
+#: plugins/python/mutator/mutator.py:225
 msgid ""
 "Controls the degree to which mutation affects Krita's global foreground "
 "color value."
 msgstr "控制随机变化对 Krita 全局前景色明度影响的程度。"
 
-#: plugins/python/mutator/mutator.py:222
+#: plugins/python/mutator/mutator.py:227
 msgid "Value Mutation: "
 msgstr "明度变化："
 
-#: plugins/python/mutator/mutator.py:232
+#: plugins/python/mutator/mutator.py:237
 msgid "Mutate"
 msgstr "随机调整"
 
-#: plugins/python/mutator/mutator.py:233
+#: plugins/python/mutator/mutator.py:238
 msgid ""
 "Invokes the \"Mutate\" action, which randomly mutates various global brush "
 "and color settings based on the mutation settings configured above."
 msgstr ""
 "调用“随机调整”操作，该操作会根据上面的设置随机调整各种全局笔刷参数和颜色。"
 
-#: plugins/python/palette_docker/palette_docker.py:37
+#: plugins/python/palette_docker/palette_docker.py:45
 msgid "Python Palette Docker"
 msgstr "Python 色板面板"
 
-#: plugins/python/palette_docker/palette_docker.py:63
+#: plugins/python/palette_docker/palette_docker.py:71
 msgid "Set"
 msgstr "集合"
 
-#: plugins/python/palette_docker/palette_docker.py:72
+#: plugins/python/palette_docker/palette_docker.py:80
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "新增色块组"
 
-#: plugins/python/palette_docker/palette_docker.py:75
+#: plugins/python/palette_docker/palette_docker.py:83
 msgid "Remove Entry"
 msgstr "移除项目"
 
-#: plugins/python/palette_docker/palette_docker.py:91
+#: plugins/python/palette_docker/palette_docker.py:99
 msgid "Edit Palette Settings"
 msgstr "编辑色板设置"
 
-#: plugins/python/palette_docker/palette_docker.py:97
+#: plugins/python/palette_docker/palette_docker.py:105
 msgid "Export as GIMP Palette File"
 msgstr "导出为 GIMP 色板文件"
 
-#: plugins/python/palette_docker/palette_docker.py:101
+#: plugins/python/palette_docker/palette_docker.py:109
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "导出为包含色板的 Inkscape SVG"
 
-#: plugins/python/palette_docker/palette_docker.py:105
+#: plugins/python/palette_docker/palette_docker.py:113
 msgid "Sort Colors"
 msgstr "整理颜色"
 
-#: plugins/python/palette_docker/palette_docker.py:215
+#: plugins/python/palette_docker/palette_docker.py:223
 msgid "Edit Palette Data"
 msgstr "编辑色板数据"
 
-#: plugins/python/palette_docker/palette_docker.py:220
+#: plugins/python/palette_docker/palette_docker.py:228
 msgid "Palette Data"
 msgstr "色板数据"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:26
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:31
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:29
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:35
 msgid "Export Successful"
 msgstr "导出成功"
 
-#: plugins/python/palette_docker/palette_exporter_gimppalette.py:28
-#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:33
+#: plugins/python/palette_docker/palette_exporter_gimppalette.py:31
+#: plugins/python/palette_docker/palette_exporter_inkscapeSVG.py:37
 #, python-brace-format
 msgid "{input} has been exported to {output}."
 msgstr "{input} 已被导出到 {output}。"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:73
+#: plugins/python/photobash_images/photobash_images_docker.py:76
 msgctxt "@title:window"
 msgid "Photobash Images"
 msgstr "罩染画法图像调用面板"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:141
-#: plugins/python/photobash_images/photobash_images_docker.py:471
+#: plugins/python/photobash_images/photobash_images_docker.py:144
+#: plugins/python/photobash_images/photobash_images_docker.py:474
 msgid "Change References Folder"
 msgstr "更改参考图像文件夹"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:147
-#: plugins/python/photobash_images/photobash_images_docker.py:219
+#: plugins/python/photobash_images/photobash_images_docker.py:150
+#: plugins/python/photobash_images/photobash_images_docker.py:222
 #, python-brace-format
 msgid "Image Scale: {0}%"
 msgstr "图像缩放：{0}%"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:321
+#: plugins/python/photobash_images/photobash_images_docker.py:324
 #, python-brace-format
 msgid "Page: {0}/{1}"
 msgstr "页面：{0}/{1}"
 
-#: plugins/python/photobash_images/photobash_images_docker.py:460
+#: plugins/python/photobash_images/photobash_images_docker.py:463
 msgid "Change Directory for Images"
 msgstr "更改图像目录"
 
 #. i18n: ectx: property (text), widget (QPushButton, changePathButton)
-#: plugins/python/photobash_images/photobash_images_docker.py:469
+#: plugins/python/photobash_images/photobash_images_docker.py:472
 #: plugins/python/photobash_images/photobash_images_docker.ui:96
 #, kde-format
 msgid "Set References Folder"
@@ -60060,40 +60060,40 @@ msgstr "桌面定义文件"
 msgid "No plugins found in archive"
 msgstr "未在压缩文件中找到插件"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:32
+#: plugins/python/plugin_importer/plugin_importer_extension.py:36
 msgid "Import Python Plugin from File..."
 msgstr "从文件导入 Python 插件..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:37
+#: plugins/python/plugin_importer/plugin_importer_extension.py:41
 msgid "Import Python Plugin from Web..."
 msgstr "从网络导入 Python 插件..."
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:44
+#: plugins/python/plugin_importer/plugin_importer_extension.py:48
 msgid "Overwrite Plugin"
 msgstr "覆盖插件"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:45
+#: plugins/python/plugin_importer/plugin_importer_extension.py:49
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
 msgstr "插件 \"%s\" 已存在。是否覆盖？"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:53
+#: plugins/python/plugin_importer/plugin_importer_extension.py:57
 msgid "The following plugins were imported:"
 msgstr "以下插件已被导入："
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:63
+#: plugins/python/plugin_importer/plugin_importer_extension.py:67
 msgid "Enable plugins now? (Requires restart)"
 msgstr "要立即启用插件吗？(需要重新启动程序)"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:68
+#: plugins/python/plugin_importer/plugin_importer_extension.py:72
 msgid "Activate Plugins?"
 msgstr "要启用插件吗？"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:75
+#: plugins/python/plugin_importer/plugin_importer_extension.py:79
 msgid "Error during import:"
 msgstr "导入时发生错误："
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:94
+#: plugins/python/plugin_importer/plugin_importer_extension.py:98
 msgid ""
 "<p><strong>Enter download URL</strong></p><p>For example:<ul><li>Zip "
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
@@ -60103,16 +60103,16 @@ msgstr ""
 "(http://example.com/plugin.zip)</li><li>Github 源代码仓库网址 (https://"
 "github.com/test/plugin)</li>"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:102
-#: plugins/python/plugin_importer/plugin_importer_extension.py:116
+#: plugins/python/plugin_importer/plugin_importer_extension.py:106
+#: plugins/python/plugin_importer/plugin_importer_extension.py:120
 msgid "Import Plugin"
 msgstr "导入插件"
 
-#: plugins/python/plugin_importer/plugin_importer_extension.py:118
+#: plugins/python/plugin_importer/plugin_importer_extension.py:122
 msgid "Zip Archives"
 msgstr "Zip 压缩文件"
 
-#: plugins/python/quick_settings_docker/quick_settings_docker.py:29
+#: plugins/python/quick_settings_docker/quick_settings_docker.py:35
 msgid "Quick Settings Docker"
 msgstr "笔刷常用数值一键切换面板"
 
@@ -60130,127 +60130,127 @@ msgid "Script {0}"
 msgstr "脚本 {0}"
 
 #: plugins/python/scripter/debugcontroller.py:63
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:34
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:36
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:16
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:41
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggerwidget.py:20
 msgid "Debugger"
 msgstr "调试器"
 
-#: plugins/python/scripter/scripter.py:20
-#: plugins/python/scripter/uicontroller.py:86
+#: plugins/python/scripter/scripter.py:23
+#: plugins/python/scripter/uicontroller.py:94
 msgid "Scripter"
 msgstr "脚本调试工具"
 
-#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:31
+#: plugins/python/scripter/ui_scripter/actions/closeaction/closeaction.py:36
 msgid "Do you want to save the current document?"
 msgstr "您确定要保存当前文档吗？"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:27
 msgid "Debug"
 msgstr "调试"
 
-#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:23
+#: plugins/python/scripter/ui_scripter/actions/debugaction/debugaction.py:28
 msgid "Debug Ctrl+D"
 msgstr "调试 Ctrl+D"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:20
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:25
 msgid "New"
 msgstr "新建"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:31
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:36
 msgid "The document has been modified."
 msgstr "该文档已被修改。"
 
-#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:32
+#: plugins/python/scripter/ui_scripter/actions/newaction/newaction.py:37
 msgid "Do you want to save your changes?"
 msgstr "您确定要保存更改吗？"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:27
 msgid "Open"
 msgstr "打开"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:32
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:37
 msgid "Python Files (*.py)"
 msgstr "Python 文件 (*.py)"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:45
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:50
 msgid "Invalid File"
 msgstr "无效文件"
 
-#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:46
+#: plugins/python/scripter/ui_scripter/actions/openaction/openaction.py:51
 msgid "Open files with .py extension"
 msgstr "打开 .py 扩展名的文件"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:22
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:27
 msgid "Reload File"
 msgstr "重新加载文件"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:26
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:31
 msgid "Reload File Alt+R"
 msgstr "重新加载文件 Alt+R"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:44
 msgid "No existing document"
 msgstr "不存在已有文档"
 
-#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/reloadaction/reloadaction.py:45
 msgid "Please specify a document by opening it before reloading"
 msgstr "请在重新加载之前先打开一个文档以指定它。"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:35
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:57
-#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:16
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:61
+#: plugins/python/scripter/ui_scripter/tabwidgets/outputwidget/outputwidget.py:20
 msgid "Output"
 msgstr "输出"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:39
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:43
 msgid "Run"
 msgstr "执行"
 
-#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/runaction/runaction.py:44
 msgid "Run Ctrl+R"
 msgstr "运行 Ctrl+R"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:35
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:33
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:40
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:38
 msgid "Save Python File"
 msgstr "保存 Python 文件"
 
-#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:36
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:34
+#: plugins/python/scripter/ui_scripter/actions/saveaction/saveaction.py:41
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:39
 msgid "Python File (*.py)"
 msgstr "Python 文件 (*.py)"
 
-#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:21
+#: plugins/python/scripter/ui_scripter/actions/saveasaction/saveasaction.py:26
 msgid "Save As"
 msgstr "另存为"
 
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:19
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:22
 msgid "Syntax highlighter:"
 msgstr "语法高亮："
 
-#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:20
+#: plugins/python/scripter/ui_scripter/actions/settingsaction/settingsdialog.py:23
 msgid "Fonts:"
 msgstr "字体："
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgid "Scope"
 msgstr "范围"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:19
 msgctxt "Value in DebuggerTable"
 msgid "Value"
 msgstr "值"
 
-#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
+#: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:25
 msgid "Step Over"
 msgstr "单步执行"
 
-#: plugins/python/scripter/uicontroller.py:165
+#: plugins/python/scripter/uicontroller.py:173
 msgid "Error Running Script"
 msgstr "执行脚本时出错"
 
-#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
+#: plugins/python/selectionsbagdocker/selectionsbagdocker.py:25
 msgid "Selections Bag"
 msgstr "选区包"
 
@@ -60341,20 +60341,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "激活笔刷预设 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:28
+#: plugins/python/tenbrushes/tenbrushes.py:31
 msgid "Ten Brushes"
 msgstr "常用笔刷快捷键"
 
-#: plugins/python/tenbrushes/tenbrushes.py:29
+#: plugins/python/tenbrushes/tenbrushes.py:32
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "分配十种笔刷预设到十个快捷键。"
 
-#: plugins/python/tenbrushes/tenbrushes.py:81
+#: plugins/python/tenbrushes/tenbrushes.py:84
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "激活笔刷预设 {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:108
+#: plugins/python/tenbrushes/tenbrushes.py:111
 msgid ""
 "{}\n"
 "selected"
@@ -60362,24 +60362,24 @@ msgstr ""
 "{}\n"
 "已选择"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:23
+#: plugins/python/tenbrushes/uitenbrushes.py:29
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
 msgstr "再次按下快捷键 - 回到之前的笔刷预设(&A)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:28
+#: plugins/python/tenbrushes/uitenbrushes.py:34
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "按下快捷键 - 选择手绘笔刷工具(&S)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:47
+#: plugins/python/tenbrushes/uitenbrushes.py:53
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr "首先在下面列表选中一个笔刷预设，然后点击上方快捷键槽位。"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:50
-#: plugins/python/tenscripts/uitenscripts.py:46
+#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
@@ -60462,184 +60462,184 @@ msgctxt "action"
 msgid "Execute Script 10"
 msgstr "执行脚本 10"
 
-#: plugins/python/tenscripts/tenscripts.py:27
+#: plugins/python/tenscripts/tenscripts.py:30
 msgid "Ten Scripts"
 msgstr "常用脚本快捷键"
 
-#: plugins/python/tenscripts/tenscripts.py:28
+#: plugins/python/tenscripts/tenscripts.py:31
 msgid "Assign ten scripts to ten shortcuts."
 msgstr "分配十个脚本到十个快捷键。"
 
-#: plugins/python/tenscripts/tenscripts.py:54
+#: plugins/python/tenscripts/tenscripts.py:57
 #, python-brace-format
 msgid "Execute Script {num}"
 msgstr "执行脚本 {num}"
 
-#: plugins/python/tenscripts/tenscripts.py:80
+#: plugins/python/tenscripts/tenscripts.py:83
 #, python-brace-format
 msgid "Script {0} executed"
 msgstr "脚本 {0} 执行完毕"
 
-#: plugins/python/tenscripts/uitenscripts.py:66
+#: plugins/python/tenscripts/uitenscripts.py:73
 msgid "Selected path"
 msgstr "选定路径"
 
-#: plugins/python/tenscripts/uitenscripts.py:67
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:283
+#: plugins/python/tenscripts/uitenscripts.py:74
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:290
 msgid "Select the script"
 msgstr "选择脚本"
 
-#: plugins/python/tenscripts/uitenscripts.py:99
+#: plugins/python/tenscripts/uitenscripts.py:106
 msgid "Python files (*.py)"
 msgstr "Python 文件 (*.py)"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 msgid "Custom icon"
 msgstr "自定义图标"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 msgid "Tool icon"
 msgstr "工具图标"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:59
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
 msgid "Brush preset icon"
 msgstr "笔刷预设图标"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:64
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
 msgid "Workflow Buttons settings"
 msgstr "自定义按钮设置"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:96
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
 msgid "Selected button:"
 msgstr "选择的按钮："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:109
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
 msgid "Add a workflow button"
 msgstr "添加自定义按钮"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:117
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:124
 msgid "Move selected workflow button to the left"
 msgstr "向左移动选中的自定义按钮"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:123
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:130
 msgid "Move selected workflow button to the right"
 msgstr "向右移动选中的自定义按钮"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:131
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
 msgid "Delete selected workflow button"
 msgstr "删除选中的自定义按钮"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:138
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
 msgid "Select icon mode:"
 msgstr "选择图标模式："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:154
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
 msgid "Select a custom icon:"
 msgstr "选择自定义图标："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:157
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
 msgid "Custom icon path"
 msgstr "自定义图标路径"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:162
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
 msgid "Select the custom icon"
 msgstr "选择自定义图标"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:170
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
 msgid "Enter a Tooltip:"
 msgstr "输入悬停提示文字"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:173
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
 msgid "Tooltip text"
 msgstr "悬停提示文字"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:181
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
 msgid "Select a tool:"
 msgstr "选择工具："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:196
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
 msgid "Select a brush preset:"
 msgstr "选择笔刷预设："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:199
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
 msgid "Brush preset name"
 msgstr "笔刷预设名称"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:204
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
 msgid "Select the brush preset"
 msgstr "选择笔刷预设"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:212
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
 msgid "Select foreground color:"
 msgstr "选择前景色："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:214
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
 msgid "Load current foreground color"
 msgstr "加载当前前景色"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:217
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
 msgid "Clear foreground color"
 msgstr "清除前景色"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:227
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
 msgid "Color model ; depth ; profile ; components"
 msgstr "色彩模型 ; 位深 ; 特性文件 ; 颜色分量"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:244
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
 msgid "Select background color:"
 msgstr "选择背景色："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:246
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
 msgid "Load current background color"
 msgstr "加载当前背景色"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:249
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
 msgid "Clear background color"
 msgstr "清除背景色"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:275
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
 msgid "Select a script file:"
 msgstr "选择脚本文件："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:278
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
 msgid "Script path"
 msgstr "脚本路径"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:297
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
 msgid "Buttons size:"
 msgstr "按钮大小："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:313
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
 msgid "Settings button position:"
 msgstr "设置按钮位置："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:315
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
 msgid "Bottom bar"
 msgstr "底栏"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:316
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
 msgid "Inline"
 msgstr "同行显示"
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:453
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:460
 msgid "Icon files "
 msgstr "图标文件 "
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:509
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:542
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:516
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:549
 msgid "Color info: "
 msgstr "颜色信息："
 
-#: plugins/python/workflow_buttons/buttons_settings_dialog.py:579
+#: plugins/python/workflow_buttons/buttons_settings_dialog.py:586
 msgid "Script files "
 msgstr "脚本文件 "
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:20
+#: plugins/python/workflow_buttons/workflow_buttons.py:25
 msgctxt "@title:window"
 msgid "Workflow Buttons"
 msgstr "自定义按钮"
 
-#: plugins/python/workflow_buttons/workflow_buttons.py:59
+#: plugins/python/workflow_buttons/workflow_buttons.py:64
 msgid "Open workflow buttons settings dialog"
 msgstr "打开自定义按钮设置对话框"
 
@@ -64828,14 +64828,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "严重错误"
-
-#~ msgid ""
-#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
-#~ "Wayland. Krita will close now."
-#~ msgstr ""
-#~ "Krita 不支持 Wayland 环境。请使用 XWayland 来在 Wayland 环境下运行 Krita。"
-#~ "Krita 现在将会关闭。"

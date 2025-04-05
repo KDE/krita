@@ -101,6 +101,12 @@ if (QT_MAJOR_VERSION STREQUAL "5")
     )
 endif()
 
+# Add QtGui's private headers to KKeySequenceWidget, which are
+# required for the shortcuts translation
+set_source_files_properties(xmlgui/kkeysequencewidget.cpp
+    PROPERTIES
+    INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+    )
 
 if (HAVE_DBUS)
     set(kritawidgetutils_LIB_SRCS ${kritawidgetutils_LIB_SRCS}
@@ -149,7 +155,6 @@ target_link_libraries(kritawidgetutils
         kritaresources
     PRIVATE
         Qt${QT_MAJOR_VERSION}::PrintSupport
-        Qt${QT_MAJOR_VERSION}::GuiPrivate # required for the shortcuts translation
         KF${KF_MAJOR}::I18n
         KF${KF_MAJOR}::ConfigCore
         KF${KF_MAJOR}::CoreAddons

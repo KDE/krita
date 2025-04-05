@@ -29,6 +29,15 @@ else()
 endif()
 
 if (WIN32)
+    # Private headers are needed for main.cc to enable WinTab support
+    set_source_files_properties(
+        main.cc
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
+endif()
+
+if (WIN32)
     set(krita_windows_stub_ICONS_SRCS "")
     ecm_add_app_icon(krita_windows_stub_ICONS_SRCS ICONS ${ICON_SRCS} OUTFILE_BASENAME krita)
 
@@ -103,7 +112,6 @@ elseif (WIN32)
     # Build the main implementation into a DLL to be called by a stub EXE.
     kis_add_library(krita SHARED ${krita_SRCS})
     set_target_properties(krita PROPERTIES PREFIX "")
-    target_link_libraries(krita PRIVATE Qt${QT_MAJOR_VERSION}::GuiPrivate)
 else()
     add_executable(krita ${krita_SRCS})
 endif()

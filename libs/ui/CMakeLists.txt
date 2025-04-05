@@ -695,11 +695,18 @@ target_link_libraries(kritaui
 )
 
 if(WIN32)
-    # Private headers are needed for WinTab API:
+    # Private headers are needed for:
     #    * KisDlgCustomTabletResolution
     #    * KisScreenInformationAdapter
     #    * dialogs/kis_dlg_preferences.cc
-    target_link_libraries(kritaui PRIVATE Qt${QT_MAJOR_VERSION}::GuiPrivate)
+    set_source_files_properties(
+        dialogs/KisDlgCustomTabletResolution.cpp
+        opengl/KisScreenInformationAdapter.cpp
+        dialogs/kis_dlg_preferences.cc # for WinTab switching API
+        kis_config.cc # for logging the WinTab API
+        PROPERTIES
+        INCLUDE_DIRECTORIES "${Qt${QT_MAJOR_VERSION}Gui_PRIVATE_INCLUDE_DIRS}"
+        )
 endif()
 
 if (QT_MAJOR_VERSION STREQUAL "6")

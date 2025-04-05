@@ -58,13 +58,17 @@ private:
     KisCoordinatesConverter *m_converter;
 };
 
+// A delay longer than 80 ms is needed for a visibly smoother canvas updates
+// (due to the canvas getting affected by the frequent ruler updates).
+static constexpr int guiUpdateDelay = 160;
 
 KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)
         : m_view(view)
         , m_zoomHandler(zoomHandler)
         , m_canvasController(canvasController)
-        , m_guiUpdateCompressor(80, KisSignalCompressor::FIRST_ACTIVE)
+        , m_zoomChangedCompressor(guiUpdateDelay, KisSignalCompressor::FIRST_ACTIVE)
+        , m_pageOffsetChangedCompressor(guiUpdateDelay, KisSignalCompressor::FIRST_ACTIVE)
         , m_previousZoomMode(KoZoomMode::ZOOM_PAGE)
         , m_previousZoomPoint(QPointF(0.0, 0.0))
 {
@@ -173,7 +177,8 @@ void KisZoomManager::setup(KisKActionCollection * actionCollection)
 
     applyRulersUnit(m_view->document()->unit());
 
-    connect(&m_guiUpdateCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterZoomChange()));
+    connect(&m_zoomChangedCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterZoomChange()));
+    connect(&m_pageOffsetChangedCompressor, SIGNAL(timeout()), SLOT(slotUpdateGuiAfterPageOffsetChanged()));
 }
 
 void KisZoomManager::updateImageBoundsSnapping()
@@ -359,7 +364,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     Q_UNUSED(mode);
     Q_UNUSED(zoom);
     m_view->canvasBase()->notifyZoomChanged();
-    m_guiUpdateCompressor.start();
+    m_zoomChangedCompressor.start();
 }
 
 void KisZoomManager::slotZoomLevelsChanged()
@@ -396,6 +401,11 @@ void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
 }
 
 void KisZoomManager::pageOffsetChanged()
+{
+    m_pageOffsetChangedCompressor.start();
+}
+
+void KisZoomManager::slotUpdateGuiAfterPageOffsetChanged()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
     const QPoint newRulersOffset = widgetRect.topLeft().toPoint();

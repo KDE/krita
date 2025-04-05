@@ -89,6 +89,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotUpdateGuiAfterZoomChange();
+    void slotUpdateGuiAfterPageOffsetChanged();
 
 private:
     void updateMouseTrackingConnections();
@@ -109,7 +110,8 @@ private:
     qreal m_physicalDpiY {72.0};
     qreal m_devicePixelRatio {1.0};
     bool m_canvasMappingMode {false};
-    KisSignalCompressor m_guiUpdateCompressor;
+    KisSignalCompressor m_zoomChangedCompressor;
+    KisSignalCompressor m_pageOffsetChangedCompressor;
     qreal m_previousZoomLevel {1.0};
     KoZoomMode::Mode m_previousZoomMode;
     QPointF m_previousZoomPoint;

@@ -96,7 +96,7 @@ public:
 public Q_SLOTS:
 
     void executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow);
-    void remoteArguments(QByteArray message, QObject*socket);
+    void remoteArguments(const QString &message);
     void fileOpenRequested(const QString & url);
     void setSplashScreenLoadingText(const QString&);
 

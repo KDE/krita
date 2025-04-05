@@ -670,7 +670,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
-            if (app.sendMessage(args.serialize())) {
+            if (app.sendMessage(args.serialize().toBase64())) {
                 return 0;
             }
         }
@@ -732,11 +732,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
-    QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
-                     &app, SLOT(remoteArguments(QByteArray,QObject*)));
-
-    QObject::connect(&app, SIGNAL(fileOpenRequest(QString)),
-                     &app, SLOT(fileOpenRequested(QString)));
+    QObject::connect(&app, &KisApplication::messageReceived,
+                     &app, &KisApplication::remoteArguments);
 
     // Hardware information
     KisUsageLogger::writeSysInfo("\nHardware Information\n");

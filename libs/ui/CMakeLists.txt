@@ -1,6 +1,3 @@
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
-)
 
 if (ANDROID)
     # We explicitly set QT_OPENGL_ES_3 here because Qt for some reason does
@@ -442,8 +439,6 @@ set(kritaui_LIB_SRCS
     KisViewManager.cpp
     kis_mirror_manager.cpp
 
-    qtlockedfile/qtlockedfile.cpp
-
     qtsingleapplication/qtlocalpeer.cpp
     qtsingleapplication/qtsingleapplication.cpp
 
@@ -492,10 +487,6 @@ endif()
 if(WIN32)
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
-        qtlockedfile/qtlockedfile_win.cpp
-    )
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
         dialogs/KisDlgCustomTabletResolution.cpp
         )
 endif()
@@ -521,13 +512,6 @@ endif()
         input/wintab/drawpile_tablettester/tablettester.cpp
         input/wintab/drawpile_tablettester/tablettest.cpp
     )
-
-if (UNIX)
-    set(kritaui_LIB_SRCS
-        ${kritaui_LIB_SRCS}
-        qtlockedfile/qtlockedfile_unix.cpp
-        )
-endif()
 
 if (ENABLE_UPDATERS)
 	if (UNIX)

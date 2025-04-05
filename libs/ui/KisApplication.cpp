@@ -979,10 +979,8 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
 }
 
 
-void KisApplication::remoteArguments(QByteArray message, QObject *socket)
+void KisApplication::remoteArguments(const QString &message)
 {
-    Q_UNUSED(socket);
-
     // check if we have any mainwindow
     KisMainWindow *mw = qobject_cast<KisMainWindow*>(qApp->activeWindow());
 
@@ -990,11 +988,14 @@ void KisApplication::remoteArguments(QByteArray message, QObject *socket)
         mw = KisPart::instance()->mainWindows().first();
     }
 
+    const QByteArray unpackedMessage =
+        QByteArray::fromBase64(message.toLatin1());
+
     if (!mw) {
-        d->earlyRemoteArguments << message;
+        d->earlyRemoteArguments << unpackedMessage;
         return;
     }
-    executeRemoteArguments(message, mw);
+    executeRemoteArguments(unpackedMessage, mw);
 }
 
 void KisApplication::fileOpenRequested(const QString &url)

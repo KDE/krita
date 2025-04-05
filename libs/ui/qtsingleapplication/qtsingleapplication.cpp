@@ -1,187 +1,288 @@
-/****************************************************************************
-**
-** Copyright (C) 2014 Digia Plc and/or its subsidiary(-ies).
-** Contact: http://www.qt-project.org/legal
-**
-** This file is part of Qt Creator.
-**
-** Commercial License Usage
-** Licensees holding valid commercial Qt licenses may use this file in
-** accordance with the commercial license agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Digia.  For licensing terms and
-** conditions see https://www.qt.io/licensing.  For further information
-** use the contact form at https://www.qt.io/contact-us.
-**
-** GNU Lesser General Public License Usage
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 or version 3 as published by the Free
-** Software Foundation and appearing in the file LICENSE.LGPLv21 and
-** LICENSE.LGPLv3 included in the packaging of this file.  Please review the
-** following information to ensure the GNU Lesser General Public License
-** requirements will be met: https://www.gnu.org/licenses/lgpl.html and
-** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
-**
-** In addition, as a special exception, Digia gives you certain additional
-** rights.  These rights are described in the Digia Qt LGPL Exception
-** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
-**
-****************************************************************************/
+// Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
+// SPDX-License-Identifier: BSD-3-Clause
+
 
 #include "qtsingleapplication.h"
 #include "qtlocalpeer.h"
-
-#include <qtlockedfile.h>
-
-#include <QDir>
-#include <QFileOpenEvent>
-#include <QSharedMemory>
 #include <QWidget>
 
-static const int instancesSize = 1024;
 
-static QString instancesLockFilename(const QString &appSessionId)
+/*!
+    \class QtSingleApplication qtsingleapplication.h
+    \brief The QtSingleApplication class provides an API to detect and
+    communicate with running instances of an application.
+
+    This class allows you to create applications where only one
+    instance should be running at a time. I.e., if the user tries to
+    launch another instance, the already running instance will be
+    activated instead. Another usecase is a client-server system,
+    where the first started instance will assume the role of server,
+    and the later instances will act as clients of that server.
+
+    By default, the full path of the executable file is used to
+    determine whether two processes are instances of the same
+    application. You can also provide an explicit identifier string
+    that will be compared instead.
+
+    The application should create the QtSingleApplication object early
+    in the startup phase, and call isRunning() to find out if another
+    instance of this application is already running. If isRunning()
+    returns false, it means that no other instance is running, and
+    this instance has assumed the role as the running instance. In
+    this case, the application should continue with the initialization
+    of the application user interface before entering the event loop
+    with exec(), as normal.
+
+    The messageReceived() signal will be emitted when the running
+    application receives messages from another instance of the same
+    application. When a message is received it might be helpful to the
+    user to raise the application so that it becomes visible. To
+    facilitate this, QtSingleApplication provides the
+    setActivationWindow() function and the activateWindow() slot.
+
+    If isRunning() returns true, another instance is already
+    running. It may be alerted to the fact that another instance has
+    started by using the sendMessage() function. Also data such as
+    startup parameters (e.g. the name of the file the user wanted this
+    new instance to open) can be passed to the running instance with
+    this function. Then, the application should terminate (or enter
+    client mode).
+
+    If isRunning() returns true, but sendMessage() fails, that is an
+    indication that the running instance is frozen.
+
+    Here's an example that shows how to convert an existing
+    application to use QtSingleApplication. It is very simple and does
+    not make use of all QtSingleApplication's functionality (see the
+    examples for that).
+
+    \code
+    // Original
+    int main(int argc, char **argv)
+    {
+        QApplication app(argc, argv);
+
+        MyMainWidget mmw;
+        mmw.show();
+        return app.exec();
+    }
+
+    // Single instance
+    int main(int argc, char **argv)
+    {
+        QtSingleApplication app(argc, argv);
+
+        if (app.isRunning())
+            return !app.sendMessage(someDataString);
+
+        MyMainWidget mmw;
+        app.setActivationWindow(&mmw);
+        mmw.show();
+        return app.exec();
+    }
+    \endcode
+
+    Once this QtSingleApplication instance is destroyed (normally when
+    the process exits or crashes), when the user next attempts to run the
+    application this instance will not, of course, be encountered. The
+    next instance to call isRunning() or sendMessage() will assume the
+    role as the new running instance.
+
+    For console (non-GUI) applications, QtSingleCoreApplication may be
+    used instead of this class, to avoid the dependency on the QtGui
+    library.
+
+    \sa QtSingleCoreApplication
+*/
+
+
+void QtSingleApplication::sysInit(const QString &appId)
 {
-    const QChar slash(QLatin1Char('/'));
-    QString res = QDir::tempPath();
-    if (!res.endsWith(slash))
-        res += slash;
-    return res + appSessionId + QLatin1String("-instances");
+    actWin = 0;
+    peer = new QtLocalPeer(this, appId);
+    connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
 }
+
+
+/*!
+    Creates a QtSingleApplication object. The application identifier
+    will be QCoreApplication::applicationFilePath(). \a argc, \a
+    argv, and \a GUIenabled are passed on to the QAppliation constructor.
+
+    If you are creating a console application (i.e. setting \a
+    GUIenabled to false), you may consider using
+    QtSingleCoreApplication instead.
+*/
+
+QtSingleApplication::QtSingleApplication(int &argc, char **argv, bool GUIenabled)
+    : QApplication(argc, argv, GUIenabled)
+{
+    sysInit();
+}
+
+
+/*!
+    Creates a QtSingleApplication object with the application
+    identifier \a appId. \a argc and \a argv are passed on to the
+    QAppliation constructor.
+*/
 
 QtSingleApplication::QtSingleApplication(const QString &appId, int &argc, char **argv)
-    : QApplication(argc, argv),
-      firstPeer(-1),
-      pidPeer(0)
+    : QApplication(argc, argv)
 {
-    this->appId = appId;
-
-    const QString appSessionId = QtLocalPeer::appSessionId(appId);
-
-    // This shared memory holds a zero-terminated array of active (or crashed) instances
-    instances = new QSharedMemory(appSessionId, this);
-    actWin = 0;
-    block = false;
-
-    // First instance creates the shared memory, later instances attach to it
-    const bool created = instances->create(instancesSize);
-    if (!created) {
-        if (!instances->attach()) {
-            qWarning() << "Failed to initialize instances shared memory: "
-                       << instances->errorString();
-            delete instances;
-            instances = 0;
-            return;
-        }
-    }
-
-    // QtLockedFile is used to workaround QTBUG-10364
-    QtLockedFile lockfile(instancesLockFilename(appSessionId));
-
-    lockfile.open(QtLockedFile::ReadWrite);
-    lockfile.lock(QtLockedFile::WriteLock);
-    qint64 *pids = static_cast<qint64 *>(instances->data());
-    if (!created) {
-        // Find the first instance that it still running
-        // The whole list needs to be iterated in order to append to it
-        for (; *pids; ++pids) {
-            if (firstPeer == -1 && isRunning(*pids))
-                firstPeer = *pids;
-        }
-    }
-    // Add current pid to list and terminate it
-    *pids++ = QCoreApplication::applicationPid();
-    *pids = 0;
-    pidPeer = new QtLocalPeer(this, appId + QLatin1Char('-') +
-                              QString::number(QCoreApplication::applicationPid()));
-    connect(pidPeer, SIGNAL(messageReceived(QByteArray,QObject*)), SIGNAL(messageReceived(QByteArray,QObject*)));
-    pidPeer->isClient();
-    lockfile.unlock();
+    sysInit(appId);
 }
 
-QtSingleApplication::~QtSingleApplication()
+#if QT_VERSION < 0x050000
+
+/*!
+    Creates a QtSingleApplication object. The application identifier
+    will be QCoreApplication::applicationFilePath(). \a argc, \a
+    argv, and \a type are passed on to the QAppliation constructor.
+*/
+QtSingleApplication::QtSingleApplication(int &argc, char **argv, Type type)
+    : QApplication(argc, argv, type)
 {
-    if (!instances)
-        return;
-    const qint64 appPid = QCoreApplication::applicationPid();
-    QtLockedFile lockfile(instancesLockFilename(QtLocalPeer::appSessionId(appId)));
-    lockfile.open(QtLockedFile::ReadWrite);
-    lockfile.lock(QtLockedFile::WriteLock);
-    // Rewrite array, removing current pid and previously crashed ones
-    qint64 *pids = static_cast<qint64 *>(instances->data());
-    qint64 *newpids = pids;
-    for (; *pids; ++pids) {
-        if (*pids != appPid && isRunning(*pids))
-            *newpids++ = *pids;
-    }
-    *newpids = 0;
-    lockfile.unlock();
+    sysInit();
 }
 
-bool QtSingleApplication::event(QEvent *event)
+
+#  if defined(Q_WS_X11)
+/*!
+  Special constructor for X11, ref. the documentation of
+  QApplication's corresponding constructor. The application identifier
+  will be QCoreApplication::applicationFilePath(). \a dpy, \a visual,
+  and \a cmap are passed on to the QApplication constructor.
+*/
+QtSingleApplication::QtSingleApplication(Display* dpy, Qt::HANDLE visual, Qt::HANDLE cmap)
+    : QApplication(dpy, visual, cmap)
 {
-    if (event->type() == QEvent::FileOpen) {
-        QFileOpenEvent *foe = static_cast<QFileOpenEvent*>(event);
-        Q_EMIT fileOpenRequest(foe->file());
-        return true;
-    }
-    return QApplication::event(event);
+    sysInit();
 }
 
-bool QtSingleApplication::isRunning(qint64 pid)
+/*!
+  Special constructor for X11, ref. the documentation of
+  QApplication's corresponding constructor. The application identifier
+  will be QCoreApplication::applicationFilePath(). \a dpy, \a argc, \a
+  argv, \a visual, and \a cmap are passed on to the QApplication
+  constructor.
+*/
+QtSingleApplication::QtSingleApplication(Display *dpy, int &argc, char **argv, Qt::HANDLE visual, Qt::HANDLE cmap)
+    : QApplication(dpy, argc, argv, visual, cmap)
 {
-    if (pid == -1) {
-        pid = firstPeer;
-        if (pid == -1) {
-            return false;
-        }
-    }
-
-    QtLocalPeer peer(this, appId + QLatin1Char('-') + QString::number(pid, 10));
-
-    return peer.isClient();
+    sysInit();
 }
 
-bool QtSingleApplication::sendMessage(const QByteArray &message, int timeout, qint64 pid)
+/*!
+  Special constructor for X11, ref. the documentation of
+  QApplication's corresponding constructor. The application identifier
+  will be \a appId. \a dpy, \a argc, \a
+  argv, \a visual, and \a cmap are passed on to the QApplication
+  constructor.
+*/
+QtSingleApplication::QtSingleApplication(Display* dpy, const QString &appId, int argc, char **argv, Qt::HANDLE visual, Qt::HANDLE cmap)
+    : QApplication(dpy, argc, argv, visual, cmap)
 {
-    if (pid == -1) {
-        pid = firstPeer;
-        if (pid == -1)
-            return false;
-    }
+    sysInit(appId);
+}
+#  endif // Q_WS_X11
+#endif // QT_VERSION < 0x050000
 
-    QtLocalPeer peer(this, appId + QLatin1Char('-') + QString::number(pid, 10));
-    return peer.sendMessage(message, timeout, block);
+
+/*!
+    Returns true if another instance of this application is running;
+    otherwise false.
+
+    This function does not find instances of this application that are
+    being run by a different user (on Windows: that are running in
+    another session).
+
+    \sa sendMessage()
+*/
+
+bool QtSingleApplication::isRunning()
+{
+    return peer->isClient();
 }
 
-QString QtSingleApplication::applicationId() const
+
+/*!
+    Tries to send the text \a message to the currently running
+    instance. The QtSingleApplication object in the running instance
+    will emit the messageReceived() signal when it receives the
+    message.
+
+    This function returns true if the message has been sent to, and
+    processed by, the current instance. If there is no instance
+    currently running, or if the running instance fails to process the
+    message within \a timeout milliseconds, this function return false.
+
+    \sa isRunning(), messageReceived()
+*/
+bool QtSingleApplication::sendMessage(const QString &message, int timeout)
 {
-    return appId;
+    return peer->sendMessage(message, timeout);
 }
 
-void QtSingleApplication::setBlock(bool value)
+
+/*!
+    Returns the application identifier. Two processes with the same
+    identifier will be regarded as instances of the same application.
+*/
+QString QtSingleApplication::id() const
 {
-    block = value;
+    return peer->applicationId();
 }
 
-void QtSingleApplication::setActivationWindow(QWidget *aw, bool activateOnMessage)
+
+/*!
+  Sets the activation window of this application to \a aw. The
+  activation window is the widget that will be activated by
+  activateWindow(). This is typically the application's main window.
+
+  If \a activateOnMessage is true (the default), the window will be
+  activated automatically every time a message is received, just prior
+  to the messageReceived() signal being emitted.
+
+  \sa activateWindow(), messageReceived()
+*/
+
+void QtSingleApplication::setActivationWindow(QWidget* aw, bool activateOnMessage)
 {
     actWin = aw;
-    if (!pidPeer)
-        return;
     if (activateOnMessage)
-        connect(pidPeer, SIGNAL(messageReceived(QByteArray,QObject*)), this, SLOT(activateWindow()));
+        connect(peer, SIGNAL(messageReceived(const QString&)), this, SLOT(activateWindow()));
     else
-        disconnect(pidPeer, SIGNAL(messageReceived(QByteArray,QObject*)), this, SLOT(activateWindow()));
+        disconnect(peer, SIGNAL(messageReceived(const QString&)), this, SLOT(activateWindow()));
 }
 
 
+/*!
+    Returns the applications activation window if one has been set by
+    calling setActivationWindow(), otherwise returns 0.
+
+    \sa setActivationWindow()
+*/
 QWidget* QtSingleApplication::activationWindow() const
 {
     return actWin;
 }
 
 
+/*!
+  De-minimizes, raises, and activates this application's activation window.
+  This function does nothing if no activation window has been set.
+
+  This is a convenience function to show the user that this
+  application instance has been activated when he has tried to start
+  another instance.
+
+  This function should typically be called in response to the
+  messageReceived() signal. By default, that will happen
+  automatically, if an activation window has been set.
+
+  \sa setActivationWindow(), messageReceived(), initialize()
+*/
 void QtSingleApplication::activateWindow()
 {
     if (actWin) {
@@ -190,3 +291,20 @@ void QtSingleApplication::activateWindow()
         actWin->activateWindow();
     }
 }
+
+
+/*!
+    \fn void QtSingleApplication::messageReceived(const QString& message)
+
+    This signal is emitted when the current instance receives a \a
+    message from another instance of this application.
+
+    \sa sendMessage(), setActivationWindow(), activateWindow()
+*/
+
+
+/*!
+    \fn void QtSingleApplication::initialize(bool dummy = true)
+
+    \obsolete
+*/

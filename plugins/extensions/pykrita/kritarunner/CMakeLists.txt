@@ -19,7 +19,7 @@ set(kritarunner_PRIVATE_LINK_LIBS
 )
 
 if(WIN32)
-    if (QT_MAJOR_VERSION STREQUAL "6")
+    if (NOT QT_MAJOR_VERSION STREQUAL "6")
         configure_file(kritarunner.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)
     else()
         configure_file(kritarunner6.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)

@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-04 02:01+0000\n"
+"POT-Creation-Date: 2025-04-05 01:59+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -41625,13 +41625,13 @@ msgid "Animation Curves"
 msgstr "फिल्टर परत (&F)"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:73
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:75
 #, fuzzy, kde-format
 msgid "Frame register"
 msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
 #, fuzzy, kde-format
 #| msgid "Speed"
 msgctxt "preview playback speed percentage prefix"
@@ -41639,7 +41639,7 @@ msgid "Speed: "
 msgstr "गति"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
 #, kde-format
 msgid "Preview playback speed"
 msgstr ""
@@ -41668,7 +41668,7 @@ msgid "Zoom vertically"
 msgstr "खड़े मं सोबेल"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:132
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "कास्ट्रेन प्रोपोर्सन्स (&C)"
@@ -41680,26 +41680,26 @@ msgid "Audio menu"
 msgstr "आईएसओ स्टूडियो टंगस्टन"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:185
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation settings menu"
 msgstr "एनिमेटेड"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "तारा"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:206
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "रविसंकर सिरीवास्तव, जी. करूनाकर"
@@ -41808,71 +41808,78 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "परत के नाम:"
 msgstr[1] "परत के नाम:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:60
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:299
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation Timeline"
 msgstr "एनिमेटेड"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "स्रोत फाइल मन ल:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "पेंटर के औजार (&P)"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
 #, fuzzy, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
 msgstr "मान"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:171
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, fuzzy, kde-format
 #| msgid "Animated"
 msgid "Animation audio menu"
 msgstr "एनिमेटेड"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:214
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
 #, kde-format
 msgid "AutoKey Blank"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
 #, fuzzy, kde-format
 #| msgid "Duplicate"
 msgid "AutoKey Duplicate"
 msgstr "अनुकृति"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
+#, fuzzy
+#| msgid "Animated"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "एनिमेटेड"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr ""

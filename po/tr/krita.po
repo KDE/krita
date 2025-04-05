@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-04 02:01+0000\n"
-"PO-Revision-Date: 2025-03-25 21:14+0300\n"
+"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"PO-Revision-Date: 2025-04-04 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -84,235 +84,235 @@ msgstr "Tuval 04"
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0202_CLUS.pat"
 msgid "DITH 0202 CLUS"
-msgstr "DITH 0202 CLUS"
+msgstr "Titreme 0202 CLUS"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0202_GEN_.pat"
 msgid "DITH 0202 GEN "
-msgstr "DITH 0202 GEN "
+msgstr "Titreme 0202 GEN "
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0202_HORZ.pat"
 msgid "DITH 0202 HORZ"
-msgstr "DITH 0202 HORZ"
+msgstr "Titreme 0202 HORZ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0202_VERT.pat"
 msgid "DITH 0202 VERT"
-msgstr "DITH 0202 VERT"
+msgstr "Titreme 0202 VERT"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_ALT_.pat"
 msgid "DITH 0404 ALT "
-msgstr "DITH 0404 ALT "
+msgstr "Titreme 0404 ALT "
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_BL22.pat"
 msgid "DITH 0404 BL22"
-msgstr "DITH 0404 BL22"
+msgstr "Titreme 0404 BL22"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_CLUS.pat"
 msgid "DITH 0404 CLUS"
-msgstr "DITH 0404 CLUS"
+msgstr "Titreme 0404 CLUS"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_CURL.pat"
 msgid "DITH 0404 CURL"
-msgstr "DITH 0404 CURL"
+msgstr "Titreme 0404 CURL"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_DIAG.pat"
 msgid "DITH 0404 DIAG"
-msgstr "DITH 0404 DIAG"
+msgstr "Titreme 0404 DIAG"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_ELL2.pat"
 msgid "DITH 0404 ELL2"
-msgstr "DITH 0404 ELL2"
+msgstr "Titreme 0404 ELL2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_ELL3.pat"
 msgid "DITH 0404 ELL3"
-msgstr "DITH 0404 ELL3"
+msgstr "Titreme 0404 ELL3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_ELLS.pat"
 msgid "DITH 0404 ELLS"
-msgstr "DITH 0404 ELLS"
+msgstr "Titreme 0404 ELLS"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_GEN_.pat"
 msgid "DITH 0404 GEN "
-msgstr "DITH 0404 GEN "
+msgstr "Titreme 0404 GEN "
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_HORZ.pat"
 msgid "DITH 0404 HORZ"
-msgstr "DITH 0404 HORZ"
+msgstr "Titreme 0404 HORZ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_SHUR.pat"
 msgid "DITH 0404 SHUR"
-msgstr "DITH 0404 SHUR"
+msgstr "Titreme 0404 SHUR"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_SLIC.pat"
 msgid "DITH 0404 SLIC"
-msgstr "DITH 0404 SLIC"
+msgstr "Titreme 0404 SLIC"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_VERT.pat"
 msgid "DITH 0404 VERT"
-msgstr "DITH 0404 VERT"
+msgstr "Titreme 0404 VERT"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_WAV2.pat"
 msgid "DITH 0404 WAV2"
-msgstr "DITH 0404 WAV2"
+msgstr "Titreme 0404 WAV2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_WAVE.pat"
 msgid "DITH 0404 WAVE"
-msgstr "DITH 0404 WAVE"
+msgstr "Titreme 0404 WAVE"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0404_ZORO.pat"
 msgid "DITH 0404 ZORO"
-msgstr "DITH 0404 ZORO"
+msgstr "Titreme 0404 ZORO"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_BL22.pat"
 msgid "DITH 0808 BL22"
-msgstr "DITH 0808 BL22"
+msgstr "Titreme 0808 BL22"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_BL22_v.pat"
 msgid "DITH 0808 BL22 V"
-msgstr "DITH 0808 BL22 V"
+msgstr "Titreme 0808 BL22 V"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_BUBL.pat"
 msgid "DITH 0808 BUBL"
-msgstr "DITH 0808 BUBL"
+msgstr "Titreme 0808 BUBL"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_CIRC.pat"
 msgid "DITH 0808 CIRC"
-msgstr "DITH 0808 CIRC"
+msgstr "Titreme 0808 CIRC"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_CLUS.pat"
 msgid "DITH 0808 CLUS"
-msgstr "DITH 0808 CLUS"
+msgstr "Titreme 0808 CLUS"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_DIAM.pat"
 msgid "DITH 0808 DIAM"
-msgstr "DITH 0808 DIAM"
+msgstr "Titreme 0808 DIAM"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_PANL.pat"
 msgid "DITH 0808 PANL"
-msgstr "DITH 0808 PANL"
+msgstr "Titreme 0808 PANL"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_SPOT.pat"
 msgid "DITH 0808 SPOT"
-msgstr "DITH 0808 SPOT"
+msgstr "Titreme 0808 SPOT"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_SWRL.pat"
 msgid "DITH 0808 SWRL"
-msgstr "DITH 0808 SWRL"
+msgstr "Titreme 0808 SWRL"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_0808_WAVE.pat"
 msgid "DITH 0808 WAVE"
-msgstr "DITH 0808 WAVE"
+msgstr "Titreme 0808 WAVE"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: DITH probably means 'dithering'
 #, kde-format
 msgctxt "./krita/data/patterns/DITH_3232_CSTR.pat"
 msgid "DITH 3232 CURVED STRIPES"
-msgstr "DITH 3232 CURVED STRIPES"
+msgstr "Titreme 3232 CURVED STRIPES"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desenler"
+msgstr "Fraktal Desen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Genel Kağıt 2"
+msgstr "Genel Kâğıt 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Genel Kağıt 3"
+msgstr "Genel Kâğıt 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -348,19 +348,19 @@ msgstr "Izgara05"
 #, kde-format
 msgctxt "./krita/data/patterns/hexacolBW__2.pat"
 msgid "Hexacol BW By Tarkan"
-msgstr "Tarkan tarafından Hexacol BW"
+msgstr "Tarkan’dan Hexacol BW"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Kağıt 02"
+msgstr "HR Pastel Kâğıt 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/HR_Wall_Paper.pat"
 msgid "HR Wall Paper"
-msgstr "HR Duvar Kağıdı"
+msgstr "HR Duvar Kâğıdı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -714,13 +714,13 @@ msgstr "Labirent çizgiler"
 #, kde-format
 msgctxt "./krita/data/patterns/Rough_Paper.png"
 msgid "Rough Paper"
-msgstr "Kaba Kağıt"
+msgstr "Kaba Kâğıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/patterns/Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr "Kalın Boya Tabakalı Kaba Kağıt"
+msgstr "Kalın Boya Tabakalı Kaba Kâğıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -916,25 +916,25 @@ msgstr "İki ekranlı düzenleme"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmosphere_With_Accent.kgm"
 msgid "Atmosphere With Accent"
-msgstr "Aksanlı Atmosfer"
+msgstr "Vurgulu Atmosfer"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmospheric_Triad.kgm"
 msgid "Atmospheric Triad"
-msgstr "Atmosferik Üçlü"
+msgstr "Atmosfer Üçlüsü"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Complementary.kgm"
 msgid "Complementary"
-msgstr "Destekleyen"
+msgstr "Tamamlayan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Dominant_Hue_With_Accent.kgm"
 msgid "Dominant Hue With Accent"
-msgstr "Aksanlı Baskın Renk Tonu"
+msgstr "Vurgulu Baskın Renk Tonu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -946,7 +946,7 @@ msgstr "Kaydırılmış Üçlü"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Split_Complementary.kgm"
 msgid "Split Complementary"
-msgstr "Destekleyeni Böl"
+msgstr "Tamamlayanı Böl"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3234,7 +3234,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Kağıt 02"
+msgstr "HR Pastel Kâğıt 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3242,7 +3242,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
 msgid "HR Wall Paper"
-msgstr "HR Duvar Kağıdı"
+msgstr "HR Duvar Kâğıdı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3446,7 +3446,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desen"
+msgstr "Fraktal Desen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3454,7 +3454,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Genel Kağıt 2"
+msgstr "Genel Kâğıt 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3462,7 +3462,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Genel Kağıt 3"
+msgstr "Genel Kâğıt 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4527,7 +4527,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Grow.kpp"
 msgid "v) Distort Grow"
-msgstr "v) Bozulma Büyüt"
+msgstr "v) Bozulma Genişlet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5183,7 +5183,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desen"
+msgstr "Fraktal Desen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5191,7 +5191,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper1.pat"
 msgid "Generic Paper 2"
-msgstr "Genel Kağıt 2"
+msgstr "Genel Kâğıt 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5199,7 +5199,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "generic_paper2.pat"
 msgid "Generic Paper 3"
-msgstr "Genel Kağıt 3"
+msgstr "Genel Kâğıt 3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5250,7 +5250,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "HR_PastelPaper_02.pat"
 msgid "HR Pastel Paper 02"
-msgstr "HR Pastel Kağıt 02"
+msgstr "HR Pastel Kâğıt 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5258,7 +5258,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/HR_Wall_Paper."
 "pat"
 msgid "HR Wall Paper"
-msgstr "HR Duvar Kağıdı"
+msgstr "HR Duvar Kâğıdı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5315,7 +5315,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/Rough_Paper."
 "png"
 msgid "Rough Paper"
-msgstr "Kaba Kağıt"
+msgstr "Kaba Kâğıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5323,7 +5323,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr "İmpastolu Kaba Kağıt"
+msgstr "İmpastolu Kaba Kâğıt"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5580,7 +5580,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_fractal_Brownian_Motion.kse"
 msgid "Wolthera's Color fractal Brownian Motion"
-msgstr "Wolthera’nın Kesirsel Renk Kahverengi Hareketi"
+msgstr "Wolthera’nın Fraktal Renk Kahverengi Hareketi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12412,7 +12412,7 @@ msgstr "Katmanları yeni boyuta ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "&Katmanları Kırk…"
+msgstr "&Katmanları Kaydır…"
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12422,7 +12422,7 @@ msgstr "&Katmanları Kırk…"
 #, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr "Katmanları kırk"
+msgstr "Katmanları kaydır"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3336
@@ -12548,7 +12548,7 @@ msgstr "Tüm katmanları yeni boyuta ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "&Tüm Katmanları Kırk…"
+msgstr "&Tüm Katmanları Kaydır…"
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12558,7 +12558,7 @@ msgstr "&Tüm Katmanları Kırk…"
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr "Tüm Katmanları Kırk"
+msgstr "Tüm Katmanları Kaydır"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3432
@@ -14809,7 +14809,7 @@ msgstr "Görseli 180° Döndür"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "&Görseli Kırk…"
+msgstr "&Görseli Kaydır…"
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14819,7 +14819,7 @@ msgstr "&Görseli Kırk…"
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1281
@@ -15203,7 +15203,7 @@ msgstr "Matlığı Seç (Kesiştir)"
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "&Seçimi Büyüt…"
+msgstr "&Seçimi Genişlet…"
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
@@ -15213,14 +15213,14 @@ msgstr "&Seçimi Büyüt…"
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Seçi&mi Küçült…"
+msgstr "Seçi&mi Daralt…"
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
@@ -15230,7 +15230,7 @@ msgstr "Seçi&mi Küçült…"
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1573
@@ -16316,7 +16316,7 @@ msgstr "Gölge Ayarla"
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "Şekilleri Kırk"
+msgstr "Şekilleri Kaydır"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -21072,20 +21072,20 @@ msgstr[1] "%1 Katmanı Döndür"
 #: libs/image/kis_image.cc:1264
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
-msgstr "Maskeyi Kırk"
+msgstr "Maskeyi Kaydır"
 
 #: libs/image/kis_image.cc:1268
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Katmanı Kırk"
-msgstr[1] "%1 Katmanı Kırk"
+msgstr[0] "Katmanı Kaydır"
+msgstr[1] "%1 Katmanı Kaydır"
 
 #: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #: libs/image/kis_image.cc:1293
 msgctxt "(qtundo-format)"
@@ -21151,12 +21151,12 @@ msgstr "Ölçek (Y)"
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
-msgstr "Kırk (X)"
+msgstr "Kaydır (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
-msgstr "Kırk (Y)"
+msgstr "Kaydır (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
@@ -21399,12 +21399,12 @@ msgstr "Seçimi Yumuşat"
 #: libs/image/kis_selection_filters.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #: libs/image/kis_selection_filters.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #: libs/image/kis_selection_filters.cpp:822
 msgctxt "(qtundo-format)"
@@ -21424,7 +21424,7 @@ msgstr "Seçimi Yumuşat"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "En Koyu Piksele Dek Seçimi Büyüt"
+msgstr "En Koyu Piksele Dek Seçimi Genişlet"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -38441,7 +38441,7 @@ msgstr "Yumuşatma"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
-msgstr "Büyüt: "
+msgstr "Genişlet: "
 
 #: libs/ui/widgets/kis_selection_options.cc:199
 #, kde-format
@@ -38504,14 +38504,14 @@ msgstr "Seçimin kenarlarını yumuşatır"
 #: libs/ui/widgets/kis_selection_options.cc:237
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Seçimi, ayarlı miktar kadar büyüt veya küçült"
+msgstr "Seçimi, ayarlı miktar kadar genişlet veya daralt"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/basictools/kis_tool_fill.cc:662
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:571
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr "En karanlık veya en mat piksellerde büyümeyi durdur"
+msgstr "En karanlık veya en mat piksellerde genişletmeyi durdur"
 
 #: libs/ui/widgets/kis_selection_options.cc:241
 #, kde-format
@@ -41840,20 +41840,20 @@ msgid "Animation Curves"
 msgstr "Canlandırma Eğrileri"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:73
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:75
 #, kde-format
 msgid "Frame register"
 msgstr "Kare kaydı"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Hız: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Önizleme oynatma hızı"
@@ -41880,7 +41880,7 @@ msgid "Zoom vertically"
 msgstr "Dikey yakınlaştır"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:132
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Soğan zarları menüsü"
@@ -41891,25 +41891,25 @@ msgid "Audio menu"
 msgstr "Ses menüsü"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:185
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Canlandırma ayarları menüsü"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
 #, kde-format
 msgid "Clip Start: "
 msgstr "Kırpma başlangıcı: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Clip End: "
 msgstr "Kırpma bitişi: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:206
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Kare hızı: "
@@ -42009,68 +42009,75 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Anahtar Kareyi Ayarla"
 msgstr[1] "%1 Anahtar Kareyi Ayarla"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:60
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:299
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Canlandırma Zaman Akışı"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Ses İçe Aktar…"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Sesi Kaldır"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Sessize Al"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
 #, kde-format
 msgctxt ""
 "@item:inmenu Volume slider; {n} is the number value, % is the percent sign"
 msgid "Volume: {n}%"
 msgstr "Ses düzeyi: %{n}"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:171
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, kde-format
 msgid "Animation audio menu"
 msgstr "Canlandırma sesi menüsü"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:214
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "Boş Kendiliğinden Anahtar"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Kendiliğinden Anahtar Yinelemesi"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
+#, fuzzy
+#| msgid "Animation settings menu"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Canlandırma ayarları menüsü"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Oynatma zamanlamasını korumak için etkinleştirin."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "Etkili FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "Gerçek FPS:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Bırakılan kareler:\t%​%1"
@@ -46806,12 +46813,12 @@ msgstr "Seçimi Yumuşat"
 #: plugins/extensions/modify_selection/dlg_grow_selection.cc:20
 #, kde-format
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #: plugins/extensions/modify_selection/dlg_shrink_selection.cc:19
 #, kde-format
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:53
@@ -46829,7 +46836,7 @@ msgstr "Yarıçapı yumuşat:"
 #: plugins/extensions/modify_selection/wdg_grow_selection.ui:24
 #, kde-format
 msgid "Grow by"
-msgstr "Şu kadar büyüt"
+msgstr "Şu kadar genişlet"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:69
@@ -46841,7 +46848,7 @@ msgstr "Şu kadar daralt"
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:127
 #, kde-format
 msgid "Shrink from image border"
-msgstr "Görsel kenarlıklarından küçült"
+msgstr "Görsel kenarlıklarından daralt"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
 msgctxt "(qtundo-format)"
@@ -47979,26 +47986,26 @@ msgstr "Geçerli kanalı etkinleştir"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:18
 #, kde-format
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
 #, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "Katmanı Kırk"
-msgstr[1] "%1 Katmanı Kırk"
+msgstr[0] "Katmanı Kaydır"
+msgstr[1] "%1 Katmanı Kaydır"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr "Kırkma açısı X:"
+msgstr "Kaydırma açısı X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr "Kırkma açısı Y:"
+msgstr "Kaydırma açısı Y:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
@@ -50817,7 +50824,7 @@ msgstr "Konum:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
-msgstr "Kırk:"
+msgstr "Kaydır:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -55841,7 +55848,7 @@ msgstr "Bozma Kipi"
 #, kde-format
 msgctxt "Grow as in deform brush engine"
 msgid "Grow"
-msgstr "Büyüt"
+msgstr "Genişlet"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shrinkBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:140
@@ -55849,7 +55856,7 @@ msgstr "Büyüt"
 #, kde-format
 msgctxt "Shrink as in deform brush engine"
 msgid "Shrink"
-msgstr "Küçült"
+msgstr "Daralt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCWBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:141
@@ -56247,7 +56254,7 @@ msgstr "Ölçek çarpanı"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
 #, kde-format
 msgid "Shear factor"
-msgstr "Kırkma çarpanı"
+msgstr "Kaydırma çarpanı"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:234
@@ -61721,7 +61728,7 @@ msgstr "Seçimi sınır olarak kullan"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Büyüt:"
+msgstr "Genişlet: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:607
 #, kde-format
@@ -61842,7 +61849,7 @@ msgstr "Dolgunun kenarlarını pürüzsüzleştirir"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:570
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Dolguyu, ayarlanan miktar kadar büyüt veya küçült"
+msgstr "Dolguyu, ayarlanan miktar kadar genişlet veya daralt"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:572
@@ -62486,7 +62493,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Seçimi kırkmak için tıklayın ve sürükleyin."
+msgstr "Seçimi kaydırmak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
 #, kde-format
@@ -62706,7 +62713,7 @@ msgstr "Döndür"
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
 #, kde-format
@@ -64248,7 +64255,7 @@ msgstr "Merkez"
 #, kde-format
 msgctxt "Grow as in crop tool"
 msgid "Grow"
-msgstr "Büyüt"
+msgstr "Genişlet"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:122
 #, kde-format
@@ -64349,7 +64356,7 @@ msgstr "&X:"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:152
 #, kde-format
 msgid "Allow growing the image by dragging outside bounds of the image"
-msgstr "Görseli, sınırları dışına sürükleyerek büyütmeye izin ver"
+msgstr "Görseli, sınırları dışına sürükleyerek genişletmeye izin ver"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:333
@@ -64519,7 +64526,7 @@ msgstr "Yumuşatma"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Büyüt:"
+msgstr "Genişlet: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
@@ -64864,7 +64871,7 @@ msgstr ""
 #, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
-msgstr "Bük"
+msgstr "Çarpıt"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
@@ -64976,7 +64983,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın veya seçimin şeklini değiştir"
+msgstr "Bir katmanı veya seçimi dönüştür"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:87
 #, kde-format
@@ -65060,7 +65067,7 @@ msgstr "Taşı: Fırça vuruşu boyunca görseli sürükle"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
-msgstr "Ölçekle: İmlecin altında görseli büyüt/küçült"
+msgstr "Ölçekle: İmlecin altında görseli genişlet/daralt"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:277
 #, kde-format
@@ -65072,7 +65079,7 @@ msgstr "Döndür: Görseli imlecin altında döndür"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
-msgstr "Ofset: Vuruş yönünün sağına doğru görseli kaydır"
+msgstr "Ofset: Görseli vuruş yönüne kaydır"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:279
 #, kde-format
@@ -65120,7 +65127,7 @@ msgstr "Dönüşüm Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın veya seçimin şeklini değiştir"
+msgstr "Bir katmanı veya seçimi dönüştür"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:151
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:63
@@ -65160,7 +65167,7 @@ msgstr "Serbest Dönüşüm"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:192
 #, kde-format
 msgid "Warp"
-msgstr "Bük"
+msgstr "Çarpıt"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, cageButton)
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
@@ -65224,7 +65231,7 @@ msgstr "Ölçekle"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:711
@@ -65320,7 +65327,7 @@ msgstr "y:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1154
 #, kde-format
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
@@ -65328,7 +65335,7 @@ msgstr "Kırk"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1246
 #, kde-format
 msgid "Horizontal Shear"
-msgstr "Yatay Kayma"
+msgstr "Yatay Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
@@ -65336,7 +65343,7 @@ msgstr "Yatay Kayma"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1224
 #, kde-format
 msgid "Vertical Shear"
-msgstr "Dikey Kırkma"
+msgstr "Dikey Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1279
@@ -65729,404 +65736,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Ölümcül Hata"
-
-#~ msgid ""
-#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
-#~ "Wayland. Krita will close now."
-#~ msgstr ""
-#~ "Krita, Wayland platformunu desteklemiyor. Krita’yı Wayland üzerinde "
-#~ "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
-
-#~ msgid "Krita Tablet Support"
-#~ msgstr "Krita Tablet Desteği"
-
-#~ msgid ""
-#~ "Cannot load WinTab driver and no Windows Ink pen devices are found. If "
-#~ "you have a drawing tablet, please make sure the tablet driver is properly "
-#~ "installed."
-#~ msgstr ""
-#~ "WinTab sürücüsü yüklenemiyor ve Windows Ink pen aygıtı bulunamadı. Çizim "
-#~ "tabletiniz varsa lütfen tablet sürücüsünün doğru şekilde kurulduğundan "
-#~ "emin olun."
-
-#~ msgid ""
-#~ "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
-#~ "the tablet driver is properly installed."
-#~ msgstr ""
-#~ "WinTab sürücüsü yüklenemiyor. Çizim tabletiniz varsa lütfen tablet "
-#~ "sürücüsünün doğru şekilde kurulduğundan emin olun."
-
-#~ msgctxt "Screen rect when choosing Wintab/Qt settings"
-#~ msgid "%1x%2 offset: %3,%4"
-#~ msgstr "%1 × %2 ofset: %3, %4"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Wintab)"
-#~ msgstr "%1 (Wintab)"
-
-#~ msgctxt "@option:radio"
-#~ msgid "%1 (Qt)"
-#~ msgstr "%1 (Qt)"
-
-#~ msgid "Choose screen resolution"
-#~ msgstr "Ekran çözünürlüğünü seçin"
-
-#~ msgid ""
-#~ "<html><head/><body><p>The driver for your  drawing tablet and Windows do "
-#~ "not agree on the size of the screen your tablet is connected to. Please "
-#~ "select the right option.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Çizim tabletinizin sürücüsü ve Windows ile "
-#~ "bağladığınız tabletin ekranı uyuşmuyor. Lütfen doğru seçeneği seçin.</p></"
-#~ "body></html>"
-
-#~ msgid "If both are wrong, enter the size manually:"
-#~ msgstr "Her ikisi de hatalıysa boyutu elle girin:"
-
-#~ msgid "Do not ask again (hold Shift to ask again)"
-#~ msgstr "Bir daha sorma (yeniden sormak için Üst Karakter’i basılı tutun)"
-
-#~ msgctxt ""
-#~ "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
-#~ msgid "Distance:"
-#~ msgstr "Uzaklık:"
-
-#~ msgctxt "left mouse button"
-#~ msgid "left button"
-#~ msgstr "sol düğme"
-
-#~ msgctxt "middle mouse button"
-#~ msgid "middle button"
-#~ msgstr "orta düğme"
-
-#~ msgctxt "right mouse button"
-#~ msgid "right button"
-#~ msgstr "sağ düğme"
-
-#~ msgctxt "a nonexistent value of mouse button"
-#~ msgid "invalid button"
-#~ msgstr "geçersiz düğme"
-
-#~ msgctxt ""
-#~ "a kind of mouse gesture: hold down one mouse button, then press another "
-#~ "button"
-#~ msgid "Hold %1, then push %2"
-#~ msgstr "Önce şunu tut: %1, sonra şunu it: %2"
-
-#~ msgid ""
-#~ "<html>KDE software is and will always be available free of charge, "
-#~ "however creating it is not free.<br /><br />To support development the "
-#~ "KDE community has formed the KDE e.V., a non-profit organization legally "
-#~ "founded in Germany. KDE e.V. represents the KDE community in legal and "
-#~ "financial matters. See <a href=\"%1\">%1</a> for information on KDE e.V."
-#~ "<br /><br />KDE benefits from many kinds of contributions, including "
-#~ "financial. We use the funds to reimburse members and others for expenses "
-#~ "they incur when contributing. Further funds are used for legal support "
-#~ "and organizing conferences and meetings. <br /> <br />We would like to "
-#~ "encourage you to support our efforts with a financial donation, using one "
-#~ "of the ways described at <a href=\"%2\">%2</a>.<br /><br />Thank you very "
-#~ "much in advance for your support.</html>"
-#~ msgstr ""
-#~ "<html>KDE yazılımları ücretsizdir ve her zaman ücretsiz kalacaktır; ancak "
-#~ "onları yapmak bedava değildir.<br /><br />KDE topluluğu, kar amacı "
-#~ "gütmeyen bir organizasyon olan KDE e.V'i Almanya'da kurmuştur. KDE e.V, "
-#~ "KDE topluluğunu finansal ve hukuki konularda temsil etmektedir. KDE e.V "
-#~ "hakkında bilgi almak için <a href=\"%1\">%1</a> adresini ziyaret edin. "
-#~ "<br /><br />KDE Takımı’nın  her zaman finansal desteğe gereksinimi "
-#~ "vardır. Yapılan bağışlar; yasal destek, KDE geliştiricilerinin KDE’ye "
-#~ "yaptıkları desteğin sürekliliğini sağlamak ve toplantıların/"
-#~ "konferansların organizasyonu için harcanır. <br /><br />Sizin de <a href="
-#~ "\"%2\">%2</a> adresinde anlatılan biçimde KDE’ye yardımlarınızı "
-#~ "bekliyoruz.<br /><br />Desteğiniz için şimdiden teşekkürler.</html>"
-
-#~ msgid "Proofing Rendering Intent:"
-#~ msgstr "Prova sunumu amacı:"
-
-#~ msgid "Add a Color Overlay Mask for inking"
-#~ msgstr "Mürekkepleme için bir renk kaplama maskesi ekle"
-
-#~ msgid "Editor Widget Control:"
-#~ msgstr "Düzenleyici araç takımı denetimi:"
-
-#~ msgid "Fit View Width"
-#~ msgstr "Görünüm Genişliğine Sığdır"
-
-#~ msgid "Actual Pixels"
-#~ msgstr "Şimdiki Pikseller"
-
-#~ msgid "Fit Text Width"
-#~ msgstr "Metin Genişliğine Sığdır"
-
-#~ msgid "Fit View Height"
-#~ msgstr "Görünüm Yüksekliğine Sığdır"
-
-#~ msgid "&Open..."
-#~ msgstr "&Aç…"
-
-#~ msgid "Open an existing document"
-#~ msgstr "Var olan bir belgeyi aç"
-
-#~ msgid "Open &Recent"
-#~ msgstr "&Son Kullanılanı Aç"
-
-#~ msgid "Open a document which was recently opened"
-#~ msgstr "En son açılan bir belgeyi aç"
-
-#~ msgid "Save document"
-#~ msgstr "Belgeyi kaydet"
-
-#~ msgid "Save &As..."
-#~ msgstr "&Farklı Kaydet…"
-
-#~ msgid "Save document under a new name"
-#~ msgstr "Belgeyi yeni bir adla kaydet"
-
-#~ msgid "Re&vert"
-#~ msgstr "Es&ki Haline Döndür"
-
-#~ msgid "Revert unsaved changes made to document"
-#~ msgstr "Belgede yapılan ve kaydedilmemiş olan değişiklikleri geri al"
-
-#~ msgid "Close document"
-#~ msgstr "Belgeyi kapat"
-
-#~ msgid "&Print..."
-#~ msgstr "&Yazdır…"
-
-#~ msgid "Print document"
-#~ msgstr "Belgeyi yazdır"
-
-#~ msgid "Print Previe&w"
-#~ msgstr "&Önizlemeyi Yazdır"
-
-#~ msgid "Show a print preview of document"
-#~ msgstr "Belgenin yazdırma önizlemesini göster"
-
-#~ msgid "&Mail..."
-#~ msgstr "&E-posta…"
-
-#~ msgid "Send document by mail"
-#~ msgstr "Belgeyi e-posta ile gönder"
-
-#~ msgid "&Quit"
-#~ msgstr "&Çık"
-
-#~ msgid "Quit application"
-#~ msgstr "Uygulamadan çık"
-
-#~ msgid "&Undo"
-#~ msgstr "&Geri Al"
-
-#~ msgid "Undo last action"
-#~ msgstr "Son eylemi geri al"
-
-#~ msgid "Re&do"
-#~ msgstr "&Yinele"
-
-#~ msgid "Redo last undone action"
-#~ msgstr "Son geri alınan eylemi yinele"
-
-#~ msgid "Cu&t"
-#~ msgstr "&Kes"
-
-#~ msgid "Cut selection to clipboard"
-#~ msgstr "Seçimi panoya kes"
-
-#~ msgid "&Copy"
-#~ msgstr "Ko&pyala"
-
-#~ msgid "Copy selection to clipboard"
-#~ msgstr "Seçimi panoya kopyala"
-
-#~ msgid "&Paste"
-#~ msgstr "&Yapıştır"
-
-#~ msgid "Paste clipboard content"
-#~ msgstr "Pano içeriğini yapıştır"
-
-#~ msgid "C&lear"
-#~ msgstr "Te&mizle"
-
-#~ msgid "Select &All"
-#~ msgstr "&Tümünü Seç"
-
-#~ msgid "Dese&lect"
-#~ msgstr "S&eçimini kaldır"
-
-#~ msgid "&Find..."
-#~ msgstr "&Bul…"
-
-#~ msgid "Find &Next"
-#~ msgstr "So&nrakini Bul"
-
-#~ msgid "Find Pre&vious"
-#~ msgstr "&Öncekini Bul"
-
-#~ msgid "&Replace..."
-#~ msgstr "&Değiştir…"
-
-#~ msgid "&Actual Size"
-#~ msgstr "&Gerçek boyut"
-
-#~ msgid "View document at its actual size"
-#~ msgstr "Belgeyi kendi özgün boyutunda göster"
-
-#~ msgid "&Fit to Page"
-#~ msgstr "&Sayfayı Sığdır"
-
-#~ msgid "Zoom to fit page in window"
-#~ msgstr "Sayfayı pencereye sığdıracak kadar yakınlaştır"
-
-#~ msgid "Fit to Page &Width"
-#~ msgstr "Sayfa Genişliğine &Sığdır"
-
-#~ msgid "Zoom to fit page width in window"
-#~ msgstr "Sayfa genişliğini pencereye sığdıracak kadar yakınlaştır"
-
-#~ msgid "Fit to Page &Height"
-#~ msgstr "Sayfa &Yüksekliğine Uydur"
-
-#~ msgid "Zoom to fit page height in window"
-#~ msgstr "Sayfa yüksekliğini pencereye sığdıracak kadar yakınlaştır"
-
-#~ msgid "Zoom &In"
-#~ msgstr "&Yakınlaştır"
-
-#~ msgid "Zoom &Out"
-#~ msgstr "&Uzaklaştır"
-
-#~ msgid "&Zoom..."
-#~ msgstr "&Yakınlaştırma…"
-
-#~ msgid "Select zoom level"
-#~ msgstr "Büyütme düzeyini seçin"
-
-#~ msgid "&Redisplay"
-#~ msgstr "&Yeniden Görüntüle"
-
-#~ msgid "Redisplay document"
-#~ msgstr "Belgeyi yeniden görüntüle"
-
-#~ msgid "&Up"
-#~ msgstr "&Yukarı"
-
-#~ msgid "Go up"
-#~ msgstr "Yukarı git"
-
-#~ msgid "&Previous Page"
-#~ msgstr "Ö&nceki Sayfa"
-
-#~ msgid "Go to previous page"
-#~ msgstr "Önceki sayfaya git"
-
-#~ msgid "&Next Page"
-#~ msgstr "&Sonraki Sayfa"
-
-#~ msgid "Go to next page"
-#~ msgstr "Sonraki sayfaya git"
-
-#~ msgid "&Go To..."
-#~ msgstr "G&it…"
-
-#~ msgid "&Go to Page..."
-#~ msgstr "Sayfaya G&it…"
-
-#~ msgid "&Go to Line..."
-#~ msgstr "Satıra G&it…"
-
-#~ msgid "&First Page"
-#~ msgstr "İ&lk Sayfa"
-
-#~ msgid "Go to first page"
-#~ msgstr "İlk sayfaya git"
-
-#~ msgid "&Last Page"
-#~ msgstr "S&on Sayfa"
-
-#~ msgid "Go to last page"
-#~ msgstr "Son sayfaya git"
-
-#~ msgid "&Back"
-#~ msgstr "&Geri"
-
-#~ msgid "Go back in document"
-#~ msgstr "Belge içerisinde geri git"
-
-#~ msgid "&Forward"
-#~ msgstr "&İleri"
-
-#~ msgid "Go forward in document"
-#~ msgstr "Belge içerisinde ileri git"
-
-#~ msgid "&Add Bookmark"
-#~ msgstr "Yer İmi &Ekle"
-
-#~ msgid "&Edit Bookmarks..."
-#~ msgstr "Yer İmlerini Dü&zenle…"
-
-#~ msgid "&Spelling..."
-#~ msgstr "&Yazım Denetimi…"
-
-#~ msgid "Check spelling in document"
-#~ msgstr "Belge içerisinde yazım denetimi yap"
-
-#~ msgid "Show or hide menubar"
-#~ msgstr "Menü çubuğunu göster veya gizle"
-
-#~ msgid "Show &Toolbar"
-#~ msgstr "&Araç Çubuğunu Göster"
-
-#~ msgid "Show or hide toolbar"
-#~ msgstr "Araç çubuğunu göster veya gizle"
-
-#~ msgid "Show or hide statusbar"
-#~ msgstr "Durum çubuğunu göster veya gizle"
-
-#~ msgid "F&ull Screen Mode"
-#~ msgstr "Ta&m Ekran Kipi"
-
-#~ msgid "&Save Settings"
-#~ msgstr "&Ayarları Kaydet"
-
-#~ msgid "Configure S&hortcuts..."
-#~ msgstr "&Kısayolları Yapılandır…"
-
-#~ msgid "&Configure %1..."
-#~ msgstr "&Yapılandır %1…"
-
-#~ msgid "Configure Tool&bars..."
-#~ msgstr "&Araç Çubuklarını Yapılandır…"
-
-#~ msgid "Configure &Notifications..."
-#~ msgstr "Bildirimleri &Yapılandır…"
-
-#~ msgid "Reset Configurations"
-#~ msgstr "Yapılandırmaları Sıfırla"
-
-#~ msgid "%1 &Handbook"
-#~ msgstr "%1 &El Kitabı"
-
-#~ msgid "What's &This?"
-#~ msgstr "Bu Ned&ir?"
-
-#~ msgid "Tip of the &Day"
-#~ msgstr "&Günün İpucu"
-
-#~ msgid "&Report Bug..."
-#~ msgstr "&Hata Bildir…"
-
-#~ msgid "Switch Application &Language..."
-#~ msgstr "Uygu&lama Dilini Seç…"
-
-#~ msgid "&About %1"
-#~ msgstr "%1 &Hakkında"
-
-#~ msgid "About &KDE"
-#~ msgstr "&KDE Hakkında"
-
-#~ msgid "--- separator ---"
-#~ msgstr "--- ayraç ---"

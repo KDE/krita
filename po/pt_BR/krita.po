@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-04 02:01+0000\n"
+"POT-Creation-Date: 2025-04-05 01:59+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -42346,20 +42346,20 @@ msgid "Animation Curves"
 msgstr "Curvas de animação"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:73
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:75
 #, kde-format
 msgid "Frame register"
 msgstr "Registro de quadro"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
 msgstr "Velocidade:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:92
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:94
 #, kde-format
 msgid "Preview playback speed"
 msgstr "Velocidade de reprodução da visualização"
@@ -42389,7 +42389,7 @@ msgid "Zoom vertically"
 msgstr "Virar verticalmente"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:132
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:134
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Menu cascas de cebola"
@@ -42400,25 +42400,25 @@ msgid "Audio menu"
 msgstr "Menu de áudio"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:185
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:187
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Menu de configurações de animação"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:197
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:199
 #, kde-format
 msgid "Clip Start: "
 msgstr "Início do clipe:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:201
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Clip End: "
 msgstr "Final do clipe:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:206
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:208
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Taxa de quadros: "
@@ -42521,26 +42521,26 @@ msgid_plural "Adjust %1 Keyframes"
 msgstr[0] "Ajustar quadro-chave"
 msgstr[1] "Ajustar %1 quadros-chaves"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:60
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:299
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:62
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:301
 #, kde-format
 msgid "Animation Timeline"
 msgstr "Linha do tempo da animação"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
 #, fuzzy, kde-format
 #| msgid "Import Bundles..."
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
 msgstr "Importar grupo de recursos..."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Remove audio"
 msgstr "Remover áudio"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:144
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:146
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu"
 #| msgid "Mute"
@@ -42548,7 +42548,7 @@ msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
 msgstr "Mudo"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:151
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:153
 #, fuzzy, kde-format
 #| msgid "Volume:"
 msgctxt ""
@@ -42556,38 +42556,45 @@ msgctxt ""
 msgid "Volume: {n}%"
 msgstr "Volume:"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:171
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:173
 #, fuzzy, kde-format
 #| msgid "Animation settings menu"
 msgid "Animation audio menu"
 msgstr "Menu de configurações de animação"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:214
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
 #, kde-format
 msgid "AutoKey Blank"
 msgstr "AutoKey em branco"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:216
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:218
 #, kde-format
 msgid "AutoKey Duplicate"
 msgstr "Duplicar AutoKey"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:537
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
+#, fuzzy
+#| msgid "Animation settings menu"
+msgctxt "(qtundo-format)"
+msgid "Update Animation Settings"
+msgstr "Menu de configurações de animação"
+
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
 msgid "Enable to preserve playback timing."
 msgstr "Ative para preservar o tempo de reprodução."
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:547
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:572
 #, kde-format
 msgid "Effective FPS:\t%1"
 msgstr "FPS efetivo:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:548
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:573
 #, kde-format
 msgid "Real FPS:\t%1"
 msgstr "FPS real:\t%1"
 
-#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:549
+#: plugins/dockers/animation/KisAnimTimelineDocker.cpp:574
 #, kde-format
 msgid "Frames dropped:\t%1%"
 msgstr "Quadros perdidos:\t%1%"

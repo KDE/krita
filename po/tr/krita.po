@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-03-09 03:20+0000\n"
-"PO-Revision-Date: 2025-03-18 13:51+0300\n"
+"PO-Revision-Date: 2025-04-04 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -300,7 +300,7 @@ msgstr "DITH 3232 CURVED STRIPES"
 #, kde-format
 msgctxt "./krita/data/patterns/fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desenler"
+msgstr "Fraktal Desenler"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -916,25 +916,25 @@ msgstr "İki ekranlı düzenleme"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmosphere_With_Accent.kgm"
 msgid "Atmosphere With Accent"
-msgstr "Aksanlı Atmosfer"
+msgstr "Vurgulu Atmosfer"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmospheric_Triad.kgm"
 msgid "Atmospheric Triad"
-msgstr "Atmosferik Üçlü"
+msgstr "Atmosfer Üçlüsü"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Complementary.kgm"
 msgid "Complementary"
-msgstr "Destekleyen"
+msgstr "Tamamlayan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Dominant_Hue_With_Accent.kgm"
 msgid "Dominant Hue With Accent"
-msgstr "Aksanlı Baskın Renk Tonu"
+msgstr "Vurgulu Baskın Renk Tonu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -946,7 +946,7 @@ msgstr "Kaydırılmış Üçlü"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Split_Complementary.kgm"
 msgid "Split Complementary"
-msgstr "Destekleyeni Böl"
+msgstr "Tamamlayanı Böl"
 
 #. i18n: Display name of resource, see context: MyPaint brush [path-to-file]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -3446,7 +3446,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desen"
+msgstr "Fraktal Desen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4527,7 +4527,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "v)_Distort_Grow.kpp"
 msgid "v) Distort Grow"
-msgstr "v) Bozulma Büyüt"
+msgstr "v) Bozulma Genişlet"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5183,7 +5183,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "fractal_pattern.pat"
 msgid "Fractal Pattern"
-msgstr "Kesirli Desen"
+msgstr "Fraktal Desen"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5580,7 +5580,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_fractal_Brownian_Motion.kse"
 msgid "Wolthera's Color fractal Brownian Motion"
-msgstr "Wolthera’nın Kesirsel Renk Kahverengi Hareketi"
+msgstr "Wolthera’nın Fraktal Renk Kahverengi Hareketi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -12448,7 +12448,7 @@ msgstr "Tüm katmanları yeni boyuta ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "&Tüm Katmanları Kırk…"
+msgstr "&Tüm Katmanları Kaydır…"
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12458,7 +12458,7 @@ msgstr "&Tüm Katmanları Kırk…"
 #, kde-format
 msgctxt "action"
 msgid "Shear All Layers"
-msgstr "Tüm Katmanları Kırk"
+msgstr "Tüm Katmanları Kaydır"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3364
@@ -14689,7 +14689,7 @@ msgstr "Görseli 180° Döndür"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "&Görseli Kırk…"
+msgstr "&Görseli Kaydır…"
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14699,7 +14699,7 @@ msgstr "&Görseli Kırk…"
 #, kde-format
 msgctxt "action"
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #. i18n: context: text @ Action (mirrorImageHorizontal), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1281
@@ -15083,7 +15083,7 @@ msgstr "Matlığı Seç (Kesiştir)"
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "&Seçimi Büyüt…"
+msgstr "&Seçimi Genişlet…"
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
@@ -15093,14 +15093,14 @@ msgstr "&Seçimi Büyüt…"
 #, kde-format
 msgctxt "action"
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #. i18n: context: text @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1561
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Seçi&mi Küçült…"
+msgstr "Seçi&mi Daralt…"
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
@@ -15110,7 +15110,7 @@ msgstr "Seçi&mi Küçült…"
 #, kde-format
 msgctxt "action"
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #. i18n: context: text @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1573
@@ -16213,7 +16213,7 @@ msgstr "Gölge Ayarla"
 #: libs/flake/commands/KoShapeShearCommand.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Shear shapes"
-msgstr "Şekilleri Kırk"
+msgstr "Şekilleri Kaydır"
 
 #: libs/flake/commands/KoShapeSizeCommand.cpp:30
 msgctxt "(qtundo-format)"
@@ -17204,7 +17204,7 @@ msgstr "Katmanı Döndür"
 #: libs/image/kis_image.cc:1252
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
-msgstr "Maskeyi Kırk"
+msgstr "Maskeyi Kaydır"
 
 #: libs/image/kis_image.cc:1255
 msgctxt "(qtundo-format)"
@@ -17214,7 +17214,7 @@ msgstr "Katmanı Kırk"
 #: libs/image/kis_image.cc:1262
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #: libs/image/kis_image.cc:1280
 msgctxt "(qtundo-format)"
@@ -17280,12 +17280,12 @@ msgstr "Ölçek (Y)"
 #: libs/image/kis_keyframe_channel.cpp:32
 #, kde-format
 msgid "Shear (X)"
-msgstr "Kırk (X)"
+msgstr "Kaydır (X)"
 
 #: libs/image/kis_keyframe_channel.cpp:33
 #, kde-format
 msgid "Shear (Y)"
-msgstr "Kırk (Y)"
+msgstr "Kaydır (Y)"
 
 #: libs/image/kis_keyframe_channel.cpp:34
 #, kde-format
@@ -17492,12 +17492,12 @@ msgstr "Seçimi Yumuşat"
 #: libs/image/kis_selection_filters.cpp:550
 msgctxt "(qtundo-format)"
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #: libs/image/kis_selection_filters.cpp:679
 msgctxt "(qtundo-format)"
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #: libs/image/kis_selection_filters.cpp:822
 msgctxt "(qtundo-format)"
@@ -17517,7 +17517,7 @@ msgstr "Seçimi Yumuşat"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "En Koyu Piksele Dek Seçimi Büyüt"
+msgstr "En Koyu Piksele Dek Seçimi Genişlet"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -34252,7 +34252,7 @@ msgstr "Yumuşatma"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in selection tools options"
 msgid "Grow: "
-msgstr "Büyüt: "
+msgstr "Genişlet: "
 
 #: libs/ui/widgets/kis_selection_options.cc:198
 #, kde-format
@@ -34315,14 +34315,14 @@ msgstr "Seçimin kenarlarını yumuşatır"
 #: libs/ui/widgets/kis_selection_options.cc:235
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
-msgstr "Seçimi, ayarlı miktar kadar büyüt veya küçült"
+msgstr "Seçimi, ayarlı miktar kadar genişlet veya daralt"
 
 #: libs/ui/widgets/kis_selection_options.cc:237
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
-msgstr "En karanlık veya en mat piksellerde büyümeyi durdur"
+msgstr "En karanlık veya en mat piksellerde genişletmeyi durdur"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #, kde-format
@@ -42694,12 +42694,12 @@ msgstr "Seçimi Yumuşat"
 #: plugins/extensions/modify_selection/dlg_grow_selection.cc:20
 #, kde-format
 msgid "Grow Selection"
-msgstr "Seçimi Büyüt"
+msgstr "Seçimi Genişlet"
 
 #: plugins/extensions/modify_selection/dlg_shrink_selection.cc:19
 #, kde-format
 msgid "Shrink Selection"
-msgstr "Seçimi Küçült"
+msgstr "Seçimi Daralt"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWidth)
 #: plugins/extensions/modify_selection/wdg_border_selection.ui:53
@@ -42725,7 +42725,7 @@ msgstr "Yarıçapı yumuşat:"
 #: plugins/extensions/modify_selection/wdg_grow_selection.ui:24
 #, kde-format
 msgid "Grow by"
-msgstr "Şu kadar büyüt"
+msgstr "Şu kadar genişlet"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:69
@@ -42737,7 +42737,7 @@ msgstr "Şu kadar daralt"
 #: plugins/extensions/modify_selection/wdg_shrink_selection.ui:127
 #, kde-format
 msgid "Shrink from image border"
-msgstr "Görsel kenarlıklarından küçült"
+msgstr "Görsel kenarlıklarından daralt"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:56
 msgctxt "(qtundo-format)"
@@ -43779,7 +43779,7 @@ msgstr "Geçerli kanalı etkinleştir"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:18
 #, kde-format
 msgid "Shear Image"
-msgstr "Görseli Kırk"
+msgstr "Görseli Kaydır"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, kde-format
@@ -43790,13 +43790,13 @@ msgstr "Katmanı Kırk"
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
 #, kde-format
 msgid "Shear angle X:"
-msgstr "Kırkma açısı X:"
+msgstr "Kaydırma açısı X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngelY)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:34
 #, kde-format
 msgid "Shear angle Y:"
-msgstr "Kırkma açısı Y:"
+msgstr "Kaydırma açısı Y:"
 
 #: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
@@ -46364,7 +46364,7 @@ msgstr "&Desen:"
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
-msgstr "Kırk:"
+msgstr "Kaydır:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
 #: plugins/generators/pattern/wdgpatternoptions.ui:293
@@ -51354,7 +51354,7 @@ msgstr "Bozma Kipi"
 #, kde-format
 msgctxt "Grow as in deform brush engine"
 msgid "Grow"
-msgstr "Büyüt"
+msgstr "Genişlet"
 
 #. i18n: ectx: property (text), widget (QRadioButton, shrinkBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:140
@@ -51362,7 +51362,7 @@ msgstr "Büyüt"
 #, kde-format
 msgctxt "Shrink as in deform brush engine"
 msgid "Shrink"
-msgstr "Küçült"
+msgstr "Daralt"
 
 #. i18n: ectx: property (text), widget (QRadioButton, swirlCWBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:141
@@ -51760,7 +51760,7 @@ msgstr "Ölçek çarpanı"
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
 #, kde-format
 msgid "Shear factor"
-msgstr "Kırkma çarpanı"
+msgstr "Kaydırma çarpanı"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:234
@@ -56929,7 +56929,7 @@ msgstr "Seçimi sınır olarak kullan"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
-msgstr "Büyüt:"
+msgstr "Genişlet: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:586
 #, kde-format
@@ -57044,7 +57044,7 @@ msgstr "Dolgunun kenarlarını pürüzsüzleştirir"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
-msgstr "Dolguyu, ayarlanan miktar kadar büyüt veya küçült"
+msgstr "Dolguyu, ayarlanan miktar kadar genişlet veya daralt"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
@@ -57665,7 +57665,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:747
 #, kde-format
 msgid "Click and drag to shear selection."
-msgstr "Seçimi kırkmak için tıklayın ve sürükleyin."
+msgstr "Seçimi kaydırmak için tıklayın ve sürükleyin."
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:752
 #, kde-format
@@ -57849,7 +57849,7 @@ msgstr "Döndür"
 #: plugins/tools/defaulttool/defaulttool/ShapeShearStrategy.cpp:180
 msgctxt "(qtundo-format)"
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:96
 #, kde-format
@@ -59202,7 +59202,7 @@ msgstr "Merkez"
 #, kde-format
 msgctxt "Grow as in crop tool"
 msgid "Grow"
-msgstr "Büyüt"
+msgstr "Genişlet"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:122
 #, kde-format
@@ -59303,7 +59303,7 @@ msgstr "&X:"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:152
 #, kde-format
 msgid "Allow growing the image by dragging outside bounds of the image"
-msgstr "Görseli, sınırları dışına sürükleyerek büyütmeye izin ver"
+msgstr "Görseli, sınırları dışına sürükleyerek genişletmeye izin ver"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, lockWidthButton)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:333
@@ -59463,7 +59463,7 @@ msgstr "Yumuşatma"
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
-msgstr "Büyüt:"
+msgstr "Genişlet: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:484
 #, kde-format
@@ -59808,7 +59808,7 @@ msgstr ""
 #, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
-msgstr "Bük"
+msgstr "Çarpıt"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
 #, kde-format
@@ -59920,7 +59920,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/kis_tool_transform.h:358
 #, kde-format
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın veya seçimin şeklini değiştir"
+msgstr "Bir katmanı veya seçimi dönüştür"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:86
 #, kde-format
@@ -60004,7 +60004,7 @@ msgstr "Taşı: Fırça vuruşu boyunca görseli sürükle"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Scale: grow/shrink image under cursor"
-msgstr "Ölçekle: İmlecin altında görseli büyüt/küçült"
+msgstr "Ölçekle: İmlecin altında görseli genişlet/daralt"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:274
 #, kde-format
@@ -60016,7 +60016,7 @@ msgstr "Döndür: Görseli imlecin altında döndür"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Offset: shift the image to the right of the stroke direction"
-msgstr "Ofset: Vuruş yönünün sağına doğru görseli kaydır"
+msgstr "Ofset: Görseli vuruş yönüne kaydır"
 
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:276
 #, kde-format
@@ -60064,7 +60064,7 @@ msgstr "Dönüşüm Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Transform a layer or a selection"
-msgstr "Bir katmanın veya seçimin şeklini değiştir"
+msgstr "Bir katmanı veya seçimi dönüştür"
 
 #: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:147
 #: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
@@ -60104,7 +60104,7 @@ msgstr "Serbest Dönüşüm"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:180
 #, kde-format
 msgid "Warp"
-msgstr "Bük"
+msgstr "Çarpıt"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, cageButton)
 #. i18n: ectx: property (text), widget (QToolButton, cageButton)
@@ -60168,7 +60168,7 @@ msgstr "Ölçekle"
 #, kde-format
 msgctxt "@option:radio Type of transformation"
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
@@ -60256,7 +60256,7 @@ msgstr "y:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1143
 #, kde-format
 msgid "Shear"
-msgstr "Kırk"
+msgstr "Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearX)
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearXBox)
@@ -60264,7 +60264,7 @@ msgstr "Kırk"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1235
 #, kde-format
 msgid "Horizontal Shear"
-msgstr "Yatay Kayma"
+msgstr "Yatay Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleSliderSpinBox, shearYBox)
 #. i18n: ectx: property (toolTip), widget (QLabel, label_shearY)
@@ -60272,7 +60272,7 @@ msgstr "Yatay Kayma"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1213
 #, kde-format
 msgid "Vertical Shear"
-msgstr "Dikey Kırkma"
+msgstr "Dikey Kaydır"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, flipXButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1268

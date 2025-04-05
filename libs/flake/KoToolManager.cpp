@@ -454,6 +454,20 @@ void KoToolManager::Private::connectActiveTool()
                 q, SIGNAL(changedStatusText(QString)));
         connect(canvasData->activeTool, SIGNAL(textModeChanged(bool)),
                 q, SIGNAL(textModeChanged(bool)));
+
+        {
+            KoCanvasResourceProvider *resourceManager = canvasData->canvas->canvas()->resourceManager();
+
+            const QHash<int, KoAbstractCanvasResourceInterfaceSP> abstractResources =
+                canvasData->activeTool->toolAbstractResources();
+            const QHash<int, KoDerivedResourceConverterSP> converters = canvasData->activeTool->toolConverters();
+            for (KoAbstractCanvasResourceInterfaceSP abstractResource : abstractResources) {
+                resourceManager->setAbstractResource(abstractResource);
+            }
+            for (KoDerivedResourceConverterSP converter : converters) {
+                resourceManager->addDerivedResourceConverter(converter);
+            }
+        }
     }
 
     // we expect the tool to Q_EMIT a cursor on activation.
@@ -465,6 +479,21 @@ void KoToolManager::Private::connectActiveTool()
 void KoToolManager::Private::disconnectActiveTool()
 {
     if (canvasData->activeTool) {
+        {
+            KoCanvasResourceProvider *resourceManager = canvasData->canvas->canvas()->resourceManager();
+
+            const QList<int> abstractKeys = canvasData->activeTool->toolAbstractResources().keys();
+            const QList<int> derivedKeys = canvasData->activeTool->toolConverters().keys();
+            for (int key : abstractKeys) {
+                if (resourceManager->hasAbstractResource(key))
+                    resourceManager->removeAbstractResource(key);
+            }
+            for (int key : derivedKeys) {
+                if (resourceManager->hasDerivedResourceConverter(key))
+                    resourceManager->removeDerivedResourceConverter(key);
+            }
+        }
+
         canvasData->deactivateToolActions();
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
@@ -501,33 +530,11 @@ void KoToolManager::Private::switchTool(const QString &id)
 
     disconnectActiveTool();
 
-    KoCanvasResourceProvider *resourceManager = canvasData->canvas->canvas()->resourceManager();
-
     if (canvasData->activeTool) {
         canvasData->mostRecentTools.prepend(canvasData->activeTool);
-
-        const QList<int> abstractKeys = canvasData->activeTool->toolAbstractResources().keys();
-        const QList<int> derivedKeys = canvasData->activeTool->toolConverters().keys();
-        for (int key : abstractKeys) {
-            if (resourceManager->hasAbstractResource(key))
-                resourceManager->removeAbstractResource(key);
-        }
-        for (int key : derivedKeys) {
-            if (resourceManager->hasDerivedResourceConverter(key))
-                resourceManager->removeDerivedResourceConverter(key);
-        }
     }
     canvasData->activeTool = tool;
     canvasData->mostRecentTools.removeOne(tool);
-
-    const QHash<int, KoAbstractCanvasResourceInterfaceSP> abstractResources = canvasData->activeTool->toolAbstractResources();
-    const QHash<int, KoDerivedResourceConverterSP> converters = canvasData->activeTool->toolConverters();
-    for (KoAbstractCanvasResourceInterfaceSP abstractResource : abstractResources) {
-        resourceManager->setAbstractResource(abstractResource);
-    }
-    for (KoDerivedResourceConverterSP converter : converters) {
-        resourceManager->addDerivedResourceConverter(converter);
-    }
 
     connectActiveTool();
     postSwitchTool();

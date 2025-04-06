@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16347,14 +16347,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्रे"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "इशारा"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16856,7 +16856,7 @@ msgstr "गुळगुळीत आकार"
 msgid "%1 Options"
 msgstr "%1 पर्याय"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "सक्रिय साधन : %1"
@@ -62202,22 +62202,22 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "कुंचला पूर्व संयोजना"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 #, fuzzy
 #| msgid "Brushes"
 msgid "Ten Brushes"
 msgstr "कुंचले"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, fuzzy, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "कुंचला पूर्व संयोजना"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 #, fuzzy
 msgid ""
 "{}\n"
@@ -62234,13 +62234,17 @@ msgstr ""
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr ""
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

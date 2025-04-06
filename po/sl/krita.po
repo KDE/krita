@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2025-03-29 13:48+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -15964,14 +15964,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Delovne površine"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: opozorilo"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16416,7 +16416,7 @@ msgstr "Preprosta oblika poti"
 msgid "%1 Options"
 msgstr "Možnosti za %1"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Dejavno orodje: %1"
@@ -61242,21 +61242,21 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Aktiviraj prednastavitev čopiča 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "Deset čopičev"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr ""
 "Dodeli deset prednastavitev čopiča desetim kombinacijam tipk za bližnjice."
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Aktiviraj prednastavitev čopiča {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -61275,7 +61275,13 @@ msgstr ""
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Izberi orodje prostoročnega čopiča ob pritisku tipk za bližnjico"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "Pokaži pojavna sporočila na platnu"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -61283,7 +61289,7 @@ msgstr ""
 "Izberite prednastavitev čopiča in nato kliknite gumb, ki ga želite uporabiti "
 "za prednastavitev."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

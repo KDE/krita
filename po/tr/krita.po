@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2025-04-04 19:05+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -15959,14 +15959,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Çalışma alanları"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Uyarı"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16409,7 +16409,7 @@ msgstr "Bir basit bir yol şekli"
 msgid "%1 Options"
 msgstr "%1 Seçenekleri"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Etkin araç: %1"
@@ -61181,20 +61181,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Fırça Önayarı 10’u Etkinleştir"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "On Fırça"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "On fırça önayarını on adet kısayola ata."
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "{num}. Fırça Önayarını Etkinleştir"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -61213,7 +61213,13 @@ msgstr ""
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "Bir &kısayola basarken serbest fırça aracını seç"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "Tuval üstü açılır pencere iletilerini göster"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -61221,7 +61227,7 @@ msgstr ""
 "Fırça önayarını seçin, ardından önayarı seçmek için kullanmak istediğiniz "
 "düğmeye tıklayın."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

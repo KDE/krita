@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -15951,14 +15951,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "作業空間"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita：警告"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16399,7 +16399,7 @@ msgstr "一個簡單路徑形狀"
 msgid "%1 Options"
 msgstr "%1的選項"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "使用中工具：%1"
@@ -60666,20 +60666,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "啟動筆刷預設 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "十大筆刷"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "為十個快捷鍵指定十個筆刷。"
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "啟動筆刷預設 {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -60697,13 +60697,19 @@ msgstr "第二次按下捷徑時切換至先前的筆刷預設(&A)"
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "按下捷徑時選取手繪筆刷工具(&S)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "在畫布上顯示浮動訊息"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
 msgstr "選擇筆刷預設，然後點擊用於選擇該預設的按鈕。"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

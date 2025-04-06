@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
-"PO-Revision-Date: 2025-03-25 09:50+0100\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
+"PO-Revision-Date: 2025-04-05 11:36+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15996,14 +15996,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espais de treball"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Avís"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16444,7 +16444,7 @@ msgstr "Una forma senzilla de camí"
 msgid "%1 Options"
 msgstr "Opcions de %1"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Eina activa: %1"
@@ -28873,7 +28873,7 @@ msgstr "Renderitzador actual:"
 #: libs/ui/forms/wdgdisplaysettings.ui:250
 #, kde-format
 msgid "HDR Settings"
-msgstr "Configureu l'HDR"
+msgstr "Configureu HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:256
@@ -31305,7 +31305,7 @@ msgstr ""
 "dur a la mateixa carpeta com a fitxer de memòria d'intercanvi. La memòria "
 "cau s'emmagatzema de manera comprimida. És necessària poca memòria extra de "
 "RAM.</p><p>Com que la velocitat de transferència de dades del disc dur és "
-"baixa, segurament voldreu limitar la mida dels fotogrames a la memòria cau "
+"baixa, segurament voldreu limitar la mida dels fotogrames en la memòria cau "
 "per a poder reproduir el vídeo a 25 fps. El límit de 2500 px normalment és "
 "una bona elecció.</p></body></html>"
 
@@ -31337,7 +31337,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:471
 #, kde-format
 msgid "Limit cached frame size:"
-msgstr "Límit de la mida dels fotogrames a la memòria cau:"
+msgstr "Límit de la mida dels fotogrames en la memòria cau:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:484
@@ -42277,11 +42277,9 @@ msgid "AutoKey Duplicate"
 msgstr "Duplica la clau automàtica"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Menú de configuració de l'animació"
+msgstr "Actualització de la configuració d'animacions"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
@@ -48351,7 +48349,7 @@ msgid ""
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
 "Assegureu-vos que les accions corresponen al gest correcte a nivell del "
-"sistema. Estos es poden configurar a Paràmetres del S Pen -> Accions aire."
+"sistema. Estos es poden configurar a Paràmetres de S Pen -> Accions aire."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
@@ -51276,12 +51274,12 @@ msgstr "Contrast:"
 #: plugins/generators/screentone/KisScreentoneGenerator.cpp:30
 #, kde-format
 msgid "&Screentone..."
-msgstr "&Tons a la pantalla…"
+msgstr "&Tons en la pantalla…"
 
 #: plugins/generators/screentone/KisScreentoneGenerator.h:52
 #, kde-format
 msgid "Screentone"
-msgstr "Tons a la pantalla"
+msgstr "Tons en la pantalla"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:21
 #, kde-format
@@ -61536,20 +61534,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Activa el pinzell predefinit 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "Deu pinzells"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "Assigna els predefinits dels deu pinzells a deu dreceres."
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Activa el pinzell predefinit {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -61568,7 +61566,13 @@ msgstr ""
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Selecciona l'eina del pinzell a mà alçada en prémer una drecera"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "Mostra els missatges emergents en el llenç"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -61576,7 +61580,7 @@ msgstr ""
 "Seleccioneu el pinzell predefinit, després feu clic en el botó que voleu "
 "utilitzar per a seleccionar el predefinit."
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
@@ -66104,14 +66108,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Error fatal"
-
-#~ msgid ""
-#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
-#~ "Wayland. Krita will close now."
-#~ msgstr ""
-#~ "Krita no admet la plataforma Wayland. Utilitzeu XWayland per a executar "
-#~ "Krita a Wayland. Krita tancarà ara."

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -15999,14 +15999,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "ワークスペース"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: 警告"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16446,7 +16446,7 @@ msgstr "単純なパスシェイプ"
 msgid "%1 Options"
 msgstr "%1 オプション"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "アクティブなツール: %1"
@@ -61237,20 +61237,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "ブラシプリセット10を有効化"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "10個のブラシ割り当て"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "10個のブラシプリセットを10個のショートカットにそれぞれ割り当てます。"
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "ブラシプリセット {num} が有効になりました"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 msgid ""
 "{}\n"
 "selected"
@@ -61269,7 +61269,13 @@ msgstr ""
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "ショートカットを押すとフリーハンドブラシツールを選択する(&S)"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "キャンバス上にポップアップメッセージを表示"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -61277,7 +61283,7 @@ msgstr ""
 "プリセットブラシを選択し、そのプリセットブラシで使用したいボタンをクリックし"
 "ます。"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

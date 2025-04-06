@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-05 01:59+0000\n"
+"POT-Creation-Date: 2025-04-06 01:57+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -17127,14 +17127,14 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Tööruumid"
 
-#: krita/main.cc:702 libs/ui/KisApplication.cpp:431
+#: krita/main.cc:710 libs/ui/KisApplication.cpp:431
 #: libs/ui/KisApplication.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: hoiatus"
 
-#: krita/main.cc:703
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -17587,7 +17587,7 @@ msgstr "Lihtne kompleksjoone kujund"
 msgid "%1 Options"
 msgstr "%1 valikud"
 
-#: libs/flake/KoToolManager.cpp:606
+#: libs/flake/KoToolManager.cpp:613
 #, kde-format
 msgid "Active tool: %1"
 msgstr "Aktiivne tööriist: %1"
@@ -63848,20 +63848,20 @@ msgctxt "action"
 msgid "Activate Brush Preset 10"
 msgstr "Aktiveeri valmispintsel 10"
 
-#: plugins/python/tenbrushes/tenbrushes.py:31
+#: plugins/python/tenbrushes/tenbrushes.py:33
 msgid "Ten Brushes"
 msgstr "Kümme pintslit"
 
-#: plugins/python/tenbrushes/tenbrushes.py:32
+#: plugins/python/tenbrushes/tenbrushes.py:34
 msgid "Assign ten brush presets to ten shortcuts."
 msgstr "Kümnele valmispintslile kümne kiirklahvi omistamine."
 
-#: plugins/python/tenbrushes/tenbrushes.py:84
+#: plugins/python/tenbrushes/tenbrushes.py:92
 #, python-brace-format
 msgid "Activate Brush Preset {num}"
 msgstr "Aktiveeri valmispintsel {num}"
 
-#: plugins/python/tenbrushes/tenbrushes.py:111
+#: plugins/python/tenbrushes/tenbrushes.py:121
 #, fuzzy
 #| msgid ""
 #| "%1\n"
@@ -63886,7 +63886,13 @@ msgstr "&Eelmise valmispintsli aktiveerimine kiirklahvi kaks korda vajutades"
 msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr ""
 
-#: plugins/python/tenbrushes/uitenbrushes.py:53
+#: plugins/python/tenbrushes/uitenbrushes.py:38
+#, fuzzy
+#| msgid "Show on-canvas popup messages"
+msgid "Show on-canvas &popup message when activating brush preset"
+msgstr "Hüpikteadete näitamine lõuendi peal"
+
+#: plugins/python/tenbrushes/uitenbrushes.py:57
 #, fuzzy
 #| msgid ""
 #| "Select the brush preset, then click on the button you want to use to "
@@ -63896,7 +63902,7 @@ msgid ""
 "the preset."
 msgstr "Vali valmispintsel ja siis klõpsa nupul, millega seda valida soovid"
 
-#: plugins/python/tenbrushes/uitenbrushes.py:56
+#: plugins/python/tenbrushes/uitenbrushes.py:60
 #: plugins/python/tenscripts/uitenscripts.py:53
 msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "

@@ -320,7 +320,10 @@ struct LineBox {
 
     bool isEmpty() {
         if (chunks.isEmpty()) return true;
-        return chunks.at(currentChunk).chunkIndices.isEmpty();
+        for (int i =0; i < chunks.size(); i++) {
+            if (!chunks.at(i).chunkIndices.isEmpty()) return false;
+        }
+        return true;
     }
 
 };

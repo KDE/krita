@@ -64,7 +64,7 @@ void addWordToLine(QVector<CharacterResult> &result,
 
     Q_FOREACH (const int j, wordIndices) {
         CharacterResult cr = result.at(j);
-        if (currentChunk.boundingBox.isEmpty() && j == wordIndices.first()) {
+        if (currentLine.isEmpty() && j == wordIndices.first()) {
             if (result.at(j).lineStart == LineEdgeBehaviour::Collapse) {
                 result[j].advance = QPointF();
                 if (isHorizontal) {
@@ -80,12 +80,9 @@ void addWordToLine(QVector<CharacterResult> &result,
                 currentPos -= cr.advance;
                 cr.isHanging = true;
             }
-
-            // Ensure that the first non-collapsed result will always set the line-top and bottom.
-            calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, false);
-        } else {
-            calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, true);
         }
+        calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, !cr.anchored_chunk);
+
         cr.cssPosition = currentPos;
         currentPos += cr.advance;
         lineAdvance = currentPos;

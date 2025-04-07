@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2025-04-05 11:36+0200\n"
+"PO-Revision-Date: 2025-04-06 11:31+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -61565,10 +61565,10 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Selecciona l'eina del pinzell a mà alçada en prémer una drecera"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Mostra els missatges emergents en el llenç"
+msgstr ""
+"Mostra els missatges emer&gents en el llenç en activar els pinzells "
+"predefinits"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
@@ -66106,14 +66106,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Error fatal"
-
-#~ msgid ""
-#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
-#~ "Wayland. Krita will close now."
-#~ msgstr ""
-#~ "El Krita no admet la plataforma Wayland. Useu XWayland per a executar el "
-#~ "Krita a Wayland. El Krita tancarà ara."

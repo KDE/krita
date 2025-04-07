@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2025-04-04 19:05+0300\n"
+"PO-Revision-Date: 2025-04-07 00:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -42056,11 +42056,9 @@ msgid "AutoKey Duplicate"
 msgstr "Kendiliğinden Anahtar Yinelemesi"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Canlandırma ayarları menüsü"
+msgstr "Canlandırma Ayarlarını Güncelle"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
@@ -61214,10 +61212,8 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "Bir &kısayola basarken serbest fırça aracını seç"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Tuval üstü açılır pencere iletilerini göster"
+msgstr "Fırça önayarını etkinleştirirken bir t&uval üzeri açılır ileti göster"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""

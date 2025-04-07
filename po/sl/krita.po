@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2025-03-29 13:48+0100\n"
+"PO-Revision-Date: 2025-04-06 09:13+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -42089,11 +42089,9 @@ msgid "AutoKey Duplicate"
 msgstr "Podvoji prazno samodejno ključno sličico"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Meni nastavitev animacije"
+msgstr "Posodobi nastavitve animacije"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
@@ -61276,10 +61274,9 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Izberi orodje prostoročnega čopiča ob pritisku tipk za bližnjico"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Pokaži pojavna sporočila na platnu"
+msgstr ""
+"&Pokaži pojavno sporočilo na platnu pri aktiviranju prednastavitve čopiča"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""
@@ -65800,14 +65797,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgctxt "@title:window"
-#~ msgid "Fatal Error"
-#~ msgstr "Usodna napaka"
-
-#~ msgid ""
-#~ "Krita does not support the Wayland platform. Use XWayland to run Krita on "
-#~ "Wayland. Krita will close now."
-#~ msgstr ""
-#~ "Krita ne podpira platforme Wayland. Uporabite XWayland za izvajanje Krite "
-#~ "na Waylandu. Krita se bo zaprla."

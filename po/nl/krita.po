@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2025-04-05 23:25+0200\n"
+"PO-Revision-Date: 2025-04-06 14:13+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -61537,10 +61537,10 @@ msgstr ""
 "sneltoets"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Pop-up berichten op het werkveld tonen"
+msgstr ""
+"&Pop-up bericht op het werkveld tonen bij activeren van een penseel-"
+"voorinstelling"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""

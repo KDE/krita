@@ -25,14 +25,13 @@ PaletteView::PaletteView(QWidget *parent)
     layout->addWidget(d->widget);
 
     //forward signals.
-    connect(d->widget, SIGNAL(entrySelected(KisSwatch)),
-                 this, SLOT(fgSelected(KisSwatch)));
-    connect(d->widget, SIGNAL(entrySelectedBackGround(KisSwatch)),
-            this, SLOT(bgSelected(KisSwatch)));
+    connect(d->widget, SIGNAL(sigIndexSelected(QModelIndex)),
+                 this, SLOT(fgSelected(QModelIndex)));
 }
 
 PaletteView::~PaletteView()
 {
+    delete d->widget;
     delete d->model;
 }
 
@@ -71,12 +70,8 @@ void PaletteView::trySelectClosestColor(ManagedColor *color)
     d->widget->selectClosestColor(color->color());
 }
 
-void PaletteView::fgSelected(KisSwatch swatch)
+void PaletteView::fgSelected(QModelIndex index)
 {
+    KisSwatch swatch = d->model->getSwatch(index);
     Q_EMIT entrySelectedForeGround(Swatch(swatch));
-}
-
-void PaletteView::bgSelected(KisSwatch swatch)
-{
-    Q_EMIT entrySelectedBackGround(Swatch(swatch));
 }

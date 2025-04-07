@@ -13,7 +13,6 @@
 #include "libkis.h"
 #include "Palette.h"
 #include "ManagedColor.h"
-#include "KoColorSet.h"
 #include <kis_palette_view.h>
 #include <KisPaletteModel.h>
 
@@ -85,8 +84,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-    void fgSelected(KisSwatch swatch);
-    void bgSelected(KisSwatch swatch);
+    void fgSelected(QModelIndex index);
 
 private:
 

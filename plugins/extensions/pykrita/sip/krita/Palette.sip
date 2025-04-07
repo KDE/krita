@@ -32,6 +32,7 @@ public Q_SLOTS:
     void addGroup(QString name);
     void removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
+    int colorsCountGroup(QString name);
     Swatch *colorSetEntryByIndex(int index) /Factory/;
     Swatch *entryByIndex(int index) /Factory/;
     Swatch *colorSetEntryFromGroup(int index, const QString &groupName) /Factory/;

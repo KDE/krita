@@ -91,6 +91,15 @@ int Palette::colorsCountTotal()
     return d->palette->colorCount();
 }
 
+int Palette::colorsCountGroup(QString name)
+{
+    if (!d->palette) return 0;
+    KisSwatchGroupSP group =  d->palette->getGroup(name);
+    if (!group) return 0;
+    return group->colorCount();
+}
+
+
 Swatch *Palette::colorSetEntryByIndex(int index)
 {
     warnScript << "DEPRECATED Palette.colorSetEntryByIndex() - use Palette.entryByIndex() instead";
@@ -118,8 +127,8 @@ Swatch *Palette::entryByIndexFromGroup(int index, const QString &groupName)
     if (!d->palette || columnCount() == 0) {
         return new Swatch();
     }
-    int row = index % columnCount();
-    return new Swatch(d->palette->getSwatchFromGroup((index - row) / columnCount(), row, groupName));
+    int col = index % columnCount();
+    return new Swatch(d->palette->getSwatchFromGroup(col, (index - col) / columnCount(), groupName));
 }
 
 void Palette::addEntry(Swatch entry, QString groupName)

@@ -141,6 +141,8 @@ void KisPaletteModel::addSwatch(const KisSwatch &entry, const QString &groupName
 
 void KisPaletteModel::removeSwatch(const QModelIndex &index, bool keepColors)
 {
+    if (!index.isValid()) { return; }
+
     KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
     if (!qvariant_cast<bool>(data(index, IsGroupNameRole))) {
         m_colorSet->removeSwatch(index.column(),

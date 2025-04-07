@@ -127,6 +127,13 @@ public Q_SLOTS:
     int colorsCountTotal();
 
     /**
+     * @brief colorsCountGroup
+     * @param name of the group to check. Empty is the default group.
+     * @return the amount of colors within that group.
+     */
+     int colorsCountGroup(QString name);
+
+    /**
      * @brief colorSetEntryByIndex
      * get the colorsetEntry from the global index.
      *

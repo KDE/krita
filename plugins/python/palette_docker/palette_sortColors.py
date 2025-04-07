@@ -28,8 +28,8 @@ class sortColors(object):
         d = {}
         colorCount = self.currentPalette.colorsCountGroup(groupName)
         for i in range(colorCount - 1, -1, -1):
-            entry = self.currentPalette.colorSetEntryFromGroup((i), groupName)
-            d[entry.name + str(i)] = entry
+            entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
+            d[entry.name() + str(i)] = entry
             self.currentPalette.removeEntry((i), groupName)
 
         for s in sorted(d):
@@ -39,7 +39,7 @@ class sortColors(object):
         d = {}
         colorCount = self.currentPalette.colorsCountGroup(groupName)
         for i in range(colorCount - 1, -1, -1):
-            entry = self.currentPalette.colorSetEntryFromGroup((i), groupName)
+            entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
             d[entry.id() + " " + str(i)] = entry
             self.currentPalette.removeEntry((i), groupName)
 
@@ -50,8 +50,8 @@ class sortColors(object):
         d = {}
         colorCount = self.currentPalette.colorsCountGroup(groupName)
         for i in range(colorCount - 1, -1, -1):
-            entry = self.currentPalette.colorSetEntryFromGroup((i), groupName)
-            color = self.currentPalette.colorForEntry(entry)
+            entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
+            color = entry.color()
             color.setColorSpace("RGBA", "U8", "sRGB built-in")
             d[color.components()[0] +
               color.components()[1] +

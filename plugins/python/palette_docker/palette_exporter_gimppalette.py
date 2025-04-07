@@ -38,40 +38,22 @@ class gimpPaletteExporter:
         gplFile = open(self.fileName + "/" + self.paletteName + ".gpl", "w")
         gplFile.write("GIMP Palette\n")
         gplFile.write("Name: %s\n" % self.paletteName)
-        gplFile.write("Columns: %s/n", self.currentPalette.columnCount())
+        gplFile.write("Columns: %s\n" % self.currentPalette.columnCount())
         gplFile.write("#%s\n" % self.currentPalette.comment())
-        colorCount = self.currentPalette.colorsCountGroup("")
 
-        for i in range(colorCount):
-            entry = self.currentPalette.colorSetEntryFromGroup(i, "")
-            color = self.currentPalette.colorForEntry(entry)
-            # convert to sRGB
-            color.setColorSpace("RGBA", "U8", "sRGB built-in")
-
-            red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
-            green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
-            blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
-            gplFile.write(
-                "{red} {green} {blue}    {id}-{name}\n".format(
-                    red=red, green=green, blue=blue, id=entry.id(),
-                    name=entry.name))
-            groupNames = self.currentPalette.groupNames()
-            for groupName in groupNames:
-                colorCount = self.currentPalette.colorsCountGroup(groupName)
-                for i in range(colorCount):
-                    entry = self.currentPalette.colorSetEntryFromGroup(
-                        i, groupName)
-                    color = self.currentPalette.colorForEntry(entry)
-                    # convert to sRGB
-                    color.setColorSpace("RGBA", "U8", "sRGB built-in")
-                    red = max(
-                        min(int(color.componentsOrdered()[0] * 255), 255), 0)
-                    green = max(
-                        min(int(color.componentsOrdered()[1] * 255), 255), 0)
-                    blue = max(
-                        min(int(color.componentsOrdered()[2] * 255), 255), 0)
-                    gplFile.write(
-                        "{red} {green} {blue}    {id}-{name}\n".format(
-                            red=red, green=green, blue=blue, id=entry.id(),
-                            name=entry.name))
+        groupNames = self.currentPalette.groupNames()
+        for groupName in groupNames:
+            colorCount = self.currentPalette.colorsCountGroup(groupName)
+            for i in range(colorCount):
+                entry = self.currentPalette.entryByIndexFromGroup(i, groupName)
+                color = entry.color()
+                # convert to sRGB
+                color.setColorSpace("RGBA", "U8", "sRGB built-in")
+                red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
+                green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
+                blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
+                name = f"{entry.id()}-{entry.name()}" if entry.id() else entry.name()
+                gplFile.write(
+                    "{red:>3} {green:>3} {blue:>3}    {name}\n".format(
+                        red=red, green=green, blue=blue, name=name))
         gplFile.close()

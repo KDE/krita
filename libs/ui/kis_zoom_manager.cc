@@ -398,7 +398,11 @@ void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
 void KisZoomManager::pageOffsetChanged()
 {
     QRectF widgetRect = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    m_rulersOffset = widgetRect.topLeft().toPoint();
+    const QPoint newRulersOffset = widgetRect.topLeft().toPoint();
+
+    if (m_rulersOffset == newRulersOffset) return;
+
+    m_rulersOffset = newRulersOffset;
 
     m_horizontalRuler->setOffset(m_rulersOffset.x());
     m_verticalRuler->setOffset(m_rulersOffset.y());

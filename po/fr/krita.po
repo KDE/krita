@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2025-03-26 10:00+0100\n"
+"POT-Creation-Date: 2025-04-08 01:59+0000\n"
+"PO-Revision-Date: 2025-04-06 10:50+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -20345,30 +20345,30 @@ msgid "Character Variant %1"
 msgstr "Variante de caractères (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1648
+#: libs/flake/text/KoSvgTextShape.cpp:1657
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Texte de substitution"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1627
+#: libs/flake/text/KoSvgTextShape.cpp:1636
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texte"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1629
-#: libs/flake/text/KoSvgTextShape.cpp:1637
+#: libs/flake/text/KoSvgTextShape.cpp:1638
+#: libs/flake/text/KoSvgTextShape.cpp:1646
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Objet textuel SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1635
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, kde-format
 msgid "SVG Text"
 msgstr "Texte SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1658
+#: libs/flake/text/KoSvgTextShape.cpp:1667
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -21550,7 +21550,7 @@ msgid "Processing"
 msgstr "Traitement"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:382 libs/ui/KisMainWindow.cpp:1392
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1392
 #: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
@@ -23646,10 +23646,10 @@ msgstr "Ressources locales"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
-#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
-#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
-#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1094 libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1142 libs/ui/KisApplication.cpp:1156
+#: libs/ui/KisApplication.cpp:1184 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -34436,7 +34436,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1 %2"
 
-#: libs/ui/kis_zoom_manager.cc:319
+#: libs/ui/kis_zoom_manager.cc:324
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -34647,22 +34647,22 @@ msgid "Cannot add the file layer: no document is open."
 msgstr ""
 "Impossible d'ajouter un calque de fichier : aucun document n'est ouvert."
 
-#: libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1092
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Impossible de trouver un modèle pour %1"
 
-#: libs/ui/KisApplication.cpp:1094
+#: libs/ui/KisApplication.cpp:1095
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Trop de modèles trouvés pour : %1"
 
-#: libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1111
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Échec du chargement du modèle %1"
 
-#: libs/ui/KisApplication.cpp:1142
+#: libs/ui/KisApplication.cpp:1143
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -34677,7 +34677,7 @@ msgstr ""
 "\n"
 "Redémarrer Krita pour que les modifications prennent effet."
 
-#: libs/ui/KisApplication.cpp:1156
+#: libs/ui/KisApplication.cpp:1157
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -34689,7 +34689,7 @@ msgstr ""
 "Veuillez vérifier qu'aucun autre programme n'utilise le fichier et essayez à "
 "nouveau."
 
-#: libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1185
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Voulez-vous vraiment effacer le fichier de paramètres ? "
@@ -42523,11 +42523,9 @@ msgid "AutoKey Duplicate"
 msgstr "Dupliquer la clé automatique"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Menu pour les paramètres d'animation"
+msgstr "Mettre à jour la configuration pour l'animation"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format

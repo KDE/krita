@@ -82,14 +82,12 @@
 # -- krita_shape_vector
 # Copyright © 2012 This_file_is_part_of_KDE
 # This file is distributed under the same license as the calligra package.
-#
-# KDE Finnish translation sprint participants:
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-06 01:57+0000\n"
-"PO-Revision-Date: 2024-11-21 09:19+0200\n"
+"POT-Creation-Date: 2025-04-08 01:59+0000\n"
+"PO-Revision-Date: 2025-04-07 22:41+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -97,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14133,19 +14131,17 @@ msgstr "Vie"
 
 #. i18n: context: text @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:104
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr "Sekoitustapa"
+msgstr "Edistynyt vienti..."
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "action"
 msgid "Advanced Export"
-msgstr "Sekoitustapa"
+msgstr "Edistynyt vienti"
 
 #. i18n: context: text @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:117
@@ -14159,10 +14155,10 @@ msgstr "Tuo animaatioruudut..."
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:119 krita/kritamenu.action:120
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Import animation frames"
-msgstr "Komposiittitila"
+msgstr "Tuo animaatioruudut"
 
 #. i18n: context: text @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:129
@@ -14514,12 +14510,10 @@ msgstr "Kopioi yhdistelmä"
 #. i18n: context: text @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:349 krita/kritamenu.action:352
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Layer Style"
+#, kde-format
 msgctxt "action"
 msgid "Copy Layer Style"
-msgstr "Tason tyyli"
+msgstr "Kopioi tason tyyli"
 
 #. i18n: context: toolTip @ Action (copy_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:351
@@ -14576,12 +14570,10 @@ msgstr "Liitä kohdistimen kohdalle"
 #. i18n: context: iconText @ Action (paste_into), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:385 krita/kritamenu.action:387
 #: krita/kritamenu.action:388
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Isolate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Paste into Active Layer"
-msgstr "Eristä taso"
+msgstr "Liitä aktiiviseen tasoon"
 
 #. i18n: context: text @ Action (paste_new), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:397
@@ -14619,36 +14611,30 @@ msgstr ""
 
 #. i18n: context: text @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:421
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Mallikuvat"
+msgstr "Liitä mallikuvana"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:423 krita/kritamenu.action:424
-#, fuzzy, kde-format
-#| msgid "Reference Images"
+#, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Mallikuvat"
+msgstr "Liitä mallikuvana"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:433 krita/kritamenu.action:436
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Paste Shapes"
+#, kde-format
 msgctxt "action"
 msgid "Paste Layer Style"
-msgstr ""
-"Liitä muotoja\n"
-"muotojen liittäminen"
+msgstr "Liitä tason tyyli"
 
 #. i18n: context: toolTip @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:435
@@ -14898,12 +14884,10 @@ msgstr "&Koko näytön tila"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach Path"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
-msgstr "Irrota polku"
+msgstr "Irrota kangas"
 
 #. i18n: context: toolTip @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:642
@@ -14937,12 +14921,10 @@ msgstr "Kierrä ympärille tila"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Kierrä ympärille tila"
+msgstr "Kierrä molempien suuntien ympärille"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -14952,12 +14934,10 @@ msgstr "Kierrä ympärille tila"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Peilaa taso vaakasuunnassa"
+msgstr "Kierrä ympärille vaakasuunnassa"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -14967,12 +14947,10 @@ msgstr "Peilaa taso vaakasuunnassa"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Peilaa taso pystysuunnassa"
+msgstr "Kierrä ympärille pystysuunnassa"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -15050,12 +15028,10 @@ msgstr "Peilaa näkymä"
 #. i18n: context: iconText @ Action (mirror_canvas_around_cursor), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:742 krita/kritamenu.action:744
 #: krita/kritamenu.action:745
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Cursor"
-msgstr "Peilaa näkymä"
+msgstr "Peilaa näkymä kohdistimen ympärille"
 
 #. i18n: context: text @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
@@ -15065,31 +15041,27 @@ msgstr "Peilaa näkymä"
 #. i18n: context: iconText @ Action (mirror_canvas_around_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:752 krita/kritamenu.action:754
 #: krita/kritamenu.action:755
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror View"
+#, kde-format
 msgctxt "action"
 msgid "Mirror View Around Canvas"
-msgstr "Peilaa näkymä"
+msgstr "Peilaa näkymä kankaan ympärille"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Reset Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "Alusta lähennystaso 100 %:iin"
+msgstr "&Lähennä 100 %:iin"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Reset Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Alusta lähennystaso 100 %:iin"
+msgstr "Lähennä 100 %:iin"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -15124,57 +15096,51 @@ msgstr "Loitonna"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Sovita sivulle"
+msgstr "Sovita näkymään"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Kankaan koko"
+msgstr "Sovita kankaan kokoon"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
-msgstr "Sovita leveyteen"
+msgstr "Sovita näkymän leveyteen"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Sovita leveyteen"
+msgstr "Sovita kangas näkymän leveyteen"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Page &Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
-msgstr "Sovita sivun &korkeuteen"
+msgstr "Sovita näkymän korkeuteen"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Page &Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Sovita sivun &korkeuteen"
+msgstr "Sovita kangas näkymän korkeuteen"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -15184,11 +15150,10 @@ msgstr "Sovita sivun &korkeuteen"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Sovita sivulle"
+msgstr "Vaihda sovita näkymään"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -15232,41 +15197,37 @@ msgstr "Kierrä kangasta vasemmalle"
 #. i18n: context: iconText @ Action (reset_canvas_rotation), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:862 krita/kritamenu.action:864
 #: krita/kritamenu.action:865
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Reset Canvas Rotation"
-msgstr "Kumoa kierto"
+msgstr "Nollaa kankaan kierto"
 
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Näkymä:"
+msgstr "Nollaa näkymä"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Reset to default value"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Palauta oletusarvoon"
+msgstr "Palauta zoomaus, kierto ja peilaus oletusarvoihin."
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
-msgstr "Tulostuskoko"
+msgstr "Tarkastele tulostuskoko"
 
 #. i18n: context: toolTip @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:886
@@ -15284,19 +15245,15 @@ msgstr "Näytä &viivaimet"
 
 #. i18n: context: whatsThis @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:895
-#, fuzzy, kde-format
-#| msgid ""
-#| "The rulers show the horizontal and vertical positions of the mouse on the "
-#| "image and can be used to position your mouse at the right place on the "
-#| "canvas. <p>Uncheck this to hide the rulers.</p>"
+#, kde-format
 msgctxt "action"
 msgid ""
 "The rulers show the horizontal and vertical positions of the mouse on the "
 "image and can be used to position your mouse at the right place on the "
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
-"Viivaimet näyttävät hiiren vaaka- ja pystysijainnin suhteessa kuvaan, ja "
-"niitä voi käyttää sijoittamaan hiiri oikeaan paikkaan kankaalla.<p>Poista "
+"Viivaimet näyttävät hiiren vaaka- ja pystysuoran sijainnin suhteessa kuvaan, "
+"ja niitä voi käyttää sijoittamaan hiiri oikeaan paikkaan kankaalla.<p>Poista "
 "valinta piilottaaksesi viivaimet.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -15320,7 +15277,7 @@ msgstr "Näytä viivaimet"
 #, kde-format
 msgctxt "action"
 msgid "Rulers Track Pointer"
-msgstr ""
+msgstr "Viivaimet seuraavat kohdistinta"
 
 #. i18n: context: whatsThis @ Action (rulers_track_mouse), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:907
@@ -15330,6 +15287,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"Viivoittimet seuraavat nykyistä hiiren sijaintia ja näyttävät sen näytöllä. "
+"Voi aiheuttaa pientä suorituskyvyn laskua"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -15380,7 +15339,7 @@ msgstr "Kohdista apuviivoihin"
 #, kde-format
 msgctxt "action"
 msgid "Snap cursor to guides position"
-msgstr "Kohdista apuviivojen sijaintiin"
+msgstr "Kohdista kohdistin apuviivojen sijaintiin"
 
 #. i18n: context: text @ Action (showStatusBar), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:954
@@ -15508,11 +15467,10 @@ msgstr "Viisto X:"
 #. i18n: context: iconText @ Action (view_snap_to_pixel), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1049 krita/kritamenu.action:1051
 #: krita/kritamenu.action:1052
-#, fuzzy, kde-format
-#| msgid "Black Pixel"
+#, kde-format
 msgctxt "action"
 msgid "Snap Pixel"
-msgstr "Musta kuvapiste"
+msgstr "Kohdista kuvapiste"
 
 #. i18n: context: text @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (view_snap_intersection), Actions (View), ActionCollection (Menu)
@@ -15561,10 +15519,10 @@ msgstr "Tallenna kuva jakamisen jälkeen"
 #. i18n: context: iconText @ Action (view_snap_image_center), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1096 krita/kritamenu.action:1098
 #: krita/kritamenu.action:1099
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "action"
 msgid "Snap Image Center"
-msgstr "Tallenna kuva jakamisen jälkeen"
+msgstr "Kohdista kuvan keskusta"
 
 #. i18n: context: text @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:1107
@@ -21263,33 +21221,33 @@ msgid "Character Variant %1"
 msgstr "Muunnelma (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1648
+#: libs/flake/text/KoSvgTextShape.cpp:1657
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Paikkavarausteksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1627
+#: libs/flake/text/KoSvgTextShape.cpp:1636
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Teksti"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1629
-#: libs/flake/text/KoSvgTextShape.cpp:1637
+#: libs/flake/text/KoSvgTextShape.cpp:1638
+#: libs/flake/text/KoSvgTextShape.cpp:1646
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "Tekstimuoto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1635
+#: libs/flake/text/KoSvgTextShape.cpp:1644
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " Teksti:"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1658
+#: libs/flake/text/KoSvgTextShape.cpp:1667
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -22594,7 +22552,7 @@ msgid "Processing"
 msgstr "Käsitellään"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:382 libs/ui/KisMainWindow.cpp:1392
+#: libs/ui/KisApplicationArguments.cpp:384 libs/ui/KisMainWindow.cpp:1392
 #: libs/ui/KisMainWindow.cpp:1762 libs/ui/KisMainWindow.cpp:1775
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
@@ -24815,10 +24773,10 @@ msgstr "Ladataan resursseja…"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
 #: libs/ui/kis_layer_manager.cc:1018 libs/ui/kis_node_manager.cpp:1314
-#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1090
-#: libs/ui/KisApplication.cpp:1093 libs/ui/KisApplication.cpp:1109
-#: libs/ui/KisApplication.cpp:1141 libs/ui/KisApplication.cpp:1155
-#: libs/ui/KisApplication.cpp:1183 libs/ui/KisDocument.cpp:1003
+#: libs/ui/kis_node_manager.cpp:1377 libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1094 libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1142 libs/ui/KisApplication.cpp:1156
+#: libs/ui/KisApplication.cpp:1184 libs/ui/KisDocument.cpp:1003
 #: libs/ui/KisDocument.cpp:1018 libs/ui/KisDocument.cpp:1962
 #: libs/ui/KisDocument.cpp:2005 libs/ui/KisDocument.cpp:2016
 #: libs/ui/KisMainWindow.cpp:974 libs/ui/KisMainWindow.cpp:1044
@@ -35963,7 +35921,7 @@ msgctxt "<color space> <image profile>"
 msgid "%1  %2"
 msgstr "%1  %2"
 
-#: libs/ui/kis_zoom_manager.cc:319
+#: libs/ui/kis_zoom_manager.cc:324
 #, kde-format
 msgctxt "floating message about zoom"
 msgid "Zoom: %1 %"
@@ -36176,22 +36134,22 @@ msgstr ""
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1091
+#: libs/ui/KisApplication.cpp:1092
 #, fuzzy, kde-format
 msgid "No template found for: %1"
 msgstr "Mallipohjaa ei löytynyt kohteelle: %1"
 
-#: libs/ui/KisApplication.cpp:1094
+#: libs/ui/KisApplication.cpp:1095
 #, fuzzy, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Löytyi liian monta mallipohjaa kohteelle: %1"
 
-#: libs/ui/KisApplication.cpp:1110
+#: libs/ui/KisApplication.cpp:1111
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Mallipohjan %1 lataus epäonnistui."
 
-#: libs/ui/KisApplication.cpp:1142
+#: libs/ui/KisApplication.cpp:1143
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -36206,7 +36164,7 @@ msgstr ""
 "\n"
 "Käynnistä Krita uudelleen, jotta muutokset tulevat voimaan."
 
-#: libs/ui/KisApplication.cpp:1156
+#: libs/ui/KisApplication.cpp:1157
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -36214,7 +36172,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1184
+#: libs/ui/KisApplication.cpp:1185
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Haluatko tyhjentää asetustiedoston?"
@@ -45691,11 +45649,13 @@ msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
 "its location manually"
 msgstr ""
+"FFmpeg-ohjelman sijaintia ei havaittu, asenna se tai valitse sen sijainti "
+"manuaalisesti"
 
 #: plugins/dockers/recorder/recorder_export.cpp:176
 #, kde-format
 msgid "Abort encoding the timelapse video?"
-msgstr ""
+msgstr "Peru timelapse-videon enkoodaus?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:247
 #, fuzzy, kde-format
@@ -45757,19 +45717,14 @@ msgid "Select FFmpeg Executable File"
 msgstr "Valitse FFmpeg-ohjelmatiedosto"
 
 #: plugins/dockers/recorder/recorder_export.cpp:600
-#, fuzzy, kde-format
+#, kde-format
 msgid "Export Timelapse Video As"
-msgstr "Komposiittitila"
+msgstr "Vie timelapse-video"
 
 #: plugins/dockers/recorder/recorder_export.cpp:616
-#, fuzzy, kde-format
-#| msgid ""
-#| "A profile with that name already exists.\n"
-#| "Do you want to overwrite it?"
+#, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
-msgstr ""
-"Sen niminen profiili on jo olemassa.\n"
-"Haluatko korvata sen?"
+msgstr "Videotiedosto on jo olemassa. Haluatko korvata sen?"
 
 #: plugins/dockers/recorder/recorder_export.cpp:621
 #, fuzzy, kde-format
@@ -45781,7 +45736,7 @@ msgstr "Kopioi taso leikepöydälle"
 #: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
-msgstr ""
+msgstr "Timelapse-videota enkoodataan..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:663
 #, fuzzy, kde-format
@@ -45808,10 +45763,9 @@ msgstr "Siivotaan…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderExport)
 #: plugins/dockers/recorder/recorder_export.ui:18
-#, fuzzy, kde-format
-#| msgid "Import Images"
+#, kde-format
 msgid "Export Timelapse"
-msgstr "Tuo kuvia"
+msgstr "Tuo timelapse"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64

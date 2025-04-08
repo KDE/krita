@@ -58,7 +58,7 @@ public Q_SLOTS:
      * Make the given view active in this window. If the view
      * does not belong to this window, nothing happens.
      */
-    void showView(View *view);
+    void showView(View *v);
 
 
     /**

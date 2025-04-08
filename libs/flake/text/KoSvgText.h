@@ -343,6 +343,11 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
 
     qint32 hangingBaseline; ///< location of the hanging baseline used in north brahmic scripts.
 
+    qint32 underlineOffset; ///< underline offset from alphabetic, positive.
+    qint32 underlineThickness; ///< underline thickness from font.
+    qint32 lineThroughOffset; ///< offset of strike-through from alphabetic baseline.
+    qint32 lineThroughThickness; ///< strikethrough thickness, from font.
+
     FontMetrics () {
 
     }
@@ -359,6 +364,8 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
     void setMetricsValueByTag(const QLatin1String &tag, int32_t value);
 
     void scaleBaselines(const qreal multiplier);
+
+    void offsetMetricsToNewOrigin(const Baseline baseline);
 };
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontMetrics &metrics);
 

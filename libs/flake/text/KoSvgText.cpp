@@ -1427,6 +1427,7 @@ FontMetrics::FontMetrics(qreal fontSizeInPt, bool isHorizontal)
 
     ideographicFaceUnderBaseline = descender;
     ideographicFaceOverBaseline = ascender;
+    lineThroughOffset = mathematicalBaseline;
 }
 
 bool FontMetrics::operator==(const FontMetrics &other) const {
@@ -1449,7 +1450,11 @@ bool FontMetrics::operator==(const FontMetrics &other) const {
             && ideographicOverBaseline == other.ideographicOverBaseline
             && ideographicFaceUnderBaseline == other.ideographicFaceUnderBaseline
             && ideographicFaceOverBaseline == other.ideographicFaceOverBaseline
-            && hangingBaseline == other.hangingBaseline;
+            && hangingBaseline == other.hangingBaseline
+            && lineThroughOffset == other.lineThroughOffset
+            && lineThroughThickness == other.lineThroughThickness
+            && underlineOffset == other.underlineOffset
+            && underlineThickness == other.underlineThickness;
 }
 
 int FontMetrics::valueForBaselineValue(Baseline baseline) const {
@@ -1473,17 +1478,16 @@ int FontMetrics::valueForBaselineValue(Baseline baseline) const {
     case BaselineMiddle:
         baselineVal = isVertical? ideographicCenterBaseline: xHeight/2;
         break;
-        // Because we normalize ascender and descender in vertical, we need to add ideographic-central to ensure that they stay the same.
     case BaselineTextBottom:
-        baselineVal = isVertical? descender + ideographicCenterBaseline: descender;
+        baselineVal = descender;
         break;
     case BaselineTextTop:
-        baselineVal = isVertical? ascender + ideographicCenterBaseline: ascender;
+        baselineVal = ascender;
         break;
     default:
         break;
     }
-    return isVertical? baselineVal - ideographicCenterBaseline: baselineVal - alphabeticBaseline;
+    return baselineVal;
 }
 
 void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {
@@ -1519,6 +1523,14 @@ void FontMetrics::setMetricsValueByTag(const QLatin1String &tag, int32_t value) 
         superScriptOffset.first = value;
     } else if (tag == "spyo") {
         superScriptOffset.second = value;
+    } else if (tag == "strs") {
+        lineThroughThickness = value;
+    } else if (tag == "stro") {
+        lineThroughOffset = value;
+    } else if (tag == "unds") {
+        underlineThickness = value;
+    } else if (tag == "undo") {
+        underlineOffset = value;
     }
 }
 
@@ -1546,6 +1558,29 @@ void FontMetrics::scaleBaselines(const qreal multiplier)
     zeroAdvance *= multiplier;
     spaceAdvance *= multiplier;
     ideographicAdvance *= multiplier;
+
+    underlineOffset *= multiplier;
+    underlineThickness *= multiplier;
+    lineThroughOffset *= multiplier;
+    lineThroughThickness *= multiplier;
+}
+
+void FontMetrics::offsetMetricsToNewOrigin(const Baseline baseline)
+{
+    qint32 offset = valueForBaselineValue(baseline);
+    if (offset == 0) return;
+
+    alphabeticBaseline -= offset;
+    hangingBaseline -= offset;
+    mathematicalBaseline -= offset;
+    ideographicFaceUnderBaseline -= offset;
+    ideographicFaceOverBaseline -= offset;
+    ideographicOverBaseline -= offset;
+    ideographicCenterBaseline -= offset;
+    ideographicUnderBaseline -= offset;
+
+    ascender -= offset;
+    descender -= offset;
 }
 
 QDebug operator<<(QDebug dbg, const FontMetrics &metrics)

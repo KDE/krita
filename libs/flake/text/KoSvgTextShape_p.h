@@ -463,12 +463,12 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping,
+                                const qreal res,
                                 const KoSvgText::TextDecorationUnderlinePosition underlinePosH = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto,
                                 const KoSvgText::TextDecorationUnderlinePosition underlinePosV = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto);
-    QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
-                                                                          const int &start, const int &end,
+    QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
+                                                                          const qreal res,
                                                                           const QVector<CharacterResult> &result,
-                                                                          QPainterPathStroker &stroker,
                                                                           const bool isHorizontal,
                                                                           const KoSvgText::TextDecorations &decor,
                                                                           const qreal &minimumDecorationThickness,
@@ -479,6 +479,17 @@ public:
                                                                           const bool textPathSide = false,
                                                                           const KoSvgText::TextDecorationUnderlinePosition underlinePosH = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto,
                                                                           const KoSvgText::TextDecorationUnderlinePosition underlinePosV = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto);
+    static void finalizeDecoration (
+            QPainterPath decorationPath,
+            const QPointF offset,
+            const QPainterPathStroker &stroker,
+            const KoSvgText::TextDecoration type,
+            QMap<KoSvgText::TextDecoration, QPainterPath> &decorationPaths,
+            const KoPathShape *currentTextPath,
+            const bool isHorizontal,
+            const qreal currentTextPathOffset,
+            const bool textPathSide
+            );
     void paintPaths(QPainter &painter,
                     const QPainterPath &outlineRect,
                     const KoShape *rootShape,

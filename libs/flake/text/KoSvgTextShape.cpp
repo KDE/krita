@@ -580,7 +580,7 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     }
 
     QPainterPathStroker stroker;
-    qreal width = qMax(minimum, d->textData.childBegin()->textDecorationWidths.value(KoSvgText::DecorationUnderline));
+    qreal width = minimum;
     if (thick) {
         width *= 2;
     }

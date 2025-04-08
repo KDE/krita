@@ -797,7 +797,11 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
                                               HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
                                               HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
                                               HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
-                                              HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET
+                                              HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
+                                              HB_OT_METRICS_TAG_UNDERLINE_OFFSET,
+                                              HB_OT_METRICS_TAG_UNDERLINE_SIZE,
+                                              HB_OT_METRICS_TAG_STRIKEOUT_OFFSET,
+                                              HB_OT_METRICS_TAG_STRIKEOUT_SIZE,
                                           });
 
     for (auto it = metricTags.begin(); it!= metricTags.end(); it++) {
@@ -924,6 +928,15 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     metrics.ascender = ascender;
     metrics.descender = descender;
     metrics.lineGap = lineGap;
+
+    if (isHorizontal) {
+        metrics.offsetMetricsToNewOrigin(KoSvgText::BaselineAlphabetic);
+    } else {
+        // because we normalize, we need to add here.
+        metrics.ascender += metrics.ideographicCenterBaseline;
+        metrics.descender += metrics.ideographicCenterBaseline;
+        metrics.offsetMetricsToNewOrigin(KoSvgText::BaselineCentral);
+    }
 
     return metrics;
 }

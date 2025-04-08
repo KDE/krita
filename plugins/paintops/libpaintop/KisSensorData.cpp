@@ -129,7 +129,7 @@ void KisDrawingAngleSensorData::read(const QDomElement &e)
         fanCornersStep = e.attribute("fanCornersStep").toInt();
     }
     if (e.hasAttribute("angleOffset")) {
-        angleOffset = e.attribute("angleOffset").toInt();
+        angleOffset = e.attribute("angleOffset").toFloat();
     }
     if (e.hasAttribute("lockedAngleMode")) {
         lockedAngleMode = e.attribute("lockedAngleMode").toInt();

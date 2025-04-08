@@ -65,7 +65,7 @@ struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public b
         return *static_cast<const KisSensorData*>(&lhs) == *static_cast<const KisSensorData*>(&rhs) &&
                 lhs.fanCornersEnabled == rhs.fanCornersEnabled &&
                 lhs.fanCornersStep == rhs.fanCornersStep &&
-                lhs.angleOffset == rhs.angleOffset &&
+                qFuzzyCompare(lhs.angleOffset, rhs.angleOffset) &&
                 lhs.lockedAngleMode == rhs.lockedAngleMode;
     }
 
@@ -75,7 +75,7 @@ struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public b
 
     bool fanCornersEnabled = false;
     int fanCornersStep = 30;
-    int angleOffset = 0; // in degrees
+    qreal angleOffset = 0.0; // in degrees
     bool lockedAngleMode = false;
 };
 

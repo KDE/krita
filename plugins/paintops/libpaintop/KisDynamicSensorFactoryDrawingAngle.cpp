@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <kis_slider_spin_box.h>
+#include <KisAngleSelector.h>
 
 #include "KisDrawingAngleSensorModel.h"
 #include "KisWidgetConnectionUtils.h"
@@ -63,11 +64,11 @@ QWidget *KisDynamicSensorFactoryDrawingAngle::createConfigWidget(lager::cursor<K
     intFanCornersStep->setSuffix(i18n("°"));
     connectControl(intFanCornersStep, model, "fanCornersStep");
 
-    KisSliderSpinBox *angleOffset = new KisSliderSpinBox(widget);
-    angleOffset->setRange(0, 359);
-    angleOffset->setSingleStep(1);
-    angleOffset->setSuffix(i18n("°"));
-    connectControl(angleOffset, model, "angleOffset");
+    KisAngleSelector *angleOffset = new KisAngleSelector(widget);
+    angleOffset->setDecimals(0);
+    angleOffset->setRange(-180, 180);
+    angleOffset->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
+    connectControl(angleOffset, model, "angleOffsetInverted");
 
     QVBoxLayout *layout = new QVBoxLayout(widget);
     layout->addWidget(chkLockedMode);

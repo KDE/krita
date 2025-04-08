@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>480</width>
-    <height>474</height>
+    <height>546</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -23,8 +23,11 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt; text-decoration: underline;&quot;&gt;Advanced&lt;/span&gt;&lt;/p&gt;&lt;p&gt;The option &amp;quot;Default (encoder chooses)&amp;quot; is common. It means that the encoder automatically selects optimal settings based on your quality/speed tradeoff selection. This option is recommended for most users.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;Encoder Parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;general settings that apply to the overall JPEG XL encoding process, regardless of which compression method is used.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;VarDCT parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Variable Discrete Cosine Transform (Optimized for photographic content)&lt;/p&gt;&lt;p&gt;This one is in the same family of compression techniques as used by the original JPEG, and thus best for ‘Natural’ images, such as photographs and images with a lot of gradients and textures.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; text-decoration: underline;&quot;&gt;Modular Parameters:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Settings for Modular mode - optimized for graphical content, illustrations, and lossless compression.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="general">
       <attribute name="title">
@@ -387,9 +390,19 @@ Default is 0.</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Hover this text for info tooltip</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTabWidget" name="advancedParameters">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="encoderParameters">
           <attribute name="title">
@@ -398,6 +411,9 @@ Default is 0.</string>
           <layout class="QFormLayout" name="formLayout_11">
            <item row="0" column="0">
             <widget class="QLabel" name="lblResampling">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reduces color resolution to achieve smaller files. Only recommended for low quality settings as it reduces sharpness at color transitions.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Color channel resampling</string>
              </property>
@@ -412,6 +428,9 @@ Default is 0.</string>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lblAlphaResampling">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reduces transparency channel resolution for smaller files. Only reccomended for low quality or when precise transparency edges aren't critical.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Alpha channel resampling</string>
              </property>
@@ -426,6 +445,9 @@ Default is 0.</string>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblPhotonNoise">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Separates camera sensor noise patterns for better compression. Higher values reconstruct more noise, useful for preserving the natural look of high-ISO photos.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Photon noise</string>
              </property>
@@ -451,6 +473,9 @@ The default value is 0.</string>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="lblDots">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Identifies and efficiently encodes repeating dot patterns in the image. Useful for scanned documents and certain textures.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Generate dots</string>
              </property>
@@ -465,6 +490,9 @@ The default value is 0.</string>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="label">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Identifies repeated elements (like text characters or icons) and stores them once, referencing them elsewhere. Improves compression for digital illustrations and screenshots.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Generate patches</string>
              </property>
@@ -479,8 +507,11 @@ The default value is 0.</string>
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="lblEpf">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Smooths areas while preserving sharp edges, improving compression without blurring important details. Higher values apply stronger filtering.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
-              <string>Edge preserving filter</string>
+              <string>Edge preserving filter strength</string>
              </property>
             </widget>
            </item>
@@ -498,10 +529,13 @@ The default value is 0.</string>
              <property name="bottomMargin">
               <number>0</number>
              </property>
+             <property name="horizontalSpacing">
+              <number>100</number>
+             </property>
              <item row="0" column="1">
               <widget class="QLabel" name="lblMax">
                <property name="text">
-                <string>Maximum strength</string>
+                <string>Strong</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -510,8 +544,11 @@ The default value is 0.</string>
              </item>
              <item row="0" column="0">
               <widget class="QLabel" name="lblNone1">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Default (encoder chooses)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
                <property name="text">
-                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+                <string comment="JPEG-XL encoder options">Auto</string>
                </property>
               </widget>
              </item>
@@ -545,6 +582,9 @@ The default value is 0.</string>
            </item>
            <item row="6" column="0">
             <widget class="QLabel" name="lblGaborishFilter">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Advanced texture analysis filter that improves compression of complex textured areas while preserving visual quality.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Gaborish filter</string>
              </property>
@@ -552,6 +592,9 @@ The default value is 0.</string>
            </item>
            <item row="7" column="0">
             <widget class="QLabel" name="lbModularEncoding">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Uses the Modular compression system which excels at compressing graphics with sharp edges and limited colors. Can be lossless or lossy.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Modular encoding</string>
              </property>
@@ -583,6 +626,9 @@ The default value is 0.</string>
            </item>
            <item row="8" column="0">
             <widget class="QLabel" name="lblKeepInvisible">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Preserves color information in fully transparent areas. Disable to reduce file size when colors under transparency aren't needed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Keep color of invisible pixels</string>
              </property>
@@ -590,6 +636,9 @@ The default value is 0.</string>
            </item>
            <item row="9" column="0">
             <widget class="QLabel" name="lblGroupOrder">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Determines the order in which image tiles are encoded. 'Center first' prioritizes the center of the image for progressive loading, useful for web content.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Group order</string>
              </property>
@@ -597,6 +646,12 @@ The default value is 0.</string>
            </item>
            <item row="10" column="0">
             <widget class="QLabel" name="lblJPEGReconCFL">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Predicts color from brightness information, reducing file size. Very effective for natural images where brightness and color are correlated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Chroma-from-luma</string>
              </property>
@@ -611,6 +666,9 @@ The default value is 0.</string>
           <layout class="QFormLayout" name="formLayout_12">
            <item row="0" column="0">
             <widget class="QLabel" name="lblProgressiveAC">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables progressive loading using advanced color mathematics for fine details. Images load as a rough preview that becomes progressively sharper. Takes more time but provides better results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Spectral progression</string>
              </property>
@@ -626,7 +684,7 @@ The default value is 0.</string>
            <item row="1" column="0">
             <widget class="QLabel" name="lblQProgressiveAC">
              <property name="toolTip">
-              <string/>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables progressive loading using quantization to compress fine details. Results in smaller file sizes but requires more encoding time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Quantization</string>
@@ -642,6 +700,9 @@ The default value is 0.</string>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblProgressiveDC">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Creates a better coarse preview image for progressive loading. Adds a few bytes to file size but improves the initial low-resolution preview quality.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Low resolution DC</string>
              </property>
@@ -663,6 +724,9 @@ The default value is 0.</string>
           <layout class="QFormLayout" name="formLayout_3">
            <item row="0" column="0">
             <widget class="QLabel" name="lblResponsive">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables the 'Squeeze' transform that allows images to load progressively from low to high quality as data streams in.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Progressive encoding</string>
              </property>
@@ -677,6 +741,9 @@ The default value is 0.</string>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lblChannelColorsGlobalPercent">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls how color values are mapped across the entire image. 'All' uses the full range; smaller percentages create more efficient compression for images with limited color ranges.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Global channel palette range</string>
              </property>
@@ -729,6 +796,9 @@ Used for modular encoding.</string>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblChannelColorsGroupPercent">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls color mapping within local 256×256 pixel tiles. More efficient for images with areas of limited color variety.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Local channel palette range</string>
              </property>
@@ -781,6 +851,9 @@ Used for modular encoding.</string>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="lblPaletteColors">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Activates palette-based compression when the image contains this number of unique colors or fewer. -1 lets the encoder decide automatically.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Use color palette for ... colors or less</string>
              </property>
@@ -817,6 +890,9 @@ Used for modular encoding.</string>
            </item>
            <item row="4" column="0">
             <widget class="QLabel" name="lblLossyPalette">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables relative color encoding that stores differences between predicted and actual colors. Excellent for near-lossless compression of smooth gradients without banding artifacts.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Delta palette</string>
              </property>
@@ -831,6 +907,9 @@ Used for modular encoding.</string>
            </item>
            <item row="5" column="0">
             <widget class="QLabel" name="lblModularGroupSize">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sets the tile size for compression. Larger groups may improve compression but require more memory.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Group size</string>
              </property>
@@ -852,6 +931,9 @@ Used for modular encoding.</string>
            </item>
            <item row="6" column="0">
             <widget class="QLabel" name="lblModularPredictor">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Selects the algorithm used to predict pixel values based on surrounding pixels. Different predictors work better for different image types.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string comment="JPEG-XL encoder options">Predictor</string>
              </property>
@@ -859,6 +941,9 @@ Used for modular encoding.</string>
            </item>
            <item row="7" column="0">
             <widget class="QLabel" name="lblModularMATreeLearningPercent">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controls how many pixels are analyzed to build the meta-adaptive decision tree that selects the optimal predictor for each pixel. Higher values may improve compression but take longer.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
              <property name="text">
               <string>Pixels for MA tree learning</string>
              </property>

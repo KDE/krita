@@ -1446,7 +1446,8 @@ TabletSettingsTab::TabletSettingsTab(QWidget* parent, const char* name): QWidget
 
     m_page->tiltDirectionOffsetAngle->setDecimals(0);
     m_page->tiltDirectionOffsetAngle->setRange(-180, 180);
-    m_page->tiltDirectionOffsetAngle->setAngle(cfg.readEntry("tiltDirectionOffset", 0));
+    // the angle is saved in clockwise direction to be consistent with Drawing Angle, so negate
+    m_page->tiltDirectionOffsetAngle->setAngle(-cfg.readEntry("tiltDirectionOffset", 0.0));
     m_page->tiltDirectionOffsetAngle->setPrefix(i18n("Pen tilt direction offset: "));
     m_page->tiltDirectionOffsetAngle->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 }
@@ -2573,7 +2574,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.writeEntry<bool>("useTimestampsForBrushSpeed", m_tabletSettings->m_page->chkUseTimestampsForBrushSpeed->isChecked());
         cfg.writeEntry<int>("maxAllowedSpeedValue", m_tabletSettings->m_page->intMaxAllowedBrushSpeed->value());
         cfg.writeEntry<int>("speedValueSmoothing", m_tabletSettings->m_page->intBrushSpeedSmoothing->value());
-        cfg.writeEntry<int>("tiltDirectionOffset", m_tabletSettings->m_page->tiltDirectionOffsetAngle->angle());
+        // the angle is saved in clockwise direction to be consistent with Drawing Angle, so negate
+        cfg.writeEntry<int>("tiltDirectionOffset", -m_tabletSettings->m_page->tiltDirectionOffsetAngle->angle());
 
         m_performanceSettings->save();
 

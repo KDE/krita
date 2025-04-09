@@ -2141,10 +2141,24 @@ void KisResourceCacheDb::deleteTemporaryResources()
         qWarning() << "Could not execute delete temporary versioned resources query." << q.lastError();
     }
 
+    if (!q.prepare("DELETE FROM metadata\n"
+                   "WHERE foreign_id = (SELECT id\n"
+                   "                    FROM   storages\n"
+                   "                    WHERE  storage_type_id  == :storage_type)\n"
+                   "AND   table_name = :table;")) {
+        qWarning() << "Could not prepare delete temporary resources query." << q.lastError();
+    }
+    q.bindValue(":storage_type", (int)KisResourceStorage::StorageType::Memory);
+    q.bindValue(":table", METADATA_STORAGES);
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute delete temporary resources query." << q.lastError();
+    }
+
+
     if (!q.prepare("DELETE FROM resources\n"
                    "WHERE  temporary = 1")) {
         qWarning() << "Could not prepare delete temporary resources query." << q.lastError();
-        return;
     }
 
     if (!q.exec()) {

@@ -130,6 +130,11 @@ void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPain
                                 maskStroke->paint(shape.data(), *strokePainter.maskPainter());
                             }
                             strokePainter.renderOnGlobalPainter();
+                        } else {
+                            {
+                                QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(decorPath));
+                                stroke->paint(shape.data(), painter);
+                            }
                         }
                     }
                 }

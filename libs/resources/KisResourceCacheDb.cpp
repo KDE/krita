@@ -2090,7 +2090,6 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
 
     QSqlDatabase::database().commit();
-    removeOrphanedMetaData();
     debugResource << "Synchronizing the storages took" << t.elapsed() << "milliseconds for" << storage->location();
 
     return success;
@@ -2346,6 +2345,11 @@ bool KisResourceCacheDb::removeOrphanedMetaData()
             return false;
 
         }
+
+        if (q.numRowsAffected() > 0) {
+            qWarning() << "WARNING: orphaned metadata records were found for the resources! Num records removed:" 
+                       << q.numRowsAffected();
+        }
     }
 
     {
@@ -2363,7 +2367,10 @@ bool KisResourceCacheDb::removeOrphanedMetaData()
             QSqlDatabase::database().rollback();
             qWarning() << "Could not execute delete oprhaned metadata query for storages" << q.lastError();
             return false;
-
+        }
+        if (q.numRowsAffected() > 0) {
+            qWarning() << "WARNING: orphaned metadata records were found for the storages! Num records removed:"
+                       << q.numRowsAffected();
         }
     }
     QSqlDatabase::database().commit();

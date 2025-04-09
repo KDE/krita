@@ -1216,6 +1216,16 @@ bool KisResourceLocator::synchronizeDb()
         }
     }
 
+    /**
+     * In the current layout of the database we cannot set FOREIGN KEY
+     * for the metadata table (since it links to both, resources and storages),
+     * hence we should manually track the orphaned data.
+     *
+     * Theoretically, these should be none, if our code is correct, but who 
+     * knows anything about our code...
+     */
+    KisResourceCacheDb::removeOrphanedMetaData();
+
     // now remove the storages that no longer exists
     KisStorageModel model;
 

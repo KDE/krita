@@ -743,6 +743,7 @@ KisApplication::~KisApplication()
 {
     if (!isRunning()) {
         KisResourceCacheDb::deleteTemporaryResources();
+        KisResourceCacheDb::performHouseKeepingOnExit();
     }
 }
 

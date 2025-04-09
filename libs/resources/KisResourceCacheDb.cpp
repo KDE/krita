@@ -2179,6 +2179,19 @@ void KisResourceCacheDb::deleteTemporaryResources()
     QSqlDatabase::database().commit();
 }
 
+void KisResourceCacheDb::performHouseKeepingOnExit()
+{
+    QSqlQuery q;
+
+    if (!q.prepare("PRAGMA optimize;")) {
+        qWarning() << "Could not prepare query" << q.lastQuery() << q.lastError();
+    }
+
+    if (!q.exec()) {
+        qWarning() << "Could not execute query" << q.lastQuery() << q.lastError();
+    }
+}
+
 bool KisResourceCacheDb::registerResourceType(const QString &resourceType)
 {
     // Check whether the type already exists

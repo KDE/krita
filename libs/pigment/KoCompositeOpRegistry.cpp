@@ -115,6 +115,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, i18nc("Blending mode - Lambert Lighting (Gamma 2.2)", "Lambert Lighting (Gamma 2.2)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_ERASE           ,  i18nc("Blending mode - Erase", "Erase")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_ALPHA_DARKEN    ,  i18nc("Blending mode - Alpha Darken", "Alpha Darken")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_MARKER          ,  i18nc("Blending mode - Marker", "Marker")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX        ,  i18nc("Blending mode - Hard Mix", "Hard Mix")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_HDR    ,  i18nc("Blending mode - Hard Mix HDR", "Hard Mix HDR")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX_PHOTOSHOP,  i18nc("Blending mode - Hard Mix (Photoshop)", "Hard Mix (Photoshop)")));

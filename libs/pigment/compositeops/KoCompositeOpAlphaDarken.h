@@ -77,41 +77,7 @@ public:
                 }
 
                 if(alpha_pos != -1) {
-                    channels_type fullFlowAlpha;
-                    channels_type averageOpacity = scale<channels_type>(paramsWrapper.averageOpacity);
-
-                    /**
-                     * Here we calculate fullFlowAlpha, which should strive either to
-                     * averageOpacity or opacity (whichever is the greater) or just keep old dstAlpha
-                     * value, if both opacity values are not bit enough
-                     */
-                    if (averageOpacity > opacity) {
-                        /**
-                         * This cryptic code is basically an optimized version of the following:
-                         * fullFlowAlpha = averageOpacity *
-                         *                     unionShapeOpacity(srcAlpha / averageOpacity,
-                         *                                       dstAlpha / averageOpacity);
-                         *
-                         * The main idea is: fullFlowAlpha should be as near to averageOpacity as
-                         * maximum of srcAlpha and dstAlpha and a bit more. So that in consequent
-                         * applications of the blending operation alpha channel would aim to
-                         * averageOpacity.
-                         */
-
-                        channels_type reverseBlend = KoColorSpaceMaths<channels_type>::divide(dstAlpha, averageOpacity);
-                        fullFlowAlpha = averageOpacity > dstAlpha ? lerp(srcAlpha, averageOpacity, reverseBlend) : dstAlpha;
-                    } else {
-                        fullFlowAlpha = opacity > dstAlpha ? lerp(dstAlpha, opacity, mskAlpha) : dstAlpha;
-                    }
-
-                    if (params.flow == 1.0f) {
-                        dstAlpha = fullFlowAlpha;
-                    } else {
-                        channels_type zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlphaLegacy(srcAlpha, dstAlpha);
-                        dstAlpha = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
-                    }
-
-                    dst[alpha_pos] = dstAlpha;
+                    dst[alpha_pos] = calculateAlpha(params, paramsWrapper, flow, opacity, srcAlpha, dstAlpha, mskAlpha);
                 }
 
                 src += srcInc;
@@ -124,6 +90,51 @@ public:
             srcRowStart  += params.srcRowStride;
             dstRowStart  += params.dstRowStride;
             maskRowStart += params.maskRowStride;
+        }
+    }
+
+    static channels_type calculateAlpha(const KoCompositeOp::ParameterInfo &params,
+                                        const ParamsWrapper &paramsWrapper,
+                                        channels_type flow,
+                                        channels_type opacity,
+                                        channels_type srcAlpha,
+                                        channels_type dstAlpha,
+                                        channels_type mskAlpha)
+    {
+        using namespace Arithmetic;
+
+        channels_type fullFlowAlpha;
+        channels_type averageOpacity = scale<channels_type>(paramsWrapper.averageOpacity);
+
+        /**
+         * Here we calculate fullFlowAlpha, which should strive either to
+         * averageOpacity or opacity (whichever is the greater) or just keep old dstAlpha
+         * value, if both opacity values are not bit enough
+         */
+        if (averageOpacity > opacity) {
+            /**
+             * This cryptic code is basically an optimized version of the following:
+             * fullFlowAlpha = averageOpacity *
+             *                     unionShapeOpacity(srcAlpha / averageOpacity,
+             *                                       dstAlpha / averageOpacity);
+             *
+             * The main idea is: fullFlowAlpha should be as near to averageOpacity as
+             * maximum of srcAlpha and dstAlpha and a bit more. So that in consequent
+             * applications of the blending operation alpha channel would aim to
+             * averageOpacity.
+             */
+
+            channels_type reverseBlend = KoColorSpaceMaths<channels_type>::divide(dstAlpha, averageOpacity);
+            fullFlowAlpha = averageOpacity > dstAlpha ? lerp(srcAlpha, averageOpacity, reverseBlend) : dstAlpha;
+        } else {
+            fullFlowAlpha = opacity > dstAlpha ? lerp(dstAlpha, opacity, mskAlpha) : dstAlpha;
+        }
+
+        if (params.flow == 1.0f) {
+            return fullFlowAlpha;
+        } else {
+            channels_type zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlphaLegacy(srcAlpha, dstAlpha);
+            return lerp(zeroFlowAlpha, fullFlowAlpha, flow);
         }
     }
 };

@@ -26,6 +26,7 @@
 #include "compositeops/KoCompositeOpDestinationIn.h"
 #include "compositeops/KoCompositeOpDestinationAtop.h"
 #include "compositeops/KoCompositeOpGreater.h"
+#include "compositeops/KoCompositeOpMarker.h"
 #include "compositeops/KoAlphaDarkenParamsWrapper.h"
 #include "compositeops/KoColorSpaceBlendingPolicy.h"
 #include "compositeops/KoCompositeOpClampPolicy.h"
@@ -215,6 +216,7 @@ struct AddGeneralOps<Traits, true>
          add<CFPenumbraB<Arg>      >(cs, COMPOSITE_PENUMBRAB     , KoCompositeOp::categoryMix());
          add<&cfPenumbraC<Arg>     >(cs, COMPOSITE_PENUMBRAC     , KoCompositeOp::categoryMix());
          add<&cfPenumbraD<Arg>     >(cs, COMPOSITE_PENUMBRAD     , KoCompositeOp::categoryMix());
+         cs->addCompositeOp(new KoCompositeOpMarker<Traits>(cs));
 
          add<&cfScreen<Arg>      >(cs, COMPOSITE_SCREEN      , KoCompositeOp::categoryLight());
 

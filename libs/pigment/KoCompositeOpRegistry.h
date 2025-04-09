@@ -79,6 +79,7 @@ const QString COMPOSITE_PENUMBRAA     = "penumbra a";
 const QString COMPOSITE_PENUMBRAB     = "penumbra b";
 const QString COMPOSITE_PENUMBRAC     = "penumbra c";
 const QString COMPOSITE_PENUMBRAD     = "penumbra d";
+const QString COMPOSITE_MARKER        = "marker";
 
 const QString COMPOSITE_DARKEN      = "darken";
 const QString COMPOSITE_BURN        = "burn";//this is also known as 'color burn'.

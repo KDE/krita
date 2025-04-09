@@ -1447,6 +1447,7 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
     LineThrough currentLineThrough;
 
     qint32 lastFontSize = 0;
+    QPointF lastBaselineOffset;
     QPointF lastLineThroughPoint;
 
     for (int k = start; k < end; k++) {
@@ -1467,16 +1468,19 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
             decorationBoxes.append(currentBox);
             currentBox = DecorationBox();
         }
-        if (charResult.metrics.fontSize != lastFontSize && !currentLineThrough.line.isEmpty()) {
+        // Adjustments to "vertical align" will not affect the baseline offset, so no new stroke needs to be created.
+        const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && charResult.totalBaselineOffset() == lastBaselineOffset;
+        if (newLineThrough && !currentLineThrough.line.isEmpty()) {
             if (currentLineThrough.line.last() != lastLineThroughPoint) {
                 currentLineThrough.line.append(lastLineThroughPoint);
             }
         }
-        if (charResult.metrics.fontSize != lastFontSize || charResult.anchored_chunk) {
+        if (newLineThrough || charResult.anchored_chunk) {
             lineThroughLines.append(currentLineThrough);
             currentLineThrough = LineThrough();
 
             lastFontSize = charResult.metrics.fontSize;
+            lastBaselineOffset = charResult.totalBaselineOffset();
         }
 
         currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);

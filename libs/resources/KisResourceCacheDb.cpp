@@ -1156,7 +1156,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     }
 
     if (!resource->metadata().isEmpty()) {
-        return addMetaDataForId(resource->metadata(), resource->resourceId(), METADATA_RESOURCES);
+        return updateMetaDataForId(resource->metadata(), resource->resourceId(), METADATA_RESOURCES);
     }
 
     return true;
@@ -1644,7 +1644,7 @@ bool KisResourceCacheDb::addStorage(KisResourceStorageSP storage, bool preinstal
                 metadata[key] = storage->metaData(key);
             }
 
-            addMetaDataForId(metadata, id, METADATA_STORAGES);
+            updateMetaDataForId(metadata, id, METADATA_STORAGES);
         }
     }
 

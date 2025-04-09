@@ -36,16 +36,18 @@
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceThumbnailCache.h>
+#include <KisResourceMetaDataModel.h>
 
 
 /// The resource item delegate for rendering the resource preview
 class KisPresetDelegate : public QAbstractItemDelegate
 {
 public:
-    KisPresetDelegate(QObject * parent = 0)
+    KisPresetDelegate(KisResourceMetaDataModel *metaDataModel, QObject * parent = 0)
         : QAbstractItemDelegate(parent)
         , m_showText(false)
-        , m_useDirtyPresets(false) {}
+        , m_useDirtyPresets(false)
+        , m_metaDataModel(metaDataModel) {}
 
     ~KisPresetDelegate() override {}
 
@@ -68,6 +70,7 @@ public:
 private:
     bool m_showText;
     bool m_useDirtyPresets;
+    KisResourceMetaDataModel *m_metaDataModel;
 };
 
 void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -145,8 +148,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     }
 
     bool broken = false;
-    QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
-    QStringList requiredBrushes = metaData["dependent_resources_filenames"].toStringList();
+    
+    
+    const int id = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+    const QStringList requiredBrushes = m_metaDataModel->metaDataValue(id, "dependent_resources_filenames").toStringList();
     if (!requiredBrushes.isEmpty()) {
         KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
         Q_FOREACH(const QString brushFile, requiredBrushes) {
@@ -188,7 +193,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
     m_chooser->setRowHeight(50);
-    m_delegate = new KisPresetDelegate(this);
+    m_delegate = new KisPresetDelegate(KisResourceModelProvider::resourceMetadataModel(), this);
     m_chooser->setItemDelegate(m_delegate);
     m_chooser->setSynced(true);
     m_chooser->showImportExportBtns(false);

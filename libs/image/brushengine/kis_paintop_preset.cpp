@@ -26,6 +26,7 @@
 #include <brushengine/kis_paintop_config_widget.h>
 #include <KisRequiredResourcesOperators.h>
 #include <KoLocalStrokeCanvasResources.h>
+#include <KisLocalStrokeResources.h>
 #include <KisResourceModel.h>
 #include "KisPaintopSettingsIds.h"
 #include <KisResourceTypes.h>
@@ -249,6 +250,8 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         setImage(img);
     }
 
+    updateLinkedResourcesMetaData();
+
     return true;
 }
 
@@ -403,7 +406,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
 
 }
 
-void KisPaintOpPreset::updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface)
+void KisPaintOpPreset::updateLinkedResourcesMetaData()
 {
     /**
      * The new preset format embeds all the linked resources outside
@@ -412,7 +415,8 @@ void KisPaintOpPreset::updateLinkedResourcesMetaData(KisResourcesInterfaceSP res
      */
 
     if (d->version == "2.2") {
-        QList<KoResourceLoadResult> dependentResources = this->linkedResources(resourcesInterface);
+        KisResourcesInterfaceSP fakeResourcesInterface(new KisLocalStrokeResources());
+        QList<KoResourceLoadResult> dependentResources = this->linkedResources(fakeResourcesInterface);
 
         QStringList resourceFileNames;
 

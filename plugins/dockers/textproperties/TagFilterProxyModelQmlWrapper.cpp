@@ -8,6 +8,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisResourceMetaDataModel.h>
 #include <KisTagModel.h>
 #include <KisTagResourceModel.h>
 #include <kis_signal_compressor.h>
@@ -282,8 +283,11 @@ bool FontFamilyTagFilterModel::additionalResourceNameChecks(const QModelIndex &i
     bool match = false;
     if (index.isValid()) {
         const QStringList resourceTags = sourceModel()->data(index, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
-        const QMap<QString, QVariant> metadata = sourceModel()->data(index, Qt::UserRole + KisResourceModel::MetaData).toMap();
-        const QVariantMap localizedNames = metadata.value("localized_font_family").toMap();
+
+        KisResourceMetaDataModel *metadataModel = KisResourceModelProvider::resourceMetadataModel();
+        const int resourceId = sourceModel()->data(index, Qt::UserRole + KisResourceModel::Id).toInt();
+        const QVariantMap localizedNames = metadataModel->metaDataValue(resourceId, "localized_font_family").toMap();
+
         Q_FOREACH(const QVariant localizedName, localizedNames.values()) {
             match = filter->matchesResource(localizedName.toString(), resourceTags);
             if (match) {

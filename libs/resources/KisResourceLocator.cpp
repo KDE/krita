@@ -337,7 +337,6 @@ KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString
             d->resourceCache[key] = resource;
             // load all the embedded resources into temporary "memory" storage
             loadRequiredResources(resource);
-            resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
         }
     }
 
@@ -572,7 +571,6 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         resource->setVersion(0);
         resource->setDirty(false);
         loadRequiredResources(resource);
-        resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
         Q_EMIT beginExternalResourceImport(resourceType, 1);
 
@@ -647,7 +645,6 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
     loadRequiredResources(resource);
-    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
@@ -692,7 +689,6 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
     loadRequiredResources(resource);
-    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // The version needs already to have been incremented
     if (!KisResourceCacheDb::addResourceVersion(resource->resourceId(), QDateTime::currentDateTime(), storage, resource)) {
@@ -731,7 +727,6 @@ bool KisResourceLocator::reloadResource(const QString &resourceType, const KoRes
     resource->setMD5Sum(storage->resourceMd5(resourceType + "/" + resource->filename()));
     resource->setDirty(false);
     loadRequiredResources(resource);
-    resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
     // We haven't changed the version of the resource, so the cache must be still valid
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());

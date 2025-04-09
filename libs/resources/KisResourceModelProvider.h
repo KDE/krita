@@ -13,6 +13,7 @@
 class KisAllResourcesModel;
 class KisAllTagsModel;
 class KisAllTagResourceModel;
+class KisResourceMetaDataModel;
 
 /**
  * KisResourceModelProvider should be used to retrieve resource models.
@@ -30,7 +31,7 @@ public:
     static KisAllTagResourceModel *tagResourceModel(const QString& resourceType);
 
     static void testingResetAllModels();
-
+    static KisResourceMetaDataModel *resourceMetadataModel();
 private:
 
     struct Private;

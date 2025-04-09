@@ -27,6 +27,8 @@
 #include <KisResourceItemView.h>
 #include <KisResourceItemChooser.h>
 #include <KisResourceModel.h>
+#include <KisResourceMetaDataModel.h>
+#include <KisResourceModelProvider.h>
 
 #include <kis_icon.h>
 #include "KisBrushServerProvider.h"
@@ -68,7 +70,11 @@ using namespace KisWidgetConnectionUtils;
 class KisBrushDelegate : public QAbstractItemDelegate
 {
 public:
-    KisBrushDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent) {}
+    KisBrushDelegate(KisResourceMetaDataModel *metaDataModel,
+                     QObject * parent = 0) 
+        : QAbstractItemDelegate(parent) 
+        , m_metaDataModel(metaDataModel)
+    {}
     ~KisBrushDelegate() override {}
     /// reimplemented
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
@@ -76,6 +82,9 @@ public:
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override {
         return option.decorationSize;
     }
+
+private:
+    KisResourceMetaDataModel *m_metaDataModel;
 };
 
 void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -97,13 +106,8 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
     painter->save();
 
-    const QMap<QString, QVariant> metadata =
-        index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
-
-    const bool hasImageType =
-        metadata.value(KisBrush::brushTypeMetaDataKey,
-                       QVariant::fromValue(false)).toBool();
-
+    const int resourceId = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+    const bool hasImageType = m_metaDataModel->metaDataValue(resourceId, KisBrush::brushTypeMetaDataKey).toBool();
 
     if (hasImageType) {
         KisPaintingTweaks::PenBrushSaver s(painter);
@@ -198,7 +202,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
 
     m_itemChooser->showTaggingBar(true);
     m_itemChooser->setRowHeight(30);
-    m_itemChooser->setItemDelegate(new KisBrushDelegate(this));
+    m_itemChooser->setItemDelegate(new KisBrushDelegate(KisResourceModelProvider::resourceMetadataModel(), this));
     m_itemChooser->setCurrentItem(0);
     m_itemChooser->setSynced(true);
     m_itemChooser->setMinimumWidth(100);

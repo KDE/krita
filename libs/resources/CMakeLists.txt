@@ -53,6 +53,7 @@ set(kritaresources_LIB_SRCS
     KisEmbeddedResourceStorageProxy.cpp
 
     KisResourceThumbnailCache.cpp
+    KisResourceMetaDataModel.cpp
 )
 
 qt_add_resources(kritaresources_LIB_SRCS sql.qrc)

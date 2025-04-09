@@ -8,6 +8,7 @@
 #include "KisResourceModel.h"
 #include "KisTagModel.h"
 #include "KisTagResourceModel.h"
+#include "KisResourceMetaDataModel.h"
 
 #include "KoResource.h"
 
@@ -22,6 +23,7 @@ struct KisResourceModelProvider::Private
     QMap<QString, KisAllResourcesModel*> resourceModels;
     QMap<QString, KisAllTagsModel*> tagModels;
     QMap<QString, KisAllTagResourceModel*> tagResourceModels;
+    std::optional<KisResourceMetaDataModel> metadataModel;
 };
 
 KisResourceModelProvider::KisResourceModelProvider()
@@ -73,4 +75,12 @@ void KisResourceModelProvider::testingResetAllModels()
     for (auto it = s_instance->d->tagResourceModels.begin(); it != s_instance->d->tagResourceModels.end(); ++it) {
         it.value()->resetQuery();
     }
+}
+
+KisResourceMetaDataModel* KisResourceModelProvider::resourceMetadataModel()
+{
+    if (!s_instance->d->metadataModel) {
+        s_instance->d->metadataModel.emplace("resources");
+    }
+    return &s_instance->d->metadataModel.value();
 }

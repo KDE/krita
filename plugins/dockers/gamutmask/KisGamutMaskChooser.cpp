@@ -22,13 +22,19 @@
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 #include "KisPopupButton.h"
+#include <KisResourceModelProvider.h>
+#include <KisResourceMetaDataModel.h>
+
 
 /// The resource item delegate for rendering the resource preview
 class KisGamutMaskDelegate: public QAbstractItemDelegate
 {
 public:
-    KisGamutMaskDelegate(QObject * parent = 0) : QAbstractItemDelegate(parent)
-      , m_mode(KisGamutMaskChooser::ViewMode::THUMBNAIL) {}
+    KisGamutMaskDelegate(KisResourceMetaDataModel *metaDataModel, QObject * parent = 0) : QAbstractItemDelegate(parent)
+      , m_mode(KisGamutMaskChooser::ViewMode::THUMBNAIL) 
+      , m_metaDataModel(metaDataModel)
+    {
+    }
     ~KisGamutMaskDelegate() override {}
 
     /// reimplemented
@@ -45,6 +51,7 @@ public:
 
 private:
     KisGamutMaskChooser::ViewMode m_mode;
+    KisResourceMetaDataModel *m_metaDataModel;
 };
 
 void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
@@ -116,9 +123,9 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
                               name, Qt::ElideRight, titleRect.width()
                               )
                           );
-        QMap<QString, QVariant> metaData = index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
-        QString descriptionKey = "description";
-        QString description = metaData.contains(descriptionKey) ? metaData[descriptionKey].toString() : "";
+        const QString descriptionKey = "description";
+        const int resourceId = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
+        const QString description = m_metaDataModel->metaDataValue(resourceId, descriptionKey).toString();
         if (!description.isEmpty() && !description.isNull()) {
             font.setPointSize(font.pointSize()-1);
             font.setBold(false);
@@ -150,9 +157,10 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
 }
 
 
-KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
+KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) 
+    : QWidget(parent)
 {
-    m_delegate = new KisGamutMaskDelegate(this);
+    m_delegate = new KisGamutMaskDelegate(KisResourceModelProvider::resourceMetadataModel(), this);
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);

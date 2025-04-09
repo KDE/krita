@@ -11,6 +11,7 @@
 #include <KisResourceModel.h>
 #include <KisTagResourceModel.h>
 #include <KisTagModel.h>
+#include <KisResourceMetaDataModel.h>
 
 #include <kis_debug.h>
 #include <KisResourceSearchBoxFilter.h>
@@ -366,14 +367,12 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
         }
     }
 
-    bool metaDataMatches = true;
-    QMap<QString, QVariant> resourceMetaData = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::MetaData).toMap();
+    KisResourceMetaDataModel *metaDataModel = KisResourceModelProvider::resourceMetadataModel();
+    const int resourceId = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Id).toInt();
     Q_FOREACH(const QString &key, d->metaDataMapFilter.keys()) {
-        if (resourceMetaData.contains(key)) {
-            metaDataMatches = (resourceMetaData[key] == d->metaDataMapFilter[key]);
-            if (!metaDataMatches) {
+        const QVariant value = metaDataModel->metaDataValue(resourceId, key);
+        if (value.isValid() && value != d->metaDataMapFilter[key]) {
                 return false;
-            }
         }
     }
 
@@ -388,7 +387,7 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
     }
 
 
-    return (resourceNameMatches && metaDataMatches);
+    return resourceNameMatches;
 }
 
 bool KisTagFilterResourceProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const

@@ -490,6 +490,12 @@ public:
             const qreal currentTextPathOffset,
             const bool textPathSide
             );
+
+    void paintTextDecoration(QPainter &painter,
+                             const QPainterPath &outlineRect,
+                             const KoShape *rootShape,
+                             const KoSvgText::TextDecoration type
+                             );
     void paintPaths(QPainter &painter,
                     const QPainterPath &outlineRect,
                     const KoShape *rootShape,

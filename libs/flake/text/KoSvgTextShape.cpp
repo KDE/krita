@@ -1416,7 +1416,10 @@ void KoSvgTextShape::paint(QPainter &painter) const
     if (!d->result.isEmpty()) {
         QPainterPath rootBounds;
         rootBounds.addRect(this->outline().boundingRect());
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationUnderline);
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationOverline);
         d->paintPaths(painter, rootBounds, this, d->result, chunk, currentIndex);
+        d->paintTextDecoration(painter, rootBounds, this, KoSvgText::DecorationLineThrough);
     }
 #if 0 // Debug
     Q_FOREACH (KoShape *child, this->shapes()) {

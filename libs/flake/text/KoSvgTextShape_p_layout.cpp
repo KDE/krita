@@ -1391,6 +1391,7 @@ void KoSvgTextShape::Private::finalizeDecoration (
     } else {
         decorationPaths[type].addPath(stroker.createStroke(decorationPath.translated(offset)));
     }
+    decorationPaths[type].setFillRule(Qt::WindingFill);
 }
 
 QMap<KoSvgText::TextDecoration, QPainterPath>

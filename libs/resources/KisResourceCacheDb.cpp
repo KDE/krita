@@ -39,7 +39,7 @@
 const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.17" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.18" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -87,7 +87,70 @@ bool updateSchemaVersion()
     return true;
 }
 
+namespace kismpl {
+template<typename Class, typename MemType, typename MemTypeNoRef = std::remove_reference_t<MemType>>
+inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&value) {
+    return detail::mem_checker<std::equal_to<>, Class, MemTypeNoRef, decltype(ptr)>{ptr, std::forward<MemType>(value)};
+}
+}
 
+QSqlError runUpdateScriptFile(const QString &path, const QString &message, QSqlDatabase &db)
+{
+    QFile f(path);
+    if (f.open(QFile::ReadOnly)) {
+        QString entireScript = f.readAll();
+        QTextStream stream(&entireScript);
+
+        QStringList statements;
+
+        // remove comments by splitting into lines
+        QRegularExpression regexp("^--.*$");
+        while (!stream.atEnd()) {
+            const QString statement = stream.readLine().trimmed();
+            if (!regexp.match(statement).hasMatch()) {
+                statements.append(statement);
+            }
+        }
+
+        // split lines into actual statements
+        statements = statements.join(' ').split(';');
+
+        // trim the statements
+        std::transform(statements.begin(), statements.end(),
+                       statements.begin(), [] (const QString &x) { return x.trimmed(); });
+
+        // remove empty statements
+        statements.erase(std::remove_if(statements.begin(), statements.end(),
+                                        kismpl::mem_equal_to(&QString::isEmpty, true)));
+
+        Q_FOREACH (const QString &statement, statements) {
+            QSqlQuery q;
+            if (!q.exec(statement)) {
+                qWarning() << "Could execute DB update step:" << message << q.lastError();
+                qWarning() << "    faulty statement:" << statement;
+                return q.lastError();
+            }
+        }
+        infoResources << "Completed DB update step:" << message;
+    } else {
+        return QSqlError("Error executing SQL",
+                         QString("Could not find SQL file %1").arg(path),
+                         QSqlError::StatementError);
+    }
+    return QSqlError();
+}
+
+QSqlError runUpdateScript(const QString &script, const QString &message, QSqlDatabase &db)
+{
+    QSqlQuery q;
+    if (!q.exec(script)) {
+        qWarning() << "Could execute DB update step:" << message << q.lastError();
+        return db.lastError();
+    }
+    infoResources << "Completed DB update step:" << message;
+
+    return QSqlError();
+}
 
 QSqlError createDatabase(const QString &location)
 {
@@ -156,22 +219,25 @@ QSqlError createDatabase(const QString &location)
         if (dbTables.contains("version_information")) {
             // Verify the version number
 
-            QSqlQuery q("SELECT database_version\n"
-                        ",      krita_version\n"
-                        ",      creation_date\n"
-                        "FROM version_information\n"
-                        "ORDER BY id\n"
-                        "DESC\n"
-                        "LIMIT 1;\n");
+            {
+                QSqlQuery q(
+                    "SELECT database_version\n"
+                    ",      krita_version\n"
+                    ",      creation_date\n"
+                    "FROM version_information\n"
+                    "ORDER BY id\n"
+                    "DESC\n"
+                    "LIMIT 1;\n");
 
-            if (!q.exec()) {
-                qWarning() << "Could not retrieve version information from the database." << q.lastError();
-                abort();
+                if (!q.exec()) {
+                    qWarning() << "Could not retrieve version information from the database." << q.lastError();
+                    abort();
+                }
+                q.first();
+                schemaVersion = q.value(0).toString();
+                kritaVersion = q.value(1).toString();
+                creationDate = q.value(2).toInt();
             }
-            q.first();
-            schemaVersion = q.value(0).toString();
-            kritaVersion = q.value(1).toString();
-            creationDate = q.value(2).toInt();
 
             oldSchemaVersionNumber = QVersionNumber::fromString(schemaVersion);
             newSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
@@ -183,72 +249,97 @@ QSqlError createDatabase(const QString &location)
                 schemaIsOutDated = true;
                 KisBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.17")
-                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0
-                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.17")) < 0) {
+                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.18")
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) >= 0
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.18")) < 0) {
+                    
                     bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
+                    
                     bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");
+
                     bool from16to17 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.16");
 
+                    bool from17to18 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.16")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.17");
+
                     bool success = true;
                     if (from14to15) {
-                        qWarning() << "Going to update resource_tags table";
-
-                        QSqlQuery q;
-                        q.prepare("ALTER TABLE  resource_tags\n"
-                                  "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
-                        if (!q.exec()) {
-                            qWarning() << "Could not update the resource_tags table." << q.lastError();
+                        QSqlError error = runUpdateScript(
+                            "ALTER TABLE  resource_tags\n"
+                            "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1", 
+                            "Update resource tags table (add \'active\' column)", db);
+                        if (error.type() != QSqlError::NoError) {
                             success = false;
                         }
-                        else {
-                            qWarning() << "Updated table resource_tags: success.";
-                        }
                     }
-                    if (from15to16) {
+                    if (success && from15to16) {
                         qWarning() << "Going to update indices";
 
                         QStringList indexes = QStringList() << "tags" << "resources" << "tag_translations" << "resource_tags";
 
                         Q_FOREACH(const QString &index, indexes) {
-                            QFile f(":/create_index_" + index + ".sql");
-                            if (f.open(QFile::ReadOnly)) {
-                                QSqlQuery q;
-                                if (!q.exec(f.readAll())) {
-                                    qWarning() << "Could not create index" << index << q.lastError();
-                                    return db.lastError();
-                                }
-                                infoResources << "Created index" << index;
-                            }
-                            else {
-                                return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
+                            QSqlError error = runUpdateScriptFile(":/create_index_" + index + ".sql",
+                                                                  QString("Create index for %1").arg(index),
+                                                                  db);
+                            if (error.type() != QSqlError::NoError) {
+                                success = false;
                             }
                         }
                     }
 
-                    if (from16to17) {
-                        qWarning() << "Going to update resource signature index";
-
-                        QFile f(":/create_index_resources_signature.sql");
-                        if (f.open(QFile::ReadOnly)) {
-                            QSqlQuery q;
-                            if (!q.exec(f.readAll())) {
-                                qWarning() << "Could not create index for resources signature" << q.lastError();
-                                return db.lastError();
-                            }
-                            infoResources << "Created resources signature index";
+                    if (success && from16to17) {
+                        QSqlError error = runUpdateScriptFile(":/create_index_resources_signature.sql",
+                                                              "Create index for resources_signature",
+                                                              db);
+                        if (error.type() != QSqlError::NoError) {
+                            success = false;
                         }
-                        else {
-                            return QSqlError("Error executing SQL", QString("Could not find SQL file for resources signature index"), QSqlError::StatementError);
+                    }
+
+                    if (success && from17to18) {
+                        {
+                            QSqlError error = runUpdateScriptFile(":/0_0_18_0001_cleanup_metadata_table.sql",
+                                                                  "Cleanup and deduplicate metadata table",
+                                                                  db);
+                            if (error.type() != QSqlError::NoError) {
+                                success = false;
+                            }
+                        }
+                        if (success) {
+                            QSqlError error = runUpdateScriptFile(":/0_0_18_0002_update_metadata_table_constraints.sql",
+                                                                  "Update metadata table constraints",
+                                                                  db);
+                            if (error.type() != QSqlError::NoError) {
+                                success = false;
+                            }
+                        }
+                        if (success) {
+                            QSqlError error = runUpdateScriptFile(":/create_index_metadata_key.sql",
+                                                                  "Create index for metadata_key",
+                                                                  db);
+                            if (error.type() != QSqlError::NoError) {
+                                success = false;
+                            }
                         }
                     }
 
                     if (success) {
                         if (!updateSchemaVersion()) {
-                            return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
+                            success = false;
+                        }
+
+                        if (success) {
+                            QSqlError error = runUpdateScript("VACUUM",
+                                                              "Vacuum database after updating schema",
+                                                              db);
+                            if (error.type() != QSqlError::NoError) {
+                                success = false;
+                            }
                         }
                     }
 
@@ -284,17 +375,21 @@ QSqlError createDatabase(const QString &location)
 
     // Create tables
     Q_FOREACH(const QString &table, tables) {
-        QFile f(":/create_" + table + ".sql");
-        if (f.open(QFile::ReadOnly)) {
-            QSqlQuery q;
-            if (!q.exec(f.readAll())) {
-                qWarning() << "Could not create table" << table << q.lastError();
-                return db.lastError();
-            }
-            infoResources << "Created table" << table;
+        QSqlError error =
+            runUpdateScriptFile(":/create_" + table + ".sql", QString("Create table %1").arg(table), db);
+        if (error.type() != QSqlError::NoError) {
+            return error;
         }
-        else {
-            return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(table), QSqlError::StatementError);
+    }
+
+    {
+        // metadata table constraints were updated in version 0.0.18
+        QSqlError error = runUpdateScriptFile(":/0_0_18_0002_update_metadata_table_constraints.sql",
+                                              "Update metadata table constraints",
+                                              db);
+
+        if (error.type() != QSqlError::NoError) {
+            return error;
         }
     }
 
@@ -304,45 +399,37 @@ QSqlError createDatabase(const QString &location)
     // these indexes came in version 0.0.16
     indexes << "storages" << "versioned_resources" << "tags" << "resources" << "tag_translations" << "resource_tags";
 
-    // this indexes came in version 0.0.17
+    // this index came in version 0.0.17
     indexes << "resources_signature";
 
+    // this index came in version 0.0.18
+    indexes << "metadata_key";
+
     Q_FOREACH(const QString &index, indexes) {
-        QFile f(":/create_index_" + index + ".sql");
-        if (f.open(QFile::ReadOnly)) {
-            QSqlQuery q;
-            if (!q.exec(f.readAll())) {
-                qWarning() << "Could not create index" << index;
-                return db.lastError();
-            }
-            infoResources << "Created table" << index;
-        }
-        else {
-            return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
+        QSqlError error = runUpdateScriptFile(":/create_index_" + index + ".sql",
+                                              QString("Create index for %1").arg(index),
+                                              db);
+        if (error.type() != QSqlError::NoError) {
+            return error;
         }
     }
 
     // Fill lookup tables
     {
-        if (dbTables.contains("storage_types")) {
-            QSqlQuery q;
-            if (!q.exec("DELETE FROM storage_types;")) {
-                qWarning() << "Could not clear table storage_types" << db.lastError();
-            }
-        }
-
         QFile f(":/fill_storage_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &originType, KisResourceCacheDb::storageTypes) {
+                const QString updateStep = QString("Register storage type: %1").arg(originType);
                 QSqlQuery q(sql);
                 q.addBindValue(originType);
                 if (!q.exec()) {
-                    qWarning() << "Could not insert" << originType << db.lastError() << q.executedQuery();
+                    qWarning() << "Could execute DB update step:" << updateStep << q.lastError();
+                    qWarning() << "    faulty statement:" << sql;
                     return db.lastError();
                 }
+                infoResources << "Completed DB update step:" << updateStep;
             }
-            infoResources << "Filled lookup table storage_types";
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL fill_storage_types.sql."), QSqlError::StatementError);
@@ -350,24 +437,20 @@ QSqlError createDatabase(const QString &location)
     }
 
     {
-        if (dbTables.contains("resource_types")) {
-            QSqlQuery q;
-            if (!q.exec("DELETE FROM resource_types;")) {
-                qWarning() << "Could not clear table resource_types" << db.lastError();
-            }
-        }
         QFile f(":/fill_resource_types.sql");
         if (f.open(QFile::ReadOnly)) {
             QString sql = f.readAll();
             Q_FOREACH(const QString &resourceType, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+                const QString updateStep = QString("Register resource type: %1").arg(resourceType);
                 QSqlQuery q(sql);
                 q.addBindValue(resourceType);
                 if (!q.exec()) {
-                    qWarning() << "Could not insert" << resourceType << db.lastError() << q.executedQuery();
+                    qWarning() << "Could execute DB update step:" << updateStep << q.lastError();
+                    qWarning() << "    faulty statement:" << sql;
                     return db.lastError();
                 }
+                infoResources << "Completed DB update step:" << updateStep;
             }
-            infoResources << "Filled lookup table resource_types";
         }
         else {
             return QSqlError("Error executing SQL", QString("Could not find SQL fill_resource_types.sql."), QSqlError::StatementError);

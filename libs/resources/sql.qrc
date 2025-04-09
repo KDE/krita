@@ -23,5 +23,8 @@
         <file alias="create_index_resource_tags.sql">sql/create_index_resource_tags.sql</file>
         <file alias="create_index_resources.sql">sql/create_index_resources.sql</file>
         <file alias="create_index_resources_signature.sql">sql/create_index_resources_signature.sql</file>
+		<file alias="0_0_18_0001_cleanup_metadata_table.sql">sql/0_0_18_0001_cleanup_metadata_table.sql</file>
+        <file alias="0_0_18_0002_update_metadata_table_constraints.sql">sql/0_0_18_0002_update_metadata_table_constraints.sql</file>
+        <file alias="create_index_metadata_key.sql">sql/create_index_metadata_key.sql</file>
     </qresource>
 </RCC>

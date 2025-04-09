@@ -429,7 +429,7 @@ Default is 0.</string>
            <item row="1" column="0">
             <widget class="QLabel" name="lblAlphaResampling">
              <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reduces transparency channel resolution for smaller files. Only reccomended for low quality or when precise transparency edges aren't critical.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reduces transparency channel resolution for smaller files. Only recommended for low quality or when precise transparency edges aren't critical.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
               <string>Alpha channel resampling</string>

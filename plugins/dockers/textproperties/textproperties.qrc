@@ -57,5 +57,6 @@
         <file alias="baseline-hanging.svg">icons/baseline-hanging.svg</file>
         <file alias="baseline-ideo-embox-bottom.svg">icons/baseline-ideo-embox-bottom.svg</file>
         <file alias="baseline-ideo-embox-horizontal-center.svg">icons/baseline-ideo-embox-horizontal-center.svg</file>
+        <file alias="16_light_format-text-overline.svg">icons/16_light_format-text-overline.svg</file>
     </qresource>
 </RCC>

@@ -15,6 +15,7 @@
 #include <QFontDatabase>
 #include <QStringListModel>
 #include <QQuickStyle>
+#include <QColorDialog>
 
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
@@ -214,6 +215,12 @@ void TextPropertiesDock::connectAutoEnabler(QObject *watched)
     KIS_SAFE_ASSERT_RECOVER_RETURN(watched);
 
     new TextPropertyAutoEnabler(watched, watched);
+}
+
+QColor TextPropertiesDock::modalColorDialog(QColor oldColor)
+{
+    QColor c = QColorDialog::getColor(oldColor);
+    return c.isValid()? c: oldColor;
 }
 
 void TextPropertiesDock::slotCanvasTextPropertiesChanged()

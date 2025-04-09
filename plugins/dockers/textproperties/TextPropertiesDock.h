@@ -36,6 +36,8 @@ public Q_SLOTS:
     QString wwsFontFamilyName(QString familyName);
     void connectAutoEnabler(QObject *watched);
 
+    QColor modalColorDialog(QColor oldColor);
+
 private:
     QPointer<KisCanvas2> m_canvas;
     QQuickWidget *m_quickWidget {0};

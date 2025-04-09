@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="16" height="16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ <metadata>
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:description>adapted from breeze 16-format-text-underline</dc:description>
+    <dc:contributor>
+     <cc:Agent>
+      <dc:title>Wolthera van Hövell tot Westerflier</dc:title>
+     </cc:Agent>
+    </dc:contributor>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <g transform="translate(-421.71 -531.79)" fill="#d2d2d2">
+  <rect x="423.71" y="533.79" width="12" height="1" color="#000000"/>
+  <path d="m429.71 536.79c1.1046 0 2.0077 1.8995 2 4-8e-3 2.1006-0.89543 4-2 4s-2.0077-1.8995-2-4c8e-3 -2.1005 0.89543-4 2-4zm0 9c3 0 4.9923-2.3472 5-5 8e-3 -2.6528-2.0068-5-5-5-3 0-4.9923 2.3472-5 5-8e-3 2.6528 2 5 5 5z" color="#000000"/>
+ </g>
+</svg>

@@ -92,18 +92,19 @@ void KoSvgTextShape::Private::paintTextDecoration(QPainter &painter, const QPain
         if (!clipRect.contains(decorPath.boundingRect()) &&
                  !clipRect.intersects(decorPath.boundingRect())) continue;
         const QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
+        const bool colorValid = textDecorationColor.isValid() && it->properties.hasProperty(KoSvgTextProperties::TextDecorationColorId) && textDecorationColor != Qt::transparent;
 
         Q_FOREACH(const KoShape::PaintOrder p, paintOrder) {
             if (p == KoShape::Fill) {
 
-                if (background && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
+                if (background && !colorValid) {
                     KoClipMaskPainter fillPainter(&painter, shapeGlobalClipRect);
                     setRenderHints(*fillPainter.maskPainter(), textRendering, painter.testRenderHint(QPainter::Antialiasing));
                     background->paint(*fillPainter.shapePainter(), rootOutline);
                     fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
                     fillPainter.maskPainter()->fillPath(decorPath, Qt::white);
                     fillPainter.renderOnGlobalPainter();
-                } else if (textDecorationColor.isValid()) {
+                } else if (colorValid) {
                     painter.fillPath(decorPath, textDecorationColor);
                 }
             } else if (p == KoShape::Stroke) {
@@ -371,7 +372,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
         QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
         QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
         QSharedPointer<KoShapeBackground> decorationColor = background;
-        if (textDecorationColor.isValid()) {
+        if (textDecorationColor.isValid() && it->properties.hasProperty(KoSvgTextProperties::TextDecorationColorId)) {
             decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
         }
         KoInsets insets;

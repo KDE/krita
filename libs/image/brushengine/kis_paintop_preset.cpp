@@ -391,6 +391,8 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
      */
     d->version = "5.0";
 
+    const_cast<KisPaintOpPreset*>(this)->updateLinkedResourcesMetaData();
+
     writer.setText("version", d->version);
     writer.setText("preset", doc.toString());
 
@@ -403,7 +405,6 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
     }
 
     return writer.write(img);
-
 }
 
 void KisPaintOpPreset::updateLinkedResourcesMetaData()
@@ -433,6 +434,8 @@ void KisPaintOpPreset::updateLinkedResourcesMetaData()
         if (!resourceFileNames.isEmpty()) {
             addMetaData("dependent_resources_filenames", resourceFileNames);
         }
+    } else {
+        addMetaData("dependent_resources_filenames", QStringList());
     }
 }
 

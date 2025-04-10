@@ -52,6 +52,11 @@ public:
         ResourceActive,
         /// Whether the current resource's storage is active
         StorageActive,
+        /// Whether the resource is broken (bool)
+        BrokenStatus,
+        /// If resource is "broken", returns a non-empty string explaining why it is
+        /// considered broken. Otherwise returns an empty QVariant.
+        BrokenStatusMessage,
     };
 
     virtual ~KisAbstractResourceModel(){}

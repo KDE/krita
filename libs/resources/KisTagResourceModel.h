@@ -53,7 +53,7 @@ public:
 public:
 
     enum Columns {
-        TagId = KisAbstractResourceModel::StorageActive + 1,
+        TagId = KisAbstractResourceModel::BrokenStatusMessage + 1,
         ResourceId,
         Tag,
         Resource,

@@ -151,6 +151,10 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
             return i18n("Dirty");
         case MetaData:
             return i18n("Metadata");
+        case BrokenStatus:
+            return i18n("Broken Status");
+        case BrokenStatusMessage:
+            return i18n("Broken Status Message");
         default:
             return QString::number(section);
         }
@@ -196,6 +200,8 @@ QHash<int, QByteArray> KisAllResourcesModel::roleNames() const
     roles[Qt::UserRole + MetaData] = "metadata";
     roles[Qt::UserRole + ResourceActive] = "resourceactive";
     roles[Qt::UserRole + StorageActive] = "storageactive";
+    roles[Qt::UserRole + BrokenStatus] = "brokenstatus";
+    roles[Qt::UserRole + BrokenStatusMessage] = "brokenstatusmessage";
 
     return roles;
 }

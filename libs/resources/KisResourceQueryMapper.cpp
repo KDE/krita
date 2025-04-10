@@ -19,11 +19,13 @@
 #include <QVariant>
 
 #include "KisResourceLocator.h"
+#include "KisResourceMetaDataModel.h"
 #include "KisResourceModel.h"
 #include "KisResourceModelProvider.h"
 #include "KisResourceThumbnailCache.h"
 #include "KisTag.h"
 #include "kis_assert.h"
+
 
 QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, bool useResourcePrefix)
 {
@@ -237,6 +239,57 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::UserRole + KisAbstractResourceModel::StorageActive:
     {
         return query.value(useResourcePrefix ? "resource_storage_active" : "storage_active");
+    }
+    case Qt::UserRole + KisAbstractResourceModel::BrokenStatus:
+    {
+        if (resourceType == ResourceType::PaintOpPresets) {
+            KisResourceMetaDataModel *metaDataModel = KisResourceModelProvider::resourceMetadataModel();
+            const int id = query.value(useResourcePrefix ? "resource_id" : "id").toInt();
+            const QStringList requiredBrushes =
+                metaDataModel->metaDataValue(id, "dependent_resources_filenames").toStringList();
+            if (!requiredBrushes.isEmpty()) {
+                KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
+                Q_FOREACH (const QString brushFile, requiredBrushes) {
+                    if (!model->resourceExists("", brushFile, "")) {
+                        qWarning() << "dependent resource" << brushFile << "misses.";
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+    case Qt::UserRole + KisAbstractResourceModel::BrokenStatusMessage: 
+    {
+        if (resourceType == ResourceType::PaintOpPresets) {
+            KisResourceMetaDataModel *metaDataModel = KisResourceModelProvider::resourceMetadataModel();
+            const int id = query.value(useResourcePrefix ? "resource_id" : "id").toInt();
+            const QStringList requiredBrushes =
+                metaDataModel->metaDataValue(id, "dependent_resources_filenames").toStringList();
+            QStringList missingResources;
+            if (!requiredBrushes.isEmpty()) {
+                KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
+                Q_FOREACH (const QString brushFile, requiredBrushes) {
+                    if (!model->resourceExists("", brushFile, "")) {
+                        missingResources << brushFile;
+                        break;
+                    }
+                }
+                if (!missingResources.isEmpty()) {
+                    QString resourcesList;
+                    Q_FOREACH (const QString &resource, missingResources) {
+                        resourcesList += "<li>" + resource + "</li>";
+                    }
+
+                    return QString(
+                        "%1</br>"
+                        "<ul style=\"list-style-type: disc; margin: 0px;\">%2</ul>")
+                        .arg(i18n("Some resources are missing:"), resourcesList);
+                }
+            }
+        }
+        return QVariant();
     }
     default:
         ;

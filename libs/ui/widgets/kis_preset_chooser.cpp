@@ -147,22 +147,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawPixmap(paintRect.x() + 3, paintRect.y() + 3, pixmap);
     }
 
-    bool broken = false;
-    
-    
-    const int id = index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt();
-    const QStringList requiredBrushes = m_metaDataModel->metaDataValue(id, "dependent_resources_filenames").toStringList();
-    if (!requiredBrushes.isEmpty()) {
-        KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Brushes);
-        Q_FOREACH(const QString brushFile, requiredBrushes) {
-            if (!model->resourceExists("", brushFile, "")) {
-                qWarning() << "dependent resource" << brushFile << "misses.";
-                broken = true;
-            }
-        }
-    }
-
-    if (broken) {
+    if (index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatus).toBool()) {
         const QIcon icon = KisIconUtils::loadIcon("broken-preset");
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }

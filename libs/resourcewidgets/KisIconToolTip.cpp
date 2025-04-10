@@ -99,15 +99,22 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         tagsRow = QString("<tr><td>%1:</td><td style=\"text-align: right;\">%2</td></tr>").arg(i18n("Tags"), list);
     }
 
-    QString location = index.data(Qt::UserRole + KisAbstractResourceModel::Location).toString();
+    const QString brokenReason = index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatusMessage).toString();
+    const QString brokenRow = 
+        !brokenReason.isEmpty() 
+        ? QString("<tr><td colspan=\"2\"><b>%1</b></td></tr>"
+                  "<tr><td colspan=\"2\">%2</td></tr>")
+                  .arg(i18n("Resource is broken!"), brokenReason)
+        : QString();
 
+    QString location = index.data(Qt::UserRole + KisAbstractResourceModel::Location).toString();
     if (location.isEmpty()) {
         location = i18nc("a placeholder name for the default storage of resources", "resource folder");
     }
 
     const QString locationRow = QString("<tr><td>%1:</td><td style=\"text-align: right;\">%2</td></tr>").arg(i18n("Location"), location);
 
-    const QString footerTable = QString("<p><table>%1%2</table></p>").arg(tagsRow).arg(locationRow);
+    const QString footerTable = QString("<p><table>%1%2%3</table></p>").arg(brokenRow).arg(tagsRow).arg(locationRow);
 
     const QString image = QString("<center><img src=\"data:thumbnail\"></center>");
     QString body = QString("<h3 align=\"center\">%1</h3>%2%3").arg(name, image, footerTable);

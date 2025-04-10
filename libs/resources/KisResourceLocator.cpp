@@ -972,7 +972,7 @@ void KisResourceLocator::updateFontStorage()
     if (!KisResourceCacheDb::synchronizeStorage(fontStorage())) {
         qWarning() << i18n("Could not synchronize updated font registery with the database");
     } else {
-        emit storageUpdated(fontStorage()->location());
+        Q_EMIT storageResynchronized(fontStorage()->location(), false);
     }
 }
 
@@ -1051,6 +1051,9 @@ bool KisResourceLocator::initializeDb()
             d->errorMessages.append(QString("Could not add tags for storage %1 to the cache database").arg(storage->location()));
         }
     }
+
+    Q_EMIT storagesBulkSynchronizationFinished();
+
     return (d->errorMessages.isEmpty());
 }
 
@@ -1207,6 +1210,8 @@ bool KisResourceLocator::synchronizeDb()
     Q_FOREACH(const KisResourceStorageSP storage, d->storages) {
         if (!KisResourceCacheDb::synchronizeStorage(storage)) {
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
+        } else {
+            Q_EMIT storageResynchronized(storage->location(), true);
         }
     }
 
@@ -1215,6 +1220,8 @@ bool KisResourceLocator::synchronizeDb()
             d->errorMessages.append(i18n("Could not synchronize %1 with the database", storage->location()));
         }
     }
+
+    Q_EMIT storagesBulkSynchronizationFinished();
 
     /**
      * In the current layout of the database we cannot set FOREIGN KEY

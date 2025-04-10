@@ -147,8 +147,17 @@ Q_SIGNALS:
     /// Emitted when a resource changes its active state
     void resourceActiveStateChanged(const QString &resourceType, int resourceId);
 
-    /// Emitted when a storage is updated.
-    void storageUpdated(const QString &location);
+    /// Emitted when a storage is resynchronized using KisresourceCacheDb::synchronizeStorage()
+    ///
+    /// if \p isBulkResynchronization then this resynchronization happened as a part
+    /// of bulk resynchronization at the start of Krita. At the end of this bulk
+    /// action storagesBulkSynchronizationFinished() will be emitted as well.
+    void storageResynchronized(const QString &storage, bool isBulkResynchronization);
+
+    /// Emitted when bulk-synchronization of all the storages has been finished
+    ///
+    /// \see storageResynchronized
+    void storagesBulkSynchronizationFinished();
 
 private:
 

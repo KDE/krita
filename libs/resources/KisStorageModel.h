@@ -68,7 +68,12 @@ Q_SIGNALS:
 
     void storageEnabled(const QString &storage);
     void storageDisabled(const QString &storage);
-    void storageUpdated(const QString &storage);
+    
+    /// Emitted when an individual storage is initialized
+    void storageResynchronized(const QString &storage, bool isBulkResynchronization);
+
+    /// Emitted on loading when all the storages are finished initialization
+    void storagesBulkSynchronizationFinished();
 
 private Q_SLOTS:
 
@@ -78,13 +83,11 @@ private Q_SLOTS:
     /// This is called when a storage really is deleted both from database and anywhere else
     void removeStorage(const QString &location);
 
-    /// Called when the storage is updated and everything needs to be reloaded.
-    void updateStorage(const QString &location);
+    /// called when storages finished synchronization process
+    void slotStoragesBulkSynchronizationFinished();
 
-private:
-
-    KisStorageModel(const KisStorageModel&);
-    KisStorageModel operator=(const KisStorageModel&);
+private :
+    void resetQuery();
 
     static QImage getThumbnailFromQuery(const QSqlQuery &query);
 

@@ -38,16 +38,16 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     /// we don't handle KisResourceLocator::storage{Added,Removed} signals
     /// here, we use per-resource notifications from KisResourceLocator instead
 
-    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
-    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
-    connect(KisStorageModel::instance(), SIGNAL(storageUpdated(const QString&)), this, SLOT(storageUpdated(const QString&)));
+    connect(KisStorageModel::instance(), &KisStorageModel::storageEnabled, this, &KisAllResourcesModel::storageActiveStateChanged);
+    connect(KisStorageModel::instance(), &KisStorageModel::storageDisabled, this, &KisAllResourcesModel::storageActiveStateChanged);
+    connect(KisStorageModel::instance(), &KisStorageModel::storageResynchronized, this, &KisAllResourcesModel::storageResynchronized);
+    connect(KisStorageModel::instance(), &KisStorageModel::storagesBulkSynchronizationFinished, this, &KisAllResourcesModel::storagesBulkSynchronizationFinished);
 
-    connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceImport(QString, int)), this, SLOT(beginExternalResourceImport(QString, int)));
-    connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceImport(QString)), this, SLOT(endExternalResourceImport(QString)));
-
-    connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceRemove(QString, QVector<int>)), this, SLOT(beginExternalResourceRemove(QString, QVector<int>)));
-    connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceRemove(QString)), this, SLOT(endExternalResourceRemove(QString)));
-    connect(KisResourceLocator::instance(), SIGNAL(resourceActiveStateChanged(QString, int)), this, SLOT(slotResourceActiveStateChanged(QString, int)));
+    connect(KisResourceLocator::instance(), &KisResourceLocator::beginExternalResourceImport, this, &KisAllResourcesModel::beginExternalResourceImport);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::endExternalResourceImport, this, &KisAllResourcesModel::endExternalResourceImport);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::beginExternalResourceRemove, this, &KisAllResourcesModel::beginExternalResourceRemove);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::endExternalResourceRemove, this, &KisAllResourcesModel::endExternalResourceRemove);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::resourceActiveStateChanged, this, &KisAllResourcesModel::slotResourceActiveStateChanged);
 
     d->resourceType = resourceType;
 
@@ -668,7 +668,21 @@ void KisAllResourcesModel::storageActiveStateChanged(const QString &location)
     }
 }
 
-void KisAllResourcesModel::storageUpdated(const QString &location)
+void KisAllResourcesModel::storageResynchronized(const QString &storage, bool isBulkResynchronization)
+{
+    Q_UNUSED(storage);
+
+    // we handle bulk-synchronization separately in slotStoragesBulkSynchronizationFinished()
+    if (isBulkResynchronization) return;
+
+    // TODO: ideally, we should use more fine-grained updates for
+    //       updating the storages, but let's keep it this
+    beginResetModel();
+    resetQuery();
+    endResetModel();
+}
+
+void KisAllResourcesModel::storagesBulkSynchronizationFinished()
 {
     beginResetModel();
     resetQuery();

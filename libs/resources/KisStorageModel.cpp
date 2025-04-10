@@ -22,10 +22,11 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
+#include <kis_debug.h>
+
 Q_GLOBAL_STATIC(KisStorageModel, s_instance)
 
 struct KisStorageModel::Private {
-    int cachedRowCount {-1};
     QList<QString> storages;
 };
 
@@ -33,28 +34,12 @@ KisStorageModel::KisStorageModel(QObject *parent)
     : QAbstractTableModel(parent)
     , d(new Private())
 {
-    connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
-    connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
-    connect(KisResourceLocator::instance(), SIGNAL(storageUpdated(const QString&)), this, SLOT(updateStorage(const QString&)));
+    connect(KisResourceLocator::instance(), &KisResourceLocator::storageAdded, this, &KisStorageModel::addStorage);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::storageRemoved, this, &KisStorageModel::removeStorage);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::storageResynchronized, this, &KisStorageModel::storageResynchronized);
+    connect(KisResourceLocator::instance(), &KisResourceLocator::storagesBulkSynchronizationFinished, this, &KisStorageModel::slotStoragesBulkSynchronizationFinished);
 
-    QSqlQuery query;
-
-    bool r = query.prepare("SELECT location\n"
-                           "FROM   storages\n"
-                           "ORDER BY id");
-    if (!r) {
-        qWarning() << "Could not prepare KisStorageModel query" << query.lastError();
-    }
-
-    r = query.exec();
-
-    if (!r) {
-        qWarning() << "Could not execute KisStorageModel query" << query.lastError();
-    }
-
-    while (query.next()) {
-        d->storages << query.value(0).toString();
-    }
+    resetQuery();
 }
 
 KisStorageModel *KisStorageModel::instance()
@@ -513,9 +498,35 @@ void KisStorageModel::removeStorage(const QString &location)
     endRemoveRows();
 }
 
-void KisStorageModel::updateStorage(const QString &location)
+void KisStorageModel::slotStoragesBulkSynchronizationFinished()
 {
-    emit storageUpdated(location);
+    beginResetModel();
+    resetQuery();
+    endResetModel();
+
+    Q_EMIT storagesBulkSynchronizationFinished();
 }
 
+void KisStorageModel::resetQuery()
+{
+    QSqlQuery query;
 
+    bool r = query.prepare(
+        "SELECT location\n"
+        "FROM   storages\n"
+        "ORDER BY id");
+    if (!r) {
+        qWarning() << "Could not prepare KisStorageModel query" << query.lastError();
+    }
+
+    r = query.exec();
+
+    if (!r) {
+        qWarning() << "Could not execute KisStorageModel query" << query.lastError();
+    }
+
+    d->storages.clear();
+    while (query.next()) {
+        d->storages << query.value(0).toString();
+    }
+}

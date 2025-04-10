@@ -2350,6 +2350,7 @@ bool KisResourceCacheDb::removeOrphanedMetaData()
         if (!q.prepare("DELETE FROM metadata\n"
                        "WHERE  foreign_id NOT IN (SELECT id FROM resources)\n"
                        "AND    table_name = :table\n")) {
+            QSqlDatabase::database().rollback();
             qWarning() << "Could not prepare delete oprhaned metadata query for resources" << q.lastError();
             return false;
         }
@@ -2374,6 +2375,7 @@ bool KisResourceCacheDb::removeOrphanedMetaData()
         if (!q.prepare("DELETE FROM metadata\n"
                        "WHERE  foreign_id NOT IN (SELECT id FROM storages)\n"
                        "AND    table_name = :table\n")) {
+            QSqlDatabase::database().rollback();
             qWarning() << "Could not prepare delete oprhaned metadata query for storages" << q.lastError();
             return false;
         }

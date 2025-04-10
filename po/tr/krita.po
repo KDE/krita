@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-09 01:53+0000\n"
+"POT-Creation-Date: 2025-04-10 01:53+0000\n"
 "PO-Revision-Date: 2025-04-07 00:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -52356,6 +52356,22 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">Gelişmiş</span></p><p>“Öntanımlı (kodlayıcı seçer)” seçeneği "
+"yaygın olarak kullanılır. Bu, kalite/hız ödününüze bağlı olarak kodlayıcının "
+"en iyi ayarları kendiliğinden seçeceği anlamına gelir. Çoğu kullanıcı için "
+"bu seçenek önerilir.</p><p><span style=\" font-size:14pt; text-decoration: "
+"underline;\">Kodlayıcı parametreleri:</span></p><p>Hangi sıkıştırma "
+"yönteminin kullanıldığına bakılmaksızın genel JPEG XL kodlama sürecinde "
+"kullanılan genel ayarlar.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">VarDCT parametreleri:</span></p><p>Değişken Ayrık "
+"Kosinüs Dönüşümü (Fotoğrafik içerik için eniyilenmiş)</p><p>Bu, özgün JPEG "
+"ile kullanılan sıkıştırma teknikleri ile aynı ailedendir ve bu yüzden "
+"fotoğraflar ve çok miktarda gradyan ve doku içeren görseller gibi “Doğal” "
+"görseller için en iyi seçimdir.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">Modüler parametreler:</span></p><p>Modüler kip için "
+"olan ayarlar — grafiksel içerik, ilüstrasyonlar ve kayıpsız sıkıştırma için "
+"eniyilenmiştir.</p><p><br/></p><p><br/></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -52585,7 +52601,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:395
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "Bilgi için bu metnin üzerine fareyle gelin"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -52609,6 +52625,9 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Daha küçük dosyalar elde etmek için renk çözünürlüğünü "
+"azaltır. Renk geçişlerinde keskinliği azalttığından yalnızca düşük kaliteli "
+"ayarlar için önerilir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
@@ -52631,12 +52650,19 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>Reduces transparency channel resolution for smaller "
+#| "files. Only reccomended for low quality or when precise transparency "
+#| "edges aren't critical.</p></body></html>"
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
-"files. Only reccomended for low quality or when precise transparency edges "
+"files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Daha küçük dosyalar için saydamlık kanalı "
+"çözünürlüğünü azaltır. Yalnızca düşük kalite veya kesin saydamlık kenarları "
+"kritik değilse önerilir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52663,6 +52689,10 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Kamera algılayıcısı gürültü desenlerini daha iyi "
+"sıkıştırma için ayırır. Daha yüksek değerler daha çok gürültüyü yeniden "
+"yapar, yüksek ISO’lu fotoğrafların doğal görünümünü korumak için yararlıdır."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
@@ -52695,6 +52725,9 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Görseldeki yinelenen nokta desenlerini tanımlar ve "
+"etkili bir biçimde kodlar. Taranan belgeler ve bazı dokular için "
+"kullanışlıdır.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:480
@@ -52742,10 +52775,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
-#, fuzzy, kde-format
-#| msgid "Edge preserving filter"
+#, kde-format
 msgid "Edge preserving filter strength"
-msgstr "Kenar koruyan süzgeç"
+msgstr "Kenar koruyan süzgeç gücü"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:538
@@ -52757,15 +52789,13 @@ msgstr "Güçlü"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Eylem Tanımlaması</p></body></html>"
+msgstr "<html><head/><body><p>Öntanımlı (kodlayıcı seçer)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
 msgstr "Kendiliğinden"
@@ -52843,19 +52873,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
 "areas. Disable to reduce file size when colors under transparency aren't "
 "needed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Etkinleştirilirse bu, alfa kanalını (saydamlık) "
-"kayıpsız olarak ayarlar. Kayıplı dışa aktarmada saydamlık kalıntılarını "
-"azaltmak için yararlıdır.</p></body></html>"
+"<html><head/><body><p>Tümüyle saydam alanlardaki renk bilgisi korur. "
+"Saydamlık altındaki renklere gereksinim yoksa dosya boyutunu azaltmak için "
+"devre dışı bırakın.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:633
@@ -52865,19 +52891,15 @@ msgstr "Görünmez piksellerin rengini tut"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:640
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Add the author nickname and the first contact of "
-#| "the author profile. This is overridden by the anonymizer.</p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Determines the order in which image tiles are encoded. "
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Çizerin takma adını ve çizer profilindeki öncelikli "
-"iletişim bilgilerini ekleyin. Bu anonimleştirici tarafından geçersiz kılınır."
-"</p></body></html>"
+"<html><head/><body><p>Görsel karolarının hangi sırada kodlandığını belirler. "
+"“Önce orta”, ilerlemeli yükleme için görselin ortasına öncelik verir, web "
+"içeriği için kullanışlıdır.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:643
@@ -53113,16 +53135,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Normların belirlenmesi için tabletin eğimini kullanın."
-"</p></body></html>"
+"<html><head/><body><p>Sıkıştırma için karo boyutunu ayarlar. Daha büyük "
+"gruplar sıkıştırmayı iyileştirebilir; ancak daha çok bellek gerektirir.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914

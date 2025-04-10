@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-09 01:53+0000\n"
+"POT-Creation-Date: 2025-04-10 01:53+0000\n"
 "PO-Revision-Date: 2025-03-29 20:10+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -52927,12 +52927,19 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<html><head/><body><p>If enabled, this will set alpha channel "
+#| "(transparency) to lossless. Useful to reduce transparency artifact on "
+#| "lossy export.</p></body></html>"
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
-"files. Only reccomended for low quality or when precise transparency edges "
+"files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Se attivata, imposta il canale alfa (trasparenza) in "
+"modalità senza perdita di dati. Utile per ridurre gli artefatti della "
+"trasparenza durante l'esportazione con perdita di dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435

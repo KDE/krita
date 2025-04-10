@@ -1023,38 +1023,7 @@ KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(Initi
     f.write(KritaVersionWrapper::versionString().toUtf8());
     f.close();
 
-    if (!initializeDb()) {
-        return LocatorError::CannotInitializeDb;
-    }
-
     return LocatorError::Ok;
-}
-
-bool KisResourceLocator::initializeDb()
-{
-    Q_EMIT progressMessage(i18n("Initializing the resources."));
-    d->errorMessages.clear();
-    findStorages();
-
-    Q_FOREACH(auto loader, KisResourceLoaderRegistry::instance()->values()) {
-        KisResourceCacheDb::registerResourceType(loader->resourceType());
-    }
-
-    Q_FOREACH(KisResourceStorageSP storage, d->storages) {
-        if (!KisResourceCacheDb::addStorage(storage, (storage->type() == KisResourceStorage::StorageType::Folder ? false : true))) {
-            d->errorMessages.append(QString("Could not add storage %1 to the cache database").arg(storage->location()));
-        }
-    }
-
-    Q_FOREACH(KisResourceStorageSP storage, d->storages) {
-        if (!KisResourceCacheDb::addStorageTags(storage)) {
-            d->errorMessages.append(QString("Could not add tags for storage %1 to the cache database").arg(storage->location()));
-        }
-    }
-
-    Q_EMIT storagesBulkSynchronizationFinished();
-
-    return (d->errorMessages.isEmpty());
 }
 
 void KisResourceLocator::findStorages()
@@ -1198,6 +1167,8 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
 
 bool KisResourceLocator::synchronizeDb()
 {
+    Q_EMIT progressMessage(i18n("Synchronizing the resources."));
+
     d->errorMessages.clear();
 
     // Add resource types that have been added since first-time installation.

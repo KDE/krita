@@ -336,9 +336,6 @@ private:
 
     LocatorError firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation);
 
-    // First time installation
-    bool initializeDb();
-
     // Synchronize on restarting Krita to see whether the user has added any storages or resources to the resources location
     bool synchronizeDb();
 

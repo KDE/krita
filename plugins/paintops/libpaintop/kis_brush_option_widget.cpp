@@ -108,7 +108,10 @@ void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     using namespace KisBrushModel;
 
     std::optional<BrushData> data = BrushData::read(setting.data(), resourcesInterface());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(data);
+    if (!data) {
+        qWarning() << "WARNING: failed to load brush object for the a paintop preset";
+        return;
+    }
     m_d->brushData.set(*data);
     m_d->commonBrushSizeData.set(effectiveSizeForBrush(data->type, data->autoBrush, data->predefinedBrush, data->textBrush));
 

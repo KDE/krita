@@ -288,6 +288,15 @@ bool KoResource::isDirty() const
 
 void KoResource::addMetaData(QString key, QVariant value)
 {
+    /**
+     * It is responsibility of the resource itself to load all the necessary
+     * metadata right on loading in loadFromDevice(). The resource locator will
+     * **not** try to load this information from the database. Database only
+     * caches metadata.
+     *
+     * To make sure that metadata is correctly populated in the database,
+     * it should be set up right in loadFromDevice().
+     */
     d->metadata.insert(key, value);
 }
 

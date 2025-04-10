@@ -45,11 +45,11 @@ public:
     void removePalette(KoColorSetSP );
 
     /**
-     * @brief rowNumberOfGroup
+     * @brief rowCountOfGroup
      * @param originalName the original name of a group at the creation of the instance
      * @return newest row number of the group
      */
-    int rowNumberOfGroup(const QString &originalName) const;
+    int rowCountOfGroup(const QString &originalName) const;
 
     /**
      * @brief oldNameFromNewName

@@ -951,9 +951,9 @@ void KisPaintOpPresetsEditor::slotUpdatePresetSettings()
                     isBroken = index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatus).toBool();
                     brokenReason =
                         QString(
-                            "<html><h3>%1</h3>"
+                            "<html><body style=\"margin: 20px;\"><h3>%1</h3>"
                             "%2"
-                            "</html>")
+                            "</body></html>")
                             .arg(i18n("Resource is broken!"),
                                  index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatusMessage).toString());
                 }

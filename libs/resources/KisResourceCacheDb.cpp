@@ -858,6 +858,10 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
         qWarning() << "Could not update resource" << q.boundValues() << q.lastError();
     }
 
+    if (!resource->metadata().isEmpty()) {
+        return updateMetaDataForId(resource->metadata(), resourceId, METADATA_RESOURCES);
+    }
+
     return r;
 }
 

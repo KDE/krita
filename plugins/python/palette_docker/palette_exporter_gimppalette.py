@@ -43,8 +43,8 @@ class gimpPaletteExporter:
 
         groupNames = self.currentPalette.groupNames()
         for groupName in groupNames:
-            colorCount = self.currentPalette.colorsCountGroup(groupName)
-            for i in range(colorCount):
+            slotCount = self.currentPalette.slotCountGroup(groupName)
+            for i in range(slotCount):
                 entry = self.currentPalette.entryByIndexFromGroup(i, groupName)
                 color = entry.color()
                 # convert to sRGB

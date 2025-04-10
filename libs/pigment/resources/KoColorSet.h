@@ -115,6 +115,7 @@ public:
     int rowCountWithTitles() const;
 
     quint32 colorCount() const;
+    quint32 slotCount() const;
 
     PaletteType paletteType() const;
     void setPaletteType(PaletteType paletteType);

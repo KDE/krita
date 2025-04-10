@@ -915,6 +915,15 @@ quint32 KoColorSet::colorCount() const
     return colorCount;
 }
 
+quint32 KoColorSet::slotCount() const
+{
+    int slotCount = 0;
+    for (const KisSwatchGroupSP &group : d->swatchGroups) {
+        slotCount += group->slotCount();
+    }
+    return slotCount;
+}
+
 KisSwatchGroupSP KoColorSet::getGroup(const QString &name) const
 {
     for (KisSwatchGroupSP &group : d->swatchGroups) {

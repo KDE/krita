@@ -84,37 +84,44 @@ class inkscapeSVGExporter:
             groupTitle.appendChild(svgDoc.createTextNode(groupName))
             svgSwatches.appendChild(groupTitle)
             Row += 1
-            colorCount = self.currentPalette.colorsCountGroup(groupName)
-            for i in range(colorCount):
-                entry = self.currentPalette.entryByIndexFromGroup(
-                    i, groupName)
-                color = entry.color()
-                iccColor = "icc-color(" + color.colorProfile()
-                for c in range(len(color.componentsOrdered()) - 1):
-                    iccColor = "{col},{c}".format(
-                        col=iccColor, c=color.componentsOrdered()[c])
-                iccColor = iccColor + ")"
-                if color.colorProfile() not in iccProfileList:
-                    iccProfileList.append(color.colorProfile())
-                # convert to sRGB
-                color.setColorSpace("RGBA", "U8", "sRGB built-in")
-                red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
-                green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
-                blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
-                hexcode = "#{red:02x}{green:02x}{blue:02x}".format(
-                    red=red, green=green, blue=blue)
+            slotCount = self.currentPalette.slotCountGroup(groupName)
+            for i in range(slotCount):
+                entry = self.currentPalette.entryByIndexFromGroup(i, groupName)
+
                 swatchName = "{i}-{name}".format(i=i, name=entry.name())
                 swatchName = swatchName.replace(" ", "-")
                 swatchName = swatchName.replace("(", "-")
                 swatchName = swatchName.replace(")", "-")
+
                 swatchMain = svgDoc.createElement("linearGradient")
                 swatchMain.setAttribute("osb:paint", "solid")
                 swatchMain.setAttribute("id", swatchName)
                 swatchSub = svgDoc.createElement("stop")
-                swatchSub.setAttribute(
-                    "style",
-                    "stop-color: {hex} {color};stop-opacity:1;".format(
-                        hex=hexcode, color=iccColor))
+                if entry.isValid():
+                    color = entry.color()
+                    iccColor = "icc-color(" + color.colorProfile()
+                    for c in range(len(color.componentsOrdered()) - 1):
+                        iccColor = "{col},{c}".format(
+                            col=iccColor, c=color.componentsOrdered()[c])
+                    iccColor = iccColor + ")"
+                    if color.colorProfile() not in iccProfileList:
+                        iccProfileList.append(color.colorProfile())
+                    # convert to sRGB
+                    color.setColorSpace("RGBA", "U8", "sRGB built-in")
+                    red = max(min(int(color.componentsOrdered()[0] * 255), 255), 0)
+                    green = max(min(int(color.componentsOrdered()[1] * 255), 255), 0)
+                    blue = max(min(int(color.componentsOrdered()[2] * 255), 255), 0)
+                    hexcode = "#{red:02x}{green:02x}{blue:02x}".format(
+                        red=red, green=green, blue=blue)
+
+                    swatchSub.setAttribute(
+                        "style",
+                        "stop-color: {hex} {color};stop-opacity:1;".format(
+                            hex=hexcode, color=iccColor))
+                else: # empty slot- transparent black
+                    swatchSub.setAttribute(
+                        "style",
+                        "stop-color: #000000;stop-opacity:0;")
 
                 swatchMain.appendChild(swatchSub)
                 svgDefs.appendChild(swatchMain)

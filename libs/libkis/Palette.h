@@ -56,7 +56,7 @@ public:
 public Q_SLOTS:
 
     /**
-     * @brief number of colors (swatches) in palette
+     * @brief number of filled colors (swatches) in palette
      * NOTE: same as `colorsCountTotal()`
      *
      * @return total number of colors
@@ -79,6 +79,28 @@ public Q_SLOTS:
      * @param columns Set the amount of columns this palette should use.
      */
     void setColumnCount(int columns);
+
+    /**
+     * @brief The number of rows in the palette grid.
+     * If the palette has groups, the row count is defined by the groups' row count.
+     * Otherwise, it's determined by the number of columns and entries.
+     * @return the number of rows this palette has.
+     */
+    int rowCount();
+
+    /**
+     * @brief The number of rows defined in the given group.
+     * @param name of the group to check.
+     * @return the number of rows this group is set to use.
+     */
+    int rowCountGroup(QString name);
+
+    /**
+     * @brief Set the number of rows defined in the given group.
+     * @param rows the amount of rows this group should use.
+     * @param name of the group to modify.
+     */
+    void setRowCountGroup(int rows, QString name);
 
     /**
      * @brief the comment or description associated with the palette.
@@ -113,13 +135,13 @@ public Q_SLOTS:
      * @brief Palette content can be organized in groups.
      * This method allows to remove an existing group from palette.
      *
-     * @param name The name of the new group to remve.
+     * @param name The name of the group to remove.
      * @param keepColors whether or not to delete all the colors inside, or to move them to the default group.
      */
     void removeGroup(QString name, bool keepColors = true);
 
     /**
-     * @brief number of colors (swatches) in palette
+     * @brief number of filled colors (swatches) in palette
      * NOTE: same as `numberOfEntries()`
      *
      * @return total number of colors
@@ -129,9 +151,26 @@ public Q_SLOTS:
     /**
      * @brief colorsCountGroup
      * @param name of the group to check. Empty is the default group.
-     * @return the amount of colors within that group.
+     * @return the amount of filled colors within that group.
      */
      int colorsCountGroup(QString name);
+
+    /**
+     * @brief number of slots for swatches in palette
+     * This includes any empty slots not filled by a color.
+     *
+     * @return total number of slots
+     */
+    int slotCount();
+
+    /**
+     * @brief number of slots for swatches in group
+     * This includes any empty slots not filled by a color.
+     *
+     * @param name of the group to check. Empty is the default group.
+     * @return number of slots in group
+     */
+    int slotCountGroup(QString name);
 
     /**
      * @brief colorSetEntryByIndex
@@ -182,12 +221,19 @@ public Q_SLOTS:
     void addEntry(Swatch entry, QString groupName = QString());
 
     /**
-     * @brief remove from defined group a color entry designed by given index.
+     * @brief Remove the color entry at the given index in this palette.
+     *
+     * @param index index in this palette.
+     */
+     void removeEntry(int index);
+
+    /**
+     * @brief Remove the color entry at the given index in the given group.
      *
      * @param index index in the group.
-     * @param groupName the name of the group within which color have to be removed.
+     * @param groupName the name of the group to remove the entry from.
      */
-    void removeEntry(int index, const QString &groupName);
+    void removeEntryFromGroup(int index, const QString &groupName);
 
     /**
      * @brief changeGroupName
@@ -233,7 +279,7 @@ private:
 
     /**
      * @brief colorSet
-     * @return gives qa KoColorSet object back
+     * @return gives a KoColorSet object back
      */
     KoColorSetSP colorSet();
 

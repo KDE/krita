@@ -19,44 +19,49 @@ class sortColors(object):
         self.sort_all_groups()
 
     def sort_all_groups(self):
-        self.sort_color_by_name(str())
         groupNames = self.currentPalette.groupNames()
         for groupName in groupNames:
             self.sort_color_by_name(groupName)
 
     def sort_color_by_name(self, groupName):
         d = {}
-        colorCount = self.currentPalette.colorsCountGroup(groupName)
-        for i in range(colorCount - 1, -1, -1):
+        slotCount = self.currentPalette.slotCountGroup(groupName)
+        for i in range(slotCount - 1, -1, -1):
             entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
+            if not entry.isValid():
+                continue
             d[entry.name() + str(i)] = entry
-            self.currentPalette.removeEntry((i), groupName)
+            self.currentPalette.removeEntryFromGroup((i), groupName)
 
         for s in sorted(d):
             self.currentPalette.addEntry(d[s], groupName)
 
     def sort_color_by_id(self, groupName):
         d = {}
-        colorCount = self.currentPalette.colorsCountGroup(groupName)
-        for i in range(colorCount - 1, -1, -1):
+        slotCount = self.currentPalette.slotCountGroup(groupName)
+        for i in range(slotCount - 1, -1, -1):
             entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
+            if not entry.isValid():
+                continue
             d[entry.id() + " " + str(i)] = entry
-            self.currentPalette.removeEntry((i), groupName)
+            self.currentPalette.removeEntryFromGroup((i), groupName)
 
         for s in sorted(d):
             self.currentPalette.addEntry(d[s], groupName)
 
     def sort_by_value(self, groupName):
         d = {}
-        colorCount = self.currentPalette.colorsCountGroup(groupName)
-        for i in range(colorCount - 1, -1, -1):
+        slotCount = self.currentPalette.slotCountGroup(groupName)
+        for i in range(slotCount - 1, -1, -1):
             entry = self.currentPalette.entryByIndexFromGroup((i), groupName)
+            if not entry.isValid():
+                continue
             color = entry.color()
             color.setColorSpace("RGBA", "U8", "sRGB built-in")
             d[color.components()[0] +
               color.components()[1] +
               color.components()[2]] = entry
-            self.currentPalette.removeEntry((i), groupName)
+            self.currentPalette.removeEntryFromGroup((i), groupName)
 
         for s in sorted(d):
             self.currentPalette.addEntry(d[s], groupName)

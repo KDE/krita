@@ -26,6 +26,9 @@ public Q_SLOTS:
     int numberOfEntries() const;
     int columnCount();
     void setColumnCount(int columns);
+    int rowCount();
+    int rowCountGroup(QString name);
+    void setRowCountGroup(int rows, QString name);
     QString comment();
     void setComment(QString comment);
     QStringList groupNames();
@@ -33,12 +36,15 @@ public Q_SLOTS:
     void removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
     int colorsCountGroup(QString name);
+    int slotCount();
+    int slotCountGroup(QString name);
     Swatch *colorSetEntryByIndex(int index) /Factory/;
     Swatch *entryByIndex(int index) /Factory/;
     Swatch *colorSetEntryFromGroup(int index, const QString &groupName) /Factory/;
     Swatch *entryByIndexFromGroup(int index, const QString &groupName) /Factory/;
     void addEntry(Swatch entry, QString groupName);
-    void removeEntry(int index, const QString &groupName);
+    void removeEntry(int index);
+    void removeEntryFromGroup(int index, const QString &groupName);
     void changeGroupName(QString oldGroupName, QString newGroupName);
     void renameGroup(QString oldGroupName, QString newGroupName);
     void moveGroup(const QString &groupName, const QString &groupNameInsertBefore);

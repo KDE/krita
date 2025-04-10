@@ -56,6 +56,7 @@ public:
     int rowCount() const;
 
     int colorCount() const;
+    int slotCount() const;
 
     /**
      * @brief getColors

@@ -205,6 +205,11 @@ int KisSwatchGroup::colorCount() const
     return d->colorCount;
 }
 
+int KisSwatchGroup::slotCount() const
+{
+    return columnCount() * rowCount();
+}
+
 QList<KisSwatchGroup::SwatchInfo> KisSwatchGroup::infoList() const
 {
     QList<SwatchInfo> res;

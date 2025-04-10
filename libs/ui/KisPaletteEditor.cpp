@@ -174,9 +174,21 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
     m_d->rServer->removeResourceFromServer(cs);
 }
 
-int KisPaletteEditor::rowNumberOfGroup(const QString &originalName) const
+int KisPaletteEditor::rowCountOfGroup(const QString &originalName) const
 {
-    if (!m_d->modifiedPaletteInfo.groups.contains(originalName)) { return 0; }
+    if (!m_d->modifiedPaletteInfo.groups.contains(originalName)) {
+        KoColorSetSP colorSet = m_d->model->colorSet();
+        if (originalName.isEmpty()) {
+            return colorSet->getGlobalGroup()->rowCount();
+        }
+        else {
+            KisSwatchGroupSP group = colorSet->getGroup(originalName);
+            if (group ){
+                return group->rowCount();
+            }
+        }
+        return 0;
+    }
     return m_d->modifiedPaletteInfo.groups[originalName]->rowCount();
 }
 

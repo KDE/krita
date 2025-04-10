@@ -108,7 +108,7 @@ void KisDlgPaletteEditor::initialize(KisPaletteModel *model)
     m_ui->bnDelGroup->setEnabled(false);
     m_ui->bnRenGroup->setEnabled(false);
 
-    m_ui->spinBoxRow->setValue(m_paletteEditor->rowNumberOfGroup(KoColorSet::GLOBAL_GROUP_NAME));
+    m_ui->spinBoxRow->setValue(m_paletteEditor->rowCountOfGroup(KoColorSet::GLOBAL_GROUP_NAME));
 
     m_ui->lineEditName->setEnabled(true);
     m_ui->spinBoxCol->setEnabled(true);
@@ -155,7 +155,7 @@ void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
         m_ui->bnRenGroup->setEnabled(true);
     }
     m_currentGroupOriginalName = m_paletteEditor->oldNameFromNewName(groupName);
-    m_ui->spinBoxRow->setValue(m_paletteEditor->rowNumberOfGroup(m_currentGroupOriginalName));
+    m_ui->spinBoxRow->setValue(m_paletteEditor->rowCountOfGroup(m_currentGroupOriginalName));
 }
 
 void KisDlgPaletteEditor::slotRowCountChanged(int newCount)

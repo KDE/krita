@@ -894,6 +894,7 @@ void KisPaintOpPresetsEditor::updateThemedIcons()
     m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
     m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setIcon(KisIconUtils::loadIcon("document-edit"));
     m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("warning"));
+    m_d->uiWdgPaintOpPresetSettings.brokenPresetIndicatorButton->setIcon(KisIconUtils::loadIcon("broken-preset"));
 
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
@@ -929,14 +930,39 @@ void KisPaintOpPresetsEditor::slotUpdatePresetSettings()
     // hide options on UI if we are creating a brush preset from scratch to prevent confusion
     if (m_d->isCreatingBrushFromScratch) {
         m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(false);
+        m_d->uiWdgPaintOpPresetSettings.brokenPresetIndicatorButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setVisible(false);
         m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(false);
     } else {
-        bool isPresetDirty = m_d->resourceProvider->currentPreset()->isDirty();
+        const bool isPresetDirty = m_d->resourceProvider->currentPreset()->isDirty();
 
         // don't need to reload or overwrite a clean preset
         m_d->uiWdgPaintOpPresetSettings.dirtyPresetIndicatorButton->setVisible(isPresetDirty);
+
+        {
+            bool isBroken = false;
+            QString brokenReason;
+            const int resourceId = m_d->resourceProvider->currentPreset()->resourceId();
+            if (resourceId >= 0) {
+                KisResourceModel model(ResourceType::PaintOpPresets);
+                QModelIndex index = model.indexForResourceId(resourceId);
+                if (index.isValid()) {
+                    isBroken = index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatus).toBool();
+                    brokenReason =
+                        QString(
+                            "<html><h3>%1</h3>"
+                            "%2"
+                            "</html>")
+                            .arg(i18n("Resource is broken!"),
+                                 index.data(Qt::UserRole + KisAbstractResourceModel::BrokenStatusMessage).toString());
+                }
+            }
+
+            m_d->uiWdgPaintOpPresetSettings.brokenPresetIndicatorButton->setVisible(isBroken);
+            m_d->uiWdgPaintOpPresetSettings.brokenPresetIndicatorButton->setToolTip(brokenReason);
+        }
+        
         m_d->uiWdgPaintOpPresetSettings.reloadPresetButton->setVisible(isPresetDirty);
         m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton->setEnabled(isPresetDirty);
         m_d->uiWdgPaintOpPresetSettings.renameBrushPresetButton->setVisible(true);

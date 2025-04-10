@@ -96,7 +96,7 @@ inline auto mem_equal_to(MemTypeNoRef (Class::*ptr)() const noexcept, MemType &&
 }
 }
 
-QSqlError runUpdateScriptFile(const QString &path, const QString &message, QSqlDatabase &db)
+QSqlError runUpdateScriptFile(const QString &path, const QString &message)
 {
     QFile f(path);
     if (f.open(QFile::ReadOnly)) {
@@ -142,12 +142,12 @@ QSqlError runUpdateScriptFile(const QString &path, const QString &message, QSqlD
     return QSqlError();
 }
 
-QSqlError runUpdateScript(const QString &script, const QString &message, QSqlDatabase &db)
+QSqlError runUpdateScript(const QString &script, const QString &message)
 {
     QSqlQuery q;
     if (!q.exec(script)) {
         qWarning() << "Could execute DB update step:" << message << q.lastError();
-        return db.lastError();
+        return q.lastError();
     }
     infoResources << "Completed DB update step:" << message;
 
@@ -274,7 +274,7 @@ QSqlError createDatabase(const QString &location)
                         QSqlError error = runUpdateScript(
                             "ALTER TABLE  resource_tags\n"
                             "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1", 
-                            "Update resource tags table (add \'active\' column)", db);
+                            "Update resource tags table (add \'active\' column)");
                         if (error.type() != QSqlError::NoError) {
                             success = false;
                         }
@@ -286,8 +286,7 @@ QSqlError createDatabase(const QString &location)
 
                         Q_FOREACH(const QString &index, indexes) {
                             QSqlError error = runUpdateScriptFile(":/create_index_" + index + ".sql",
-                                                                  QString("Create index for %1").arg(index),
-                                                                  db);
+                                                                  QString("Create index for %1").arg(index));
                             if (error.type() != QSqlError::NoError) {
                                 success = false;
                             }
@@ -296,8 +295,7 @@ QSqlError createDatabase(const QString &location)
 
                     if (success && from16to17) {
                         QSqlError error = runUpdateScriptFile(":/create_index_resources_signature.sql",
-                                                              "Create index for resources_signature",
-                                                              db);
+                                                              "Create index for resources_signature");
                         if (error.type() != QSqlError::NoError) {
                             success = false;
                         }
@@ -306,24 +304,21 @@ QSqlError createDatabase(const QString &location)
                     if (success && from17to18) {
                         {
                             QSqlError error = runUpdateScriptFile(":/0_0_18_0001_cleanup_metadata_table.sql",
-                                                                  "Cleanup and deduplicate metadata table",
-                                                                  db);
+                                                                  "Cleanup and deduplicate metadata table");
                             if (error.type() != QSqlError::NoError) {
                                 success = false;
                             }
                         }
                         if (success) {
                             QSqlError error = runUpdateScriptFile(":/0_0_18_0002_update_metadata_table_constraints.sql",
-                                                                  "Update metadata table constraints",
-                                                                  db);
+                                                                  "Update metadata table constraints");
                             if (error.type() != QSqlError::NoError) {
                                 success = false;
                             }
                         }
                         if (success) {
                             QSqlError error = runUpdateScriptFile(":/create_index_metadata_key.sql",
-                                                                  "Create index for metadata_key",
-                                                                  db);
+                                                                  "Create index for metadata_key");
                             if (error.type() != QSqlError::NoError) {
                                 success = false;
                             }
@@ -337,8 +332,7 @@ QSqlError createDatabase(const QString &location)
 
                         if (success) {
                             QSqlError error = runUpdateScript("VACUUM",
-                                                              "Vacuum database after updating schema",
-                                                              db);
+                                                              "Vacuum database after updating schema");
                             if (error.type() != QSqlError::NoError) {
                                 success = false;
                             }
@@ -378,7 +372,7 @@ QSqlError createDatabase(const QString &location)
     // Create tables
     Q_FOREACH(const QString &table, tables) {
         QSqlError error =
-            runUpdateScriptFile(":/create_" + table + ".sql", QString("Create table %1").arg(table), db);
+            runUpdateScriptFile(":/create_" + table + ".sql", QString("Create table %1").arg(table));
         if (error.type() != QSqlError::NoError) {
             return error;
         }
@@ -387,8 +381,7 @@ QSqlError createDatabase(const QString &location)
     {
         // metadata table constraints were updated in version 0.0.18
         QSqlError error = runUpdateScriptFile(":/0_0_18_0002_update_metadata_table_constraints.sql",
-                                              "Update metadata table constraints",
-                                              db);
+                                              "Update metadata table constraints");
 
         if (error.type() != QSqlError::NoError) {
             return error;
@@ -409,8 +402,7 @@ QSqlError createDatabase(const QString &location)
 
     Q_FOREACH(const QString &index, indexes) {
         QSqlError error = runUpdateScriptFile(":/create_index_" + index + ".sql",
-                                              QString("Create index for %1").arg(index),
-                                              db);
+                                              QString("Create index for %1").arg(index));
         if (error.type() != QSqlError::NoError) {
             return error;
         }

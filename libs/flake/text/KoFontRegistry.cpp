@@ -757,11 +757,12 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     hb_direction_t dir = isHorizontal? HB_DIRECTION_LTR: HB_DIRECTION_TTB;
     QLatin1String scriptLatin1(script.toLatin1());
     hb_script_t scriptTag = hb_script_from_string(scriptLatin1.data(), scriptLatin1.size());
-    hb_tag_t otScriptTag;
-    hb_tag_t otLangTag;
+    hb_tag_t otScriptTag = HB_OT_TAG_DEFAULT_SCRIPT;
+    hb_tag_t otLangTag = HB_OT_TAG_DEFAULT_LANGUAGE;
     uint maxCount = 1;
     hb_ot_tags_from_script_and_language(scriptTag, nullptr, &maxCount, &otScriptTag, &maxCount, &otLangTag);
     hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
+    hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
 
     FT_Int32 faceLoadFlags = loadFlagsForFace(face.data(), isHorizontal);
 
@@ -769,20 +770,25 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     // Fontsize and advances.
     metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem*64.0: face.data()->size->metrics.x_ppem*64.0;
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), ' '), faceLoadFlags) == FT_Err_Ok) {
+    if(uint charIndex = FT_Get_Char_Index(face.data(), ' ') > 0) {
+        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
         metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), '0'), faceLoadFlags) == FT_Err_Ok) {
+    if(uint charIndex = FT_Get_Char_Index(face.data(), '0') > 0) {
+        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
         metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
     } else {
         metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
-    if(FT_Load_Glyph(face.data(), FT_Get_Char_Index(face.data(), 0x6C34), faceLoadFlags) == FT_Err_Ok) {
+    bool isIdeographic = false;
+    if(uint charIndex = FT_Get_Char_Index(face.data(), 0x6C34) > 0) {
+        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
         metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        isIdeographic = true;
     } else {
         metrics.ideographicAdvance = metrics.fontSize;
     }
@@ -826,89 +832,176 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
                 HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_TOP_OR_RIGHT,
                 HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
                 HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_TOP_OR_RIGHT,
-                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_CENTRAL,
                 HB_OT_LAYOUT_BASELINE_TAG_MATH
     });
 
+    QMap<QString, qint32> baselineVals;
+
     for (auto it = baselines.begin(); it!= baselines.end(); it++) {
-        char c[4];
-        hb_tag_to_string(*it, c);
-        const QLatin1String tagName(c, 4);
         hb_position_t origin = 0;
-        if (useFallback) {
-            hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, otScriptTag, otLangTag, &origin);
-        } else {
-            hb_ot_layout_get_baseline(font.data(), *it, dir, otScriptTag, otLangTag, &origin);
+        if (hb_ot_layout_get_baseline(font.data(), *it, dir, otScriptTag, otLangTag, &origin)) {
+            std::vector<char> c(4);
+            hb_tag_to_string(*it, c.data());
+            baselineVals.insert(QString::fromLatin1(c.data(), 4), origin);
         }
-        metrics.setBaselineValueByTag(tagName, origin);
     }
 
-    // Ascender, line gap, descender.
+    //--- ascender/descender/linegap, and also ideographic em-box calculatation ---//
 
     hb_position_t ascender = 0;
     hb_position_t descender = 0;
     hb_position_t lineGap = 0;
 
-    if (isHorizontal) {
-        /**
-         * There's 3 different definitions of the so-called vertical metrics, that is,
-         * the ascender and descender for horizontally laid out script. WinAsc & Desc,
-         * HHAE asc&desc, and OS/2... we need the last one, but harfbuzz doesn't return
-         * it unless there's a flag set in the font, which is missing in a lot of fonts
-         * that were from the transitional period, like Deja Vu Sans. Hence we need to get
-         * the OS/2 table and calculate the values manually (and fall back in various ways).
-         *
-         * https://www.w3.org/TR/css-inline-3/#ascent-descent
-         * https://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
-         * https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
-         *
-         * Related HB issue: https://github.com/harfbuzz/harfbuzz/issues/1920
-         */
-        TT_OS2 *os2Table = nullptr;
-        os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
-        if (os2Table) {
-            int yscale = face.data()->size->metrics.y_scale;
+    /**
+     * There's 3 different definitions of the so-called vertical metrics, that is,
+     * the ascender and descender for horizontally laid out script. WinAsc & Desc,
+     * HHAE asc&desc, and OS/2... we need the last one, but harfbuzz doesn't return
+     * it unless there's a flag set in the font, which is missing in a lot of fonts
+     * that were from the transitional period, like Deja Vu Sans. Hence we need to get
+     * the OS/2 table and calculate the values manually (and fall back in various ways).
+     *
+     * https://www.w3.org/TR/css-inline-3/#ascent-descent
+     * https://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
+     * https://wiki.inkscape.org/wiki/Text_Rendering_Notes#Ascent_and_Descent
+     *
+     * Related HB issue: https://github.com/harfbuzz/harfbuzz/issues/1920
+     */
+    TT_OS2 *os2Table = nullptr;
+    os2Table = (TT_OS2*)FT_Get_Sfnt_Table(face.data(), FT_SFNT_OS2);
+    if (os2Table) {
+        int yscale = face.data()->size->metrics.y_scale;
 
-            ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
-            descender = FT_MulFix(os2Table->sTypoDescender, yscale);
-            lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
+        ascender = FT_MulFix(os2Table->sTypoAscender, yscale);
+        descender = FT_MulFix(os2Table->sTypoDescender, yscale);
+        lineGap = FT_MulFix(os2Table->sTypoLineGap, yscale);
+    }
+
+    constexpr unsigned USE_TYPO_METRICS = 1u << 7;
+    if (!os2Table || os2Table->version == 0xFFFFU || !(os2Table->fsSelection & USE_TYPO_METRICS)) {
+        hb_position_t altAscender = 0;
+        hb_position_t altDescender = 0;
+        hb_position_t altLineGap = 0;
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &altAscender)) {
+            altAscender = face.data()->ascender;
+        }
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &altDescender)) {
+            altDescender = face.data()->descender;
+        }
+        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &altLineGap)) {
+            altLineGap = face.data()->height - (altAscender-altDescender);
         }
 
-        constexpr unsigned USE_TYPO_METRICS = 1u << 7;
-        if (!os2Table || os2Table->version == 0xFFFFU || !(os2Table->fsSelection & USE_TYPO_METRICS)) {
-            hb_position_t altAscender = 0;
-            hb_position_t altDescender = 0;
-            hb_position_t altLineGap = 0;
-            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &altAscender)) {
-                altAscender = face.data()->ascender;
-            }
-            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &altDescender)) {
-                altDescender = face.data()->descender;
-            }
-            if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, &altLineGap)) {
-                altLineGap = face.data()->height - (altAscender-altDescender);
-            }
+        // Some fonts have sTypo metrics that are too small compared
+        // to the HHEA values which make the default line height too
+        // tight (e.g. Microsoft JhengHei, Source Han Sans), so we
+        // compare them and take the ones that are larger.
+        if (!os2Table || (altAscender - altDescender + altLineGap) > (ascender - descender + lineGap)) {
+            ascender = altAscender;
+            descender = altDescender;
+            lineGap = altLineGap;
+        }
+    }
 
-            // Some fonts have sTypo metrics that are too small compared
-            // to the HHEA values which make the default line height too
-            // tight (e.g. Microsoft JhengHei, Source Han Sans), so we
-            // compare them and take the ones that are larger.
-            if (!os2Table || (altAscender - altDescender + altLineGap) > (ascender - descender + lineGap)) {
-                ascender = altAscender;
-                descender = altDescender;
-                lineGap = altLineGap;
+    // Because the ideographic em-box is so important to SVG 2 vertical line calculation,
+    // I am manually calculating it here, following
+    // https://learn.microsoft.com/en-us/typography/opentype/spec/baselinetags#ideographic-em-box
+    const QString ideoBottom("ideo");
+    const QString ideoTop("idtp");
+    const QString alphabetic("romn");
+    const QString ideoCenter("Idce");
+    const QString hang("hang");
+    const QString math("math");
+
+    if (baselineVals.keys().contains(ideoBottom) && !baselineVals.keys().contains(ideoTop)) {
+        baselineVals.insert(ideoTop, baselineVals.value(ideoBottom)+metrics.fontSize);
+    } else if (!baselineVals.keys().contains(ideoBottom) && baselineVals.keys().contains(ideoTop)) {
+        baselineVals.insert(ideoBottom, baselineVals.value(ideoTop)-metrics.fontSize);
+    } else if (!baselineVals.keys().contains(ideoBottom) && !baselineVals.keys().contains(ideoTop)){
+
+        if (!isIdeographic) {
+            hb_blob_t_sp dLang(hb_ot_meta_reference_entry( hbFace.data() , HB_OT_META_TAG_DESIGN_LANGUAGES));
+            uint length = hb_blob_get_length(dLang.data());
+            QByteArray ba(hb_blob_get_data(dLang.data(), &length), length);
+
+            const QString designLang = QString::fromLatin1(ba).trimmed();
+
+            if (!designLang.isEmpty()) {
+                // This assumes a font where there's design language metadata, but no water glyph.
+                // In theory could happen with the non-han cjk fonts.
+                const QStringList cjkScripts {
+                    KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::HanScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::JapaneseScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::TraditionalHanScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::SimplifiedHanScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::HanWithBopomofoScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::BopomofoScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::HangulScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::KatakanaScript),
+                            KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale::HiraganaScript),
+                };
+                Q_FOREACH (const QString cjk, cjkScripts) {
+                    if (cjk.isEmpty()) continue;
+                    if (designLang.contains(cjk.trimmed())) {
+                        isIdeographic = true;
+                        break;
+                    }
+                }
             }
         }
-    } else {
-        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender)) {
-            ascender = metrics.ideographicOverBaseline;
+
+        if (isIdeographic) {
+            baselineVals.insert(ideoTop, ascender);
+            baselineVals.insert(ideoBottom, descender);
+            if (!baselineVals.keys().contains(alphabetic)) {
+                baselineVals.insert(alphabetic, 0);
+            }
+            if (!baselineVals.keys().contains(hang)) {
+                baselineVals.insert(hang, baselineVals.value(alphabetic)+metrics.fontSize*0.6);
+            }
+        } else if (isHorizontal) {
+            const qreal alphabeticMultiplier = qreal(ascender+descender)/metrics.fontSize;
+            qint32 top = qMax(baselineVals.value(hang, metrics.capHeight), qint32(qRound(ascender*alphabeticMultiplier)));
+            baselineVals.insert(ideoTop, top);
+            baselineVals.insert(ideoBottom, top-metrics.fontSize);
+        } else {
+            baselineVals.insert(ideoTop, metrics.fontSize);
+            baselineVals.insert(ideoBottom, 0);
+            if (!baselineVals.keys().contains(alphabetic)) {
+                const qreal alphabeticMultiplier = qreal(ascender+descender)/metrics.fontSize;
+                baselineVals.insert(alphabetic, (-descender)*alphabeticMultiplier);
+            }
+            if (!baselineVals.keys().contains(hang)) {
+                baselineVals.insert(hang, baselineVals.value(alphabetic)+metrics.fontSize*0.6);
+            }
         }
-        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender)) {
-            descender = metrics.ideographicUnderBaseline;
+    }
+    baselineVals.insert(ideoCenter, (baselineVals.value(ideoTop) + baselineVals.value(ideoBottom))/2);
+    if (!isHorizontal && !baselineVals.keys().contains(math)) {
+        baselineVals.insert(math, baselineVals.value(ideoCenter));
+    }
+
+    if (useFallback) {
+        for (auto it = baselines.begin(); it!= baselines.end(); it++) {
+            char c[4];
+            hb_tag_to_string(*it, c);
+            const QString tagName = QString::fromLatin1(c, 4);
+            if (!baselineVals.keys().contains(tagName)) {
+                hb_position_t origin = 0;
+                hb_ot_layout_get_baseline_with_fallback(font.data(), *it, dir, otScriptTag, otLangTag, &origin);
+                baselineVals.insert(tagName, origin);
+            }
         }
-        if (!hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_LINE_GAP, &lineGap)) {
-            lineGap = 0;
-        }
+    }
+
+    Q_FOREACH(const QString key, baselineVals.keys()) {
+        metrics.setBaselineValueByTag(key, baselineVals.value(key));
+    }
+
+    if (!isHorizontal) {
+        // SVG 2.0 explicitely requires vertical ascent/descent to be tied to the ideographic em box.
+        ascender = metrics.ideographicOverBaseline;
+        descender = metrics.ideographicUnderBaseline;
+
         // Default microsoft CJK fonts have the vertical ascent and descent be the same as the horizontal
         // ascent and descent, so we 'normalize' the ascender and descender to be half the total height.
         qreal height = ascender - descender;

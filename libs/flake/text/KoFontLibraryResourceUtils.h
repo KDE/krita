@@ -100,5 +100,6 @@ using FT_FaceSP = KisLibraryResourcePointerWithSanityCheck<std::remove_pointer_t
 using hb_font_t_sp = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
 using hb_face_t_sp = KisLibraryResourcePointer<hb_face_t, hb_face_destroy>;
 using hb_set_t_sp =KisLibraryResourcePointer<hb_set_t, hb_set_destroy>;
+using hb_blob_t_sp = KisLibraryResourcePointer<hb_blob_t, hb_blob_destroy>;
 
 #endif // KOFONTLIBRARYRESOURCEUTILS_H

@@ -359,7 +359,7 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
 
     int valueForBaselineValue(Baseline baseline) const;
 
-    void setBaselineValueByTag(const QLatin1String &tag, int32_t value);
+    void setBaselineValueByTag(const QString &tag, int32_t value);
 
     void setMetricsValueByTag(const QLatin1String &tag, int32_t value);
 

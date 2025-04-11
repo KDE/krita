@@ -1490,7 +1490,7 @@ int FontMetrics::valueForBaselineValue(Baseline baseline) const {
     return baselineVal;
 }
 
-void FontMetrics::setBaselineValueByTag(const QLatin1String &tag, int32_t value) {
+void FontMetrics::setBaselineValueByTag(const QString &tag, int32_t value) {
     if (tag == "romn") {
         alphabeticBaseline = value;
     } else if (tag == "hang") {

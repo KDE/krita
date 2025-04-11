@@ -64,8 +64,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-10 01:53+0000\n"
-"PO-Revision-Date: 2025-04-06 12:35+0100\n"
+"POT-Creation-Date: 2025-04-11 01:52+0000\n"
+"PO-Revision-Date: 2025-04-10 20:45+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -20247,30 +20247,30 @@ msgid "Character Variant %1"
 msgstr "Variante de carácter %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1657
+#: libs/flake/text/KoSvgTextShape.cpp:1660
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Texto a introducir"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1636
+#: libs/flake/text/KoSvgTextShape.cpp:1639
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Texto"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1638
-#: libs/flake/text/KoSvgTextShape.cpp:1646
+#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Forma de texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1647
 #, kde-format
 msgid "SVG Text"
 msgstr "Texto SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1667
+#: libs/flake/text/KoSvgTextShape.cpp:1670
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23485,10 +23485,10 @@ msgstr "En"
 msgid "Out"
 msgstr "Fuera"
 
-#: libs/pigment/resources/KoColorSet.cpp:1057
-#: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1481
-#: libs/pigment/resources/KoColorSet.cpp:1890
+#: libs/pigment/resources/KoColorSet.cpp:1092
+#: libs/pigment/resources/KoColorSet.cpp:1436
+#: libs/pigment/resources/KoColorSet.cpp:1516
+#: libs/pigment/resources/KoColorSet.cpp:1925
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -26721,7 +26721,7 @@ msgstr "Propiedades de la capa"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:288
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:283
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:144
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
@@ -27554,14 +27554,14 @@ msgid "Y offset:"
 msgstr "Desplazamiento Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Añadir un grupo de muestra"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27569,7 +27569,7 @@ msgid "Remove selected group"
 msgstr "Eliminar el grupo seleccionado"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27577,43 +27577,43 @@ msgid "Rename selected group"
 msgstr "Cambiar el nombre del grupo seleccionado"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, kde-format
 msgid "Palette Editor"
 msgstr "Editor de la paleta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, kde-format
 msgid "Palette options"
 msgstr "Opciones de la paleta"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, kde-format
 msgid "Palette name:"
 msgstr "Nombre de la paleta:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Opciones del grupo de muestra"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, kde-format
 msgid "Columns of swatches:"
 msgstr "Columnas de las muestras:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Filas de las muestras del grupo:"
@@ -35440,75 +35440,75 @@ msgstr "Activar %1"
 msgid "Open Existing Document"
 msgstr "Abrir documento existente"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "Nueva paleta"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, kde-format
 msgid "New palette name:"
 msgstr "Nombre de la nueva paleta:"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "Paleta de Krita (KPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "Paleta de GIMP (GPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "Guardar paleta en el documento actual"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, kde-format
 msgid "Import Palette"
 msgstr "Importar paleta"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "¿Desea guardar esta paleta en la imagen actual?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, kde-format
 msgid "New swatch group name:"
 msgstr "Nombre del nuevo grupo de muestra:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Eliminando grupo de muestra"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Mantener los colores"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Color %1"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Añadir una nueva muestra de color"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -35520,37 +35520,37 @@ msgstr ""
 "mezclar las tintas de las que dispone. Lo contrario se denomina color "
 "procesado."
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "ID de la muestra:"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Nombre de la muestra de color:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Color:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Color puntual:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Grupo de muestra:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -39632,7 +39632,7 @@ msgstr "Importar una nueva paleta desde un archivo"
 msgid "Export current palette to file"
 msgstr "Exportar la paleta actual a un archivo"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr "Ranura vacía"
@@ -43658,7 +43658,7 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Paleta exportada correctamente"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -43667,7 +43667,7 @@ msgstr ""
 "Guardar la paleta explícitamente. También se guardará de forma automática al "
 "salir de Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -45116,7 +45116,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Etiqueta de función OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:118
 #, kde-format
 msgid "Text Properties"
 msgstr "Propiedades del texto"
@@ -52639,6 +52639,24 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">Avanzado</span></p><p>La opción «Predeterminada (la escoge el "
+"codificador)» es común. Significa que el codificador selecciona "
+"automáticamente los ajustes óptimos según la selección actual de "
+"compensación calidad/velocidad. Esta opción es la recomendada para la "
+"mayoría de usuarios.</p><p><span style=\" font-size:14pt; text-decoration: "
+"underline;\">Parámetros del codificador:</span></p><p>preferencias generales "
+"que se aplican al proceso general de codificación JPEG XL, sin importar el "
+"método de compresión que se use.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">Parámetros VarDCT:</span></p><p>Transformada de "
+"coseno discreta variable (optimizada para contenido fotográfico).</"
+"p><p>Pertenece a la misma familia de técnicas de compresión que utiliza el "
+"JPEG original y, por lo tanto, es mejor para imágenes «naturales», como "
+"fotografías e imágenes con muchos degradados y texturas.</p><p><span style="
+"\" font-size:14pt; text-decoration: underline;\">Parámetros modulares:</"
+"span></p><p>Ajustes para el modo modular (optimizado para contenido gráfico, "
+"ilustraciones y compresión sin pérdida).</p><p><br/></p><p><br/></p></body></"
+"html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -52871,7 +52889,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:395
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "Sitúe el puntero sobre este texto para mostrar ayuda"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -52895,6 +52913,9 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Reduce la resolución de color para conseguir archivos "
+"más pequeños. Se recomienda solo para configuraciones de baja calidad, ya "
+"que reduce la nitidez en las transiciones de color.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
@@ -52917,19 +52938,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
 "files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si se activa, el canal de alfa (transparencia) se "
-"configura para que no tenga pérdidas. Útil para reducir los defectos de la "
-"transparencia en exportaciones con pérdida.</p></body></html>"
+"<html><head/><body><p>Reduce la resolución del canal de transparencia para "
+"archivos pequeños. Solo se recomienda para baja calidad o cuando la "
+"precisión de los bordes de transparencia no es crucial.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52956,6 +52973,10 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Separa los patrones de ruido del sensor de la cámara "
+"para una mejor compresión. Los valores más altos reconstruyen más ruido, lo "
+"que resulta útil para preservar el aspecto natural de las fotos con ISO alto."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
@@ -52988,6 +53009,9 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifica y codifica eficazmente patrones de puntos "
+"repetitivos en la imagen. Útil para documentos escaneados y para ciertas "
+"texturas.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:480
@@ -53010,6 +53034,10 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifica elementos repetidos (como caracteres de "
+"texto o iconos) y los almacena una vez, haciendo referencia a ellos en otro "
+"lugar. Mejora la compresión de ilustraciones digitales y capturas de "
+"pantalla.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -53032,13 +53060,15 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Suaviza las áreas conservando la nitidez de los "
+"bordes, mejorando la compresión sin difuminar detalles importantes. Los "
+"valores más altos aplican un filtrado más intenso.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
-#, fuzzy, kde-format
-#| msgid "Edge preserving filter"
+#, kde-format
 msgid "Edge preserving filter strength"
-msgstr "Filtro de preservación de bordes"
+msgstr "Fuerza del filtro de preservación de bordes"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:538
@@ -53050,18 +53080,18 @@ msgstr "Fuerte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Descripción de acción</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Predeterminada (la escoge el codificador)</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "Automático"
+msgstr "Automática"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -53087,6 +53117,9 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Filtro de análisis de textura avanzado que mejora la "
+"compresión de áreas con texturas complejas preservando la calidad visual.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
@@ -53103,6 +53136,9 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Usa el sistema de compresión modular. Excelente para "
+"comprimir gráficos con bordes nítidos y colores limitados. Puede ser con o "
+"sin pérdida.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
@@ -53136,19 +53172,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
 "areas. Disable to reduce file size when colors under transparency aren't "
 "needed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si se activa, el canal de alfa (transparencia) se "
-"configura para que no tenga pérdidas. Útil para reducir los defectos de la "
-"transparencia en exportaciones con pérdida.</p></body></html>"
+"<html><head/><body><p>Preserva la información de color en áreas totalmente "
+"transparentes. Desactive esta opción para reducir el tamaño del archivo "
+"cuando no se necesiten colores con transparencia.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:633
@@ -53158,19 +53190,15 @@ msgstr "Mantener el color de los píxeles invisibles"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:640
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Add the author nickname and the first contact of "
-#| "the author profile. This is overridden by the anonymizer.</p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Determines the order in which image tiles are encoded. "
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Añadir el apodo del autor y el primer contacto del "
-"perfil del autor. El anonimizador tendrá preferencia sobre esto.</p></body></"
-"html>"
+"<html><head/><body><p>Determina el orden en que se codifican los mosaicos de "
+"imagen. «Primero el centro» prioriza el centro de la imagen para una carga "
+"progresiva. Útil para contenido web.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:643
@@ -53187,6 +53215,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Predice el color a partir de la información de brillo, "
+"lo que reduce el tamaño del archivo. Muy eficaz para imágenes naturales "
+"donde el brillo y el color están correlacionados.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:656
@@ -53210,6 +53241,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Activa la carga progresiva usando cálculos matemáticos "
+"de color avanzados para los detalles finos. Las imágenes se cargan como una "
+"vista previa aproximada que se vuelve progresivamente más nítida. Requiere "
+"más tiempo, pero ofrece mejores resultados.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -53237,6 +53272,9 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Activa la carga progresiva usando cuantificación para "
+"comprimir detalles finos. Esto genera archivos de menor tamaño, pero "
+"requiere más tiempo de codificación.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -53252,6 +53290,9 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Crea una mejor imagen de vista previa aproximada para "
+"la carga progresiva. Añade algunos bytes al tamaño del archivo, pero mejora "
+"la calidad inicial de baja resolución de la vista previa.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53280,6 +53321,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Activa la transformación «Apretar», que permite que "
+"las imágenes se carguen progresivamente, de baja a alta calidad, a medida "
+"que se reciben los datos.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
@@ -53301,6 +53345,10 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Controla cómo se asignan los valores de color a toda "
+"la imagen. «Todo» usa el intervalo completo; porcentajes menores generan una "
+"compresión más eficiente para imágenes con intervalos de color limitados.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53331,6 +53379,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Controla la asignación de color dentro de mosaicos "
+"locales de 256×256 píxeles. Es más eficiente para imágenes con áreas de "
+"variedad de color limitada.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:803
@@ -53361,6 +53412,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Activa la compresión basada en paleta cuando la imagen "
+"contiene esta cantidad de colores únicos o menos. El valor -1 permite que el "
+"codificador decida automáticamente.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:858
@@ -53388,6 +53442,10 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Activa la codificación de color relativa que almacena "
+"las diferencias entre los colores predichos y los reales. Excelente para una "
+"compresión casi sin pérdidas de gradientes suaves sin artefactos de bandas.</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
@@ -53404,16 +53462,14 @@ msgstr "Activa o desactiva la paleta delta. Se usa en el modo modular."
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Usar la inclinación de la tableta para determinar las "
-"normales.</p></body></html>"
+"<html><head/><body><p>Define el tamaño del mosaico para la compresión. Los "
+"grupos más grandes pueden mejorar la compresión, pero requieren más memoria."
+"</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -53442,6 +53498,10 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Selecciona el algoritmo que se usa para predecir los "
+"valores de los píxeles según los píxeles circundantes. Diferentes "
+"predictores funcionan mejor para distintos tipos de imágenes.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
@@ -53459,6 +53519,10 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Controla la cantidad de píxeles que se analizan para "
+"construir el árbol de decisión metaadaptativo que selecciona el predictor "
+"óptimo para cada píxel. Los valores más altos pueden mejorar la compresión, "
+"pero requieren más tiempo.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:948
@@ -62293,12 +62357,6 @@ msgstr "Activar ajuste cuando se usan borradores"
 msgid "Freehand Brush Tool"
 msgstr "Herramienta de pincel a mano alzada"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:98
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only."
-msgstr ""
-"No se puede escribir el archivo de paleta %1. Puede que sea de solo lectura."
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, kde-format
 msgid "Color Sampler Tool"
@@ -66401,5 +66459,7 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Herramienta de imágenes de referencia"
 
-#~ msgid "Maximum strength"
-#~ msgstr "Fuerza máxima"
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
+#~ msgstr ""
+#~ "No se puede escribir el archivo de paleta %1. Puede que sea de solo "
+#~ "lectura."

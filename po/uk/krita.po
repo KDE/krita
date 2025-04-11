@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-10 01:53+0000\n"
-"PO-Revision-Date: 2025-04-09 13:50+0300\n"
+"POT-Creation-Date: 2025-04-11 01:52+0000\n"
+"PO-Revision-Date: 2025-04-10 14:22+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -20265,30 +20265,30 @@ msgid "Character Variant %1"
 msgstr "Варіант символу %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1657
+#: libs/flake/text/KoSvgTextShape.cpp:1660
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Текст-замінник"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1636
+#: libs/flake/text/KoSvgTextShape.cpp:1639
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1638
-#: libs/flake/text/KoSvgTextShape.cpp:1646
+#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма-текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1647
 #, kde-format
 msgid "SVG Text"
 msgstr "Текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1667
+#: libs/flake/text/KoSvgTextShape.cpp:1670
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23660,10 +23660,10 @@ msgstr "Вхідний"
 msgid "Out"
 msgstr "Вихідний"
 
-#: libs/pigment/resources/KoColorSet.cpp:1057
-#: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1481
-#: libs/pigment/resources/KoColorSet.cpp:1890
+#: libs/pigment/resources/KoColorSet.cpp:1092
+#: libs/pigment/resources/KoColorSet.cpp:1436
+#: libs/pigment/resources/KoColorSet.cpp:1516
+#: libs/pigment/resources/KoColorSet.cpp:1925
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -26927,7 +26927,7 @@ msgstr "Властивості шару"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:288
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:283
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:144
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
@@ -27765,14 +27765,14 @@ msgid "Y offset:"
 msgstr "Відступ за Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Додати групу зразків"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27780,7 +27780,7 @@ msgid "Remove selected group"
 msgstr "Вилучити позначену групу"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27788,43 +27788,43 @@ msgid "Rename selected group"
 msgstr "Перейменувати позначену групу"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, kde-format
 msgid "Palette Editor"
 msgstr "Редактор палітри"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, kde-format
 msgid "Palette options"
 msgstr "Параметри палітри"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, kde-format
 msgid "Palette name:"
 msgstr "Назва палітри:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Параметри групи зразків"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, kde-format
 msgid "Columns of swatches:"
 msgstr "Стовпчиків зразків:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Рядків зразків у групі:"
@@ -35752,75 +35752,75 @@ msgstr "Задіяти %1"
 msgid "Open Existing Document"
 msgstr "Відкрити наявний документ"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "Нова палітра"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, kde-format
 msgid "New palette name:"
 msgstr "Назва нової палітри:"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "палітра Krita (KPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "палітра GIMP (GPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "Зберегти палітру у поточному документі"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, kde-format
 msgid "Import Palette"
 msgstr "Імпортувати палітру"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "Хочете зберегти цю палітру у вашому поточному зображенні?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, kde-format
 msgid "New swatch group name:"
 msgstr "Назва нової групи зразків:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Вилучення групи зразків"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Зберегти кольори"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Колір %1"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Додавання нового запису зразка кольору"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -35831,37 +35831,37 @@ msgstr ""
 "Спеціальний колір — це колір, яким принтер здатен друкувати без змішування "
 "доступних йому фарб. Інші кольори називаються складеними кольорами."
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "Ід. зразка:"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Назва зразка кольору:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Колір:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Колір плями:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Група зразків:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -39959,7 +39959,7 @@ msgstr "Імпортувати нову палітру з файла"
 msgid "Export current palette to file"
 msgstr "Експортувати поточну палітру до файла"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr "Порожній слот"
@@ -44095,7 +44095,7 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Палітру успішно експортовано"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
@@ -44104,7 +44104,7 @@ msgstr ""
 "Зберегти палітру явними чином. Збереження також буде виконано автоматично "
 "під час завершення роботи Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -45560,7 +45560,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr "Мітка можливості OpenType"
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:118
 #, kde-format
 msgid "Text Properties"
 msgstr "Властивості тексту"
@@ -53432,11 +53432,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Reduces transparency channel resolution for smaller "
-#| "files. Only reccomended for low quality or when precise transparency "
-#| "edges aren't critical.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
 "files. Only recommended for low quality or when precise transparency edges "
@@ -62831,11 +62827,6 @@ msgstr "Вмикання прилипання при використанні г
 msgid "Freehand Brush Tool"
 msgstr "Інструмент довільного мазка пензлем"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:98
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only."
-msgstr "Помилка запису в файл палітри %1. Можливо, він тільки для читання."
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, kde-format
 msgid "Color Sampler Tool"
@@ -67004,6 +66995,9 @@ msgstr "Інструмент масштабування"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Інструмент еталонних зображень"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
+#~ msgstr "Помилка запису в файл палітри %1. Можливо, він тільки для читання."
 
 #~ msgid "Maximum strength"
 #~ msgstr "Максимальна потужність"

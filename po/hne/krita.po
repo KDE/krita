@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-10 01:53+0000\n"
+"POT-Creation-Date: 2025-04-11 01:52+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -20343,32 +20343,32 @@ msgid "Character Variant %1"
 msgstr "प्रतिसत: (&P)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1657
+#: libs/flake/text/KoSvgTextShape.cpp:1660
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1636
+#: libs/flake/text/KoSvgTextShape.cpp:1639
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1638
-#: libs/flake/text/KoSvgTextShape.cpp:1646
+#: libs/flake/text/KoSvgTextShape.cpp:1641
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, fuzzy, kde-format
 #| msgid "Text Shape"
 msgid "SVG Text Shape"
 msgstr "पाठ आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1644
+#: libs/flake/text/KoSvgTextShape.cpp:1647
 #, fuzzy, kde-format
 msgid "SVG Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1667
+#: libs/flake/text/KoSvgTextShape.cpp:1670
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -23672,10 +23672,10 @@ msgstr "जानकारी "
 msgid "Out"
 msgstr "मनमाफिक"
 
-#: libs/pigment/resources/KoColorSet.cpp:1057
-#: libs/pigment/resources/KoColorSet.cpp:1401
-#: libs/pigment/resources/KoColorSet.cpp:1481
-#: libs/pigment/resources/KoColorSet.cpp:1890
+#: libs/pigment/resources/KoColorSet.cpp:1092
+#: libs/pigment/resources/KoColorSet.cpp:1436
+#: libs/pigment/resources/KoColorSet.cpp:1516
+#: libs/pigment/resources/KoColorSet.cpp:1925
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -26856,7 +26856,7 @@ msgstr "परत गुन"
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:61
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:288
+#: plugins/tools/basictools/kis_tool_colorsampler.cc:283
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:144
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:145
@@ -27652,7 +27652,7 @@ msgid "Y offset:"
 msgstr "वाय आफसेट: (&Y)"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, fuzzy, kde-format
 #| msgid "Add Group"
@@ -27660,7 +27660,7 @@ msgid "Add a swatch group"
 msgstr "समूह जोड़व"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27668,7 +27668,7 @@ msgid "Remove selected group"
 msgstr "परत के नाम:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -27676,7 +27676,7 @@ msgid "Rename selected group"
 msgstr "पेज खिसकाव"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, fuzzy, kde-format
 #| msgid "Palette name:"
@@ -27684,14 +27684,14 @@ msgid "Palette Editor"
 msgstr "रंगदानी नाम:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, fuzzy, kde-format
 msgid "Palette options"
 msgstr "पैटर्न औजार"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, fuzzy, kde-format
 #| msgid "Palette name:"
@@ -27699,7 +27699,7 @@ msgid "Palette name:"
 msgstr "रंगदानी नाम:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
@@ -27707,15 +27707,15 @@ msgid "Swatch Group options"
 msgstr "समूह नाम भरव:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, fuzzy, kde-format
 msgid "Columns of swatches:"
 msgstr "रंग जगह:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -35298,81 +35298,81 @@ msgstr "सक्रिय"
 msgid "Open Existing Document"
 msgstr "ये कागद ल खोलव"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, fuzzy, kde-format
 #| msgid "Add New Palette"
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "नवा रंगदानी जोड़व"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, fuzzy, kde-format
 #| msgid "Add New Palette"
 msgid "New palette name:"
 msgstr "नवा रंगदानी जोड़व"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, fuzzy, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "रंगपट्टिका मं रंग जोड़व"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, fuzzy, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "पैटर्न"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Save Palette in the Current Document"
 msgstr "का आप मन सही मं  अभी हाल के टैम्प्लेट '%1' ल मेटाय के लिखना चाहथो ?"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, fuzzy, kde-format
 msgid "Import Palette"
 msgstr "लकीरें आयात करव:"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to store this palette in your current image?"
 msgstr "का आप मन सही मं  अभी हाल के टैम्प्लेट '%1' ल मेटाय के लिखना चाहथो ?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "New swatch group name:"
 msgstr "समूह नाम भरव:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "परत मेटाव"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, fuzzy, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "मेटाव"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "रंग"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "प्रोफाइल लगाव"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -35381,19 +35381,19 @@ msgid ""
 "paints it has available to it. The opposite is called a process color."
 msgstr ""
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, fuzzy, kde-format
 msgid "Swatch ID:"
 msgstr "रंग चुनइया"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, fuzzy, kde-format
 msgid "Color swatch name:"
 msgstr "रंग जगह:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, fuzzy, kde-format
 #| msgid "Color:"
@@ -35401,19 +35401,19 @@ msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "रंगः"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, fuzzy, kde-format
 msgid "Spot color:"
 msgstr "स्टाप रंग:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group:"
 msgstr "समूह नाम भरव:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, fuzzy, kde-format
 #| msgid "New program %1"
 msgctxt "Default new group name"
@@ -39275,7 +39275,7 @@ msgstr "प्रोफाइल लगाव"
 msgid "Export current palette to file"
 msgstr "परत निर्यात करव"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr ""
@@ -43260,14 +43260,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "एक्सपोजर मोड:"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."
@@ -44698,7 +44698,7 @@ msgctxt "@title:column"
 msgid "OpenType Feature Tag"
 msgstr ""
 
-#: plugins/dockers/textproperties/TextPropertiesDock.cpp:117
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:118
 #, fuzzy, kde-format
 msgid "Text Properties"
 msgstr "गुन"
@@ -61919,11 +61919,6 @@ msgstr ""
 msgid "Freehand Brush Tool"
 msgstr "मुक्तहस्त औजार"
 
-#: plugins/tools/basictools/kis_tool_colorsampler.cc:98
-#, kde-format
-msgid "Cannot write to palette file %1. Maybe it is read-only."
-msgstr "रंगदानी फाइल %1 मं लिख नइ सकिस. सायद ए सिरिफ पढ़े जइसन हे."
-
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, fuzzy, kde-format
 msgid "Color Sampler Tool"
@@ -66048,6 +66043,9 @@ msgstr "सब्बो जूम करव"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ फोटू:"
+
+#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
+#~ msgstr "रंगदानी फाइल %1 मं लिख नइ सकिस. सायद ए सिरिफ पढ़े जइसन हे."
 
 #, fuzzy
 #~ msgid "Maximum strength"

@@ -45,11 +45,11 @@ public:
     void removePalette(KoColorSetSP );
 
     /**
-     * @brief rowNumberOfGroup
+     * @brief rowCountOfGroup
      * @param originalName the original name of a group at the creation of the instance
      * @return newest row number of the group
      */
-    int rowNumberOfGroup(const QString &originalName) const;
+    int rowCountOfGroup(const QString &originalName) const;
 
     /**
      * @brief oldNameFromNewName
@@ -59,36 +59,41 @@ public:
     QString oldNameFromNewName(const QString &newName) const;
 
     /**
-     * @brief rename
+     * @brief Stage a palette rename.
      * @param newName
      */
     void rename(const QString &newName);
 
     /**
-     * @brief changeColumnCount
+     * @brief Stage a change of the palette's column count.
      */
     void changeColumnCount(int);
 
     /**
-     * @brief addGroup
+     * @brief Stage the addition of a new swatch group.
      * @return new group's name if change accepted, empty string if cancelled
      */
     QString addGroup();
 
     /**
-     * @brief removeGroup
+     * @brief Stage the removal of a group.
      * @param name original group name
      * @return true if change accepted, false if cancelled
      */
     bool removeGroup(const QString &name);
 
     /**
-     * @brief renameGroup
+     * @brief Stage a rename of a group.
      * @param oldName
      * @return new name if change accepted, empty string if cancelled
      */
     QString renameGroup(const QString &oldName);
 
+    /**
+     * @brief Stage a change to the row count of a group.
+     * @param name
+     * @param newRowCount
+     */
     void changeGroupRowCount(const QString &name, int newRowCount);
 
     void setStorageLocation(QString location);
@@ -104,10 +109,22 @@ public:
     bool isModified() const;
 
     /**
-     * @brief updatePalette
-     * MUST be called to make the changes into the resource server
+     * @brief Start editing the current palette.
+     *
+     * This must be called before any calls that stage changes,
+     * otherwise those calls have no effect.
+     * All staged changes get applied when calling endEditing().
+     *
+     * Adding, removing and updating swatches happens immediately
      */
-    void updatePalette();
+    void startEditing();
+    /**
+     * @brief End editing and either apply or discard staged changes.
+     * @param applyChanges If set to false, the palette remains unchanged and
+     *        staged changes are discarded.
+     */
+    void endEditing(bool applyChanges = true);
+    void clearStagedChanges();
 
     /**
      * @brief saveNewPaletteVersion

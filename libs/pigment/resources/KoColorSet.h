@@ -66,7 +66,8 @@ public:
         KPL,                // KoColor-based XML palette
         SBZ,                // SwatchBooker
         ASE,                // Adobe swatch exchange
-        ACB                 // Adobe Color Book.
+        ACB,                // Adobe Color Book.
+        CSS                 // CSS palette
     };
 
 
@@ -253,6 +254,9 @@ public:
 Q_SIGNALS:
 
     void modified();
+    void layoutAboutToChange();
+    void layoutChanged();
+    void entryChanged(int column, int row);
 
 
 private Q_SLOTS:
@@ -264,6 +268,7 @@ private Q_SLOTS:
 private:
 
     void setModified(bool);
+    void notifySwatchChanged(const QString& groupName, int column, int row);
 
     friend struct AddSwatchCommand;
     friend struct RemoveSwatchCommand;

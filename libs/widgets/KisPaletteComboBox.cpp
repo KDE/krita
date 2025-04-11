@@ -87,6 +87,9 @@ void KisPaletteComboBox::slotPaletteChanged()
     }
     QModelIndex idx = m_view->currentIndex();
     if (!idx.isValid()) { return; }
+    // FIXME! checkIndex() is just a workaround to not trigger ASSERT failures amidst model resets/row changes.
+    // This class really needs a rewrite to conform with Qt's MVC patterns...
+    if (!m_model->checkIndex(idx, QAbstractItemModel::CheckIndexOption::IndexIsValid)) { return; }
     if (qvariant_cast<bool>(idx.data(KisPaletteModel::IsGroupNameRole))) { return; }
     if (!qvariant_cast<bool>(idx.data(KisPaletteModel::CheckSlotRole))) { return; }
 

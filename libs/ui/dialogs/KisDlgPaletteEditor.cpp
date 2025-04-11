@@ -34,12 +34,13 @@
 
 #include <kstandardguiitem.h>
 
-KisDlgPaletteEditor::KisDlgPaletteEditor()
-    : m_ui(new Ui_WdgDlgPaletteEditor)
+KisDlgPaletteEditor::KisDlgPaletteEditor(KisPaletteEditor *editor, QWidget *parent, Qt::WindowFlags f)
+    : QDialog(parent, f)
+    , m_ui(new Ui_WdgDlgPaletteEditor)
     , m_actAddGroup(new QAction(i18n("Add a swatch group")))
     , m_actDelGroup(new QAction(i18nc("Group as Swatch Group in a Palette", "Remove selected group")))
     , m_actRenGroup(new QAction(i18nc("Group as Swatch Group in a Palette", "Rename selected group")))
-    , m_paletteEditor(new KisPaletteEditor(this))
+    , m_paletteEditor(editor)
     , m_currentGroupOriginalName(KoColorSet::GLOBAL_GROUP_NAME)
 {
     setWindowTitle(i18n("Palette Editor"));
@@ -70,8 +71,6 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
     m_ui->storageLocation->setEnabled(false);
     connect(m_ui->storageLocation, SIGNAL(currentIndexChanged(int)), SLOT(slotSetGlobal()));
 
-    connect(this, SIGNAL(accepted()), SLOT(slotAccepted()));
-
     m_warnPalette.setColor(QPalette::Text, Qt::red);
 
     KGuiItem::assign(m_ui->buttonBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
@@ -81,13 +80,12 @@ KisDlgPaletteEditor::KisDlgPaletteEditor()
 KisDlgPaletteEditor::~KisDlgPaletteEditor()
 { }
 
-void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
+void KisDlgPaletteEditor::initialize(KisPaletteModel *model)
 {
     m_colorSet = model->colorSet();
     if (m_colorSet.isNull()) {
         return;
     }
-    m_paletteEditor->setPaletteModel(model);
 
     // don't let editor make changes when initializing
     const QSignalBlocker blocker2(m_ui->lineEditName);
@@ -110,17 +108,12 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
     m_ui->bnDelGroup->setEnabled(false);
     m_ui->bnRenGroup->setEnabled(false);
 
-    m_ui->spinBoxRow->setValue(m_paletteEditor->rowNumberOfGroup(KoColorSet::GLOBAL_GROUP_NAME));
+    m_ui->spinBoxRow->setValue(m_paletteEditor->rowCountOfGroup(KoColorSet::GLOBAL_GROUP_NAME));
 
     m_ui->lineEditName->setEnabled(true);
     m_ui->spinBoxCol->setEnabled(true);
     m_ui->spinBoxRow->setEnabled(true);
     m_ui->bnAddGroup->setEnabled(true);
-}
-
-void KisDlgPaletteEditor::setView(KisViewManager *view)
-{
-    m_paletteEditor->setView(view);
 }
 
 void KisDlgPaletteEditor::slotAddGroup()
@@ -162,7 +155,7 @@ void KisDlgPaletteEditor::slotGroupChosen(const QString &groupName)
         m_ui->bnRenGroup->setEnabled(true);
     }
     m_currentGroupOriginalName = m_paletteEditor->oldNameFromNewName(groupName);
-    m_ui->spinBoxRow->setValue(m_paletteEditor->rowNumberOfGroup(m_currentGroupOriginalName));
+    m_ui->spinBoxRow->setValue(m_paletteEditor->rowCountOfGroup(m_currentGroupOriginalName));
 }
 
 void KisDlgPaletteEditor::slotRowCountChanged(int newCount)
@@ -183,9 +176,4 @@ void KisDlgPaletteEditor::slotNameChanged()
 void KisDlgPaletteEditor::slotColCountChanged(int newCount)
 {
     m_paletteEditor->changeColumnCount(newCount);
-}
-
-void KisDlgPaletteEditor::slotAccepted()
-{
-    m_paletteEditor->updatePalette();
 }

@@ -51,6 +51,7 @@ public:
     bool loadSbz();
     bool loadAse();
     bool loadAcb();
+    bool loadCss();
 
     bool saveKpl(QIODevice *dev) const;
     bool loadKpl();
@@ -88,8 +89,16 @@ private:
     float readFloat(QIODevice *io);
     QString readUnicodeString(QIODevice *io, bool sizeIsInt = false);
 
+    const KoColorProfile *loadColorProfile(QScopedPointer<KoStore> &store,
+                                           const QString &path,
+                                           const QString &modelId,
+                                           const QString &colorDepthId);
+
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
                       const KisSwatchGroupSP group, QSet<const KoColorSpace *> &colorSetSet) const;
+    bool loadKplProfiles(QScopedPointer<KoStore> &store);
+    bool loadKplColorset(QScopedPointer<KoStore> &store);
+    bool loadSbzSwatchbook(QScopedPointer<KoStore> &store);
     void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroupSP group, QString version);
 };
 

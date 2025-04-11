@@ -107,7 +107,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_ui->paletteView, SIGNAL(clicked(QModelIndex)), SLOT(slotPaletteIndexClicked(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
-    connect(m_ui->paletteView, SIGNAL(sigPaletteUpdatedFromModel()), SLOT(slotUpdateLblPaletteName()));
+    connect(m_model, SIGNAL(sigPaletteModified()), SLOT(slotUpdateLblPaletteName()));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(const KoColor&)), SLOT(slotNameListSelection(const KoColor&)));
     connect(m_ui->bnLock, SIGNAL(toggled(bool)), SLOT(slotLockPalette(bool)));
 
@@ -144,8 +144,8 @@ PaletteDockerDock::PaletteDockerDock( )
         m_ui->paletteView->setAllowModification(false);
     }
 
-    m_ui->bnUndo->setVisible(false);
-    m_ui->bnRedo->setVisible(false);
+    //m_ui->bnUndo->setVisible(false);
+    //m_ui->bnRedo->setVisible(false);
 
 
     KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
@@ -276,7 +276,6 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
     if (m_currentColorSet == colorSet) {
         slotUpdateLblPaletteName();
-        m_paletteEditor->updatePalette();
         return;
     }
 
@@ -288,7 +287,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     if (m_paletteEditor->isModified() && m_currentColorSet != colorSet) {
         m_paletteEditor->saveNewPaletteVersion();
     }
-    else if (colorSet) {
+    if (colorSet) {
 
         m_model->setColorSet(colorSet);
 
@@ -332,13 +331,12 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 
 void PaletteDockerDock::slotEditPalette()
 {
-    KisDlgPaletteEditor dlg;
+    KisDlgPaletteEditor dlg(m_paletteEditor.data());
     if (!m_currentColorSet) { return; }
-    dlg.setPaletteModel(m_model);
-    dlg.setView(m_view);
-    if (dlg.exec() != QDialog::Accepted){ return; }
-
-    slotSetColorSet(m_currentColorSet); // update GUI
+    dlg.initialize(m_model);
+    m_paletteEditor->startEditing();
+    bool applyChanges = (dlg.exec() == QDialog::Accepted);
+    m_paletteEditor->endEditing(applyChanges);
 }
 
 void PaletteDockerDock::slotSavePalette()
@@ -451,18 +449,13 @@ void PaletteDockerDock::setRedoToolTip(const QString &text)
 void PaletteDockerDock::undo()
 {
     m_currentColorSet->undoStack()->undo();
-    m_model->slotExternalPaletteModified(m_currentColorSet);
-    m_paletteEditor->updatePalette();
     slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::redo()
 {
     m_currentColorSet->undoStack()->redo();
-    m_model->slotExternalPaletteModified(m_currentColorSet);
-    m_paletteEditor->updatePalette();
     slotUpdateLblPaletteName();
-
 }
 
 

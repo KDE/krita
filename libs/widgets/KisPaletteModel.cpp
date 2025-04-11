@@ -20,7 +20,7 @@
 #include <KoColorDisplayRendererInterface.h>
 #include <KisResourceModel.h>
 #include <QFileInfo>
-
+#include <QScopedValueRollback>
 
 KisPaletteModel::KisPaletteModel(QObject* parent)
     : QAbstractTableModel(parent)
@@ -102,10 +102,20 @@ QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& paren
 
 void KisPaletteModel::setColorSet(KoColorSetSP colorSet)
 {
+    if (colorSet == m_colorSet) {
+        return;
+    }
+
     beginResetModel();
     m_colorSet = colorSet;
+    if (m_colorSet) {
+        m_colorSet->disconnect(this);
+    }
     if (colorSet) {
         connect(colorSet.data(), SIGNAL(modified()), this, SIGNAL(sigPaletteModified()));
+        connect(colorSet.data(), SIGNAL(layoutChanged()), this, SLOT(slotLayoutChanged()));
+        connect(colorSet.data(), SIGNAL(layoutAboutToChange()), this, SLOT(slotLayoutAboutToChange()));
+        connect(colorSet.data(), SIGNAL(entryChanged(int,int)), this, SLOT(slotEntryChanged(int,int)));
     }
     endResetModel();
     Q_EMIT sigPaletteChanged();
@@ -146,6 +156,7 @@ void KisPaletteModel::removeSwatch(const QModelIndex &index, bool keepColors)
 
 void KisPaletteModel::removeGroup(const QString &groupName, bool keepColors)
 {
+    QScopedValueRollback editMarker(m_editing, true);
     int removeStart = m_colorSet->startRowForGroup(groupName);
     int removedRowCount = m_colorSet->getGroup(groupName)->rowCount();
 
@@ -170,7 +181,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
     if (!finalIndex.isValid()) { return false; }
 
     if (data->hasFormat("krita/x-colorsetgroup")) {
-        // dragging group not supported for now
+        QScopedValueRollback editMarker(m_editing, true);
         QByteArray encodedData = data->data("krita/x-colorsetgroup");
         QDataStream stream(&encodedData, QIODevice::ReadOnly);
 
@@ -189,7 +200,6 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
             m_colorSet->moveGroup(groupNameDragged, groupNameDroppedOn);
             endMoveRows();
-            Q_EMIT sigPaletteModified();
         }
         return true;
     }
@@ -216,7 +226,6 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
             }
             setSwatch(entry, finalIndex);
-            Q_EMIT sigPaletteModified();
         }
 
         return true;
@@ -279,6 +288,7 @@ void KisPaletteModel::setSwatch(const KisSwatch &entry, const QModelIndex &index
 
 void KisPaletteModel::changeGroupName(const QString &groupName, const QString &newName)
 {
+    QScopedValueRollback editMarker(m_editing, true);
     beginResetModel();
     m_colorSet->changeGroupName(groupName, newName);
     endResetModel();
@@ -286,6 +296,7 @@ void KisPaletteModel::changeGroupName(const QString &groupName, const QString &n
 
 KisSwatchGroupSP KisPaletteModel::addGroup(const QString &groupName, int _columnCount, int _rowCount)
 {
+    QScopedValueRollback editMarker(m_editing, true);
     beginInsertRows(QModelIndex(), rowCount(), rowCount() + _rowCount);
     m_colorSet->addGroup(groupName, _columnCount, _rowCount);
     endInsertRows();
@@ -294,6 +305,7 @@ KisSwatchGroupSP KisPaletteModel::addGroup(const QString &groupName, int _column
 
 void KisPaletteModel::setRowCountForGroup(const QString &groupName, int rowCount)
 {
+    QScopedValueRollback editMarker(m_editing, true);
     beginResetModel();
     KisSwatchGroupSP g = m_colorSet->getGroup(groupName);
     if (g) {
@@ -304,20 +316,17 @@ void KisPaletteModel::setRowCountForGroup(const QString &groupName, int rowCount
 
 void KisPaletteModel::setColumnCount(int colCount)
 {
-    beginResetModel();
     m_colorSet->setColumnCount(colCount);
-    endResetModel();
 }
 
 void KisPaletteModel::clear()
 {
-    beginResetModel();
     m_colorSet->clear();
-    endResetModel();
 }
 
 void KisPaletteModel::clear(int defaultColumnsCount)
 {
+    QScopedValueRollback editMarker(m_editing, true);
     beginResetModel();
     m_colorSet->clear();
     m_colorSet->setColumnCount(defaultColumnsCount);
@@ -422,6 +431,27 @@ void KisPaletteModel::slotPaletteModified()
     else if (m_colorSet->paletteType() == KoColorSet::GPL) {
         m_colorSet->setFilename(QFileInfo(m_colorSet->filename()).completeBaseName() + ".gpl");
     }
+}
+
+void KisPaletteModel::slotLayoutAboutToChange()
+{
+    // when m_editing is true, we have the information about model changes and don't need to reset
+    if (!m_editing) {
+        beginResetModel();
+    }
+}
+
+void KisPaletteModel::slotLayoutChanged()
+{
+    if (!m_editing) {
+        endResetModel();
+    }
+}
+
+void KisPaletteModel::slotEntryChanged(int column, int row)
+{
+    QModelIndex index = createIndex(row, column);
+    Q_EMIT dataChanged(index, index);
 }
 
 void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> resource)

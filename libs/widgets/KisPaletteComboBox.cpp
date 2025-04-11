@@ -39,10 +39,8 @@ void KisPaletteComboBox::setPaletteModel(const KisPaletteModel *paletteModel)
     m_model = paletteModel;
     if (m_model.isNull()) { return; }
     slotPaletteChanged();
-    connect(m_model, SIGNAL(sigPaletteChanged()),
-            SLOT(slotPaletteChanged()));
-    connect(m_model, SIGNAL(sigPaletteModified()),
-            SLOT(slotPaletteChanged()));
+    connect(m_model, SIGNAL(sigPaletteChanged()), SLOT(slotPaletteChanged()));
+    connect(m_model, SIGNAL(sigPaletteModified()), SLOT(slotPaletteChanged()));
 }
 
 void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
@@ -53,8 +51,7 @@ void KisPaletteComboBox::setCompanionView(KisPaletteView *view)
     }
     m_view = view;
     setPaletteModel(view->paletteModel());
-    connect(view, SIGNAL(sigIndexSelected(QModelIndex)),
-            SLOT(slotSwatchSelected(QModelIndex)));
+    connect(view, SIGNAL(sigIndexSelected(QModelIndex)), SLOT(slotSwatchSelected(QModelIndex)));
 }
 
 void KisPaletteComboBox::slotPaletteChanged()
@@ -65,15 +62,15 @@ void KisPaletteComboBox::slotPaletteChanged()
 
     if (QSharedPointer<KoColorSet>(m_model->colorSet()).isNull()) { return; }
 
-    for (const QString &groupName : m_model->colorSet()->getGroupNames()) {
-        QVector<SwatchInfoType> infoList;
+    for (const QString &groupName : m_model->colorSet()->swatchGroupNames()) {
+        QVector<KisSwatchGroup::SwatchInfo> infoList;
         PosIdxMapType posIdxMap;
-        const KisSwatchGroup *group = m_model->colorSet()->getGroup(groupName);
-        for (const SwatchInfoType &info : group->infoList()) {
+        const KisSwatchGroupSP group = m_model->colorSet()->getGroup(groupName);
+        for (const KisSwatchGroup::SwatchInfo &info : group->infoList()) {
             infoList.append(info);
         }
         std::sort(infoList.begin(), infoList.end(), swatchInfoLess);
-        for (const SwatchInfoType &info : infoList) {
+        for (const KisSwatchGroup::SwatchInfo &info : infoList) {
             const KisSwatch &swatch = info.swatch;
             QString name = swatch.name();
             if (!swatch.id().isEmpty()){
@@ -90,6 +87,9 @@ void KisPaletteComboBox::slotPaletteChanged()
     }
     QModelIndex idx = m_view->currentIndex();
     if (!idx.isValid()) { return; }
+    // FIXME! checkIndex() is just a workaround to not trigger ASSERT failures amidst model resets/row changes.
+    // This class really needs a rewrite to conform with Qt's MVC patterns...
+    if (!m_model->checkIndex(idx, QAbstractItemModel::CheckIndexOption::IndexIsValid)) { return; }
     if (qvariant_cast<bool>(idx.data(KisPaletteModel::IsGroupNameRole))) { return; }
     if (!qvariant_cast<bool>(idx.data(KisPaletteModel::CheckSlotRole))) { return; }
 
@@ -98,7 +98,7 @@ void KisPaletteComboBox::slotPaletteChanged()
     blockSignals(false);
 }
 
-bool KisPaletteComboBox::swatchInfoLess(const SwatchInfoType &first, const SwatchInfoType &second)
+bool KisPaletteComboBox::swatchInfoLess(const KisSwatchGroup::SwatchInfo &first, const KisSwatchGroup::SwatchInfo &second)
 {
     return first.swatch.name() < second.swatch.name();
 }
@@ -143,6 +143,6 @@ void KisPaletteComboBox::slotSwatchSelected(const QModelIndex &index)
 void KisPaletteComboBox::slotIndexUpdated(int idx)
 {
     if (idx >= 0 && idx < m_idxSwatchMap.size()) {
-        emit sigColorSelected(m_idxSwatchMap[idx].color());
+        Q_EMIT sigColorSelected(m_idxSwatchMap[idx].color());
     }
 }

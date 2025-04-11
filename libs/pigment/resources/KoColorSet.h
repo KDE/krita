@@ -1,9 +1,9 @@
 /*  This file is part of the KDE project
-    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
-    SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
-
-    SPDX-License-Identifier: LGPL-2.1-or-later
-
+ *  SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2022 Halla Rempt <halla@valdyas.org>
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
+ *
  */
 #ifndef KOCOLORSET
 #define KOCOLORSET
@@ -19,13 +19,17 @@
 #include "KisSwatch.h"
 #include "KisSwatchGroup.h"
 
+class KUndo2Stack;
+
 /**
  * Also called palette.
  * Open Gimp, Photoshop or RIFF palette files. This is a straight port
  * from the Gimp.
  */
-class KRITAPIGMENT_EXPORT KoColorSet :public KoResource
+class KRITAPIGMENT_EXPORT KoColorSet : public QObject, public KoResource
 {
+    Q_OBJECT
+
 public:
     static const QString GLOBAL_GROUP_NAME;
     static const QString KPL_VERSION_ATTR;
@@ -60,7 +64,10 @@ public:
         ACO,                // Photoshop Swatches
         XML,                // XML palette (Scribus)
         KPL,                // KoColor-based XML palette
-        SBZ                 // SwatchBooker
+        SBZ,                // SwatchBooker
+        ASE,                // Adobe swatch exchange
+        ACB,                // Adobe Color Book.
+        CSS                 // CSS palette
     };
 
 
@@ -88,7 +95,12 @@ public:
         return QPair<QString, QString>(ResourceType::Palettes, "");
     }
 
+    KUndo2Stack *undoStack() const;
+
     void updateThumbnail() override;
+
+    void setLocked(bool lock);
+    bool isLocked() const;
 
     void setColumnCount(int columns);
     int columnCount() const;
@@ -96,7 +108,12 @@ public:
     void setComment(QString comment);
     QString comment();
 
+    // Total number of rows, including empty rows in the groups, excluding rows
+    // a model might use to show group headings
     int rowCount() const;
+
+    int rowCountWithTitles() const;
+
     quint32 colorCount() const;
 
     PaletteType paletteType() const;
@@ -108,34 +125,15 @@ public:
      * @brief Add a color to the palette.
      * @param c the swatch
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
+     * @param column. The column in the group
+     * @param row. The row in the group
      */
-    void add(const KisSwatch &, const QString &groupName = GLOBAL_GROUP_NAME);
-    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = GLOBAL_GROUP_NAME);
+    void addSwatch(const KisSwatch &swatch, const QString &groupName = GLOBAL_GROUP_NAME, int column = -1, int row = -1);
 
     /**
-     * @brief getColorGlobal
-     * A function for getting a color based on a global index. Useful for iterating through all color entries.
-     * @param x the global x index over the whole palette.
-     * @param y the global y index over the whole palette.
-     * @return the entry.
+     * @brief remove the swatch from the given group at column and row
      */
-    KisSwatch getColorGlobal(quint32 x, quint32 y) const;
-
-    /**
-     * @brief getColorGroup
-     * A function for getting the color from a specific group.
-     * @param x the x index over the group.
-     * @param y the y index over the group.
-     * @param groupName the name of the group, will give unsorted when not defined.
-     * @return the entry
-     */
-    KisSwatch getColorGroup(quint32 x, quint32 y, QString groupName);
-
-    /**
-     * @brief getGroupNames
-     * @return returns a list of group names, excluding the unsorted group.
-     */
-    QStringList getGroupNames() const;
+    void removeSwatch(int column, int row, KisSwatchGroupSP group);
 
     /**
      * @brief getGroup
@@ -143,19 +141,35 @@ public:
      * @return the group with the name given; global group if no parameter is given
      * null pointer if not found.
      */
-    KisSwatchGroup *getGroup(const QString &name);
-    KisSwatchGroup *getGlobalGroup();
+    KisSwatchGroupSP getGroup(const QString &name) const;
 
-    bool changeGroupName(const QString &oldGroupName, const QString &newGroupName);
+    /**
+     * @brief getGroup get the group that covers this row
+     * @param row
+     * @return a swatch group
+     */
+    KisSwatchGroupSP getGroup(int row) const;
 
+    /**
+     * @brief getGlobalGroup
+     * @return
+     */
+    KisSwatchGroupSP getGlobalGroup() const;
+
+    /**
+     * @brief changeGroupName
+     * @param oldGroupName
+     * @param newGroupName
+     */
+    void changeGroupName(const QString &oldGroupName, const QString &newGroupName);
 
     /**
      * @brief addGroup
      * Adds a new group.
      * @param groupName the name of the new group. When not specified, this will fail.
-     * @return whether thegroup was made.
+     * @return whether the group was made.
      */
-    bool addGroup(const QString &groupName);
+    void addGroup(const QString &groupName, int columnCount = KisSwatchGroup::DEFAULT_COLUMN_COUNT, int rowCount = KisSwatchGroup::DEFAULT_ROW_COUNT);
 
     /**
      * @brief moveGroup
@@ -164,7 +178,8 @@ public:
      * @param groupNameInsertBefore the groupname to insert before. Empty means it will be added to the end.
      * @return
      */
-    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = GLOBAL_GROUP_NAME);
+    void moveGroup(const QString &groupName, const QString &groupNameInsertBefore = GLOBAL_GROUP_NAME);
+
     /**
      * @brief removeGroup
      * Remove a group from the KoColorSet
@@ -172,8 +187,11 @@ public:
      * @param keepColors Whether you wish to keep the colorsetentries. These will be added to the unsorted.
      * @return whether it could find the group to remove.
      */
-    bool removeGroup(const QString &groupName, bool keepColors = true);
+    void removeGroup(const QString &groupName, bool keepColors = true);
 
+    /**
+     * @brief clears the complete colorset
+     */
     void clear();
 
     /**
@@ -185,9 +203,86 @@ public:
      * when the two colors' colorspaces don't match. Else it'll use the entry's colorspace.
      * @return returns the int of the closest match.
      */
-    KisSwatchGroup::SwatchInfo getClosestColorInfo(KoColor compare, bool useGivenColorSpace = true);
+    KisSwatchGroup::SwatchInfo getClosestSwatchInfo(KoColor compare, bool useGivenColorSpace = true) const;
+
+    /**
+     * @brief getColorGlobal
+     * A function for getting a color based on a global index. Useful for iterating through all color entries.
+     * @param x the global x index over the whole palette.
+     * @param y the global y index over the whole palette.
+     * @return the entry.
+     */
+    KisSwatch getColorGlobal(quint32 column, quint32 row) const;
+
+    /**
+     * @brief getColorGroup
+     * A function for getting the color from a specific group.
+     * @param x the x index over the group.
+     * @param y the y index over the group.
+     * @param groupName the name of the group, will give unsorted when not defined.
+     * @return the entry
+     */
+    KisSwatch getSwatchFromGroup(quint32 column, quint32 row, QString groupName = KoColorSet::GLOBAL_GROUP_NAME) const;
+
+    /**
+     * @brief getGroupNames
+     * @return returns a list of group names, excluding the unsorted group.
+     */
+    QStringList swatchGroupNames() const;
+
+    /**
+     * @brief isGroupRow checks whether the current row is a group title
+     * @param row the row to check
+     * @return true if this is a group row
+     */
+    bool isGroupTitleRow(int row) const;
+
+    /**
+     * @brief rowForNamedGroup returns the row the group's title is on
+     * @param groupName
+     * @return
+     */
+    int startRowForGroup(const QString &groupName) const;
+
+    /**
+     * @brief rowNumberInGroup calculates the row number in the group from the global rownumber
+     * @param rowNumber this is a row in rowCountWithTitles
+     * @return -1 if the row is a group title row.
+     */
+    int rowNumberInGroup(int rowNumber) const;
+
+Q_SIGNALS:
+
+    void modified();
+    void layoutAboutToChange();
+    void layoutChanged();
+    void entryChanged(int column, int row);
+
+
+private Q_SLOTS:
+
+    void canUndoChanged(bool canUndo);
+    void canRedoChanged(bool canRedo);
+
 
 private:
+
+    void setModified(bool);
+    void notifySwatchChanged(const QString& groupName, int column, int row);
+
+    friend struct AddSwatchCommand;
+    friend struct RemoveSwatchCommand;
+    friend struct ChangeGroupNameCommand;
+    friend struct AddGroupCommand;
+    friend struct RemoveGroupCommand;
+    friend struct ClearCommand;
+    friend struct SetColumnCountCommand;
+    friend struct SetCommentCommand;
+    friend struct SetPaletteTypeCommand;
+    friend struct MoveGroupCommand;
+    friend class TestKoColorSet;
+    friend class TestKisPaletteModel;
+
     class Private;
     const QScopedPointer<Private> d;
 

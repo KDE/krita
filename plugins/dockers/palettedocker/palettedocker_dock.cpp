@@ -21,12 +21,14 @@
 #include <QLineEdit>
 #include <QString>
 
+#include <kundo2stack.h>
 #include <KisSqueezedComboBox.h>
 #include <klocalizedstring.h>
 #include <KoResourceServerProvider.h>
 #include <KisResourceLocator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
+#include <kis_floating_message.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_node_manager.h>
@@ -89,6 +91,7 @@ PaletteDockerDock::PaletteDockerDock( )
     m_ui->bnEditPalette->setIconSize(QSize(16, 16));
     m_ui->bnSavePalette->setIconSize(QSize(16, 16));
 
+
     m_ui->paletteView->setPaletteModel(m_model);
     m_ui->paletteView->setAllowModification(true);
     m_ui->cmbNameList->setCompanionView(m_ui->paletteView);
@@ -100,14 +103,13 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_actModify.data(), SIGNAL(triggered()), SLOT(slotEditEntry()));
     connect(m_actEditPalette.data(), SIGNAL(triggered()), SLOT(slotEditPalette()));
     connect(m_actSavePalette.data(), SIGNAL(triggered()), SLOT(slotSavePalette()));
-    connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)),
-            SLOT(slotPaletteIndexSelected(QModelIndex)));
-    connect(m_ui->paletteView, SIGNAL(clicked(QModelIndex)),
-            SLOT(slotPaletteIndexClicked(QModelIndex)));
+    connect(m_ui->paletteView, SIGNAL(sigIndexSelected(QModelIndex)), SLOT(slotPaletteIndexSelected(QModelIndex)));
+    connect(m_ui->paletteView, SIGNAL(clicked(QModelIndex)), SLOT(slotPaletteIndexClicked(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
-    connect(m_ui->paletteView, SIGNAL(sigPaletteUpdatedFromModel()), SLOT(slotUpdatePaletteName()));
+    connect(m_model, SIGNAL(sigPaletteModified()), SLOT(slotUpdateLblPaletteName()));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(const KoColor&)), SLOT(slotNameListSelection(const KoColor&)));
+    connect(m_ui->bnLock, SIGNAL(toggled(bool)), SLOT(slotLockPalette(bool)));
 
     m_viewContextMenu.addAction(m_actModify.data());
     m_viewContextMenu.addAction(m_actRemove.data());
@@ -120,7 +122,7 @@ PaletteDockerDock::PaletteDockerDock( )
     connect(m_paletteChooser, SIGNAL(sigExportPalette(KoColorSetSP)), SLOT(slotExportPalette(KoColorSetSP)));
 
     m_ui->bnColorSets->setIcon(KisIconUtils::loadIcon("palette-library"));
-    m_ui->bnColorSets->setToolTip(i18n("Load palette"));
+    m_ui->bnColorSets->setToolTip(i18n("Load a palette"));
     m_ui->bnColorSets->setPopupWidget(m_paletteChooser);
 
     KisConfig cfg(true);
@@ -131,12 +133,20 @@ PaletteDockerDock::PaletteDockerDock( )
         m_paletteChooser->setCurrentItem(defaultPalette);
     } else {
         m_ui->bnAdd->setEnabled(false);
+        m_ui->bnUndo->setEnabled(false);
+        m_ui->bnRedo->setEnabled(false);
         m_ui->bnRename->setEnabled(false);
         m_ui->bnRemove->setEnabled(false);
         m_ui->bnEditPalette->setEnabled(false);
         m_ui->bnSavePalette->setEnabled(false);
+        m_ui->bnLock->setEnabled(false);
+
         m_ui->paletteView->setAllowModification(false);
     }
+
+    //m_ui->bnUndo->setVisible(false);
+    //m_ui->bnRedo->setVisible(false);
+
 
     KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
     srv->addObserver(this);
@@ -155,10 +165,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
     m_resourceProvider = kisview->canvasResourceProvider();
-    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
-            SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
-    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
-            SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
@@ -209,7 +215,9 @@ void PaletteDockerDock::slotRemovePalette(KoColorSetSP cs)
 void PaletteDockerDock::slotImportPalette()
 {
     KoColorSetSP palette = m_paletteEditor->importPalette();
-    m_paletteChooser->setCurrentItem(palette);
+    if (palette) {
+        m_paletteChooser->setCurrentItem(palette);
+    }
 }
 
 void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
@@ -217,13 +225,22 @@ void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
     KoFileDialog dialog(this, KoFileDialog::SaveFile, "Save Palette");
     dialog.setCaption(i18n("Export Palette"));
     dialog.setDefaultDir(palette->filename());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-palette");
     QString newPath;
-    QString oriPath = palette->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
-    palette->setFilename(newPath);
-    palette->save();
-    palette->setFilename(oriPath);
+
+    QFile file(newPath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        warnKrita << "Could not open the file for writing:" << newPath;
+        return;
+    }
+    if (palette->saveToDevice(&file)) {
+        m_view->showFloatingMessage(
+            i18nc("Floating message about exporting successful", "Palette exported successfully"), QIcon(),
+            500, KisFloatingMessage::Low);
+    } else {
+        warnKrita << "Could export to the file:" << newPath;
+    }
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)
@@ -257,58 +274,76 @@ void PaletteDockerDock::unsetCanvas()
 
 void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
 {
+    if (m_currentColorSet == colorSet) {
+        slotUpdateLblPaletteName();
+        return;
+    }
+
+    if (m_currentColorSet) {
+        disconnect(m_currentColorSet->undoStack());
+    }
+
     // needs to save the palette before switching to another one
     if (m_paletteEditor->isModified() && m_currentColorSet != colorSet) {
         m_paletteEditor->saveNewPaletteVersion();
     }
-    // if it was modified, it should've been saved and now it shouldn't be modified anyway
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_paletteEditor->isModified());
-
     if (colorSet) {
-        m_ui->bnAdd->setEnabled(true);
-        m_ui->bnRename->setEnabled(true);
-        m_ui->bnRemove->setEnabled(true);
-        m_ui->bnEditPalette->setEnabled(true);
-        m_ui->bnSavePalette->setEnabled(true);
-        m_ui->paletteView->setAllowModification(true);
-    } else {
-        m_ui->bnAdd->setEnabled(false);
-        m_ui->bnRename->setEnabled(false);
-        m_ui->bnRemove->setEnabled(false);
-        m_ui->bnEditPalette->setEnabled(false);
-        m_ui->bnSavePalette->setEnabled(false);
-        m_ui->paletteView->setAllowModification(false);
+
+        m_model->setColorSet(colorSet);
+
+        m_ui->bnUndo->setEnabled(colorSet->undoStack()->canUndo() && !colorSet->isLocked());
+        connect(colorSet->undoStack(), SIGNAL(canUndoChanged(bool)), m_ui->bnUndo, SLOT(setEnabled(bool)));
+        connect(colorSet->undoStack(), SIGNAL(undoTextChanged(QString)), this, SLOT(setUndoToolTip(QString)));
+
+        m_ui->bnRedo->setEnabled(colorSet->undoStack()->canRedo() && colorSet->isLocked());
+        connect(colorSet->undoStack(), SIGNAL(canRedoChanged(bool)), m_ui->bnRedo, SLOT(setEnabled(bool)));
+        connect(colorSet->undoStack(), SIGNAL(redoTextChanged(QString)), this, SLOT(setRedoToolTip(QString)));
+
+        connect(m_ui->bnUndo, SIGNAL(clicked()), this, SLOT(undo()));
+        connect(m_ui->bnRedo, SIGNAL(clicked()), this, SLOT(redo()));
+
+        m_ui->bnLock->setChecked(colorSet->isLocked());
+    }
+    bool state = (bool)colorSet;
+    if (state != (bool)m_currentColorSet) {
+        m_ui->bnAdd->setEnabled(state);
+        m_ui->bnRename->setEnabled(state);
+        m_ui->bnRemove->setEnabled(state);
+        m_ui->bnEditPalette->setEnabled(state);
+        m_ui->bnSavePalette->setEnabled(state);
+        m_ui->paletteView->setAllowModification(state);
+        m_ui->bnLock->setEnabled(state);
     }
 
     m_currentColorSet = colorSet;
-    m_model->setPalette(colorSet);
+
     if (colorSet) {
         KisConfig cfg(true);
         cfg.setDefaultPalette(colorSet->name());
         m_ui->lblPaletteName->setTextElideMode(Qt::ElideMiddle);
         m_ui->lblPaletteName->setText(colorSet->name());
-    } else {
+    }
+    else {
         m_ui->lblPaletteName->setText("");
     }
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotEditPalette()
 {
-    KisDlgPaletteEditor dlg;
+    KisDlgPaletteEditor dlg(m_paletteEditor.data());
     if (!m_currentColorSet) { return; }
-    dlg.setPaletteModel(m_model);
-    dlg.setView(m_view);
-    if (dlg.exec() != QDialog::Accepted){ return; }
-
-    slotSetColorSet(m_currentColorSet); // update GUI
+    dlg.initialize(m_model);
+    m_paletteEditor->startEditing();
+    bool applyChanges = (dlg.exec() == QDialog::Accepted);
+    m_paletteEditor->endEditing(applyChanges);
 }
 
 void PaletteDockerDock::slotSavePalette()
 {
     if (m_paletteEditor->isModified()) {
         m_paletteEditor->saveNewPaletteVersion();
-        slotUpdatePaletteName();
+        slotUpdateLblPaletteName();
     }
 }
 
@@ -318,7 +353,7 @@ void PaletteDockerDock::slotAddColor()
     if (m_resourceProvider) {
         m_paletteEditor->addEntry(m_resourceProvider->fgColor());
     }
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotRemoveColor()
@@ -329,7 +364,7 @@ void PaletteDockerDock::slotRemoveColor()
     }
     m_paletteEditor->removeEntry(index);
     m_ui->bnRemove->setEnabled(false);
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
@@ -341,7 +376,7 @@ void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
     }
 }
 
-void PaletteDockerDock::slotUpdatePaletteName()
+void PaletteDockerDock::slotUpdateLblPaletteName()
 {
     if (m_currentColorSet) {
         m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
@@ -362,7 +397,8 @@ void PaletteDockerDock::slotUpdatePaletteName()
         m_actSavePalette.data()->setEnabled(isGlobal);
         if (isGlobal) {
             m_actSavePalette.data()->setToolTip(i18nc("@tooltip", "Save palette explicitly, will also happen automatically on exiting Krita."));
-        } else {
+        }
+        else {
             m_actSavePalette.data()->setToolTip(i18nc("@tooltip", "Saving for document palettes is done by saving the document."));
         }
         // if the palette is not global, then let's not indicate that the changes has been made
@@ -372,42 +408,62 @@ void PaletteDockerDock::slotUpdatePaletteName()
             QFont font = m_ui->lblPaletteName->font();
             font.setItalic(true);
             m_ui->lblPaletteName->setFont(font);
-        } else {
+        }
+        else {
             QFont font = m_ui->lblPaletteName->font();
             font.setItalic(false);
             m_ui->lblPaletteName->setFont(font);
         }
 
         m_ui->lblPaletteName->setText(name);
-    } else {
+    }
+    else {
         m_ui->lblPaletteName->setText("");
     }
 }
 
-void PaletteDockerDock::saveToWorkspace(KisWorkspaceResourceSP workspace)
+void PaletteDockerDock::slotLockPalette(bool locked)
 {
-    if (!m_currentColorSet.isNull()) {
-        workspace->setProperty("palette", m_currentColorSet->name());
-    }
+    m_currentColorSet->setLocked(locked);
+    QIcon icon = locked ? KisIconUtils::loadIcon(koIconName("object-locked"))
+                        : KisIconUtils::loadIcon(koIconName("object-unlocked"));
+    m_ui->bnLock->setIcon(icon);
+    m_ui->bnAdd->setEnabled(!locked);
+    m_ui->bnRename->setEnabled(!locked);
+    m_ui->bnRemove->setEnabled(!locked);
+    m_ui->bnEditPalette->setEnabled(!locked);
+    m_ui->bnSavePalette->setEnabled(!locked);
+    m_ui->paletteView->setAllowModification(!locked);
 }
 
-void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
+void PaletteDockerDock::setUndoToolTip(const QString &text)
 {
-    if (workspace->hasProperty("palette")) {
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSetSP colorSet = rServer->resource("", "", workspace->getString("palette"));
-        if (colorSet) {
-            slotSetColorSet(colorSet);
-        }
-    }
+    m_ui->bnUndo->setToolTip(text);
 }
+
+void PaletteDockerDock::setRedoToolTip(const QString &text)
+{
+    m_ui->bnRedo->setToolTip(text);
+}
+
+void PaletteDockerDock::undo()
+{
+    m_currentColorSet->undoStack()->undo();
+    slotUpdateLblPaletteName();
+}
+
+void PaletteDockerDock::redo()
+{
+    m_currentColorSet->undoStack()->redo();
+    slotUpdateLblPaletteName();
+}
+
 
 void PaletteDockerDock::slotFGColorResourceChanged(const KoColor &color)
 {
     if (!m_colorSelfUpdate) {
         m_ui->paletteView->slotFGColorChanged(color);
     }
-
 }
 
 void PaletteDockerDock::slotStoragesChanged(const QString &/*location*/)
@@ -428,12 +484,12 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
     if (occupied) {
         if (!qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
             m_ui->bnRemove->setEnabled(true);
-            KisSwatch entry = m_model->getEntry(index);
+            KisSwatch entry = m_model->getSwatch(index);
             setFGColorByPalette(entry);
         }
     }
     m_ui->bnRemove->setEnabled(occupied);
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
@@ -441,20 +497,20 @@ void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
     if (!(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)))) {
         setEntryByForeground(index);
     }
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexDoubleClicked(const QModelIndex &index)
 {
     m_paletteEditor->modifyEntry(index);
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
     m_paletteEditor->setEntry(m_resourceProvider->fgColor(), index);
     m_ui->bnRemove->setEnabled(true);
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotEditEntry()
@@ -464,7 +520,7 @@ void PaletteDockerDock::slotEditEntry()
         return;
     }
     m_paletteEditor->modifyEntry(index);
-    slotUpdatePaletteName();
+    slotUpdateLblPaletteName();
 }
 
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)

@@ -11,7 +11,6 @@
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QLineEdit>
-#include <QPushButton>
 #include <QLabel>
 #include <QSpinBox>
 #include <QComboBox>
@@ -39,13 +38,12 @@ struct KisPaletteEditor::PaletteInfo {
     QString filename;
     int columnCount;
     QString storageLocation;
-    QHash<QString, KisSwatchGroup> groups;
+    QHash<QString, KisSwatchGroupSP> groups;
 };
 
 struct KisPaletteEditor::Private
 {
-    bool isNameModified {false};
-    bool isColumnCountModified {false};
+    bool isEditing {false};
     QSet<QString> modifiedGroupNames; // key is original group name
     QSet<QString> newGroupNames;
     QSet<QString> keepColorGroups;
@@ -53,7 +51,7 @@ struct KisPaletteEditor::Private
     QString groupBeingRenamed;
     QPointer<KisPaletteModel> model;
     QPointer<KisViewManager> view;
-    PaletteInfo modified;
+    KisPaletteEditor::PaletteInfo modifiedPaletteInfo;
     QPointer<KoDialog> query;
     KoResourceServer<KoColorSet> *rServer {0};
 
@@ -76,6 +74,9 @@ KisPaletteEditor::~KisPaletteEditor()
 void KisPaletteEditor::setPaletteModel(KisPaletteModel *model)
 {
     if (!model) { return; }
+    if (m_d->model) {
+        m_d->model->disconnect(this);
+    }
     m_d->model = model;
     slotPaletteChanged();
     connect(model, SIGNAL(sigPaletteChanged()), SLOT(slotPaletteChanged()));
@@ -99,17 +100,25 @@ KoColorSetSP KisPaletteEditor::addPalette()
     QLineEdit *le = new QLineEdit(i18nc("Default name for a new palette","New Palette"));
     layout->addRow(i18n("New palette name:"), le);
 
-    QString saveLocation = m_d->rServer->saveLocation();
-
+    QComboBox *cmbPaletteType = new QComboBox();
+    cmbPaletteType->addItem(i18nc("Palette File Type", "Krita Palette (KPL)"));
+    cmbPaletteType->addItem(i18nc("Palette File Type", "GIMP Palette (GPL)"));
+    layout->addRow(cmbPaletteType);
 
     QCheckBox *chkSaveInDocument = new QCheckBox(i18n("Save Palette in the Current Document"));
     chkSaveInDocument->setChecked(false);
     layout->addRow(chkSaveInDocument);
 
+
     if (dialog.exec() != QDialog::Accepted) { return 0; }
 
     QString name = le->text();
-    colorSet->setPaletteType(KoColorSet::KPL);
+    if (cmbPaletteType->currentIndex() == 0) {
+        colorSet->setPaletteType(KoColorSet::KPL);
+    }
+    else {
+        colorSet->setPaletteType(KoColorSet::GPL);
+    }
     colorSet->setValid(true);
     colorSet->setName(name);
     colorSet->setFilename(name.split(" ").join("_")+colorSet->defaultFileExtension());
@@ -119,8 +128,7 @@ KoColorSetSP KisPaletteEditor::addPalette()
         resourceLocation = m_d->view->document()->linkedResourcesStorageId();
     }
 
-    if (KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindow(), colorSet, resourceLocation)) {
-
+    if (KisResourceUserOperations::addResourceWithUserInput(m_d->view->mainWindowAsQWidget(), colorSet, resourceLocation)) {
         return colorSet;
 
     }
@@ -134,7 +142,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     dialog.setCaption(i18n("Import Palette"));
 
     dialog.setDefaultDir(QDir::homePath());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-palette" << "application/x-gimp-color-palette");
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) {
@@ -148,7 +156,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     if (messageBox.exec() == QMessageBox::Yes) {
         storageLocation = m_d->view->document()->linkedResourcesStorageId();
     }
-    KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindow(), storageLocation, ResourceType::Palettes, filename);
+    KoResourceSP resource = KisResourceUserOperations::importResourceFileWithUserInput(m_d->view->mainWindowAsQWidget(), storageLocation, ResourceType::Palettes, filename);
 
     KoColorSetSP palette;
     if (resource) {
@@ -166,30 +174,42 @@ void KisPaletteEditor::removePalette(KoColorSetSP cs)
     m_d->rServer->removeResourceFromServer(cs);
 }
 
-int KisPaletteEditor::rowNumberOfGroup(const QString &oriName) const
+int KisPaletteEditor::rowCountOfGroup(const QString &originalName) const
 {
-    if (!m_d->modified.groups.contains(oriName)) { return 0; }
-    return m_d->modified.groups[oriName].rowCount();
+    if (!m_d->modifiedPaletteInfo.groups.contains(originalName)) {
+        KoColorSetSP colorSet = m_d->model->colorSet();
+        if (originalName.isEmpty()) {
+            return colorSet->getGlobalGroup()->rowCount();
+        }
+        else {
+            KisSwatchGroupSP group = colorSet->getGroup(originalName);
+            if (group ){
+                return group->rowCount();
+            }
+        }
+        return 0;
+    }
+    return m_d->modifiedPaletteInfo.groups[originalName]->rowCount();
 }
 
 bool KisPaletteEditor::duplicateExistsGroupName(const QString &name) const
 {
     if (name == m_d->groupBeingRenamed) { return false; }
-    Q_FOREACH (const KisSwatchGroup &g, m_d->modified.groups.values()) {
-        if (name == g.name()) { return true; }
+    Q_FOREACH (const KisSwatchGroupSP group, m_d->modifiedPaletteInfo.groups.values()) {
+        if (name == group->name()) { return true; }
     }
     return false;
 }
 
 bool KisPaletteEditor::duplicateExistsOriginalGroupName(const QString &name) const
 {
-    return m_d->modified.groups.contains(name);
+    return m_d->modifiedPaletteInfo.groups.contains(name);
 }
 
 QString KisPaletteEditor::oldNameFromNewName(const QString &newName) const
 {
-    Q_FOREACH (const QString &oldGroupName, m_d->modified.groups.keys()) {
-        if (m_d->modified.groups[oldGroupName].name() == newName) {
+    Q_FOREACH (const QString &oldGroupName, m_d->modifiedPaletteInfo.groups.keys()) {
+        if (m_d->modifiedPaletteInfo.groups[oldGroupName]->name() == newName) {
             return oldGroupName;
         }
     }
@@ -198,19 +218,26 @@ QString KisPaletteEditor::oldNameFromNewName(const QString &newName) const
 
 void KisPaletteEditor::rename(const QString &newName)
 {
+    if (!m_d->isEditing) {
+        return;
+    }
     if (newName.isEmpty()) { return; }
-    m_d->isNameModified = true;
-    m_d->modified.name = newName;
+    m_d->modifiedPaletteInfo.name = newName;
 }
 
-void KisPaletteEditor::changeColCount(int newCount)
+void KisPaletteEditor::changeColumnCount(int newCount)
 {
-    m_d->isColumnCountModified = true;
-    m_d->modified.columnCount = newCount;
+    if (!m_d->isEditing) {
+        return;
+    }
+    m_d->modifiedPaletteInfo.columnCount = newCount;
 }
 
 QString KisPaletteEditor::addGroup()
 {
+    if (!m_d->isEditing) {
+        return QString();
+    }
     KoDialog dialog;
     m_d->query = &dialog;
 
@@ -233,16 +260,19 @@ QString KisPaletteEditor::addGroup()
     if (duplicateExistsOriginalGroupName(name)) {
         name = newGroupName();
     }
-    m_d->modified.groups[name] = KisSwatchGroup();
-    KisSwatchGroup &newGroup = m_d->modified.groups[name];
-    newGroup.setName(realName);
+    m_d->modifiedPaletteInfo.groups[name].reset(new KisSwatchGroup);
+    KisSwatchGroupSP newGroup = m_d->modifiedPaletteInfo.groups[name];
+    newGroup->setName(realName);
     m_d->newGroupNames.insert(name);
-    newGroup.setRowCount(spxRow->value());
+    newGroup->setRowCount(spxRow->value());
     return realName;
 }
 
 bool KisPaletteEditor::removeGroup(const QString &name)
 {
+    if (!m_d->isEditing) {
+        return false;
+    }
     KoDialog dialog;
     dialog.setWindowTitle(i18nc("@title:dialog", "Removing Swatch Group"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
@@ -251,7 +281,7 @@ bool KisPaletteEditor::removeGroup(const QString &name)
     editableItems->addRow(i18nc("Shows up when deleting a swatch group", "Keep the Colors"), chkKeep);
     if (dialog.exec() != KoDialog::Accepted) { return false; }
 
-    m_d->modified.groups.remove(name);
+    m_d->modifiedPaletteInfo.groups.remove(name);
     m_d->newGroupNames.remove(name);
     if (chkKeep->isChecked()) {
         m_d->keepColorGroups.insert(name);
@@ -261,17 +291,20 @@ bool KisPaletteEditor::removeGroup(const QString &name)
 
 QString KisPaletteEditor::renameGroup(const QString &oldName)
 {
+    if (!m_d->isEditing) {
+        return QString();
+    }
     if (oldName.isEmpty() || oldName == KoColorSet::GLOBAL_GROUP_NAME) { return QString(); }
 
     KoDialog dialog;
     m_d->query = &dialog;
-    m_d->groupBeingRenamed = m_d->modified.groups[oldName].name();
+    m_d->groupBeingRenamed = m_d->modifiedPaletteInfo.groups[oldName]->name();
 
     QFormLayout *form = new QFormLayout(dialog.mainWidget());
 
     QLineEdit *leNewName = new QLineEdit();
     connect(leNewName, SIGNAL(textChanged(QString)), SLOT(slotGroupNameChanged(QString)));
-    leNewName->setText(m_d->modified.groups[oldName].name());
+    leNewName->setText(m_d->modifiedPaletteInfo.groups[oldName]->name());
 
     form->addRow(i18n("New swatch group name:"), leNewName);
 
@@ -279,7 +312,7 @@ QString KisPaletteEditor::renameGroup(const QString &oldName)
     if (leNewName->text().isEmpty()) { return QString(); }
     if (duplicateExistsGroupName(leNewName->text())) { return QString(); }
 
-    m_d->modified.groups[oldName].setName(leNewName->text());
+    m_d->modifiedPaletteInfo.groups[oldName]->setName(leNewName->text());
     m_d->modifiedGroupNames.insert(oldName);
 
     return leNewName->text();
@@ -303,14 +336,17 @@ void KisPaletteEditor::slotGroupNameChanged(const QString &newName)
 
 void KisPaletteEditor::changeGroupRowCount(const QString &name, int newRowCount)
 {
-    if (!m_d->modified.groups.contains(name)) { return; }
-    m_d->modified.groups[name].setRowCount(newRowCount);
+    if (!m_d->isEditing) {
+        return;
+    }
+    if (!m_d->modifiedPaletteInfo.groups.contains(name)) { return; }
+    m_d->modifiedPaletteInfo.groups[name]->setRowCount(newRowCount);
     m_d->modifiedGroupNames.insert(name);
 }
 
 void KisPaletteEditor::setStorageLocation(QString location)
 {
-   m_d->modified.storageLocation = location;
+   m_d->modifiedPaletteInfo.storageLocation = location;
 }
 
 void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
@@ -321,14 +357,13 @@ void KisPaletteEditor::setEntry(const KoColor &color, const QModelIndex &index)
     KisSwatch c = KisSwatch(color);
     c.setId(QString::number(m_d->model->colorSet()->colorCount() + 1));
     c.setName(i18nc("Default name for a color swatch","Color %1", QString::number(m_d->model->colorSet()->colorCount()+1)));
-    m_d->model->setEntry(c, index);
+    m_d->model->setSwatch(c, index);
 }
 
 void KisPaletteEditor::slotSetDocumentModified()
 {
-    if (m_d->modified.storageLocation == m_d->view->document()->linkedResourcesStorageId()) {
-        updatePalette();
-        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), m_d->model->colorSet());
+    if (m_d->modifiedPaletteInfo.storageLocation == m_d->view->document()->linkedResourcesStorageId()) {
+        KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindowAsQWidget(), m_d->model->colorSet());
         m_d->view->document()->setModified(true);
     }
     m_d->model->colorSet()->setDirty(true);
@@ -340,11 +375,12 @@ void KisPaletteEditor::removeEntry(const QModelIndex &index)
     if (!m_d->view) { return; }
     if (!m_d->view->document()) { return; }
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+        startEditing();
         removeGroup(qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole)));
+        endEditing();
     } else {
-        m_d->model->removeEntry(index, false);
+        m_d->model->removeSwatch(index, false);
     }
-    updatePalette();
 }
 
 void KisPaletteEditor::modifyEntry(const QModelIndex &index)
@@ -358,8 +394,9 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
 
     QString groupName = qvariant_cast<QString>(index.data(Qt::DisplayRole));
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
+        startEditing();
         renameGroup(groupName);
-        updatePalette();
+        endEditing();
     }
     else {
 
@@ -369,7 +406,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
         QCheckBox *chkSpot = new QCheckBox();
         chkSpot->setToolTip(i18nc("@info:tooltip", "A spot color is a color that the printer is able to print without mixing the paints it has available to it. The opposite is called a process color."));
 
-        KisSwatch entry = m_d->model->getEntry(index);
+        KisSwatch entry = m_d->model->getSwatch(index);
 
         editableItems->addRow(i18n("Swatch ID:"), lnIDName);
         editableItems->addRow(i18n("Color swatch name:"), lnGroupName);
@@ -386,7 +423,7 @@ void KisPaletteEditor::modifyEntry(const QModelIndex &index)
             entry.setId(lnIDName->text());
             entry.setColor(bnColor->color());
             entry.setSpotColor(chkSpot->isChecked());
-            m_d->model->setEntry(entry, index);
+            m_d->model->setSwatch(entry, index);
         }
     }
 }
@@ -403,7 +440,7 @@ void KisPaletteEditor::addEntry(const KoColor &color)
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
 
     QComboBox *cmbGroups = new QComboBox();
-    cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
+    cmbGroups->addItems(m_d->model->colorSet()->swatchGroupNames());
     cmbGroups->setCurrentIndex(0);
 
     QLineEdit *lnIDName = new QLineEdit();
@@ -429,14 +466,14 @@ void KisPaletteEditor::addEntry(const KoColor &color)
 
     QString groupName = cmbGroups->currentText();
 
-    KisSwatch newEntry;
-    newEntry.setColor(bnColor->color());
-    newEntry.setName(lnName->text());
-    newEntry.setId(lnIDName->text());
-    newEntry.setSpotColor(chkSpot->isChecked());
-    m_d->model->addEntry(newEntry, groupName);
+    KisSwatch newSwatch;
+    newSwatch.setColor(bnColor->color());
+    newSwatch.setName(lnName->text());
+    newSwatch.setId(lnIDName->text());
+    newSwatch.setSpotColor(chkSpot->isChecked());
+    m_d->model->addSwatch(newSwatch, groupName);
     m_d->modifiedGroupNames.insert(groupName);
-    m_d->modified.groups[groupName].addEntry(newEntry);
+    m_d->modifiedPaletteInfo.groups[groupName]->addSwatch(newSwatch);
 }
 
 bool KisPaletteEditor::isModified() const
@@ -448,48 +485,90 @@ bool KisPaletteEditor::isModified() const
     }
 }
 
-void KisPaletteEditor::updatePalette()
+void KisPaletteEditor::startEditing()
 {
-    dbgResources << Q_FUNC_INFO << "updating the palette model inside the palette editor object";
-    Q_ASSERT(m_d->model);
-    Q_ASSERT(m_d->model->colorSet());
-    if (!m_d->view) { return; }
-    if (!m_d->view->document()) { return; }
-    KoColorSetSP palette = m_d->model->colorSet();
-    PaletteInfo &modified = m_d->modified;
-
-    if (m_d->isColumnCountModified) {
-        palette->setColumnCount(modified.columnCount);
+    if (m_d->isEditing) {
+        qWarning() << "KisPaletteEditor::startEditing(): restarting palette editing.";
+        clearStagedChanges();
     }
-    if (m_d->isNameModified) {
-        KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindow(), palette, m_d->modified.name);
+
+    if (!m_d->model || !m_d->model->colorSet()) {
+        return;
+    }
+    KoColorSetSP palette = m_d->model->colorSet();
+
+    m_d->modifiedPaletteInfo.name = palette->name();
+    m_d->modifiedPaletteInfo.storageLocation = palette->storageLocation();
+    m_d->modifiedPaletteInfo.columnCount = palette->columnCount();
+
+    Q_FOREACH (const QString &groupName, palette->swatchGroupNames()) {
+        KisSwatchGroupSP cs = palette->getGroup(groupName);
+        m_d->modifiedPaletteInfo.groups[groupName].reset(new KisSwatchGroup(*cs.data()));
+    }
+
+    m_d->isEditing = true;
+}
+
+void KisPaletteEditor::endEditing(bool applyChanges)
+{
+    if (!m_d->isEditing) {
+        qWarning("KisPaletteEditor::endEditing(): not in editing state; ignoring.");
+        return;
+    }
+
+    if (!applyChanges) {
+        clearStagedChanges();
+        return;
+    }
+
+    if (!m_d->model) return;
+    if (!m_d->model->colorSet()) return;
+    if (!m_d->view) return;
+    if (!m_d->view->document()) return;
+
+    KoColorSetSP palette = m_d->model->colorSet();
+    PaletteInfo &modified = m_d->modifiedPaletteInfo;
+
+    if (modified.columnCount != palette->columnCount()) {
+        m_d->model->setColumnCount(modified.columnCount);
+    }
+    if (modified.name != palette->name()) {
+        KisResourceUserOperations::renameResourceWithUserInput(m_d->view->mainWindowAsQWidget(), palette, m_d->modifiedPaletteInfo.name);
     }
     QString resourceLocation = m_d->model->colorSet()->storageLocation();
-    if (resourceLocation != m_d->modified.storageLocation) {
+    if (resourceLocation != m_d->modifiedPaletteInfo.storageLocation) {
         // We need functionality for moving the resource to the new resource storage...
     }
 
-    Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
+    Q_FOREACH (const QString &groupName, palette->swatchGroupNames()) {
         if (!modified.groups.contains(groupName)) {
             m_d->model->removeGroup(groupName, m_d->keepColorGroups.contains(groupName));
         }
     }
-    m_d->keepColorGroups.clear();
-    Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
+    Q_FOREACH (const QString &groupName, palette->swatchGroupNames()) {
         if (m_d->modifiedGroupNames.contains(groupName)) {
-            m_d->model->setRowNumber(groupName, modified.groups[groupName].rowCount());
-            if (groupName != modified.groups[groupName].name()) {
-                m_d->model->renameGroup(groupName, modified.groups[groupName].name());
-                modified.groups[modified.groups[groupName].name()] = modified.groups[groupName];
+            m_d->model->setRowCountForGroup(groupName, modified.groups[groupName]->rowCount());
+            if (groupName != modified.groups[groupName]->name()) {
+                m_d->model->changeGroupName(groupName, modified.groups[groupName]->name());
+                modified.groups[modified.groups[groupName]->name()] = modified.groups[groupName];
                 modified.groups.remove(groupName);
             }
         }
     }
-    m_d->modifiedGroupNames.clear();
     Q_FOREACH (const QString &newGroupName, m_d->newGroupNames) {
-        m_d->model->addGroup(modified.groups[newGroupName]);
+        m_d->model->addGroup(newGroupName, palette->columnCount(), m_d->modifiedPaletteInfo.groups[newGroupName]->rowCount());
     }
+
+    clearStagedChanges();
+}
+
+void KisPaletteEditor::clearStagedChanges()
+{
+    m_d->modifiedPaletteInfo.groups.clear();
+    m_d->keepColorGroups.clear();
     m_d->newGroupNames.clear();
+    m_d->modifiedGroupNames.clear();
+    m_d->isEditing = false;
 }
 
 void KisPaletteEditor::saveNewPaletteVersion()
@@ -510,48 +589,26 @@ void KisPaletteEditor::saveNewPaletteVersion()
     bool res = false;
     if (isGlobal) {
         if (m_d->view) {
-            res = KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindow(), m_d->model->colorSet());
+            res = KisResourceUserOperations::updateResourceWithUserInput(m_d->view->mainWindowAsQWidget(), m_d->model->colorSet());
         } else if (m_d->model->colorSet()->version() >= 0) {
             //if the version is -1, then the resource should not be updated, because it was never saved to begin with...
             res = m_d->rServer->resourceModel()->updateResource(m_d->model->colorSet());
             dbgResources << Q_FUNC_INFO << "-- Updating resource without user input: " << m_d->model->colorSet()->name() << "Result:" << res;
         }
     }
-
-    // let's not change it to true if it wasn't modified at all
-    m_d->model->colorSet()->setDirty(m_d->model->colorSet()->isDirty() && !res);
 }
 
 void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
-    if (!m_d->model->colorSet()) { return; }
-    KoColorSetSP palette = m_d->model->colorSet();
-    m_d->modified.groups.clear();
-    m_d->keepColorGroups.clear();
-    m_d->newGroupNames.clear();
-    m_d->modifiedGroupNames.clear();
-
-    m_d->modified.name = palette->name();
-    m_d->modified.storageLocation = palette->storageLocation();
-    m_d->modified.columnCount = palette->columnCount();
-
-    Q_FOREACH (const QString &groupName, palette->getGroupNames()) {
-        KisSwatchGroup *cs = palette->getGroup(groupName);
-        m_d->modified.groups[groupName] = KisSwatchGroup(*cs);
-    }
-}
-
-QString KisPaletteEditor::relativePathFromSaveLocation() const
-{
-    return filenameFromPath(m_d->modified.filename);
+    clearStagedChanges();
 }
 
 QString KisPaletteEditor::newGroupName() const
 {
     int i = 1;
     QString groupname = i18nc("Default new group name", "New Group %1", QString::number(i));
-    while (m_d->modified.groups.contains(groupname)) {
+    while (m_d->modifiedPaletteInfo.groups.contains(groupname)) {
         i++;
         groupname = i18nc("Default new group name", "New Group %1", QString::number(i));
     }

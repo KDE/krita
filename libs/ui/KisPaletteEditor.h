@@ -21,7 +21,7 @@ class KisViewManager;
 
 /**
  * @brief The PaletteEditor class
- * this class manipulates a KisPaletteModel using GUI elements and communicate
+ * this class manipulates a KisPaletteModel using GUI elements and communicates
  * with KisDocument
  *
  * Changes made in this class won't be done to the palette if the palette is
@@ -45,74 +45,89 @@ public:
     void removePalette(KoColorSetSP );
 
     /**
-     * @brief rowNumberOfGroup
-     * @param oriName the original name of a group at the creation of the instance
+     * @brief rowCountOfGroup
+     * @param originalName the original name of a group at the creation of the instance
      * @return newest row number of the group
      */
-    int rowNumberOfGroup(const QString &oriName) const;
+    int rowCountOfGroup(const QString &originalName) const;
+
     /**
      * @brief oldNameFromNewName
      * @param newName the current name of a group
      * @return the name of the group at the creation of the instance
      */
     QString oldNameFromNewName(const QString &newName) const;
+
     /**
-     * @brief duplicateExistsFilename
-     * @param filename the name of the file
-     * @param global if this filename is going to be used for a global palette
-     * @return true if the a palette in the resource system that has filename
-     * name already exists else false
+     * @brief Stage a palette rename.
+     * @param newName
      */
-    bool duplicateExistsFilename(const QString &filename, bool global) const;
-    QString relativePathFromSaveLocation() const;
-
     void rename(const QString &newName);
-    void changeFilename(const QString &newName);
-    void changeColCount(int);
 
     /**
-     * @brief addGroup
+     * @brief Stage a change of the palette's column count.
+     */
+    void changeColumnCount(int);
+
+    /**
+     * @brief Stage the addition of a new swatch group.
      * @return new group's name if change accepted, empty string if cancelled
      */
     QString addGroup();
+
     /**
-     * @brief removeGroup
+     * @brief Stage the removal of a group.
      * @param name original group name
      * @return true if change accepted, false if cancelled
      */
     bool removeGroup(const QString &name);
+
     /**
-     * @brief renameGroup
+     * @brief Stage a rename of a group.
      * @param oldName
      * @return new name if change accepted, empty string if cancelled
      */
     QString renameGroup(const QString &oldName);
+
+    /**
+     * @brief Stage a change to the row count of a group.
+     * @param name
+     * @param newRowCount
+     */
     void changeGroupRowCount(const QString &name, int newRowCount);
+
     void setStorageLocation(QString location);
 
     void setEntry(const KoColor &color, const QModelIndex &index);
+
     void removeEntry(const QModelIndex &index);
+
     void modifyEntry(const QModelIndex &index);
+
     void addEntry(const KoColor &color);
 
     bool isModified() const;
 
     /**
-     * @brief getModifiedGroup
-     * @param originalName name of the group at the creation of the instance
-     * @return the modified group
-     */
-    const KisSwatchGroup &getModifiedGroup(const QString &originalName) const;
-
-    /**
-     * @brief updatePalette
-     * MUST be called to make the changes into the resource server
-     */
-    void updatePalette();
-
-    /**
-     * @brief savePalette
+     * @brief Start editing the current palette.
      *
+     * This must be called before any calls that stage changes,
+     * otherwise those calls have no effect.
+     * All staged changes get applied when calling endEditing().
+     *
+     * Adding, removing and updating swatches happens immediately
+     */
+    void startEditing();
+    /**
+     * @brief End editing and either apply or discard staged changes.
+     * @param applyChanges If set to false, the palette remains unchanged and
+     *        staged changes are discarded.
+     */
+    void endEditing(bool applyChanges = true);
+    void clearStagedChanges();
+
+    /**
+     * @brief saveNewPaletteVersion
      */
     void saveNewPaletteVersion();
 

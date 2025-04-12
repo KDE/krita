@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-11 01:52+0000\n"
+"POT-Creation-Date: 2025-04-12 01:50+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -23354,10 +23354,10 @@ msgstr "Ulaz"
 msgid "Out"
 msgstr "Izlaz"
 
-#: libs/pigment/resources/KoColorSet.cpp:1092
-#: libs/pigment/resources/KoColorSet.cpp:1436
-#: libs/pigment/resources/KoColorSet.cpp:1516
-#: libs/pigment/resources/KoColorSet.cpp:1925
+#: libs/pigment/resources/KoColorSet.cpp:1101
+#: libs/pigment/resources/KoColorSet.cpp:1445
+#: libs/pigment/resources/KoColorSet.cpp:1525
+#: libs/pigment/resources/KoColorSet.cpp:1934
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -38692,7 +38692,7 @@ msgstr "Svojstva uređaja"
 msgid "Export current palette to file"
 msgstr "I&zvoz..."
 
-#: libs/widgets/KisPaletteModel.cpp:374
+#: libs/widgets/KisPaletteModel.cpp:376
 #, kde-format
 msgid "Empty slot"
 msgstr ""
@@ -41466,7 +41466,7 @@ msgstr "&Bijela"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:76
+#: plugins/python/palette_docker/palette_docker.py:78
 #, kde-format
 msgid "+"
 msgstr ""
@@ -59801,53 +59801,53 @@ msgid ""
 "and color settings based on the mutation settings configured above."
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:45
+#: plugins/python/palette_docker/palette_docker.py:47
 #, fuzzy
 msgid "Python Palette Docker"
 msgstr "Uzorci"
 
-#: plugins/python/palette_docker/palette_docker.py:71
+#: plugins/python/palette_docker/palette_docker.py:73
 #, fuzzy
 msgid "Set"
 msgstr "Svjetlina / Kontrast"
 
-#: plugins/python/palette_docker/palette_docker.py:80
+#: plugins/python/palette_docker/palette_docker.py:82
 #, fuzzy
 #| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Dodaj grupu"
 
-#: plugins/python/palette_docker/palette_docker.py:83
+#: plugins/python/palette_docker/palette_docker.py:85
 #, fuzzy
 msgid "Remove Entry"
 msgstr "Ukloni trenutni %1"
 
-#: plugins/python/palette_docker/palette_docker.py:99
+#: plugins/python/palette_docker/palette_docker.py:101
 #, fuzzy
 msgid "Edit Palette Settings"
 msgstr "Uzorci"
 
-#: plugins/python/palette_docker/palette_docker.py:105
+#: plugins/python/palette_docker/palette_docker.py:107
 #, fuzzy
 msgid "Export as GIMP Palette File"
 msgstr "I&zvoz..."
 
-#: plugins/python/palette_docker/palette_docker.py:109
+#: plugins/python/palette_docker/palette_docker.py:111
 msgid "Export as Inkscape SVG with Swatches"
 msgstr ""
 
-#: plugins/python/palette_docker/palette_docker.py:113
+#: plugins/python/palette_docker/palette_docker.py:115
 #, fuzzy
 msgid "Sort Colors"
 msgstr "&Bijela"
 
-#: plugins/python/palette_docker/palette_docker.py:223
+#: plugins/python/palette_docker/palette_docker.py:225
 #, fuzzy
 msgid "Edit Palette Data"
 msgstr "Uzorci"
 
-#: plugins/python/palette_docker/palette_docker.py:228
+#: plugins/python/palette_docker/palette_docker.py:230
 #, fuzzy
 msgid "Palette Data"
 msgstr "Uzorci"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-11 01:52+0000\n"
+"POT-Creation-Date: 2025-04-12 01:50+0000\n"
 "PO-Revision-Date: 2025-04-10 20:45+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -23485,10 +23485,10 @@ msgstr "En"
 msgid "Out"
 msgstr "Fuera"
 
-#: libs/pigment/resources/KoColorSet.cpp:1092
-#: libs/pigment/resources/KoColorSet.cpp:1436
-#: libs/pigment/resources/KoColorSet.cpp:1516
-#: libs/pigment/resources/KoColorSet.cpp:1925
+#: libs/pigment/resources/KoColorSet.cpp:1101
+#: libs/pigment/resources/KoColorSet.cpp:1445
+#: libs/pigment/resources/KoColorSet.cpp:1525
+#: libs/pigment/resources/KoColorSet.cpp:1934
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -39632,7 +39632,7 @@ msgstr "Importar una nueva paleta desde un archivo"
 msgid "Export current palette to file"
 msgstr "Exportar la paleta actual a un archivo"
 
-#: libs/widgets/KisPaletteModel.cpp:374
+#: libs/widgets/KisPaletteModel.cpp:376
 #, kde-format
 msgid "Empty slot"
 msgstr "Ranura vacía"
@@ -42505,7 +42505,7 @@ msgstr "Filtrar pieles de cebolla por color de fotograma"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:76
+#: plugins/python/palette_docker/palette_docker.py:78
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -61467,44 +61467,44 @@ msgstr ""
 "de pincel y de color según las preferencias de mutación configuradas más "
 "arriba."
 
-#: plugins/python/palette_docker/palette_docker.py:45
+#: plugins/python/palette_docker/palette_docker.py:47
 msgid "Python Palette Docker"
 msgstr "Panel de la paleta de Python"
 
-#: plugins/python/palette_docker/palette_docker.py:71
+#: plugins/python/palette_docker/palette_docker.py:73
 msgid "Set"
 msgstr "Definir"
 
-#: plugins/python/palette_docker/palette_docker.py:80
+#: plugins/python/palette_docker/palette_docker.py:82
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "Añadir grupo"
 
-#: plugins/python/palette_docker/palette_docker.py:83
+#: plugins/python/palette_docker/palette_docker.py:85
 msgid "Remove Entry"
 msgstr "Eliminar entrada"
 
-#: plugins/python/palette_docker/palette_docker.py:99
+#: plugins/python/palette_docker/palette_docker.py:101
 msgid "Edit Palette Settings"
 msgstr "Editar las preferencias de la paleta"
 
-#: plugins/python/palette_docker/palette_docker.py:105
+#: plugins/python/palette_docker/palette_docker.py:107
 msgid "Export as GIMP Palette File"
 msgstr "Exportar como archivo de paleta de GIMP"
 
-#: plugins/python/palette_docker/palette_docker.py:109
+#: plugins/python/palette_docker/palette_docker.py:111
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "Exportar como SVG de Inkscape con muestras"
 
-#: plugins/python/palette_docker/palette_docker.py:113
+#: plugins/python/palette_docker/palette_docker.py:115
 msgid "Sort Colors"
 msgstr "Ordenar colores"
 
-#: plugins/python/palette_docker/palette_docker.py:223
+#: plugins/python/palette_docker/palette_docker.py:225
 msgid "Edit Palette Data"
 msgstr "Editar los datos de la paleta"
 
-#: plugins/python/palette_docker/palette_docker.py:228
+#: plugins/python/palette_docker/palette_docker.py:230
 msgid "Palette Data"
 msgstr "Datos de la paleta"
 

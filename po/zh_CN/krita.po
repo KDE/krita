@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-11 01:52+0000\n"
+"POT-Creation-Date: 2025-04-12 01:50+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -23210,10 +23210,10 @@ msgstr "输入"
 msgid "Out"
 msgstr "输出"
 
-#: libs/pigment/resources/KoColorSet.cpp:1092
-#: libs/pigment/resources/KoColorSet.cpp:1436
-#: libs/pigment/resources/KoColorSet.cpp:1516
-#: libs/pigment/resources/KoColorSet.cpp:1925
+#: libs/pigment/resources/KoColorSet.cpp:1101
+#: libs/pigment/resources/KoColorSet.cpp:1445
+#: libs/pigment/resources/KoColorSet.cpp:1525
+#: libs/pigment/resources/KoColorSet.cpp:1934
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:533 libs/ui/KisView.cpp:1188
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -38946,7 +38946,7 @@ msgstr "导入色板文件"
 msgid "Export current palette to file"
 msgstr "导出选中色板文件"
 
-#: libs/widgets/KisPaletteModel.cpp:374
+#: libs/widgets/KisPaletteModel.cpp:376
 #, kde-format
 msgid "Empty slot"
 msgstr "空格"
@@ -41759,7 +41759,7 @@ msgstr "按帧的颜色标签过滤显示绘图纸"
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:132
 #: plugins/dockers/storyboarddocker/wdgcommentmenu.ui:92
-#: plugins/python/palette_docker/palette_docker.py:76
+#: plugins/python/palette_docker/palette_docker.py:78
 #, kde-format
 msgid "+"
 msgstr "+"
@@ -51522,7 +51522,7 @@ msgstr "8x8 降采样"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr "默认 (编码器选择)"
+msgstr "默认 (由编码器选择)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:38
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:44
@@ -51575,7 +51575,7 @@ msgstr "扫描线顺序"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
-msgstr "中心起始顺序"
+msgstr "中心优先顺序"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:93
 #, kde-format
@@ -51746,6 +51746,25 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">高级</span></p><p>“默认（编码器选择）”是一个常见选项。它意味着编"
+"码器会根据您对质量/速度权衡的选择自动选择最佳设置。推荐给大多数用户使用此选"
+"项。</p><p><span style=\" font-size:14pt; text-decoration: underline;\">编码"
+"器参数：</span></p><p>应用到整个 JPEG XL 编码过程的通用设置，无论使用哪种压缩"
+"方式。</p><p><span style=\" font-size:14pt; text-decoration: underline;"
+"\">VarDCT 参数：</span></p><p>VarDCT (可变离散余弦变换) (针对摄影内容优化)</"
+"p><p>这与原版 JPEG 使用的压缩技术属于同一类别，因此最适合“自然”图像，例如照片"
+"和具有大量渐变和纹理的图像。</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">模块化参数：</span></p><p>模块化模式的设置 - 针对几"
+"何图形内容、插图和无损压缩进行优化。</p><p><br/></p><p><br/></p></body></"
+"html>\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"模块化参数：\n"
+"\n"
+"模块化模式的设置 - 针对图形内容、插图和无损压缩进行了优化。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -51967,7 +51986,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:395
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "悬停在此文字上以显示提示信息"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -51991,6 +52010,8 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>降低色彩分辨率以生成更小的文件。仅建议在低画质设置下使"
+"用，因为它会降低色彩过渡区域的清晰度。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
@@ -52043,6 +52064,9 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>将相机传感器的噪声图案从画面中剥离出去，以实现更好的压"
+"缩效果。较高的值将重构更多噪声，有助于保留高感光度照片的自然观感。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
@@ -52072,6 +52096,8 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>识别图像中重复的点状图案，并对其进行高效编码。适用于扫"
+"描文档和特定纹理。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:480
@@ -52094,6 +52120,9 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>识别重复的元素 (如字符或图标)，每个元素仅存储一套，然后"
+"在其他位置引用它们。这有助于提高数字插图和屏幕截图的压缩效果。</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -52116,12 +52145,14 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>平滑大片区域的同时保留其边缘的锐利度，可以提高压缩效果"
+"而不模糊重要细节。数值越高，应用的过滤越强。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
 #, kde-format
 msgid "Edge preserving filter strength"
-msgstr ""
+msgstr "边缘保护过滤强度"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:538
@@ -52135,14 +52166,14 @@ msgstr "强"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
 #, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr ""
+msgstr "<html><head/><body><p>默认 (由编码器选择)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr ""
+msgstr "自动"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -52151,7 +52182,7 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
-"边缘保护滤镜效果强度级别，有效值从 -1 到 3。使用 -1 时为默认值 (编码器选择)，"
+"边缘保护过滤效果强度级别，有效值从 -1 到 3。使用 -1 时为默认 (由编码器选择)，"
 "使用 0 到 3 设置实际强度。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -52168,6 +52199,8 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>一种高级纹理分析滤镜，能够提升复杂纹理区域的压缩效果，"
+"同时保持视觉品质。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
@@ -52184,6 +52217,8 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>使用模块化压缩系统，该系统擅长压缩边缘锐利且色彩有限的"
+"图形。支持无损和有损压缩。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
@@ -52220,6 +52255,8 @@ msgid ""
 "areas. Disable to reduce file size when colors under transparency aren't "
 "needed.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>保留完全透明区域的色彩信息。如不需要在透明区域中保留颜"
+"色，可禁用以减小文件体积。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:633
@@ -52235,6 +52272,8 @@ msgid ""
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>指定图像的图块编码顺序。“中心优先”会优先对图像的中心部"
+"分进行编码，适用于渐进式加载和网页内容。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:643
@@ -52251,6 +52290,8 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>根据亮度信息预测颜色，从而减小文件体积。对于亮度和颜色"
+"相关性较强的自然图像，压缩效果非常显著。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:656
@@ -52274,6 +52315,9 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>启用渐进式加载，利用高级色彩数学算法呈现精细细节。图像"
+"以粗糙的预览形式加载，然后逐渐变得清晰。虽然耗时更长，但效果更佳。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -52299,6 +52343,8 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>启用使用量化压缩精细细节的渐进式加载。这样会生成更小的"
+"文件大小，但需要更长的编码时间。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -52314,6 +52360,8 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>为渐进式加载创建更好的粗略预览图像。会使文件大小增加几"
+"字节，但能提升初始低分辨率预览的质量。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -52341,6 +52389,8 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>启用“渐进式压缩”转换，使图像在加载过程中能够随着数据流"
+"的输入逐步从低画质向画质转变。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
@@ -52362,6 +52412,9 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>控制整个图像中颜色数值的映射方式。选择“全部”会使用完整"
+"范围；较小的百分比值对于颜色范围有限的图像能实现更高效的压缩。</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -52389,6 +52442,8 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>控制本地 256×256 像素图块内的颜色映射。对于颜色种类有限"
+"的图像区域，此方法更高效。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:803
@@ -52416,6 +52471,8 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>当图像包含此数量或更少的独特颜色时，激活基于调色板的压"
+"缩。-1 会让编码器自动决定。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:858
@@ -52442,6 +52499,8 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>启用相对颜色编码，该编码存储预测颜色与实际颜色之间的差"
+"异。对于平滑渐变能够实现接近无损压缩，且不会产生色带现象。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
@@ -52463,6 +52522,8 @@ msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>设置压缩处理时的图块大小。较大的分组可能会提高压缩效"
+"果，但需要更多内存。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -52491,6 +52552,8 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>选择用于根据周围像素预测像素色彩数值的算法。每种预测程"
+"序对其特化的图像效果更好。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
@@ -52508,6 +52571,9 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>控制用于构建元自适应决策树的像素数量，该决策树用于为每"
+"个像素选择最佳预测程序。较高的值可能会提高压缩效果，但处理时间会更长。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:948
@@ -60178,44 +60244,44 @@ msgid ""
 msgstr ""
 "调用“随机调整”操作，该操作会根据上面的设置随机调整各种全局笔刷参数和颜色。"
 
-#: plugins/python/palette_docker/palette_docker.py:45
+#: plugins/python/palette_docker/palette_docker.py:47
 msgid "Python Palette Docker"
 msgstr "Python 色板面板"
 
-#: plugins/python/palette_docker/palette_docker.py:71
+#: plugins/python/palette_docker/palette_docker.py:73
 msgid "Set"
 msgstr "集合"
 
-#: plugins/python/palette_docker/palette_docker.py:80
+#: plugins/python/palette_docker/palette_docker.py:82
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "新增色块组"
 
-#: plugins/python/palette_docker/palette_docker.py:83
+#: plugins/python/palette_docker/palette_docker.py:85
 msgid "Remove Entry"
 msgstr "移除项目"
 
-#: plugins/python/palette_docker/palette_docker.py:99
+#: plugins/python/palette_docker/palette_docker.py:101
 msgid "Edit Palette Settings"
 msgstr "编辑色板设置"
 
-#: plugins/python/palette_docker/palette_docker.py:105
+#: plugins/python/palette_docker/palette_docker.py:107
 msgid "Export as GIMP Palette File"
 msgstr "导出为 GIMP 色板文件"
 
-#: plugins/python/palette_docker/palette_docker.py:109
+#: plugins/python/palette_docker/palette_docker.py:111
 msgid "Export as Inkscape SVG with Swatches"
 msgstr "导出为包含色板的 Inkscape SVG"
 
-#: plugins/python/palette_docker/palette_docker.py:113
+#: plugins/python/palette_docker/palette_docker.py:115
 msgid "Sort Colors"
 msgstr "整理颜色"
 
-#: plugins/python/palette_docker/palette_docker.py:223
+#: plugins/python/palette_docker/palette_docker.py:225
 msgid "Edit Palette Data"
 msgstr "编辑色板数据"
 
-#: plugins/python/palette_docker/palette_docker.py:228
+#: plugins/python/palette_docker/palette_docker.py:230
 msgid "Palette Data"
 msgstr "色板数据"
 
@@ -65068,6 +65134,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr "无法写入色板文件 %1。它可能是只读文件。"

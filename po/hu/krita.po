@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 03:20+0000\n"
+"POT-Creation-Date: 2025-04-12 03:16+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -20078,10 +20078,10 @@ msgstr "Bemenet"
 msgid "Out"
 msgstr "Ki"
 
-#: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1391
-#: libs/pigment/resources/KoColorSet.cpp:1474
-#: libs/pigment/resources/KoColorSet.cpp:1688
+#: libs/pigment/resources/KoColorSet.cpp:1088
+#: libs/pigment/resources/KoColorSet.cpp:1432
+#: libs/pigment/resources/KoColorSet.cpp:1512
+#: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24105,7 +24105,7 @@ msgid "Y offset:"
 msgstr "Y eltolás:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -24114,7 +24114,7 @@ msgid "Add a swatch group"
 msgstr "Alakzatok hozzáadása a csoporthoz"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -24122,7 +24122,7 @@ msgid "Remove selected group"
 msgstr "Név beszúrása"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 #| msgid "Rename tag"
@@ -24131,7 +24131,7 @@ msgid "Rename selected group"
 msgstr "Címke átnevezése"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, fuzzy, kde-format
 #| msgid "Palette Manager"
@@ -24139,7 +24139,7 @@ msgid "Palette Editor"
 msgstr "Palettakezelő"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, fuzzy, kde-format
 #| msgid "Pattern Options"
@@ -24147,7 +24147,7 @@ msgid "Palette options"
 msgstr "Mintabeállítások"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, fuzzy, kde-format
 #| msgid "Palette name:"
@@ -24155,7 +24155,7 @@ msgid "Palette name:"
 msgstr "Paletta név:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
@@ -24163,7 +24163,7 @@ msgid "Swatch Group options"
 msgstr "Adja meg a csoport nevét:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, fuzzy, kde-format
 #| msgid "Color name:"
@@ -24171,8 +24171,8 @@ msgid "Columns of swatches:"
 msgstr "Színnév:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -31696,20 +31696,20 @@ msgstr "Aktiválás"
 msgid "Open Existing Document"
 msgstr "Meglévő dokumentum megnyitása"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, fuzzy, kde-format
 #| msgid "Add New Palette"
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "Új paletta hozzáadása"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, fuzzy, kde-format
 #| msgid "Add New Palette"
 msgid "New palette name:"
 msgstr "Új paletta hozzáadása"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, fuzzy, kde-format
 #| msgctxt "description of a file type"
 #| msgid "Krita Color Palette"
@@ -31717,57 +31717,57 @@ msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "Krita színpaletta"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, fuzzy, kde-format
 #| msgid "GIMP Patterns (*.pat)"
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "GIMP minták (*.pat)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, fuzzy, kde-format
 #| msgid "Replace Current Document"
 msgid "Save Palette in the Current Document"
 msgstr "Jelenlegi dokumentum cseréje"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, fuzzy, kde-format
 msgid "Import Palette"
 msgstr "Fájlok importálása"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, fuzzy, kde-format
 #| msgid "Do you really want to overwrite the existing '%1' template?"
 msgid "Do you want to store this palette in your current image?"
 msgstr "Biztosan felül akarja írni a már létező '%1' sablont?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "New swatch group name:"
 msgstr "Adja meg a csoport nevét:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, fuzzy, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Réteg eltávolítása"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, fuzzy, kde-format
 #| msgid "Delete color"
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Szín törlése"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Szín"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, fuzzy, kde-format
 #| msgid "Add new color profile:"
@@ -31775,7 +31775,7 @@ msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Új színprofil hozzáadása:"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -31784,20 +31784,20 @@ msgid ""
 "paints it has available to it. The opposite is called a process color."
 msgstr ""
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, fuzzy, kde-format
 msgid "Swatch ID:"
 msgstr "Sc_karcolások"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, fuzzy, kde-format
 #| msgid "Color name:"
 msgid "Color swatch name:"
 msgstr "Színnév:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, fuzzy, kde-format
 #| msgid "Color:"
@@ -31805,20 +31805,20 @@ msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Szín:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, fuzzy, kde-format
 #| msgid "Stop color."
 msgid "Spot color:"
 msgstr "Befejező szín:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group:"
 msgstr "Adja meg a csoport nevét:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, fuzzy, kde-format
 #| msgid "Normal"
 msgctxt "Default new group name"
@@ -35705,7 +35705,7 @@ msgstr "Új profil telepítése fájlból"
 msgid "Export current palette to file"
 msgstr "Réteg exportálása"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr ""
@@ -40166,14 +40166,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Csomópont exportálása"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

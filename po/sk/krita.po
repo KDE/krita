@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 03:20+0000\n"
+"POT-Creation-Date: 2025-04-12 03:16+0000\n"
 "PO-Revision-Date: 2022-07-27 20:32+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -19880,10 +19880,10 @@ msgstr "Dovnútra"
 msgid "Out"
 msgstr "Von"
 
-#: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1391
-#: libs/pigment/resources/KoColorSet.cpp:1474
-#: libs/pigment/resources/KoColorSet.cpp:1688
+#: libs/pigment/resources/KoColorSet.cpp:1088
+#: libs/pigment/resources/KoColorSet.cpp:1432
+#: libs/pigment/resources/KoColorSet.cpp:1512
+#: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24017,14 +24017,14 @@ msgid "Y offset:"
 msgstr "Súradnica X:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Pridať skupinu vzorky"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -24034,7 +24034,7 @@ msgid "Remove selected group"
 msgstr "Odstrániť vybranú snímku"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 #| msgid "Rename this group"
@@ -24043,14 +24043,14 @@ msgid "Rename selected group"
 msgstr "Premenovať túto skupinu"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, kde-format
 msgid "Palette Editor"
 msgstr "Editor paliet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, fuzzy, kde-format
 #| msgid "Pattern Options"
@@ -24058,7 +24058,7 @@ msgid "Palette options"
 msgstr "Možnosti vzoru"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, fuzzy, kde-format
 #| msgid "Palette Name"
@@ -24066,22 +24066,22 @@ msgid "Palette name:"
 msgstr "Názov palety"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Možnosti skupiny vzoriek"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, kde-format
 msgid "Columns of swatches:"
 msgstr "Stĺpce vzoriek:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Riadky vzoriek v skupine:"
@@ -31731,20 +31731,20 @@ msgstr "Aktivovať %1"
 msgid "Open Existing Document"
 msgstr "Otvoriť existujúci dokument"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "Nová paleta"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, fuzzy, kde-format
 #| msgctxt "Default name for a new palette"
 #| msgid "New Palette"
 msgid "New palette name:"
 msgstr "Nová paleta"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, fuzzy, kde-format
 #| msgctxt "description of a file type"
 #| msgid "Krita Color Palette"
@@ -31752,60 +31752,60 @@ msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "Farebná paleta Krita"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, fuzzy, kde-format
 #| msgid "GIMP Patterns (*.pat)"
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "GIMP vzory (*.pat)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "Uložiť paletu v aktuálnom dokumente"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, fuzzy, kde-format
 #| msgid "Import Palettes"
 msgid "Import Palette"
 msgstr "Importovať palety"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "Chcete túto paletu uložiť do svojho aktuálneho obrázka?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, kde-format
 msgid "New swatch group name:"
 msgstr "Nový názov skupiny vzoriek:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Odstránenie skupiny vzoriek"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Zachovať farby"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Farba  %1"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Pridať novú vzorku farby"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -31816,37 +31816,37 @@ msgstr ""
 "Farba bodky je farba, ktorú tlačiareň dokáže tlačiť bez toho, aby zmiešala "
 "farby, ktoré má k dispozícii. Opak sa nazýva procesná farba."
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "ID vzorky:"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Názov vzorky farby:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Farba:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Farba bodky:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Skupina vzoriek:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -35992,7 +35992,7 @@ msgstr "Importovať novú paletu zo súboru"
 msgid "Export current palette to file"
 msgstr "Exportovať aktuálnu paletu do súboru"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr "Prázdny slot"
@@ -40423,14 +40423,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Import úspešný"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

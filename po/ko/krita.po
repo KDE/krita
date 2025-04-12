@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 03:20+0000\n"
+"POT-Creation-Date: 2025-04-12 03:16+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20354,10 +20354,10 @@ msgstr "시작점"
 msgid "Out"
 msgstr "종점"
 
-#: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1391
-#: libs/pigment/resources/KoColorSet.cpp:1474
-#: libs/pigment/resources/KoColorSet.cpp:1688
+#: libs/pigment/resources/KoColorSet.cpp:1088
+#: libs/pigment/resources/KoColorSet.cpp:1432
+#: libs/pigment/resources/KoColorSet.cpp:1512
+#: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -24474,7 +24474,7 @@ msgid "Y offset:"
 msgstr "Y 오프셋:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, fuzzy, kde-format
 #| msgctxt "@title:dialog"
@@ -24483,7 +24483,7 @@ msgid "Add a swatch group"
 msgstr "새 그룹 추가"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
@@ -24493,7 +24493,7 @@ msgid "Remove selected group"
 msgstr "선택한 스냡샷 삭제"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 #| msgid "Rename this group"
@@ -24502,14 +24502,14 @@ msgid "Rename selected group"
 msgstr "이 그룹 이름 바꾸기"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, kde-format
 msgid "Palette Editor"
 msgstr "팔레트 편집기"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, fuzzy, kde-format
 #| msgid "Pattern Options"
@@ -24517,7 +24517,7 @@ msgid "Palette options"
 msgstr "패턴 설정"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, fuzzy, kde-format
 #| msgid "Palette Name"
@@ -24525,7 +24525,7 @@ msgid "Palette name:"
 msgstr "팔레트 이름"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, fuzzy, kde-format
 #| msgctxt "Name for a swatch group"
@@ -24534,7 +24534,7 @@ msgid "Swatch Group options"
 msgstr "견본 그룹 이름"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, fuzzy, kde-format
 #| msgctxt "Name of the color swatch"
@@ -24543,8 +24543,8 @@ msgid "Columns of swatches:"
 msgstr "색상 견본 이름"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -32132,20 +32132,20 @@ msgstr "%1 활성화"
 msgid "Open Existing Document"
 msgstr "기존 문서 열기"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "새 팔레트"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, fuzzy, kde-format
 #| msgctxt "Default name for a new palette"
 #| msgid "New Palette"
 msgid "New palette name:"
 msgstr "새 팔레트"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, fuzzy, kde-format
 #| msgctxt "description of a file type"
 #| msgid "Krita Color Palette"
@@ -32153,36 +32153,36 @@ msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "Krita 색상 팔레트"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, fuzzy, kde-format
 #| msgid "GIMP Patterns (*.pat)"
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "GIMP 패턴 (*.pat)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "현재 문서에 팔레트 저장"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, kde-format
 msgid "Import Palette"
 msgstr "팔레트 가져오기"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "이 팔레트를 현재 이미지에 저장하시겠습니까?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, fuzzy, kde-format
 #| msgctxt "Name for a swatch group"
 #| msgid "Swatch group name"
 msgid "New swatch group name:"
 msgstr "견본 그룹 이름"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, fuzzy, kde-format
 #| msgctxt "@title:dialog"
 #| msgid "Removing Group"
@@ -32190,19 +32190,19 @@ msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "그룹 삭제"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "색상 유지"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "%1 색상"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, fuzzy, kde-format
 #| msgctxt "@title:dialog"
@@ -32211,7 +32211,7 @@ msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "새 색상 세트 항목 추가"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -32222,7 +32222,7 @@ msgstr ""
 "별색(스폿 색상)은 프린터에서 색상을 혼합하지 않고 출력할 수 있는 색상입니다. "
 "그 반대는 원색(프로세스 색상)입니다."
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, fuzzy, kde-format
 #| msgctxt "./krita/data/palettes/swatch-rgb.gpl"
@@ -32230,7 +32230,7 @@ msgstr ""
 msgid "Swatch ID:"
 msgstr "스와치 RGB"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, fuzzy, kde-format
 #| msgctxt "Name of the color swatch"
@@ -32238,7 +32238,7 @@ msgstr "스와치 RGB"
 msgid "Color swatch name:"
 msgstr "색상 견본 이름"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, fuzzy, kde-format
 #| msgid "Color:"
@@ -32246,21 +32246,21 @@ msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "색상:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, fuzzy, kde-format
 #| msgid "Spot color"
 msgid "Spot color:"
 msgstr "별색"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, fuzzy, kde-format
 #| msgctxt "Name for a swatch group"
 #| msgid "Swatch group name"
 msgid "Swatch Group:"
 msgstr "견본 그룹 이름"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -36281,7 +36281,7 @@ msgstr "파일에서 새 팔레트 가져오기"
 msgid "Export current palette to file"
 msgstr "현재 팔레트를 파일로 내보내기"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr "빈 슬롯"
@@ -40649,14 +40649,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "가져오기 성공"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr "팔레트를 명시적으로 저장합니다. Krita를 끝낼 때에도 수행합니다."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

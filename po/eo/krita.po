@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-03-09 03:20+0000\n"
+"POT-Creation-Date: 2025-04-12 03:16+0000\n"
 "PO-Revision-Date: 2025-01-03 21:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -19470,10 +19470,10 @@ msgstr "En"
 msgid "Out"
 msgstr "Elen"
 
-#: libs/pigment/resources/KoColorSet.cpp:1046
-#: libs/pigment/resources/KoColorSet.cpp:1391
-#: libs/pigment/resources/KoColorSet.cpp:1474
-#: libs/pigment/resources/KoColorSet.cpp:1688
+#: libs/pigment/resources/KoColorSet.cpp:1088
+#: libs/pigment/resources/KoColorSet.cpp:1432
+#: libs/pigment/resources/KoColorSet.cpp:1512
+#: libs/pigment/resources/KoColorSet.cpp:1921
 #: libs/ui/actions/KisPasteActionFactories.cpp:392
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -23522,14 +23522,14 @@ msgid "Y offset:"
 msgstr "Y-deŝovo:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Aldoni specimenan grupon"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -23537,7 +23537,7 @@ msgid "Remove selected group"
 msgstr "Forigi elektitan grupon"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:42
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
@@ -23545,43 +23545,43 @@ msgid "Rename selected group"
 msgstr "Alinomi elektitan grupon"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, WdgDlgPaletteEditor)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:45
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:46
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:18
 #, kde-format
 msgid "Palette Editor"
 msgstr "Paletredaktilo"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxPalette)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:48
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:27
 #, kde-format
 msgid "Palette options"
 msgstr "Opcioj de paletro"
 
 #. i18n: ectx: property (text), widget (QLabel, labelName)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:49
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:50
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:33
 #, kde-format
 msgid "Palette name:"
 msgstr "Paletronomo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Opcioj de Swatch Group"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:53
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:43
 #, kde-format
 msgid "Columns of swatches:"
 msgstr "Kolumnoj de specimenoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
-#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/dialogs/KisDlgPaletteEditor.cpp:55
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:250
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Vicoj de specimenoj en grupo:"
@@ -31056,75 +31056,75 @@ msgstr "Aktivigi %1"
 msgid "Open Existing Document"
 msgstr "Malfermi Ekzistantan Dokumenton"
 
-#: libs/ui/KisPaletteEditor.cpp:98
+#: libs/ui/KisPaletteEditor.cpp:100
 #, kde-format
 msgctxt "Default name for a new palette"
 msgid "New Palette"
 msgstr "Nova Paletro"
 
-#: libs/ui/KisPaletteEditor.cpp:99
+#: libs/ui/KisPaletteEditor.cpp:101
 #, kde-format
 msgid "New palette name:"
 msgstr "Nova paletronomo:"
 
-#: libs/ui/KisPaletteEditor.cpp:102
+#: libs/ui/KisPaletteEditor.cpp:104
 #, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
 msgstr "Krita Paletro (KPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:103
+#: libs/ui/KisPaletteEditor.cpp:105
 #, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
 msgstr "GIMP-Paletro (GPL)"
 
-#: libs/ui/KisPaletteEditor.cpp:106
+#: libs/ui/KisPaletteEditor.cpp:108
 #, kde-format
 msgid "Save Palette in the Current Document"
 msgstr "Konservi Paleton en la Aktuala Dokumento"
 
-#: libs/ui/KisPaletteEditor.cpp:140
+#: libs/ui/KisPaletteEditor.cpp:142
 #, kde-format
 msgid "Import Palette"
 msgstr "Import Paletro"
 
-#: libs/ui/KisPaletteEditor.cpp:151
+#: libs/ui/KisPaletteEditor.cpp:153
 #, kde-format
 msgid "Do you want to store this palette in your current image?"
 msgstr "Ĉu vi volas konservi ĉi tiun paletron en via nuna bildo?"
 
-#: libs/ui/KisPaletteEditor.cpp:225 libs/ui/KisPaletteEditor.cpp:282
+#: libs/ui/KisPaletteEditor.cpp:246 libs/ui/KisPaletteEditor.cpp:309
 #, kde-format
 msgid "New swatch group name:"
 msgstr "Nova specimena grupo nomo:"
 
-#: libs/ui/KisPaletteEditor.cpp:253
+#: libs/ui/KisPaletteEditor.cpp:277
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Removing Swatch Group"
 msgstr "Forigante Swatch Group"
 
-#: libs/ui/KisPaletteEditor.cpp:257 libs/widgets/kis_palette_view.cpp:168
+#: libs/ui/KisPaletteEditor.cpp:281 libs/widgets/kis_palette_view.cpp:168
 #, kde-format
 msgctxt "Shows up when deleting a swatch group"
 msgid "Keep the Colors"
 msgstr "Konservi la Kolorojn"
 
-#: libs/ui/KisPaletteEditor.cpp:329 libs/ui/KisPaletteEditor.cpp:419
+#: libs/ui/KisPaletteEditor.cpp:359 libs/ui/KisPaletteEditor.cpp:450
 #, kde-format
 msgctxt "Default name for a color swatch"
 msgid "Color %1"
 msgstr "Koloro %1"
 
-#: libs/ui/KisPaletteEditor.cpp:362 libs/ui/KisPaletteEditor.cpp:407
+#: libs/ui/KisPaletteEditor.cpp:392 libs/ui/KisPaletteEditor.cpp:438
 #: libs/widgets/kis_palette_view.cpp:102
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
 msgstr "Aldoni novan Koloran specimenon"
 
-#: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
+#: libs/ui/KisPaletteEditor.cpp:407 libs/ui/KisPaletteEditor.cpp:457
 #: libs/widgets/kis_palette_view.cpp:113
 #, kde-format
 msgctxt "@info:tooltip"
@@ -31135,37 +31135,37 @@ msgstr ""
 "Makulkoloro estas koloro, kiun la presilo kapablas presi sen miksi la "
 "farbojn, kiujn ĝi disponas. La malo nomiĝas proceza koloro."
 
-#: libs/ui/KisPaletteEditor.cpp:380 libs/ui/KisPaletteEditor.cpp:429
+#: libs/ui/KisPaletteEditor.cpp:411 libs/ui/KisPaletteEditor.cpp:460
 #: libs/widgets/kis_palette_view.cpp:115
 #, kde-format
 msgid "Swatch ID:"
 msgstr "Swatch ID:"
 
-#: libs/ui/KisPaletteEditor.cpp:381 libs/ui/KisPaletteEditor.cpp:430
+#: libs/ui/KisPaletteEditor.cpp:412 libs/ui/KisPaletteEditor.cpp:461
 #: libs/widgets/kis_palette_view.cpp:116
 #, kde-format
 msgid "Color swatch name:"
 msgstr "Kolora specimena nomo:"
 
-#: libs/ui/KisPaletteEditor.cpp:382 libs/ui/KisPaletteEditor.cpp:431
+#: libs/ui/KisPaletteEditor.cpp:413 libs/ui/KisPaletteEditor.cpp:462
 #: libs/widgets/kis_palette_view.cpp:117
 #, kde-format
 msgctxt "Color as the Color of a Swatch in a Palette"
 msgid "Color:"
 msgstr "Koloro:"
 
-#: libs/ui/KisPaletteEditor.cpp:383 libs/ui/KisPaletteEditor.cpp:432
+#: libs/ui/KisPaletteEditor.cpp:414 libs/ui/KisPaletteEditor.cpp:463
 #: libs/widgets/kis_palette_view.cpp:118
 #, kde-format
 msgid "Spot color:"
 msgstr "Punkta koloro:"
 
-#: libs/ui/KisPaletteEditor.cpp:428 libs/widgets/kis_palette_view.cpp:114
+#: libs/ui/KisPaletteEditor.cpp:459 libs/widgets/kis_palette_view.cpp:114
 #, kde-format
 msgid "Swatch Group:"
 msgstr "Swatch Group:"
 
-#: libs/ui/KisPaletteEditor.cpp:551 libs/ui/KisPaletteEditor.cpp:554
+#: libs/ui/KisPaletteEditor.cpp:610 libs/ui/KisPaletteEditor.cpp:613
 #, kde-format
 msgctxt "Default new group name"
 msgid "New Group %1"
@@ -35163,7 +35163,7 @@ msgstr "Importi novan paletron el dosiero"
 msgid "Export current palette to file"
 msgstr "Eksporti nunan paletron al dosiero"
 
-#: libs/widgets/KisPaletteModel.cpp:365
+#: libs/widgets/KisPaletteModel.cpp:374
 #, kde-format
 msgid "Empty slot"
 msgstr "Malplena fendo"
@@ -39522,14 +39522,14 @@ msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
 msgstr "Paletro eksportita sukcese"
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:399
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr "Konservi paletron eksplicite, ankaŭ okazos aŭtomate ĉe eliro de Krita."
 
-#: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
+#: plugins/dockers/palettedocker/palettedocker_dock.cpp:402
 #, kde-format
 msgctxt "@tooltip"
 msgid "Saving for document palettes is done by saving the document."

@@ -10,6 +10,8 @@ install( FILES
     BD-EuroTemplate.kra
     Comics-USTemplate.kra
     Manga-JpTemplate.kra
+    Tsukirino.kra
+    TsukirinoF.kra
 DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/comics/.source)
 
 install( FILES  
@@ -18,4 +20,6 @@ install( FILES
     BD-EuroTemplate.desktop
     Comics-USTemplate.desktop
     Manga-JpTemplate.desktop
+    Tsukirino.desktop
+    TsukirinoF.desktop
 DESTINATION ${KDE_INSTALL_DATADIR}/krita/templates/comics)

@@ -52039,6 +52039,8 @@ msgid ""
 "files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>降低透明度通道的分辨率以减小文件体积。仅建议在低画质或"
+"透明边缘的精确性不重要的情况下使用。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435

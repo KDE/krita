@@ -260,7 +260,7 @@ void TestKoColorSet::testLoadACB()
     QVERIFY(set.load(KisGlobalResourcesInterface::instance()));
     QCOMPARE(set.paletteType(), KoColorSet::ACB);
 
-    QCOMPARE(set.colorCount(), 17);
+    QCOMPARE(set.colorCount(), 23);
 
     set.setFilename("test.acb");
     QVERIFY(set.save());

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg2502"
+   sodipodi:docname="16_dark_format-text-lowercase.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview2504"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="14.75"
+     inkscape:cx="7.4915254"
+     inkscape:cy="8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1010"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2502" />
+  <defs
+     id="defs3051">
+    <style
+       type="text/css"
+       id="current-color-scheme">
+      .ColorScheme-Text {
+        color:#232629;
+      }
+      .ColorScheme-Accent {
+        color:#3daee9;
+      }
+      </style>
+  </defs>
+  <path
+     style="fill:#373737;fill-opacity:0.66000003;stroke:none"
+     d="M 8.5 3.0019531 L 8.5 11 L 8.5 14.005859 L 9.5 14.005859 L 9.5 13.230469 A 3 3.0000075 0 0 0 11.5 14 A 3 3.0000075 0 0 0 14.5 11 A 3 3.0000075 0 0 0 11.5 8 A 3 3.0000075 0 0 0 9.5 8.7695312 L 9.5 3.0019531 L 8.5 3.0019531 z M 6.5 7.9980469 L 6.5 8.7695312 A 3 3.0000075 0 0 0 4.5 8 A 3 3.0000075 0 0 0 1.5 11 A 3 3.0000075 0 0 0 4.5 14 A 3 3.0000075 0 0 0 6.5 13.232422 L 6.5 13.998047 L 7.5 13.998047 L 7.5 7.9980469 L 6.5 7.9980469 z M 4.5 9 A 2.0000002 2.0000048 0 0 1 6.5 11 A 2.0000002 2.0000048 0 0 1 4.5 13 A 2.0000002 2.0000048 0 0 1 2.5 11 A 2.0000002 2.0000048 0 0 1 4.5 9 z M 11.5 9 A 2.0000002 2.0000048 0 0 1 13.5 11 A 2.0000002 2.0000048 0 0 1 11.5 13 A 2.0000002 2.0000048 0 0 1 9.5 11 A 2.0000002 2.0000048 0 0 1 11.5 9 z "
+     class="ColorScheme-Text"
+     id="path2498" />
+  <path
+     style="fill:#373737;fill-opacity:1;stroke:none"
+     d="m 9.49975,1.9975 5.00025,0 -2.49975,3 z"
+     class="ColorScheme-Accent"
+     id="path2500" />
+</svg>

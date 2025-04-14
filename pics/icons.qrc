@@ -329,5 +329,11 @@
         <file>16_dark_format-text-direction-horizontal-tb.svg</file>
         <file>16_dark_format-text-direction-ltr.svg</file>
         <file>16_light_format-text-direction-ltr.svg</file>
+        <file>16_light_format-text-capitalize.svg</file>
+        <file>16_dark_format-text-capitalize.svg</file>
+        <file>16_light_format-text-lowercase.svg</file>
+        <file>16_dark_format-text-lowercase.svg</file>
+        <file>16_light_format-text-uppercase.svg</file>
+        <file>16_dark_format-text-uppercase.svg</file>
     </qresource>
 </RCC>

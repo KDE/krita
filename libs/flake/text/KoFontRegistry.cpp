@@ -918,7 +918,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         baselineVals.insert(ideoBottom, baselineVals.value(ideoTop)-metrics.fontSize);
     } else if (!baselineVals.keys().contains(ideoBottom) && !baselineVals.keys().contains(ideoTop)){
 
-        if (!isIdeographic) {
+        if (!isIdeographic && isHorizontal) {
             hb_blob_t_sp dLang(hb_ot_meta_reference_entry( hbFace.data() , HB_OT_META_TAG_DESIGN_LANGUAGES));
             uint length = hb_blob_get_length(dLang.data());
             QByteArray ba(hb_blob_get_data(dLang.data(), &length), length);
@@ -949,7 +949,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
             }
         }
 
-        if (isIdeographic) {
+        if (isIdeographic && isHorizontal) {
             baselineVals.insert(ideoTop, ascender);
             baselineVals.insert(ideoBottom, descender);
             if (!baselineVals.keys().contains(alphabetic)) {

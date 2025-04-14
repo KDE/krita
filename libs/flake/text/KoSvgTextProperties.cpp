@@ -434,10 +434,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
 
         TextDecorationStyle style = TextDecorationStyle(propertyOrDefault(TextDecorationStyleId).toInt());
-        TextDecorationUnderlinePosition underlinePosH = TextDecorationUnderlinePosition(propertyOrDefault(TextDecorationPositionHorizontalId).toInt());
-        ;
-        TextDecorationUnderlinePosition underlinePosV = TextDecorationUnderlinePosition(propertyOrDefault(TextDecorationPositionVerticalId).toInt());
-        ;
+        TextUnderlinePosition underlinePos = propertyOrDefault(TextDecorationPositionId).value<KoSvgText::TextUnderlinePosition>();
         QColor textDecorationColor = propertyOrDefault(TextDecorationStyleId).value<QColor>();
         bool setPosition = false;
 
@@ -459,16 +456,16 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             } else if (param == "wavy") {
                 style = Wavy;
             } else if (param == "auto") {
-                underlinePosH = UnderlineAuto;
+                underlinePos.horizontalPosition = UnderlineAuto;
                 setPosition = true;
             } else if (param == "under") {
-                underlinePosH = UnderlineUnder;
+                underlinePos.horizontalPosition = UnderlineUnder;
                 setPosition = true;
             } else if (param == "left") {
-                underlinePosV = UnderlineLeft;
+                underlinePos.verticalPosition = UnderlineLeft;
                 setPosition = true;
             } else if (param == "right") {
-                underlinePosV = UnderlineRight;
+                underlinePos.verticalPosition = UnderlineRight;
                 setPosition = true;
             } else if (QColor::isValidColor(param)) {
                 // TODO: Convert to KoColor::fromSvg11.
@@ -486,8 +483,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             setProperty(TextDecorationColorId, QVariant::fromValue(textDecorationColor));
         }
         if ((command == "text-decoration" || command == "text-decoration-position") && setPosition) {
-            setProperty(TextDecorationPositionHorizontalId, underlinePosH);
-            setProperty(TextDecorationPositionVerticalId, underlinePosV);
+            setProperty(TextDecorationPositionId, QVariant::fromValue(underlinePos));
         }
 
     } else if (command == "xml:lang") {
@@ -820,34 +816,24 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
 
-    QStringList decoPositionStrings;
-    if (hasProperty(TextDecorationPositionHorizontalId)) {
-        TextDecorationUnderlinePosition pos = TextDecorationUnderlinePosition(property(TextDecorationPositionHorizontalId).toInt());
-        if (pos == UnderlineAuto) {
-            decoPositionStrings.append("auto");
-        } else if (pos == UnderlineUnder) {
+    if (hasProperty(TextDecorationPositionId)) {
+        QStringList decoPositionStrings;
+        TextUnderlinePosition pos = property(TextDecorationPositionId).value<KoSvgText::TextUnderlinePosition>();
+        if (pos.horizontalPosition == UnderlineUnder) {
             decoPositionStrings.append("under");
-        } else if (pos == UnderlineLeft) {
-            decoPositionStrings.append("left");
-        } else if (pos == UnderlineRight) {
+        } else {
+            decoPositionStrings.append("auto");
+        }
+        if (pos.verticalPosition == UnderlineRight) {
             decoPositionStrings.append("right");
+        } else {
+            decoPositionStrings.append("left");
+        }
+        if (!decoPositionStrings.isEmpty()) {
+            result.insert("text-decoration-position", decoPositionStrings.join(' '));
         }
     }
-    if (hasProperty(TextDecorationPositionVerticalId)) {
-        TextDecorationUnderlinePosition pos = TextDecorationUnderlinePosition(property(TextDecorationPositionVerticalId).toInt());
-        if (pos == UnderlineAuto) {
-            decoPositionStrings.append("auto");
-        } else if (pos == UnderlineUnder) {
-            decoPositionStrings.append("under");
-        } else if (pos == UnderlineLeft) {
-            decoPositionStrings.append("left");
-        } else if (pos == UnderlineRight) {
-            decoPositionStrings.append("right");
-        }
-    }
-    if (!decoPositionStrings.isEmpty()) {
-        result.insert("text-decoration-position", decoPositionStrings.join(' '));
-    }
+
     if (hasProperty(TextLanguage)) {
         result.insert("xml:lang", property(TextLanguage).toString());
     }
@@ -1227,8 +1213,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             TextDecorations deco = DecorationNone;
 
             s_defaultProperties->setProperty(TextDecorationLineId, QVariant::fromValue(deco));
-            s_defaultProperties->setProperty(TextDecorationPositionHorizontalId, UnderlineAuto);
-            s_defaultProperties->setProperty(TextDecorationPositionVerticalId, UnderlineAuto);
+            s_defaultProperties->setProperty(TextDecorationPositionId, QVariant::fromValue(KoSvgText::TextUnderlinePosition()));
             s_defaultProperties->setProperty(TextDecorationColorId, QVariant::fromValue(Qt::transparent));
             s_defaultProperties->setProperty(TextDecorationStyleId, Solid);
 

@@ -81,8 +81,7 @@ public:
         TextDecorationLineId, ///< Flags, KoSvgText::TextDecorations
         TextDecorationStyleId, ///< KoSvgText::TextDecorationStyle
         TextDecorationColorId, ///< QColor
-        TextDecorationPositionHorizontalId, ///< KoSvgText::TextDecorationUnderlinePosition
-        TextDecorationPositionVerticalId, ///< KoSvgText::TextDecorationUnderlinePosition
+        TextDecorationPositionId, ///< KoSvgText::TextDecorationUnderlinePosition
         FillId, ///< KoSvgText::BackgroundProperty
         StrokeId, ///< KoSvgText::StrokeProperty
         Opacity, ///< Double, SVG shape opacity.

@@ -1051,7 +1051,18 @@ FontFeatureEastAsian parseFontFeatureEastAsian(const QString &value, FontFeature
 QString writeFontFeatureEastAsian(const FontFeatureEastAsian &feature);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFeatureEastAsian &feature);
 
+struct TextUnderlinePosition : public boost::equality_comparable<TextUnderlinePosition> {
+    TextDecorationUnderlinePosition horizontalPosition = UnderlineAuto;
+    TextDecorationUnderlinePosition verticalPosition = UnderlineLeft;
 
+    bool operator==(const TextUnderlinePosition & other) const {
+        return (other.horizontalPosition == horizontalPosition
+                && other.verticalPosition == verticalPosition);
+    }
+
+};
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextUnderlinePosition &position);
 
 } // namespace KoSvgText
 
@@ -1075,6 +1086,7 @@ Q_DECLARE_METATYPE(KoSvgText::FontFamilyStyleInfo)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureLigatures)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureNumeric)
 Q_DECLARE_METATYPE(KoSvgText::FontFeatureEastAsian)
+Q_DECLARE_METATYPE(KoSvgText::TextUnderlinePosition)
 
 Q_DECLARE_METATYPE(KoSvgText::FontMetrics)
 

@@ -1236,16 +1236,9 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
         }
     }
 
-    TextDecorationUnderlinePosition newUnderlinePosH =
-        TextDecorationUnderlinePosition(
-                currentTextElement->properties.property(
-                    KoSvgTextProperties::TextDecorationPositionHorizontalId,
-                    underlinePosH).toInt());
-    TextDecorationUnderlinePosition newUnderlinePosV =
-        TextDecorationUnderlinePosition(
-                currentTextElement->properties.property(
-                    KoSvgTextProperties::TextDecorationPositionVerticalId,
-                    underlinePosV).toInt());
+    KoSvgText::TextUnderlinePosition pos = currentTextElement->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionId).value<KoSvgText::TextUnderlinePosition>();
+    TextDecorationUnderlinePosition newUnderlinePosH = pos.horizontalPosition;
+    TextDecorationUnderlinePosition newUnderlinePosV = pos.verticalPosition;
 
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
         computeTextDecorations(child,

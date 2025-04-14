@@ -38,6 +38,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::FontFeatureNumeric>("KoSvgText::FontFeatureNumeric");
     qRegisterMetaType<KoSvgText::FontFeatureEastAsian>("KoSvgText::FontFeatureEastAsian");
     qRegisterMetaType<KoSvgText::FontMetrics>("KoSvgText::FontMetrics");
+    qRegisterMetaType<KoSvgText::TextUnderlinePosition>("KoSvgText::TextUnderlinePosition");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
@@ -95,6 +96,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     QMetaType::registerEqualsComparator<KoSvgText::FontMetrics>();
     QMetaType::registerDebugStreamOperator<KoSvgText::FontMetrics>();
+
+    QMetaType::registerEqualsComparator<KoSvgText::TextUnderlinePosition>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::TextUnderlinePosition>();
 #endif
 }
 
@@ -1636,6 +1640,12 @@ QDebug operator<<(QDebug dbg, const FontMetrics &metrics)
     dbg.nospace() << "Ideo Face Under: " << QString::number(metrics.ideographicFaceUnderBaseline*ftPixel) << "px. ";
     dbg.nospace() << "Hanging: " << QString::number(metrics.hangingBaseline*ftPixel) << "px. ";
     dbg.nospace() << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::TextUnderlinePosition &value)
+{
+    dbg.nospace() << "Underline position( horizontal:" << value.horizontalPosition << ", vertical:" << value.verticalPosition << ")";
     return dbg.space();
 }
 

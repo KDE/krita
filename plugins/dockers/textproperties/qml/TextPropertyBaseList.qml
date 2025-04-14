@@ -103,9 +103,9 @@ ColumnLayout {
                 }
                 /*
                 WhiteSpace {
-                }
-                UnderlinePosition {
                 }*/
+                UnderlinePosition {
+                }
                 HangingPunctuation {
                 }
                 TabSize {

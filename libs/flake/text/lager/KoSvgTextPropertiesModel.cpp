@@ -110,6 +110,26 @@ auto textDecorLineProp = [](KoSvgText::TextDecoration flag) {
     return variant_to<KoSvgText::TextDecorations> | textDecorLinePropImpl(flag);
 };
 
+auto textDecorPosPropImpl = [](bool isHorizontal) {
+    return lager::lenses::getset(
+        [isHorizontal] (const KoSvgText::TextUnderlinePosition &value) -> int {
+            return isHorizontal? value.horizontalPosition: value.verticalPosition;
+        },
+        [isHorizontal] (KoSvgText::TextUnderlinePosition value, const int &val){
+            if (isHorizontal) {
+                value.horizontalPosition = KoSvgText::TextDecorationUnderlinePosition(val);
+            } else {
+                value.verticalPosition = KoSvgText::TextDecorationUnderlinePosition(val);
+            }
+            return value;
+        }
+    );
+};
+
+auto textDecorPosProp = [](bool isHorizontal) {
+    return variant_to<KoSvgText::TextUnderlinePosition> | textDecorPosPropImpl(isHorizontal);
+};
+
 auto hangPunctuationPropImpl = [](KoSvgText::HangingPunctuation flag) {
     return lager::lenses::getset(
         [flag] (const KoSvgText::HangingPunctuations &value) -> bool {
@@ -235,6 +255,9 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(textDecorationStyleState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextDecorationStyleId))}
     , LAGER_QT(textDecorationColor){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationColorId)).zoom(variant_to<QColor>)}
     , LAGER_QT(textDecorationColorState){textData.zoom(propertyModifyState(KoSvgTextProperties::TextDecorationColorId))}
+    , LAGER_QT(textDecorationUnderlinePosHorizontal){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationPositionId)).zoom(textDecorPosProp(true))}
+    , LAGER_QT(textDecorationUnderlinePosVertical){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationPositionId)).zoom(textDecorPosProp(false))}
+    , LAGER_QT(textDecorationUnderlinePositionState){textData.zoom(propertyModifyState(KoSvgTextProperties::TextDecorationPositionId))}
     , LAGER_QT(hangingPunctuationFirst){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangFirst))}
     , LAGER_QT(hangingPunctuationComma){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangingPunactuationCommaProp)}
     , LAGER_QT(hangingPunctuationLast){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangLast))}

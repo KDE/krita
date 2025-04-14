@@ -152,6 +152,10 @@ public:
     LAGER_QT_CURSOR(QColor, textDecorationColor);
     LAGER_QT_CURSOR(PropertyState, textDecorationColorState);
 
+    LAGER_QT_CURSOR(int, textDecorationUnderlinePosHorizontal);
+    LAGER_QT_CURSOR(int, textDecorationUnderlinePosVertical);
+    LAGER_QT_CURSOR(PropertyState, textDecorationUnderlinePositionState);
+
     enum HangComma {
         NoHang,
         AllowHang,

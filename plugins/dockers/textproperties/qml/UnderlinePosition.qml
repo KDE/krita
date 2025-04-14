@@ -3,33 +3,59 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyType: TextPropertyBase.Paragraph;
+    propertyName: i18nc("@label:spinbox", "Underline Position");
+    toolTip: i18nc("@info:tooltip",
+                   "Specify the position of the underline for text-decoration.");
+    searchTerms: i18nc("comma separated search terms for the text-decoration-position property, matching is case-insensitive",
+                       "text-decoration-position, underline, left, right, under");
+    propertyType: TextPropertyBase.Mixed;
+
+    property int horizontalPos: 0;
+    property int verticalPos: 0;
+    onPropertiesUpdated: {
+        blockSignals = true;
+        horizontalPos = properties.textDecorationUnderlinePosHorizontal;
+        verticalPos = properties.textDecorationUnderlinePosVertical;
+        visible = properties.textDecorationUnderlinePositionState !== KoSvgTextPropertiesModel.PropertyUnset
+        blockSignals = false;
+    }
+
+    onHorizontalPosChanged: {
+        if (!blockSignals) {
+            properties.textDecorationUnderlinePosHorizontal = horizontalPos;
+        }
+    }
+
+    onVerticalPosChanged: {
+        if (!blockSignals) {
+            properties.textDecorationUnderlinePosVertical = verticalPos;
+        }
+    }
+
+    onEnableProperty: properties.textDecorationUnderlinePositionState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
         width: parent.width;
 
-        Item {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            ToolButton {
-                id: revert;
-                icon.width: 22;
-                icon.height: 22;
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///light_view-refresh.svg"
-            }
+        RevertPropertyButton {
+            revertState: properties.textDecorationUnderlinePositionState;
+            onClicked: properties.textDecorationUnderlinePositionState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {
-            text:  i18nc("@label:listbox", "Underline Position:")
+            text: propertyName;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
+            font.italic: properties.textDecorationUnderlinePositionState === KoSvgTextPropertiesModel.PropertyTriState;
         }
-
 
         Item {
             width: firstColumnWidth;
@@ -37,19 +63,34 @@ TextPropertyBase {
         }
         ComboBox {
             model: [
-                i18nc("@label:inlistbox", "Vertical Left"),
-                i18nc("@label:inlistbox", "Vertical Right")
+                {text:i18nc("@label:inlistbox", "Auto"), value: KoSvgText.UnderlineAuto},
+                {text:i18nc("@label:inlistbox", "Bottom"), value: KoSvgText.UnderlineUnder}
             ]
-            Layout.fillWidth: true;
-            id: verticalPositionCmb;
+            id: horizontalPositionCmb;
+            Layout.fillWidth: true
+            textRole: "text";
+            valueRole: "value";
+            onActivated: horizontalPos = currentValue;
+            wheelEnabled: true;
         }
 
         Item {
             width: firstColumnWidth;
             height: 1;
         }
-        CheckBox {
-            text:  i18nc("@option:check", "Horizontal Auto");
+        ComboBox {
+            model: [
+                {text:i18nc("@label:inlistbox", "Vertical Left"), value: KoSvgText.UnderlineLeft},
+                {text:i18nc("@label:inlistbox", "Vertical Right"), value: KoSvgText.UnderlineRight}
+            ]
+            id: verticalPositionCmb;
+            Layout.fillWidth: true
+            textRole: "text";
+            valueRole: "value";
+            onActivated: verticalPos = currentValue;
+            wheelEnabled: true;
         }
+
+
     }
 }

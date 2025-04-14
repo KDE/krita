@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-12 01:50+0000\n"
-"PO-Revision-Date: 2025-03-29 20:10+0100\n"
+"PO-Revision-Date: 2025-04-06 15:20+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -42290,11 +42290,9 @@ msgid "AutoKey Duplicate"
 msgstr "Chiave automatica - duplicato"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgid "Animation settings menu"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "Menu impostazioni animazione"
+msgstr "Aggiorna le impostazioni di animazione"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format

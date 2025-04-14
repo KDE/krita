@@ -509,16 +509,11 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         CursorInfo cursorInfo = charResult.cursorInfo;
         qreal lineHeight = (charResult.metrics.ascender-charResult.metrics.descender) * bitmapScale;
         qreal descender = charResult.metrics.descender * bitmapScale;
+        qint32 offset = charResult.metrics.caretOffset;
         if (isHorizontal) {
-            hb_position_t run = 0;
-            hb_position_t rise = 1;
-            hb_position_t offset = 0;
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN, &run);
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE, &rise);
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET, &offset);
             qreal slope = 0;
-            if (run != 0 && rise !=0) {
-                slope = double(run)/double(rise);
+            if (charResult.metrics.caretRun != 0 && charResult.metrics.caretRise !=0) {
+                slope = double(charResult.metrics.caretRun)/double(charResult.metrics.caretRise);
                 if (offset == 0) {
                     offset = descender * slope;
                 }
@@ -542,15 +537,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
 
             cursorInfo.offsets = positions;
         } else {
-            hb_position_t run = 1;
-            hb_position_t rise = 0;
-            hb_position_t offset = 0;
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RUN, &run);
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_RISE, &rise);
-            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET, &offset);
             qreal slope = 0;
-            if (run != 0 && rise !=0) {
-                slope = double(rise)/double(run);
+            if (charResult.metrics.caretRun != 0 && charResult.metrics.caretRise !=0) {
+                slope = double(charResult.metrics.caretRun)/double(charResult.metrics.caretRise);
                 if (offset == 0) {
                     offset = descender * slope;
                 }

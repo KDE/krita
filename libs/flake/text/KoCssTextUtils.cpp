@@ -578,7 +578,7 @@ void KoCssTextUtils::removeText(QString &text, int &start, int length)
 qreal KoCssTextUtils::cssSelectFontStyleValue(const QVector<qreal> &values, const qreal targetValue, const qreal defaultValue, const qreal defaultValueUpper, const bool shouldNotReturnDefault)
 {
     if(values.isEmpty()) {
-        return defaultValue;
+        return targetValue;
     }
     // follow the CSS Fonts selection mechanism.
     // See https://drafts.csswg.org/css-fonts-4/#font-style-matching

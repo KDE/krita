@@ -1106,8 +1106,9 @@ QVector<KoFFWWSConverter::FontFileEntry> KoFFWWSConverter::candidatesForCssValue
                 QVector<FontFamilyNode> obliques;
 
                 if (wws->isVariable) {
+                    qreal slantValue = info.slantMode == QFont::StyleItalic? 11: info.autoSlant? 14: info.slantValue;
                     italics = findNodesByAxis(candidates, ITALIC_TAG, 1.0, 0.0, 0.0);
-                    obliques = findNodesByAxis(candidates, SLANT_TAG, -info.slantValue, 0.0, 0.0);
+                    obliques = findNodesByAxis(candidates, SLANT_TAG, -slantValue, 0.0, 0.0);
                 }
                 if (italics.isEmpty() && obliques.isEmpty()) {
                     Q_FOREACH(const FontFamilyNode &node, candidates) {

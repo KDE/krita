@@ -1407,6 +1407,10 @@ FontMetrics::FontMetrics(qreal fontSizeInPt, bool isHorizontal)
 
         hangingBaseline = (fontSize / 5) * 3;
 
+        caretRun = 0;
+        caretRise = 1;
+        caretOffset = 0;
+
     } else {
         zeroAdvance = fontSize;
         spaceAdvance = fontSize;
@@ -1423,6 +1427,10 @@ FontMetrics::FontMetrics(qreal fontSizeInPt, bool isHorizontal)
         alphabeticBaseline = ascender - (fontSize / 5) * 4;
 
         hangingBaseline = alphabeticBaseline + ((fontSize / 5) * 3);
+
+        caretRun = 1;
+        caretRise = 0;
+        caretOffset = 0;
     }
 
     ideographicFaceUnderBaseline = descender;
@@ -1531,6 +1539,18 @@ void FontMetrics::setMetricsValueByTag(const QLatin1String &tag, int32_t value) 
         underlineThickness = value;
     } else if (tag == "undo") {
         underlineOffset = value;
+    } else if (tag == "hcrs") {
+        caretRise = value;
+    } else if (tag == "hcrn") {
+        caretRun = value;
+    } else if (tag == "hcof") {
+        caretOffset = value;
+    } else if (tag == "vcrs") {
+        caretRise = value;
+    } else if (tag == "vcrs") {
+        caretRise = value;
+    } else if (tag == "vcrs") {
+        caretRise = value;
     }
 }
 

@@ -348,6 +348,11 @@ struct FontMetrics : public boost::equality_comparable<FontMetrics> {
     qint32 lineThroughOffset; ///< offset of strike-through from alphabetic baseline.
     qint32 lineThroughThickness; ///< strikethrough thickness, from font.
 
+    /// These are only used to determine the caret slant proportion.
+    qint32 caretRun;
+    qint32 caretRise;
+    qint32 caretOffset;
+
     FontMetrics () {
 
     }

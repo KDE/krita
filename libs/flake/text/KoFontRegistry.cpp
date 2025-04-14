@@ -812,7 +812,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
 
     // metrics
 
-    const QVector<hb_ot_metrics_tag_t> metricTags ({
+    QVector<hb_ot_metrics_tag_t> metricTags ({
                                               HB_OT_METRICS_TAG_X_HEIGHT,
                                               HB_OT_METRICS_TAG_CAP_HEIGHT,
                                               HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
@@ -825,6 +825,18 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
                                               HB_OT_METRICS_TAG_STRIKEOUT_SIZE,
                                           });
 
+    if (isHorizontal) {
+        metricTags.append(HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE);
+        metricTags.append(HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN);
+        metricTags.append(HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET);
+        metrics.caretRise = 1;
+    } else {
+        metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_RISE);
+        metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_RUN);
+        metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET);
+        metrics.caretRun = 1;
+    }
+
     for (auto it = metricTags.begin(); it!= metricTags.end(); it++) {
         char c[4];
         hb_tag_to_string(*it, c);
@@ -832,10 +844,10 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         hb_position_t origin = 0;
         if (useFallback) {
             hb_ot_metrics_get_position_with_fallback(font.data(), *it, &origin);
-        } else {
-            hb_ot_metrics_get_position(font.data(), *it, &origin);
+            metrics.setMetricsValueByTag(tagName, origin);
+        } else if (hb_ot_metrics_get_position(font.data(), *it, &origin)) {
+            metrics.setMetricsValueByTag(tagName, origin);
         }
-        metrics.setMetricsValueByTag(tagName, origin);
     }
 
     // Baselines.

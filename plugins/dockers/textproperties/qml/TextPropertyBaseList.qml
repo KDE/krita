@@ -112,6 +112,9 @@ ColumnLayout {
                 }
                 FontSize {
                 }
+                FontSizeAdjust {
+                }
+
                 FontFamily {
                 }
                 FontStyle {

@@ -24,7 +24,7 @@ struct KRITAFLAKE_EXPORT KoCSSFontInfo: public boost::equality_comparable<KoCSSF
 
     double size = -1; /// < Size in Pt.
     bool automaticOpticalSizing = true;
-    double fontSizeAdjust = 1.0;
+    double fontSizeAdjust = 0.0; // 1.0 would mean that the x-height is the same as the specified font-size, allowing scaling by x-height.
     double weight = 400;
     double width = 100;
 

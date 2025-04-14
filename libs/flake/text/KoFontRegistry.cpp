@@ -594,6 +594,8 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
             FT_Set_Charmap(face.data(), map);
         }
 
+        qreal adjustedSize = size;
+
         if (!FT_IS_SCALABLE(face)) {
             const qreal fontSizePixels = size * ftFontUnit * scaleToPixel;
             qreal sizeDelta = 0;
@@ -626,10 +628,11 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
             hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
             hb_position_t xHeight = 0;
             hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &xHeight);
-            if (xHeight > 0 && fontSizeAdjust > 0 && fontSizeAdjust < 1.0) {
+            if (xHeight > 0 && fontSizeAdjust > 0) {
                 qreal aspect = xHeight / (size * ftFontUnit * scaleToPixel);
+                adjustedSize = (fontSizeAdjust / aspect) * (size);
                 errorCode = FT_Set_Char_Size(face.data(),
-                                             static_cast<FT_F26Dot6>((fontSizeAdjust / aspect) * (size * ftFontUnit)),
+                                             static_cast<FT_F26Dot6>(adjustedSize * ftFontUnit),
                                              0,
                                              xRes,
                                              yRes);
@@ -641,7 +644,19 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
             if (tagName.size() == 4) {
                 const QByteArray utfData = tagName.toUtf8();
                 const char *tag = utfData.data();
-                tags.insert(FT_MAKE_TAG(tag[0], tag[1], tag[2], tag[3]), axisSettings.value(tagName));
+                if (tagName == "opsz" && !qFuzzyCompare(adjustedSize, size)) {
+                    /**
+                     *  There's something peculiar about this:
+                     *  Var fonts can change their x-height depending
+                     *  on the optical size selected. Meaning that the x-height adjusted size
+                     *  could be wrong depending on the font and its x-height choices.
+                     *  There's no reasonable way to fix this beyond cycling, and it is questionable
+                     *  whether the font-size-adjust property is even meant to be that specific.
+                     */
+                    tags.insert(FT_MAKE_TAG(tag[0], tag[1], tag[2], tag[3]), adjustedSize);
+                } else {
+                    tags.insert(FT_MAKE_TAG(tag[0], tag[1], tag[2], tag[3]), axisSettings.value(tagName));
+                }
             }
         }
         const FT_Tag ITALIC_TAG = FT_MAKE_TAG('i', 't', 'a', 'l');

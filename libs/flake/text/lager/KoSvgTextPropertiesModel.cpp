@@ -80,6 +80,20 @@ auto autoValueToBoolImpl = lager::lenses::getset(
 
 auto autoValueToBool = variant_to<KoSvgText::AutoValue> | autoValueToBoolImpl;
 
+// Used for font-size-adjust.
+auto autoValueSimplifiedImpl = lager::lenses::getset(
+            [](const KoSvgText::AutoValue &value) -> qreal {
+                return value.isAuto? 0.0: value.customValue;
+            },
+            [](KoSvgText::AutoValue value, const qreal &val){
+                value.customValue = val;
+                value.isAuto = value.customValue > 0? false: true;
+                return value;
+            }
+        );
+
+auto autoValueSimplified = variant_to<KoSvgText::AutoValue> | autoValueSimplifiedImpl;
+
 auto textDecorLinePropImpl = [](KoSvgText::TextDecoration flag) {
     return lager::lenses::getset(
         [flag] (const KoSvgText::TextDecorations &value) -> bool {
@@ -252,6 +266,8 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontKerningState) {textData.zoom(propertyModifyState(KoSvgTextProperties::KerningId))}
     , LAGER_QT(language) {textData.zoom(createTextProperty(KoSvgTextProperties::TextLanguage)).zoom(variant_to<QString>)}
     , LAGER_QT(languageState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextLanguage))}
+    , LAGER_QT(fontSizeAdjust) {textData.zoom(createTextProperty(KoSvgTextProperties::FontSizeAdjustId)).zoom(autoValueSimplified)}
+    , LAGER_QT(fontSizeAdjustState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontSizeAdjustId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

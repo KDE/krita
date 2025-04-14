@@ -1131,7 +1131,7 @@ KoCSSFontInfo KoSvgTextProperties::cssFontInfo() const
     info.families = propertyOrDefault(FontFamiliesId).toStringList();
     const KoSvgText::AutoValue fontSizeAdjust = propertyOrDefault(FontSizeAdjustId).value<KoSvgText::AutoValue>();
     if (property(KraTextVersionId).toInt() >= 3) {
-        info.fontSizeAdjust = fontSizeAdjust.isAuto? 1.0: fontSizeAdjust.customValue;
+        info.fontSizeAdjust = fontSizeAdjust.isAuto? 0.0: fontSizeAdjust.customValue;
     }
 
     const KoSvgText::CssFontStyleData style = propertyOrDefault(FontStyleId).value<KoSvgText::CssFontStyleData>();

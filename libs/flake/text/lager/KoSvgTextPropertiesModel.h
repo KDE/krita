@@ -202,6 +202,9 @@ public:
     LAGER_QT_CURSOR(QString, language);
     LAGER_QT_CURSOR(PropertyState, languageState);
 
+    LAGER_QT_CURSOR(qreal, fontSizeAdjust);
+    LAGER_QT_CURSOR(PropertyState, fontSizeAdjustState);
+
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 

@@ -2298,7 +2298,6 @@ bool KoColorSet::Private::loadAcb()
 {
 
     QFileInfo info(colorSet->filename());
-    colorSet->setName(info.completeBaseName());
 
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);
@@ -2333,6 +2332,7 @@ bool KoColorSet::Private::loadAcb()
         metadata.append(metadataString);
     }
     QString title = metadata.at(0);
+    colorSet->setName(title);
     QString prefix = metadata.at(1);
     QString postfix = metadata.at(2);
     QString description = metadata.at(3);

@@ -1462,7 +1462,10 @@ bool FontMetrics::operator==(const FontMetrics &other) const {
             && lineThroughOffset == other.lineThroughOffset
             && lineThroughThickness == other.lineThroughThickness
             && underlineOffset == other.underlineOffset
-            && underlineThickness == other.underlineThickness;
+            && underlineThickness == other.underlineThickness
+            && caretRun == other.caretRun
+            && caretRise == other.caretRise
+            && caretOffset == other.caretOffset;
 }
 
 int FontMetrics::valueForBaselineValue(Baseline baseline) const {

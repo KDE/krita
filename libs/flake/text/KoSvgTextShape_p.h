@@ -427,9 +427,13 @@ public:
                                                CharacterResult &charResult) const;
 
     void clearAssociatedOutlines();
-    void resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
+    void resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
+                           QString text, QVector<CharacterResult> &result, int &currentIndex,
+                           bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved,
+                           QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps);
 
-    void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
+    void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal,
+                         const KoSvgTextProperties resolvedProps);
     static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
@@ -438,7 +442,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
+    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos, const KoSvgTextProperties resolvedProps);
     static void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent, const KoSvgTextProperties &parentProps,
                             const KoSvgText::FontMetrics &parentBaselineTable, const KoSvgText::Baseline parentBaseline,
                             const QPointF superScript,
@@ -451,7 +455,7 @@ public:
     static void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
                             QVector<CharacterResult> &result, const QVector<LineBox> lineBoxes,
                             int &currentIndex,
-                            const bool isHorizontal);
+                            const bool isHorizontal, const KoSvgTextProperties resolvedProps);
     void computeTextDecorations(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                 const QVector<CharacterResult>& result,
                                 const QMap<int, int>& logicalToVisual,
@@ -464,8 +468,7 @@ public:
                                 bool ltr,
                                 bool wrapping,
                                 const qreal res,
-                                const KoSvgText::TextDecorationUnderlinePosition underlinePosH = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto,
-                                const KoSvgText::TextDecorationUnderlinePosition underlinePosV = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto);
+                                const KoSvgTextProperties resolvedProps);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
                                                                           const qreal res,
                                                                           const QVector<CharacterResult> &result,
@@ -508,10 +511,12 @@ public:
                     int &currentIndex);
 
     /// Get the number of characters for the whole subtree of this node.
-    static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls = false) {
-        int count = parent->numChars(withControls);
+    static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls = false, KoSvgTextProperties resolvedProps = KoSvgTextProperties::defaultProperties()) {
+        KoSvgTextProperties props = parent->properties;
+        props.inheritFrom(resolvedProps, true);
+        int count = parent->numChars(withControls, props);
         for (auto it = KisForestDetail::childBegin(parent); it != KisForestDetail::childEnd(parent); it++) {
-            count += numChars(it, withControls);
+            count += numChars(it, withControls, props);
         }
         return count;
     }

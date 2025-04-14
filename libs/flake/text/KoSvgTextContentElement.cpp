@@ -381,15 +381,15 @@ static QString transformText(QString text, KoSvgText::TextTransformInfo textTran
     return text;
 }
 
-int KoSvgTextContentElement::numChars(bool withControls) const
+int KoSvgTextContentElement::numChars(bool withControls, KoSvgTextProperties resolvedProps) const
 {
     int result = 0;
     if (withControls) {
-        KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
-        KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+        KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(resolvedProps.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
+        KoSvgText::Direction direction = KoSvgText::Direction(resolvedProps.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
         KoSvgText::TextTransformInfo textTransformInfo =
-            properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
-        QString lang = properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+            resolvedProps.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
+        QString lang = resolvedProps.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
         QVector<QPair<int, int>> positions;
 
         result = KoCssTextUtils::getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi).size();
@@ -411,11 +411,11 @@ void KoSvgTextContentElement::insertText(int start, QString insertText)
 }
 
 
-QString KoSvgTextContentElement::getTransformedString(QVector<QPair<int, int> > &positions) const
+QString KoSvgTextContentElement::getTransformedString(QVector<QPair<int, int> > &positions, KoSvgTextProperties resolvedProps) const
 {
     KoSvgText::TextTransformInfo textTransformInfo =
-        properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
-    QString lang = properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+        resolvedProps.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
+    QString lang = resolvedProps.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
     return transformText(text, textTransformInfo, lang, positions);
 }
 

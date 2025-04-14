@@ -258,7 +258,7 @@ void KoSvgTextShape::Private::relayout()
         resolvedTransforms[0].xPos = 0;
         resolvedTransforms[0].yPos = 0;
     }
-    this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
+    this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars, KoSvgTextProperties::defaultProperties());
 
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
@@ -625,7 +625,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Handle baseline alignment.
     globalIndex = 0;
-    this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
+    this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal, KoSvgTextProperties::defaultProperties());
 
     if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
@@ -665,7 +665,7 @@ void KoSvgTextShape::Private::relayout()
         debugFlake << "5. Apply ‘textLength’ attribute";
         globalIndex = 0;
         int resolved = 0;
-        this->applyTextLength(textData.childBegin(), result, globalIndex, resolved, isHorizontal);
+        this->applyTextLength(textData.childBegin(), result, globalIndex, resolved, isHorizontal, KoSvgTextProperties::defaultProperties());
 
         // 6. Adjust positions: x, y
         debugFlake << "6. Adjust positions: x, y";
@@ -712,12 +712,12 @@ void KoSvgTextShape::Private::relayout()
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
                                   false,
-                                  finalRes);
+                                  finalRes, KoSvgTextProperties::defaultProperties());
 
         // 8. Position on path
 
         debugFlake << "8. Position on path";
-        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos);
+        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos, KoSvgTextProperties::defaultProperties());
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
@@ -732,7 +732,7 @@ void KoSvgTextShape::Private::relayout()
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
                                   true,
-                                  finalRes);
+                                  finalRes, KoSvgTextProperties::defaultProperties());
     }
 
     // 9. return result.
@@ -825,14 +825,14 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
  * @brief KoSvgTextShape::Private::resolveTransforms
  * This resolves transforms and applies whitespace collapse.
  */
-void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
+void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars, const KoSvgTextProperties resolvedProps) {
 
     QVector<KoSvgText::CharTransformation> local = currentTextElement->localTransformations;
 
     int i = 0;
 
     int index = currentIndex;
-    int j = index + numChars(currentTextElement, true);
+    int j = index + numChars(currentTextElement, true, resolvedProps);
 
     if (currentTextElement->textPath) {
         textInPath = true;
@@ -865,8 +865,10 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
         }
     }
 
+    KoSvgTextProperties props = currentTextElement->properties;
+    props.inheritFrom(resolvedProps, true);
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
-        resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars);
+        resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars, props);
 
     }
 
@@ -907,15 +909,18 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
                                               QVector<CharacterResult> &result,
                                               int &currentIndex,
                                               int &resolvedDescendentNodes,
-                                              bool isHorizontal)
+                                              bool isHorizontal,
+                                              const KoSvgTextProperties resolvedProps)
 {
 
     int i = currentIndex;
-    int j = i + numChars(currentTextElement, true);
+    int j = i + numChars(currentTextElement, true, resolvedProps);
     int resolvedChildren = 0;
 
+    KoSvgTextProperties props;
+    props.inheritFrom(resolvedProps, true);
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
-        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal);
+        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal, props);
     }
     // Raqm handles bidi reordering for us, but this algorithm does not
     // anticipate that, so we need to keep track of which typographic item
@@ -1034,7 +1039,7 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     const bool disableFontMatching)
 {
     const int i = currentIndex;
-    const int j = qMin(i + numChars(parent, true), result.size());
+    const int j = qMin(i + numChars(parent, true, parentProps), result.size());
 
     KoSvgTextProperties properties = parent->properties;
     properties.inheritFrom(parentProps, true);
@@ -1139,17 +1144,19 @@ void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentE
                                                      QVector<CharacterResult> &result,
                                                      const QVector<LineBox> lineBoxes,
                                                      int &currentIndex,
-                                                     const bool isHorizontal)
+                                                     const bool isHorizontal,
+                                                     const KoSvgTextProperties resolvedProps)
 {
 
     const int i = currentIndex;
-    const int j = qMin(i + numChars(parent, true), result.size());
+    const int j = qMin(i + numChars(parent, true, resolvedProps), result.size());
 
     KoSvgTextProperties properties = parent->properties;
     KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
+    properties.inheritFrom(resolvedProps);
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        handleLineBoxAlignment(child, result, lineBoxes, currentIndex, isHorizontal);
+        handleLineBoxAlignment(child, result, lineBoxes, currentIndex, isHorizontal, properties);
     }
 
     if (baselineShiftMode == KoSvgText::ShiftLineTop || baselineShiftMode == KoSvgText::ShiftLineBottom) {
@@ -1211,12 +1218,11 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     bool ltr,
     bool wrapping,
     const qreal res,
-    const KoSvgText::TextDecorationUnderlinePosition underlinePosH,
-    const KoSvgText::TextDecorationUnderlinePosition underlinePosV)
+    const KoSvgTextProperties resolvedProps)
 {
 
     const int i = currentIndex;
-    const int j = qMin(i + numChars(currentTextElement, true), result.size());
+    const int j = qMin(i + numChars(currentTextElement, true, resolvedProps), result.size());
     using namespace KoSvgText;
 
     KoPathShape *currentTextPath = nullptr;
@@ -1235,8 +1241,10 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
             }
         }
     }
+    KoSvgTextProperties properties = currentTextElement->properties;
+    properties.inheritFrom(resolvedProps);
 
-    KoSvgText::TextUnderlinePosition pos = currentTextElement->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionId).value<KoSvgText::TextUnderlinePosition>();
+    KoSvgText::TextUnderlinePosition pos = properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionId).value<KoSvgText::TextUnderlinePosition>();
     TextDecorationUnderlinePosition newUnderlinePosH = pos.horizontalPosition;
     TextDecorationUnderlinePosition newUnderlinePosV = pos.verticalPosition;
 
@@ -1253,13 +1261,13 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                                ltr,
                                wrapping,
                                res,
-                               newUnderlinePosH,
-                               newUnderlinePosV);
+                               properties
+                               );
     }
 
     TextDecorations decor = currentTextElement->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<TextDecorations>();
     if (decor != DecorationNone && currentTextElement->properties.hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
-        KoSvgTextProperties properties =currentTextElement->properties;
+
         TextDecorationStyle style = TextDecorationStyle(
                     properties.propertyOrDefault(
                         KoSvgTextProperties::TextDecorationStyleId).toInt());
@@ -1714,7 +1722,8 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(const QPainterPath &gly
 void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator root,
                                             QVector<CharacterResult> &result,
                                             bool isHorizontal,
-                                            QPointF &startPos)
+                                            QPointF &startPos,
+                                            const KoSvgTextProperties resolvedProps)
 {
     // Unlike all the other applying functions, this one only iterrates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
@@ -1724,7 +1733,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
     int currentIndex = 0;
     QPointF pathEnd;
     for (auto textShapeElement = KisForestDetail::childBegin(root); textShapeElement != KisForestDetail::childEnd(root); textShapeElement++) {
-        int endIndex = currentIndex + numChars(textShapeElement, true);
+        int endIndex = currentIndex + numChars(textShapeElement, true, resolvedProps);
 
         KoPathShape *shape = dynamic_cast<KoPathShape *>(textShapeElement->textPath.data());
         if (shape) {
@@ -1848,7 +1857,7 @@ QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextC
         }
 
         chunk.originalText = it->text;
-        chunk.text = it->getTransformedString(chunk.newToOldPositions);
+        chunk.text = it->getTransformedString(chunk.newToOldPositions, chunk.inheritedProps);
         result.append(chunk);
 
         if (!bidiClosing.isEmpty()) {

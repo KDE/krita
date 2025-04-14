@@ -93,13 +93,13 @@ public:
      * @param withControls this will enable the bidi controls to be
      * counted as well.
      */
-    int numChars(bool withControls = false) const;
+    int numChars(bool withControls = false, KoSvgTextProperties resolvedProps = KoSvgTextProperties()) const;
 
     /**
      * Get the text with transformations applied.
      * @param positions the text positions which may have changed due the uppercase transform.
      */
-    QString getTransformedString(QVector<QPair<int, int>> &positions) const;
+    QString getTransformedString(QVector<QPair<int, int>> &positions, KoSvgTextProperties resolvedProps = KoSvgTextProperties()) const;
 
     /**
      * @brief insertText

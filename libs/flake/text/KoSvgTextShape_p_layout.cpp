@@ -851,8 +851,14 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
                 result[k].addressable = false;
                 continue;
             }
+            if (k > 0 && text.at(k).isLowSurrogate() && text.at(k-1).isHighSurrogate()) {
+                // transforms apply per-undicode codepoint, not per utf16.
+                result[k].addressable = false;
+                continue;
+            }
 
             if (i < local.size()) {
+
                 KoSvgText::CharTransformation newTransform = local.at(i);
                 newTransform.mergeInParentTransformation(resolved[k]);
                 resolved[k] = newTransform;

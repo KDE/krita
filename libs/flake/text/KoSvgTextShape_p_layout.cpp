@@ -92,6 +92,22 @@ static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> &c
     return logicalToVisual;
 }
 
+QString langToLibUnibreakLang(const QString lang) {
+    // Libunibreak only tests against "ko", "ja" and "zh".
+    QLocale locale = KoWritingSystemUtils::localeFromBcp47Locale(lang);
+    if (locale.language() == QLocale::Japanese || locale.script() == QLocale::JapaneseScript) {
+        return "ja";
+    } else if (locale.language() == QLocale::Korean || locale.script() == QLocale::KoreanScript || locale.script() == QLocale::HangulScript) {
+        return "ko";
+    } else if (locale.script() == QLocale::SimplifiedChineseScript
+               || locale.script() == QLocale::TraditionalChineseScript
+               || locale.script() == QLocale::HanWithBopomofoScript
+               || locale.script() == QLocale::HanScript
+               || locale.script() == QLocale::BopomofoScript) {
+        return "zh";
+    }
+    return lang;
+}
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout()
@@ -113,7 +129,7 @@ void KoSvgTextShape::Private::relayout()
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(rootProperties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(rootProperties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     KoSvgText::AutoValue inlineSize = rootProperties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
-    QString lang = rootProperties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+    QString lang = rootProperties.property(KoSvgTextProperties::TextLanguage).toString();
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
@@ -197,13 +213,7 @@ void KoSvgTextShape::Private::relayout()
     // 1. Setup.
     KoSvgText::TextWrap wrap = KoSvgText::TextWrap(rootProperties.propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
     KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(rootProperties.property(KoSvgTextProperties::LineBreakId).toInt());
-    if (!lang.isEmpty()) {
-        // Libunibreak currently only has support for strict, and even then only
-        // for very specific cases.
-        if (linebreakStrictness == KoSvgText::LineBreakStrict) {
-            lang += "-strict";
-        }
-    }
+
     QVector<QPair<bool, bool>> justify;
     QVector<char> lineBreaks(text.size());
     QVector<char> wordBreaks(text.size());
@@ -211,9 +221,17 @@ void KoSvgTextShape::Private::relayout()
     if (text.size() > 0) {
         // TODO: Figure out how to gracefully skip all the next steps when the text-size is 0.
         // can't currently remember if removing the associated outlines was all that is necessary.
-        set_linebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), lineBreaks.data());
-        set_wordbreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), wordBreaks.data());
-        set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), graphemeBreaks.data());
+        QString unibreakLang = langToLibUnibreakLang(lang);
+        if (!lang.isEmpty()) {
+            // Libunibreak currently only has support for strict, and even then only
+            // for very specific cases.
+            if (linebreakStrictness == KoSvgText::LineBreakStrict) {
+                unibreakLang += "-strict";
+            }
+        }
+        set_linebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), unibreakLang.toUtf8().data(), lineBreaks.data());
+        set_wordbreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), unibreakLang.toUtf8().data(), wordBreaks.data());
+        set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), unibreakLang.toUtf8().data(), graphemeBreaks.data());
         justify = KoCssTextUtils::justificationOpportunities(text, lang);
     }
 
@@ -291,6 +309,28 @@ void KoSvgTextShape::Private::relayout()
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
             KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(properties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
 
+            KoSvgText::LineBreak localLinebreakStrictness = KoSvgText::LineBreak(properties.property(KoSvgTextProperties::LineBreakId).toInt());
+            QString localLang = properties.property(KoSvgTextProperties::TextLanguage).toString();
+
+            if ((localLinebreakStrictness != linebreakStrictness && localLinebreakStrictness != KoSvgText::LineBreakAnywhere) || localLang != lang ) {
+                QString unibreakLang = langToLibUnibreakLang(localLang);
+                if (localLinebreakStrictness == KoSvgText::LineBreakStrict && !unibreakLang.isEmpty()) {
+                    unibreakLang += "-strict";
+                }
+                int localLineBreakStart = qMax(0, start -1);
+                int localLineBreakEnd = qMin(text.size(), start+chunk.text.size());
+                QVector<char> localLineBreaks(localLineBreakEnd - localLineBreakStart);
+                set_linebreaks_utf16(text.mid(localLineBreakStart, localLineBreaks.size()).utf16(),
+                                     static_cast<size_t>(localLineBreaks.size()),
+                                     unibreakLang.toUtf8().data(),
+                                     localLineBreaks.data());
+                for (int i = 0; i < localLineBreaks.size(); i++) {
+                    if (i < (start - localLineBreakStart)) continue;
+                    if (i+localLineBreakStart > start+chunk.text.size()) break;
+                    lineBreaks[i+localLineBreakStart] = localLineBreaks[i];
+                }
+            }
+
             KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.bg.data());
             QColor fillColor;
             if (b)
@@ -348,7 +388,7 @@ void KoSvgTextShape::Private::relayout()
                 }
 
                 if ((wordBreakStrictness == KoSvgText::WordBreakBreakAll ||
-                     linebreakStrictness == KoSvgText::LineBreakAnywhere)
+                     localLinebreakStrictness == KoSvgText::LineBreakAnywhere)
                         && wrap != KoSvgText::NoWrap) {
                     if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == BreakType::NoBreak) {
                         cr.breakType = BreakType::SoftBreak;

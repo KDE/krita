@@ -52650,11 +52650,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Reduces transparency channel resolution for smaller "
-#| "files. Only reccomended for low quality or when precise transparency "
-#| "edges aren't critical.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
 "files. Only recommended for low quality or when precise transparency edges "
@@ -52750,6 +52746,10 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Yinelenen ögeleri tanımlar (örneğin metin karakterleri "
+"veya simgeler gibi) ve onlara başka bir yerden başvurarak yalnızca bir kez "
+"depolamış olur. Sayısal ilüstrasyonlar ve ekran görüntüleri için "
+"sıkıştırmayı iyileştirir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -52772,6 +52772,9 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Keskin kenarları korurken alanları pürüzsüzleştirir ve "
+"önemli ayrıntıları bulanıklaştırmadan sıkıştırmayı iyileştirir. Daha yüksek "
+"değerler, daha güçlü süzme uygular.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
@@ -66011,9 +66014,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvurulan Görseller Aracı"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
-
-#~ msgid "Maximum strength"
-#~ msgstr "En yüksek güç"

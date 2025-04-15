@@ -101,9 +101,8 @@ ColumnLayout {
                 }
                 DominantBaseline {
                 }
-                /*
                 WhiteSpace {
-                }*/
+                }
                 UnderlinePosition {
                 }
                 HangingPunctuation {

@@ -104,6 +104,7 @@ enum TextSpaceCollapse {
     PreserveSpaces ///< Preserve spaces, convert tabs and linebreaks to spaces,
                    ///< required for 'xml:space="preserve"' emulation.
 };
+Q_ENUM_NS(TextSpaceCollapse)
 
 /// Part of "white-space", in practice we only support wrap and nowrap.
 enum TextWrap {
@@ -117,6 +118,7 @@ enum TextWrap {
     Pretty ///< select algorithm that gives the best looking result, may require
            ///< looking ahead.
 };
+Q_ENUM_NS(TextWrap)
 
 /// Part of "white-space"
 enum TextSpaceTrim {
@@ -125,6 +127,7 @@ enum TextSpaceTrim {
     DiscardBefore = 0x2, ///< Trim white space before the start of the element.
     DiscardAfter = 0x4 ///< Trim white space after the end of the element.
 };
+Q_ENUM_NS(TextSpaceTrim)
 
 /// Whether to break words.
 enum WordBreak {

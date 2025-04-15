@@ -291,6 +291,10 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(languageState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextLanguage))}
     , LAGER_QT(fontSizeAdjust) {textData.zoom(createTextProperty(KoSvgTextProperties::FontSizeAdjustId)).zoom(autoValueSimplified)}
     , LAGER_QT(fontSizeAdjustState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontSizeAdjustId))}
+    , LAGER_QT(textCollapse){textData.zoom(createTextProperty(KoSvgTextProperties::TextCollapseId)).zoom(variant_to<int>)}
+    , LAGER_QT(textCollapseState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextCollapseId))}
+    , LAGER_QT(textWrap){textData.zoom(createTextProperty(KoSvgTextProperties::TextWrapId)).zoom(variant_to<int>)}
+    , LAGER_QT(textWrapState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextWrapId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

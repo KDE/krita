@@ -353,6 +353,8 @@ void KoSvgTextShape::Private::relayout()
                     if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == BreakType::NoBreak) {
                         cr.breakType = BreakType::SoftBreak;
                     }
+                } else if (wordBreakStrictness == KoSvgText::WordBreakKeepAll) {
+                    cr.breakType = (wordBreaks[start + i] == WORDBREAK_BREAK)? cr.breakType: BreakType::NoBreak;
                 }
                 if (cr.lineStart != LineEdgeBehaviour::Collapse && hang.testFlag(KoSvgText::HangFirst)) {
                     cr.lineStart = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangFirst)

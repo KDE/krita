@@ -95,7 +95,7 @@ public:
      * @return A vector of booleans the size of the input text that marks
      * whether the character should be collapsed.
      */
-    static QVector<bool> collapseSpaces(QString *text, KoSvgText::TextSpaceCollapse collapseMethod);
+    static QVector<bool> collapseSpaces(QString *text, QMap<int, KoSvgText::TextSpaceCollapse> collapseMethods);
 
     /**
      * @brief collapseLastSpace

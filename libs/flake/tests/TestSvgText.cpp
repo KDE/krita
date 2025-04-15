@@ -416,7 +416,7 @@ void TestSvgText::testSimpleText()
     QCOMPARE(KoSvgTextShape::Private::childCount(chunkShape->d->textData.childBegin()), 0);
 
     QString text = chunkShape->d->textData.childBegin()->text;
-    QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
+    QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, QMap<int, KoSvgText::TextSpaceCollapse>({{0, KoSvgText::Collapse}}));
     QCOMPARE(collapse.count(false), 17);
     QCOMPARE(text, QString("         Hello, out there!         "));
 
@@ -479,7 +479,7 @@ void TestSvgText::testComplexText()
         QCOMPARE(KoSvgTextShape::Private::childCount(child), 0);
 
         QString text = child->text;
-        QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
+        QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, QMap<int, KoSvgText::TextSpaceCollapse>({{0, KoSvgText::Collapse}}));
 
         QCOMPARE(collapse.count(false), 6);
         QCOMPARE(text, QString("             Hello, "));

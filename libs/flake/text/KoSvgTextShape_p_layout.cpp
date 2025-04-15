@@ -176,6 +176,7 @@ void KoSvgTextShape::Private::relayout()
         collectSubChunks(textData.childBegin(), KoSvgTextProperties::defaultProperties(),false, _ignore);
     QString text;
     QVector<QPair<int, int>> clusterToOriginalString;
+    QMap<int, KoSvgText::TextSpaceCollapse> collapseModes;
     QString plainText;
     Q_FOREACH (const SubChunk &chunk, textChunks) {
         for (int i = 0; i < chunk.newToOldPositions.size(); i++) {
@@ -185,19 +186,17 @@ void KoSvgTextShape::Private::relayout()
             QPair<int, int> newPos = QPair<int, int> (a, b);
             clusterToOriginalString.append(newPos);
         }
+        KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(chunk.inheritedProps.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+        collapseModes.insert(text.size(), collapse);
         text.append(chunk.text);
         plainText.append(chunk.originalText);
     }
+    QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(&text, collapseModes);
     debugFlake << "Laying out the following text: " << text;
 
     // 1. Setup.
-
-    // KoSvgText::TextSpaceTrims trims =
-    // q->textProperties().propertyOrDefault(KoSvgTextProperties::TextTrimId).value<KoSvgText::TextSpaceTrims>();
     KoSvgText::TextWrap wrap = KoSvgText::TextWrap(rootProperties.propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
-    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(rootProperties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
     KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(rootProperties.property(KoSvgTextProperties::LineBreakId).toInt());
-    QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(&text, collapse);
     if (!lang.isEmpty()) {
         // Libunibreak currently only has support for strict, and even then only
         // for very specific cases.
@@ -290,6 +289,7 @@ void KoSvgTextShape::Private::relayout()
             KoSvgText::AutoLengthPercentage letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoLengthPercentage>();
             KoSvgText::AutoLengthPercentage wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoLengthPercentage>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
+            KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(properties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
 
             KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.bg.data());
             QColor fillColor;

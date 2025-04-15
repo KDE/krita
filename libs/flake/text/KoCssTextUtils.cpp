@@ -196,15 +196,22 @@ QString KoCssTextUtils::transformTextFullSizeKana(const QString &text)
     return transformedText;
 }
 
-QVector<bool> KoCssTextUtils::collapseSpaces(QString *text, KoSvgText::TextSpaceCollapse collapseMethod)
+QVector<bool> KoCssTextUtils::collapseSpaces(QString *text, QMap<int, KoSvgText::TextSpaceCollapse> collapseMethods)
 {
+
     QString modifiedText = *text;
     QVector<bool> collapseList(modifiedText.size());
     collapseList.fill(false);
     int spaceSequenceCount = 0;
+    KoSvgText::TextSpaceCollapse collapseMethod = collapseMethods.first();
     for (int i = 0; i < modifiedText.size(); i++) {
         bool firstOrLast = (i == 0 || i == modifiedText.size() - 1);
         bool collapse = false;
+        if (collapseMethods.contains(i)) {
+            // If a whitespace:collapse sequence is inside a pre-wrap sequence, the first space needs to be left alone.
+            if (collapseMethods.value(i) != collapseMethod) spaceSequenceCount = 0;
+            collapseMethod = collapseMethods.value(i);
+        }
         const QChar c = modifiedText.at(i);
         if (c == QChar::LineFeed || c == QChar::Tabulation) {
             if (collapseMethod == KoSvgText::Collapse ||
@@ -244,6 +251,11 @@ QVector<bool> KoCssTextUtils::collapseSpaces(QString *text, KoSvgText::TextSpace
     }
     // go backward to ensure any dangling space characters are marked as collapsed.
     for (int i = modifiedText.size()-1; i>=0; i--) {
+        if (collapseMethods.contains(i)) {
+            int pos = collapseMethods.keys().indexOf(i);
+            collapseMethod = collapseMethods.value(collapseMethods.keys().value(pos-1, 0), KoSvgText::Collapse);
+            if (collapseMethod != KoSvgText::Collapse) break;
+        }
         if (modifiedText.at(i).isSpace()) {
             if (collapseMethod == KoSvgText::Collapse) {
                 collapseList[i] = true;

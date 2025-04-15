@@ -172,7 +172,7 @@ void registerResources()
     QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     if (dir.exists("resourcecache.sqlite")) {
         bool result = dir.removeRecursively();
-        qDebug() << "result" << (result);
+        qDebug() << "Result of deleting resourcecache.sqlite:" << (result);
     }
 
     addResourceTypes();

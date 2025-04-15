@@ -83,7 +83,7 @@ TextPropertyBase {
         Label {
             text: propertyName;
             elide: Text.ElideRight;
-            Layout.fillWidth: true;
+            Layout.maximumWidth: implicitWidth;
             font.italic: properties.textCollapseState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 

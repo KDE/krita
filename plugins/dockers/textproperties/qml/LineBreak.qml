@@ -46,22 +46,28 @@ TextPropertyBase {
         Label {
             text: propertyName;
             elide: Text.ElideRight;
-            Layout.fillWidth: true;
+            Layout.maximumWidth: implicitWidth;
             font.italic: properties.lineBreakState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
-        ComboBox {
+        SqueezedComboBox {
             id: lineBreakCmb
             model: [
-                { text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.LineBreakAuto},
-                { text: i18nc("@label:inlistbox", "Loose"), value: KoSvgText.LineBreakLoose},
-                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.LineBreakNormal},
-                { text: i18nc("@label:inlistbox", "Strict"), value: KoSvgText.LineBreakStrict},
-                { text: i18nc("@label:inlistbox", "Anywhere"), value: KoSvgText.LineBreakAnywhere}
+                { text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.LineBreakAuto,
+                    toolTip:i18nc("@info:tooltip", "No particular adjustments are made to the line break algorithm")},
+                { text: i18nc("@label:inlistbox", "Loose"), value: KoSvgText.LineBreakLoose,
+                    toolTip:i18nc("@info:tooltip", "While typically defines a looser algorithm, currently same as auto.")},
+                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.LineBreakNormal,
+                    toolTip:i18nc("@info:tooltip", "Same as auto. Soft breaks will be allowed before small kana if text language is Japanese.")},
+                { text: i18nc("@label:inlistbox", "Strict"), value: KoSvgText.LineBreakStrict,
+                    toolTip:i18nc("@info:tooltip", "Soft breaks will not be allowed before small kana.")},
+                { text: i18nc("@label:inlistbox", "Anywhere"), value: KoSvgText.LineBreakAnywhere,
+                    toolTip:i18nc("@info:tooltip", "Soft breaks will occur along any grapheme.")}
             ]
             Layout.fillWidth: true;
             textRole: "text";
             valueRole: "value";
+            toolTipRole: "toolTip";
             onActivated: breakType = currentValue;
         }
     }

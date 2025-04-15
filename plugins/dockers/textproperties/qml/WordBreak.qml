@@ -51,16 +51,20 @@ TextPropertyBase {
         }
 
 
-        ComboBox {
+        SqueezedComboBox {
             id: wordBreakCmb
             model: [
-                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.WordBreakNormal},
-                { text: i18nc("@label:inlistbox", "Keep-all"), value: KoSvgText.WordBreakKeepAll},
-                { text: i18nc("@label:inlistbox", "Break-all"), value: KoSvgText.WordBreakBreakAll}
+                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.WordBreakNormal,
+                    toolTip:i18nc("@info:tooltip", "No additional adjustments are made to the regular line break algorithm.")},
+                { text: i18nc("@label:inlistbox", "Keep-all"), value: KoSvgText.WordBreakKeepAll,
+                toolTip:i18nc("@info:tooltip", "Soft breaks will only be allowed inside words, typically delimited by spaces.")},
+                { text: i18nc("@label:inlistbox", "Break-all"), value: KoSvgText.WordBreakBreakAll,
+                    toolTip:i18nc("@info:tooltip", "Soft breaks will occur along any grapheme.")}
             ]
             Layout.fillWidth: true;
             textRole: "text";
             valueRole: "value";
+            toolTipRole: "toolTip";
             onActivated: breakType = currentValue;
             wheelEnabled: true;
         }

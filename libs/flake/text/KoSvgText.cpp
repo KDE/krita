@@ -748,9 +748,16 @@ QString writeTextIndent(const TextIndentInfo textIndent)
 TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context)
 {
     TabSizeInfo tabSizeInfo;
-    tabSizeInfo.value = KisDomUtils::toDouble(value, &tabSizeInfo.isNumber);
-    if (!tabSizeInfo.isNumber) {
+    qreal val = KisDomUtils::toDouble(value, &tabSizeInfo.isNumber);
+    if (tabSizeInfo.isNumber) {
+        tabSizeInfo.value = qMax(0.0, val);
+    } else {
         tabSizeInfo.length = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
+    }
+    if ((tabSizeInfo.isNumber && tabSizeInfo.value < 0) || tabSizeInfo.length.value < 0) {
+        tabSizeInfo.isNumber = true;
+        tabSizeInfo.value = 0;
+        tabSizeInfo.length.value = 0;
     }
     return tabSizeInfo;
 }

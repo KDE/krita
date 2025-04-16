@@ -484,6 +484,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
     QPainterPath currentShape;
     while (it.hasNext()) {
         int index = it.next();
+        result[index].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal);
         CharacterResult charResult = result.at(index);
         if (!charResult.addressable) {
             continue;

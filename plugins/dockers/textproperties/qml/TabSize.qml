@@ -33,8 +33,6 @@ TextPropertyBase {
         id: converter;
         dpi: dpi;
         dataMultiplier: tabSizeSpn.multiplier;
-        userValue: tabSizeSpn.value;
-        userUnit: tabSizeUnitCmb.currentValue;
 
         onUserValueChanged: tabSizeSpn.value = userValue;
         onUserUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(userUnit);
@@ -44,7 +42,7 @@ TextPropertyBase {
         blockSignals = true;
         converter.dpi = canvasDPI;
         converter.setFontMetricsFromTextPropertiesModel(properties);
-        converter.setDataValueAndUnit(properties.tabSize.unit, properties.tabSize.value);
+        converter.setDataValueAndUnit(properties.tabSize.value, properties.tabSize.unit);
         visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
@@ -95,7 +93,8 @@ TextPropertyBase {
             id: tabSizeSpn;
             Layout.fillWidth: true;
             from: 0;
-            to: 100 * multiplier;
+            to: 999 * multiplier;
+            onValueChanged: converter.userValue = value;
         }
         SqueezedComboBox {
             id: tabSizeUnitCmb;

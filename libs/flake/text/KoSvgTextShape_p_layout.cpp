@@ -277,8 +277,6 @@ void KoSvgTextShape::Private::relayout()
     }
     this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars, KoSvgTextProperties::defaultProperties());
 
-    QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
-
     // pass everything to a css-compatible text-layout algortihm.
     raqm_t_sp layout(raqm_create());
 
@@ -420,9 +418,7 @@ void KoSvgTextShape::Private::relayout()
                 cr.cursorInfo.isWordBoundary = (wordBreaks[start + i] == WORDBREAK_BREAK);
                 cr.cursorInfo.color = fillColor;
 
-                if (text.at(start + i) == QChar::Tabulation) {
-                    tabSizeInfo.insert(start + i, tabInfo);
-                }
+
 
                 if (resolvedTransforms.at(start + i).startsNewChunk()) {
                     raqm_set_arbitrary_run_break(layout.data(), static_cast<size_t>(start + i), true);
@@ -502,6 +498,16 @@ void KoSvgTextShape::Private::relayout()
 
                     const KoSvgText::FontMetrics currentMetrics = properties.applyLineHeight(result[j].metrics);
 
+                    if (text.at(j) == QChar::Tabulation) {
+                        qreal tabSize = 0;
+                        if (tabInfo.isNumber) {
+                            tabSize = (result[j].metrics.spaceAdvance + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
+                            } else {
+                            tabSize = tabInfo.length.value * ftFontUnit;
+                        }
+                        result[j].tabSize = tabSize;
+                    }
+
                     result[j].fontHalfLeading = currentMetrics.lineGap / 2;
                     result[j].fontStyle = synthesizeStyle? style.style: QFont::StyleNormal;
                     result[j].fontWeight = synthesizeWeight? properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(): 400;
@@ -557,7 +563,6 @@ void KoSvgTextShape::Private::relayout()
         }
 
         if (!this->loadGlyph(ftTF,
-                             tabSizeInfo,
                              faceLoadFlags,
                              isHorizontal,
                              codepoint,

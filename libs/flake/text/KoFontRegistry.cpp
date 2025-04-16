@@ -785,24 +785,33 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     // Fontsize and advances.
     metrics.fontSize = isHorizontal? face.data()->size->metrics.y_ppem*64.0: face.data()->size->metrics.x_ppem*64.0;
 
-    if(uint charIndex = FT_Get_Char_Index(face.data(), ' ') > 0) {
-        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
-        metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+    if(uint charIndex = FT_Get_Char_Index(face.data(), 0x20) > 0) {
+        if (FT_Load_Glyph(face.data(), charIndex, faceLoadFlags) == FT_Err_Ok) {
+            metrics.spaceAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        } else {
+            metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
+        }
     } else {
         metrics.spaceAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
     if(uint charIndex = FT_Get_Char_Index(face.data(), '0') > 0) {
-        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
-        metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        if(FT_Load_Glyph(face.data(), charIndex, faceLoadFlags) == FT_Err_Ok) {
+            metrics.zeroAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        } else {
+            metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
+        }
     } else {
         metrics.zeroAdvance = isHorizontal? metrics.fontSize/2: metrics.fontSize;
     }
 
     bool isIdeographic = false;
     if(uint charIndex = FT_Get_Char_Index(face.data(), 0x6C34) > 0) {
-        FT_Load_Glyph(face.data(), charIndex, faceLoadFlags);
-        metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        if (FT_Load_Glyph(face.data(), charIndex, faceLoadFlags) == FT_Err_Ok) {
+            metrics.ideographicAdvance = isHorizontal? face.data()->glyph->advance.x: face.data()->glyph->advance.y;
+        } else {
+            metrics.ideographicAdvance = metrics.fontSize;
+        }
         isIdeographic = true;
     } else {
         metrics.ideographicAdvance = metrics.fontSize;

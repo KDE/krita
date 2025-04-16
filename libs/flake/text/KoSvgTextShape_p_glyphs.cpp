@@ -474,7 +474,6 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
-                                        const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
                                         const FT_Int32 faceLoadFlags,
                                         const bool isHorizontal,
                                         const char32_t firstCodepoint,
@@ -485,14 +484,6 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
-
-    const int cluster = static_cast<int>(currentGlyph.cluster);
-
-    QPointF spaceAdvance;
-    if (tabSizeInfo.contains(cluster)) {
-        FT_Load_Glyph(currentGlyph.ftface, FT_Get_Char_Index(currentGlyph.ftface, ' '), faceLoadFlags);
-        spaceAdvance = QPointF(currentGlyph.ftface->glyph->advance.x, currentGlyph.ftface->glyph->advance.y);
-    }
 
     /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
     /// adjusting the bounding box of bitmap glyphs.
@@ -554,15 +545,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
 
     {
         QPointF advance(currentGlyph.x_advance, currentGlyph.y_advance);
-        if (tabSizeInfo.contains(cluster)) {
-            KoSvgText::TabSizeInfo tabSize = tabSizeInfo.value(cluster);
-            qreal newAdvance = tabSize.length.value * ftFontUnit;
-            if (tabSize.isNumber) {
-                QPointF extraSpacing = isHorizontal ? QPointF(tabSize.extraSpacing * ftFontUnit, 0) : QPointF(0, tabSize.extraSpacing * ftFontUnit);
-                advance = (spaceAdvance + extraSpacing) * tabSize.value;
-            } else {
-                advance = isHorizontal ? QPointF(newAdvance, advance.y()) : QPointF(advance.x(), newAdvance);
-            }
+        if (charResult.tabSize) {
             charResult.glyph.emplace<Glyph::Outline>();
         }
 
@@ -621,6 +604,9 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
         charResult.scaledAscent = isHorizontal? scaledBBox.top(): scaledBBox.right();
         charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
+        if (charResult.tabSize) {
+            charResult.tabSize = ftTF.map(QPointF(*charResult.tabSize, *charResult.tabSize)).x();
+        }
 
         if(!qFuzzyCompare(bitmapScale, 1.0)) {
             charResult.metrics.scaleBaselines(bitmapScale);

@@ -23,6 +23,7 @@
 #include <QPointF>
 #include <QRectF>
 #include <QVector>
+#include <QtMath>
 
 #include <variant>
 
@@ -123,6 +124,20 @@ struct CharacterResult {
     qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
     qreal scaledAscent{}; ///< Ascender, in pt
     qreal scaledDescent{}; ///< Descender, in pt
+
+    std::optional<qreal> tabSize; ///< If present, this is a tab and it should align to multiples of this tabSize value.
+
+    void calculateAndApplyTabsize(QPointF currentPos, bool isHorizontal) {
+        if (!tabSize) return;
+        if (*tabSize == qInf() || qIsNaN(*tabSize)) return;
+
+        if (*tabSize > 0) {
+            qreal remainder = *tabSize - (isHorizontal? fmod(currentPos.x(), *tabSize): fmod(currentPos.y(), *tabSize));
+            advance = isHorizontal? QPointF(remainder, advance.y()): QPointF(advance.x(), remainder);
+        } else {
+            advance = isHorizontal? QPointF(0, advance.y()): QPointF(advance.x(), 0);
+        }
+    }
 
     /**
      * @brief layoutBox
@@ -412,7 +427,6 @@ public:
     void relayout();
 
     bool loadGlyph(const QTransform &ftTF,
-                   const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,
                    FT_Int32 faceLoadFlags,
                    bool isHorizontal,
                    char32_t firstCodepoint,

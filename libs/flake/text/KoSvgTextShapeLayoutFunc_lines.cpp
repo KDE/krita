@@ -84,6 +84,7 @@ void addWordToLine(QVector<CharacterResult> &result,
         calculateLineHeight(cr, currentLine.actualLineTop, currentLine.actualLineBottom, isHorizontal, !cr.anchored_chunk);
 
         cr.cssPosition = currentPos;
+        cr.calculateAndApplyTabsize(currentPos, isHorizontal);
         currentPos += cr.advance;
         lineAdvance = currentPos;
 
@@ -478,6 +479,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
     QListIterator<int> it(logicalToVisual.keys());
     while (it.hasNext()) {
         int index = it.next();
+        result[index].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal);
         CharacterResult charResult = result.at(index);
         if (!charResult.addressable) {
             continue;
@@ -542,6 +544,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                     QVector<int> partialWord;
                     currentLine.firstLine = firstLine;
                     Q_FOREACH (const int i, wordIndices) {
+                        result[i].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal);
                         wordAdvance += result.at(i).advance;
                         wordLength = isHorizontal ? wordAdvance.x() : wordAdvance.y();
                         if (wordLength <= inlineSize.customValue) {
@@ -563,6 +566,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
                             if (!inlineSize.isAuto) {
                                 currentPos += currentLine.textIndent;
                             }
+                            result[i].calculateAndApplyTabsize(wordAdvance + currentPos, isHorizontal);
                             wordAdvance = result.at(i).advance;
                             partialWord.append(i);
                         }

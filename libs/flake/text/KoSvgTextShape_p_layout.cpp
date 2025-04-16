@@ -384,6 +384,8 @@ void KoSvgTextShape::Private::relayout()
                     if (KoCssTextUtils::hangLastSpace(text.at(start + i), collapse, wrap, forceHang, isFollowedByForcedLineBreak())) {
                         cr.lineEnd = forceHang? LineEdgeBehaviour::ForceHang: LineEdgeBehaviour::ConditionallyHang;
 
+                    } else if (collapse == KoSvgText::BreakSpaces && wrap != KoSvgText::NoWrap && KoCssTextUtils::IsCssWordSeparator(QString(text.at(start + i)))) {
+                        cr.breakType = BreakType::SoftBreak;
                     }
                 }
 

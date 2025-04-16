@@ -532,10 +532,11 @@ bool whiteSpaceValueToLongHands(const QString &value, TextSpaceCollapse &collaps
         collapseMethod = Preserve;
         wrapMethod = Wrap;
         trimMethod = TrimNone;
-    } else if (value == "pre-line" || value == "break-spaces") {
-        if (value == "break-spaces") {
-            result = false;
-        }
+    } else if (value == "pre-wrap") {
+        collapseMethod = BreakSpaces;
+        wrapMethod = Wrap;
+        trimMethod = TrimNone;
+    } else if (value == "pre-line") {
         collapseMethod = PreserveBreaks;
         wrapMethod = Wrap;
         trimMethod = TrimNone;
@@ -589,6 +590,8 @@ QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod, TextWrap wrapMeth
             return "pre-wrap";
         } else if (collapseMethod == PreserveBreaks) {
             return "pre-line";
+        } else if (collapseMethod == BreakSpaces) {
+            return "break-spaces";
         } else {
             return "normal";
         }

@@ -31,6 +31,8 @@ TextPropertyBase {
                 whiteSpace = wsPreWrap;
             } else if (properties.textCollapse === KoSvgText.PreserveBreaks) {
                 whiteSpace = wsPreLine;
+            } else if (properties.textCollapse === KoSvgText.BreakSpaces) {
+                whiteSpace = wsBreakSpace;
             } else {
                 whiteSpace = wsNormal;
             }
@@ -61,7 +63,7 @@ TextPropertyBase {
                 properties.textCollapse = KoSvgText.Preserve;
                 properties.textWrap = KoSvgText.Wrap;
             } else if (whiteSpace === wsBreakSpace) {
-                properties.textCollapse = KoSvgText.PreserveBreaks;
+                properties.textCollapse = KoSvgText.BreakSpaces;
                 properties.textWrap = KoSvgText.Wrap;
             } else if (whiteSpace === wsPreLine) {
                 properties.textCollapse = KoSvgText.PreserveBreaks;
@@ -94,6 +96,7 @@ TextPropertyBase {
                 {text:i18nc("@label:inlistbox", "Pre"), value: wsPre},
                 {text:i18nc("@label:inlistbox", "No Wrap"), value: wsNoWrap},
                 {text:i18nc("@label:inlistbox", "Pre Wrap"), value: wsPreWrap},
+                {text:i18nc("@label:inlistbox", "Break Spaces"), value: wsBreakSpace},
                 {text:i18nc("@label:inlistbox", "Pre Line"), value: wsPreLine}
             ]
             Layout.fillWidth: true;

@@ -233,6 +233,7 @@ QVector<bool> KoCssTextUtils::collapseSpaces(QString *text, QMap<int, KoSvgText:
                     collapse = true;
                     break;
                 case KoSvgText::Preserve:
+                case KoSvgText::BreakSpaces:
                 case KoSvgText::PreserveSpaces:
                     collapse = false;
                     break;
@@ -280,6 +281,7 @@ bool KoCssTextUtils::collapseLastSpace(const QChar c, KoSvgText::TextSpaceCollap
             collapse = true;
             break;
         case KoSvgText::Preserve:
+        case KoSvgText::BreakSpaces:
             collapse = false;
             break;
         case KoSvgText::PreserveBreaks:

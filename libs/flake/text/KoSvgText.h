@@ -101,8 +101,9 @@ enum TextSpaceCollapse {
     Preserve, ///< Do not collapse any space
     PreserveBreaks, ///< Preserve segment breaks like /n, but otherwise collapse
                     ///< all whitespace.
-    PreserveSpaces ///< Preserve spaces, convert tabs and linebreaks to spaces,
+    PreserveSpaces, ///< Preserve spaces, convert tabs and linebreaks to spaces,
                    ///< required for 'xml:space="preserve"' emulation.
+    BreakSpaces ///< Same as preserve, except each white space and wordseperate is breakable.
 };
 Q_ENUM_NS(TextSpaceCollapse)
 

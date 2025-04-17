@@ -180,7 +180,6 @@ void KisPlaybackEngineQT::seek(int frameIndex, SeekOptionFlags flags)
         return;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas()->animationState());
-
     KisFrameDisplayProxy* displayProxy = activeCanvas()->animationState()->displayProxy();
     KIS_SAFE_ASSERT_RECOVER_RETURN(displayProxy);
 

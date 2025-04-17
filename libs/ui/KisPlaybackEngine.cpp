@@ -52,11 +52,7 @@ void KisPlaybackEngine::play()
 void KisPlaybackEngine::pause()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
-    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
-
-    animationState->setPlaybackState(PAUSED);
-
-    seek(animationState->displayProxy()->activeFrame(), SEEK_FINALIZE);
+    activeCanvas()->animationState()->setPlaybackState(PAUSED);
 }
 
 void KisPlaybackEngine::playPause()
@@ -65,7 +61,8 @@ void KisPlaybackEngine::playPause()
     KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
     if (animationState->playbackState() == PLAYING) {
-        pause();  
+        pause();
+        seek(animationState->displayProxy()->activeFrame(), SEEK_FINALIZE);
     } else {
         play();
     }

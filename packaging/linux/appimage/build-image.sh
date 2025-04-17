@@ -38,6 +38,11 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+# add our own linuxdeployqt to our PATH environemnt if available
+if [ -d $DEPS_INSTALL_PREFIX/appimage-tools/bin ]; then
+  export PATH=$DEPS_INSTALL_PREFIX/appimage-tools/bin/:$PATH
+fi
+
 source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
 
 if [[ $ARCH == "arm64" ]]; then
@@ -328,6 +333,12 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     rm -f $TEMPFILE
 fi
 
+EXTRA_RUNTIME_ARGUMENT=
+
+if [ -f $DEPS_INSTALL_PREFIX/appimage-tools/share/runtime-x86_64 ]; then
+  EXTRA_RUNTIME_ARGUMENT=-runtime-file=$DEPS_INSTALL_PREFIX/appimage-tools/share/runtime-x86_64
+fi
+
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
@@ -338,6 +349,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -bundle-non-qt-libs \
   -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so  \
   -updateinformation="${ZSYNC_URL}" \
+  ${EXTRA_RUNTIME_ARGUMENT} \
   -appimage
 
 # Generate a new name for the Appimage file and rename it accordingly

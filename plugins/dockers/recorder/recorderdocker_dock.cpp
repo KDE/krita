@@ -27,10 +27,10 @@
 #include <KisPart.h>
 #include <KisKineticScroller.h>
 #include "KisMainWindow.h"
+#include "KoFileDialog.h"
 
 #include <QFileInfo>
 #include <QPointer>
-#include <QFileDialog>
 #include <QMessageBox>
 #include <QTimer>
 #include <QRegularExpression>
@@ -580,12 +580,10 @@ void RecorderDockerDock::onManageRecordingsButtonClicked()
 
 void RecorderDockerDock::onSelectRecordFolderButtonClicked()
 {
-    QFileDialog dialog(this);
-    dialog.setOption(QFileDialog::ShowDirsOnly, true);
-    const QString &directory = dialog.getExistingDirectory(this,
-                               i18n("Select a Directory for Recordings"),
-                               d->ui->editDirectory->text(),
-                               QFileDialog::ShowDirsOnly);
+    KoFileDialog dialog(this, KoFileDialog::OpenDirectory, "SelectRecordingsDirectory");
+    dialog.setCaption(i18n("Select a Directory for Recordings"));
+    dialog.setDefaultDir(d->ui->editDirectory->text());
+    QString directory = dialog.filename();
     if (!directory.isEmpty()) {
         d->ui->editDirectory->setText(directory);
         RecorderConfig(false).setSnapshotDirectory(directory);

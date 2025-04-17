@@ -15,12 +15,13 @@
 #include <klocalizedstring.h>
 #include <kis_icon_utils.h>
 #include "kis_config.h"
+#include "KoFileDialog.h"
+#include "KisMimeDatabase.h"
 
 #include <QAction>
 #include <QDesktopServices>
 #include <QDir>
 #include <QDirIterator>
-#include <QFileDialog>
 #include <QUrl>
 #include <QDebug>
 #include <QCloseEvent>
@@ -544,14 +545,10 @@ void RecorderExport::onButtonLockFpsToggled(bool checked)
 
 void RecorderExport::onButtonBrowseFfmpegClicked()
 {
-    QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::ExistingFile);
-    dialog.setOption(QFileDialog::DontUseNativeDialog, true);
-    dialog.setFilter(QDir::Executable | QDir::Files);
-
-    const QString &file = dialog.getOpenFileName(this,
-                          i18n("Select FFmpeg Executable File"),
-                          settings->ffmpegPath);
+    KoFileDialog dialog(this, KoFileDialog::OpenFile, "SelectFFmpeg");
+    dialog.setCaption(i18n("Select FFmpeg Executable File"));
+    dialog.setDefaultDir(settings->ffmpegPath);
+    QString file = dialog.filename();
     if (!file.isEmpty()) {
         settings->ffmpegPath = file;
         RecorderExportConfig(false).setFfmpegPath(file);
@@ -593,12 +590,12 @@ void RecorderExport::onEditVideoPathChanged(const QString &videoFilePath)
 
 void RecorderExport::onButtonBrowseExportClicked()
 {
-    QFileDialog dialog(this);
-
+    KoFileDialog dialog(this, KoFileDialog::SaveFile, "ExportTimelapse");
+    dialog.setCaption(i18n("Export Timelapse Video As"));
+    dialog.setDefaultDir(settings->videoDirectory);
     const QString &extension = settings->profiles[settings->profileIndex].extension;
-    const QString &videoFileName = dialog.getSaveFileName(this,
-                                   i18n("Export Timelapse Video As"),
-                                   settings->videoDirectory, "*." % extension);
+    dialog.setMimeTypeFilters(QStringList(KisMimeDatabase::mimeTypeForSuffix(extension)));
+    QString videoFileName = dialog.filename();
     if (!videoFileName.isEmpty()) {
         QFileInfo fileInfo(videoFileName);
         settings->videoDirectory = fileInfo.absolutePath();

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 01:50+0000\n"
+"POT-Creation-Date: 2025-04-18 01:55+0000\n"
 "PO-Revision-Date: 2025-02-26 18:25+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -42029,30 +42029,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Zooma tidslinje. Håll nere och dra åt vänster eller höger."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Infoga eller ta bort hållbilder"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Ange antal bildrutor"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Redigera bildrutor:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Nyckelbilder"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

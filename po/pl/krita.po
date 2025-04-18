@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 01:50+0000\n"
+"POT-Creation-Date: 2025-04-18 01:55+0000\n"
 "PO-Revision-Date: 2025-02-15 11:29+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -42352,30 +42352,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Powiększanie osi czasu. Przytrzymaj i przeciągnij w lewo lub prawo."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Wstaw lub usuń klatki zatrzymania"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Podaj liczbę klatek"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edytuj klatki:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Klatki kluczowe"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

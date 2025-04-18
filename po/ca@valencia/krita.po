@@ -8,13 +8,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 01:50+0000\n"
-"PO-Revision-Date: 2025-04-10 08:50+0200\n"
+"POT-Creation-Date: 2025-04-18 01:55+0000\n"
+"PO-Revision-Date: 2025-04-16 20:23+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -32821,7 +32821,7 @@ msgctxt ""
 "number of buttons in that list."
 msgid "%1 Button"
 msgid_plural "%1 Buttons"
-msgstr[0] "Botó %1"
+msgstr[0] "Botó «%1»"
 msgstr[1] "%1 botons"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:375
@@ -42336,30 +42336,30 @@ msgstr ""
 "Zoom de la línia de temps. Mantindre premut i arrossegar cap a l'esquerra o "
 "cap a la dreta."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Inserix o elimina els fotogrames congelats"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Introduïu el nombre de fotogrames"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Edita els fotogrames:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Fotogrames clau"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -52642,18 +52642,18 @@ msgstr ""
 "codificador)» és habitual. Açò significa que el codificador selecciona "
 "automàticament la configuració de compromís de qualitat/velocitat. Esta "
 "opció és recomana a la majoria dels usuaris.</p><p><span style=\" font-"
-"size:14pt; text-decoration: underline;\">Paràmetres del codificador:</"
-"span><p><p>paràmetres generals que s'apliquen a tot el procés de codificació "
-"JPEG XL, independentment del mètode de compressió que s'utilitze.</"
-"p><p><span style=\" font-size:14pt; text-decoration: underline;\">Paràmetres "
-"de la VarDCT:</span></p><p>Transformada cosinus discreta variable "
-"(optimitzada per a contingut fotogràfic)</p><p>Esta es troba en la mateixa "
-"família de tècniques de compressió que utilitza JPEG original, i per tant "
-"millor per a imatges «naturals», com ara fotografies i imatges amb molts "
-"degradats i textures./p><p><span style=\" font-size:14pt; text-decoration: "
-"underline;\">Paràmetres modulars:</span></p><p>Configuració per al mode "
-"modular mode, optimitzat per a contingut gràfic, il·lustracions i compressió "
-"sense pèrdua.</p><p><br/></p><p><br/></p></body></html>"
+"size:14pt; text-decoration: underline;\">Paràmetres del codificador:</span></"
+"p><p>paràmetres generals que s'apliquen a tot el procés de codificació JPEG "
+"XL, independentment del mètode de compressió que s'utilitze.</p><p><span "
+"style=\" font-size:14pt; text-decoration: underline;\">Paràmetres de la "
+"VarDCT:</span></p><p>Transformada cosinus discreta variable (optimitzada per "
+"a contingut fotogràfic)</p><p>Esta es troba en la mateixa família de "
+"tècniques de compressió que utilitza JPEG original, i per tant millor per a "
+"imatges «naturals», com ara fotografies i imatges amb molts degradats i "
+"textures.</p><p><span style=\" font-size:14pt; text-decoration: underline;"
+"\">Paràmetres modulars:</span></p><p>Configuració per al mode modular mode, "
+"optimitzat per a contingut gràfic, il·lustracions i compressió sense pèrdua."
+"</p><p><br/></p><p><br/></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -66429,7 +66429,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Cannot write to palette file %1. Maybe it is read-only."
-#~ msgstr ""
-#~ "No es pot escriure en el fitxer de paleta %1. Potser només és de lectura."

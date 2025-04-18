@@ -509,6 +509,14 @@ find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
         Sql
 )
 
+# Krita uses QtGuiPrivate headers
+if (QT_MAJOR_VERSION STREQUAL "5")
+    find_package(Qt${QT_MAJOR_VERSION}Gui ${MIN_QT_VERSION}
+        REQUIRED COMPONENTS
+        Private
+    )
+endif()
+
 if (ANDROID)
     if (QT_MAJOR_VERSION STREQUAL "5")
         find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
@@ -531,6 +539,11 @@ if (QT_MAJOR_VERSION STREQUAL "6")
         REQUIRED COMPONENTS
         ColorScheme
     )
+
+    # Qt 6.10 has split this into it's own CMake module, it's no longer included with Gui
+    if (Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
+        find_package(Qt6GuiPrivate ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+    endif()
 endif()
 
 #

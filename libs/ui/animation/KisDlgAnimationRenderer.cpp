@@ -155,12 +155,12 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     // Check known ffmpeg locations..
     QString likelyFFmpegPath = [&]() {
         // Check last used
-        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
+        if (!lastUsedOptions.ffmpegPath.isEmpty() && QFileInfo(lastUsedOptions.ffmpegPath).isExecutable()) {
             return lastUsedOptions.ffmpegPath;
         }
 
         // Check krita config
-        if (!cfgFFmpegPath.isEmpty()) {
+        if (!cfgFFmpegPath.isEmpty() && QFileInfo(cfgFFmpegPath).isExecutable()) {
             return cfgFFmpegPath;
         }
 

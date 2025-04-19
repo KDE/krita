@@ -9,7 +9,6 @@
 # Onur Soysal <e116511@ceng.metu.edu.tr>, 2000.
 # Anıl Özbek <ozbekanil@gmail.com>, 2012-2013.
 # Özer Kavak <ozerkavak@gmail.com>, 2008.
-# Emir SARI <emir_sari@icloud.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
@@ -52827,6 +52826,8 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Görsel kaliteyi korurken karmaşık dokulu alanların "
+"sıkıştırmasını iyileştiren gelişmiş doku çözümleme süzgeci.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
@@ -52843,6 +52844,9 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Keskin kenarlar ve sınırlı renklerde en iyi başarıyı "
+"gösteren modüler sıkıştırma sistemini kullanır. Kayıplı veya kayıpsız "
+"olabilir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
@@ -52919,6 +52923,9 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Parlaklık bilgisinden renkleri tahmin ederek dosya "
+"boyutunu azaltır. Parlaklığın ve rengin birbiriyle ilişkili olduğu doğal "
+"görsellerde pek etkilidir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:656
@@ -52942,6 +52949,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>İnce ayrıntılar için gelişmiş renk matematiğini "
+"kullanarak ilerlemeli yüklemeyi etkinleştirir. Görseller, gittikçe daha "
+"keskin bir duruma gelen kaba önizlemeler olarak yüklenir. Daha çok zaman "
+"alır; ancak daha iyi sonuçlar verir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -52969,12 +52980,15 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>İnce ayrıntıları sıkıştırmak için nicemlemeyi "
+"kullanarak ilerlemeli yüklemeyi etkinleştirir. Daha küçük dosya boyutuna "
+"neden olur; ancak daha çok kodlama zamanı gerektirir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
 #, kde-format
 msgid "Quantization"
-msgstr "Niceleme"
+msgstr "Nicemleme"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:704
@@ -52984,6 +52998,9 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>İlerlemeli yükleme için daha iyi bir kaba önizleme "
+"oluşturur. Dosya boyutuna ek birkaç bayt ekler; ancak başlangıçtaki ilk "
+"düşük kaliteli önizlemeyi iyileştirir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53013,6 +53030,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Veri akışı sürdükçe görsellerin düşükten yüksek "
+"kaliteye yüklenmesine olanak tanıyan “Sıkma” dönüşümünü etkinleştirir.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
@@ -53034,6 +53054,10 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Renk değerlerinin bütün görsel üzerinde nasıl "
+"eşlemlendiğini denetler. “Tümü”, tüm erimi kullanır; daha küçük yüzdeler, "
+"sınırlı renk erimine iye görseller üzerinde daha verimli sıkıştırmaya neden "
+"olur.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53063,6 +53087,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Yerel 256 × 256 piksel karoları bünyesindeki renk "
+"eşlemlemesini denetler. Sınırlı renk çeşitliliğine iye alanlara sahip "
+"görseller için daha verimlidir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:803
@@ -53093,6 +53120,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Görsel bu sayıdaki benzersiz renklere veya daha azına "
+"sahipse palet tabanlı sıkıştırmayı etkinleştirir. −1, bunu kodlayıcının "
+"kendiliğinden seçmesine olanak tanır.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:858
@@ -53120,6 +53150,10 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Tahmin edilen ve aslında olan renkler arasındaki "
+"göreceli renk kodlamasını etkinleştirir. Bant kalıntıları olmayan neredeyse "
+"kayıpsız pürüzsüz gradyanların sıkıştırılması için mükemmeldir.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
@@ -53174,6 +53208,9 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Çevresindeki piksellere bakarak piksel değeri "
+"tahminini yapan algoritmayı seçer. Değişik görsel türleri için farklı "
+"tahminciler daha iyi sonuç verir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
@@ -53191,6 +53228,10 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Her bir piksel için en iyi tahminciyi seçen genel "
+"uyarlanır karar ağacını yapmak için kaç tane pikselin çözümleneceğini "
+"denetler. Daha yüksek değerler sıkıştırmayı iyileştirir; ancak daha çok "
+"zaman alırlar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:948

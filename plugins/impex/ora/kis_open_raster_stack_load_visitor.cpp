@@ -198,9 +198,9 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                     opacity = KisDomUtils::toDouble(subelem.attribute("opacity", "1.0"));
                 }
                 KisGroupLayerSP layer = new KisGroupLayer(d->image, "", opacity * 255);
-                bool passThrough = true;
-                if (subelem.attribute("isolation")=="isolate") {
-                    passThrough = false;
+                bool passThrough = false;
+                if (subelem.attribute("isolation")=="auto") {
+                    passThrough = true;
                 }
                 layer->setPassThroughMode(passThrough);
                 d->image->addNode(layer, groupLayer.data(), 0);

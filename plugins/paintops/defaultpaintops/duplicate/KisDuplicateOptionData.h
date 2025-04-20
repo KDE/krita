@@ -7,7 +7,6 @@
 #ifndef __KISDUPLICATEOPTIONDATA_H_
 #define __KISDUPLICATEOPTIONDATA_H_
 
-#include <QPointF>
 
 #include <boost/operators.hpp>
 

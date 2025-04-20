@@ -7,8 +7,6 @@
 
 #include "kis_indirect_painting_support.h"
 
-#include <QMutex>
-#include <QMutexLocker>
 #include <QReadWriteLock>
 
 #include <KoCompositeOp.h>

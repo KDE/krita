@@ -5,7 +5,6 @@
  */
 
 #include "widgets/kis_multi_bool_filter_widget.h"
-#include <QLabel>
 #include <QLayout>
 #include <QCheckBox>
 #include <QVBoxLayout>

@@ -18,7 +18,6 @@ Parser::~Parser()
 
 #include <QDateTime>
 #include <QRegExp>
-#include <QStringList>
 #include <QVariant>
 
 

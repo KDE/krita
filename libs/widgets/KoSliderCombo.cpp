@@ -6,7 +6,6 @@
 #include "KoSliderCombo.h"
 #include "KoSliderCombo_p.h"
 
-#include <QTimer>
 #include <QApplication>
 #include <QSize>
 #include <QSlider>
@@ -16,8 +15,6 @@
 #include <QLineEdit>
 #include <QValidator>
 #include <QHBoxLayout>
-#include <QFrame>
-#include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>
 #include <QScreen>

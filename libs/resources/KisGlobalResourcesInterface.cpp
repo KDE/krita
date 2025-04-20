@@ -12,6 +12,7 @@
 #include <kis_debug.h>
 
 #include <QBasicMutex>
+#include <QMutexLocker>
 
 
 namespace {

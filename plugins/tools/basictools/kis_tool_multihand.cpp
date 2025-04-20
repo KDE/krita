@@ -9,11 +9,9 @@
 #include <QTransform>
 
 #include <QPushButton>
-#include <QComboBox>
 #include <QFormLayout>
 #include <QStackedWidget>
 #include <kis_slider_spin_box.h>
-#include <QLabel>
 #include "kis_aspect_ratio_locker.h"
 #include "kis_canvas2.h"
 #include "kis_cursor.h"

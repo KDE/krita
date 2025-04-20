@@ -7,12 +7,9 @@
 #include "kis_brush_selection_widget.h"
 #include <QLayout>
 #include <QTabWidget>
-#include <QFrame>
-#include <QImage>
 #include <QPainter>
 #include <QBrush>
 #include <QColor>
-#include <QToolButton>
 #include <QButtonGroup>
 #include <QStackedWidget>
 

@@ -7,7 +7,6 @@
 #include "kis_equalizer_column.h"
 
 #include <QVBoxLayout>
-#include <QFontMetrics>
 #include <QApplication>
 
 #include "kis_debug.h"

@@ -9,7 +9,6 @@
 
 #include <QFontDatabase>
 #include <QRectF>
-#include <QTimer>
 
 #include "KisHandlePainterHelper.h"
 #include "KoCanvasBase.h"

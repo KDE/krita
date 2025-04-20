@@ -12,7 +12,6 @@
 #include <KoColor.h>
 
 #include <QBuffer>
-#include <QByteArray>
 
 #define PREVIEW_WIDTH 2048
 #define PREVIEW_HEIGHT 1

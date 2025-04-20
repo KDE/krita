@@ -8,7 +8,6 @@
 
 #include <QApplication>
 #include <QDir>
-#include <QFileInfo>
 #include <QThread>
 #include <QTimer>
 #include <QDebug>

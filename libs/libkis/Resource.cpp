@@ -5,7 +5,6 @@
  */
 #include "Resource.h"
 #include <KoResource.h>
-#include <QByteArray>
 #include <QBuffer>
 
 #include <KoPattern.h>

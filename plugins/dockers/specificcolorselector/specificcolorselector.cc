@@ -7,7 +7,6 @@
 #include "specificcolorselector.h"
 #include <stdlib.h>
 
-#include <QTimer>
 
 
 #include <kis_debug.h>

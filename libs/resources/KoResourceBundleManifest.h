@@ -8,7 +8,6 @@
 #define KORESOURCEBUNDLEMANIFEST_H
 
 #include <QString>
-#include <QPair>
 #include <QMap>
 #include <QMultiMap>
 #include <QDomElement>

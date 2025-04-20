@@ -9,8 +9,6 @@
 
 #include "kritapsd_export.h"
 
-#include <QBitArray>
-#include <QByteArray>
 #include <QDomDocument>
 #include <QIODevice>
 #include <QString>

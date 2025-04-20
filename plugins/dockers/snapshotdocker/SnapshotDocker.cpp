@@ -7,7 +7,6 @@
 #include "SnapshotDocker.h"
 
 #include <QWidget>
-#include <QListView>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>

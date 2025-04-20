@@ -11,7 +11,6 @@
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
 
-#include <QFileInfo>
 
 #include <kis_annotation.h>
 #include <kis_types.h>

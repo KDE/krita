@@ -26,7 +26,6 @@
 #include <KisResourceUserOperations.h>
 
 #include <QWidget>
-#include <QMenu>
 #include <QButtonGroup>
 #include <QRegularExpressionValidator>
 #include <QRegularExpression>

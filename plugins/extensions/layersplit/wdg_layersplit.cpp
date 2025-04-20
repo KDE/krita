@@ -6,9 +6,6 @@
 #include "wdg_layersplit.h"
 
 #include <QPainter>
-#include <QStringList>
-#include <QImage>
-#include <QListWidgetItem>
 #include <kis_debug.h>
 
 #include "kis_config.h"

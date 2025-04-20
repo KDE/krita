@@ -8,7 +8,6 @@
 #define _KIS_ANIMATION_CURVES_MODEL_H
 
 #include <QScopedPointer>
-#include <QIcon>
 #include <QAbstractItemModel>
 
 #include "KisTimeBasedItemModel.h"

@@ -9,7 +9,6 @@
 #include <QApplication>
 #include <QThread>
 #include <QDomDocument>
-#include <QFileInfo>
 #include "kis_gbr_brush.h"
 #include "kis_png_brush.h"
 #include "kis_abr_brush.h"

@@ -9,13 +9,8 @@
 #include <KoResourceServerProvider.h>
 #include <resources/KoPattern.h>
 
-#include <QLabel>
-#include <QImage>
-#include <QPushButton>
-#include <QComboBox>
 #include <QPixmap>
 #include <QShowEvent>
-#include <QSharedPointer>
 #include <QFileInfo>
 #include <KoFileDialog.h>
 #include <QMessageBox>

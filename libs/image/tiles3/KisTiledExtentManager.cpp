@@ -7,7 +7,6 @@
 
 #include "KisTiledExtentManager.h"
 
-#include <QMutex>
 #include <QVector>
 #include "kis_tile_data_interface.h"
 #include "kis_assert.h"

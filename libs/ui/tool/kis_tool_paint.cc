@@ -12,7 +12,6 @@
 #include <QWidget>
 #include <QRect>
 #include <QLayout>
-#include <QLabel>
 #include <QPushButton>
 #include <QWhatsThis>
 #include <QCheckBox>

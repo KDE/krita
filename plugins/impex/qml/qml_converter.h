@@ -11,7 +11,6 @@
 
 #include <QObject>
 
-#include <QFileInfo>
 
 #include "kis_types.h"
 #include <KisImportExportErrorCode.h>

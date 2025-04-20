@@ -8,7 +8,6 @@
 
 #include <QDomDocument>
 #include <QVector>
-#include <QPointF>
 
 #include <KoColorSpaceConstants.h>
 

@@ -6,7 +6,6 @@
 
 
 #include <QString>
-#include <QHash>
 #include <QGlobalStatic>
 #include <QFile>
 #include <QFileInfo>

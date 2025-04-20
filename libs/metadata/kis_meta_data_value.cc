@@ -6,11 +6,9 @@
 
 #include "kis_meta_data_value.h"
 #include <QPoint>
-#include <QPointF>
 #include <QRegExp>
 #include <QTime>
 #include <QVariant>
-#include <QStringList>
 
 #include <klocalizedstring.h>
 

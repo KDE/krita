@@ -7,7 +7,6 @@
 #define KISRESOURCETYPEMODEL_H
 
 #include <QAbstractTableModel>
-#include <QStyledItemDelegate>
 #include <QObject>
 
 #include "kritaresources_export.h"

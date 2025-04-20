@@ -6,7 +6,6 @@
 
 #include "histogramdocker_dock.h"
 
-#include <QLabel>
 #include <QVBoxLayout>
 #include <klocalizedstring.h>
 

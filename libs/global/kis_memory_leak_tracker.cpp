@@ -7,6 +7,7 @@
 #include "kis_memory_leak_tracker.h"
 
 #include <QMutex>
+#include <QMutexLocker>
 #include <QGlobalStatic>
 
 #include "kis_debug.h"

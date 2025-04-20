@@ -8,7 +8,6 @@
 #define KISDLGAdjustMENTLAYER_H
 
 #include <KoDialog.h>
-#include <QLabel>
 
 class KisFilterConfiguration;
 class KisNodeFilterInterface;

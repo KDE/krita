@@ -7,8 +7,6 @@
 #include "KisRecoverNamedAutosaveDialog.h"
 #include "ui_KisRecoverNamedAutosaveDialog.h"
 
-#include <QTimer>
-#include <QElapsedTimer>
 #include <QThread>
 
 #include "kis_debug.h"

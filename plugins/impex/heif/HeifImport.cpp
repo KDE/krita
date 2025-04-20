@@ -11,7 +11,6 @@
 #include "HeifError.h"
 
 #include <QBuffer>
-#include <QFileInfo>
 
 #include <kpluginfactory.h>
 #include <libheif/heif.h>

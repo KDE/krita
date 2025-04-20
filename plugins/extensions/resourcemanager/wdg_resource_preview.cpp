@@ -15,7 +15,6 @@
 #include <QPainter>
 #include <QLabel>
 #include <QCompleter>
-#include <QToolButton>
 #include <QLineEdit>
 
 #include <kis_action.h>

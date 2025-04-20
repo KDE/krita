@@ -7,7 +7,6 @@
 #ifndef __KIS_PROJECTION_UPDATES_FILTER_H
 #define __KIS_PROJECTION_UPDATES_FILTER_H
 
-#include <QSharedPointer>
 #include "kritaimage_export.h"
 #include "kis_image_interfaces.h"
 

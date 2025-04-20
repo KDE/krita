@@ -8,7 +8,6 @@
 #include "digitalmixer_dock.h"
 
 #include <QGridLayout>
-#include <QToolButton>
 #include <KisSignalMapper.h>
 
 #include <klocalizedstring.h>

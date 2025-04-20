@@ -18,7 +18,6 @@
 #include <QLineEdit>
 #include <QValidator>
 #include <QHBoxLayout>
-#include <QFrame>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>

@@ -8,7 +8,6 @@
 
 #include <QList>
 #include <QFont>
-#include <QMenu>
 #include <QAction>
 #include <QShowEvent>
 #include <QPointer>

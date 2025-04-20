@@ -5,7 +5,6 @@
  */
 #include "kis_canvas_resource_provider.h"
 
-#include <QImage>
 #include <QPainter>
 
 #include <KoCanvasBase.h>

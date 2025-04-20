@@ -30,7 +30,6 @@ extern "C" {
 #include <QApplication>
 
 #include <klocalizedstring.h>
-#include <QFileInfo>
 
 #include <KoDocumentInfo.h>
 #include <KoColorSpace.h>

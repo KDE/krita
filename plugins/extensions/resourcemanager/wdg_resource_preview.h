@@ -7,7 +7,6 @@
 #ifndef WDG_RESOURCE_PREVIEW_H
 #define WDG_RESOURCE_PREVIEW_H
 
-#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QItemSelection>
 #include <QWidget>

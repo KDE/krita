@@ -8,7 +8,6 @@
 #include "ui_KisOnionSkinsDocker.h"
 
 #include <QSlider>
-#include <QFrame>
 #include <QGridLayout>
 #include <QEvent>
 

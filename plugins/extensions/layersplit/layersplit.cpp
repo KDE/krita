@@ -8,7 +8,6 @@
 
 #include <QMap>
 #include <QPointer>
-#include <QHash>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>

@@ -8,11 +8,9 @@
 #define KOSVGTEXT_H
 
 #include <QFont>
-#include <QList>
 #include <QPainterPath>
 #include <QTextCharFormat>
 #include <QVariant>
-#include <QVector>
 #include <QLocale>
 #include <array>
 #include <boost/operators.hpp>

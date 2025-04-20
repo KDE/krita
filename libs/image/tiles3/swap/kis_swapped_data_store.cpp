@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QMutexLocker>
 //#include "kis_debug.h"
 #include "kis_swapped_data_store.h"
 #include "kis_memory_window.h"

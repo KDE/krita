@@ -5,7 +5,6 @@
  */
 
 #include "tool_smartpatch.h"
-#include <QStringList>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

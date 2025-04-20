@@ -8,7 +8,6 @@
 #define KIS_RECOVER_NAMED_AUTOSAVE_DIALOG_H
 
 #include <QDialog>
-#include <QScopedPointer>
 #include "kis_types.h"
 
 namespace Ui {

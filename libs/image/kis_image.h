@@ -11,7 +11,6 @@
 #include <QString>
 #include <QPainter>
 #include <QRect>
-#include <QBitArray>
 
 #include <KoColorConversionTransformation.h>
 

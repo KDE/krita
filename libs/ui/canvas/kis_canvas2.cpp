@@ -16,7 +16,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QTime>
-#include <QLabel>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QScreen>

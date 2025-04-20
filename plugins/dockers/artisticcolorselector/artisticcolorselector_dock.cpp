@@ -26,9 +26,7 @@
 #include <kis_display_color_converter.h>
 
 #include <QWidget>
-#include <QMenu>
 #include <QButtonGroup>
-#include <QFileInfo>
 
 #include "artisticcolorselector_dock.h"
 #include <KisViewManager.h>

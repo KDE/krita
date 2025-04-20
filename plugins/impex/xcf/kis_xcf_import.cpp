@@ -13,7 +13,6 @@
 #include <qendian.h>
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

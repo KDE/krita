@@ -7,9 +7,9 @@
 #ifndef KIS_GUI_CLIENT_H
 #define KIS_GUI_CLIENT_H
 
-#include <QDockWidget>
 #include <QQueue>
 #include <QPointer>
+#include <QMainWindow>
 
 #include <KoToolManager.h>
 

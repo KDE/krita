@@ -8,6 +8,7 @@
 
 #include <QThread>
 #include <QThreadPool>
+#include <QMutexLocker>
 
 #include "kis_update_job_item.h"
 #include "kis_stroke_job.h"

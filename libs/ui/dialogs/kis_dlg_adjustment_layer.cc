@@ -10,14 +10,9 @@
 #include <kstandardguiitem.h>
 
 #include <QGroupBox>
-#include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <QTimer>
-#include <QIcon>
-#include <QImage>
 #include <QPixmap>
-#include <QPushButton>
 #include <QDialogButtonBox>
 
 #include "filter/kis_filter.h"

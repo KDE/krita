@@ -8,7 +8,6 @@
 #include "LogDockerDock.h"
 
 #include <QHBoxLayout>
-#include <QToolButton>
 #include <QScrollBar>
 #include <QStandardPaths>
 #include <QDateTime>

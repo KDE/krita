@@ -14,7 +14,6 @@
 #include <QMouseEvent>
 #include <QResizeEvent>
 #include <QTransform>
-#include <QList>
 #include <cmath>
 
 #include <kis_config.h>

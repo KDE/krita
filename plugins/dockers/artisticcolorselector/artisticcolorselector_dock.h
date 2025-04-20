@@ -8,7 +8,6 @@
 #define H_ARTISTIC_COLOR_SELECTOR_DOCK_H
 
 #include <QDockWidget>
-#include <QPointer>
 
 #include <KoCanvasObserverBase.h>
 #include <KoResourceServerProvider.h>

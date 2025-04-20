@@ -18,7 +18,6 @@
 
 #include "KisTextureMaskInfo.h"
 
-#include <QRect>
 
 class KoPattern;
 class KoResource;

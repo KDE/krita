@@ -7,7 +7,6 @@
 #define KIS_CHANGE_FILTER_COMMAND_H
 
 #include <kundo2command.h>
-#include <QRect>
 #include "kis_types.h"
 #include <klocalizedstring.h>
 #include "filter/kis_filter_configuration.h"

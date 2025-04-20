@@ -13,7 +13,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <QStringList>
 
 #include <math.h>
 

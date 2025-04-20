@@ -26,7 +26,6 @@
 #include <QToolButton>
 #include <QWheelEvent>
 #include <QLineEdit>
-#include <QComboBox>
 #include <QStandardPaths>
 
 #include "ksharedconfig.h"

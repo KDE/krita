@@ -10,6 +10,7 @@
 #include "recorder_format.h"
 
 #include <QObject>
+#include <QPointer>
 #include <QMutex>
 
 struct RecorderExportSettings;

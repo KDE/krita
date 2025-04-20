@@ -9,7 +9,6 @@
 #include "kis_wdg_pattern.h"
 
 #include <QLayout>
-#include <QLabel>
 #include <QSlider>
 
 #include <KoColor.h>

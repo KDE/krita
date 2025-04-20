@@ -11,7 +11,6 @@
 
 #include <QGridLayout>
 #include <QPainterPath>
-#include <QTimer>
 #include <QCheckBox>
 
 #include <KoCanvasResourceProvider.h>

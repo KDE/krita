@@ -19,7 +19,6 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QStandardPaths>
-#include <QComboBox>
 #include <QLineEdit>
 #include <QDebug>
 #include <QTextEdit>

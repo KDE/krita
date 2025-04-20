@@ -7,7 +7,6 @@
 #ifndef KIS_ARCS_CONSTANTS_H
 #define KIS_ARCS_CONSTANTS_H
 
-#include <QString>
 #include <QColor>
 
 static const int MIN_NUM_HUE_PIECES       = 1;

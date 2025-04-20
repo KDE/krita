@@ -11,7 +11,6 @@
 #include <KoDialog.h>
 #include <QScopedPointer>
 #include <QSortFilterProxyModel>
-#include <QSharedPointer>
 #include <QItemSelection>
 #include <KisResourceThumbnailPainter.h>
 #include "wdg_resource_preview.h"

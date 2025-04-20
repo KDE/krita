@@ -9,7 +9,6 @@
 
 
 #include <QPainter>
-#include <QTimer>
 #include <kundo2command.h>
 #include <QMimeData>
 #include <QApplication>

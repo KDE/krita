@@ -13,7 +13,6 @@
 #include <QApplication>
 #include <QBuffer>
 #include <QCheckBox>
-#include <QFileInfo>
 #include <QScopedPointer>
 #include <QSlider>
 

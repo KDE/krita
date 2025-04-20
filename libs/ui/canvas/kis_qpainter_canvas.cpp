@@ -15,11 +15,8 @@
 #include <QImage>
 #include <QBrush>
 #include <QColor>
-#include <QString>
 #include <QTime>
-#include <QTimer>
 #include <QApplication>
-#include <QMenu>
 
 #include <kis_debug.h>
 #include <kis_config.h>

@@ -19,7 +19,6 @@
 #include <QImage>
 #include <QRadioButton>
 #include <QApplication>
-#include <QFileInfo>
 
 // KDE's headers
 #include <kis_debug.h>

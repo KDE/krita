@@ -9,6 +9,7 @@
 #include <QHash>
 #include <QSharedPointer>
 #include <QPointer>
+#include <QMutexLocker>
 
 #include "kis_global.h"
 #include "kis_image.h"

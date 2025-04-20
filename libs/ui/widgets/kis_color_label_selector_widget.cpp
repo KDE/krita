@@ -10,7 +10,6 @@
 #include "kis_global.h"
 
 #include <QAction>
-#include <QIcon>
 #include <QMenu>
 #include <QStyleOption>
 

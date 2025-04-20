@@ -8,9 +8,7 @@
 #define RESOURCE_IMPORTER_H
 
 #include <KoDialog.h>
-#include <QScopedPointer>
 #include <QSortFilterProxyModel>
-#include <QSharedPointer>
 #include <QItemSelection>
 #include <KisResourceThumbnailPainter.h>
 

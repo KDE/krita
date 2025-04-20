@@ -12,7 +12,6 @@
 #include <QPoint>
 #include <QList>
 #include <QVector>
-#include <QScopedPointer>
 
 #include "kis_tool_paint.h"
 #include <flake/kis_node_shape.h>

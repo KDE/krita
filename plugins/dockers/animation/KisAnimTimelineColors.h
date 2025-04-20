@@ -7,7 +7,7 @@
 #ifndef __TIMELINE_COLOR_SCHEME_H
 #define __TIMELINE_COLOR_SCHEME_H
 
-#include <QScopedPointer>
+#include <QString>
 
 class QColor;
 class QBrush;

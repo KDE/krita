@@ -13,7 +13,6 @@
 #include "KoShapeController.h"
 #include <QHash>
 #include <QWidget>
-#include <QString>
 #include <QPointer>
 #include <string.h> // for the qt version check
 

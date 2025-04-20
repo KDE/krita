@@ -8,11 +8,9 @@
 
 #include "kis_clipboard_brush_widget.h"
 
-#include <QLabel>
-#include <QImage>
 #include <QPixmap>
-#include <QShowEvent>
 #include <QPushButton>
+#include <QShowEvent>
 #include <QDialogButtonBox>
 #include <QUuid>
 

@@ -11,8 +11,6 @@
 
 #include "ui_wdg_animationrenderer.h"
 
-#include <QSharedPointer>
-#include <QScopedPointer>
 #include <kis_types.h>
 
 

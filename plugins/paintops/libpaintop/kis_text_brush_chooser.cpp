@@ -9,7 +9,6 @@
 
 #include <QSpinBox>
 #include <QCheckBox>
-#include <QLabel>
 #include <QPixmap>
 #include <QLineEdit>
 #include <QString>

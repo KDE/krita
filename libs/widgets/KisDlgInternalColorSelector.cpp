@@ -4,11 +4,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QList>
 #include <QAbstractSpinBox>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
-#include <QPointer>
 #include <QCompleter>
 
 #include <functional>

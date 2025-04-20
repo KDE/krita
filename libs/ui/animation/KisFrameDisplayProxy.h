@@ -9,7 +9,6 @@
 #define KISFRAMEDISPLAYPROXY_H
 
 #include <QObject>
-#include <QPointer>
 
 #include "kritaui_export.h"
 

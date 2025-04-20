@@ -18,13 +18,9 @@
 #include <QList>
 #include <QSlider>
 #include <QLineEdit>
-#include <QToolButton>
-#include <QLabel>
 #include <QGridLayout>
-#include <QMenu>
 #include <QStatusBar>
 #include <QButtonGroup>
-#include <QComboBox>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>

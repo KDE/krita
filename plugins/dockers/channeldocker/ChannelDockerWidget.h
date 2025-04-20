@@ -7,7 +7,6 @@
 #ifndef CHANNELDOCKER_WIDGET_H
 #define CHANNELDOCKER_WIDGET_H
 
-#include <QPointer>
 
 #include <KisKineticScroller.h>
 

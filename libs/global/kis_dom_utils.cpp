@@ -7,6 +7,7 @@
 #include "kis_dom_utils.h"
 
 #include <QTransform>
+#include <QVector3D>
 
 #include "kis_debug.h"
 

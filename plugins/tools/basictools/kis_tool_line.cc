@@ -13,7 +13,6 @@
 #include "kis_tool_line.h"
 
 
-#include <QPushButton>
 
 #include <ksharedconfig.h>
 

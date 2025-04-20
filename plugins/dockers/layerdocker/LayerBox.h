@@ -11,11 +11,9 @@
 #ifndef KIS_LAYERBOX_H
 #define KIS_LAYERBOX_H
 
-#include <QFrame>
 #include <QList>
 #include <QDockWidget>
 #include <QPointer>
-#include <QTimer>
 
 #include <kis_debug.h>
 

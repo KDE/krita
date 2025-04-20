@@ -9,7 +9,6 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <QObject>
-#include <QRect>
 #include <kis_projection_leaf.h>
 
 KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KisKActionCollection *actionCollection, KisNodeManager *nodeManager)

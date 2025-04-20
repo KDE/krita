@@ -10,7 +10,6 @@
 #ifndef _KIS_MULTICHANNEL_FILTER_BASE_H_
 #define _KIS_MULTICHANNEL_FILTER_BASE_H_
 
-#include <QPair>
 #include <QList>
 
 #include <filter/kis_color_transformation_filter.h>

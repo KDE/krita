@@ -7,7 +7,6 @@
 #ifndef TAGACTIONS_H
 #define TAGACTIONS_H
 
-#include <QMenu>
 #include <QWidgetAction>
 #include <QLabel>
 #include <QLineEdit>

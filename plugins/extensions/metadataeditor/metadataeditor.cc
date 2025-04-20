@@ -7,7 +7,6 @@
 #include "metadataeditor.h"
 #include <stdlib.h>
 
-#include <QDialog>
 #include <QVBoxLayout>
 
 #include <kis_debug.h>

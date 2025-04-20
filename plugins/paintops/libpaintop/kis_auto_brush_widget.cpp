@@ -11,10 +11,7 @@
 #include <math.h>
 #include <kis_debug.h>
 #include <QSpinBox>
-#include <QToolButton>
 #include <QImage>
-#include <QComboBox>
-#include <QLabel>
 #include <QPixmap>
 #include <QResizeEvent>
 

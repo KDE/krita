@@ -10,9 +10,6 @@
 #include "resourcemanager.h"
 #include "dlg_create_bundle.h"
 
-#include <QListWidget>
-#include <QTreeWidget>
-#include <QListWidgetItem>
 #include <QPainter>
 #include <QPixmap>
 #include <QMessageBox>

@@ -15,7 +15,6 @@
 #include <QFile>
 #include <QPainterPath>
 #include <QPoint>
-#include <QFileInfo>
 #include <QBuffer>
 
 #include <kis_debug.h>

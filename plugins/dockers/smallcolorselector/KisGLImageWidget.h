@@ -13,7 +13,6 @@
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
-#include <QTransform>
 #include <KisGLImageF16.h>
 #include <KisSurfaceColorSpaceWrapper.h>
 

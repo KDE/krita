@@ -6,11 +6,8 @@
 
 #include "KisResourceModel.h"
 
-#include <QElapsedTimer>
 #include <QBuffer>
-#include <QImage>
 #include <QtSql>
-#include <QStringList>
 
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>

@@ -11,7 +11,6 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceEngine.h"
 #include "KoColorConversionTransformation.h"
-#include <QPair>
 #include <QThreadStorage>
 #include <QPolygonF>
 

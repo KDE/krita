@@ -7,7 +7,6 @@
 #include "KoCompositeOpRegistry.h"
 
 #include <QGlobalStatic>
-#include <QList>
 
 #include <klocalizedstring.h>
 

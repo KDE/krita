@@ -8,8 +8,6 @@
 #define __INPLACE_TRANSFORM_STROKE_STRATEGY_H
 
 #include <QObject>
-#include <QMutex>
-#include <QElapsedTimer>
 #include <KoUpdater.h>
 #include <kis_stroke_strategy_undo_command_based.h>
 #include <kis_types.h>

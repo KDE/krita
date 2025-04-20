@@ -11,6 +11,7 @@
 #include "timeline_frames_index_converter.h"
 
 #include <QSet>
+#include <QPointer>
 #include "kis_keyframe_channel.h"
 #include "KisNodeDisplayModeAdapter.h"
 #include "kis_signal_auto_connection.h"

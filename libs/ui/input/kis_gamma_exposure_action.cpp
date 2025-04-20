@@ -7,7 +7,6 @@
 #include "kis_gamma_exposure_action.h"
 
 #include <QApplication>
-#include <QIcon>
 
 #include <klocalizedstring.h>
 #include <kis_canvas2.h>

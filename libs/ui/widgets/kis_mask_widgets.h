@@ -15,7 +15,6 @@
 #include <QRadioButton>
 #include <QLineEdit>
 #include <QWidget>
-#include <QString>
 
 class WdgMaskSource : public QWidget, public Ui::WdgMaskSource
 {

@@ -11,8 +11,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#include <QImage>
-#include <QBitArray>
 
 #include <klocalizedstring.h>
 

@@ -7,7 +7,6 @@
 #ifndef __KIS_LOD_CAPABLE_LAYER_OFFSET_H
 #define __KIS_LOD_CAPABLE_LAYER_OFFSET_H
 
-#include <QScopedPointer>
 #include "kritaimage_export.h"
 #include "kis_default_bounds_base.h"
 

@@ -17,7 +17,6 @@
 
 #include <QPoint>
 #include <QSpinBox>
-#include <QVector>
 
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>

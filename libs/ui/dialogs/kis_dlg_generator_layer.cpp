@@ -8,10 +8,8 @@
 #include "kis_dlg_generator_layer.h"
 
 #include <QGroupBox>
-#include <QLabel>
 #include <QLayout>
 #include <QGridLayout>
-#include <QPushButton>
 
 #include <klocalizedstring.h>
 #include <kstandardguiitem.h>

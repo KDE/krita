@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QMutex>
 #include <QSemaphore>
 
 #include "tiles3/swap/kis_tile_data_swapper.h"

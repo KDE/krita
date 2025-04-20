@@ -10,9 +10,7 @@
 
 #include <QScopedPointer>
 #include <QTableView>
-#include <QPushButton>
 #include <QPixmap>
-#include <QIcon>
 
 #include <KoColorSet.h>
 #include "kritawidgets_export.h"

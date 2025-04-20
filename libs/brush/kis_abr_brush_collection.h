@@ -9,7 +9,6 @@
 #define KIS_ABR_BRUSH_COLLECTION_H
 
 #include <QImage>
-#include <QVector>
 #include <QDataStream>
 #include <QString>
 #include <kis_debug.h>

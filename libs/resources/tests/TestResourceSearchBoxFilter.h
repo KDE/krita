@@ -8,7 +8,6 @@
 #define TEST_RESOURCE_SEARCH_BOX_FILTER_H
 
 #include <QObject>
-#include <QScopedPointer>
 
 #include <KisResourceSearchBoxFilter.h>
 

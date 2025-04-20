@@ -10,7 +10,6 @@
 #ifndef KIS_TOOL_COLOR_SAMPLER_H_
 #define KIS_TOOL_COLOR_SAMPLER_H_
 
-#include <QTimer>
 #include "KoToolFactoryBase.h"
 #include "ui_wdgcolorsampler.h"
 #include "kis_tool.h"

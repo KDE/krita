@@ -8,7 +8,6 @@
 
 #include <QApplication>
 
-#include <QFileInfo>
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>

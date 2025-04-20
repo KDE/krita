@@ -7,10 +7,7 @@
 #ifndef WDG_TAG_SELECTION_H
 #define WDG_TAG_SELECTION_H
 
-#include <QWidget>
-#include <QLabel>
 #include <QString>
-#include <QToolButton>
 #include <QHBoxLayout>
 
 #include <KisTag.h>

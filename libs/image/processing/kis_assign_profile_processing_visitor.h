@@ -8,7 +8,6 @@
 #define __KIS_ASSIGN_PROFILE_PROCESSING_VISITOR_H
 
 #include "kis_simple_processing_visitor.h"
-#include <QRect>
 #include "kis_types.h"
 
 class KoColorSpace;

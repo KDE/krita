@@ -14,7 +14,6 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
-#include <QListView>
 #include <KisKineticScroller.h>
 
 #include <klocalizedstring.h>

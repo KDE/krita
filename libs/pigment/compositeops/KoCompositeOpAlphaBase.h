@@ -7,7 +7,6 @@
 #ifndef _KOCOMPOSITEOPALPHABASE_H_
 #define _KOCOMPOSITEOPALPHABASE_H_
 
-#include <QBitArray>
 
 #include <KoColorSpaceMaths.h>
 #include <KoCompositeOp.h>

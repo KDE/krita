@@ -15,7 +15,6 @@
 #include <kis_signals_blocker.h>
 #include <KisSpinBoxI18nHelper.h>
 
-#include <QStringList>
 #include <QScrollBar>
 #include <QResizeEvent>
 

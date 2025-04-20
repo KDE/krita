@@ -6,7 +6,7 @@
 
 #include "kis_image_animation_interface.h"
 
-#include <QFileInfo>
+#include <QMutex>
 
 #include "kis_global.h"
 #include "kis_image.h"

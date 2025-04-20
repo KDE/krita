@@ -14,7 +14,7 @@
 #include "KoInteractionStrategy.h"
 
 #include <QList>
-#include <QRect>
+#include <QRectF>
 
 class KoPathTool;
 class KoParameterShape;

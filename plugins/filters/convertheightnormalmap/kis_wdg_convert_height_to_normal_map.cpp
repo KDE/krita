@@ -5,7 +5,6 @@
  */
 #include "kis_wdg_convert_height_to_normal_map.h"
 #include <filter/kis_filter_configuration.h>
-#include <QComboBox>
 #include <klocalizedstring.h>
 #include <KoChannelInfo.h>
 #include <KisGlobalResourcesInterface.h>

@@ -10,7 +10,6 @@
 #include <QDomDocument>
 #include <QTextStream>
 #include <QBuffer>
-#include <QByteArray>
 
 #include <kis_debug.h>
 #include <KisPortingUtils.h>

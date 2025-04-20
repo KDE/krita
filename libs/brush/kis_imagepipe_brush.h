@@ -7,7 +7,6 @@
 #ifndef KIS_IMAGEPIPE_BRUSH_
 #define KIS_IMAGEPIPE_BRUSH_
 
-#include <QList>
 #include <QMap>
 #include <QString>
 

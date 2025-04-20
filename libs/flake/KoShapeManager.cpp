@@ -35,8 +35,8 @@
 
 #include <QPainter>
 #include <QPainterPath>
-#include <QTimer>
 #include <QThread>
+#include <QMutexLocker>
 #include <FlakeDebug.h>
 
 #include "kis_painting_tweaks.h"

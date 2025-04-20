@@ -7,7 +7,6 @@
 
 #include <QCheckBox>
 #include <QSlider>
-#include <QFileInfo>
 #include <QApplication>
 
 #include <kpluginfactory.h>

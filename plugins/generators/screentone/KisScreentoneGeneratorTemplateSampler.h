@@ -10,8 +10,6 @@
 #define KISSCREENTONEGENERATORTEMPLATESAMPLER_H
 
 #include <QtGlobal>
-#include <QVector>
-#include <QTransform>
 
 #include <cmath>
 

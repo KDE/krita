@@ -12,7 +12,6 @@
 #include "KisReferenceImage.h"
 #include <KisImportExportManager.h>
 
-#include <QRect>
 #include <QBuffer>
 #include <QByteArray>
 #include <QMessageBox>

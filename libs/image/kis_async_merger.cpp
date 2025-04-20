@@ -7,7 +7,6 @@
 
 
 #include <kis_debug.h>
-#include <QBitArray>
 
 #include <KoChannelInfo.h>
 #include <KoCompositeOpRegistry.h>

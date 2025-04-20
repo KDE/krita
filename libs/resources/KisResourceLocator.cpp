@@ -14,7 +14,6 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QVersionNumber>
-#include <QElapsedTimer>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QBuffer>

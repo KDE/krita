@@ -12,6 +12,7 @@
 #include <QRunnable>
 #include <QThreadPool>
 #include <QApplication>
+#include <QMutexLocker>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

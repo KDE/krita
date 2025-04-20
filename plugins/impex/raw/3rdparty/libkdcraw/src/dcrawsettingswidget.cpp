@@ -81,7 +81,6 @@
 #include <QGridLayout>
 #include <QApplication>
 #include <QStyle>
-#include <QIcon>
 #include <QStandardPaths>
 
 // KDE includes

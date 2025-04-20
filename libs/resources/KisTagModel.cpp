@@ -7,8 +7,6 @@
 #include "KisTagModel.h"
 
 #include <QtSql>
-#include <QStringList>
-#include <QElapsedTimer>
 
 #include <klocalizedstring.h>
 

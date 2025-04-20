@@ -12,7 +12,6 @@
 #include <KoCompositeOpRegistry.h>
 
 #include <QVariant>
-#include <QHash>
 #include <QVector>
 
 #include <kis_types.h>

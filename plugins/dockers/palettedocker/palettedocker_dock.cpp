@@ -13,9 +13,7 @@
 #include <QHeaderView>
 #include <QWheelEvent>
 #include <QCompleter>
-#include <QComboBox>
 #include <QAction>
-#include <QMenu>
 #include <QCheckBox>
 #include <QFormLayout>
 #include <QLineEdit>

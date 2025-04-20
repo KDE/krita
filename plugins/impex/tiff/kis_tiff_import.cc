@@ -10,7 +10,6 @@
 #include "kis_assert.h"
 
 #include <QBuffer>
-#include <QFileInfo>
 #include <QPair>
 #include <QSharedPointer>
 #include <QStack>

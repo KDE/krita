@@ -10,7 +10,6 @@
 #include <QSlider>
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 #include <QApplication>
 
 #include <KisImportExportManager.h>

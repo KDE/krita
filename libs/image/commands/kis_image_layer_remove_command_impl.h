@@ -8,7 +8,6 @@
 #ifndef KIS_IMAGE_LAYER_REMOVE_COMMAND_IMPL_H_
 #define KIS_IMAGE_LAYER_REMOVE_COMMAND_IMPL_H_
 
-#include <QList>
 
 #include <kritaimage_export.h>
 

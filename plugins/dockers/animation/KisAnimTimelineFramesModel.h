@@ -9,7 +9,6 @@
 
 
 #include <QScopedPointer>
-#include <QIcon>
 #include <QFileInfo>
 
 #include "kritaanimationdocker_export.h"

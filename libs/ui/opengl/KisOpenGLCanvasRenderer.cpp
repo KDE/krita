@@ -25,7 +25,6 @@
 #include <QPainterPath>
 #include <QOpenGLPaintDevice>
 #include <QPointF>
-#include <QPointer>
 #include <QTransform>
 #include <QThread>
 #include <QFile>
@@ -35,6 +34,7 @@
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLFramebufferObjectFormat>
 #include <QMessageBox>
+#include <QVector3D>
 #include <KoCompositeOpRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include "KisOpenGLBufferCircularStorage.h"

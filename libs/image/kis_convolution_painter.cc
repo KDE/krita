@@ -13,12 +13,9 @@
 #include <QBrush>
 #include <QColor>
 #include <QPen>
-#include <QImage>
 #include <QMap>
 #include <QPainter>
 #include <QRect>
-#include <QString>
-#include <QVector>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>

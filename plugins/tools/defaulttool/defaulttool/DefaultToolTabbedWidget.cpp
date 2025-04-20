@@ -6,7 +6,6 @@
 
 #include "DefaultToolTabbedWidget.h"
 
-#include <QLabel>
 #include "kis_icon_utils.h"
 #include "DefaultToolGeometryWidget.h"
 #include "KoStrokeConfigWidget.h"

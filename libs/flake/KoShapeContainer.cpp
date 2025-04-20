@@ -11,7 +11,6 @@
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 
-#include <QPointF>
 #include <QPainter>
 #include <QPainterPath>
 

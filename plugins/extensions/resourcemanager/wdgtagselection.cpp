@@ -8,7 +8,6 @@
 #include "wdgtagselection.h"
 
 #include <QProcessEnvironment>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QGridLayout>
@@ -17,9 +16,7 @@
 #include <QListWidget>
 #include <QAction>
 #include <QMouseEvent>
-#include <QMenu>
 #include <QPair>
-#include <QTimer>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>

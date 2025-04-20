@@ -9,7 +9,6 @@
 class QIODevice;
 class QUuid;
 
-#include <QVector>
 
 #include <psd.h>
 

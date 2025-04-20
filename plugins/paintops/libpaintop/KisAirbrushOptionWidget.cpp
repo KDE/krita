@@ -6,7 +6,6 @@
 #include "KisAirbrushOptionWidget.h"
 
 #include <QWidget>
-#include <QLabel>
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

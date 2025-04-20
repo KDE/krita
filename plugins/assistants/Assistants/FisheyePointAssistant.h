@@ -13,9 +13,7 @@
 #include "kis_painting_assistant.h"
 #include "Ellipse.h"
 #include <QObject>
-#include <QPolygonF>
 #include <QLineF>
-#include <QTransform>
 //class FisheyePoint;
 
 class FisheyePointAssistant : public KisPaintingAssistant

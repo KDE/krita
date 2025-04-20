@@ -9,7 +9,6 @@
 #include <QGridLayout>
 #include <QListView>
 #include <QHeaderView>
-#include <QStyledItemDelegate>
 #include <QPainter>
 #include <QInputDialog>
 #include <QThread>

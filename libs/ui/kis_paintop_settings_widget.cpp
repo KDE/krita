@@ -15,7 +15,6 @@
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QStyleOptionViewItem>
-#include <QMenu>
 #include <QAction>
 #include <QShowEvent>
 

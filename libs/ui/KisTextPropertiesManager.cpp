@@ -15,7 +15,6 @@
 #include <kis_canvas2.h>
 #include <kis_signal_auto_connection.h>
 
-#include <QPointer>
 
 struct KisTextPropertiesManager::Private {
     KisCanvasResourceProvider *provider {nullptr};

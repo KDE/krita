@@ -12,7 +12,6 @@
 #include <QFile>
 #include <kis_debug.h>
 #include <QVector>
-#include <QByteArray>
 #include <QBuffer>
 
 #include <KoChannelInfo.h>

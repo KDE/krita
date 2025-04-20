@@ -17,9 +17,8 @@
 #include <QVBoxLayout>
 #include <QScreen>
 #include <QDialogButtonBox>
-#include <QStringList>
-#include <QToolButton>
 #include <QPushButton>
+#include <QToolButton>
 
 WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
     : KisPreferenceSet(parent)

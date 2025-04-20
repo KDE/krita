@@ -9,7 +9,6 @@
 
 #include <QImage>
 #include <QString>
-#include <QHash>
 #include <QSharedPointer>
 #include <QDebug>
 

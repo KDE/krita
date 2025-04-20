@@ -16,7 +16,6 @@
 #include <cfloat>
 #include <cmath>
 
-#include <QImage>
 #include <QTextStream>
 #include <QFile>
 #include <QByteArray>

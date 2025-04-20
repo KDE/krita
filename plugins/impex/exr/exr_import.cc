@@ -7,7 +7,6 @@
 #include "exr_import.h"
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 
 #include <KisImportExportManager.h>
 

@@ -12,7 +12,6 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QFontMetrics>
 
 const int CHANNEL_LEGEND_RADIUS = 6;
 const int CHANNEL_ICON_SIZE = 16;

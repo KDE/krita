@@ -7,7 +7,6 @@
 #ifndef KIS_DLG_LAYER_PROPERTIES_H_
 #define KIS_DLG_LAYER_PROPERTIES_H_
 
-#include <QList>
 #include <QCheckBox>
 #include <QScopedPointer>
 

@@ -8,7 +8,6 @@
 #include "timeline_insert_keyframe_dialog.h"
 #include "KisAnimTimelineFramesView.h"
 
-#include <QLabel>
 #include <QGroupBox>
 #include <QSpinBox>
 #include <QRadioButton>

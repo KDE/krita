@@ -9,7 +9,6 @@
 
 #include <QObject>
 #include <KisSqueezedComboBox.h>
-#include <QList>
 #include <QFont>
 #include <QFontDatabase>
 #include <QStyledItemDelegate>

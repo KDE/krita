@@ -11,7 +11,6 @@
 #include <QObject>
 #include <QWidget>
 #include <QPixmap>
-#include <QPointer>
 
 #include "KisWidgetWithIdleTask.h"
 

@@ -9,7 +9,6 @@
 
 
 #include <simpletest.h>
-#include <QImageReader>
 
 #include <KoConfig.h>
 

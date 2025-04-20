@@ -10,7 +10,6 @@
 #include "kritaflake_export.h"
 
 #include <QScopedPointer>
-#include <QList>
 #include <QTextDocument>
 #include <QTextCharFormat>
 

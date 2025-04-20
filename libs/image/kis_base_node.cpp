@@ -14,7 +14,6 @@
 #include <KoColorSpace.h>
 #include <KoCompositeOpRegistry.h>
 
-#include <QSharedPointer>
 #include "kis_pointer_utils.h"
 
 #include "kis_paint_device.h"

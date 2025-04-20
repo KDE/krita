@@ -10,8 +10,6 @@
 #include <float.h>
 
 #include <QPointF>
-#include <QVector3D>
-#include <QVector>
 #include <QDomElement>
 #include <QLocale>
 #include <QColor>
@@ -24,6 +22,8 @@
 #include "kis_debug.h"
 #include "krita_container_utils.h"
 #include "KisPortingUtils.h"
+
+class QVector3D;
 
 namespace KisDomUtils {
 

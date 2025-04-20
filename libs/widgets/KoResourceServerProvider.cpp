@@ -11,8 +11,6 @@
 #include "KoResourceServerProvider.h"
 
 #include <QApplication>
-#include <QFileInfo>
-#include <QStringList>
 #include <QDir>
 #include <QStandardPaths>
 #include <QGlobalStatic>

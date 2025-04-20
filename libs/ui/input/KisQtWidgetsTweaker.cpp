@@ -7,7 +7,6 @@
 #include "KisQtWidgetsTweaker.h"
 
 #include <QBitArray>
-#include <QComboBox>
 #include <QDockWidget>
 #include <QDoubleSpinBox>
 #include <QEvent>

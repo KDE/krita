@@ -10,8 +10,6 @@
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <QLabel>
-#include <QComboBox>
 
 #include <KisDialogStateSaver.h>
 

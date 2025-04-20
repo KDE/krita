@@ -8,7 +8,6 @@
 
 #include "kis_wdg_unsharp.h"
 #include <QLayout>
-#include <QToolButton>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>

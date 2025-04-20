@@ -7,12 +7,10 @@
 
 #include <QList>
 #include <QPointer>
-#include <QSet>
 #include <QEvent>
 #include <QTouchEvent>
 #include <QScopedPointer>
 #include <QQueue>
-#include <QElapsedTimer>
 
 #include "kis_input_manager.h"
 #include "kis_shortcut_matcher.h"

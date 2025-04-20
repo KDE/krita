@@ -9,7 +9,6 @@
 
 #include "KoShapeContainer.h"
 
-#include <QList>
 
 #include "kritaflake_export.h"
 

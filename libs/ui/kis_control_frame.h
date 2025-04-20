@@ -11,7 +11,6 @@
 #ifndef __kis_control_frame_h__
 #define __kis_control_frame_h__
 
-#include <QMenu>
 #include <QObject>
 
 #include <KoPattern.h>

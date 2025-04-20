@@ -42,7 +42,6 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QIntValidator>
-#include <QTimer>
 #include <QtDebug>
 #include <QDoubleSpinBox>
 

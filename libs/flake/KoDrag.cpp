@@ -13,7 +13,6 @@
 #include <QClipboard>
 #include <QMimeData>
 #include <QString>
-#include <QTransform>
 
 #include <FlakeDebug.h>
 

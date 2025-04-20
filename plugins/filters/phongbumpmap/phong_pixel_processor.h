@@ -9,10 +9,8 @@
 
 #include <QVector3D>
 #include <QTime>
-#include <QImage>
 #include <QColor>
 #include <QList>
-#include <QPair>
 #include <QMap>
 
 #include "phong_bumpmap_constants.h"

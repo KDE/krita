@@ -5,7 +5,6 @@
  */
 
 #include "kis_color_selector_simple.h"
-#include <QImage>
 #include <QPainter>
 #include <QColor>
 #include <cmath>

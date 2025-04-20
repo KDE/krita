@@ -9,7 +9,6 @@
 #include "kis_seexpr_script_chooser.h"
 
 #include <math.h>
-#include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
 #include <QResizeEvent>

@@ -8,10 +8,8 @@
 #include <QColor>
 #include <QImage>
 #include <QPainter>
-#include <QRect>
 #include <QVector>
 #include <QVector4D>
-#include <QList>
 #include <QtMath>
 
 #include "KoColorConversions.h"
@@ -19,7 +17,6 @@
 #include "KoColorDisplayRendererInterface.h"
 #include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
-#include <QPointer>
 
 #include "kis_debug.h"
 

@@ -9,7 +9,6 @@
 
 #include <simpletest.h>
 
-#include <QPointF>
 
 #include "kis_cubic_curve.h"
 

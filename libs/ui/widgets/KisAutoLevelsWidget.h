@@ -9,7 +9,6 @@
 #ifndef KIS_AUTO_LEVELS_WIDGET_H
 #define KIS_AUTO_LEVELS_WIDGET_H
 
-#include <QScopedPointer>
 #include <QWidget>
 
 #include <KoColor.h>

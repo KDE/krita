@@ -13,7 +13,6 @@
 
 #include "kis_color_selector_base.h"
 #include <QColor>
-#include <QImage>
 #include <KoColor.h>
 
 class KoColorSpace;

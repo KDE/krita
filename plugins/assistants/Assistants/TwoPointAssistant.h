@@ -11,7 +11,6 @@
 
 #include "kis_painting_assistant.h"
 #include <QObject>
-#include <QPolygonF>
 #include <QLineF>
 #include <QTransform>
 

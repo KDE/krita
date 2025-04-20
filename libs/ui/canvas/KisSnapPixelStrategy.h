@@ -7,7 +7,6 @@
 #ifndef __KIS_SNAP_PIXEL_STRATEGY_H
 #define __KIS_SNAP_PIXEL_STRATEGY_H
 
-#include <QScopedPointer>
 
 #include "KoSnapStrategy.h"
 

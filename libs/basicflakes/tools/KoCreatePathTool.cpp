@@ -27,7 +27,6 @@
 
 #include <QCheckBox>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPainter>
 #include <QSpinBox>
 #include <QVBoxLayout>

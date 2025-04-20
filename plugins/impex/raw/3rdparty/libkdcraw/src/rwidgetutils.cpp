@@ -39,7 +39,6 @@
 #include <QFileInfo>
 #include <QPainter>
 #include <QStandardPaths>
-#include <QVector>
 #include <QColorDialog>
 #include <QStyleOptionButton>
 #include <qdrawutil.h>

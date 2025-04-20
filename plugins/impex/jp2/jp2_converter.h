@@ -10,7 +10,6 @@
 #include <stdio.h>
 
 #include <QObject>
-#include <QVector>
 
 #include "kis_types.h"
 #include "kis_global.h"

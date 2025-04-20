@@ -19,7 +19,6 @@
 
 #include <QElapsedTimer>
 
-#include <QFileInfo>
 
 #include <kis_debug.h>
 #include <KisPortingUtils.h>

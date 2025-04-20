@@ -11,7 +11,6 @@
 #include "kritaflake_export.h"
 
 #include <QObject>
-#include <QHash>
 
 class QAction;
 class QAction;

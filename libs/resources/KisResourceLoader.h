@@ -9,8 +9,6 @@
 
 #include <QString>
 #include <QStringList>
-#include <QImage>
-#include <QScopedPointer>
 #include <QSharedPointer>
 #include <QIODevice>
 

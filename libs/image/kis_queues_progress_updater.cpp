@@ -7,6 +7,7 @@
 #include "kis_queues_progress_updater.h"
 
 #include <QMutex>
+#include <QMutexLocker>
 #include <QTimer>
 #include <KoProgressProxy.h>
 

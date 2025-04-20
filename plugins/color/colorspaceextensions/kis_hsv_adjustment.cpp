@@ -10,7 +10,6 @@
 #include <half.h>
 #endif
 
-#include <QByteArray>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>

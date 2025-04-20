@@ -8,8 +8,6 @@
 
 #include <QWidget>
 #include <QLayout>
-#include <QComboBox>
-#include <QLabel>
 #include <QGridLayout>
 
 #include <KoUnit.h>

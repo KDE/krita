@@ -7,7 +7,6 @@
 #ifndef _KIS_PRESET_LIVE_PREVIEW_
 #define _KIS_PRESET_LIVE_PREVIEW_
 
-#include <QImage>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QPainterPath>

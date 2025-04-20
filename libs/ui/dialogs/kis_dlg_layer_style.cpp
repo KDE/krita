@@ -8,7 +8,6 @@
 
 #include <QBuffer>
 #include <QCheckBox>
-#include <QComboBox>
 #include <QDial>
 #include <QInputDialog>
 #include <QItemSelectionModel>

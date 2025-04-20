@@ -7,7 +7,8 @@
 #ifndef __KIS_LAZY_WAIT_CONDITION_H
 #define __KIS_LAZY_WAIT_CONDITION_H
 
-
+#include <QMutex>
+#include <QMutexLocker>
 #include <QWaitCondition>
 
 /**

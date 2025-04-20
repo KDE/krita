@@ -9,10 +9,7 @@
 #include "widgets/kis_custom_image_widget.h"
 
 #include <QMimeData>
-#include <QPushButton>
 #include <QSlider>
-#include <QComboBox>
-#include <QRect>
 #include <QApplication>
 #include <QScreen>
 #include <QDialogButtonBox>

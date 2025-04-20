@@ -8,7 +8,6 @@
 #include <simpletest.h>
 
 #include <QRect>
-#include <QIcon>
 #include <QBitArray>
 #include <QRandomGenerator>
 

@@ -7,7 +7,6 @@
 #ifndef KISOPTIMIZEDBRUSHOUTLINE_H
 #define KISOPTIMIZEDBRUSHOUTLINE_H
 
-#include <QList>
 #include <QPolygonF>
 #include <QTransform>
 #include <boost/iterator/iterator_facade.hpp>

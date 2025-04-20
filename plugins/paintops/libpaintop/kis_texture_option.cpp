@@ -7,15 +7,10 @@
  */
 #include "kis_texture_option.h"
 
-#include <QWidget>
 #include <QString>
-#include <QByteArray>
 #include <QCheckBox>
 #include <QBuffer>
 #include <QFormLayout>
-#include <QLabel>
-#include <QComboBox>
-#include <QTransform>
 #include <QPainter>
 #include <QBoxLayout>
 

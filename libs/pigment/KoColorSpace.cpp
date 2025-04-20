@@ -31,7 +31,6 @@
 #include <cmath>
 
 #include <QThreadStorage>
-#include <QByteArray>
 #include <QBitArray>
 #include <QPolygonF>
 #include <QPointF>

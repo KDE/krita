@@ -7,6 +7,8 @@
 #include "KisSafeNodeProjectionStore.h"
 
 #include <QCoreApplication>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QVector>
 #include <KoColorSpace.h>
 

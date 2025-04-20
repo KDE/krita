@@ -9,13 +9,11 @@
 
 #include <QApplication>
 #include <QSize>
-#include <QToolButton>
 #include <QHBoxLayout>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
 #include <QMouseEvent>
-#include <QMenu>
 #include <QWidgetAction>
 #include <QDir>
 #include <QScrollArea>

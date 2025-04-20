@@ -13,7 +13,6 @@
 #include "kis_tool_select_contiguous.h"
 #include <QPainter>
 #include <QLayout>
-#include <QLabel>
 #include <QApplication>
 #include <QCheckBox>
 #include <QVBoxLayout>

@@ -8,7 +8,6 @@
 #define _KIS_TIME_BASED_ITEM_MODEL_H
 
 #include <QAbstractTableModel>
-#include <QList>
 #include <KisKineticScroller.h>
 
 #include "kritaanimationdocker_export.h"

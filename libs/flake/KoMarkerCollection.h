@@ -11,7 +11,6 @@
 
 #include <QObject>
 #include <QList>
-#include <QHash>
 #include <QMetaType>
 
 class KoMarker;

@@ -9,7 +9,6 @@
 
 #include "kritawidgetutils_export.h"
 #include <QString>
-#include <QByteArray>
 
 namespace KHelpClient
 {

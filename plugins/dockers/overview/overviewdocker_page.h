@@ -9,7 +9,6 @@
 #define _OVERVIEW_PAGE_H_
 
 #include <QPointer>
-#include <QDockWidget>
 #include <QVariantAnimation>
 
 #include <KoCanvasObserverBase.h>

@@ -8,6 +8,7 @@
 #define KISSCREENMIGRATIONTRACKER_H
 
 #include <QObject>
+#include <QPointer>
 #include <kritawidgetutils_export.h>
 #include <kis_signal_auto_connection.h>
 

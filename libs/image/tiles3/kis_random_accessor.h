@@ -6,7 +6,6 @@
 #ifndef KIS_TILED_RANDOM_ACCESSOR_H
 #define KIS_TILED_RANDOM_ACCESSOR_H
 
-#include <QRect>
 
 #include <kis_shared.h>
 

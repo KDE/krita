@@ -12,7 +12,6 @@
 
 #include <kis_types.h>
 
-#include <QPointF>
 #include <QTransform>
 
 class KisFilterStrategy;

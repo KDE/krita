@@ -14,7 +14,6 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPaintEvent>
-#include <QImage>
 #include <QTextStream>
 #include <cmath>
 #include <klocalizedstring.h>

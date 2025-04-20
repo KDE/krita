@@ -9,7 +9,6 @@
 #include <QVariant>
 #include <QBrush>
 #include <QColor>
-#include <QList>
 
 #include <simpletest.h>
 #include <kundo2stack.h>

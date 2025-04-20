@@ -48,7 +48,6 @@
 #include <kconfiggroup.h>
 #include <QKeySequence>
 
-#include <QDialog>
 #include <QApplication>
 #include <QDomDocument>
 #include <QDomElement>

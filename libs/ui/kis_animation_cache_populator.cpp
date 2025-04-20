@@ -9,7 +9,6 @@
 #include <functional>
 
 #include <QTimer>
-#include <QMutex>
 #include <QStack>
 
 #include "kis_config.h"

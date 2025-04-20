@@ -8,8 +8,6 @@
 #include <QStandardItem>
 #include <QSlider>
 #include <QPainter>
-#include <QLabel>
-#include <QListView>
 #include <kis_icon.h>
 #include <QDebug>
 #include <KoResourcePaths.h>

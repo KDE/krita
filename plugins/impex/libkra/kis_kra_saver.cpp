@@ -15,7 +15,6 @@
 #include <QDomElement>
 #include <QString>
 #include <QStringList>
-#include <QScopedPointer>
 
 #include <QUrl>
 #include <QBuffer>

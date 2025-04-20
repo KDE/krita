@@ -16,7 +16,6 @@
 #include <QScreen>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QTimer>
 #include <QRegExp>
 #include <QScreen>
 #include <QLabel>

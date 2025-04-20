@@ -7,7 +7,6 @@
 #include "KisOpenPane.h"
 
 #include <QLayout>
-#include <QLabel>
 #include <QImage>
 #include <QPainter>
 #include <QPen>

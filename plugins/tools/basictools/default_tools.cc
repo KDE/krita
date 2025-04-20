@@ -7,7 +7,6 @@
  */
 
 #include "default_tools.h"
-#include <QStringList>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

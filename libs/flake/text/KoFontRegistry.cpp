@@ -12,7 +12,6 @@
 #include <QDir>
 #include <QFile>
 #include <QGlobalStatic>
-#include <QMutex>
 #include <QThread>
 #include <QThreadStorage>
 #include <QtGlobal>

@@ -3,6 +3,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "kis_suspend_projection_updates_stroke_strategy.h"
 

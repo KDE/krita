@@ -11,7 +11,6 @@
 #include <QObject>
 #include <QPointer>
 #include <QTime>
-#include <QVector>
 
 class KoUpdater;
 

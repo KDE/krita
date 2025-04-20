@@ -8,7 +8,6 @@
 #include "kis_input_editor_delegate.h"
 
 #include <QApplication>
-#include <QPushButton>
 
 #include <KLocalizedString>
 

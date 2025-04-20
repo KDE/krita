@@ -7,7 +7,6 @@
 
 #include <QApplication>
 
-#include <QFileInfo>
 #include <QStack>
 
 #include <KoColorSpace.h>

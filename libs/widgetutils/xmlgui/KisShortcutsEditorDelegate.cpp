@@ -16,7 +16,6 @@
 #include <QApplication>
 #include <QHeaderView>
 #include <QKeyEvent>
-#include <QLabel>
 #include <QPainter>
 #include <QTreeWidgetItemIterator>
 #include <QAction>

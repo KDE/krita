@@ -7,7 +7,6 @@
 #include "patterndocker_dock.h"
 
 #include <QHBoxLayout>
-#include <QPushButton>
 
 #include <klocalizedstring.h>
 

@@ -14,7 +14,6 @@
 #include "kis_paintop_box.h"
 
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QToolButton>
 #include <QPixmap>
 #include <QWidgetAction>

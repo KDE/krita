@@ -8,7 +8,6 @@
 #define __KIS_PAINTOP_LOD_LIMITATIONS_H
 
 #include <KoID.h>
-#include <QVector>
 #include <QMetaType>
 #include <boost/operators.hpp>
 

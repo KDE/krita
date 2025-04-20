@@ -10,7 +10,6 @@
 #include <kis_icon_utils.h>
 
 #include <QDebug>
-#include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSpacerItem>

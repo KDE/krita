@@ -7,7 +7,6 @@
  */
 
 #include <QPainter>
-#include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QAction>
 #include <QDialog>

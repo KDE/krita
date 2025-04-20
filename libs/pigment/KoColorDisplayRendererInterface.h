@@ -9,7 +9,6 @@
 
 #include <QObject>
 #include <QColor>
-#include <QSharedPointer>
 
 #include "KoColor.h"
 

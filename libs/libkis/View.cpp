@@ -5,7 +5,6 @@
  */
 #include "View.h"
 #include <QPointer>
-#include <QScopedPointer>
 
 #include <KoPattern.h>
 #include <KoAbstractGradient.h>

@@ -8,7 +8,6 @@
 
 #include "KisTagFilterWidget.h"
 
-#include <QPushButton>
 #include <QAction>
 #include <QGridLayout>
 #include <QLineEdit>

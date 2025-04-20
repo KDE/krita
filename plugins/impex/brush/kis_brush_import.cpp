@@ -12,7 +12,6 @@
 #include <QApplication>
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

@@ -6,7 +6,6 @@
 #include "kis_wdg_edge_detection.h"
 
 #include <filter/kis_filter_configuration.h>
-#include <QComboBox>
 #include <klocalizedstring.h>
 #include <KisGlobalResourcesInterface.h>
 

@@ -20,7 +20,6 @@
 #include <QMap>
 #include <QPainter>
 #include <QRect>
-#include <QString>
 
 #include <klocalizedstring.h>
 

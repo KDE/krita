@@ -17,10 +17,7 @@
 
 #include <QPainter>
 #include <QPen>
-#include <QPushButton>
 #include <QObject>
-#include <QLabel>
-#include <QComboBox>
 #include <QApplication>
 #include <QMatrix4x4>
 #include <QMenu>

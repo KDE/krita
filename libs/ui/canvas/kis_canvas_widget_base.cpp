@@ -9,7 +9,6 @@
 #include <QImage>
 #include <QPainter>
 #include <QTimer>
-#include <QMenu>
 
 #include <KoShapeManager.h>
 #include <KoToolManager.h>

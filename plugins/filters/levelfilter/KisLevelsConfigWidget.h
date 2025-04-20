@@ -11,7 +11,6 @@
 #define KIS_LEVEL_CONFIG_WIDGET_H
 
 #include <QPair>
-#include <QPolygonF>
 
 #include <kis_config_widget.h>
 #include <KisLevelsCurve.h>

@@ -10,7 +10,6 @@
 
 #include <QObject>
 #include <QColor>
-#include <QVector>
 #include <QScopedPointer>
 #include <QSharedPointer>
 

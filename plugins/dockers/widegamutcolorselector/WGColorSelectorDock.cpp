@@ -29,7 +29,6 @@
 #include <KisGamutMaskToolbar.h>
 #include <KoCanvasResourceProvider.h>
 
-#include <QLabel>
 #include <QBoxLayout>
 #include <QMenu>
 #include <QToolButton>

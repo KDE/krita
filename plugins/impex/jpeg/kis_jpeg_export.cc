@@ -10,9 +10,7 @@
 #include <QSlider>
 #include <QColor>
 #include <QString>
-#include <QStringList>
 #include <QApplication>
-#include <QFileInfo>
 #include <QScopedPointer>
 
 #include <kpluginfactory.h>

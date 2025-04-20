@@ -6,6 +6,7 @@
  */
 
 
+#include <QMutexLocker>
 #include "kis_tile_data.h"
 #include "kis_tile_data_store.h"
 #include "kis_tile.h"

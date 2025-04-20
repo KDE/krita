@@ -12,7 +12,6 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <brushengine/kis_paintop_factory.h>
 #include <KoResourcePaths.h>
-#include <QIcon>
 
 
 

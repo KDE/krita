@@ -15,13 +15,10 @@
 #define KORESOURCESERVER_H
 
 #include <QString>
-#include <QStringList>
 #include <QList>
 #include <QFileInfo>
 #include <QApplication>
 #include <QThread>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QDir>
 #include <QTemporaryFile>
 

@@ -20,7 +20,6 @@
 #include <KisViewManager.h>
 #include "KisRepaintDebugger.h"
 
-#include <QPointer>
 #include "KisOpenGLModeProber.h"
 #include "KisOpenGLContextSwitchLock.h"
 

@@ -33,7 +33,6 @@
 #include <QInputDialog>
 #include <QTableView>
 #include <QStandardItem>
-#include <QLabel>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>

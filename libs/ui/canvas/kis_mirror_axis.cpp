@@ -10,7 +10,6 @@
 #include "KoConfig.h"
 
 #include <QPainter>
-#include <QToolButton>
 #include <QApplication>
 #include <QPaintEngine>
 #include <QOpenGLContext>

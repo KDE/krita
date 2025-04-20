@@ -7,7 +7,6 @@
 #define _HISTORY_DOCK_H_
 
 #include <QDockWidget>
-#include <QToolButton>
 
 #include "KisUndoView.h"
 

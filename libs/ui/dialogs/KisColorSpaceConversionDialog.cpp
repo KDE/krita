@@ -10,9 +10,6 @@
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <QLabel>
-#include <QComboBox>
-#include <QList>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>

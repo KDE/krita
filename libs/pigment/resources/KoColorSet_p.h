@@ -5,10 +5,8 @@
 #ifndef KOCOLORSET_P_H
 #define KOCOLORSET_P_H
 
-#include <QHash>
 #include <QXmlStreamReader>
 #include <QDomElement>
-#include <QPointer>
 #include <kundo2stack.h>
 
 #include <KisSwatch.h>

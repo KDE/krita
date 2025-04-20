@@ -14,7 +14,6 @@
 
 #include "ktoolbar.h"
 #include "config-xmlgui.h"
-#include <QPointer>
 #include <QAction>
 #include <QApplication>
 #include <QScreen>

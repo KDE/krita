@@ -8,7 +8,6 @@
 #include "kis_dlg_layer_properties.h"
 #include <limits.h>
 
-#include <QLabel>
 #include <QLayout>
 #include <QString>
 #include <QGroupBox>

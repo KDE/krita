@@ -12,8 +12,6 @@
 #include "kis_abstract_input_action.h"
 
 #include <QObject>
-#include <QPointer>
-#include <QWidget>
 #include <QMainWindow>
 
 #include "kis_global.h"

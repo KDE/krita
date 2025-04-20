@@ -8,14 +8,12 @@
 #include "kis_custom_brush_widget.h"
 
 #include <kis_debug.h>
-#include <QLabel>
 #include <QImage>
-#include <QPushButton>
-#include <QComboBox>
 #include <QCheckBox>
 #include <QUuid>
 
 #include <QPixmap>
+#include <QPushButton>
 #include <QShowEvent>
 
 #include <KoResourcePaths.h>

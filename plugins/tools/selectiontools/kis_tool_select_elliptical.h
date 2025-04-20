@@ -19,7 +19,6 @@
 #include <KoIcon.h>
 #include <QKeySequence>
 #include <kis_icon.h>
-#include <QMenu>
 
 class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 {

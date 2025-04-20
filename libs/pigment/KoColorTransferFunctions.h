@@ -9,7 +9,6 @@
 
 #include <cmath>
 
-#include <QVector>
 #include <QtGlobal>
 
 #include <KoAlwaysInline.h>

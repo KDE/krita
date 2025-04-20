@@ -9,7 +9,6 @@
 #include <QCheckBox>
 #include <QSlider>
 #include <QApplication>
-#include <QFileInfo>
 #include <QImageReader>
 
 #include <kpluginfactory.h>

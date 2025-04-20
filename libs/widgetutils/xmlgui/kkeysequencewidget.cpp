@@ -12,7 +12,6 @@
 #include <QAction>
 #include <QKeyEvent>
 #include <QTimer>
-#include <QHash>
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QApplication>

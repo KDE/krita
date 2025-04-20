@@ -9,8 +9,6 @@
 #define RESOURCEMANAGER_H
 
 #include <QVariant>
-#include <QStringList>
-#include <QString>
 
 #include <KoResourceServer.h>
 

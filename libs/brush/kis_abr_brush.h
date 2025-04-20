@@ -9,7 +9,6 @@
 #define KIS_ABR_BRUSH_
 
 #include <QImage>
-#include <QVector>
 
 #include <kis_scaling_size_brush.h>
 #include <kis_types.h>

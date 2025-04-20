@@ -9,7 +9,6 @@
 #define KOSUBPATHREMOVECOMMAND_H
 
 #include <kundo2command.h>
-#include <QList>
 #include "KoPathShape.h"
 #include "kritaflake_export.h"
 

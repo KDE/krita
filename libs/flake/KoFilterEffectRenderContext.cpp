@@ -8,7 +8,6 @@
 #include "KoViewConverter.h"
 
 #include <QRectF>
-#include <QTransform>
 
 class Q_DECL_HIDDEN KoFilterEffectRenderContext::Private
 {

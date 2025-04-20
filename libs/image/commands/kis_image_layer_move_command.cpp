@@ -6,8 +6,6 @@
  */
 
 #include "kis_image_commands.h"
-#include <QString>
-#include <QBitArray>
 
 #include <klocalizedstring.h>
 

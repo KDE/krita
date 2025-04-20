@@ -7,7 +7,6 @@
 #include "griddocker_dock.h"
 //#include "gridwidget.h"
 
-// #include <QLabel>
 // #include <QVBoxLayout>
 #include <QStatusBar>
 #include <klocalizedstring.h>

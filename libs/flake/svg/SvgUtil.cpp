@@ -13,7 +13,6 @@
 #include <QString>
 #include <QRectF>
 #include <QStringList>
-#include <QFontMetrics>
 #include <QRegExp>
 
 #include <math.h>

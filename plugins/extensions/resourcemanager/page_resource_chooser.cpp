@@ -14,9 +14,9 @@
 #include <QPainter>
 #include <QDebug>
 #include <QLabel>
-#include <QScroller>
 #include <QScrollBar>
 #include <QScrollArea>
+#include <QListWidgetItem>
 
 #include <KisResourceModel.h>
 #include <KisResourceTypeModel.h>

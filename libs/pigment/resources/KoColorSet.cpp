@@ -13,7 +13,6 @@
 #include <QTextStream>
 #include <QTextCodec>
 #include <QHash>
-#include <QList>
 #include <QByteArray>
 #include <QDomDocument>
 #include <QDomElement>

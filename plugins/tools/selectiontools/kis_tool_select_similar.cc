@@ -11,7 +11,6 @@
 
 #include <QApplication>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QVBoxLayout>
 
 #include <ksharedconfig.h>

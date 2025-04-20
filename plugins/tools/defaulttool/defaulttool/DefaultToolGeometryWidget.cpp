@@ -31,11 +31,9 @@
 #include <QAction>
 #include <QSize>
 #include <QRadioButton>
-#include <QLabel>
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QList>
-#include <QTransform>
 #include <kis_algebra_2d.h>
 
 #include "kis_aspect_ratio_locker.h"

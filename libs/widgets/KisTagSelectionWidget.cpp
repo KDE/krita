@@ -8,7 +8,6 @@
 #include "KisTagSelectionWidget.h"
 
 #include <QProcessEnvironment>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QGridLayout>
@@ -18,7 +17,6 @@
 #include <QAction>
 #include <QMouseEvent>
 #include <QMenu>
-#include <QPair>
 #include <QApplication>
 #include <QInputDialog>
 #include <QPainterPath>

@@ -11,9 +11,6 @@
 #ifndef QSBR_H
 #define QSBR_H
 
-#include <QVector>
-#include <QMutex>
-#include <QMutexLocker>
 #include <kis_lockless_stack.h>
 
 #define CALL_MEMBER(obj, pmf) ((obj).*(pmf))

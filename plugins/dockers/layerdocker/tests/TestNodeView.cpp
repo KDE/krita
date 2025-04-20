@@ -10,7 +10,6 @@
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QLabel>
 
 #include <NodeView.h>
 

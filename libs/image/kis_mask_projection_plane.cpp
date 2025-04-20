@@ -6,7 +6,6 @@
 
 #include "kis_mask_projection_plane.h"
 
-#include <QBitArray>
 #include <KoColorSpace.h>
 #include <KoChannelInfo.h>
 #include "kis_painter.h"

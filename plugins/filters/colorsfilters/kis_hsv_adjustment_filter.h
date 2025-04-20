@@ -8,7 +8,6 @@
 #ifndef _KIS_HSV_ADJUSTMENT_FILTER_H_
 #define _KIS_HSV_ADJUSTMENT_FILTER_H_
 
-#include <QList>
 
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"

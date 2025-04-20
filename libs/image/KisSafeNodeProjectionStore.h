@@ -9,7 +9,6 @@
 
 #include <QObject>
 
-#include <QMutex>
 #include <QScopedPointer>
 
 #include "kritaimage_export.h"

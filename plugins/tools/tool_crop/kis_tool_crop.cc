@@ -13,13 +13,10 @@
 
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QObject>
 #include <QPainter>
 #include <QPen>
-#include <QPushButton>
 #include <QRect>
-#include <QVector>
 #include <QMenu>
 
 #include <kis_debug.h>

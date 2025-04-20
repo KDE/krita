@@ -5,7 +5,6 @@
  */
 
 #include <simpletest.h>
-#include <QPointF>
 #include <KoColor.h>
 #include <QElapsedTimer>
 

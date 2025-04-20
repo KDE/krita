@@ -19,6 +19,7 @@
 #include <kis_iterator_ng.h>
 
 #include <QGlobalStatic>
+#include <QMutexLocker>
 
 /**********************************************************************/
 /*       KisTextureMaskInfo                                           */

@@ -10,7 +10,6 @@
 #include "kaboutkdedialog_p.h"
 
 #include <QDialogButtonBox>
-#include <QFrame>
 #include <QLabel>
 #include <QLayout>
 #include <QTabWidget>

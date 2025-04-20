@@ -16,13 +16,10 @@
 #include <QApplication>
 #include <QLayout>
 #include <QTabWidget>
-#include <QFrame>
 #include <QWidget>
 #include <QEvent>
 #include <QHBoxLayout>
-#include <QMenu>
 #include <QWidgetAction>
-#include <QFontDatabase>
 
 #include <klocalizedstring.h>
 #include <QAction>

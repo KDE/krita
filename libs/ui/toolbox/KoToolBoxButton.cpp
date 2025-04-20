@@ -10,7 +10,6 @@
 
 #include <KoToolManager.h>
 #include <QAction>
-#include <QIcon>
 #include <QPalette>
 #include <QApplication>
 #include <klocalizedstring.h>

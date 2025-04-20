@@ -7,7 +7,6 @@
 
 #include "kis_input_profile.h"
 
-#include <QStringList>
 #include <QMultiHash>
 
 #include "kis_abstract_input_action.h"

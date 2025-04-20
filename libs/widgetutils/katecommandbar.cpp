@@ -11,8 +11,6 @@
 #include <QKeyEvent>
 #include <QLineEdit>
 #include <QPainter>
-#include <QPointer>
-#include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <QStyledItemDelegate>
 #include <QTextDocument>

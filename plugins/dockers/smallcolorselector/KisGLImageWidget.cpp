@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QFile>
 #include <QResizeEvent>
+#include <QVector3D>
 #include "kis_debug.h"
 #include <config-hdr.h>
 #include <opengl/kis_opengl.h>

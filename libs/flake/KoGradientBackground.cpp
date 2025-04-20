@@ -11,7 +11,6 @@
 
 #include <FlakeDebug.h>
 
-#include <QSharedPointer>
 #include <QBrush>
 #include <QPainter>
 #include <QSharedData>

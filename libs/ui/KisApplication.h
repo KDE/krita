@@ -8,7 +8,6 @@
 #ifndef KIS_APPLICATION_H
 #define KIS_APPLICATION_H
 
-#include <QPointer>
 #include <QScopedPointer>
 #include <qtsingleapplication/qtsingleapplication.h>
 #include "kritaui_export.h"

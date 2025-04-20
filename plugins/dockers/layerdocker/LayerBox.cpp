@@ -28,8 +28,6 @@
 #include <QPixmap>
 #include <QBitmap>
 #include <QList>
-#include <QVector>
-#include <QLabel>
 #include <QMenu>
 #include <QWidgetAction>
 #include <QProxyStyle>

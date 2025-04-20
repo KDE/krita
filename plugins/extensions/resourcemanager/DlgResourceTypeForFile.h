@@ -9,7 +9,6 @@
 #include <KoDialog.h>
 #include <QModelIndex>
 #include <QPersistentModelIndex>
-#include <QStyledItemDelegate>
 #include <QWidget>
 #include <QMap>
 #include <QString>

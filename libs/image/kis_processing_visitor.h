@@ -10,7 +10,6 @@
 #include "kritaimage_export.h"
 #include "kis_shared.h"
 
-#include <QMutex>
 
 class KisNode;
 class KoUpdater;

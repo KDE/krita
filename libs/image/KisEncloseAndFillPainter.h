@@ -9,9 +9,7 @@
 #ifndef KISENCLOSEANDFILLPAINTER_H
 #define KISENCLOSEANDFILLPAINTER_H
 
-#include <QVector>
 #include <QPoint>
-#include <QRect>
 #include <QScopedPointer>
 
 #include <kis_pixel_selection.h>

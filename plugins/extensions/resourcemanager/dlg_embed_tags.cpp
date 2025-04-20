@@ -7,13 +7,13 @@
 #include "ui_wdgdlgembedtags.h"
 
 #include <QProcessEnvironment>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QGridLayout>
 #include <QTableWidget>
 #include <QPainter>
 #include <QListWidget>
+#include <QListWidgetItem>
 
 #include <KisImportExportManager.h>
 #include <KoDocumentInfo.h>

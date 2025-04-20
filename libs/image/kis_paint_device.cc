@@ -9,10 +9,11 @@
 #include "kis_paint_device.h"
 
 #include <QRect>
-#include <QTransform>
 #include <QImage>
 #include <QList>
 #include <QHash>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QIODevice>
 #include <qmath.h>
 #include <KisRegion.h>

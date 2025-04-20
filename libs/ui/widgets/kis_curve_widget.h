@@ -17,7 +17,6 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QPaintEvent>
-#include <QList>
 #include <optional>
 
 #include <kis_cubic_curve.h>

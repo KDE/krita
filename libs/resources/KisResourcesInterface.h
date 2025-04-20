@@ -10,7 +10,6 @@
 
 #include <QScopedPointer>
 #include <KoResource.h>
-#include <QHash>
 #include <KoResourceLoadResult.h>
 
 class QString;

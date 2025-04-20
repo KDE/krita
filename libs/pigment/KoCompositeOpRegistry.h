@@ -10,7 +10,6 @@
 #include <QString>
 #include <QList>
 #include <QMultiMap>
-#include <QBitArray>
 
 #include "kritapigment_export.h"
 

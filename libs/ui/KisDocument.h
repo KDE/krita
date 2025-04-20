@@ -9,7 +9,6 @@
 #define KISDOCUMENT_H
 
 #include <QDateTime>
-#include <QTransform>
 #include <QList>
 #include <QFileInfo>
 

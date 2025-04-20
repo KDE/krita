@@ -7,7 +7,6 @@
 #include "StoryboardModelTest.h"
 
 #include <simpletest.h>
-#include <QWidget>
 #include <StoryboardModel.h>
 #include <CommentModel.h>
 

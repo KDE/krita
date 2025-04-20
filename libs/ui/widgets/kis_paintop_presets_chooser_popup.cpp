@@ -7,7 +7,6 @@
 
 #include "kis_paintop_presets_chooser_popup.h"
 
-#include <QToolButton>
 #include <QCompleter>
 #include <QMenu>
 #include <QWidgetAction>

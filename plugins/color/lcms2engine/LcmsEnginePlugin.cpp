@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
-#include <QHash>
 #include <QStringList>
 
 #include <klocalizedstring.h>

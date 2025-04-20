@@ -6,9 +6,9 @@
 
 #include "KoColorConversionCache.h"
 
-#include <QHash>
 #include <QList>
 #include <QMutex>
+#include <QMutexLocker>
 #include <QThreadStorage>
 
 #include <KoColorSpace.h>

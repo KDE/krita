@@ -9,7 +9,6 @@
 #include <QIODevice>
 #include <QLocale>
 #include <QBuffer>
-#include <QByteArray>
 #include <QStandardPaths>
 #include <QFile>
 #include <QTextCodec>

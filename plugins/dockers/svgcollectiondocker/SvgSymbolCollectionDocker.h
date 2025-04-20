@@ -10,7 +10,6 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QMap>
-#include <QIcon>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>

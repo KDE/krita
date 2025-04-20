@@ -10,7 +10,7 @@
 
 #include "KoTosContainer.h"
 #include <QSharedData>
-#include <QRect>
+#include <QRectF>
 
 class KoTosContainer::Private : public QSharedData
 {

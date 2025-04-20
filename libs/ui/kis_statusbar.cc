@@ -7,10 +7,7 @@
 
 #include "kis_statusbar.h"
 
-#include <QLabel>
-#include <QFontMetrics>
 #include <QToolButton>
-#include <QPushButton>
 #include <QAction>
 #include <QToolTip>
 #include <QStatusBar>

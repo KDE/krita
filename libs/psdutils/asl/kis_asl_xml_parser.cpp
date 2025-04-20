@@ -15,7 +15,6 @@
 #include <QFileInfo>
 
 #include <QColor>
-#include <QHash>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoColorConversions.h>

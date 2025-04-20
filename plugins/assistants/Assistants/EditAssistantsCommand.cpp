@@ -6,7 +6,6 @@
 
 #include "EditAssistantsCommand.h"
 
-#include <QListIterator>
 
 #include <kis_canvas2.h>
 #include <KisView.h>

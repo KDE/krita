@@ -7,6 +7,7 @@
 #include "kis_switch_time_stroke_strategy.h"
 
 #include <QMutex>
+#include <QMutexLocker>
 
 #include "kis_image_animation_interface.h"
 #include "kis_post_execution_undo_adapter.h"

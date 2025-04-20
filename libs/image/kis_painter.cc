@@ -24,7 +24,6 @@
 #include <QImage>
 #include <QRect>
 #include <QString>
-#include <QStringList>
 #include <kundo2command.h>
 
 #include <kis_debug.h>

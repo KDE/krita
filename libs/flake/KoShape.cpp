@@ -46,7 +46,6 @@
 #include <QPainterPath>
 #include <QList>
 #include <QMap>
-#include <QByteArray>
 #include <FlakeDebug.h>
 
 #include "kis_assert.h"

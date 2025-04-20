@@ -6,7 +6,6 @@
 
 #include "kis_dlg_image_properties.h"
 
-#include <QPushButton>
 #include <QRadioButton>
 #include <QLayout>
 #include <QLabel>

@@ -11,7 +11,6 @@
 #include <QLayout>
 #include <QMenu>
 #include <QMessageBox>
-#include <QVector>
 #include <QAction>
 #include <QApplication>
 

@@ -39,7 +39,6 @@
 #include <KisRunnableStrokeJobUtils.h>
 #include <KisRunnableStrokeJobsInterface.h>
 
-#include <QSharedPointer>
 #include <QThread>
 #include "kis_image_config.h"
 #include "kis_wrapped_rect.h"

@@ -9,9 +9,7 @@
 
 #include "kritawidgets_export.h"
 
-#include <QComboBox>
 #include <QPointer>
-#include <QScopedPointer>
 #include <QPixmap>
 #include <QPair>
 #include <QHash>

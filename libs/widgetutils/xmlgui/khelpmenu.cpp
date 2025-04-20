@@ -14,7 +14,6 @@
 #include <QAction>
 #include <QApplication>
 #include <QDialogButtonBox>
-#include <QLabel>
 #include <QMenu>
 #include <QStyle>
 #include <QWidget>

@@ -15,7 +15,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPointer>
-#include <QStringList>
 
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>

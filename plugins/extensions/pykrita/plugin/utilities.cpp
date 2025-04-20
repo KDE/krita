@@ -23,7 +23,6 @@
 #include <QLibrary>
 #include <QString>
 #include <QStringList>
-#include <QVector>
 #include <QFileInfo>
 
 #include <KoResourcePaths.h>

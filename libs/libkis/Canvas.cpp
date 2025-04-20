@@ -10,7 +10,6 @@
 #include <KoCanvasController.h>
 #include <kis_canvas_controller.h>
 #include <kis_zoom_manager.h>
-#include <QPointer>
 #include <View.h>
 
 struct Canvas::Private {

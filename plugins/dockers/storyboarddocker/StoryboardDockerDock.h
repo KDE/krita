@@ -10,6 +10,7 @@
 #include <QDockWidget>
 #include <QButtonGroup>
 #include <QItemSelection>
+#include <QPointer>
 
 #include <kis_mainwindow_observer.h>
 #include <kis_canvas2.h>

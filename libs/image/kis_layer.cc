@@ -13,8 +13,6 @@
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>

@@ -10,7 +10,6 @@
 #include "kis_global.h"
 #include "kis_properties_configuration.h"
 #include "kis_custom_image_widget.h"
-#include <QPointer>
 
 /**
  * The 'New image from clipboard' widget in the Krita startup widget.

@@ -8,7 +8,6 @@
 #define CHANGETEXTNGDATACOMMAND_H
 
 #include <kundo2command.h>
-#include <QByteArray>
 
 #include "KoSvgTextShape.h"
 

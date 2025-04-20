@@ -11,7 +11,6 @@
 #include "kis_painter.h"
 #include "KisOptimizedByteArray.h"
 
-#include <QSet>
 #include <QMutex>
 #include <QMutexLocker>
 #include <KisRollingMeanAccumulatorWrapper.h>

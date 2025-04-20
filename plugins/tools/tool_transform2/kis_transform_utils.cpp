@@ -9,6 +9,7 @@
 #include <cmath>
 #include <QPainterPath>
 #include <QTransform>
+#include <QVector3D>
 #include <KoUnit.h>
 #include "tool_transform_args.h"
 #include "kis_paint_device.h"

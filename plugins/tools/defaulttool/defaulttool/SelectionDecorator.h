@@ -15,7 +15,6 @@
 #include "KoShapeMeshGradientHandles.h"
 
 #include <QPainter>
-#include <QPointer>
 
 class KoSelection;
 class KoCanvasResourceProvider;

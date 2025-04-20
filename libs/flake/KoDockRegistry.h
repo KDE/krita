@@ -7,7 +7,6 @@
 #ifndef KODOCKREGISTRY_
 #define KODOCKREGISTRY_
 
-#include <QFont>
 
 #include "KoGenericRegistry.h"
 #include <KoDockFactoryBase.h>

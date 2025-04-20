@@ -6,10 +6,8 @@
 
 #include "kis_dlg_stroke_selection_properties.h"
 
-#include <QPushButton>
 #include <QRadioButton>
 #include <QLayout>
-#include <QLabel>
 #include <QSpinBox>
 #include <QSlider>
 #include <QCheckBox>

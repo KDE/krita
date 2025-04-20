@@ -6,7 +6,6 @@
  */
 #include "psd_header.h"
 
-#include <QByteArray>
 #include <QIODevice>
 #include <QtEndian>
 #include <psd_utils.h>

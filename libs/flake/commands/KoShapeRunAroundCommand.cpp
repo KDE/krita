@@ -6,7 +6,6 @@
 
 #include "KoShapeRunAroundCommand.h"
 
-#include <QString>
 #include <klocalizedstring.h>
 #include "KoShape.h"
 

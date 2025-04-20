@@ -8,7 +8,6 @@
 
 #include <klocalizedstring.h>
 #include <QAction>
-#include <QLabel>
 #include <kactioncollection.h>
 
 #include <KoCanvasBase.h>

@@ -12,7 +12,6 @@
 #include <QMouseEvent>
 #include <QPolygon>
 #include <QPaintEvent>
-#include <QMenu>
 #include <QStyleOptionToolButton>
 #include <QWindow>
 #include <QAction>

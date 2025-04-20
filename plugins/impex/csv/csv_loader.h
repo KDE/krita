@@ -8,7 +8,6 @@
 #define CSV_LOADER_H_
 
 #include <QObject>
-#include <QFileInfo>
 
 #include "kis_image.h"
 #include "kritaui_export.h"

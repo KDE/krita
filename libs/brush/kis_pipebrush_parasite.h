@@ -12,10 +12,7 @@
 #include <limits.h>
 
 #include <QFile>
-#include <QImage>
 #include <QPoint>
-#include <QStringList>
-#include <QVector>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>

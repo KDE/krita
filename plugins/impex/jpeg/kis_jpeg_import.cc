@@ -6,7 +6,6 @@
 
 #include "kis_jpeg_import.h"
 
-#include <QFileInfo>
 
 #include <kpluginfactory.h>
 

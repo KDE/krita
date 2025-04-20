@@ -6,8 +6,6 @@
 #ifndef _KIS_BOUNDARY_H_
 #define _KIS_BOUNDARY_H_
 
-#include <QList>
-#include <QPair>
 #include <QPainter>
 
 #include <kritabrush_export.h>

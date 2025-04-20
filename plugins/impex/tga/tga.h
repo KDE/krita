@@ -18,7 +18,6 @@
 #define TGA_H
 
 #include <QDataStream>
-#include <QImage>
 #include <QColor>
 
 // Header format of saved files.

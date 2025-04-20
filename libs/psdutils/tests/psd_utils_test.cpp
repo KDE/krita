@@ -7,7 +7,6 @@
 #include "psd_utils_test.h"
 
 #include <QBuffer>
-#include <QByteArray>
 #include <QCoreApplication>
 #include <klocalizedstring.h>
 

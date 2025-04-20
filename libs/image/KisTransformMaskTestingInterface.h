@@ -6,7 +6,6 @@
 #ifndef KISTRANSFORMMASKTESTINGINTERFACE_H
 #define KISTRANSFORMMASKTESTINGINTERFACE_H
 
-#include <QMutex>
 #include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisTransformMaskTestingInterface

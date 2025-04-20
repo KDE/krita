@@ -8,7 +8,6 @@
 #define KISRESOURCELOADERREGISTRY_H
 
 #include <QObject>
-#include <QSet>
 #include <QStringList>
 
 #include <KoGenericRegistry.h>

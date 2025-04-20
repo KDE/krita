@@ -9,7 +9,6 @@
 #include <QScreen>
 #include <QWindow>
 #include <QBitmap>
-#include <QImage>
 #include <qmath.h>
 #include <QDebug>
 #include <QPainter>

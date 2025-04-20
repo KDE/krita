@@ -8,7 +8,6 @@
 #ifndef KIS_HAIRYPAINTOP_SETTINGS_H_
 #define KIS_HAIRYPAINTOP_SETTINGS_H_
 
-#include <QList>
 
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_types.h>

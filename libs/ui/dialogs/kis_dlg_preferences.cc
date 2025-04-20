@@ -33,7 +33,6 @@
 #include <QSlider>
 #include <QStandardPaths>
 #include <QThread>
-#include <QToolButton>
 #include <QStyleFactory>
 #include <QScreen>
 #include <QFontComboBox>

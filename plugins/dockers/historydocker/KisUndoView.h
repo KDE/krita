@@ -49,7 +49,6 @@
 #include <QListView>
 #include <QString>
 #include <QAction>
-#include <QMenu>
 #include <kis_types.h>
 #include <klocalizedstring.h>
 #include <KisKineticScroller.h>

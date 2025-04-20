@@ -14,9 +14,7 @@
 #include "RulerAssistant.h"
 
 #include <QObject>
-#include <QPolygonF>
 #include <QLineF>
-#include <QTransform>
 
 
 

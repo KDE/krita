@@ -6,7 +6,6 @@
 #include "KisLocalStrokeResources.h"
 #include "KisResourcesInterface_p.h"
 
-#include <QFileInfo>
 #include "kis_assert.h"
 #include "kis_debug.h"
 

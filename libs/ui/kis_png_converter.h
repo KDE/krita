@@ -10,7 +10,6 @@
 #include <png.h>
 
 #include <QColor>
-#include <QVector>
 
 #include "kis_types.h"
 #include "kis_global.h"

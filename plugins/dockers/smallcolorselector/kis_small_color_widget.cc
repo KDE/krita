@@ -4,7 +4,6 @@
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_small_color_widget.h"
-#include <QTimer>
 #include "kis_slider_spin_box.h"
 #include <QVBoxLayout>
 #include "kis_signal_compressor.h"

@@ -10,7 +10,6 @@
 
 #include <QScrollArea>
 #include <QHBoxLayout>
-#include <QFileInfo>
 #include <QColorDialog>
 #include <QInputDialog>
 

@@ -8,7 +8,6 @@
 
 #include <simpletest.h>
 
-#include <QBitArray>
 
 #include <KisDocument.h>
 #include <KoDocumentInfo.h>

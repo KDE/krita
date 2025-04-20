@@ -8,7 +8,6 @@
 #ifndef KIS_KRA_LOAD_VISITOR_H_
 #define KIS_KRA_LOAD_VISITOR_H_
 
-#include <QRect>
 #include <QStringList>
 
 // kritaimage

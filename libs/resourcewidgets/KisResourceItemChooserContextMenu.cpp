@@ -9,7 +9,6 @@
 #include "KisResourceItemChooserContextMenu.h"
 
 #include <QDebug>
-#include <QLabel>
 #include <QGridLayout>
 
 #include <KoIcon.h>

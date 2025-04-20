@@ -11,9 +11,7 @@
 #include <QDockWidget>
 #include <QModelIndex>
 #include <QScopedPointer>
-#include <QVector>
 #include <QPointer>
-#include <QPair>
 #include <QAction>
 #include <QMenu>
 

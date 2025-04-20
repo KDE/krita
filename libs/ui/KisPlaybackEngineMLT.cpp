@@ -9,6 +9,8 @@
 
 #include <QMap>
 
+#include <QMutex>
+#include <QMutexLocker>
 #include <QElapsedTimer>
 #include <QWaitCondition>
 

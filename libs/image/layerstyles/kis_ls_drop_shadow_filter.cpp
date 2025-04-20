@@ -8,7 +8,6 @@
 
 #include <cstdlib>
 
-#include <QBitArray>
 
 #include <KoUpdater.h>
 #include <resources/KoAbstractGradient.h>

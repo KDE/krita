@@ -7,8 +7,6 @@
 
 #include "kis_edit_profiles_dialog.h"
 
-#include <QPushButton>
-#include <QStringListModel>
 #include <KLocalizedString>
 #include <QMessageBox>
 

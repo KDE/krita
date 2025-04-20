@@ -12,7 +12,6 @@
 #include <QFile>
 #include <QImage>
 #include <QPoint>
-#include <QByteArray>
 #include <QBuffer>
 #include <QCryptographicHash>
 

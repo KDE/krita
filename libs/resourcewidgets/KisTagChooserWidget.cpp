@@ -14,7 +14,6 @@
 #include "KisTagChooserWidget.h"
 
 #include <QDebug>
-#include <QToolButton>
 #include <QGridLayout>
 #include <QComboBox>
 #include <QMessageBox>

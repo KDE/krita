@@ -9,7 +9,6 @@
 #include "kritaui_export.h"
 #include <kis_types.h>
 #include <QAbstractItemModel>
-#include <QIcon>
 #include <QList>
 #include <QString>
 #include <QVariant>

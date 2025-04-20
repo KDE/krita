@@ -10,7 +10,6 @@
 #include "ui_wdglut.h"
 
 #include <QWidget>
-#include <QLabel>
 #include <QPointer>
 #include <QDockWidget>
 

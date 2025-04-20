@@ -11,7 +11,8 @@
 #include <kritawidgetutils_export.h>
 
 #include <QList>
-#include <QPushButton>
+#include <QObject>
+#include <QWidget>
 
 class KisKKeySequenceWidgetPrivate;
 class QAction;

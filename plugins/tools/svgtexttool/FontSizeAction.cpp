@@ -15,7 +15,6 @@
 
 #include <QFontDatabase>
 #include <QToolBar>
-#include <QToolButton>
 #include <QRegularExpression>
 #include <QDebug>
 #include <klocalizedstring.h>

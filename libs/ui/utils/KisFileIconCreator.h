@@ -6,7 +6,6 @@
 #ifndef KIS_FILE_ICON_CREATOR_H
 #define KIS_FILE_ICON_CREATOR_H
 
-#include <QScopedPointer>
 #include <QIcon>
 
 #include <KisPreviewFileDialog.h>

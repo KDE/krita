@@ -7,7 +7,6 @@
 
 #include "KisVisualColorModel.h"
 
-#include <QRect>
 #include <QVector>
 #include <QVector3D>
 #include <QVector4D>

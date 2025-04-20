@@ -13,7 +13,6 @@
 #ifndef KISSHORTCUTSDIALOG_H
 #define KISSHORTCUTSDIALOG_H
 
-#include <QDialog>
 
 #include <KisShortcutsEditor.h>
 

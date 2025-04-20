@@ -8,7 +8,6 @@
 #define __KIS_CONVERT_COLORSPACE_PROCESSING_VISITOR_H
 
 #include "kis_simple_processing_visitor.h"
-#include <QRect>
 #include "kis_types.h"
 #include <KoColorConversionTransformation.h>
 

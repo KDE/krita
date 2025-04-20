@@ -15,7 +15,6 @@
 #include "kritawidgets_export.h"
 #include <KoColorSet.h>
 #include <KisSwatchGroup.h>
-#include <QScopedPointer>
 
 class KisPaletteView;
 

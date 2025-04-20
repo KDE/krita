@@ -8,8 +8,6 @@
 #include "ui_manager.h"
 
 #include <QVBoxLayout>
-#include <QDialogButtonBox>
-#include <QPushButton>
 #include <QSortFilterProxyModel>
 #include <kconfiggroup.h>
 #include <QTreeView>

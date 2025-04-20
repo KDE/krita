@@ -7,7 +7,6 @@
 #include "TestKoZoomAction.h"
 
 #include <simpletest.h>
-#include <QDialog>
 
 #include <QVBoxLayout>
 

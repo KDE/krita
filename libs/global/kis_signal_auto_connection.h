@@ -8,7 +8,6 @@
 #define __KIS_SIGNAL_AUTO_CONNECTOR_H
 
 #include <QObject>
-#include <QPointer>
 #include <QVector>
 
 /**

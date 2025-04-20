@@ -6,6 +6,7 @@
  */
 
 #include <QMouseEvent>
+#include <QLabel>
 
 #include "kis_shade_selector_line_editor.h"
 #include "kis_double_parse_spin_box.h"

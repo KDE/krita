@@ -12,7 +12,6 @@
 #include <QColor>
 #include <QPainter>
 #include <QMouseEvent>
-#include <QTimer>
 #include <QToolButton>
 #include <QApplication>
 

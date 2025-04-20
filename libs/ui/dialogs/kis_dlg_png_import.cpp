@@ -5,7 +5,6 @@
  */
 #include "kis_dlg_png_import.h"
 
-#include <QLabel>
 
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

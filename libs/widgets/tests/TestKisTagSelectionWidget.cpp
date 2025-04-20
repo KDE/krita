@@ -7,7 +7,6 @@
 #include <TestKisTagSelectionWidget.h>
 
 #include <QTest>
-#include <QDialog>
 
 #include <QVBoxLayout>
 

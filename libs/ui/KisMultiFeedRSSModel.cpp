@@ -25,7 +25,6 @@
 
 #include "KisMultiFeedRSSModel.h"
 
-#include <QTimer>
 #include <QThread>
 #include <QXmlStreamReader>
 #include <QCoreApplication>

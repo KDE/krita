@@ -12,8 +12,6 @@
 #include <QLayout>
 #include <QPixmap>
 #include <QPainter>
-#include <QLabel>
-#include <QComboBox>
 #include <QDomDocument>
 #include <QHBoxLayout>
 #include <QMessageBox>

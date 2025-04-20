@@ -11,7 +11,6 @@
 #include "kis_types.h"
 #include "kis_default_bounds_base.h"
 
-#include <QScopedPointer>
 
 
 class QTransform;

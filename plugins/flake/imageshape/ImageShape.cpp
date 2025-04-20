@@ -13,7 +13,6 @@
 #include <SvgLoadingContext.h>
 #include <SvgSavingContext.h>
 #include <SvgUtil.h>
-#include <QFileInfo>
 #include <QBuffer>
 #include <KisMimeDatabase.h>
 #include <KoXmlWriter.h>

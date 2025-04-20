@@ -7,8 +7,6 @@
 #include "kra_converter.h"
 
 #include <QApplication>
-#include <QFileInfo>
-#include <QScopedPointer>
 #include <QUrl>
 #include <QVersionNumber>
 

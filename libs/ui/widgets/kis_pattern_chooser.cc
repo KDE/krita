@@ -8,7 +8,6 @@
 #include "widgets/kis_pattern_chooser.h"
 
 #include <math.h>
-#include <QLabel>
 #include <QLayout>
 #include <QVBoxLayout>
 #include <QResizeEvent>

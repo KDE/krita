@@ -10,7 +10,6 @@
 #include <QToolButton>
 #include <QPalette>
 
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QApplication>
 

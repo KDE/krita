@@ -53,7 +53,6 @@
 #include <QAbstractItemModel>
 #include <QPointer>
 #include <QIcon>
-#include <QLabel>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
 #include <QWidgetAction>

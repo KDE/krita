@@ -7,7 +7,6 @@
 #include "tasksetdocker_dock.h"
 
 #include <QGridLayout>
-#include <QListView>
 #include <QHeaderView>
 #include <QStyledItemDelegate>
 #include <QPainter>

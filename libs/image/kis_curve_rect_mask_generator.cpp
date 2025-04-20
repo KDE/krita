@@ -7,8 +7,6 @@
 #include <cmath>
 
 #include <QDomDocument>
-#include <QVector>
-#include <QPointF>
 
 #include <kis_fast_math.h>
 #include "kis_antialiasing_fade_maker.h"

@@ -9,7 +9,6 @@
 #define KIS_GBR_BRUSH_
 
 #include <QImage>
-#include <QVector>
 
 #include "KisColorfulBrush.h"
 #include <kis_types.h>

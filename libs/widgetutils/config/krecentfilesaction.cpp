@@ -21,7 +21,6 @@
 #include <QGuiApplication>
 #include <QDir>
 #include <QMenu>
-#include <QComboBox>
 #include <QScreen>
 #include <QProxyStyle>
 #include <QStandardItemModel>

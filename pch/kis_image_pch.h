@@ -1,8 +1,6 @@
 #include <QtMath>
 #include <QObject>
 #include <QThread>
-#include <QList>
-#include <QVector>
 #include <QVariant>
 #include <QPainter>
 #include <kis_types.h>

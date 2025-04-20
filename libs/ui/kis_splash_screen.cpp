@@ -27,7 +27,6 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
-#include <QIcon>
 
 #ifdef Q_OS_MACOS
 #include "libs/macosutils/KisMacosEntitlements.h"

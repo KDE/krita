@@ -13,7 +13,6 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
-#include <QLabel>
 #include <QSlider>
 #include <QSpinBox>
 #include <QCheckBox>

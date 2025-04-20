@@ -8,7 +8,6 @@
 #define STORYBOARD_VIEW_H
 
 #include <QListView>
-#include <QScroller>
 
 #include <kritastoryboarddocker_export.h>
 

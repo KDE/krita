@@ -8,6 +8,7 @@
 #define KIS_MEMENTO_MANAGER_
 
 #include <QList>
+#include <QMutex>
 
 #include "kis_memento_item.h"
 #include "config-hash-table-implementation.h"

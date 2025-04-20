@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QPointer>
 #include "KisSelectedShapesProxy.h"
 
 #include "kis_signal_auto_connection.h"

@@ -21,7 +21,6 @@
 #include "lazybrush/kis_colorize_mask.h"
 #include "generator/kis_generator_layer.h"
 
-#include <QList>
 #include <QAction>
 
 class KisKActionCollection;

@@ -9,10 +9,7 @@
 
 #include <QDialog>
 #include <QPointer>
-#include <QPair>
 #include <QScopedPointer>
-#include <QHash>
-#include <QSet>
 
 #include <KoColorSet.h>
 

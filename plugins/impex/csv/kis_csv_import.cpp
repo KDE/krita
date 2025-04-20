@@ -9,7 +9,6 @@
 #include <kpluginfactory.h>
 
 #include <QDebug>
-#include <QFileInfo>
 
 #include <KisImportExportManager.h>
 

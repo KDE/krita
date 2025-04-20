@@ -11,15 +11,12 @@
 #include <sstream>
 
 #include <QLayout>
-#include <QLabel>
 #include <QPixmap>
 #include <QPainter>
-#include <QImage>
 #include <QFormLayout>
 #include <QCheckBox>
 #include <QApplication>
 #include <QScreen>
-#include <QToolButton>
 #include <QDir>
 
 

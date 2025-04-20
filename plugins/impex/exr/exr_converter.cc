@@ -24,7 +24,6 @@
 #include <QDomDocument>
 #include <QThread>
 
-#include <QFileInfo>
 
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOpRegistry.h>

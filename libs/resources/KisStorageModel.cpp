@@ -7,7 +7,6 @@
 #include "KisStorageModel.h"
 
 #include <QtSql>
-#include <QElapsedTimer>
 #include <KisResourceLocator.h>
 #include <KoResourcePaths.h>
 #include <KisResourceModelProvider.h>

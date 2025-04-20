@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <QPushButton>
 #include "kis_dlg_paste_format.h"
 
-#include <QPushButton>
 
 KisDlgPasteFormat::KisDlgPasteFormat(QWidget *parent)
     : KoDialog(parent)

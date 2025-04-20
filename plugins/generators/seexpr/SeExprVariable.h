@@ -7,7 +7,6 @@
  */
 
 #include <QMap>
-#include <QString>
 #include <KSeExpr/Expression.h>
 
 class SeExprVariable : public KSeExpr::ExprVarRef

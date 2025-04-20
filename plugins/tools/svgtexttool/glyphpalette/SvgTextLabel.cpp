@@ -8,7 +8,6 @@
 #include <KoSvgTextProperties.h>
 #include <KoColorBackground.h>
 #include <QPainter>
-#include <QImage>
 #include <QQuickWindow>
 #include <KoShapePainter.h>
 #include <kis_assert.h>

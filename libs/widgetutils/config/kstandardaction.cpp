@@ -8,7 +8,6 @@
 #include "kstandardaction_p.h"
 #include "moc_kstandardaction_p.cpp"
 
-#include <QToolButton>
 #include <QActionGroup>
 #include <QApplication>
 #include <QWidget>

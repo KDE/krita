@@ -14,10 +14,8 @@
 #include <QPainterPath>
 #include <QRect>
 #include <QDomElement>
-#include <QByteArray>
 #include <QBuffer>
 #include <QFile>
-#include <QFileInfo>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>

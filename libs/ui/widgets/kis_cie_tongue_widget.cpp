@@ -29,7 +29,6 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 #include <QPainter>
 #include <QPainterPath>
 #include <QFile>
-#include <QTimer>
 #include <QPaintEvent>
 #include <QImage>
 #include <cmath>

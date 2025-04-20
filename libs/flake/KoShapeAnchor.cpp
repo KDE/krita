@@ -15,8 +15,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 
-#include <QRectF>
-#include <QTransform>
+#include <QPointF>
 #include <FlakeDebug.h>
 
 class Q_DECL_HIDDEN KoShapeAnchor::Private

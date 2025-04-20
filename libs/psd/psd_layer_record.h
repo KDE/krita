@@ -9,7 +9,6 @@
 
 #include "kritapsd_export.h"
 
-#include <QBitArray>
 #include <QByteArray>
 #include <QString>
 #include <QVector>

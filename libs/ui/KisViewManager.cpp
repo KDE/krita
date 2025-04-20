@@ -33,7 +33,6 @@
 #include <QPoint>
 #include <QPrintDialog>
 #include <QPushButton>
-#include <QRect>
 #include <QScreen>
 #include <QScrollBar>
 #include <QStatusBar>

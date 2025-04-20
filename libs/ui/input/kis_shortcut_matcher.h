@@ -8,7 +8,6 @@
 #define __KIS_SHORTCUT_MATCHER_H
 
 
-#include <QList>
 #include "kis_single_action_shortcut.h"
 #include "KisInputActionGroup.h"
 #include <functional>

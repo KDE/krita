@@ -10,6 +10,7 @@
 
 #include <kis_debug.h>
 #include <QMutex>
+#include <QMutexLocker>
 
 #include <KisTransformMaskTestingInterface.h>
 

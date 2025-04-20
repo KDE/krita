@@ -7,7 +7,6 @@
 #ifndef _KIS_COLOR_BALANCE_FILTER_H_
 #define _KIS_COLOR_BALANCE_FILTER_H_
 
-#include <QList>
 #include "filter/kis_filter.h"
 #include "kis_config_widget.h"
 #include "ui_wdg_color_balance.h"

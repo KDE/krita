@@ -9,6 +9,7 @@
 #include <QDomDocument>
 #include <QAction>
 #include <QMenu>
+#include <QPointer>
 
 #include <kactionmenu.h>
 #include <klocalizedstring.h>

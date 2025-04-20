@@ -11,7 +11,6 @@
 #include "kis_iterator_ng.h"
 #include "kis_datamanager.h"
 
-#include <QTransform>
 #include <QVector2D>
 #include <QPainter>
 #include <QVarLengthArray>

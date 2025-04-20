@@ -9,7 +9,6 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
-#include <QLabel>
 #include <QCheckBox>
 #include <QPushButton>
 

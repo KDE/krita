@@ -12,7 +12,6 @@
 
 #include <QMenu>
 #include <QWidgetAction>
-#include <QLabel>
 #include <QLineEdit>
 
 #include <KoResource.h>

@@ -5,7 +5,6 @@
  */
 #include "Window.h"
 
-#include <QMenuBar>
 #include <QObject>
 #include <QAction>
 

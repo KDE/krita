@@ -12,7 +12,6 @@
 #include <QPointF>
 #include <QVector>
 #include <QMap>
-#include <QScopedPointer>
 #include <QPainterPath>
 
 #include <KoPathShape.h>

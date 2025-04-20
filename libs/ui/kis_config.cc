@@ -9,8 +9,6 @@
 #include <QtGlobal>
 #include <QApplication>
 #include <QScreen>
-#include <QMutex>
-#include <QFont>
 #include <QThread>
 #include <QStringList>
 #include <QSettings>

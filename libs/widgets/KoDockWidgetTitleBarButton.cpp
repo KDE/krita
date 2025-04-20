@@ -11,7 +11,6 @@
 
 #include <QAbstractButton>
 #include <QAction>
-#include <QLabel>
 #include <QLayout>
 #include <QStyle>
 #include <QStylePainter>

@@ -9,7 +9,6 @@
 #define _KIS_STOP_GRADIENT_SLIDER_H_
 
 #include <QWidget>
-#include <QScopedPointer>
 
 #include <KoStopGradient.h>
 #include <kis_signal_compressor.h>

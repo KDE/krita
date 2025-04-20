@@ -10,7 +10,6 @@
 #include <math.h>
 
 #include <QDomElement>
-#include <QImage>
 
 #include <KoCompositeOpRegistry.h>
 

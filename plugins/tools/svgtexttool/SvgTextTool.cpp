@@ -20,9 +20,7 @@
 #include "SvgTextEditor.h"
 #include "SvgTextRemoveCommand.h"
 
-#include <QLabel>
 #include <QPainterPath>
-#include <QToolButton>
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QDesktopServices>

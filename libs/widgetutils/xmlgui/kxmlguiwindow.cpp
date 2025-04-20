@@ -38,7 +38,6 @@
 #include <QStatusBar>
 #include <QStyle>
 #include <QWidget>
-#include <QList>
 
 #include <ktoggleaction.h>
 #include <kstandardaction.h>

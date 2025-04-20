@@ -8,6 +8,7 @@
 #define _GRID_DOCK_H_
 
 #include <QDockWidget>
+#include <QPointer>
 #include <KoCanvasObserverBase.h>
 #include "kis_signal_auto_connection.h"
 

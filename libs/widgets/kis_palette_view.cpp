@@ -9,11 +9,9 @@
 #include <QWheelEvent>
 #include <QHeaderView>
 #include <QFormLayout>
-#include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QMenu>
 
 #include <KConfigGroup>
 #include <KSharedConfig>

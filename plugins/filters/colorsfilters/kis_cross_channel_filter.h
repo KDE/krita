@@ -10,8 +10,6 @@
 #ifndef _KIS_CROSSCHANNEL_FILTER_H_
 #define _KIS_CROSSCHANNEL_FILTER_H_
 
-#include <QPair>
-#include <QList>
 
 #include <filter/kis_color_transformation_filter.h>
 #include <filter/kis_color_transformation_configuration.h>

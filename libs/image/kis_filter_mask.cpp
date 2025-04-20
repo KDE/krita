@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QMutex>
+#include <QMutexLocker>
 #include <KoIcon.h>
 #include <kis_icon.h>
 #include <KoCompositeOpRegistry.h>

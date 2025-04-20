@@ -17,7 +17,6 @@
 
 #include "KisShortcutsEditor.h"
 #include <QTreeWidget>
-#include <QScroller>
 #include <ktreewidgetsearchline.h>
 
 #include "KisShortcutsDialog_p.h"

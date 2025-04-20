@@ -8,8 +8,6 @@
 #define KIS_UNDO_STORE_H_
 
 #include <QObject>
-#include <QString>
-#include <QVector>
 
 #include <kritacommand_export.h>
 

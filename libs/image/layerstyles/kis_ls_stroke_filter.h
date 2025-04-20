@@ -7,7 +7,6 @@
 #ifndef KIS_LS_STROKE_FILTER_H
 #define KIS_LS_STROKE_FILTER_H
 
-#include <QSharedPointer>
 #include <kritaimage_export.h>
 
 #include "kis_layer_style_filter.h"

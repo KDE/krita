@@ -10,7 +10,6 @@
 
 #include <QPoint>
 #include <QPolygonF>
-#include <QVector>
 #include <QMap>
 #include <QtMath>
 #include <QDomDocument>

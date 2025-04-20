@@ -8,7 +8,6 @@
 #define H_GAMUT_MASK_DOCK_H
 
 #include <QDockWidget>
-#include <QPointer>
 #include <QMessageBox>
 
 #include <KoCanvasObserverBase.h>

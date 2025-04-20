@@ -26,9 +26,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QEvent>
-#include <QDockWidget>
 #include <QTimer>
-#include <QPointer>
 
 #include <QOpenGLWidget>
 

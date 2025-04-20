@@ -9,7 +9,6 @@
 #include "overviewwidget.h"
 #include "overviewdocker_page.h"
 
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QToolButton>

@@ -8,7 +8,6 @@
 
 #include <QPainter>
 #include <QDebug>
-#include <QStyledItemDelegate>
 
 #include "KisResourceItemDelegate.h"
 #include "KisResourceModel.h"

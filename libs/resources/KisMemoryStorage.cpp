@@ -7,7 +7,6 @@
 #include "KisMemoryStorage.h"
 
 #include <QVector>
-#include <QFileInfo>
 
 #include <KisMimeDatabase.h>
 #include <kis_debug.h>

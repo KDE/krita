@@ -8,12 +8,8 @@
 
 #include "dlg_colorrange.h"
 #include <QApplication>
-#include <QPushButton>
 #include <QCheckBox>
 #include <QSlider>
-#include <QComboBox>
-#include <QImage>
-#include <QLabel>
 #include <QColor>
 #include <QRadioButton>
 

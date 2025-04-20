@@ -8,7 +8,6 @@
 #define KOCOMPOSITEOP_H
 
 #include <QString>
-#include <QList>
 #include <QMultiMap>
 #include <QBitArray>
 

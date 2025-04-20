@@ -10,7 +10,6 @@
 #define _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 
 #include <kritaui_export.h>
-#include <QIcon>
 #include <QStyledItemDelegate>
 
 /**

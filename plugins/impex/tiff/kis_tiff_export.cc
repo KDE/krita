@@ -8,7 +8,6 @@
 #include "kis_tiff_export.h"
 
 #include <QBuffer>
-#include <QFileInfo>
 
 #include <memory>
 

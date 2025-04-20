@@ -8,6 +8,7 @@
 
 #include "DebugPigment.h"
 
+#include <QMutex>
 #include <QMutexLocker>
 
 #include "KoColorProfile.h"

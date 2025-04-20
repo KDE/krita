@@ -2,11 +2,8 @@
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <QList>
-#include <QString>
 #include <QVariant>
 #include <QMap>
-#include <QByteArray>
 #include <QAction>
 
 class Canvas;

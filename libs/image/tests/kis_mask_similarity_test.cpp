@@ -7,7 +7,6 @@
 #include "kis_mask_similarity_test.h"
 
 #include <simpletest.h>
-#include <QPointF>
 
 #include <KoColor.h>
 #include <testutil.h>

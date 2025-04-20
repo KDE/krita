@@ -17,7 +17,6 @@
 
 #include <kis_document_aware_spin_box_unit_manager.h>
 
-#include <QComboBox>
 #include <QButtonGroup>
 
 const QString DlgCanvasSize::PARAM_PREFIX = "canvasizedlg";

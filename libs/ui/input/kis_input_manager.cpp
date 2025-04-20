@@ -13,7 +13,6 @@
 #include <klocalizedstring.h>
 #include <QApplication>
 #include <QTouchEvent>
-#include <QElapsedTimer>
 #include <QWidget>
 
 #include <KoToolManager.h>

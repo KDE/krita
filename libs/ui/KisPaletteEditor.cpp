@@ -6,7 +6,6 @@
 
 #include <QHash>
 #include <QString>
-#include <QScopedPointer>
 #include <QPointer>
 #include <QFormLayout>
 #include <QCheckBox>

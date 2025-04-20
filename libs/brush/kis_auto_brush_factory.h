@@ -8,7 +8,6 @@
 
 #include <QString>
 #include <QDomElement>
-#include <QHash>
 
 #include <KoID.h>
 

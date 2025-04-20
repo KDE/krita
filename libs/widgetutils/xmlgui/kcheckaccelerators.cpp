@@ -15,7 +15,6 @@
 #include <QMouseEvent>
 #include <QLayout>
 #include <QMenuBar>
-#include <QPushButton>
 #include <QTabBar>
 #include <QTextBrowser>
 #include <QChar>

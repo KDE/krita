@@ -8,7 +8,6 @@
 #define KISGAMUTMASKTOOLBAR_H
 
 #include <QWidget>
-#include <QIcon>
 
 #include <resources/KoGamutMask.h>
 #include "kritaui_export.h"

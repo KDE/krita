@@ -12,7 +12,6 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickItem>
-#include <QFontDatabase>
 #include <QStringListModel>
 #include <QQuickStyle>
 #include <QColorDialog>

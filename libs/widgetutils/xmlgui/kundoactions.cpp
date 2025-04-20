@@ -8,7 +8,6 @@
 #include "config-xmlgui.h"
 #include <QAction>
 #include <QKeySequence>
-#include <QList>
 #include <QUndoStack>
 
 #include <kactioncollection.h>

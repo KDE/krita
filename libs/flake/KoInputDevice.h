@@ -10,7 +10,6 @@
 
 #include "kritaflake_export.h"
 
-#include <QHash>
 #include <QTabletEvent>
 #include <QDebug>
 #include <QFlags>

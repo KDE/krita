@@ -15,7 +15,6 @@
 #include <QApplication>
 #include <QSize>
 #include <QMouseEvent>
-#include <QListView>
 #include <QSpinBox>
 #include <QScrollBar>
 

@@ -4,6 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QMutex>
+#include <QMutexLocker>
 #include "kis_dummies_facade_base.h"
 
 #include "kis_image.h"

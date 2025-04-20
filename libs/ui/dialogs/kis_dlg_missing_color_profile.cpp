@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
+#include <QPushButton>
 #include "kis_dlg_missing_color_profile.h"
 
-#include <QPushButton>
 
 KisDlgMissingColorProfile::KisDlgMissingColorProfile(QWidget *parent)
     : KoDialog(parent)

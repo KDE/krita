@@ -13,7 +13,6 @@
 #include <array>
 #include <cmath>
 
-#include <QScopedPointer>
 #include <QtGlobal>
 
 class KoColorSpace;

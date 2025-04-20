@@ -8,7 +8,6 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QList>
 
 #include "kis_adjustment_layer.h"
 #include "kis_generator_layer.h"

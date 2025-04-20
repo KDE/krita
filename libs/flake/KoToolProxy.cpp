@@ -9,7 +9,6 @@
 
 #include <QMimeData>
 #include <QUrl>
-#include <QTimer>
 #include <QApplication>
 #include <QTouchEvent>
 #include <QClipboard>

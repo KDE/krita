@@ -10,7 +10,6 @@
 #include <QHash>
 
 #include <QReadWriteLock>
-#include <QStringList>
 #include <QDir>
 #include <QGlobalStatic>
 

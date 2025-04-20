@@ -23,7 +23,6 @@
 
 #include <KisRollingMeanAccumulatorWrapper.h>
 
-#include <QElapsedTimer>
 
 class KisPainter;
 class KisColorSource;

@@ -6,9 +6,6 @@
 #ifndef KIS_BRUSH_SERVER_PROVIDER_H
 #define KIS_BRUSH_SERVER_PROVIDER_H
 
-#include <QString>
-#include <QStringList>
-#include <QList>
 
 #include <KoResourceServer.h>
 

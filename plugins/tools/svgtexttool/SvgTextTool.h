@@ -12,11 +12,9 @@
 
 #include <KConfigGroup>
 #include <KoToolBase.h>
-#include <QPushButton>
 #include <QFontComboBox>
 #include <QPointer>
 #include <QDoubleSpinBox>
-#include <QTimer>
 
 #include <kis_signal_auto_connection.h>
 

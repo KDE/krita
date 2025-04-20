@@ -7,7 +7,6 @@
 #ifndef _KIS_ROUNDMARKEROP_H_
 #define _KIS_ROUNDMARKEROP_H_
 
-#include <QRect>
 
 #include <kis_paintop.h>
 #include <kis_types.h>

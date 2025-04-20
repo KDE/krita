@@ -8,8 +8,6 @@
 
 #include "kis_wdg_blur.h"
 #include <QLayout>
-#include <QToolButton>
-#include <QIcon>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>

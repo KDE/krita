@@ -11,7 +11,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDoubleSpinBox>
-#include <QLabel>
 
 #include <klocalizedstring.h>
 

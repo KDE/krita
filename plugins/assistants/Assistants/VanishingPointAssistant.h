@@ -12,9 +12,7 @@
 
 #include "kis_painting_assistant.h"
 #include <QObject>
-#include <QPolygonF>
 #include <QLineF>
-#include <QTransform>
 /* Design:
  *The idea behind the vanishing point ruler is that in a perspective deformed landscape, a set of parallel
  *lines al share a single vanishing point.

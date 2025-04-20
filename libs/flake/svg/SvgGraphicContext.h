@@ -10,7 +10,6 @@
 
 #include "kritaflake_export.h"
 #include <KoShapeStroke.h>
-#include <QFont>
 #include <QTransform>
 #include <text/KoSvgTextProperties.h>
 

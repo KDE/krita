@@ -37,7 +37,6 @@
 #include <QApplication>
 #include <QStyle>
 #include <QHBoxLayout>
-#include <QIcon>
 
 // KDE includes
 

@@ -22,14 +22,12 @@
 #include <QDockWidget>
 #include <QIcon>
 #include <QInputDialog>
-#include <QLabel>
 #include <QLayout>
 #include <QMdiArea>
 #include <QMdiSubWindow>
 #include <QMutex>
 #include <QMutexLocker>
 #include <QPointer>
-#include <QToolButton>
 #include <KisSignalMapper.h>
 #include <QTabBar>
 #include <QMoveEvent>

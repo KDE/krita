@@ -6,7 +6,6 @@
 #include "psd_import.h"
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 
 #include <KisDocument.h>
 #include <kis_image.h>

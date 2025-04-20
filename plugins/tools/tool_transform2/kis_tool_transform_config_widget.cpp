@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QVector3D>
 #include "kis_tool_transform_config_widget.h"
 
 #include <kis_icon.h>

@@ -8,7 +8,6 @@
 #define _HAIRY_BRUSH_H_
 
 #include <QVector>
-#include <QList>
 #include <QTransform>
 
 #include <KoColor.h>

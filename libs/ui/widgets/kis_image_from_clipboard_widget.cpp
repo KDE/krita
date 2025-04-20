@@ -11,14 +11,11 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QComboBox>
 #include <QScreen>
 #include <QFile>
 #include <QMimeData>
-#include <QPushButton>
 #include <QRect>
 #include <QSlider>
-#include <QTimer>
 
 #include <KisPart.h>
 #include <KoColor.h>

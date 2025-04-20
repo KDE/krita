@@ -8,7 +8,6 @@
 #define KOABSTRACTCANVASRESOURCEINTERFACE_H
 
 #include <QObject>
-#include <QScopedPointer>
 #include <QSharedPointer>
 #include "kritaflake_export.h"
 

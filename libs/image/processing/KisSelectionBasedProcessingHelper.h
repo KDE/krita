@@ -9,7 +9,6 @@
 #include "kis_types.h"
 
 #include <functional>
-#include <QRect>
 
 class KisUndoAdapter;
 

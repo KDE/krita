@@ -8,7 +8,6 @@
 #define __KIS_PAINT_DEVICE_CACHE_H
 
 #include "kis_lock_free_cache.h"
-#include <QElapsedTimer>
 #include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>

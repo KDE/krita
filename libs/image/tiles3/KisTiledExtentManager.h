@@ -8,7 +8,6 @@
 #ifndef KISTILEDEXTENTMANAGER_H
 #define KISTILEDEXTENTMANAGER_H
 
-#include <QMutex>
 #include <QReadWriteLock>
 #include <QMap>
 #include <QRect>

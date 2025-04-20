@@ -10,7 +10,6 @@
 #ifndef KIS_COMPOSITEOP_WIDGETS_H_
 #define KIS_COMPOSITEOP_WIDGETS_H_
 
-#include <QComboBox>
 #include <KisSqueezedComboBox.h>
 #include <kritaui_export.h>
 #include "kis_categorized_list_view.h"

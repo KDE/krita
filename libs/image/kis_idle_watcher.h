@@ -11,7 +11,6 @@
 
 #include <QScopedPointer>
 #include <QObject>
-#include <QString>
 
 #include "kis_types.h"
 

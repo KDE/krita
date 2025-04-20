@@ -23,7 +23,6 @@
 #include <QImage>
 #include <QPixmap>
 #include <QHeaderView>
-#include <QStyledItemDelegate>
 #include <QStandardPaths>
 #include <QPainter>
 #include <QCheckBox>

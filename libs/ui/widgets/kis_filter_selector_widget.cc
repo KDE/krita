@@ -11,8 +11,6 @@
 #include <QHeaderView>
 #include <QTreeView>
 #include <QLabel>
-#include <QComboBox>
-#include <QPushButton>
 #include <QScrollArea>
 #include <QLayout>
 #include <QDialogButtonBox>

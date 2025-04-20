@@ -9,7 +9,6 @@
 
 #include <QColor>
 #include <QDomElement>
-#include <QImage>
 
 #include <klocalizedstring.h>
 

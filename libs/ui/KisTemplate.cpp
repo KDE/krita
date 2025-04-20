@@ -8,7 +8,6 @@
 
 #include <QImage>
 #include <QPixmap>
-#include <QIcon>
 #include <QFile>
 #include <kis_debug.h>
 #include <KoResourcePaths.h>

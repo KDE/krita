@@ -5,17 +5,13 @@
  */
 
 #include <QAction>
-#include <QFileInfo>
 #include <QSpinBox>
-#include <QLabel>
 #include <QVBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
-#include <QComboBox>
 #include <QInputDialog>
 #include <QFormLayout>
 #include <QPicture>
-#include <QPushButton>
 #include <QSignalBlocker>
 
 #include <KoResourceServerProvider.h>

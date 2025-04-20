@@ -9,7 +9,6 @@
 #include "widgets/kis_paintop_presets_editor.h"
 
 #include <QList>
-#include <QComboBox>
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QGridLayout>

@@ -9,7 +9,6 @@
 #define KIS_PROPERTY_WRAPPER_H
 
 #include <QObject>
-#include <QPointer>
 #include <QVariant>
 
 #include "kis_scalar_keyframe_channel.h"

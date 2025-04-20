@@ -7,7 +7,6 @@
 
 #include <brushengine/kis_paintop_settings.h>
 
-#include <QImage>
 #include <QColor>
 #include <QDomDocument>
 #include <QDomElement>

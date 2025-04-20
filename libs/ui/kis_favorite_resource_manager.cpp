@@ -7,7 +7,6 @@
 
 #include <kis_debug.h>
 #include <QPoint>
-#include <QStringList>
 #include <QString>
 #include <QColor>
 #include <brushengine/kis_paintop_registry.h>

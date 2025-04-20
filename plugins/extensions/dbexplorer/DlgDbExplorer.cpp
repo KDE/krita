@@ -13,7 +13,6 @@
 #include <QDataWidgetMapper>
 #include <QTableView>
 #include <QtSql>
-#include <QStyledItemDelegate>
 
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>

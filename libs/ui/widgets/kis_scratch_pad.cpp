@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QMutex>
+#include <QMutexLocker>
 #include <QWheelEvent>
 #include <QPaintEvent>
 

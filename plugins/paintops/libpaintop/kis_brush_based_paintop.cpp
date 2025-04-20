@@ -19,7 +19,6 @@
 #include <KisUsageLogger.h>
 #include <KoResourceLoadResult.h>
 
-#include <QImage>
 #include <QPainter>
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

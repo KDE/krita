@@ -5,11 +5,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QPointer>
-#include <QScopedPointer>
 #include <QGridLayout>
-#include <QSet>
-#include <QStringList>
 #include <QFile>
 #include <QMessageBox>
 #include <QInputDialog>

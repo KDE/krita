@@ -12,7 +12,6 @@
 #include <QBuffer>
 #include <QDataStream>
 #include <QIODevice>
-#include <QStringList>
 
 #include "kis_iterator_ng.h"
 #include <algorithm>

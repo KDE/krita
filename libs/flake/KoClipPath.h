@@ -9,7 +9,6 @@
 
 #include "kritaflake_export.h"
 
-#include <QScopedPointer>
 #include <QList>
 #include <QSharedDataPointer>
 #include <qnamespace.h>

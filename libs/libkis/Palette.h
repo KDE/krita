@@ -8,7 +8,6 @@
 #define LIBKIS_PALETTE_H
 
 #include <QObject>
-#include <QList>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"

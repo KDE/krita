@@ -5,7 +5,6 @@
  */
 #include "kis_text_brush_factory.h"
 
-#include <QString>
 #include <QFont>
 #include <kis_dom_utils.h>
 #include "kis_text_brush.h"

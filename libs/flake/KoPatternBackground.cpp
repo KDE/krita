@@ -14,7 +14,6 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPainterPath>
-#include <QPointer>
 #include <QSharedData>
 
 class KoPatternBackground::Private : public QSharedData

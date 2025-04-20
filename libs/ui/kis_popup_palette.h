@@ -10,8 +10,6 @@
 
 #include <QPushButton>
 #include <QSlider>
-#include <QComboBox>
-#include <QLabel>
 #include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"

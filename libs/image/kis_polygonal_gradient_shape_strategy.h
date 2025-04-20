@@ -9,7 +9,6 @@
 
 #include "kis_gradient_shape_strategy.h"
 
-#include <QPolygonF>
 #include <QPainterPath>
 
 #include "kritaimage_export.h"

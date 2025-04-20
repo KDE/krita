@@ -5,7 +5,6 @@
  */
 
 #include "tool_lazybrush.h"
-#include <QStringList>
 
 #include <kis_debug.h>
 #include <kpluginfactory.h>

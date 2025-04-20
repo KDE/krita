@@ -9,7 +9,6 @@
 #include "dlg_create_bundle.h"
 
 #include <QProcessEnvironment>
-#include <QFileInfo>
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QGridLayout>

@@ -8,7 +8,6 @@
 
 #include <QLabel>
 #include <kis_brush.h>
-#include <QScroller>
 
 #include "kritapaintop_export.h"
 #include "ui_wdgpredefinedbrushchooser.h"

@@ -10,7 +10,6 @@
 #include <QDebug>
 #include <QVector>
 #include <QFile>
-#include <QFileInfo>
 #include <QBuffer>
 #include <QByteArray>
 #include <QImage>

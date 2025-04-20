@@ -7,9 +7,7 @@
 #include "kis_psd_layer_style_test.h"
 #include "kis_psd_layer_style.h"
 
-#include <QString>
 #include <QFile>
-#include <QByteArray>
 #include <QBuffer>
 
 #include <simpletest.h>

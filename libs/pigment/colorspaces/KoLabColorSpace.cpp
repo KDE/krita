@@ -11,7 +11,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <QImage>
 #include <QBitArray>
 
 #include <klocalizedstring.h>

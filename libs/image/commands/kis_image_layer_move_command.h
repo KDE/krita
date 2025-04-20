@@ -11,7 +11,6 @@
 #include <kritaimage_export.h>
 
 #include <QSize>
-#include <QBitArray>
 #include "kis_types.h"
 #include "kis_image_command.h"
 

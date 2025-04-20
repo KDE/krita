@@ -7,7 +7,6 @@
 #include "kis_png_import.h"
 
 #include <kpluginfactory.h>
-#include <QFileInfo>
 
 #include <KisImportExportManager.h>
 

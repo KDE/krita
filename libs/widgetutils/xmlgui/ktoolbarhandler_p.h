@@ -9,7 +9,6 @@
 
 #include <QLinkedList>
 #include <QObject>
-#include <QPointer>
 
 #include <kxmlguiclient.h>
 

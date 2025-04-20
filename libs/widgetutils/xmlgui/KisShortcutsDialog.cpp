@@ -25,6 +25,7 @@
 #include <QDomDocument>
 #include <QVBoxLayout>
 #include <QDebug>
+#include <QPushButton>
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>

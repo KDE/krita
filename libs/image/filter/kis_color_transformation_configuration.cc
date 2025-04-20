@@ -6,6 +6,7 @@
 
 #include "filter/kis_color_transformation_configuration.h"
 
+#include <QMutex>
 #include <QMutexLocker>
 #include <QMap>
 #include <QThread>

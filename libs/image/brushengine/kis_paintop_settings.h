@@ -10,7 +10,6 @@
 #include "kis_types.h"
 #include "kritaimage_export.h"
 
-#include <QImage>
 #include <QScopedPointer>
 
 #include "kis_properties_configuration.h"

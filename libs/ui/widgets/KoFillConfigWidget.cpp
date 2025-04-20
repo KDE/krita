@@ -11,7 +11,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QButtonGroup>
-#include <QLabel>
 #include <QSizePolicy>
 #include <QBitmap>
 #include <QAction>

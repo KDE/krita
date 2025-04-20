@@ -9,7 +9,6 @@
 #define KIS_PRESET_CHOOSER_H_
 
 #include <QWidget>
-#include <QScroller>
 #include <QPointer>
 
 #include <KoResource.h>

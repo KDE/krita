@@ -13,6 +13,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 
+#include <QElapsedTimer>
 #include <QTimer>
 #include "animation/KisFrameDisplayProxy.h"
 #include "KisRollingMeanAccumulatorWrapper.h"
@@ -20,7 +21,6 @@
 
 #include "KisPlaybackEngineQT.h"
 
-#include <QFileInfo>
 
 namespace {
 

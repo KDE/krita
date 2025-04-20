@@ -6,7 +6,9 @@
 
 #include "inplace_transform_stroke_strategy.h"
 
+#include <QMutex>
 #include <QMutexLocker>
+#include <QElapsedTimer>
 #include "kundo2commandextradata.h"
 
 #include "kis_node_progress_proxy.h"

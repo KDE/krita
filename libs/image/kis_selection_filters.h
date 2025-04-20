@@ -14,7 +14,6 @@
 #include "kis_default_bounds_base.h"
 
 #include <QRect>
-#include <QString>
 
 class KUndo2MagicString;
 class KoColorSpace;

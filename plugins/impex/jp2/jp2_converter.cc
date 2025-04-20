@@ -8,7 +8,6 @@
 
 #include <openjpeg.h>
 
-#include <QFileInfo>
 #include <QApplication>
 
 #include <QMessageBox>

@@ -8,7 +8,6 @@
 
 #include <klocalizedstring.h>
 #include <KoID.h>
-#include <QList>
 
 #include "KoColorSpace.h"
 #include "KoCompositeOpRegistry.h"

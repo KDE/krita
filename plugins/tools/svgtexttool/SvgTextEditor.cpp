@@ -11,7 +11,6 @@
 #include <QActionGroup>
 #include <QApplication>
 #include <QBuffer>
-#include <QComboBox>
 #include <QDialogButtonBox>
 #include <QDoubleSpinBox>
 #include <QFontComboBox>
@@ -23,7 +22,6 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPalette>
-#include <QPushButton>
 #include <QStandardItem>
 #include <QStandardItemModel>
 #include <QSvgGenerator>

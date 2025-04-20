@@ -18,7 +18,6 @@
 #include <QFileInfo>
 #include <QGridLayout>
 #include <QHash>
-#include <QLabel>
 #include <QMessageBox>
 #include <QPainter>
 #include <QProcessEnvironment>

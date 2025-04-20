@@ -14,7 +14,6 @@
 #include <QDebug>
 #include <QMutex>
 #include <QObject>
-#include <QRect>
 #include <QScopedPointer>
 #include <QSize>
 #include <QVector>

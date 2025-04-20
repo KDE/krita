@@ -22,16 +22,13 @@
 #include <kselectaction.h>
 #include <kconfiggroup.h>
 
-#include <QMenu>
 #include <QMessageBox>
 #include <QUrl>
 #include <QTemporaryFile>
 #include <QApplication>
 #include <QScreen>
-#include <QDockWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QImage>
 #include <QList>
 #include <QPrintDialog>
 #include <QToolBar>

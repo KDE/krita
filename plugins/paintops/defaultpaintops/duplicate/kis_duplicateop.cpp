@@ -14,13 +14,10 @@
 #include <string.h>
 
 #include <QRect>
-#include <QWidget>
 #include <QLayout>
-#include <QLabel>
 #include <QCheckBox>
 #include <QDomElement>
 #include <QHBoxLayout>
-#include <QToolButton>
 
 #include <kis_image.h>
 #include <kis_debug.h>

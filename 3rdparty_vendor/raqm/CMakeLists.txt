@@ -86,6 +86,7 @@ set(libraqm_SRC
 
 add_library(libraqm STATIC ${libraqm_SRC})
 set_property(TARGET libraqm PROPERTY C_STANDARD 99)
+set_property(TARGET libraqm PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(libraqm INTERFACE ${libraqm_src_SOURCE_DIR}/src)
 target_include_directories(libraqm PUBLIC ${CMAKE_CURRENT_BINARY_DIR})

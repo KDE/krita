@@ -604,12 +604,16 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
         charResult.scaledAscent = isHorizontal? scaledBBox.top(): scaledBBox.right();
         charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
+
         if (charResult.tabSize) {
             charResult.tabSize = ftTF.map(QPointF(*charResult.tabSize, *charResult.tabSize)).x();
         }
 
         if(!qFuzzyCompare(bitmapScale, 1.0)) {
             charResult.metrics.scaleBaselines(bitmapScale);
+        }
+        if (charResult.extraFontScaling < 1.0) {
+            charResult.scaleCharacterResult(charResult.extraFontScaling, charResult.extraFontScaling);
         }
 
         if (bitmapGlyph) {

@@ -444,6 +444,7 @@ void KoSvgTextShape::Private::relayout()
                 static_cast<quint32>(finalRes),
                 static_cast<quint32>(finalRes),
                 disableFontMatching);
+            const qreal fontSize = properties.cssFontInfo().size;
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(),
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
@@ -495,6 +496,9 @@ void KoSvgTextShape::Private::relayout()
                         metricsList.insert(currentScript, KoFontRegistry::generateFontMetrics(face, isHorizontal, KoWritingSystemUtils::scriptTagForQCharScript(currentScript)));
                     }
                     result[j].metrics = metricsList.value(currentScript);
+                    if (fontSize < 1.0) {
+                        result[j].extraFontScaling = fontSize;
+                    }
 
                     const KoSvgText::FontMetrics currentMetrics = properties.applyLineHeight(result[j].metrics);
 
@@ -647,11 +651,9 @@ void KoSvgTextShape::Private::relayout()
         dummy.finalPosition = dummy.cssPosition;
         dummy.inkBoundingBox = hardbreak.inkBoundingBox;
         if (isHorizontal) {
-            dummy.advance.setX(0);
-            dummy.inkBoundingBox.setWidth(0);
+            dummy.scaleCharacterResult(0.0, 1.0);
         } else {
-            dummy.advance.setY(0);
-            dummy.inkBoundingBox.setHeight(0);
+            dummy.scaleCharacterResult(1.0, 0.0);
         }
         dummy.plaintTextIndex = hardbreak.cursorInfo.graphemeIndices.last();
         dummy.cursorInfo.caret = hardbreak.cursorInfo.caret;
@@ -1032,13 +1034,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
                 cr.finalPosition += shift;
                 if (spacingAndGlyphs) {
                     QPointF scale(d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0, d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
-                    QTransform tf = QTransform::fromScale(scale.x(), scale.y());
-                    // FIXME: What about other glyph formats?
-                    if (auto *outlineGlyph = std::get_if<Glyph::Outline>(&cr.glyph)) {
-                        outlineGlyph->path = tf.map(outlineGlyph->path);
-                    }
-                    cr.advance = tf.map(cr.advance);
-                    cr.inkBoundingBox = tf.mapRect(cr.inkBoundingBox);
+                    cr.scaleCharacterResult(scale.x(), scale.y());
                 }
                 bool last = spacingAndGlyphs ? false : k == visualToLogical.keys().last();
 

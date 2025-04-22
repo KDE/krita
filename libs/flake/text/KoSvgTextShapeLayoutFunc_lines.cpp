@@ -66,11 +66,10 @@ void addWordToLine(QVector<CharacterResult> &result,
         CharacterResult cr = result.at(j);
         if (currentLine.isEmpty() && j == wordIndices.first()) {
             if (result.at(j).lineStart == LineEdgeBehaviour::Collapse) {
-                result[j].advance = QPointF();
                 if (isHorizontal) {
-                    result[j].inkBoundingBox.setWidth(0);
+                    result[j].scaleCharacterResult(0.0, 1.0);
                 } else {
-                    result[j].inkBoundingBox.setHeight(0);
+                    result[j].scaleCharacterResult(1.0, 0.0);
                 }
                 result[j].hidden = true;
                 continue;

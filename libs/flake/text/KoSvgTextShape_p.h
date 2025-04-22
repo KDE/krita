@@ -119,6 +119,7 @@ struct CharacterResult {
     bool textLengthApplied = false;
     bool overflowWrap = false;
 
+    qreal extraFontScaling = 1.0; ///< Freetype doesn't allow us to scale below 1pt, so we need to do an extra transformation in these cases.
     qreal fontHalfLeading; ///< Leading for both sides, can be either negative or positive.
     KoSvgText::FontMetrics metrics; ///< Fontmetrics for current font, in Freetype scanline coordinates.
     qreal scaledHalfLeading{}; ///< Leading for both sides, can be either negative or positive, in pt
@@ -183,6 +184,66 @@ struct CharacterResult {
         } else {
             scaledDescent -= newOrigin.x();
             scaledAscent -= newOrigin.x();
+        }
+    }
+
+    /**
+     * @brief scaleCharacterResult
+     * convenience function to scale the whole character result.
+     * @param xScale -- the factor by which the width should be scaled.
+     * @param yScale -- the factor by which the height should be scaled.
+     */
+    void scaleCharacterResult(qreal xScale, qreal yScale) {
+        QTransform scale = QTransform::fromScale(xScale, yScale);
+        if (scale.isIdentity()) return;
+        const bool scaleToZero = !(xScale > 0 && yScale > 0);
+
+        if (Glyph::Outline *outlineGlyph = std::get_if<Glyph::Outline>(&glyph)) {
+            if (!outlineGlyph->path.isEmpty()) {
+                if (scaleToZero) {
+                    outlineGlyph->path = QPainterPath();
+                } else {
+                    outlineGlyph->path = scale.map(outlineGlyph->path);
+                }
+            }
+        } else if (Glyph::Bitmap *bitmapGlyph = std::get_if<Glyph::Bitmap>(&glyph)) {
+            if (scaleToZero) {
+                bitmapGlyph->drawRects.clear();
+                bitmapGlyph->images.clear();
+            } else {
+                for (int i = 0; i< bitmapGlyph->drawRects.size(); i++) {
+                    bitmapGlyph->drawRects[i] = scale.mapRect(bitmapGlyph->drawRects[i]);
+                }
+            }
+        } else if  (Glyph::ColorLayers *colorGlyph = std::get_if<Glyph::ColorLayers>(&glyph)) {
+            for (int i = 0; i< colorGlyph->paths.size(); i++) {
+                if (scaleToZero) {
+                    colorGlyph->paths[i] = QPainterPath();
+                } else {
+                    colorGlyph->paths[i] = scale.map(colorGlyph->paths[i]);
+                }
+            }
+        }
+        advance = scale.map(advance);
+        cursorInfo.caret = scale.map(cursorInfo.caret);
+        inkBoundingBox = scale.mapRect(inkBoundingBox);
+
+        if (isHorizontal) {
+            scaledDescent *= yScale;
+            scaledAscent *= yScale;
+            scaledHalfLeading *= yScale;
+            metrics.scaleBaselines(yScale);
+            if (tabSize) {
+                tabSize = scale.map(QPointF(*tabSize, *tabSize)).x();
+            }
+        } else {
+            scaledDescent *= xScale;
+            scaledAscent *= xScale;
+            scaledHalfLeading *= xScale;
+            metrics.scaleBaselines(xScale);
+            if (tabSize) {
+                tabSize = scale.map(QPointF(*tabSize, *tabSize)).y();
+            }
         }
     }
 

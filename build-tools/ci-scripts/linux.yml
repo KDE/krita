@@ -1,6 +1,6 @@
 linux-build:
   stage: build
-  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder-2204:latest
   tags:
     - Linux
   extends:

@@ -37,10 +37,10 @@ filesToMove = os.listdir(stagingRoot)
 for file in filesToMove:
     shutil.move(os.path.join(stagingRoot, file), os.path.join(appdirPath, 'usr'))
 
-os.environ.putenv('KRITA_APPDIR_PATH', appdirPath)
-os.environ.putenv('KRITA_DOWNLOADS_PATH', downloadsPath)
-os.environ.putenv('KRITA_BUILD_PATH', buildPath)
-os.environ.putenv('KRITA_DEPS_PATH', depsPath)
+os.environ['KRITA_APPDIR_PATH'] = appdirPath
+os.environ['KRITA_DOWNLOADS_PATH'] = downloadsPath
+os.environ['KRITA_BUILD_PATH'] = buildPath
+os.environ['KRITA_DEPS_PATH'] = depsPath
 
 commandToRun = ' '.join(['./packaging/linux/appimage/build-image.sh', packagingPath, os.path.abspath('.')])
 

@@ -19,7 +19,6 @@
 #include <testimage.h>
 #include <testutil.h>
 
-
 #include "KisScreentoneGeneratorTest.h"
 
 void KisScreentoneGeneratorTest::initTestCase()
@@ -70,6 +69,7 @@ void KisScreentoneGeneratorTest::testGenerate01()
 
     properties.insert("equalization_mode", 0);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test01", properties);
 }
@@ -80,6 +80,7 @@ void KisScreentoneGeneratorTest::testGenerate02()
 
     properties.insert("equalization_mode", 1);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test02", properties);
 }
@@ -90,6 +91,7 @@ void KisScreentoneGeneratorTest::testGenerate03()
 
     properties.insert("equalization_mode", 2);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test03", properties);
 }
@@ -101,6 +103,7 @@ void KisScreentoneGeneratorTest::testGenerate04()
     properties.insert("equalization_mode", 0);
     properties.insert("align_to_pixel_grid", false);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test04", properties);
 }
@@ -112,6 +115,7 @@ void KisScreentoneGeneratorTest::testGenerate05()
     properties.insert("equalization_mode", 1);
     properties.insert("align_to_pixel_grid", false);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test05", properties);
 }
@@ -123,6 +127,7 @@ void KisScreentoneGeneratorTest::testGenerate06()
     properties.insert("equalization_mode", 2);
     properties.insert("align_to_pixel_grid", false);
     properties.insert("brightness", 70);
+    properties.insert("interpolation", 1);
 
     testGenerate("test06", properties);
 }
@@ -147,6 +152,8 @@ void KisScreentoneGeneratorTest::testGenerate07()
     properties.insert("brightness", 75);
     properties.insert("contrast", 90);
 
+    properties.insert("interpolation", 1);
+
     testGenerate("test07", properties);
 }
 
@@ -170,6 +177,8 @@ void KisScreentoneGeneratorTest::testGenerate08()
     properties.insert("brightness", 75);
     properties.insert("contrast", 90);
 
+    properties.insert("interpolation", 1);
+
     testGenerate("test08", properties);
 }
 
@@ -192,6 +201,8 @@ void KisScreentoneGeneratorTest::testGenerate09()
     properties.insert("background_opacity", 0);
     properties.insert("brightness", 75);
     properties.insert("contrast", 90);
+
+    properties.insert("interpolation", 1);
 
     testGenerate("test09", properties);
 }

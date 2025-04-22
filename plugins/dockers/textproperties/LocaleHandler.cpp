@@ -163,7 +163,7 @@ void LocaleHandler::setSearchString(const QString &newSearchString)
 {
     if (d->filteredLanguagesModel->filterRegularExpression().pattern() == newSearchString)
         return;
-    d->filteredLanguagesModel->setFilterFixedString(newSearchString);
+    d->filteredLanguagesModel->setFilterRegularExpression(newSearchString);
     emit searchStringChanged();
 }
 

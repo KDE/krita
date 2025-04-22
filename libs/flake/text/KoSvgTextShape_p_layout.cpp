@@ -501,8 +501,13 @@ void KoSvgTextShape::Private::relayout()
                     if (text.at(j) == QChar::Tabulation) {
                         qreal tabSize = 0;
                         if (tabInfo.isNumber) {
-                            tabSize = (result[j].metrics.spaceAdvance + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
+                            // Try to avoid Nan situations.
+                            if (result[j].metrics.spaceAdvance > 0) {
+                                tabSize = (result[j].metrics.spaceAdvance + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
                             } else {
+                                tabSize = ((result[j].metrics.fontSize/2) + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
+                            }
+                        } else {
                             tabSize = tabInfo.length.value * ftFontUnit;
                         }
                         result[j].tabSize = tabSize;

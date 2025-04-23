@@ -7,7 +7,6 @@
 #define TESTRESOURCEMODEL_H
 
 #include <QObject>
-#include <QtSql>
 
 #include "KisResourceTypes.h"
 

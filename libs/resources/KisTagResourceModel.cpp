@@ -6,7 +6,10 @@
  */
 #include "KisTagResourceModel.h"
 
-#include <QtSql>
+#include <QFont>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlDatabase>
 #include <QMap>
 
 #include <KisResourceLocator.h>

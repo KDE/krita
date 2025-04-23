@@ -10,6 +10,7 @@
 #include <kis_properties_configuration.h>
 
 #include <KoPattern.h>
+#include <QBuffer>
 
 class KisLinkedPatternManagerTest : public QObject
 {

@@ -7,7 +7,7 @@
 #ifndef __TEST_KIS_TAG_SELECTION_WIDGET_H
 #define __TEST_KIS_TAG_SELECTION_WIDGET_H
 
-#include <QtTest>
+#include <QTest>
 
 
 #include "KisTagSelectionWidget.h"

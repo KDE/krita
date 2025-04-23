@@ -7,7 +7,6 @@
 #define TESTAGFILTERTRESOURCEPROXYMODEL_H
 
 #include <QObject>
-#include <QtSql>
 #include "KisResourceTypes.h"
 class KisResourceLocator;
 class TestTagFilterResourceProxyModel : public QObject

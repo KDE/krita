@@ -7,6 +7,7 @@
 #ifndef TILES_TEST_UTILS_H
 #define TILES_TEST_UTILS_H
 
+#include <QBuffer>
 #include <KoStore_p.h>
 #include <kis_paint_device_writer.h>
 #include <kis_debug.h>

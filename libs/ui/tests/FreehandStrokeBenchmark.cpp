@@ -18,6 +18,7 @@
 #include <simpletest.h>
 #include <testui.h>
 
+#include <QThread>
 
 #include "testutil.h"
 #include "KisResourceModel.h"

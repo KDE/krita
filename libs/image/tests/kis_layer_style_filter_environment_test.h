@@ -7,7 +7,7 @@
 #ifndef __KIS_LAYER_STYLE_FILTER_ENVIRONMENT_TEST_H
 #define __KIS_LAYER_STYLE_FILTER_ENVIRONMENT_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisLayerStyleFilterEnvironmentTest : public QObject
 {

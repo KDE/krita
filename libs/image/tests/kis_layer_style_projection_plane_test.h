@@ -7,7 +7,7 @@
 #ifndef __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
 #define __KIS_LAYER_STYLE_PROJECTION_PLANE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 #include "kis_types.h"
 

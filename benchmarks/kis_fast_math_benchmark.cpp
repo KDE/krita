@@ -6,6 +6,7 @@
 
 #include "kis_fast_math_benchmark.h"
 
+#include <QtMath>
 #include <simpletest.h>
 
 #include <kis_fast_math.h>

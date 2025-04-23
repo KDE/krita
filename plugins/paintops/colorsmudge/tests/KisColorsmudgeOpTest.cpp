@@ -8,6 +8,7 @@
 
 #include "kistest.h"
 
+#include <QRegularExpression>
 #include <qimage_based_test.h>
 #include <stroke_testing_utils.h>
 #include <brushengine/kis_paint_information.h>

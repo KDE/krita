@@ -5,6 +5,7 @@
  */
 #include "TableModel.h"
 
+#include <QDateTime>
 #include <QApplication>
 
 TableDelegate::TableDelegate(QObject *parent)

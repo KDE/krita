@@ -6,6 +6,7 @@
 
 #include "kis_processing_applicator_test.h"
 
+#include <QSignalSpy>
 #include <simpletest.h>
 
 #include <KoColor.h>

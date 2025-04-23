@@ -7,7 +7,7 @@
 #ifndef KISRECTSGRIDTEST_H
 #define KISRECTSGRIDTEST_H
 
-#include <QtTest>
+#include <QTest>
 #include <QObject>
 
 

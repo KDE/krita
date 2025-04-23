@@ -1,7 +1,6 @@
 #ifndef SIMPLETEST_H
 #define SIMPLETEST_H
 
-#include <QtTest>
 #include <QTest>
 #include <QStandardPaths>
 #include <QLocale>

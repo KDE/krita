@@ -7,7 +7,7 @@
 #ifndef __MOVE_SELECTION_STROKE_TEST_H
 #define __MOVE_SELECTION_STROKE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class MoveSelectionStrokeTest : public QObject
 {

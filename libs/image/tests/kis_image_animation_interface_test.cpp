@@ -6,6 +6,7 @@
 
 #include "kis_image_animation_interface_test.h"
 
+#include <QSignalSpy>
 #include <simpletest.h>
 
 #include <testutil.h>

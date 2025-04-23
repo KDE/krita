@@ -6,6 +6,7 @@
 
 #include "kis_image_test.h"
 #include <QApplication>
+#include <QSignalSpy>
 
 #include <simpletest.h>
 

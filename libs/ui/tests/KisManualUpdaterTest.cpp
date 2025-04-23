@@ -7,7 +7,8 @@
 
 #include "KisManualUpdaterTest.h"
 
-#include <QtTest>
+#include <QSignalSpy>
+#include <QTest>
 #include <QString>
 #include <QScopedPointer>
 #include <KisManualUpdater.h>

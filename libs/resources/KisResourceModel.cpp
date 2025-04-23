@@ -7,7 +7,8 @@
 #include "KisResourceModel.h"
 
 #include <QBuffer>
-#include <QtSql>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #include <KisResourceLocator.h>
 #include <KisResourceCacheDb.h>

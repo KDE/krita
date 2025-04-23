@@ -6,6 +6,7 @@
 
 #include "kis_image_signal_router_test.h"
 
+#include <QSignalSpy>
 #include <simpletest.h>
 
 

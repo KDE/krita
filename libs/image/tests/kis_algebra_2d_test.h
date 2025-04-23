@@ -7,7 +7,7 @@
 #ifndef __KIS_ALGEBRA_2D_TEST_H
 #define __KIS_ALGEBRA_2D_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisAlgebra2DTest : public QObject
 {

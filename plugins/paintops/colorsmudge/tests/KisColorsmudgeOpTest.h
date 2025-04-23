@@ -7,7 +7,7 @@
 #ifndef KISCOLORSMUDGEOPTEST_H
 #define KISCOLORSMUDGEOPTEST_H
 
-#include <QtTest>
+#include <QTest>
 
 class KisColorsmudgeOpTest : public QObject
 {

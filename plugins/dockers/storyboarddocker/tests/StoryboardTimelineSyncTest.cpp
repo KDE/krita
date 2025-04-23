@@ -10,6 +10,7 @@
 
 #include <kis_group_layer.h>
 
+#include <QSignalSpy>
 #include <simpletest.h>
 
 

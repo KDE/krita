@@ -7,7 +7,7 @@
 #ifndef __KIS_PSD_LAYER_STYLE_TEST_H
 #define __KIS_PSD_LAYER_STYLE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisPSDLayerStyleTest : public QObject
 {

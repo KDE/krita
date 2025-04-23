@@ -11,7 +11,7 @@
 #include <stroke_testing_utils.h>
 #include <qimage_based_test.h>
 #include <simpletest.h>
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisMyPaintOpTest: public QObject, public TestUtil::QImageBasedTest
 {

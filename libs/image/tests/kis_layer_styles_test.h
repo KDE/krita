@@ -7,7 +7,7 @@
 #ifndef __KIS_LAYER_STYLES_TEST_H
 #define __KIS_LAYER_STYLES_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisLayerStylesTest : public QObject
 {

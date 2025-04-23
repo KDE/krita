@@ -7,7 +7,7 @@
 #ifndef __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
 #define __KIS_IMAGE_ANIMATION_INTERFACE_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 #include <QImage>
 
 #include "kis_types.h"

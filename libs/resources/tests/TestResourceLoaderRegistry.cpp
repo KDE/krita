@@ -6,9 +6,9 @@
 
 #include "TestResourceLoaderRegistry.h"
 #include <simpletest.h>
-#include <QtSql>
 #include <QStandardPaths>
 #include <QDir>
+#include <QBuffer>
 
 #include <KisResourceLoaderRegistry.h>
 #include <KisResourceLoader.h>

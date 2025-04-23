@@ -7,7 +7,9 @@
 #define TABLEMODEL_H
 
 #include <QObject>
-#include <QtSql>
+#include <QSqlRelationalDelegate>
+#include <QSqlRelationalTableModel>
+#include <QSqlDatabase>
 
 class TableDelegate : public QSqlRelationalDelegate
 {

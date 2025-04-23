@@ -7,7 +7,7 @@
 #ifndef __KIS_MARKER_PAINTER_TEST_H
 #define __KIS_MARKER_PAINTER_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisMarkerPainterTest : public QObject
 {

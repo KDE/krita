@@ -6,7 +6,8 @@
  */
 #include "KisTagModel.h"
 
-#include <QtSql>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #include <klocalizedstring.h>
 

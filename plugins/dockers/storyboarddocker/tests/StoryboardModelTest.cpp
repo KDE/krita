@@ -9,6 +9,7 @@
 #include <simpletest.h>
 #include <StoryboardModel.h>
 #include <CommentModel.h>
+#include <QAbstractItemModelTester>
 
 void StoryboardModelTest::init()
 {

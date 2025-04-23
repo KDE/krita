@@ -8,6 +8,7 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QPointF>
+#include <QtMath>
 
 #include "kis_algebra_2d.h"
 #include "kis_distance_information.h"

@@ -5,6 +5,8 @@
  */
 
 #include "kis_lockless_stack_test.h"
+#include <QStack>
+#include <QThreadPool>
 #include <simpletest.h>
 
 #include "kis_debug.h"

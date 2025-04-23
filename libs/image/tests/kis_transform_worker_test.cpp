@@ -13,6 +13,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <QTransform>
 #include <QVector>
+#include <QtMath>
 
 #include "kis_types.h"
 #include "kis_image.h"

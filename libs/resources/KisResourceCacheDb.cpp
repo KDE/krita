@@ -5,7 +5,12 @@
  */
 #include "KisResourceCacheDb.h"
 
-#include <QtSql>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlDatabase>
+
+#include <QBuffer>
+#include <QVersionNumber>
 #include <QStandardPaths>
 #include <QDir>
 #include <QDirIterator>

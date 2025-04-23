@@ -10,9 +10,7 @@
 #include <QDir>
 #include <QVersionNumber>
 #include <QDirIterator>
-#include <QSqlError>
 #include <QSqlQuery>
-#include <QtSql>
 #include <QModelIndex>
 #include <QAbstractItemModelTester>
 #include <kconfig.h>

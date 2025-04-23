@@ -11,6 +11,8 @@
 #include <QDirIterator>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QBuffer>
+#include <QTemporaryFile>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

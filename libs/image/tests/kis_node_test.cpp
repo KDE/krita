@@ -13,6 +13,8 @@
 #include <KoProperties.h>
 #include <testutil.h>
 
+#include <QRunnable>
+#include <QThreadPool>
 
 void KisNodeTest::testCreation()
 {

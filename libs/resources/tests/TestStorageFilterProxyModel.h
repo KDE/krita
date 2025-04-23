@@ -7,7 +7,6 @@
 #define TESTAGFILTERTRESOURCEPROXYMODEL_H
 
 #include <QObject>
-#include <QtSql>
 
 class KisResourceLocator;
 

@@ -6,7 +6,11 @@
  */
 #include "KisStorageModel.h"
 
-#include <QtSql>
+#include <QBuffer>
+#include <QDir>
+#include <QFont>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <KisResourceLocator.h>
 #include <KoResourcePaths.h>
 #include <KisResourceModelProvider.h>

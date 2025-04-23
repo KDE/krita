@@ -9,6 +9,7 @@
 
 #include "kis_debug.h"
 #include <QTemporaryDir>
+#include <QRandomGenerator>
 
 #include "../swap/kis_memory_window.h"
 

@@ -6,6 +6,8 @@
 
 #include "kis_algebra_2d_test.h"
 
+#include <QtMath>
+#include <QRandomGenerator>
 #include <simpletest.h>
 
 #include "kis_algebra_2d.h"

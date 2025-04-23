@@ -6,6 +6,7 @@
 
 #include "kis_derived_resources_test.h"
 
+#include <QSignalSpy>
 #include <simpletest.h>
 #include <brushengine/kis_paintop_preset.h>
 

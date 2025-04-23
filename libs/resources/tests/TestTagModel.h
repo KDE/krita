@@ -7,7 +7,6 @@
 #define TESTTAGMODEL_H
 
 #include <QObject>
-#include <QtSql>
 
 #include "KisResourceTypes.h"
 #include "KisTag.h"

@@ -1,5 +1,7 @@
 #include "KisSafeDocumentLoaderTest.h"
 
+#include <QSignalSpy>
+#include <QTemporaryFile>
 #include <testui.h>
 
 #include "config-limit-long-tests.h"

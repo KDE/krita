@@ -4,7 +4,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisResourceTypeModel.h"
-#include <QtSql>
+#include <QDebug>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #include <KisResourceTypes.h>
 

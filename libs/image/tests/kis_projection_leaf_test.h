@@ -7,7 +7,7 @@
 #ifndef __KIS_PROJECTION_LEAF_TEST_H
 #define __KIS_PROJECTION_LEAF_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisProjectionLeafTest : public QObject
 {

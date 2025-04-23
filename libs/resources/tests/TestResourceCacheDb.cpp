@@ -6,7 +6,9 @@
 
 #include "TestResourceCacheDb.h"
 #include <simpletest.h>
-#include <QtSql>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlDatabase>
 #include <QStandardPaths>
 #include <QDir>
 #include <QImage>

@@ -13,7 +13,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QTemporaryFile>
-#include <QtSql>
+#include <QAbstractItemModelTester>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

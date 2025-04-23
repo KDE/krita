@@ -12,7 +12,9 @@
 
 #include <QDataWidgetMapper>
 #include <QTableView>
-#include <QtSql>
+#include <QSqlRelation>
+#include <QSqlRecord>
+#include <QSqlDatabase>
 
 #include <KisResourceItemDelegate.h>
 #include <KisResourceItemListView.h>

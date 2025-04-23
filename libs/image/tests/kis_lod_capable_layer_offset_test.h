@@ -7,7 +7,7 @@
 #ifndef __KIS_LOD_CAPABLE_LAYER_OFFSET_TEST_H
 #define __KIS_LOD_CAPABLE_LAYER_OFFSET_TEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class KisLodCapableLayerOffsetTest : public QObject
 {

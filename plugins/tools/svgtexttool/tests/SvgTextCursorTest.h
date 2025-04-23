@@ -6,7 +6,7 @@
 #ifndef SVGTEXTCURSORTEST_H
 #define SVGTEXTCURSORTEST_H
 
-#include <QtTest/QtTest>
+#include <QTest>
 
 class SvgTextCursorTest : public QObject
 {

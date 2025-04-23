@@ -6,7 +6,7 @@
 
 #include <simpletest.h>
 #include <QImageReader>
-#include <QtTest/QtTest>
+#include <QTest>
 #include <qimage_based_test.h>
 
 #include <kis_image.h>

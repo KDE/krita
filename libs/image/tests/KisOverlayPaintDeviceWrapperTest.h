@@ -7,7 +7,7 @@
 #ifndef KISOVERLAYPAINTDEVICEWRAPPERTEST_H
 #define KISOVERLAYPAINTDEVICEWRAPPERTEST_H
 
-#include <QtTest>
+#include <QTest>
 #include <QObject>
 
 class KisOverlayPaintDeviceWrapperTest : public QObject

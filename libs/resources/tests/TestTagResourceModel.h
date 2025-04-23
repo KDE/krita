@@ -7,7 +7,6 @@
 #define TESTAGFILTERTRESOURCEPROXYMODEL_H
 
 #include <QObject>
-#include <QtSql>
 #include <QString>
 #include "KisResourceTypes.h"
 

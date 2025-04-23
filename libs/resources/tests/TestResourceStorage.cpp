@@ -11,6 +11,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QUuid>
+#include <QBuffer>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>

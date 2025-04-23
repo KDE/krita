@@ -706,6 +706,7 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
         }
     }
 
+    result = KisLayerUtils::sortMergeableInternalNodes(result);
     return result;
 }
 

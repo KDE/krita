@@ -1114,30 +1114,6 @@ void KisToolTransform::slotTrackerChangedConfig(KisToolChangesTrackerDataSP stat
     updateOptionWidget();
 }
 
-QList<KisNodeSP> KisToolTransform::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent)
-{
-    QList<KisNodeSP> result;
-
-    auto fetchFunc =
-        [&result, mode, root] (KisNodeSP node) {
-        if (node->isEditable(node == root) &&
-                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
-                !node->inherits("KisFileLayer") &&
-                (!node->inherits("KisTransformMask") || node == root)) {
-
-                result << node;
-            }
-    };
-
-    if (isExternalSourcePresent) {
-        fetchFunc(root);
-    } else {
-        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
-    }
-
-    return result;
-}
-
 QWidget* KisToolTransform::createOptionWidget()
 {
     if (!m_canvas) return 0;

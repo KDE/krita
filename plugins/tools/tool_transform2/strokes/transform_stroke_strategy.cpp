@@ -149,7 +149,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         KisPaintDeviceSP previewDevice;
 
 
-        if (m_rootNodes.size() > 1) {
+        if (processedNodes.size() > 1) {
             const QRect bounds = rootNode->image()->bounds();
             const int desiredAnimTime = rootNode->image()->animationInterface()->currentTime();
 
@@ -166,7 +166,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             KisNodeSP cloneRoot = clonedImage->rootLayer();
 
-            Q_FOREACH(KisNodeSP node, m_rootNodes) {
+            Q_FOREACH(KisNodeSP node, processedNodes) {
                 // Masks with unselected parents can't be added.
                 if (!node->inherits("KisMask")) {
                     clonedImage->addNode(node->clone().data(), cloneRoot);

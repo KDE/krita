@@ -1660,6 +1660,28 @@ namespace Private {
         return result;
     }
 
+    KisNodeList sortMergeableInternalNodes(KisNodeList nodes)
+    {
+        KIS_SAFE_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
+
+        KisNodeSP root;
+        Q_FOREACH(KisNodeSP node, nodes) {
+            KisNodeSP localRoot = node;
+            while (localRoot->parent()) {
+                localRoot = localRoot->parent();
+            }
+
+            if (!root) {
+                root = localRoot;
+            }
+            KIS_SAFE_ASSERT_RECOVER(root == localRoot) { return nodes; }
+        }
+
+        KisNodeList result;
+        sortMergeableNodes(root, nodes, result);
+        return result;
+    }
+
     KisNodeList sortAndFilterAnyMergeableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
         KisNodeList filteredNodes = nodes;
         KisNodeList sortedNodes;

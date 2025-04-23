@@ -530,7 +530,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         } else {
             qreal slope = 0;
             if (charResult.metrics.caretRun != 0 && charResult.metrics.caretRise !=0) {
-                slope = double(charResult.metrics.caretRun)/double(charResult.metrics.caretRise);
+                slope = double(charResult.metrics.caretRise)/double(charResult.metrics.caretRun);
                 if (offset == 0) {
                     offset = descender * slope;
                 }

@@ -578,13 +578,8 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     if (start == end || start < 0 || end >= d->cursorPos.size()) {
         return QPainterPath();
     }
-
     QPainterPathStroker stroker;
-    qreal width = minimum;
-    if (thick) {
-        width *= 2;
-    }
-    stroker.setWidth(width);
+
     KoSvgText::WritingMode mode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     stroker.setCapStyle(Qt::FlatCap);
     if (style == KoSvgText::Solid) {
@@ -600,10 +595,12 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     QPainterPath underPath;
     QPainterPath overPath;
     QPainterPath middlePath;
-    QPointF inset = mode == KoSvgText::HorizontalTB? QPointF(width*0.5, 0): QPointF(0, width*0.5);
+    qint32 strokeWidth = 0;
+    QPointF inset = mode == KoSvgText::HorizontalTB? QPointF(minimum*0.5, 0): QPointF(0, minimum*0.5);
     for (int i = start+1; i <= end; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
+        strokeWidth += res.metrics.underlineThickness;
         const QTransform tf = res.finalTransform();
         QPointF first = res.cursorInfo.caret.p1();
         QPointF last = first;
@@ -641,6 +638,11 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
             middlePath.lineTo(tf.map(last+(diff*0.5)));
         }
     }
+
+    const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / qMin(d->xRes, d->yRes));
+    const qreal width = qMax(qreal(strokeWidth/(end-(start+1)))*freetypePixelsToPt, minimum);
+
+    stroker.setWidth(thick? width*2: width);
 
     QPainterPath final;
     if (decor.testFlag(KoSvgText::DecorationUnderline)){

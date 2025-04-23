@@ -1564,10 +1564,10 @@ void FontMetrics::setMetricsValueByTag(const QLatin1String &tag, int32_t value) 
         caretOffset = value;
     } else if (tag == "vcrs") {
         caretRise = value;
-    } else if (tag == "vcrs") {
-        caretRise = value;
-    } else if (tag == "vcrs") {
-        caretRise = value;
+    } else if (tag == "vcrn") {
+        caretRun = value;
+    } else if (tag == "vcof") {
+        caretOffset = value;
     }
 }
 

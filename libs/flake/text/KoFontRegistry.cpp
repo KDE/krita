@@ -842,10 +842,12 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
         metricTags.append(HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN);
         metricTags.append(HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET);
         metrics.caretRise = 1;
+        metrics.caretRun = 0;
     } else {
         metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_RISE);
         metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_RUN);
         metricTags.append(HB_OT_METRICS_TAG_VERTICAL_CARET_OFFSET);
+        metrics.caretRise = 0;
         metrics.caretRun = 1;
     }
 

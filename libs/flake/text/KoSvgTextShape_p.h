@@ -178,6 +178,7 @@ struct CharacterResult {
         }
         cursorInfo.caret.translate(-newOrigin);
         inkBoundingBox.translate(-newOrigin);
+
         if (isHorizontal) {
             scaledDescent -= newOrigin.y();
             scaledAscent -= newOrigin.y();
@@ -226,6 +227,9 @@ struct CharacterResult {
         }
         advance = scale.map(advance);
         cursorInfo.caret = scale.map(cursorInfo.caret);
+        for (int i = 0; i < cursorInfo.offsets.size(); i++) {
+            cursorInfo.offsets[i] = scale.map(cursorInfo.offsets.at(i));
+        }
         inkBoundingBox = scale.mapRect(inkBoundingBox);
 
         if (isHorizontal) {

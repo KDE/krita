@@ -1508,8 +1508,8 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
     // First we get all the ranges between anchored chunks and "trim" the whitespaces.
     for (int k = start; k < end; k++) {
         CharacterResult charResult = result.at(k);
-        if ((charResult.anchored_chunk || k+1 >= end) && currentBox.start <= k) {
-            bool atEnd = k+1 >= end;
+        const bool atEnd = k+1 >= end;
+        if ((charResult.anchored_chunk || atEnd) && currentBox.start < k) {
             // walk backwards to remove empties.
             if (k > start) {
                 for (int l = atEnd? k: k-1; l > currentBox.start; l--) {
@@ -1534,13 +1534,15 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
 
     qint32 lastFontSize = 0;
     QPointF lastBaselineOffset;
-    QPointF lastLineThroughPoint;
+    QPointF lastLineThroughOffset;
 
     // Then we go over each range, and calculate their decoration box,
     // as well as calculate the linethroughs.
     for (int b = 0; b < decorationBoxes.size(); b++) {
         DecorationBox currentBox = decorationBoxes.at(b);
         LineThrough currentLineThrough = LineThrough();
+        lastFontSize = result.at(currentBox.start).metrics.fontSize;
+        lastBaselineOffset = result.at(currentBox.start).totalBaselineOffset();
 
         for (int k = currentBox.start; k <= currentBox.end; k++) {
             CharacterResult charResult = result.at(k);
@@ -1557,13 +1559,9 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
                 continue;
             }
             // Adjustments to "vertical align" will not affect the baseline offset, so no new stroke needs to be created.
-            const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && charResult.totalBaselineOffset() == lastBaselineOffset;
+            const bool baselineIsOffset = charResult.totalBaselineOffset() != lastBaselineOffset;
+            const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && !baselineIsOffset;
 
-            if (newLineThrough && !currentLineThrough.line.isEmpty()) {
-                if (currentLineThrough.line.last() != lastLineThroughPoint) {
-                    currentLineThrough.line.append(lastLineThroughPoint);
-                }
-            }
             if (newLineThrough) {
                 lineThroughLines.append(currentLineThrough);
                 currentLineThrough = LineThrough();
@@ -1572,16 +1570,18 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
                 lastBaselineOffset = charResult.totalBaselineOffset();
             }
 
-            currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);
-
-            currentBox.thickness += charResult.metrics.underlineThickness;
-            currentLineThrough.thickness += charResult.metrics.lineThroughThickness;
             const qreal alphabetic = charResult.metrics.valueForBaselineValue(BaselineAlphabetic)*freetypePixelsToPt;
             const QPointF alphabeticOffset = isHorizontal? QPointF(0, -alphabetic): QPointF(alphabetic, 0);
-            const QPointF lineThroughOffset = isHorizontal? QPointF(0, -(charResult.metrics.lineThroughOffset*freetypePixelsToPt)) + alphabeticOffset
-                                                          : QPointF(charResult.metrics.valueForBaselineValue(BaselineCentral)*freetypePixelsToPt, 0);
 
-            lastLineThroughPoint = charResult.finalPosition + charResult.advance + lineThroughOffset;
+            if (!baselineIsOffset || newLineThrough) {
+                currentBox.thickness += charResult.metrics.underlineThickness;
+                currentLineThrough.thickness += charResult.metrics.lineThroughThickness;
+                lastLineThroughOffset =  isHorizontal? QPointF(0, -(charResult.metrics.lineThroughOffset*freetypePixelsToPt)) + alphabeticOffset
+                                                          : QPointF(charResult.metrics.valueForBaselineValue(BaselineCentral)*freetypePixelsToPt, 0);
+                currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);
+            }
+
+            const QPointF lastLineThroughPoint = charResult.finalPosition + charResult.advance + lastLineThroughOffset;
             if ((isHorizontal && underlinePosH == UnderlineAuto)) {
                 QRectF bbox = charResult.layoutBox().translated(-alphabeticOffset);
                 bbox.setBottom(0);
@@ -1590,10 +1590,9 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
                 currentBox.decorationRect |= charResult.layoutBox().translated(charResult.finalPosition);
             }
             if (currentLineThrough.line.isEmpty()) {
-                currentLineThrough.line.append(charResult.finalPosition + lineThroughOffset);
+                currentLineThrough.line.append(charResult.finalPosition + lastLineThroughOffset);
             }
             currentLineThrough.line.append(lastLineThroughPoint);
-
         }
         decorationBoxes[b] = currentBox;
         lineThroughLines.append(currentLineThrough);
@@ -1607,7 +1606,11 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
 
     for (int i = 0; i < decorationBoxes.size(); i++) {
         DecorationBox box = decorationBoxes.at(i);
-        stroker.setWidth(qMax(minimumDecorationThickness, (box.thickness/(end-start))*freetypePixelsToPt));
+        if (box.underlineOffsets.size() > 0) {
+            stroker.setWidth(qMax(minimumDecorationThickness, (box.thickness/(box.underlineOffsets.size()))*freetypePixelsToPt));
+        } else {
+            stroker.setWidth(minimumDecorationThickness);
+        }
         QRectF rect = box.decorationRect;
         if (textDecorationSkipInset) {
             qreal inset = stroker.width() * 0.5;
@@ -1657,9 +1660,9 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
     if (decor.testFlag(DecorationLineThrough)) {
         for (int i = 0; i < lineThroughLines.size(); i++) {
             LineThrough l = lineThroughLines.at(i);
-            stroker.setWidth(qMax(minimumDecorationThickness, (l.thickness/(end-start))*freetypePixelsToPt));
             QPolygonF poly = l.line;
             if (poly.isEmpty()) continue;
+            stroker.setWidth(qMax(minimumDecorationThickness, (l.thickness/(poly.size()))*freetypePixelsToPt));
             qreal average = 0.0;
             for (int j = 0; j < poly.size(); j++) {
                 average += isHorizontal? poly.at(j).y(): poly.at(j).x();

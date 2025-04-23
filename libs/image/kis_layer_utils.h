@@ -51,6 +51,7 @@ namespace KisLayerUtils
     KRITAIMAGE_EXPORT void forceAllHiddenOriginalsUpdate(KisNodeSP root);
 
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergeableInternalNodes(KisNodeList nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT KisNodeList sortMergeableInternalNodes(KisNodeList nodes);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 

@@ -230,7 +230,6 @@ public Q_SLOTS:
     void imageTooBigRequested(bool value);
 
 private:
-    QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);
     QScopedPointer<QMenu> m_contextMenu;
 
     void startStroke(ToolTransformArgs::TransformMode mode, bool forceReset);

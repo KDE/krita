@@ -1491,6 +1491,8 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
         QRectF decorationRect;
         QVector<qreal> underlineOffsets;
         qint32 thickness = 0;
+        int start = 0;
+        int end = 0;
     };
 
     struct LineThrough {
@@ -1501,56 +1503,85 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
     QVector<DecorationBox> decorationBoxes;
     QVector<LineThrough> lineThroughLines;
     DecorationBox currentBox;
-    LineThrough currentLineThrough;
+    currentBox.start = start;
+
+    // First we get all the ranges between anchored chunks and "trim" the whitespaces.
+    for (int k = start; k < end; k++) {
+        CharacterResult charResult = result.at(k);
+        if ((charResult.anchored_chunk || k+1 >= end) && currentBox.start <= k) {
+            bool atEnd = k+1 >= end;
+            // walk backwards to remove empties.
+            if (k > start) {
+                for (int l = atEnd? k: k-1; l > currentBox.start; l--) {
+                    if (!result.at(l).inkBoundingBox.isEmpty()
+                            && result.at(l).addressable
+                            && !result.at(l).hidden) {
+                        currentBox.end = l;
+                        break;
+                    }
+                }
+            }
+            decorationBoxes.append(currentBox);
+            currentBox = DecorationBox();
+            currentBox.start = k;
+        }
+        if (currentBox.start == k && (charResult.inkBoundingBox.isEmpty()
+                || !charResult.addressable
+                || charResult.hidden)) {
+            currentBox.start = k+1;
+        }
+    }
 
     qint32 lastFontSize = 0;
     QPointF lastBaselineOffset;
     QPointF lastLineThroughPoint;
 
-    for (int k = start; k < end; k++) {
-        CharacterResult charResult = result.at(k);
+    // Then we go over each range, and calculate their decoration box,
+    // as well as calculate the linethroughs.
+    for (int b = 0; b < decorationBoxes.size(); b++) {
+        DecorationBox currentBox = decorationBoxes.at(b);
+        LineThrough currentLineThrough = LineThrough();
 
-        if (currentTextPath) {
-            characterResultOnPath(charResult,
-                                  currentTextPath->outline().length(),
-                                  currentTextPathOffset,
-                                  isHorizontal,
-                                  currentTextPath->isClosedSubpath(0));
-        }
+        for (int k = currentBox.start; k <= currentBox.end; k++) {
+            CharacterResult charResult = result.at(k);
 
-        if (charResult.hidden || !charResult.addressable) {
-            continue;
-        }
-        if (charResult.anchored_chunk) {
-            decorationBoxes.append(currentBox);
-            currentBox = DecorationBox();
-        }
-        // Adjustments to "vertical align" will not affect the baseline offset, so no new stroke needs to be created.
-        const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && charResult.totalBaselineOffset() == lastBaselineOffset;
-        if (newLineThrough && !currentLineThrough.line.isEmpty()) {
-            if (currentLineThrough.line.last() != lastLineThroughPoint) {
-                currentLineThrough.line.append(lastLineThroughPoint);
+            if (currentTextPath) {
+                characterResultOnPath(charResult,
+                                      currentTextPath->outline().length(),
+                                      currentTextPathOffset,
+                                      isHorizontal,
+                                      currentTextPath->isClosedSubpath(0));
             }
-        }
-        if (newLineThrough || charResult.anchored_chunk) {
-            lineThroughLines.append(currentLineThrough);
-            currentLineThrough = LineThrough();
 
-            lastFontSize = charResult.metrics.fontSize;
-            lastBaselineOffset = charResult.totalBaselineOffset();
-        }
+            if (charResult.hidden || !charResult.addressable) {
+                continue;
+            }
+            // Adjustments to "vertical align" will not affect the baseline offset, so no new stroke needs to be created.
+            const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && charResult.totalBaselineOffset() == lastBaselineOffset;
 
-        currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);
+            if (newLineThrough && !currentLineThrough.line.isEmpty()) {
+                if (currentLineThrough.line.last() != lastLineThroughPoint) {
+                    currentLineThrough.line.append(lastLineThroughPoint);
+                }
+            }
+            if (newLineThrough) {
+                lineThroughLines.append(currentLineThrough);
+                currentLineThrough = LineThrough();
 
-        currentBox.thickness += charResult.metrics.underlineThickness;
-        currentLineThrough.thickness += charResult.metrics.lineThroughThickness;
-        const qreal alphabetic = charResult.metrics.valueForBaselineValue(BaselineAlphabetic)*freetypePixelsToPt;
-        const QPointF alphabeticOffset = isHorizontal? QPointF(0, -alphabetic): QPointF(alphabetic, 0);
-        const QPointF lineThroughOffset = isHorizontal? QPointF(0, -(charResult.metrics.lineThroughOffset*freetypePixelsToPt)) + alphabeticOffset
-                                                      : QPointF(charResult.metrics.valueForBaselineValue(BaselineCentral)*freetypePixelsToPt, 0);
+                lastFontSize = charResult.metrics.fontSize;
+                lastBaselineOffset = charResult.totalBaselineOffset();
+            }
 
-        lastLineThroughPoint = charResult.finalPosition + charResult.advance + lineThroughOffset;
-        if (!charResult.inkBoundingBox.isEmpty()) {
+            currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);
+
+            currentBox.thickness += charResult.metrics.underlineThickness;
+            currentLineThrough.thickness += charResult.metrics.lineThroughThickness;
+            const qreal alphabetic = charResult.metrics.valueForBaselineValue(BaselineAlphabetic)*freetypePixelsToPt;
+            const QPointF alphabeticOffset = isHorizontal? QPointF(0, -alphabetic): QPointF(alphabetic, 0);
+            const QPointF lineThroughOffset = isHorizontal? QPointF(0, -(charResult.metrics.lineThroughOffset*freetypePixelsToPt)) + alphabeticOffset
+                                                          : QPointF(charResult.metrics.valueForBaselineValue(BaselineCentral)*freetypePixelsToPt, 0);
+
+            lastLineThroughPoint = charResult.finalPosition + charResult.advance + lineThroughOffset;
             if ((isHorizontal && underlinePosH == UnderlineAuto)) {
                 QRectF bbox = charResult.layoutBox().translated(-alphabeticOffset);
                 bbox.setBottom(0);
@@ -1562,11 +1593,11 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
                 currentLineThrough.line.append(charResult.finalPosition + lineThroughOffset);
             }
             currentLineThrough.line.append(lastLineThroughPoint);
-        }
-    }
-    decorationBoxes.append(currentBox);
-    lineThroughLines.append(currentLineThrough);
 
+        }
+        decorationBoxes[b] = currentBox;
+        lineThroughLines.append(currentLineThrough);
+    }
 
     // Now to create a QPainterPath for the given style that stretches
     // over a single decoration rect,

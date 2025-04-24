@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 03:16+0000\n"
+"POT-Creation-Date: 2025-04-24 03:22+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -17397,7 +17397,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "នាំ​ចូល​រូបភាព"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2030
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2052
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17688,61 +17688,61 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "ចំណុច​ជម្រះ"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "ចម្លង​ពី"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "បម្លែង​ចន្លោះ​ពណ៌​នៃ​ការ​បញ្ចាំង"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2015
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "យក​ពណ៌​ដែល​បាន​ជ្រើស​ចេញ​"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ឈ្មោះ ៖"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "មើល​ឃើញ"
 
-#: libs/image/kis_layer_utils.cpp:2079
+#: libs/image/kis_layer_utils.cpp:2101
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "ជម្រើស​មូលដ្ឋាន"
 
-#: libs/image/kis_layer_utils.cpp:2102
+#: libs/image/kis_layer_utils.cpp:2124
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "ធ្វើ​រូបភាព​ឲ្យ​រាបស្មើ"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2137
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "ធ្វើ​រូបភាព​ឲ្យ​រាបស្មើ"
 
-#: libs/image/kis_layer_utils.cpp:2339
+#: libs/image/kis_layer_utils.cpp:2361
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ជម្រើស​​អាល់ហ្វា"
 
-#: libs/image/kis_layer_utils.cpp:2365
+#: libs/image/kis_layer_utils.cpp:2387
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -59939,7 +59939,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:357
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "ប្លែង​ស្រទាប់ ឬ​ការ​ជ្រើស"

@@ -64,7 +64,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 03:16+0000\n"
+"POT-Creation-Date: 2025-04-24 03:22+0000\n"
 "PO-Revision-Date: 2025-03-10 01:29+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -17195,7 +17195,7 @@ msgstr "Atravesar"
 msgid "Imported Image"
 msgstr "Imagen importada"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2030
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2052
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17457,53 +17457,53 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Fusionar hacia abajo"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Copia de"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Cambiar color de la proyección"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2015
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Fusionar los nodos seleccionados"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nuevo a partir de lo visible"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visible"
 
-#: libs/image/kis_layer_utils.cpp:2079
+#: libs/image/kis_layer_utils.cpp:2101
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Fusionar máscaras de selección"
 
-#: libs/image/kis_layer_utils.cpp:2102
+#: libs/image/kis_layer_utils.cpp:2124
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Aplanar la capa"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2137
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Aplanar la imagen"
 
-#: libs/image/kis_layer_utils.cpp:2339
+#: libs/image/kis_layer_utils.cpp:2361
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Separar el alfa en una máscara"
 
-#: libs/image/kis_layer_utils.cpp:2365
+#: libs/image/kis_layer_utils.cpp:2387
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Convertir a una capa de pintura"
@@ -60272,7 +60272,7 @@ msgstr ""
 "Las capas inferiores ocultas también se transformarán. Bloquee las capas si "
 "no quiere que se transformen."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:357
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformar una capa o una selección"

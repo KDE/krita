@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 03:16+0000\n"
+"POT-Creation-Date: 2025-04-24 03:22+0000\n"
 "PO-Revision-Date: 2025-01-03 21:16+0100\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -17159,7 +17159,7 @@ msgstr "Trapasi"
 msgid "Imported Image"
 msgstr "Importita Bildo"
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2030
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2052
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17421,53 +17421,53 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Kunfandi Malsupren"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Kopio de"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Ŝanĝi projekcian koloron"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2015
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Kunfandi Elektitajn Nodojn"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nova De Videbla"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Videbla"
 
-#: libs/image/kis_layer_utils.cpp:2079
+#: libs/image/kis_layer_utils.cpp:2101
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Kunfandi Elektajn Maskojn"
 
-#: libs/image/kis_layer_utils.cpp:2102
+#: libs/image/kis_layer_utils.cpp:2124
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Platigi Tavolon"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2137
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Platigi Bildon"
 
-#: libs/image/kis_layer_utils.cpp:2339
+#: libs/image/kis_layer_utils.cpp:2361
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dividi Alfa en Maskon"
 
-#: libs/image/kis_layer_utils.cpp:2365
+#: libs/image/kis_layer_utils.cpp:2387
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konverti al Farbo-Tavolo"
@@ -59888,7 +59888,7 @@ msgstr ""
 "Ankaŭ nevideblaj subtavoloj estos transformitaj. Ŝlosu tavolojn se vi ne "
 "volas, ke ili estu transformitaj"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:357
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformi tavolon aŭ elekton"

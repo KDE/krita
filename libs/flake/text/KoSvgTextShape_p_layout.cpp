@@ -1561,6 +1561,7 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
             // Adjustments to "vertical align" will not affect the baseline offset, so no new stroke needs to be created.
             const bool baselineIsOffset = charResult.totalBaselineOffset() != lastBaselineOffset;
             const bool newLineThrough = charResult.metrics.fontSize != lastFontSize && !baselineIsOffset;
+            const bool ignoreMetrics = !newLineThrough && baselineIsOffset && !currentLineThrough.line.isEmpty();
 
             if (newLineThrough) {
                 lineThroughLines.append(currentLineThrough);
@@ -1573,15 +1574,24 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
             const qreal alphabetic = charResult.metrics.valueForBaselineValue(BaselineAlphabetic)*freetypePixelsToPt;
             const QPointF alphabeticOffset = isHorizontal? QPointF(0, -alphabetic): QPointF(alphabetic, 0);
 
-            if (!baselineIsOffset || newLineThrough) {
+            if (!ignoreMetrics) {
                 currentBox.thickness += charResult.metrics.underlineThickness;
                 currentLineThrough.thickness += charResult.metrics.lineThroughThickness;
                 lastLineThroughOffset =  isHorizontal? QPointF(0, -(charResult.metrics.lineThroughOffset*freetypePixelsToPt)) + alphabeticOffset
                                                           : QPointF(charResult.metrics.valueForBaselineValue(BaselineCentral)*freetypePixelsToPt, 0);
                 currentBox.underlineOffsets.append((-charResult.metrics.underlineOffset)*freetypePixelsToPt);
             }
+            QPointF lastLineThroughPoint = charResult.finalPosition + charResult.advance + lastLineThroughOffset;
 
-            const QPointF lastLineThroughPoint = charResult.finalPosition + charResult.advance + lastLineThroughOffset;
+            if (ignoreMetrics) {
+                QPointF lastP = currentLineThrough.line.last();
+                if (isHorizontal) {
+                    lastLineThroughPoint.setY(lastP.y());
+                } else {
+                    lastLineThroughPoint.setX(lastP.x());
+                }
+            }
+
             if ((isHorizontal && underlinePosH == UnderlineAuto)) {
                 QRectF bbox = charResult.layoutBox().translated(-alphabeticOffset);
                 bbox.setBottom(0);

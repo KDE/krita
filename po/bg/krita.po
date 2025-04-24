@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-23 01:56+0000\n"
+"POT-Creation-Date: 2025-04-24 01:54+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -20144,30 +20144,30 @@ msgid "Character Variant %1"
 msgstr "Вариант (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1660
+#: libs/flake/text/KoSvgTextShape.cpp:1662
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1639
+#: libs/flake/text/KoSvgTextShape.cpp:1641
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1643
+#: libs/flake/text/KoSvgTextShape.cpp:1651
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма на SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1647
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1670
+#: libs/flake/text/KoSvgTextShape.cpp:1672
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20731,7 +20731,7 @@ msgid "Reselect"
 msgstr "Повторно избиране"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2044
+#: libs/image/kis_layer_utils.cpp:2066
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -21285,53 +21285,53 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Сливане с долния"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Копие на"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1995
+#: libs/image/kis_layer_utils.cpp:2017
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Сливане на избраните възли"
 
-#: libs/image/kis_layer_utils.cpp:2013
+#: libs/image/kis_layer_utils.cpp:2035
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2036
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видим"
 
-#: libs/image/kis_layer_utils.cpp:2093
+#: libs/image/kis_layer_utils.cpp:2115
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Сливане на маските на селекция"
 
-#: libs/image/kis_layer_utils.cpp:2117
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Обединяване на слой"
 
-#: libs/image/kis_layer_utils.cpp:2133
+#: libs/image/kis_layer_utils.cpp:2155
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Обединяване на изоб&ражение"
 
-#: libs/image/kis_layer_utils.cpp:2359
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Разделяне на Алфа в маска"
 
-#: libs/image/kis_layer_utils.cpp:2385
+#: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Преобразуване в слой за рисуване"
@@ -64292,7 +64292,7 @@ msgid ""
 "them to be transformed "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:359
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Трансформиране на слой или маркирана област"

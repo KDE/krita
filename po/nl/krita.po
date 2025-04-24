@@ -62,15 +62,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-23 01:56+0000\n"
-"PO-Revision-Date: 2025-04-14 13:03+0200\n"
+"POT-Creation-Date: 2025-04-24 01:54+0000\n"
+"PO-Revision-Date: 2025-04-23 12:32+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -20252,30 +20252,30 @@ msgid "Character Variant %1"
 msgstr "Tekenvariant (%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1660
+#: libs/flake/text/KoSvgTextShape.cpp:1662
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Tekst van plaatshouder"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1639
+#: libs/flake/text/KoSvgTextShape.cpp:1641
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1643
+#: libs/flake/text/KoSvgTextShape.cpp:1651
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1647
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1670
+#: libs/flake/text/KoSvgTextShape.cpp:1672
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20842,7 +20842,7 @@ msgid "Reselect"
 msgstr "Opnieuw selecteren"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2044
+#: libs/image/kis_layer_utils.cpp:2066
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -21398,53 +21398,53 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Samenvoegen ongedaan maken"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Kopiëren van"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Projectiekleur wijzigen"
 
-#: libs/image/kis_layer_utils.cpp:1995
+#: libs/image/kis_layer_utils.cpp:2017
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Geselecteerde nodes samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:2013
+#: libs/image/kis_layer_utils.cpp:2035
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nieuwe uit zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2036
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:2093
+#: libs/image/kis_layer_utils.cpp:2115
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Selectiemaskers samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:2117
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Laag waar andere lagen in terecht komen"
 
-#: libs/image/kis_layer_utils.cpp:2133
+#: libs/image/kis_layer_utils.cpp:2155
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Afbeelding plat maken"
 
-#: libs/image/kis_layer_utils.cpp:2359
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa naar een masker splitsen"
 
-#: libs/image/kis_layer_utils.cpp:2385
+#: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Naar een tekenlaag omzetten"
@@ -27093,11 +27093,9 @@ msgstr[0] "Penseelsnelheid vloeiend maken: {n} sample"
 msgstr[1] "Penseelsnelheid vloeiend maken: {n} samples"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1451
-#, fuzzy, kde-format
-#| msgid "Pen tilt direction offset: {n}°"
-#| msgid_plural "Pen tilt direction offset: {n}°"
+#, kde-format
 msgid "Pen tilt direction offset: "
-msgstr "Richtingverschuiving van kanteling van pen: {n}°"
+msgstr "Richtingverschuiving van kanteling van pen: "
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1548
@@ -65653,7 +65651,7 @@ msgstr ""
 "Onzichtbare sublagen zullen ook getransformeerd worden. Vergrendel lagen als "
 "u niet wilt dat ze getransformeerd worden "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:359
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformeer een laag of selectie"

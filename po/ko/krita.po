@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-23 01:56+0000\n"
+"POT-Creation-Date: 2025-04-24 01:54+0000\n"
 "PO-Revision-Date: 2024-08-20 23:32+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -21155,7 +21155,7 @@ msgid "Character Variant %1"
 msgstr "가변형(%1)"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1660
+#: libs/flake/text/KoSvgTextShape.cpp:1662
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -21163,24 +21163,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>텍스트를 입력하십시오</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1639
+#: libs/flake/text/KoSvgTextShape.cpp:1641
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1643
+#: libs/flake/text/KoSvgTextShape.cpp:1651
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 텍스트 모양"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1647
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1670
+#: libs/flake/text/KoSvgTextShape.cpp:1672
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -21750,7 +21750,7 @@ msgid "Reselect"
 msgstr "다시 선택"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2044
+#: libs/image/kis_layer_utils.cpp:2066
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -22313,53 +22313,53 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "아래 병합"
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "사본"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "투영 색상 변경"
 
-#: libs/image/kis_layer_utils.cpp:1995
+#: libs/image/kis_layer_utils.cpp:2017
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "선택한 노드 병합"
 
-#: libs/image/kis_layer_utils.cpp:2013
+#: libs/image/kis_layer_utils.cpp:2035
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "보이는 항목에서 새로 만들기"
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2036
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "보이기"
 
-#: libs/image/kis_layer_utils.cpp:2093
+#: libs/image/kis_layer_utils.cpp:2115
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "선택 마스크 병합"
 
-#: libs/image/kis_layer_utils.cpp:2117
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "레이어 병합"
 
-#: libs/image/kis_layer_utils.cpp:2133
+#: libs/image/kis_layer_utils.cpp:2155
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "이미지 병합"
 
-#: libs/image/kis_layer_utils.cpp:2359
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "알파를 마스크로 분할"
 
-#: libs/image/kis_layer_utils.cpp:2385
+#: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "칠하기 레이어로 변환"
@@ -66924,7 +66924,7 @@ msgstr ""
 "보이지 않는 하위 레이어도 같이 변형됩니다. 레이어를 변형시키지 않으려면 레이"
 "어를 잠그십시오 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:359
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "레이어 또는 선택 영역 변형"

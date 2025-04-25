@@ -255,6 +255,22 @@ bool KisMemoryStorage::addResource(const QString &resourceType,  KoResourceSP re
     return true;
 }
 
+bool KisMemoryStorage::testingRemoveResource(const QString &url)
+{
+    QStringList parts = url.split('/', Qt::SkipEmptyParts);
+
+    Q_ASSERT(parts.size() == 2);
+
+    const QString resourceType = parts[0];
+    const QString resourceFilename = parts[1];
+
+    if (d->resourcesNew.contains(resourceType)) {
+        return d->resourcesNew[resourceType].remove(resourceFilename) > 0;
+    }
+
+    return false;
+}
+
 QString KisMemoryStorage::resourceMd5(const QString &url)
 {
     QStringList parts = url.split('/', Qt::SkipEmptyParts);

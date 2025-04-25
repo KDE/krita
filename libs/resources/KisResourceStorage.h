@@ -272,6 +272,9 @@ private:
     friend class KisStorageModel;
     friend class KisResourceLocator;
     friend class KisResourceCacheDb;
+    friend class TestResourceLocator;
+
+    KisStoragePlugin* testingGetStoragePlugin();
 
     void setStorageId(int storageId);
     int storageId();

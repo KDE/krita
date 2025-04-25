@@ -158,6 +158,226 @@ void TestResourceLocator::testDocumentStorage()
     QVERIFY(model.rowCount() == rowcount);
 }
 
+#include <KisResourceMetaDataModel.h>
+#include <KisResourceModelProvider.h>
+#include <KisSqlQueryLoader.h>
+
+int countMetaDataForResource(int resourceId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_metadata_for_resource",
+                                 "SELECT COUNT(*) FROM metadata WHERE foreign_id = :resource_id",
+                                 KisSqlQueryLoader::prepare_only);
+        loader.query().bindValue(":resource_id", resourceId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countCurrentResourcesForResourceId(int resourceId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_current_resource_for_resource_id",
+                                 "SELECT COUNT(*) FROM resources WHERE id = :resource_id",
+                                 KisSqlQueryLoader::prepare_only);
+        loader.query().bindValue(":resource_id", resourceId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+int countVersionedResourcesForResourceId(int resourceId)
+{
+    try {
+        KisSqlQueryLoader loader("inline://count_current_resource_for_resource_id",
+                                 "SELECT COUNT(*) FROM versioned_resources WHERE resource_id = :resource_id",
+                                 KisSqlQueryLoader::prepare_only);
+        loader.query().bindValue(":resource_id", resourceId);
+        loader.exec();
+
+        loader.query().first();
+        return loader.query().value(0).toInt();
+
+    } catch (const KisSqlQueryLoader::SQLException &e) {
+        qWarning().noquote() << "ERROR: failed to execute query:" << e.message;
+        qWarning().noquote() << "       file:" << e.filePath;
+        qWarning().noquote() << "       statement:" << e.statementIndex;
+        qWarning().noquote() << "       error:" << e.sqlError.text();
+        return -1;
+    }
+}
+
+void TestResourceLocator::testLoadResourceMetadataFromStorage()
+{
+    KisResourceCacheDb::initialize(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    KisResourceLocator::LocatorError r = m_locator->initialize(m_srcLocation);
+    if (!m_locator->errorMessages().isEmpty()) qDebug() << m_locator->errorMessages();
+    QVERIFY(r == KisResourceLocator::LocatorError::Ok);
+
+
+    const QString &documentName("document");
+
+    KisResourceMetaDataModel *metadataModel = KisResourceModelProvider::resourceMetadataModel();
+    
+    KisResourceModel model(ResourceType::PaintOpPresets);
+    const int initialRowCount = model.rowCount();
+    ENTER_FUNCTION() << ppVar(initialRowCount);
+
+    KisResourceStorageSP documentStorage = QSharedPointer<KisResourceStorage>::create(documentName);
+    QVERIFY(documentStorage->valid());
+
+    QSharedPointer<DummyResource> resource(new DummyResource("metadata_test.kpp", ResourceType::PaintOpPresets));
+    resource->setSomething("123456789012345678901234567890");
+
+    documentStorage->addResource(resource);
+
+    m_locator->addStorage(documentName, documentStorage);
+
+    QVERIFY(m_locator->hasStorage(documentName));
+    QCOMPARE(model.rowCount(), initialRowCount + 1);
+
+    QSharedPointer<DummyResource> loadedResource;
+    int loadedResourceId = -1;
+
+    {
+        auto loadedResources = model.resourcesForFilename("metadata_test.kpp");
+        QCOMPARE(loadedResources.size(), 1);
+        loadedResource = loadedResources.first().dynamicCast<DummyResource>();
+        loadedResourceId = loadedResource->resourceId();
+        QVERIFY(loadedResourceId >= 0);
+
+        QCOMPARE(loadedResource->metadata()["test_metadata"], "12345678");
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "12345678");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 1);
+    }
+
+    const bool addNewVersionsToLocator = false;
+    const bool addNewVersionsToStorageAndSync = true;
+    const bool deleteStorageNormally = false;
+    const bool deleteAllTemporaryStorages = true;
+
+    if (addNewVersionsToLocator) {
+        loadedResource->setSomething("098765432109876543210987654321");
+        model.updateResource(loadedResource);
+
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "09876543");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+
+        loadedResource->setSomething("6666666666666666666666666");
+        model.updateResource(loadedResource);
+
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "66666666");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 3);
+    }
+
+    if (addNewVersionsToStorageAndSync) {
+        const QString resourceType = loadedResource->resourceType().first;
+        
+        /**
+         * Create a new version of the resource
+         */
+        loadedResource->setSomething("098765432109876543210987654321");
+        
+        // manually upload it into the storage bypassing the locator
+        resource->setVersion(resource->version() + 1);
+        documentStorage->saveAsNewVersion(loadedResource);
+        resource->setMD5Sum(documentStorage->resourceMd5(resourceType + "/" + resource->filename()));
+        resource->setDirty(false);
+
+        // nothing has changed yet, the database is in the old state
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "12345678");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 1);
+
+        // now synchronize storage with the database
+        KisResourceCacheDb::synchronizeStorage(documentStorage);
+        Q_EMIT m_locator->storageResynchronized(documentStorage->location(), false);
+
+        // the changes are present in the database
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "09876543");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 2);
+
+        /**
+         * Create another version of the resource
+         */
+        loadedResource->setSomething("6666666666666666666666666");
+        resource->setVersion(resource->version() + 1);
+        documentStorage->saveAsNewVersion(loadedResource);
+        resource->setMD5Sum(documentStorage->resourceMd5(resourceType + "/" + resource->filename()));
+        resource->setDirty(false);
+
+        KisResourceCacheDb::synchronizeStorage(documentStorage);
+        Q_EMIT m_locator->storageResynchronized(documentStorage->location(), false);
+
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "66666666");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 3);
+
+        /**
+         * Now remove the last version from the storage and try 
+         * to sync it to the database
+         */
+
+        KisMemoryStorage *memoryStorageBackend = 
+            dynamic_cast<KisMemoryStorage*>(documentStorage->testingGetStoragePlugin());
+
+        memoryStorageBackend->testingRemoveResource(resourceType + "/" + resource->filename());
+
+        KisResourceCacheDb::synchronizeStorage(documentStorage);
+        Q_EMIT m_locator->storageResynchronized(documentStorage->location(), false);
+
+        QCOMPARE(metadataModel->metaDataValue(loadedResourceId, "test_metadata"), "09876543");
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 1);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 1);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 2);
+    }
+
+    if (deleteStorageNormally) {
+        m_locator->removeStorage(documentName);
+    }
+
+    if (deleteAllTemporaryStorages) {
+        KisResourceCacheDb::deleteTemporaryResources();
+    }
+
+    if (loadedResourceId >= 0) {
+        QVERIFY(!metadataModel->metaDataValue(loadedResourceId, "test_metadata").isValid());
+        
+        QCOMPARE(countMetaDataForResource(loadedResourceId), 0);
+        QCOMPARE(countCurrentResourcesForResourceId(loadedResourceId), 0);
+        QCOMPARE(countVersionedResourcesForResourceId(loadedResourceId), 0);
+    }
+
+    QCOMPARE(model.rowCount(), initialRowCount);
+}
+
 void TestResourceLocator::testSyncVersions()
 {
     int resourceId = -1;
@@ -465,8 +685,8 @@ void TestResourceLocator::testImportDuplicatedResource()
 
 void TestResourceLocator::cleanupTestCase()
 {
-    ResourceTestHelper::rmTestDb();
-    ResourceTestHelper::cleanDstLocation(m_dstLocation);
+    // ResourceTestHelper::rmTestDb();
+    // ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 SIMPLE_TEST_MAIN(TestResourceLocator)

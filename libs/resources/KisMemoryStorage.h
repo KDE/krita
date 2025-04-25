@@ -46,6 +46,10 @@ public:
     QVariant metaData(const QString &key) const override;
 
 private:
+    friend class TestResourceLocator;
+    bool testingRemoveResource(const QString &url);
+
+private:
     class Private;
     QScopedPointer<Private> d;
 

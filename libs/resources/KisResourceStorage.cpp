@@ -306,6 +306,11 @@ int KisResourceStorage::storageId()
     return d->storageId;
 }
 
+KisStoragePlugin* KisResourceStorage::testingGetStoragePlugin()
+{
+    return d->storagePlugin.data();
+}
+
 struct VersionedFileParts
 {
     QString basename;

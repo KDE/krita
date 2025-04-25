@@ -25,6 +25,7 @@ private Q_SLOTS:
     void testResource();
     void testResourceForId();
     void testDocumentStorage();
+    void testLoadResourceMetadataFromStorage();
 
     void cleanupTestCase();
 

@@ -33,6 +33,9 @@ public:
         img.fill(Qt::blue);
         setImage(img);
 
+        // add some random metadata to the resource
+        addMetaData("test_metadata", expectedMetaData());
+
         setValid(true);
     }
 
@@ -54,7 +57,7 @@ public:
         if (!dev->isOpen()) {
             dev->open(QIODevice::ReadOnly);
         }
-        m_something = QString::fromUtf8(dev->readAll());
+        setSomething(QString::fromUtf8(dev->readAll()));
         setValid(true);
         return true;
     }
@@ -71,11 +74,17 @@ public:
     void setSomething(const QString &something)
     {
         m_something = something;
+        addMetaData("test_metadata", expectedMetaData());
     }
 
     QString something() const
     {
         return m_something;
+    }
+
+    QString expectedMetaData() const 
+    {
+        return m_something.left(8);
     }
 
     QPair<QString, QString> resourceType() const override {
@@ -86,6 +95,15 @@ private:
 
     QString m_something;
     QString m_resourceType;
+};
+
+class DummyResourceWithMetadata : public DummyResource {
+public:
+    DummyResourceWithMetadata(const QString &f, const QString &resourceType = ResourceType::PaintOpPresets)
+        : DummyResource(f, resourceType)
+    {
+        
+    }
 };
 
 #endif // DUMMYRESOURCE_H

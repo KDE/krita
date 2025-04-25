@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 03:16+0000\n"
+"POT-Creation-Date: 2025-04-24 03:22+0000\n"
 "PO-Revision-Date: 2015-08-25 20:08+0200\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -17091,7 +17091,7 @@ msgstr "Send gjennom"
 msgid "Imported Image"
 msgstr ""
 
-#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2030
+#: libs/image/kis_image.cc:693 libs/image/kis_layer_utils.cpp:2052
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17355,54 +17355,54 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Kopi av"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Endre sammenkobling"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2015
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Flett sammen valgte noder"
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2001
+#: libs/image/kis_layer_utils.cpp:2023
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2079
+#: libs/image/kis_layer_utils.cpp:2101
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Flett sammen utvalgsmasker"
 
-#: libs/image/kis_layer_utils.cpp:2102
+#: libs/image/kis_layer_utils.cpp:2124
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flat ut lag"
 
-#: libs/image/kis_layer_utils.cpp:2115
+#: libs/image/kis_layer_utils.cpp:2137
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flat ut bilde"
 
-#: libs/image/kis_layer_utils.cpp:2339
+#: libs/image/kis_layer_utils.cpp:2361
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2365
+#: libs/image/kis_layer_utils.cpp:2387
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -58253,7 +58253,7 @@ msgstr ""
 "Usynlige under-lag vil også bli transformert. Lås lagene hvis du ikke vil at "
 "de skal transformeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:357
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Omform et lag eller et utvalg"

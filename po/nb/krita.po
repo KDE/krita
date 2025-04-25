@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-04-12 01:50+0000\n"
+"POT-Creation-Date: 2025-04-24 01:54+0000\n"
 "PO-Revision-Date: 2024-03-09 12:46+0100\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -19997,30 +19997,30 @@ msgid "Character Variant %1"
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1660
+#: libs/flake/text/KoSvgTextShape.cpp:1662
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1639
+#: libs/flake/text/KoSvgTextShape.cpp:1641
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1641
-#: libs/flake/text/KoSvgTextShape.cpp:1649
+#: libs/flake/text/KoSvgTextShape.cpp:1643
+#: libs/flake/text/KoSvgTextShape.cpp:1651
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1647
+#: libs/flake/text/KoSvgTextShape.cpp:1649
 #, kde-format
 msgid "SVG Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1670
+#: libs/flake/text/KoSvgTextShape.cpp:1672
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -20411,7 +20411,7 @@ msgstr "Størrelse"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1353
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1356
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1420
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1578
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1579
 #: libs/ui/forms/wdgdisplaysettings.ui:368
 #: libs/ui/forms/wdggeneralsettings.ui:383
 #: libs/ui/forms/wdgrectangleconstraints.ui:59
@@ -20586,7 +20586,7 @@ msgid "Reselect"
 msgstr "Velg på nytt"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:2044
+#: libs/image/kis_layer_utils.cpp:2066
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -21139,54 +21139,54 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:1691
+#: libs/image/kis_layer_utils.cpp:1713
 #, kde-format
 msgid "Copy of"
 msgstr "Kopi av"
 
-#: libs/image/kis_layer_utils.cpp:1769
+#: libs/image/kis_layer_utils.cpp:1791
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Endre sammenkobling"
 
-#: libs/image/kis_layer_utils.cpp:1995
+#: libs/image/kis_layer_utils.cpp:2017
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Flett sammen valgte noder"
 
-#: libs/image/kis_layer_utils.cpp:2013
+#: libs/image/kis_layer_utils.cpp:2035
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2014
+#: libs/image/kis_layer_utils.cpp:2036
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2093
+#: libs/image/kis_layer_utils.cpp:2115
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Flett sammen utvalgsmasker"
 
-#: libs/image/kis_layer_utils.cpp:2117
+#: libs/image/kis_layer_utils.cpp:2139
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Flat ut lag"
 
-#: libs/image/kis_layer_utils.cpp:2133
+#: libs/image/kis_layer_utils.cpp:2155
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Flat ut bilde"
 
-#: libs/image/kis_layer_utils.cpp:2359
+#: libs/image/kis_layer_utils.cpp:2381
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 
-#: libs/image/kis_layer_utils.cpp:2385
+#: libs/image/kis_layer_utils.cpp:2407
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -23522,8 +23522,8 @@ msgstr "Metadata"
 #. i18n: ectx: attribute (title), widget (QWidget, tab_hsx)
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRenderer)
 #: libs/resources/KisResourceStorage.h:117
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1927
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1931
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1928
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1932
 #: libs/ui/forms/wdgdisplaysettings.ui:213 libs/ui/KoDocumentInfo.cpp:37
 #: libs/widgets/KisDlgInternalColorSelector.cpp:327
 #: libs/widgets/WdgDlgInternalColorSelector.ui:89
@@ -24297,7 +24297,7 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:514
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1951
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1952
 #, kde-format
 msgid "Warning(s):"
 msgstr ""
@@ -25225,8 +25225,8 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2237
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2239
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2238
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2240
 #: libs/ui/forms/wdgcolorsettings.ui:172 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -25326,8 +25326,8 @@ msgstr ""
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2207
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2209
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2210
 #: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -26244,12 +26244,12 @@ msgstr "Lagegenskaper"
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1424
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1427
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:1430
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1493
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1497
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1501
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1584
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2002
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2060 libs/ui/kis_paintop_box.cc:280
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1494
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1498
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1502
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1585
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2003
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2061 libs/ui/kis_paintop_box.cc:280
 #: libs/ui/kis_paintop_box.cc:281 libs/ui/widgets/kis_custom_image_widget.cc:99
 #: libs/ui/widgets/KisAutoLevelsWidget.cpp:19
 #: libs/widgets/kis_color_input.cpp:139 libs/widgets/kis_color_input.cpp:170
@@ -26630,21 +26630,19 @@ msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] ""
 msgstr[1] ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1450
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1451
 #, kde-format
-msgid "Pen tilt direction offset: {n}°"
-msgid_plural "Pen tilt direction offset: {n}°"
-msgstr[0] ""
-msgstr[1] ""
+msgid "Pen tilt direction offset: "
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1547
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1548
 #: libs/ui/forms/wdgperformancesettings.ui:215
 #, kde-format
 msgid " GiB"
 msgstr " GiB"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1568
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1569
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:59
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:81
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:93
@@ -26653,187 +26651,187 @@ msgctxt "suffix for \"seconds\""
 msgid " sec"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1572
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1573
 #, kde-format
 msgid " fps"
-msgstr ""
-
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1801
-#, kde-format
-msgctxt "canvas renderer"
-msgid "OpenGL"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1802
 #, kde-format
 msgctxt "canvas renderer"
-msgid "Software Renderer (very slow)"
+msgid "OpenGL"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1806
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1803
 #, kde-format
 msgctxt "canvas renderer"
-msgid "Direct3D 11 via ANGLE"
+msgid "Software Renderer (very slow)"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1807
 #, kde-format
 msgctxt "canvas renderer"
+msgid "Direct3D 11 via ANGLE"
+msgstr ""
+
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1808
+#, kde-format
+msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1809
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1810
 #, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL ES"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1816
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1817
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Unknown"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1836
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1837
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1913
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
 #, kde-format
 msgid "Display Id: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1914
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
 #, kde-format
 msgid "Display Name: %1 %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1915
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
 #, kde-format
 msgid "Min Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1916
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
 #, kde-format
 msgid "Max Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1917
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
 #, kde-format
 msgid "Max Full Frame Luminance: %1"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1918
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
 #, kde-format
 msgid "Red Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1919
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1920
 #, kde-format
 msgid "Green Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1920
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
 #, kde-format
 msgid "Blue Primary: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:1921
+#: libs/ui/dialogs/kis_dlg_preferences.cc:1922
 #, kde-format
 msgid "White Point: %1, %2"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2089
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2090
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2200
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
 #, kde-format
 msgid "Configure Krita"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2217
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2218
 #, kde-format
 msgid "Keyboard Shortcuts"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2219
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2220
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, kde-format
 msgid "Shortcuts"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2229
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
 #, kde-format
 msgid "Canvas Input Settings"
 msgstr "Innstillinger for lerret-inndata"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2230
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2231
 #, kde-format
 msgid "Canvas Input"
 msgstr "Lerret-inndata"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2247
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2248
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
 msgstr "Fargebehandling"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2249
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2250
 #, kde-format
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2257
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2259
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2258
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2260
 #, kde-format
 msgid "Performance"
 msgstr "Ytelse"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2267
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2268
 #, kde-format
 msgid "Tablet settings"
 msgstr "Innstillinger for tegneplate"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2269
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2270
 #, kde-format
 msgid "Tablet"
 msgstr "Tegneplate"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2277
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2278
 #, kde-format
 msgid "Canvas-only settings"
 msgstr "Innstillinger bare for lerret"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2279
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2280
 #, kde-format
 msgid "Canvas-only"
 msgstr "Bare lerret"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2287
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2289
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2288
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2290
 #, kde-format
 msgid "Pop-up Palette"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2297
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2298
 #, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Forfatter"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2299
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2300
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:232
 #, kde-format
 msgid "Author"
 msgstr "Forfatter"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2306
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2307
 #, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -31332,7 +31330,7 @@ msgid ""
 "hardware-dependent"
 msgstr ""
 
-#. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intTiltDirectionOffset)
+#. i18n: ectx: property (toolTip), widget (KisAngleSelector, tiltDirectionOffsetAngle)
 #: libs/ui/forms/wdgtabletsettings.ui:226
 #, kde-format
 msgid "Angle offset added to the reported pen tilt direction."
@@ -41021,30 +41019,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1517
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1519
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1518
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1520
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1625
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1627
 #, kde-format
 msgid "Edit Frames:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1652
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1654
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1660
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1662
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -55920,7 +55918,7 @@ msgstr ""
 msgid "%1 px"
 msgstr "%1 px"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -55930,16 +55928,15 @@ msgstr "%1 px"
 msgid "0°"
 msgstr "0°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:31
 #, kde-format
 msgid "360°"
 msgstr "360°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:40
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:63
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:69
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:41
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:64
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:28
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:29
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
@@ -55950,19 +55947,19 @@ msgstr "360°"
 msgid "°"
 msgstr "°"
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:54
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:55
 #, kde-format
 msgctxt "Lock Drawing angle at start of each stroke"
 msgid "Lock"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:58
 #, kde-format
 msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
 msgid "Fan Corners"
 msgstr ""
 
-#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:76
+#: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:77
 #, kde-format
 msgid "Angle Offset"
 msgstr "Vinkelforskyving"
@@ -63358,7 +63355,7 @@ msgstr ""
 "Usynlige under-lag vil også bli transformert. Lås lagene hvis du ikke vil at "
 "de skal transformeres "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:360
+#: plugins/tools/tool_transform2/kis_tool_transform.h:359
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Omform et lag eller et utvalg"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-24 01:54+0000\n"
-"PO-Revision-Date: 2024-07-07 07:51+0200\n"
+"PO-Revision-Date: 2025-04-26 07:04+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7825,7 +7825,7 @@ msgstr "წერტილის წაშლა"
 #, kde-format
 msgctxt "action"
 msgid "Break at segment"
-msgstr "გასატეხი სეგმენტი"
+msgstr "გატეხვა მონიშნულთან"
 
 #. i18n: context: iconText @ Action (pathsegment-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-line), Actions (Path Tool), ActionCollection (Tools)
@@ -7861,12 +7861,10 @@ msgstr "გასატეხი წერტილი"
 #. i18n: context: text @ Action (path-break-selection), Actions (Path Tool), ActionCollection (Tools)
 #: krita/data/actions/PathTool.action:56 krita/data/actions/PathTool.action:58
 #: krita/data/actions/PathTool.action:63
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Break at segment"
+#, kde-format
 msgctxt "action"
 msgid "Break at selection"
-msgstr "გასატეხი სეგმენტი"
+msgstr "გატეხვა მონიშნულთან"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -8300,7 +8298,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rename Composition"
-msgstr ""
+msgstr "კომპოზიციის სახელის გადარქმევა"
 
 #. i18n: context: text @ Action (update_composition), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (update_composition), Actions (General), ActionCollection (Krita)
@@ -9093,11 +9091,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (set_pixel_perfect_smoothing), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:847 krita/krita.action:849 krita/krita.action:850
-#, fuzzy, kde-format
-#| msgid "Smoothing:"
+#, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Pixel"
-msgstr "მოგლუვება:"
+msgstr "ფუნჯის მოგლუვება: პიქსელი"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -11434,28 +11431,24 @@ msgstr "ფილტრის ნიღაბი"
 
 #. i18n: context: text @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2676
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Add Color &Overlay Mask"
-msgstr "ფერის გალაგება"
+msgstr "ფერის &გადაფარვის ნიღბის დამატება"
 
 #. i18n: context: toolTip @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2678
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Filter Mask"
+#, kde-format
 msgctxt "action"
 msgid "Add a new Fast Color Overlay Filter Mask"
-msgstr "ახალი ფილტრის ნიღბის დამატება"
+msgstr "ახალი სწრაფი ფერის განლაგების ფილტრის ნიღბის დამატება"
 
 #. i18n: context: iconText @ Action (add_new_fast_color_overlay_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2679
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgctxt "action"
 msgid "Fast Color Overlay Mask"
-msgstr "ფერის გალაგება"
+msgstr "სწრაფი ფერის გადაფარვის ნიღაბი"
 
 #. i18n: context: text @ Action (add_new_colorize_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2688
@@ -11974,12 +11967,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3036
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert Group to &Animated Layer"
-msgstr "ფაილის ფენად გარდაქმნა"
+msgstr "ჯგუფის გარდაქმნა &ანიმირებულ ფენაში"
 
 #. i18n: context: toolTip @ Action (convert_group_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3038
@@ -11999,12 +11990,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3048
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &Animated Layer"
-msgstr "ფაილის ფენად გარდაქმნა"
+msgstr "გადაყვანა &ანიმირებულ ფენაში"
 
 #. i18n: context: toolTip @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_animated), Actions (Layers), ActionCollection (Krita)
@@ -12637,12 +12626,10 @@ msgstr "ფენის ფერის სივრცის გარდაქ
 #. i18n: context: text @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3492 krita/krita.action:3495
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Unify Layers Color Space"
-msgstr "ფენის ფერის სივრცის გარდაქმნა"
+msgstr "ფენის ფერის სივრცის გაერთიანება"
 
 #. i18n: context: toolTip @ Action (unifylayerscolorspace), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3494
@@ -12847,12 +12834,10 @@ msgstr ""
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3656 krita/krita.action:3658
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "New layer from visible"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "ახალი ფენა ხილულიდან"
+msgstr "მიმართული გამოსახულება ხილულიდან"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -16242,12 +16227,9 @@ msgid "Lock shapes"
 msgstr "ფორმის დაბლოკვა"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "ტექსტის თვისებების შეცვლა"
+msgstr "ტექსტის ფორმის თვისებების შეცვლა"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16399,1170 +16381,1114 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:21
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Basic_mix.kpp"
-#| msgid "Basic mix"
+#, kde-format
 msgctxt "@title"
 msgid "Basic Latin"
-msgstr "სტანდარტული შერევა"
+msgstr "საბაზისო ლათინური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:22
 #, kde-format
 msgctxt "@title"
 msgid "Latin-1 Supplement"
-msgstr ""
+msgstr "Latin-1 დამატებებით"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:23
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-A"
-msgstr ""
+msgstr "ლათინური გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:24
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-B"
-msgstr ""
+msgstr "ლათინური გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:25
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "IPA Extensions"
-msgstr "გაფართოება"
+msgstr "IPA-ის გაფართოებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:26
 #, kde-format
 msgctxt "@title"
 msgid "Spacing Modifier Letters"
-msgstr ""
+msgstr "ჰარეს მოდიფიკატორი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:27
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks"
-msgstr ""
+msgstr "შემკრები დიაკრიტიკული სანიშნები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:28
 #, kde-format
 msgctxt "@title"
 msgid "Greek and Coptic"
-msgstr ""
+msgstr "ბერძნული და კოპტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:29
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic"
-msgstr ""
+msgstr "კირილიცა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:30
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Supplement"
-msgstr ""
+msgstr "კირილიცა დამატებებით"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:31
 #, kde-format
 msgctxt "@title"
 msgid "Armenian"
-msgstr ""
+msgstr "სომხური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:32
 #, kde-format
 msgctxt "@title"
 msgid "Hebrew"
-msgstr ""
+msgstr "ივრითი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:33
 #, kde-format
 msgctxt "@title"
 msgid "Arabic"
-msgstr ""
+msgstr "არაბული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:34
 #, kde-format
 msgctxt "@title"
 msgid "Syriac"
-msgstr ""
+msgstr "სირიული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:35
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Supplement"
-msgstr ""
+msgstr "არაბული დამატებებით"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:36
 #, kde-format
 msgctxt "@title"
 msgid "Thaana"
-msgstr ""
+msgstr "თაანური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:37
-#, fuzzy, kde-format
-#| msgid "No"
+#, kde-format
 msgctxt "@title"
 msgid "NKo"
-msgstr "არა"
+msgstr "NKo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:38
 #, kde-format
 msgctxt "@title"
 msgid "Samaritan"
-msgstr ""
+msgstr "სამარიტული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:39
 #, kde-format
 msgctxt "@title"
 msgid "Mandaic"
-msgstr ""
+msgstr "მანდეური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:40
 #, kde-format
 msgctxt "@title"
 msgid "Syriac Supplement"
-msgstr ""
+msgstr "სირიულის შემცვლელი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:41
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-B"
-msgstr ""
+msgstr "არაბული გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:42
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-A"
-msgstr ""
+msgstr "არაბული გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:43
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari"
-msgstr ""
+msgstr "დევაგანური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:44
 #, kde-format
 msgctxt "@title"
 msgid "Bengali"
-msgstr ""
+msgstr "ბენგალური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:45
 #, kde-format
 msgctxt "@title"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "გურმუხული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:46
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - category Quadratic"
-#| msgid "Quadratic"
+#, kde-format
 msgctxt "@title"
 msgid "Gujarati"
-msgstr "კვადრატული"
+msgstr "გუჯარათული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:47
 #, kde-format
 msgctxt "@title"
 msgid "Oriya"
-msgstr ""
+msgstr "ორია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:48
 #, kde-format
 msgctxt "@title"
 msgid "Tamil"
-msgstr ""
+msgstr "თამილური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:49
 #, kde-format
 msgctxt "@title"
 msgid "Telugu"
-msgstr ""
+msgstr "ტელუგური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:50
 #, kde-format
 msgctxt "@title"
 msgid "Kannada"
-msgstr ""
+msgstr "კანნადა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:51
 #, kde-format
 msgctxt "@title"
 msgid "Malayalam"
-msgstr ""
+msgstr "მალაიამი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:52
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala"
-msgstr ""
+msgstr "სინჰალა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:53
 #, kde-format
 msgctxt "@title"
 msgid "Thai"
-msgstr ""
+msgstr "ტაილანდური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:54
-#, fuzzy, kde-format
-#| msgid "Lasso"
+#, kde-format
 msgctxt "@title"
 msgid "Lao"
-msgstr "ლასო"
+msgstr "ლაოსური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:55
 #, kde-format
 msgctxt "@title"
 msgid "Tibetan"
-msgstr ""
+msgstr "ტიბეტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:56
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar"
-msgstr ""
+msgstr "მიანმარი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:57
 #, kde-format
 msgctxt "@title"
 msgid "Georgian"
-msgstr ""
+msgstr "ქართული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:58
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo"
-msgstr ""
+msgstr "ჰანგული ჯამო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:59
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic"
-msgstr ""
+msgstr "ეთიოპიური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:60
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Supplement"
-msgstr ""
+msgstr "ეთიოპური დამატებებით"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:61
 #, kde-format
 msgctxt "@title"
 msgid "Cherokee"
-msgstr ""
+msgstr "ჩეროკი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:62
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics"
-msgstr ""
+msgstr "კანადური აბორიგინალური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:63
 #, kde-format
 msgctxt "@title"
 msgid "Ogham"
-msgstr ""
+msgstr "ოგამი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:64
 #, kde-format
 msgctxt "@title"
 msgid "Runic"
-msgstr ""
+msgstr "რუნები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:65
-#, fuzzy, kde-format
-#| msgid "Dialog"
+#, kde-format
 msgctxt "@title"
 msgid "Tagalog"
-msgstr "ფანჯარა"
+msgstr "ტაგალოგური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:66
 #, kde-format
 msgctxt "@title"
 msgid "Hanunoo"
-msgstr ""
+msgstr "ჰანუნოო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:67
 #, kde-format
 msgctxt "@title"
 msgid "Buhid"
-msgstr ""
+msgstr "ბუჰიდი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:68
 #, kde-format
 msgctxt "@title"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "ტაგბანვა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:69
 #, kde-format
 msgctxt "@title"
 msgid "Khmer"
-msgstr ""
+msgstr "კხმერული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:70
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian"
-msgstr ""
+msgstr "მონღოლური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:71
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended"
-msgstr ""
+msgstr "უნიფიცირებული კანადური აბორიგინალური მარცვლები, გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:72
 #, kde-format
 msgctxt "@title"
 msgid "Limbu"
-msgstr ""
+msgstr "ლიმბუ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:73
 #, kde-format
 msgctxt "@title"
 msgid "Tai Le"
-msgstr ""
+msgstr "ტაი ლე"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:74
-#, fuzzy, kde-format
-#| msgid "New Text"
+#, kde-format
 msgctxt "@title"
 msgid "New Tai Lue"
-msgstr "ახალი ტექსტი"
+msgstr "ახალი ტაი ლუ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:75
 #, kde-format
 msgctxt "@title"
 msgid "Khmer Symbols"
-msgstr ""
+msgstr "ხმერული სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:76
-#, fuzzy, kde-format
-#| msgctxt "Layer name for translation of template"
-#| msgid "Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Buginese"
-msgstr "ხაზები"
+msgstr "ბუგინური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:77
 #, kde-format
 msgctxt "@title"
 msgid "Tai Tham"
-msgstr ""
+msgstr "ტაი ენა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:78
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Extended"
-msgstr ""
+msgstr "გაერთიანებული დიაკრიტიკული გაფართოებული ნიშნები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:79
-#, fuzzy, kde-format
-#| msgid "BSpline"
+#, kde-format
 msgctxt "@title"
 msgid "Balinese"
-msgstr "B-სპლაინი"
+msgstr "ბალინური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:80
 #, kde-format
 msgctxt "@title"
 msgid "Sundanese"
-msgstr ""
+msgstr "სუნდური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:81
 #, kde-format
 msgctxt "@title"
 msgid "Batak"
-msgstr ""
+msgstr "ბატაკი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:82
 #, kde-format
 msgctxt "@title"
 msgid "Lepcha"
-msgstr ""
+msgstr "ლეპჩა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:83
 #, kde-format
 msgctxt "@title"
 msgid "Ol Chiki"
-msgstr ""
+msgstr "ოლ ჩიკი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:84
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-C"
-msgstr ""
+msgstr "კირილიცა გაფართოებული-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:85
 #, kde-format
 msgctxt "@title"
 msgid "Georgian Extended"
-msgstr ""
+msgstr "ქართული გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:86
 #, kde-format
 msgctxt "@title"
 msgid "Sundanese Supplement"
-msgstr ""
+msgstr "სუნდური დამატებითი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:87
-#, fuzzy, kde-format
-#| msgid "Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Vedic Extensions"
-msgstr "გაფართოება"
+msgstr "ვედიიური გაფართოებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:88
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions"
-msgstr "გაფართოების მიბმა"
+msgstr "ფონეტიკური გაფართოებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:89
 #, kde-format
 msgctxt "@title"
 msgid "Phonetic Extensions Supplement"
-msgstr ""
+msgstr "ფონეტიკური გაფართოებების ჩანაცვლებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:90
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks Supplement"
-msgstr ""
+msgstr "შემკრები დიაკრიტიკული სანიშნების დანამატები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:91
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended Additional"
-msgstr ""
+msgstr "ლათინური დამატებით გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:92
-#, fuzzy, kde-format
-#| msgid "Green-Red"
+#, kde-format
 msgctxt "@title"
 msgid "Greek Extended"
-msgstr "მწვანე-წითელი"
+msgstr "გაფართოებული ბერძნული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:93
-#, fuzzy, kde-format
-#| msgid "General settings"
+#, kde-format
 msgctxt "@title"
 msgid "General Punctuation"
-msgstr "ზოგადი პარამეტრები"
+msgstr "ზოგადი პუნქტუაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:94
 #, kde-format
 msgctxt "@title"
 msgid "Superscripts and Subscripts"
-msgstr ""
+msgstr "ზედა და ქვედა სკრიპტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:95
-#, fuzzy, kde-format
-#| msgid "Current color model:"
+#, kde-format
 msgctxt "@title"
 msgid "Currency Symbols"
-msgstr "მიმდინარე ფერის მოდელი:"
+msgstr "ფულის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:96
 #, kde-format
 msgctxt "@title"
 msgid "Combining Diacritical Marks for Symbols"
-msgstr ""
+msgstr "შემკრები დიაკრიტიკული სანიშნები სიმბოლოებისთვის"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:97
 #, kde-format
 msgctxt "@title"
 msgid "Letterlike Symbols"
-msgstr ""
+msgstr "ასოს-მსგავსი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:98
-#, fuzzy, kde-format
-#| msgid "Number of Layers:"
+#, kde-format
 msgctxt "@title"
 msgid "Number Forms"
-msgstr "ფენების რაოდენობა:"
+msgstr "რიცხვითი ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:99
-#, fuzzy, kde-format
-#| msgid "Arrow"
+#, kde-format
 msgctxt "@title"
 msgid "Arrows"
-msgstr "ისარი"
+msgstr "ისრები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:100
-#, fuzzy, kde-format
-#| msgid "Mathematics and calculations"
+#, kde-format
 msgctxt "@title"
 msgid "Mathematical Operators"
-msgstr "მათემატიკა და გამოთვლები"
+msgstr "მათემატიკური ოპერატორები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:101
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Technical"
-msgstr "სხვადასხვა"
+msgstr "დანარჩენი ტექნიკური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:102
-#, fuzzy, kde-format
-#| msgid "Could not load picture."
+#, kde-format
 msgctxt "@title"
 msgid "Control Pictures"
-msgstr "სურათის ჩატვირთვის შეცდომა."
+msgstr "საკონტროლო სურათები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:103
 #, kde-format
 msgctxt "@title"
 msgid "Optical Character Recognition"
-msgstr ""
+msgstr "სიმბოლოების ოპტიკური გამოცნობა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:104
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumerics"
-msgstr ""
+msgstr "ჩასმული ასოები და რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "drawing"
+#, kde-format
 msgctxt "@title"
 msgid "Box Drawing"
-msgstr "ნახატი"
+msgstr "ყუთის ნახატი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:106
-#, fuzzy, kde-format
-#| msgid "- Elements"
+#, kde-format
 msgctxt "@title"
 msgid "Block Elements"
-msgstr "- ელემენტი"
+msgstr "ბლოკის ელემენტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:107
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes"
-msgstr "საშუალო გეომეტრიული"
+msgstr "გეომეტრიული ფიგურები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:108
-#, fuzzy, kde-format
-#| msgid "Miscellaneous"
+#, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols"
-msgstr "სხვადასხვა"
+msgstr "სხვადასხვა სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:109
 #, kde-format
 msgctxt "@title"
 msgid "Dingbats"
-msgstr ""
+msgstr "სისულელეები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:110
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-A"
-msgstr ""
+msgstr "სხვადასხვა მათემატიკური სიმბოლოები - A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:111
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-A"
-msgstr ""
+msgstr "დამატებითი ისრები - A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:112
-#, fuzzy, kde-format
-#| msgid "Fill Patterns"
+#, kde-format
 msgctxt "@title"
 msgid "Braille Patterns"
-msgstr "შაბლონების შევსება"
+msgstr "ბრაილის შაბლონები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:113
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-B"
-msgstr ""
+msgstr "დამატებითი ისრები - B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:114
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Mathematical Symbols-B"
-msgstr ""
+msgstr "სხვადასხვა მათემატიკური სიმბოლოები - B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:115
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Mathematical Operators"
-msgstr ""
+msgstr "დამატებითი მათემატიკური ოპერატორები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:116
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Arrows"
-msgstr ""
+msgstr "სხვადასხვა სიმბოლოები და ისრები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:117
-#, fuzzy, kde-format
-#| msgid "Politics"
+#, kde-format
 msgctxt "@title"
 msgid "Glagolitic"
-msgstr "პოლიტიკა"
+msgstr "გლაგოლიტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:118
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-C"
-msgstr ""
+msgstr "ლათინური გაფართოებული-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:119
 #, kde-format
 msgctxt "@title"
 msgid "Coptic"
-msgstr ""
+msgstr "კოპტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:120
 #, kde-format
 msgctxt "@title"
 msgid "Georgian Supplement"
-msgstr ""
+msgstr "ქართული დამატებებით"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:121
 #, kde-format
 msgctxt "@title"
 msgid "Tifinagh"
-msgstr ""
+msgstr "ტიფინაგური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:122
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended"
-msgstr ""
+msgstr "გაფართოებული ეთიოპიური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:123
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-A"
-msgstr ""
+msgstr "კირილიცა გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:124
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Punctuation"
-msgstr ""
+msgstr "დამატებითი პუნქტუაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:125
 #, kde-format
 msgctxt "@title"
 msgid "CJK Radicals Supplement"
-msgstr ""
+msgstr "CJK რადიკალების დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:126
 #, kde-format
 msgctxt "@title"
 msgid "Kangxi Radicals"
-msgstr ""
+msgstr "Kangxi-ის რადიკალები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:127
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Description Characters"
-msgstr ""
+msgstr "იდეოგრაფიური აღწერის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:128
 #, kde-format
 msgctxt "@title"
 msgid "CJK Symbols and Punctuation"
-msgstr ""
+msgstr "CJK სიმბოლოები და პუნქტუაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:129
 #, kde-format
 msgctxt "@title"
 msgid "Hiragana"
-msgstr ""
+msgstr "ჰირაგანა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:130
 #, kde-format
 msgctxt "@title"
 msgid "Katakana"
-msgstr ""
+msgstr "კატაკანა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:131
 #, kde-format
 msgctxt "@title"
 msgid "Bopomofo"
-msgstr ""
+msgstr "ბოპომოფო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:132
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Compatibility Jamo"
-msgstr ""
+msgstr "Hangul-თან თავსებადი Jamo"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:133
 #, kde-format
 msgctxt "@title"
 msgid "Kanbun"
-msgstr ""
+msgstr "კანბუნი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:134
 #, kde-format
 msgctxt "@title"
 msgid "Bopomofo Extended"
-msgstr ""
+msgstr "ბოპომოფო, გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:135
-#, fuzzy, kde-format
-#| msgctxt "Draws a line around an area"
-#| msgid "Stroke"
+#, kde-format
 msgctxt "@title"
 msgid "CJK Strokes"
-msgstr "გამოძრავება"
+msgstr "CJK-ის მახვილები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:136
 #, kde-format
 msgctxt "@title"
 msgid "Katakana Phonetic Extensions"
-msgstr ""
+msgstr "კატაკანის ფონეტიკური გაფართოებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:137
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed CJK Letters and Months"
-msgstr ""
+msgstr "დახურული CJK ასოები და თვეებ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:138
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility"
-msgstr ""
+msgstr "CJK-სთან თავსებადობა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:139
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension A"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:140
 #, kde-format
 msgctxt "@title"
 msgid "Yijing Hexagram Symbols"
-msgstr ""
+msgstr "იჩინგის ჰექსაგრამული სიბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:141
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs"
-msgstr ""
+msgstr "CJK გაფართოებული იდეოგრაფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:142
 #, kde-format
 msgctxt "@title"
 msgid "Yi Syllables"
-msgstr ""
+msgstr "იჩიგის მარცვლები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:143
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt "@title"
 msgid "Yi Radicals"
-msgstr "რადიალური"
+msgstr "იჩინგის რადიკალები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:144
 #, kde-format
 msgctxt "@title"
 msgid "Lisu"
-msgstr ""
+msgstr "ლისუ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:145
 #, kde-format
 msgctxt "@title"
 msgid "Vai"
-msgstr ""
+msgstr "ვაი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:146
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-B"
-msgstr ""
+msgstr "კირილიცა გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:147
 #, kde-format
 msgctxt "@title"
 msgid "Bamum"
-msgstr ""
+msgstr "ბამუმი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:148
-#, fuzzy, kde-format
-#| msgid "Modifiers"
+#, kde-format
 msgctxt "@title"
 msgid "Modifier Tone Letters"
-msgstr "მოდიფიკატორები"
+msgstr "ტონის მოდიფიკატორი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:149
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-D"
-msgstr ""
+msgstr "ლათინური გაფართოებული-D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:150
 #, kde-format
 msgctxt "@title"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Syloti Nagri"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:151
 #, kde-format
 msgctxt "@title"
 msgid "Common Indic Number Forms"
-msgstr ""
+msgstr "ზოგადი ინდური რიცხვითი ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:152
 #, kde-format
 msgctxt "@title"
 msgid "Phags-pa"
-msgstr ""
+msgstr "Phags-pa"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:153
 #, kde-format
 msgctxt "@title"
 msgid "Saurashtra"
-msgstr ""
+msgstr "საურაშტრა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:154
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended"
-msgstr ""
+msgstr "დევაგანური გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:155
 #, kde-format
 msgctxt "@title"
 msgid "Kayah Li"
-msgstr ""
+msgstr "კაია-ლი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:156
 #, kde-format
 msgctxt "@title"
 msgid "Rejang"
-msgstr ""
+msgstr "რეჯანგი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:157
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-A"
-msgstr ""
+msgstr "ჰანგული ჯამო გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:158
 #, kde-format
 msgctxt "@title"
 msgid "Javanese"
-msgstr ""
+msgstr "იავური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:159
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-B"
-msgstr ""
+msgstr "მიანმარი გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:160
 #, kde-format
 msgctxt "@title"
 msgid "Cham"
-msgstr ""
+msgstr "ჩამური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:161
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-A"
-msgstr ""
+msgstr "მიანმარი გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:162
-#, fuzzy, kde-format
-#| msgid "Fit View"
+#, kde-format
 msgctxt "@title"
 msgid "Tai Viet"
-msgstr "ხედის ჩატევა"
+msgstr "ტაი ვიეტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:163
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek Extensions"
-msgstr ""
+msgstr "მეტეი მეიეკის გაფართოებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:164
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-A"
-msgstr ""
+msgstr "გაფართოებული ეთიოპიური-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:165
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-E"
-msgstr ""
+msgstr "ლათინური გაფართოებული-E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:166
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Cherokee Supplement"
-msgstr "სეგმენტის შეცვლა"
+msgstr "ჩეროკის დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:167
 #, kde-format
 msgctxt "@title"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "მანიპურული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:168
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Syllables"
-msgstr ""
+msgstr "ჰანგულის მარცვლები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:169
 #, kde-format
 msgctxt "@title"
 msgid "Hangul Jamo Extended-B"
-msgstr ""
+msgstr "ჰანგული ჯამო გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:170
 #, kde-format
 msgctxt "@title"
 msgid "High Surrogates"
-msgstr ""
+msgstr "მაღალი სუროგატები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:171
-#, fuzzy, kde-format
-#| msgid "High Pressure"
+#, kde-format
 msgctxt "@title"
 msgid "High Private Use Surrogates"
-msgstr "მაღალი წნევა"
+msgstr "მაღალი პირადი გამოყენების სუროგატები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:172
 #, kde-format
 msgctxt "@title"
 msgid "Low Surrogates"
-msgstr ""
+msgstr "დაბალი სუროგატები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:173
 #, kde-format
 msgctxt "@title"
 msgid "Private Use Area"
-msgstr ""
+msgstr "პირადი გამოყენების ადგილი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:174
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs"
-msgstr ""
+msgstr "CJK თავსებადი იდეოგრაფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:175
 #, kde-format
 msgctxt "@title"
 msgid "Alphabetic Presentation Forms"
-msgstr ""
+msgstr "ანბანური წარმოდგენის ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:176
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-A"
-msgstr ""
+msgstr "ფორმების არაბული პრეზენტაცია-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:177
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgctxt "@title"
 msgid "Variation Selectors"
-msgstr "მონიშნულების ამოჭრა"
+msgstr "ვარიაციული სელექტორები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:178
-#, fuzzy, kde-format
-#| msgid "Vertical offset:"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Forms"
-msgstr "ვერტიკალური წანაცვლება:"
+msgstr "ვერტიკალური ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:179
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Combine Normal Map"
-#| msgid "Combine Normal Map"
+#, kde-format
 msgctxt "@title"
 msgid "Combining Half Marks"
-msgstr "ნორმალის რუკების კომბინირება"
+msgstr "ნახევრადსანიშნების კომბინირება"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:180
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Forms"
-msgstr ""
+msgstr "CJK თავსებადობის ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:181
 #, kde-format
 msgctxt "@title"
 msgid "Small Form Variants"
-msgstr ""
+msgstr "პატარა ფორმის ვარიანტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:182
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Presentation Forms-B"
-msgstr ""
+msgstr "ფორმების არაბული პრეზენტაცია-"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:183
 #, kde-format
 msgctxt "@title"
 msgid "Halfwidth and Fullwidth Forms"
-msgstr ""
+msgstr "ნახევარსიგანიანი და სრულსიგანიანი ფორმები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:184
-#, fuzzy, kde-format
-#| msgid "Fill Special"
+#, kde-format
 msgctxt "@title"
 msgid "Specials"
-msgstr "სპეციალური შევსება"
+msgstr "სპეციალური სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:185
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Linear Burn"
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Syllabary"
-msgstr "წრფივი გამუქება"
+msgstr "წრფივი B მარცვლოვანი ანბანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:186
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Linear Burn"
-#| msgid "Linear Burn"
+#, kde-format
 msgctxt "@title"
 msgid "Linear B Ideograms"
-msgstr "წრფივი გამუქება"
+msgstr "წრფივი B იდეოგრამები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:187
-#, fuzzy, kde-format
-#| msgid "Number"
+#, kde-format
 msgctxt "@title"
 msgid "Aegean Numbers"
-msgstr "რიცხვი"
+msgstr "ეგეოსური რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:188
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Numbers"
-msgstr ""
+msgstr "ძველბერძნული ციფრები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:189
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Symbols"
-msgstr ""
+msgstr "ძველი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:190
 #, kde-format
 msgctxt "@title"
 msgid "Phaistos Disc"
-msgstr ""
+msgstr "ფესტოსის დისკო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:191
 #, kde-format
 msgctxt "@title"
 msgid "Lycian"
-msgstr ""
+msgstr "ლიდიის"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:192
-#, fuzzy, kde-format
-#| msgid "Caricature"
+#, kde-format
 msgctxt "@title"
 msgid "Carian"
-msgstr "კარიკატურა"
+msgstr "კარიული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:193
 #, kde-format
 msgctxt "@title"
 msgid "Coptic Epact Numbers"
-msgstr ""
+msgstr "კოპტური ეპაქტის რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:194
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Old Italic"
-msgstr "დახრა"
+msgstr "ძველი დახრილი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:195
 #, kde-format
 msgctxt "@title"
 msgid "Gothic"
-msgstr ""
+msgstr "გოთური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:196
 #, kde-format
 msgctxt "@title"
 msgid "Old Permic"
-msgstr ""
+msgstr "ძველი პერმული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:197
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgctxt "@title"
 msgid "Ugaritic"
-msgstr "ლოგარითმული"
+msgstr "უგარათული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:198
 #, kde-format
 msgctxt "@title"
 msgid "Old Persian"
-msgstr ""
+msgstr "ძველი სპარსული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:199
-#, fuzzy, kde-format
-#| msgid "Deselect"
+#, kde-format
 msgctxt "@title"
 msgid "Deseret"
-msgstr "მონიშვნის მოხსნა"
+msgstr "დეზერეტი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:200
 #, kde-format
 msgctxt "@title"
 msgid "Shavian"
-msgstr ""
+msgstr "შავიური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:201
 #, kde-format
 msgctxt "@title"
 msgid "Osmanya"
-msgstr ""
+msgstr "ოსმანია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:202
 #, kde-format
 msgctxt "@title"
 msgid "Osage"
-msgstr ""
+msgstr "ოსეიჯი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:203
 #, kde-format
 msgctxt "@title"
 msgid "Elbasan"
-msgstr ""
+msgstr "ელბასანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:204
 #, kde-format
 msgctxt "@title"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "კავკასიური ალბანური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:205
 #, kde-format
 msgctxt "@title"
 msgid "Vithkuqi"
-msgstr ""
+msgstr "ვითკუქი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:206
 #, kde-format
@@ -17571,139 +17497,136 @@ msgid "Todhri"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:207
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Linear"
-#| msgid "Linear"
+#, kde-format
 msgctxt "@title"
 msgid "Linear A"
-msgstr "ხაზოვანი"
+msgstr "ხაზოვანი A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:208
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-F"
-msgstr ""
+msgstr "ლათინური გაფართოებული-F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:209
 #, kde-format
 msgctxt "@title"
 msgid "Cypriot Syllabary"
-msgstr ""
+msgstr "კვიპრიოტული მარცვლოვანი ანბანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:210
 #, kde-format
 msgctxt "@title"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "იმპერიული არამეული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:211
 #, kde-format
 msgctxt "@title"
 msgid "Palmyrene"
-msgstr ""
+msgstr "პალმირული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:212
 #, kde-format
 msgctxt "@title"
 msgid "Nabataean"
-msgstr ""
+msgstr "ნაბატეური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:213
 #, kde-format
 msgctxt "@title"
 msgid "Hatran"
-msgstr ""
+msgstr "ჰატრანული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:214
 #, kde-format
 msgctxt "@title"
 msgid "Phoenician"
-msgstr ""
+msgstr "ფონეტიკური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:215
 #, kde-format
 msgctxt "@title"
 msgid "Lydian"
-msgstr ""
+msgstr "ლიდიური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:216
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "მეროიტული იეროგლიფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:217
 #, kde-format
 msgctxt "@title"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "მეროიტული კურსივი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:218
 #, kde-format
 msgctxt "@title"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "ხაროშტი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:219
 #, kde-format
 msgctxt "@title"
 msgid "Old South Arabian"
-msgstr ""
+msgstr "ძველი სამხრეთ არაბული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:220
 #, kde-format
 msgctxt "@title"
 msgid "Old North Arabian"
-msgstr ""
+msgstr "ძველი ჩრდილო არაბული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:221
 #, kde-format
 msgctxt "@title"
 msgid "Manichaean"
-msgstr ""
+msgstr "მანიქეური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:222
 #, kde-format
 msgctxt "@title"
 msgid "Avestan"
-msgstr ""
+msgstr "ავესტანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:223
-#, fuzzy, kde-format
-#| msgid "Initialization"
+#, kde-format
 msgctxt "@title"
 msgid "Inscriptional Parthian"
-msgstr "ინიციალიზაცია"
+msgstr "პართიული დამწერლობა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:224
 #, kde-format
 msgctxt "@title"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "ფეჰლევის დამწერლობა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:225
 #, kde-format
 msgctxt "@title"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "ფსალტერული პაჰლავი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:226
 #, kde-format
 msgctxt "@title"
 msgid "Old Turkic"
-msgstr ""
+msgstr "ძველი თურქული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:227
 #, kde-format
 msgctxt "@title"
 msgid "Old Hungarian"
-msgstr ""
+msgstr "ძველი უნგრული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:228
 #, kde-format
 msgctxt "@title"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "ჰანიფი როჰინგია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:229
 #, kde-format
@@ -17715,118 +17638,115 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Rumi Numeral Symbols"
-msgstr ""
+msgstr "რუმის რიცხვითი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:231
 #, kde-format
 msgctxt "@title"
 msgid "Yezidi"
-msgstr ""
+msgstr "იეზიდური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:232
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Extended-C"
-msgstr ""
+msgstr "არაბული  გაფართოებული-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:233
 #, kde-format
 msgctxt "@title"
 msgid "Old Sogdian"
-msgstr ""
+msgstr "ძველი სოგდანური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:234
 #, kde-format
 msgctxt "@title"
 msgid "Sogdian"
-msgstr ""
+msgstr "სოღდური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:235
 #, kde-format
 msgctxt "@title"
 msgid "Old Uyghur"
-msgstr ""
+msgstr "ძველი უიღურული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:236
 #, kde-format
 msgctxt "@title"
 msgid "Chorasmian"
-msgstr ""
+msgstr "ხორასნული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:237
 #, kde-format
 msgctxt "@title"
 msgid "Elymaic"
-msgstr ""
+msgstr "ელიმაური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:238
 #, kde-format
 msgctxt "@title"
 msgid "Brahmi"
-msgstr ""
+msgstr "ბრაჰმი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:239
 #, kde-format
 msgctxt "@title"
 msgid "Kaithi"
-msgstr ""
+msgstr "კაიტხი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:240
 #, kde-format
 msgctxt "@title"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "სორანგ სომპენგი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:241
 #, kde-format
 msgctxt "@title"
 msgid "Chakma"
-msgstr ""
+msgstr "ჩაკმა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:242
 #, kde-format
 msgctxt "@title"
 msgid "Mahajani"
-msgstr ""
+msgstr "მაჰაჯანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:243
-#, fuzzy, kde-format
-#| msgid "&Shared area"
+#, kde-format
 msgctxt "@title"
 msgid "Sharada"
-msgstr "&გაზიარებული აფრთობი"
+msgstr "შარადა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:244
 #, kde-format
 msgctxt "@title"
 msgid "Sinhala Archaic Numbers"
-msgstr ""
+msgstr "სინჰალური უძველესი რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:245
 #, kde-format
 msgctxt "@title"
 msgid "Khojki"
-msgstr ""
+msgstr "ქოჯკი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:246
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Multiply"
-#| msgid "Multiply"
+#, kde-format
 msgctxt "@title"
 msgid "Multani"
-msgstr "გამრავლება"
+msgstr "მულტანი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:247
 #, kde-format
 msgctxt "@title"
 msgid "Khudawadi"
-msgstr ""
+msgstr "ქუდავადი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:248
 #, kde-format
 msgctxt "@title"
 msgid "Grantha"
-msgstr ""
+msgstr "გრანტა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:249
 #, kde-format
@@ -17838,62 +17758,61 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Newa"
-msgstr ""
+msgstr "ნევა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:251
 #, kde-format
 msgctxt "@title"
 msgid "Tirhuta"
-msgstr ""
+msgstr "ტირჰუტა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:252
 #, kde-format
 msgctxt "@title"
 msgid "Siddham"
-msgstr ""
+msgstr "სიდჰამი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:253
-#, fuzzy, kde-format
-#| msgid "Modified:"
+#, kde-format
 msgctxt "@title"
 msgid "Modi"
-msgstr "შეცვლილია:"
+msgstr "მოდი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:254
 #, kde-format
 msgctxt "@title"
 msgid "Mongolian Supplement"
-msgstr ""
+msgstr "მონღოლურის დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:255
 #, kde-format
 msgctxt "@title"
 msgid "Takri"
-msgstr ""
+msgstr "ტაკრი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:256
 #, kde-format
 msgctxt "@title"
 msgid "Myanmar Extended-C"
-msgstr ""
+msgstr "მიანმარი გაფართოებული-C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:257
 #, kde-format
 msgctxt "@title"
 msgid "Ahom"
-msgstr ""
+msgstr "აჰომი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:258
 #, kde-format
 msgctxt "@title"
 msgid "Dogra"
-msgstr ""
+msgstr "დოგრა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:259
 #, kde-format
 msgctxt "@title"
 msgid "Warang Citi"
-msgstr ""
+msgstr "ვარანგ ჩიტი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:260
 #, kde-format
@@ -17905,37 +17824,37 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Nandinagari"
-msgstr ""
+msgstr "ნანდინაგარი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:262
 #, kde-format
 msgctxt "@title"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "ზანაბაზარი კვადრატული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:263
 #, kde-format
 msgctxt "@title"
 msgid "Soyombo"
-msgstr ""
+msgstr "სოიომბო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:264
 #, kde-format
 msgctxt "@title"
 msgid "Unified Canadian Aboriginal Syllabics Extended-A"
-msgstr ""
+msgstr "გაერთიანებული კანადური აბორიგინალური გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:265
 #, kde-format
 msgctxt "@title"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:266
 #, kde-format
 msgctxt "@title"
 msgid "Devanagari Extended-A"
-msgstr ""
+msgstr "დევანაგარი გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:267
 #, kde-format
@@ -17947,100 +17866,97 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "ბჰაიკსუკი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:269
-#, fuzzy, kde-format
-#| msgid "Search"
+#, kde-format
 msgctxt "@title"
 msgid "Marchen"
-msgstr "ძებნა"
+msgstr "მარჩენი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:270
 #, kde-format
 msgctxt "@title"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "მასარამი გონდი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:271
 #, kde-format
 msgctxt "@title"
 msgid "Gunjala Gondi"
-msgstr ""
+msgstr "გუნჯალა გონდი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:272
 #, kde-format
 msgctxt "@title"
 msgid "Makasar"
-msgstr ""
+msgstr "მაკასარი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:273
 #, kde-format
 msgctxt "@title"
 msgid "Kawi"
-msgstr ""
+msgstr "კავი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:274
 #, kde-format
 msgctxt "@title"
 msgid "Lisu Supplement"
-msgstr ""
+msgstr "ლისუს დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:275
 #, kde-format
 msgctxt "@title"
 msgid "Tamil Supplement"
-msgstr ""
+msgstr "ტამილის დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:276
-#, fuzzy, kde-format
-#| msgctxt "Uniform distribution in spray engine"
-#| msgid "Uniform"
+#, kde-format
 msgctxt "@title"
 msgid "Cuneiform"
-msgstr "ერთგვაროვანი"
+msgstr "ლურსმული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:277
 #, kde-format
 msgctxt "@title"
 msgid "Cuneiform Numbers and Punctuation"
-msgstr ""
+msgstr "ლურსმული რიცხვები და პუნქტუაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:278
 #, kde-format
 msgctxt "@title"
 msgid "Early Dynastic Cuneiform"
-msgstr ""
+msgstr "ადრეული დინასტიური ლურსმული დამწერლობა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:279
 #, kde-format
 msgctxt "@title"
 msgid "Cypro-Minoan"
-msgstr ""
+msgstr "კრიპტო-მინოური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:280
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs"
-msgstr ""
+msgstr "ეგვიპტური იეროგლიფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:281
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyph Format Controls"
-msgstr ""
+msgstr "ეგვიპტური იეროგლიფების დაფორმატების მართვის ელემენტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:282
 #, kde-format
 msgctxt "@title"
 msgid "Egyptian Hieroglyphs Extended-A"
-msgstr ""
+msgstr "ეგვიპტური იეროგლიფები გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:283
 #, kde-format
 msgctxt "@title"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "ანატოლიური იეროგლიფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:284
 #, kde-format
@@ -18052,33 +17968,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Bamum Supplement"
-msgstr ""
+msgstr "ბამუმი დამატებითი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:286
-#, fuzzy, kde-format
-#| msgctxt "EXIF: autofocus - distance range"
-#| msgid "Macro"
+#, kde-format
 msgctxt "@title"
 msgid "Mro"
-msgstr "მაკრო"
+msgstr "მრო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:287
 #, kde-format
 msgctxt "@title"
 msgid "Tangsa"
-msgstr ""
+msgstr "ტანგსა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:288
 #, kde-format
 msgctxt "@title"
 msgid "Bassa Vah"
-msgstr ""
+msgstr "ბასა ვაჰ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:289
 #, kde-format
 msgctxt "@title"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "პაჰაუ ჰმონგი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:290
 #, kde-format
@@ -18090,32 +18004,31 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "მედეფედრინი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:292
 #, kde-format
 msgctxt "@title"
 msgid "Miao"
-msgstr ""
+msgstr "მიაო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:293
 #, kde-format
 msgctxt "@title"
 msgid "Ideographic Symbols and Punctuation"
-msgstr ""
+msgstr "იდეოგრაფიული სიმბოლოები და პუნქტუაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:294
 #, kde-format
 msgctxt "@title"
 msgid "Tangut"
-msgstr ""
+msgstr "ტანღუტური"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:295
-#, fuzzy, kde-format
-#| msgid "Components:"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Components"
-msgstr "კომპონენტები:"
+msgstr "ტანგუტური კომპონენტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:296
 #, kde-format
@@ -18124,119 +18037,112 @@ msgid "Khitan Small Script"
 msgstr ""
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:297
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Tangut Supplement"
-msgstr "სეგმენტის შეცვლა"
+msgstr "ტანგუტის დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:298
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-B"
-msgstr ""
+msgstr "კანა გაფართოებული-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:299
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Segment"
+#, kde-format
 msgctxt "@title"
 msgid "Kana Supplement"
-msgstr "სეგმენტის შეცვლა"
+msgstr "კანა დამატებითი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:300
 #, kde-format
 msgctxt "@title"
 msgid "Kana Extended-A"
-msgstr ""
+msgstr "კანა გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Extension"
+#, kde-format
 msgctxt "@title"
 msgid "Small Kana Extension"
-msgstr "გაფართოების მიბმა"
+msgstr "პატარა კანას გაფართოება"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:302
 #, kde-format
 msgctxt "@title"
 msgid "Nushu"
-msgstr ""
+msgstr "ნუშუ"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:303
 #, kde-format
 msgctxt "@title"
 msgid "Duployan"
-msgstr ""
+msgstr "დუპლოის სტენოგრაფია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:304
 #, kde-format
 msgctxt "@title"
 msgid "Shorthand Format Controls"
-msgstr ""
+msgstr "სტენოგრაფიის მმართველი სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:305
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing Supplement"
-msgstr ""
+msgstr "მოძველებული კომპიუტერული სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:306
 #, kde-format
 msgctxt "@title"
 msgid "Znamenny Musical Notation"
-msgstr ""
+msgstr "ზნამენი მუსიკალური ნოტაცია"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:307
 #, kde-format
 msgctxt "@title"
 msgid "Byzantine Musical Symbols"
-msgstr ""
+msgstr "ბიზანტიური მუსიკალური სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:308
 #, kde-format
 msgctxt "@title"
 msgid "Musical Symbols"
-msgstr ""
+msgstr "მუსიკალური სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:309
 #, kde-format
 msgctxt "@title"
 msgid "Ancient Greek Musical Notation"
-msgstr ""
+msgstr "ძველბერძნული მუსიკალური ნოტაციები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:310
 #, kde-format
 msgctxt "@title"
 msgid "Kaktovik Numerals"
-msgstr ""
+msgstr "კაკტოვიკის ციფრები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:311
-#, fuzzy, kde-format
-#| msgid "Numerical"
+#, kde-format
 msgctxt "@title"
 msgid "Mayan Numerals"
-msgstr "რიცხვითი"
+msgstr "მაიას ციფრები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:312
 #, kde-format
 msgctxt "@title"
 msgid "Tai Xuan Jing Symbols"
-msgstr ""
+msgstr "Tai Xuan Jing-ის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:313
 #, kde-format
 msgctxt "@title"
 msgid "Counting Rod Numerals"
-msgstr ""
+msgstr "ჩხირებით თვლა"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:314
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Alphanumeric Symbols"
-msgstr ""
+msgstr "მათემატიკური ალფარიცხვული სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:315
 #, kde-format
@@ -18248,44 +18154,43 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Latin Extended-G"
-msgstr ""
+msgstr "ლათინური გაფართოებული-G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:317
 #, kde-format
 msgctxt "@title"
 msgid "Glagolitic Supplement"
-msgstr ""
+msgstr "გლაგოლიცის დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:318
 #, kde-format
 msgctxt "@title"
 msgid "Cyrillic Extended-D"
-msgstr ""
+msgstr "კირილიცა გაფართოებული-D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:319
 #, kde-format
 msgctxt "@title"
 msgid "Nyiakeng Puachue Hmong"
-msgstr ""
+msgstr "ჰმონგი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:320
 #, kde-format
 msgctxt "@title"
 msgid "Toto"
-msgstr ""
+msgstr "ტოტო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:321
-#, fuzzy, kde-format
-#| msgid "Anchor:"
+#, kde-format
 msgctxt "@title"
 msgid "Wancho"
-msgstr "მიმაგრება:"
+msgstr "ვანჩო"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:322
 #, kde-format
 msgctxt "@title"
 msgid "Nag Mundari"
-msgstr ""
+msgstr "ნაგ-მუნდარი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:323
 #, kde-format
@@ -18297,196 +18202,190 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Ethiopic Extended-B"
-msgstr ""
+msgstr "გაფართოებული ეთიოპიური-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:325
 #, kde-format
 msgctxt "@title"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "მენდე კიკაკუი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:326
 #, kde-format
 msgctxt "@title"
 msgid "Adlam"
-msgstr ""
+msgstr "ადლამი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:327
 #, kde-format
 msgctxt "@title"
 msgid "Indic Siyaq Numbers"
-msgstr ""
+msgstr "ინდური სიაქის რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:328
 #, kde-format
 msgctxt "@title"
 msgid "Ottoman Siyaq Numbers"
-msgstr ""
+msgstr "სიაქის ოტომანური რიცხვები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:329
 #, kde-format
 msgctxt "@title"
 msgid "Arabic Mathematical Alphabetic Symbols"
-msgstr ""
+msgstr "არაბული მათემატიკური ანბანის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:330
 #, kde-format
 msgctxt "@title"
 msgid "Mahjong Tiles"
-msgstr ""
+msgstr "მაჰჯონგის ფილები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:331
-#, fuzzy, kde-format
-#| msgid "Icon Size"
+#, kde-format
 msgctxt "@title"
 msgid "Domino Tiles"
-msgstr "ხატულების ზომა"
+msgstr "დომინოს ფილები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:332
 #, kde-format
 msgctxt "@title"
 msgid "Playing Cards"
-msgstr ""
+msgstr "სათამაშო კარტი"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:333
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Alphanumeric Supplement"
-msgstr ""
+msgstr "დამატებით შემოსაზღვრული ციფრები და სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:334
 #, kde-format
 msgctxt "@title"
 msgid "Enclosed Ideographic Supplement"
-msgstr ""
+msgstr "დამატებით შემოსაზღვრული იეროგლიფები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:335
 #, kde-format
 msgctxt "@title"
 msgid "Miscellaneous Symbols and Pictographs"
-msgstr ""
+msgstr "სხვადასხვა სიმბოლოები და პიქტოგრამები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:336
-#, fuzzy, kde-format
-#| msgctxt "webp preset option name"
-#| msgid "icon"
+#, kde-format
 msgctxt "@title"
 msgid "Emoticons"
-msgstr "ხატულა"
+msgstr "ემოციები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:337
 #, kde-format
 msgctxt "@title"
 msgid "Ornamental Dingbats"
-msgstr ""
+msgstr "Dingbats-ის ორნამენტები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:338
 #, kde-format
 msgctxt "@title"
 msgid "Transport and Map Symbols"
-msgstr ""
+msgstr "ტრანსპორტისა და რუკის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:339
 #, kde-format
 msgctxt "@title"
 msgid "Alchemical Symbols"
-msgstr ""
+msgstr "ალქიმიური სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:340
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Geometric Mean"
-#| msgid "Geometric Mean"
+#, kde-format
 msgctxt "@title"
 msgid "Geometric Shapes Extended"
-msgstr "საშუალო გეომეტრიული"
+msgstr "გეომეტრიული ფიგურები გაფართოებული"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:341
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Arrows-C"
-msgstr ""
+msgstr "დამატებითი ისრები - C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:342
 #, kde-format
 msgctxt "@title"
 msgid "Supplemental Symbols and Pictographs"
-msgstr ""
+msgstr "დამატებითი სიმბოლოები და პიქტოგრამები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:343
 #, kde-format
 msgctxt "@title"
 msgid "Chess Symbols"
-msgstr ""
+msgstr "ჭადრაკის სიმბოლოები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:344
 #, kde-format
 msgctxt "@title"
 msgid "Symbols and Pictographs Extended-A"
-msgstr ""
+msgstr "სიმბოლოები და პიქტოგრამები გაფართოებული-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:345
 #, kde-format
 msgctxt "@title"
 msgid "Symbols for Legacy Computing"
-msgstr ""
+msgstr "სიმბოლოები მოძველებული გამოთვლებისთვის"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:346
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension B"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:347
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension C"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება C"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:348
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension D"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება D"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:349
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension E"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება E"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:350
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension F"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება F"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:351
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension I"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება I"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:352
 #, kde-format
 msgctxt "@title"
 msgid "CJK Compatibility Ideographs Supplement"
-msgstr ""
+msgstr "CJK თავსებადი იდეოგრაფების დამატებები"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:353
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension G"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება G"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:354
 #, kde-format
 msgctxt "@title"
 msgid "CJK Unified Ideographs Extension H"
-msgstr ""
+msgstr "CJK გაერთიანებული იდეოგრაფების გაფართოება H"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:355
-#, fuzzy, kde-format
-#| msgid "Tags"
+#, kde-format
 msgctxt "@title"
 msgid "Tags"
 msgstr "ჭდეები"
@@ -18495,27 +18394,25 @@ msgstr "ჭდეები"
 #, kde-format
 msgctxt "@title"
 msgid "Variation Selectors Supplement"
-msgstr ""
+msgstr "ვარიაციული სელექტორების დამატება"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:357
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-A"
-msgstr ""
+msgstr "პირადი გამოყენების ადგილი-A"
 
 #: libs/flake/text/data/KoUnicodeBlockData.cpp:358
 #, kde-format
 msgctxt "@title"
 msgid "Supplementary Private Use Area-B"
-msgstr ""
+msgstr "პირადი გამოყენების ადგილი-B"
 
 #: libs/flake/text/data/KoUnicodeBlockData.h:47
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Align Block"
+#, kde-format
 msgctxt "@title"
 msgid "No Block"
-msgstr "ბლოკის სწორება"
+msgstr "ბლოკის გარეშე"
 
 #: libs/flake/text/KoFontGlyphModel.cpp:371
 #, kde-format
@@ -18524,11 +18421,10 @@ msgid "%1 glyph variants."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:24
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Access All Alternates"
-msgstr "ალტერნატული"
+msgstr "ყველა ალტერნატივის წვდომა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:25
 #, kde-format
@@ -18537,11 +18433,10 @@ msgid "Access any possible substitutions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:29
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Contextual Alternates"
-msgstr "ალტერნატული"
+msgstr "კონტექსტური ალტერნატივები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:30
 #, kde-format
@@ -18553,7 +18448,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "კონტექსტური ლიგატურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:34
 #, kde-format
@@ -18567,7 +18462,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "კონტექსტური ორნამენტი"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:38
 #, kde-format
@@ -18577,11 +18472,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:41
-#, fuzzy, kde-format
-#| msgid "Direction Filter"
+#, kde-format
 msgctxt "@title"
 msgid "Discretionary Ligatures"
-msgstr "მიმართულების ფილტრი"
+msgstr "არააუცილებელი ლიგატურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:42
 #, kde-format
@@ -18594,7 +18488,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "საბოლოო გლიფი ალტერნატიულ ხაზებზე"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:46
 #, kde-format
@@ -18604,11 +18498,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:49
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:53
-#, fuzzy, kde-format
-#| msgid "Histogram"
+#, kde-format
 msgctxt "@title"
 msgid "Historical Forms"
-msgstr "ჰისტოგრამა"
+msgstr "ისტორიული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:50
 #, kde-format
@@ -18628,7 +18521,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "სწორების ალტერნატივები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:58
 #, kde-format
@@ -18637,12 +18530,10 @@ msgid "Replaces glyphs with their alternates meant for justification."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:61
-#, fuzzy, kde-format
-#| msgctxt "EXIF: postprocessing - light source"
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "@title"
 msgid "Standard Ligatures"
-msgstr "სტანდარტული სინათლე A"
+msgstr "სტანდარტული ლიგატურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:62
 #, kde-format
@@ -18651,11 +18542,10 @@ msgid "Replaces sequences glyphs with common ligatures."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:65
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Left Bounds"
-msgstr "გამოსახულების საზღვრები"
+msgstr "მარცხენა საზღვრები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:66
 #, kde-format
@@ -18664,11 +18554,10 @@ msgid "This adjusts glyphs so there is no space at the left side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:69
-#, fuzzy, kde-format
-#| msgid "Local Resources"
+#, kde-format
 msgctxt "@title"
 msgid "Localized Forms"
-msgstr "ლოკალური რესურსები"
+msgstr "ლოკალიზებული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:70
 #, kde-format
@@ -18677,11 +18566,10 @@ msgid "This replaces glyphs with language specific versions."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:73
-#, fuzzy, kde-format
-#| msgid "Options"
+#, kde-format
 msgctxt "@title"
 msgid "Optical Bounds"
-msgstr "გამართვა"
+msgstr "ოპტიკური საზღვრები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:74
 #, kde-format
@@ -18692,11 +18580,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:77
-#, fuzzy, kde-format
-#| msgid "Gradients"
+#, kde-format
 msgctxt "@title"
 msgid "Ornaments"
-msgstr "გრადაციები"
+msgstr "ორნამენტები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:78
 #, kde-format
@@ -18705,8 +18592,7 @@ msgid "Replaces glyphs with ornaments for decorative purposes."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:81
-#, fuzzy, kde-format
-#| msgid "Randomize"
+#, kde-format
 msgctxt "@title"
 msgid "Randomize"
 msgstr "შემთხვევით"
@@ -18718,11 +18604,10 @@ msgid "Replaces glyphs with random alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:85
-#, fuzzy, kde-format
-#| msgid "Image Bounds"
+#, kde-format
 msgctxt "@title"
 msgid "Right Bounds"
-msgstr "გამოსახულების საზღვრები"
+msgstr "მარჯვენა საზღვრები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:86
 #, kde-format
@@ -18731,11 +18616,10 @@ msgid "This adjusts glyphs so there is no space at the right side."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:89
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Stylistic Alternates"
-msgstr "ალტერნატული"
+msgstr "სტილისტური ალტერნატივები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:90
 #, kde-format
@@ -18749,7 +18633,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Swash"
-msgstr ""
+msgstr "ძლიერი დინება"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:94
 #, kde-format
@@ -18772,9 +18656,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Kerning"
+#, kde-format
 msgctxt "@title"
 msgid "Kerning"
 msgstr "კერნინგი"
@@ -18787,11 +18669,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:107
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:111
-#, fuzzy, kde-format
-#| msgid "Position"
+#, kde-format
 msgctxt "@title"
 msgid "Mark Positioning"
-msgstr "მდებარეობა"
+msgstr "ნიშნის მდებარეობა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:108
 #, kde-format
@@ -18813,7 +18694,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "კონტექსტუალური ალტერნატივების მოთხოვნა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:116
 #, kde-format
@@ -18826,7 +18707,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "საჭირო ლიგატურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:120
 #, kde-format
@@ -18838,7 +18719,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "აუცილებელი ალტერნატიული ვარიანტები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:124
 #, kde-format
@@ -18849,11 +18730,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:127
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@title"
 msgid "Optical size"
-msgstr "ოპტიმიზაცია"
+msgstr "ოპტიკური ზომა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:128
 #, kde-format
@@ -18864,11 +18744,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:131
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kerning"
-msgstr "ვერტიკალური ხაზები"
+msgstr "სიმბოლოებს შორის ვერტიკალური დაშორება"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:132
 #, kde-format
@@ -18877,11 +18756,10 @@ msgid "This controls vertical kerning on the font."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:137
-#, fuzzy, kde-format
-#| msgid "Alternative array"
+#, kde-format
 msgctxt "@title"
 msgid "Alternative Fractions"
-msgstr "ალტერნატიული მასივი"
+msgstr "ალტერნატიული ფრაქციები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:138
 #, kde-format
@@ -18890,12 +18768,10 @@ msgid "Replaces figures separated by a slash with a nut fraction form."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:141
-#, fuzzy, kde-format
-#| msgctxt "Pen tilt declination"
-#| msgid "Declination"
+#, kde-format
 msgctxt "@title"
 msgid "Denominators"
-msgstr "დახრილობა"
+msgstr "მნიშვნელები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:142
 #, kde-format
@@ -18909,7 +18785,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "უწერტილო ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:146
 #, kde-format
@@ -18920,12 +18796,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:149
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Flatten Layer"
+#, kde-format
 msgctxt "@title"
 msgid "Flattened accent forms"
-msgstr "ფენის გაბრტყელება"
+msgstr "ბრტყელი აქცენტის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:150
 #, kde-format
@@ -18934,11 +18808,10 @@ msgid "Replaces accents on capital letters with flattened forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:153
-#, fuzzy, kde-format
-#| msgid "Actions"
+#, kde-format
 msgctxt "@title"
 msgid "Fractions"
-msgstr "ქმედებები"
+msgstr "წილადები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:154
 #, kde-format
@@ -18951,11 +18824,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:157
-#, fuzzy, kde-format
-#| msgid "Winding Fill"
+#, kde-format
 msgctxt "@title"
 msgid "Lining Figures"
-msgstr "სრული შევსება"
+msgstr "სარჩულის ფიგურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:158
 #, kde-format
@@ -18969,7 +18841,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "მათემატიკური ბერძნული ენა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:162
 #, kde-format
@@ -18982,7 +18854,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "ალტერნატიული ანოტაციის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:166
 #, kde-format
@@ -18991,11 +18863,10 @@ msgid "Replaces figures and letters with notational forms, like encircled."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:169
-#, fuzzy, kde-format
-#| msgid "Generator"
+#, kde-format
 msgctxt "@title"
 msgid "Numerators"
-msgstr "გენერატორი"
+msgstr "მრიცხველები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:170
 #, kde-format
@@ -19009,7 +18880,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "ფიგურები ძველ სტილში"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:174
 #, kde-format
@@ -19020,11 +18891,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:177
-#, fuzzy, kde-format
-#| msgid "Original"
+#, kde-format
 msgctxt "@title"
 msgid "Ordinals"
-msgstr "საწყისი"
+msgstr "რიგითი რიცხვები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:178
 #, kde-format
@@ -19033,11 +18903,10 @@ msgid "Replaces letters that follow figures with their ordinal forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:181
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Figures"
-msgstr "პროპორციული"
+msgstr "პროპორციული ფიგურები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:182
 #, kde-format
@@ -19049,7 +18918,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "სამეცნიერო ალტერნატივა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:186
 #, kde-format
@@ -19063,7 +18932,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "მათემატიკური სკრიპტის სტილის ალტერნატივები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:190
 #, kde-format
@@ -19072,12 +18941,10 @@ msgid "Replaces glyphs with ones more suited for super- and subscripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:193
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Subscript"
+#, kde-format
 msgctxt "@title"
 msgid "Subscript"
-msgstr "ქვედა ხაზზე"
+msgstr "ქვედა რეგისტრი"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:194
 #, kde-format
@@ -19086,12 +18953,10 @@ msgid "Replaces glyphs with ones more suited for subscript."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Superscript"
+#, kde-format
 msgctxt "@title"
 msgid "Superscript"
-msgstr "ზედა ხაზზე"
+msgstr "ხაზსზემო"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:198
 #, kde-format
@@ -19103,7 +18968,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "სურათები ცხრილის სახით"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:202
 #, kde-format
@@ -19115,7 +18980,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "გაჭრილი ნული"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:206
 #, kde-format
@@ -19129,7 +18994,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "რეგისტრზე-დამოკიდებული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:212
 #, kde-format
@@ -19140,11 +19005,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:215
-#, fuzzy, kde-format
-#| msgid "Spacing"
+#, kde-format
 msgctxt "@title"
 msgid "Capital Spacing"
-msgstr "დაშორება"
+msgstr "ადგილი მაღალ რეგისტრებს შორის"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:216
 #, kde-format
@@ -19156,7 +19020,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "პატარა მაღალი რეგისტრის მქონეები მაღალი რეგისტრის მქონეებიდან"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:220
 #, kde-format
@@ -19170,7 +19034,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "ძალიან პატარა მაღალი რეგისტრის მქონეები მაღალი რეგისტრის მქონეებიდან"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:224
 #, kde-format
@@ -19182,7 +19046,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "პატარა მაღალი რეგისტრის მქონე სიმბოლოები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:228
 #, kde-format
@@ -19193,12 +19057,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:231
-#, fuzzy, kde-format
-#| msgctxt "Set the gradient chooser to show small items"
-#| msgid "Small items"
+#, kde-format
 msgctxt "@title"
 msgid "Small Capitals"
-msgstr "პატარა ელემენტები"
+msgstr "ზომით პატარა დიდი ასოები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:232
 #, kde-format
@@ -19207,11 +19069,10 @@ msgid "Replaces lowercase letters with small capital forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:235
-#, fuzzy, kde-format
-#| msgid "Title"
+#, kde-format
 msgctxt "@title"
 msgid "Titling"
-msgstr "სათაური"
+msgstr "სათაურის სიმბოლოები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:236
 #, kde-format
@@ -19223,7 +19084,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Unicase"
-msgstr ""
+msgstr "ერთრეგისტრიანი"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:240
 #, kde-format
@@ -19235,7 +19096,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "ზემოზე დაფუძნებული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:246
 #, kde-format
@@ -19248,7 +19109,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "ტირეს საბაზისო ხაზის ზემოთ სწორება"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:250
 #, kde-format
@@ -19260,7 +19121,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "შეცვლა საბაზისო ხაზის ზემოთ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:254
 #, kde-format
@@ -19284,7 +19145,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "საბაზისო ხაზის ქვემო ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:262
 #, kde-format
@@ -19296,7 +19157,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "ტირეს პოზიცირება საბაზისო ხაზის ქვემოთ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:266
 #, kde-format
@@ -19308,7 +19169,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "შეცვლა საბაზისო ხაზის ქვემოთ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:270
 #, kde-format
@@ -19320,7 +19181,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "მიბმული ფორმა \"Ro\" ნიშნის შემდეგ"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:274
 #, kde-format
@@ -19332,7 +19193,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "მიბმული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:278
 #, kde-format
@@ -19341,11 +19202,10 @@ msgid "Controls conjunct forms in Indic scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:281
-#, fuzzy, kde-format
-#| msgid "Distance"
+#, kde-format
 msgctxt "@title"
 msgid "Distances"
-msgstr "მანძილი"
+msgstr "დაშორებები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:282
 #, kde-format
@@ -19357,7 +19217,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Half Forms"
-msgstr ""
+msgstr "ნახევარი ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:286
 #, kde-format
@@ -19369,7 +19229,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Halant-ის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:290
 #, kde-format
@@ -19381,7 +19241,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "ნუქტას ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:294
 #, kde-format
@@ -19406,12 +19266,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:301
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "@title"
 msgid "Pre-base Substitutions"
-msgstr "გაჯერებულობის შემცირება"
+msgstr "წინასწარი ფორმის ჩანაცვლებები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:302
 #, kde-format
@@ -19423,7 +19281,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "პოსტ-საბაზისო ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:306
 #, kde-format
@@ -19437,7 +19295,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "პოსტ-საბაზისო ჩანაცვლებები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:310
 #, kde-format
@@ -19450,7 +19308,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "რაკარის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:314
 #, kde-format
@@ -19459,11 +19317,10 @@ msgid "Replaces sequences of glyphs in Indic scripts with their Rakar forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:317
-#, fuzzy, kde-format
-#| msgid "Form"
+#, kde-format
 msgctxt "@title"
 msgid "Reph Form"
-msgstr "ფორმა"
+msgstr "რეფის ფორმა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:318
 #, kde-format
@@ -19476,7 +19333,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vattu Variants"
-msgstr ""
+msgstr "ვატუს ვარიანტები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:322
 #, kde-format
@@ -19505,7 +19362,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "CJK-ის ცენტრირებული პუნქტუაცია"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:332
 #, kde-format
@@ -19514,11 +19371,10 @@ msgid "Adjusts non-centered punctuation to be centered in CJK scripts."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:335
-#, fuzzy, kde-format
-#| msgid "Expert"
+#, kde-format
 msgctxt "@title"
 msgid "Expert Forms"
-msgstr "ექსპერტი"
+msgstr "ექსპერტული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:336
 #, kde-format
@@ -19527,11 +19383,10 @@ msgid "Replaces standard forms in Japanese fonts with expert forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:339
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Full Widths"
-msgstr "სიგანე"
+msgstr "სრული სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:340
 #, kde-format
@@ -19548,11 +19403,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:347
-#, fuzzy, kde-format
-#| msgid "Horizontal Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Horizontal Kana Alternates"
-msgstr "ჰორიზონტალური ხაზები"
+msgstr "ჰორიზონტალური კანას ალტერნატიული ვარიანტები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:348
 #, kde-format
@@ -19566,7 +19420,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Hangul"
-msgstr ""
+msgstr "ჰანგული"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:352
 #, kde-format
@@ -19578,7 +19432,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "ჰოჯო კანჯის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:356
 #, kde-format
@@ -19589,11 +19443,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:359
-#, fuzzy, kde-format
-#| msgid "Width"
+#, kde-format
 msgctxt "@title"
 msgid "Half Widths"
-msgstr "სიგანე"
+msgstr "ნახევარი სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:360
 #, kde-format
@@ -19604,11 +19457,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:363
-#, fuzzy, kde-format
-#| msgid "Italic"
+#, kde-format
 msgctxt "@title"
 msgid "Italics"
-msgstr "დახრა"
+msgstr "კურსივი"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:364
 #, kde-format
@@ -19620,7 +19472,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "JIS78 ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:368
 #, kde-format
@@ -19632,7 +19484,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "JIS83 ფრმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:372
 #, kde-format
@@ -19644,7 +19496,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "JIS90 ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:376
 #, kde-format
@@ -19656,7 +19508,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "JIS2004 ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:380
 #, kde-format
@@ -19668,7 +19520,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Jamo-ის წამყვანი ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:384
 #, kde-format
@@ -19681,7 +19533,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC კანჯის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:388
 #, kde-format
@@ -19693,7 +19545,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "პროპორციული ალტერნატიული სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:392
 #, kde-format
@@ -19702,11 +19554,10 @@ msgid "Respaces full-width glyphs to fit in a proportional context."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:395
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Kana"
-msgstr "პროპორციული"
+msgstr "პროპორციული კანა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:396
 #, kde-format
@@ -19715,11 +19566,10 @@ msgid "Replaces full-width kana in Japanese fonts with proportional kana."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:399
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@title"
 msgid "Proportional Widths"
-msgstr "პროპორციული"
+msgstr "პროპორციული სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:400
 #, kde-format
@@ -19728,11 +19578,10 @@ msgid "Replaces uniform-width glyphs with proportional glyphs."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:403
-#, fuzzy, kde-format
-#| msgid "Quarter"
+#, kde-format
 msgctxt "@title"
 msgid "Quarter Widths"
-msgstr "კვარტალი"
+msgstr "მეოთხედი სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:404
 #, kde-format
@@ -19744,7 +19593,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Ruby-ის ნოტაციის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:408
 #, kde-format
@@ -19758,7 +19607,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "გამარტივებული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:412
 #, kde-format
@@ -19770,7 +19619,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Trailing Jamo Forms"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:416
 #, kde-format
@@ -19784,7 +19633,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "სახელის ტრადიციული ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:420
 #, kde-format
@@ -19798,7 +19647,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "ტრა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:424
 #, kde-format
@@ -19807,11 +19656,10 @@ msgid "Replaces glyphs in CJK fonts with 'traditional' forms."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:427
-#, fuzzy, kde-format
-#| msgid "Thirds"
+#, kde-format
 msgctxt "@title"
 msgid "Third Widths"
-msgstr "მესამედებზე"
+msgstr "მესამე სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:428
 #, kde-format
@@ -19823,7 +19671,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "ალტერნატიული ვერტიკალური მეტრიკები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:432
 #, kde-format
@@ -19832,11 +19680,10 @@ msgid "Repositions glyphs so they look more appropriate in vertical layout."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:435
-#, fuzzy, kde-format
-#| msgid "Alternate"
+#, kde-format
 msgctxt "@title"
 msgid "Alternate Half Widths"
-msgstr "ალტერნატული"
+msgstr "ალტერნატიული ნახევარი სიგანეები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:436
 #, kde-format
@@ -19851,11 +19698,10 @@ msgid "Vertical Contextual Half-width Spacing"
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:443
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates"
-msgstr "ვერტიკალური ხაზები"
+msgstr "ვერტიკალური ალტერნატივები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:444
 #, kde-format
@@ -19867,7 +19713,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "ალტერნატიული ვერტიკალური ნახევარი მეტრიკები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:448
 #, kde-format
@@ -19880,7 +19726,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "ხმოვნის ჯამოს ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:452
 #, kde-format
@@ -19890,11 +19736,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:455
-#, fuzzy, kde-format
-#| msgid "Vertical Lines"
+#, kde-format
 msgctxt "@title"
 msgid "Vertical Kana Alternates"
-msgstr "ვერტიკალური ხაზები"
+msgstr "კანას ვერტიკალური ვარიანტები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:456
 #, kde-format
@@ -19908,7 +19753,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "პროპორციული ალტერნატიული ვერტიკალური მეტრიკები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:460
 #, kde-format
@@ -19921,7 +19766,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "ვერტიკალური ალტერნატივები მობრუნებისთვის"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:464
 #, kde-format
@@ -19933,7 +19778,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "ვერტიკალური ალტერნატივები და მობრუნება"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:468
 #, kde-format
@@ -19944,11 +19789,10 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:473
-#, fuzzy, kde-format
-#| msgid "Text Position"
+#, kde-format
 msgctxt "@title"
 msgid "Cursive Positioning"
-msgstr "ტექსტის განთავსება"
+msgstr "კურსივის მდებარეობა"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:474
 #, kde-format
@@ -19960,7 +19804,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Terminal Forms"
-msgstr ""
+msgstr "ტერმინალის ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:478
 #, kde-format
@@ -20000,11 +19844,10 @@ msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:489
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:493
-#, fuzzy, kde-format
-#| msgid "Initials:"
+#, kde-format
 msgctxt "@title"
 msgid "Initial Forms"
-msgstr "ინიციალები:"
+msgstr "საწყისი ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:490
 #, kde-format
@@ -20035,12 +19878,10 @@ msgid "Replaces glyphs with their left-to-right alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:501
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Left-to-right"
+#, kde-format
 msgctxt "@title"
 msgid "Left-to-right mirrored forms"
-msgstr "&მარცხნიდან-მარჯვნივ"
+msgstr "მარცხნიდან-მარჯვნივ სარკისებური ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:502
 #, kde-format
@@ -20052,7 +19893,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms"
-msgstr ""
+msgstr "მედიალური ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:506
 #, kde-format
@@ -20066,7 +19907,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "მედიალური ფორმები #2"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:510
 #, kde-format
@@ -20103,12 +19944,10 @@ msgid "Replaces glyphs with their right-to-left alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:521
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu Toolbox layout direction"
-#| msgid "&Right-to-left"
+#, kde-format
 msgctxt "@title"
 msgid "Right-to-left mirrored forms"
-msgstr "&მარჯვნიდან-მარცხნივ"
+msgstr "მარჯვნიდან-მარცხნივ სარკისებური ფორმები"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:522
 #, kde-format
@@ -20120,7 +19959,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "გლიფების დაშლა გაწელილი სახით"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:526
 #, kde-format
@@ -20132,7 +19971,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title"
 msgid "Stylistic Set %1"
-msgstr ""
+msgstr "სტილისტური ნაკრები %1"
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:537
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:550
@@ -20142,11 +19981,10 @@ msgid "Replaces glyphs with alternates."
 msgstr ""
 
 #: libs/flake/text/KoOpenTypeFeatureInfoFactory.cpp:549
-#, fuzzy, kde-format
-#| msgid "Variant (%1)"
+#, kde-format
 msgctxt "@title"
 msgid "Character Variant %1"
-msgstr "ვარიანტი (%1)"
+msgstr "სიმბოლოს ვარიანტი %1"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1662
@@ -20233,18 +20071,16 @@ msgstr ""
 "დასამატებლად."
 
 #: libs/flake/tools/KoPathTool.cpp:707
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected point."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected point."
-msgstr "დააწექით ღილაკს B, რომ ბილიკი მონიშნულ წერტილზე გაწყვიტოთ."
+msgstr "დააწექით ღილაკს %1, რომ ბილიკი მონიშნულ წერტილზე გაწყვიტოთ."
 
 #: libs/flake/tools/KoPathTool.cpp:709
-#, fuzzy, kde-format
-#| msgid "Press B to break path at selected segments."
+#, kde-format
 msgctxt "%1 is a shortcut to be pressed"
 msgid "Press %1 to break path at selected segments."
-msgstr "დააწექით ღილაკს B, რომ ბილიკი მონიშნულ სეგმენტებზე გაწყვიტოთ."
+msgstr "დააწექით ღილაკს %1, რომ ბილიკი მონიშნულ სეგმენტებზე გაწყვიტოთ."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -21084,12 +20920,9 @@ msgid "Convert Projection Color Space"
 msgstr "პროექციის ფერის სივრცის გარდაქმნა"
 
 #: libs/image/kis_image.cc:1397
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Layer Color Space"
 msgctxt "(qtundo-format)"
 msgid "Unify Layers Color Space"
-msgstr "ფენის ფერის სივრცის გარდაქმნა"
+msgstr "ფენის ფერის სივრცის გაერთიანება"
 
 #: libs/image/kis_image.cc:1427
 msgctxt "(qtundo-format)"
@@ -21255,11 +21088,9 @@ msgid "Error"
 msgstr "შეცდომა"
 
 #: libs/image/kis_layer_properties_icons.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Layer Color Space"
+#, kde-format
 msgid "Layer Color Space Mismatch"
-msgstr "ფენის ფერის სივრცის გარდაქმნა"
+msgstr "ფენის ფერის სივრცე არ ემთხვევა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
 #. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
@@ -22074,11 +21905,9 @@ msgid "Import frames"
 msgstr "კადრების შემოტანა"
 
 #: libs/libkis/PaintingResources.cpp:61
-#, fuzzy
-#| msgid "Overwrite Brush Preset"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "ფუნჯის პრესეტის თავზე გადაჭერა"
+msgstr "დასკრიპტული ფუნჯის მახვილი"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -22665,12 +22494,10 @@ msgid "Color Dodge"
 msgstr "ფერის გაღიავება"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:72
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Color Dodge"
-#| msgid "Color Dodge"
+#, kde-format
 msgctxt "Blending mode - Color Dodge HDR"
 msgid "Color Dodge HDR"
-msgstr "ფერის გაღიავება"
+msgstr "ფერის გაღიავება HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:73
 #, kde-format
@@ -22709,12 +22536,10 @@ msgid "Vivid Light"
 msgstr "კაშკაშა სინათლე"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:79
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Vivid Light"
-#| msgid "Vivid Light"
+#, kde-format
 msgctxt "Blending mode - Vivid Light HDR"
 msgid "Vivid Light HDR"
-msgstr "კაშკაშა სინათლე"
+msgstr "ნათელი შუქი HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:80
 #, kde-format
@@ -22933,12 +22758,10 @@ msgid "Hard Mix"
 msgstr "უხეში შერევა"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Hard Mix"
-#| msgid "Hard Mix"
+#, kde-format
 msgctxt "Blending mode - Hard Mix HDR"
 msgid "Hard Mix HDR"
-msgstr "უხეში შერევა"
+msgstr "მყარი შერევა HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
@@ -23001,11 +22824,10 @@ msgid "Hard Overlay"
 msgstr ""
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgctxt "Blending mode - Hard Overlay HDR"
 msgid "Hard Overlay HDR"
-msgstr "ფერის გალაგება"
+msgstr "მყარი გადაფარვა HDR"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
@@ -23107,7 +22929,7 @@ msgstr "ტონი"
 #, kde-format
 msgctxt "Blending mode - Tint HSY"
 msgid "Tint"
-msgstr ""
+msgstr "ტონი"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:151
 #, kde-format
@@ -23538,10 +23360,9 @@ msgstr "დროებითი რესურსები"
 
 #: libs/resources/KisResourceLocator.cpp:1081
 #: libs/resources/KisResourceStorage.h:127
-#, fuzzy, kde-format
-#| msgid "Font Style"
+#, kde-format
 msgid "Font Storage"
-msgstr "ფონტის სტილი"
+msgstr "ფონტის საცავი"
 
 #: libs/resources/KisResourceLocator.cpp:1215
 #: libs/resources/KisResourceLocator.cpp:1221
@@ -23805,11 +23626,10 @@ msgid "Layer Styles"
 msgstr "ფენის სტილები"
 
 #: libs/resources/KisResourceTypes.cpp:58
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgctxt "resource type"
 msgid "Font Families"
-msgstr "ფონტების ოჯახი"
+msgstr "ფონტის ოჯახები"
 
 #: libs/resources/KisStorageModel.cpp:477
 #: libs/widgets/KoConfigAuthorPage.cpp:90
@@ -24367,11 +24187,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/animation/KisAnimationRender.cpp:92
-#, fuzzy, kde-format
-#| msgctxt "Dialog title"
-#| msgid "Overwrite the file?"
+#, kde-format
 msgid "Overwrite existing video?"
-msgstr "გადავაწერო ფაილს?"
+msgstr "გადავაწერო არსებულ ვიდეოფაილს?"
 
 #: libs/ui/animation/KisAnimationRender.cpp:93
 #, kde-format
@@ -24828,7 +24646,7 @@ msgstr "კარგვის გარეშე"
 #: libs/ui/animation/video_export_options_dialog.ui:443
 #, kde-format
 msgid "Loop Animation"
-msgstr ""
+msgstr "ანიმაციის მარყუჟი"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
 #: libs/ui/animation/video_export_options_dialog.ui:293
@@ -26275,43 +26093,38 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:110
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1157
-#, fuzzy, kde-format
-#| msgid "Perceptual"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Perceptual"
 msgstr "აღქმული"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:111
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1158
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Relative Colorimetric"
-msgstr "შეფარდებით კოლორიმეტრული"
+msgstr "_შეფარდებით კოლორიმეტრული"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:112
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1159
-#, fuzzy, kde-format
-#| msgid "Saturation"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Saturation"
 msgstr "გაჯერებულობა"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:113
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1160
-#, fuzzy, kde-format
-#| msgid "Relative Colorimetric"
+#, kde-format
 msgctxt "Color conversion intent"
 msgid "Absolute Colorimetric"
-msgstr "შეფარდებით კოლორიმეტრული"
+msgstr "აბსოლუტური კოლორიმეტრული"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1163
-#, fuzzy, kde-format
-#| msgid "Display settings"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Use global display settings"
-msgstr "ეკრანის მორგება"
+msgstr "გლობალური ეკრანის პარამეტრების გამოყენება"
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:119
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1164
@@ -26322,8 +26135,7 @@ msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_image_properties.cc:120
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1165
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Display Mode"
 msgid "Custom"
 msgstr "ხელით"
@@ -26597,7 +26409,7 @@ msgstr "პატარა წრე"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:461
 #, kde-format
 msgid "Crosshair"
-msgstr ""
+msgstr "გადახაზული"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:220
 #, kde-format
@@ -26841,12 +26653,10 @@ msgid "Direct3D 11 via ANGLE"
 msgstr "Direct3D 11-ი ANGLE-ის საშუალებით"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1808
-#, fuzzy, kde-format
-#| msgctxt "canvas renderer"
-#| msgid "OpenGL ES"
+#, kde-format
 msgctxt "canvas renderer"
 msgid "OpenGL via ANGLE"
-msgstr "OpenGL ES"
+msgstr "OpenGL ANGLE-ით"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1810
 #, kde-format
@@ -27623,7 +27433,7 @@ msgstr "ტიპი:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:92
 #, kde-format
 msgid "&Keywords:"
-msgstr ""
+msgstr "სა&კვანძო სიტყვები:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRevisionDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:105
@@ -28050,7 +27860,7 @@ msgstr "შეფარდებით კოლორიმეტრული"
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
 msgid "Absolute Colorimetric"
-msgstr ""
+msgstr "აბსოლუტური კოლორიმეტრული"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAddColorProfile)
 #: libs/ui/forms/wdgcolorsettings.ui:247
@@ -28090,11 +27900,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent_2)
 #: libs/ui/forms/wdgcolorsettings.ui:324 libs/ui/forms/wdgcolorsettings.ui:374
 #: libs/ui/forms/wdgimageproperties.ui:354
-#, fuzzy, kde-format
-#| msgctxt "How long it took to render the video"
-#| msgid "Render time:"
+#, kde-format
 msgid "Rendering Intent:"
-msgstr "რენდერის დრო:"
+msgstr "რენდერის დანიშნულება:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, chkDisplayBlackPointCompensation)
@@ -28118,10 +27926,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgcolorsettings.ui:387
 #: libs/ui/forms/wdgimageproperties.ui:322
-#, fuzzy, kde-format
-#| msgid "Display:"
+#, kde-format
 msgid "Display Mode:"
-msgstr "ჩვენება:"
+msgstr "ჩვენების რეჟიმი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorModels)
 #: libs/ui/forms/wdgcolorspaceselector.ui:39
@@ -30980,10 +30787,9 @@ msgstr "ტონი/გაჯერებულობა/მნიშვნე�
 
 #. i18n: ectx: property (text), widget (QLabel, lblColorHistorySorting)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:173
-#, fuzzy, kde-format
-#| msgid "Color History"
+#, kde-format
 msgid "Sort Color History Ring By:"
-msgstr "ფერების ისტორია"
+msgstr "ფერების ისტორიის რგოლის დალაგების წესი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgpreseticonlibrary.ui:41
@@ -32628,16 +32434,12 @@ msgid "Import animation"
 msgstr "ანიმაციის შემოტანა"
 
 #: libs/ui/kis_async_action_feedback.cpp:79
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "progress dialog message when the user closes the document that is being "
-#| "saved"
-#| msgid "Waiting for saving to complete..."
+#, kde-format
 msgctxt ""
 "progress dialog message when the user has to wait for the image to become "
 "unlocked"
 msgid "Waiting for the action to complete..."
-msgstr "შენახვის დასრულების მოლოდინი..."
+msgstr "ქმედების დასრულების მოლოდინი..."
 
 #: libs/ui/kis_bookmarked_configurations_editor.cc:57
 #, kde-format
@@ -32822,11 +32624,10 @@ msgid "Select a Color"
 msgstr "ფერის არჩევა"
 
 #: libs/ui/kis_layer_manager.cc:191
-#, fuzzy, kde-format
-#| msgid "Select Layer"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr "ფენის მონიშვნა"
+msgstr "მონიშნული ფენების შერწყმა"
 
 #: libs/ui/kis_layer_manager.cc:193
 #, kde-format
@@ -32872,12 +32673,9 @@ msgid "Change Clone Layer"
 msgstr "კლონის ფენის შეცვლა"
 
 #: libs/ui/kis_layer_manager.cc:511
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
 msgctxt "(qtundo-format)"
 msgid "Convert Group to Animated Layer"
-msgstr "ფაილის ფენად გარდაქმნა"
+msgstr "ჯგუფის გარდაქმნა ანიმირებულ ფენაში"
 
 #: libs/ui/kis_layer_manager.cc:531
 #, kde-format
@@ -32989,17 +32787,14 @@ msgid "Add Transform Mask"
 msgstr ""
 
 #: libs/ui/kis_mask_manager.cc:307
-#, fuzzy
-#| msgid "Color Overlay"
 msgctxt "(qtundo-format)"
 msgid "Add Fast Color Overlay"
-msgstr "ფერის გალაგება"
+msgstr "სწრაფი ფერის გადაფარვის დამატება"
 
 #: libs/ui/kis_mask_manager.cc:311
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Color Overlay Mask"
-msgstr "ფერის გალაგება"
+msgstr "ფერის განლაგების ნიღაბი"
 
 #: libs/ui/kis_mask_manager.cc:352
 #, kde-format
@@ -33467,14 +33262,9 @@ msgstr ""
 "b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Using Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">უახლესი ფაილები</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>Krita-ის გამოყენება</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:231
 #, kde-format
@@ -33506,14 +33296,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/kis_splash_screen.cpp:239
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><b><span style=\" color:%1;\">Recent Files</span></"
-#| "b></p>"
+#, kde-format
 msgid "<p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
-msgstr ""
-"<html><head/><body><p><b><span style=\" color:%1;\">უახლესი ფაილები</span></"
-"b></p>"
+msgstr "<p><span style=\" color:%1;\"><b>კოდის წერა Krita-ით</b></span></p>"
 
 #: libs/ui/kis_splash_screen.cpp:240
 #, kde-format
@@ -33689,10 +33474,9 @@ msgid "Layer styles"
 msgstr "ფენის სტილები"
 
 #: libs/ui/KisApplication.cpp:382
-#, fuzzy, kde-format
-#| msgid "Font Family"
+#, kde-format
 msgid "Font Families"
-msgstr "ფონტების ოჯახი"
+msgstr "ფონტის ოჯახები"
 
 #: libs/ui/KisApplication.cpp:394
 #, kde-format
@@ -38352,43 +38136,37 @@ msgid "Color name:"
 msgstr "ფერის სახელი:"
 
 #: libs/widgets/kis_color_input.cpp:421
-#, fuzzy, kde-format
-#| msgid "Hue:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Hue'"
 msgid "H:"
 msgstr "ტონი:"
 
 #: libs/widgets/kis_color_input.cpp:422
-#, fuzzy, kde-format
-#| msgid "OS:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Saturation'"
 msgid "S:"
-msgstr "ოს-ი:"
+msgstr "გაჯ:"
 
 #: libs/widgets/kis_color_input.cpp:501
 #, kde-format
 msgctxt "@label:slider Abbreviation for 'Lightness' of HSL color model"
 msgid "L:"
-msgstr ""
+msgstr "მარცხ:"
 
 #: libs/widgets/kis_color_input.cpp:504
-#, fuzzy, kde-format
-#| msgid "Y:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Luma' of HSY color model"
 msgid "Y:"
 msgstr "Y:"
 
 #: libs/widgets/kis_color_input.cpp:507
-#, fuzzy, kde-format
-#| msgid "ID:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Intensity' of HSI color model"
 msgid "I:"
-msgstr "ID:"
+msgstr "ინტ:"
 
 #: libs/widgets/kis_color_input.cpp:511
-#, fuzzy, kde-format
-#| msgctxt "Value (Keep short!)"
-#| msgid "Val:"
+#, kde-format
 msgctxt "@label:slider Abbreviation for 'Value' of HSV color model"
 msgid "V:"
 msgstr "მნი:"
@@ -38937,10 +38715,9 @@ msgstr ""
 "ზოლია, სადაც სტატუსის ინფორმაციის წაკითხვა შეგიძლიათ.</p>"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:493
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "ერთეული:"
+msgstr "ერთეული"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:503
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -39643,17 +39420,15 @@ msgid "A scheme with this name already exists."
 msgstr "სქემა ამ სახელით უკვე არსებობს."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:127
-#, fuzzy, kde-format
-#| msgid ""
-#| "Do you really want to delete the scheme %1?\n"
-#| "Note that this will not remove any system wide shortcut schemes."
+#, kde-format
 msgid ""
 "Do you really want to delete the scheme %1?\n"
 "                                             Note that this will not remove "
 "any system wide shortcut schemes."
 msgstr ""
 "მართლა გნებავთ %1 სქემის წაშლა?\n"
-"გაითვალისწინეთ, რომ ეს არ წაშლის არცერთ სისტემურ სქემას."
+"                                        გაითვალისწინეთ, რომ ეს არ წაშლის "
+"არცერთ სისტემურ სქემას."
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:156
 #, kde-format
@@ -39941,10 +39716,9 @@ msgstr "ფერის არჩევა"
 
 #. i18n: ectx: property (text), widget (QLabel, showDockerOptionsLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:280
-#, fuzzy, kde-format
-#| msgid "Tool Options"
+#, kde-format
 msgid "Control Widget Options"
-msgstr "ხელსაწყოების გამართვა"
+msgstr "საკონტროლო ხელსაწყოების მორგება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:304
@@ -40063,7 +39837,7 @@ msgstr "უსასრულო სახაზავი"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1390
 #, kde-format
 msgid "Select an Assistant"
-msgstr ""
+msgstr "აირჩიეთ დამხმარე"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1538
 #, kde-format
@@ -41149,12 +40923,9 @@ msgid "AutoKey Duplicate"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:499
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Render Animation Again"
 msgctxt "(qtundo-format)"
 msgid "Update Animation Settings"
-msgstr "ანიმაციის თავიდან რენდერი"
+msgstr "ანიმაციის პარამეტრების განახლება"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:562
 #, kde-format
@@ -41293,12 +41064,12 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimUtils.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Copy Keyframe"
-msgstr ""
+msgstr "ძირითადი კადრის კოპირება"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:39
 msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
-msgstr ""
+msgstr "საკვანძო კადრის დამატება"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
@@ -41320,8 +41091,8 @@ msgstr[1] "%1 ძირითადი კადრის გადატან�
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ძირითადი კადრის კოპირება"
+msgstr[1] "%1 ძირითადი კადრის კოპირება"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, kde-format
@@ -41629,7 +41400,7 @@ msgstr "კომპოზიციის წაშლა"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:68
 #, kde-format
 msgid "New Composition"
-msgstr ""
+msgstr "ახალი კომპოზიცია"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:69
 #, kde-format
@@ -41680,7 +41451,7 @@ msgstr "კომპოზიციების გატანა: %1..."
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
-msgstr ""
+msgstr "კომპოზიციის სახელის გადარქმევა"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
@@ -42135,11 +41906,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KisToolButton, bnAdd)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:197
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Filter Mask"
+#, kde-format
 msgid "Add new layer or mask"
-msgstr "ახალი ფილტრის ნიღბის დამატება"
+msgstr "ახალი ფენის ან ნიღბის დამატება"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDuplicate)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:216
@@ -42950,10 +42719,9 @@ msgid "File extension:"
 msgstr "ფაილის გაფართოება:"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:82
-#, fuzzy, kde-format
-#| msgid "Pan Up"
+#, kde-format
 msgid "Clean Up"
-msgstr "პანორამა მაღლა"
+msgstr "მოსუფთავება"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:138
 #, kde-format
@@ -43787,19 +43555,16 @@ msgid "Delete the taskset"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:268
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Font Size"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Font Size (em)"
-msgstr "ფონტის ზომა"
+msgstr "ფონტის ზომა (ემ)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:270
-#, fuzzy, kde-format
-#| msgid "Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "X Height (ex)"
-msgstr "სიმაღლე: "
+msgstr "X სიმაღლე (ex)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:272
 #, kde-format
@@ -43808,11 +43573,10 @@ msgid "Cap Height (cap)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:274
-#, fuzzy, kde-format
-#| msgid "Proportional"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Proportional Advance (ch)"
-msgstr "პროპორციული"
+msgstr "პროპორციული წინ (ch)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:276
 #, kde-format
@@ -43821,11 +43585,10 @@ msgid "Ideographic Advance (ic)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:278
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Line Height (lh)"
-msgstr "ხაზის სიმაღლე: "
+msgstr "ხაზის სიმაღლე (lh)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:280
 #, kde-format
@@ -43834,33 +43597,28 @@ msgid "Spaces (Sp)"
 msgstr ""
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:282
-#, fuzzy, kde-format
-#| msgctxt "Line color"
-#| msgid "Lines: "
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Lines (Ln)"
-msgstr "ხაზები: "
+msgstr "ხაზები (Ln)"
 
 #: plugins/dockers/textproperties/CssQmlUnitConverter.cpp:284
-#, fuzzy, kde-format
-#| msgid "Percent (%)"
+#, kde-format
 msgctxt "@label:inlistbox"
 msgid "Percentage (%)"
 msgstr "პროცენტი (%)"
 
 #: plugins/dockers/textproperties/FontAxesModel.cpp:107
-#, fuzzy, kde-format
-#| msgid "Optimize"
+#, kde-format
 msgctxt "@info:label"
 msgid "Optical Size"
-msgstr "ოპტიმიზაცია"
+msgstr "ოპტიკური ზომა"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:16
-#, fuzzy, kde-format
-#| msgid "Empty slot"
+#, kde-format
 msgctxt "Empty locale"
 msgid "Empty"
-msgstr "ცარიელი სლოტი"
+msgstr "ცარიელი"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:26
 #, kde-format
@@ -43872,7 +43630,7 @@ msgstr ""
 #, kde-format
 msgctxt "language, region"
 msgid "%1, %2"
-msgstr ""
+msgstr "%1, %2"
 
 #: plugins/dockers/textproperties/LocaleHandler.cpp:32
 #, kde-format
@@ -43881,18 +43639,16 @@ msgid "%1, variant: %3"
 msgstr ""
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:109
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "On"
-msgstr "&გახსნა"
+msgstr "ჩართული"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:111
-#, fuzzy, kde-format
-#| msgid "off"
+#, kde-format
 msgctxt "Feature value toggle"
 msgid "Off"
-msgstr "გამორთული"
+msgstr "გამორთ"
 
 #: plugins/dockers/textproperties/OpenTypeFeatureModel.cpp:344
 #, kde-format
@@ -43901,11 +43657,9 @@ msgid "OpenType Feature Tag"
 msgstr ""
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:118
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
+#, kde-format
 msgid "Text Properties"
-msgstr "ტექსტის თვისებების შეცვლა"
+msgstr "ტექსტის თვისებები"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -44110,11 +43864,9 @@ msgstr "გამეორებები"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpMinimalShadeSelector)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:444
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show shade selector"
+#, kde-format
 msgid "Show Minimal Shade Selector"
-msgstr "ჩრდილის ამრჩევის ჩვენება"
+msgstr "მინიმალური ჩრდილის ამრჩევის ჩვენება"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:455
@@ -44532,7 +44284,7 @@ msgstr "მწვანები"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
 #, kde-format
 msgid "Cyans"
-msgstr ""
+msgstr "იისფრები"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47
@@ -44544,7 +44296,7 @@ msgstr "ბლუზი"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:52
 #, kde-format
 msgid "Magentas"
-msgstr ""
+msgstr "ალისფრები"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonHighlights)
 #. i18n: ectx: property (text), widget (QLabel, label_16)
@@ -46571,7 +46323,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:46
 #, kde-format
 msgid "Save to:"
-msgstr ""
+msgstr "შენახვა სად:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:104
@@ -47444,18 +47196,16 @@ msgid "Minimize Channel"
 msgstr "არხის მინიმიზაცია"
 
 #: plugins/filters/colors/KisFilterFastColorOverlay.cpp:22
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color &Overlay..."
-msgstr "ფერის გალაგება"
+msgstr "ს&წრაფი ფერის გადაფარვა..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: plugins/filters/colors/KisFilterFastColorOverlay.h:28
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Overlay"
+#, kde-format
 msgid "Fast Color Overlay"
-msgstr "ფერის გალაგება"
+msgstr "სწრაფი ფერის გადაფარვა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -47475,17 +47225,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:43
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgid "Blend Mode:"
-msgstr "შერწყმის რეჟიმი"
+msgstr "შერევის რეჟიმი:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpNormal)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:56
-#, fuzzy, kde-format
-#| msgid "Grayscale (without transparency)"
+#, kde-format
 msgid "Normal  (layers with transparency)"
-msgstr "ნაცრისფერი (გამჭვირვალობის გარეშე)"
+msgstr "ნორმალური   (ფენები გამჭვირვალობით)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCompositeOpTint)
 #: plugins/filters/colors/wdgfilterfastcoloroverlay.ui:69
@@ -47859,7 +47607,7 @@ msgstr ""
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
 #, kde-format
 msgid "Prewitt"
-msgstr ""
+msgstr "პრიუიტი"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -48137,7 +47885,7 @@ msgstr "უსახელო"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
 #, kde-format
 msgid "Gradient Colors"
-msgstr ""
+msgstr "გრადიენტის ფერები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorMode)
 #. i18n: ectx: property (text), widget (QLabel, colorModeLabel)
@@ -48511,10 +48259,9 @@ msgstr "დონე:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGrayscale)
 #: plugins/filters/noisefilter/wdgnoiseoptions.ui:85
-#, fuzzy, kde-format
-#| msgid "dy scale"
+#, kde-format
 msgid "Grayscale"
-msgstr "ზომა Y ღერძზე"
+msgstr "ნაცრისფერი"
 
 #: plugins/filters/normalize/kis_normalize.cpp:45
 #, kde-format
@@ -48627,7 +48374,7 @@ msgstr ""
 #: plugins/filters/palettize/palettize.ui:170
 #, kde-format
 msgid "Alpha Mode"
-msgstr ""
+msgstr "ალფა რეჟიმი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, alphaModeComboBox)
 #: plugins/filters/palettize/palettize.ui:181
@@ -51632,18 +51379,16 @@ msgstr "ძლიერი"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p><br/></p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p><br/></p></body></html>"
+msgstr "<html><head/><body><p>ნაგულისხმევი (ირჩევს ენკოდერი)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "ავტომატური"
+msgstr "ავტო"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -55059,7 +54804,7 @@ msgstr ""
 #: plugins/paintops/hairy/wdghairyeoptions.ui:194
 #, kde-format
 msgid "Scale factor"
-msgstr ""
+msgstr "გადიდების კოეფიციენტი"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:214
@@ -59272,31 +59017,25 @@ msgstr ""
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:4
-#, fuzzy, kde-format
-#| msgid "Illustrator"
+#, kde-format
 msgctxt "action"
 msgid "Mutator"
-msgstr "ილუსტრატორი"
+msgstr "მუტატორი"
 
 #. i18n: context: text @ Action (mutate), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/mutator/mutator.action:8
-#, fuzzy, kde-format
-#| msgid "Rotate"
+#, kde-format
 msgctxt "action"
 msgid "Mutate"
-msgstr "შემობრუნება"
+msgstr "მუტაცია"
 
 #: plugins/python/mutator/mutator.py:127
-#, fuzzy
-#| msgid "Getting Started"
 msgid "Settings mutated!"
-msgstr "საერთო ინფორმაცია"
+msgstr "პარამეტრების მუტაცია დასრულდა!"
 
 #: plugins/python/mutator/mutator.py:157
-#, fuzzy
-#| msgid "Illustrator"
 msgid "Mutator"
-msgstr "ილუსტრატორი"
+msgstr "მუტატორი"
 
 #: plugins/python/mutator/mutator.py:171
 msgid ""
@@ -59304,10 +59043,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:173
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Size Mutation: "
-msgstr "გაჯერებულობა: "
+msgstr "ზომის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:180
 msgid ""
@@ -59315,10 +59052,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:182
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Rotation Mutation: "
-msgstr "გაჯერებულობა: "
+msgstr "ბრუნვის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:189
 msgid ""
@@ -59326,10 +59061,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:191
-#, fuzzy
-#| msgid "Opacity: "
 msgid "Opacity Mutation: "
-msgstr "გაუმჭვირვალობა: "
+msgstr "გაუმჭვირვალობის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:198
 msgid ""
@@ -59337,10 +59070,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:200
-#, fuzzy
-#| msgid "Rotation:"
 msgid "Flow Mutation: "
-msgstr "შემობრუნება:"
+msgstr "ნაკადის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:207
 msgid ""
@@ -59349,10 +59080,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:209
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Hue Mutation: "
-msgstr "ვიდეოს ხანგრძლივობა:"
+msgstr "ტონის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:216
 msgid ""
@@ -59361,10 +59090,8 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:218
-#, fuzzy
-#| msgid "Saturation: "
 msgid "Saturation Mutation: "
-msgstr "გაჯერებულობა: "
+msgstr "გაჯერებულობის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:225
 msgid ""
@@ -59373,16 +59100,12 @@ msgid ""
 msgstr ""
 
 #: plugins/python/mutator/mutator.py:227
-#, fuzzy
-#| msgid "Video duration:"
 msgid "Value Mutation: "
-msgstr "ვიდეოს ხანგრძლივობა:"
+msgstr "მნიშვნელობის მუტაცია: "
 
 #: plugins/python/mutator/mutator.py:237
-#, fuzzy
-#| msgid "Rotate"
 msgid "Mutate"
-msgstr "შემობრუნება"
+msgstr "მუტაცია"
 
 #: plugins/python/mutator/mutator.py:238
 msgid ""
@@ -59952,33 +59675,24 @@ msgid "Python files (*.py)"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
-#, fuzzy
-#| msgid "Custom options"
 msgid "Custom icon"
-msgstr "ხელით მითითებული პარამეტრები"
+msgstr "მომხმარებლის ხატულა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
-#, fuzzy
-#| msgid "Tool Icon"
 msgid "Tool icon"
 msgstr "ხელსაწყოს ხატულა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:66
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset icon"
-msgstr "ფუნჯის პრესეტები"
+msgstr "ფუნჯის პრესეტის ხატულა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:71
 msgid "Workflow Buttons settings"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:103
-#, fuzzy
-#| msgctxt "left mouse button"
-#| msgid "left button"
 msgid "Selected button:"
-msgstr "მარცხენა ღილაკი"
+msgstr "არჩეული ღილაკი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:116
 msgid "Add a workflow button"
@@ -59997,169 +59711,114 @@ msgid "Delete selected workflow button"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:145
-#, fuzzy
-#| msgid "Selection Mode"
 msgid "Select icon mode:"
-msgstr "არჩევის რეჟიმი"
+msgstr "აირჩიეთ ხატულის რეჟიმი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:161
-#, fuzzy
-#| msgid "Selection Actions"
 msgid "Select a custom icon:"
-msgstr "მონიშვნის ქმედებები"
+msgstr "აირჩიეთ თქვენი ხატულა:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:164
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
 msgid "Custom icon path"
-msgstr "ბილიკების კომბინირება"
+msgstr "მორგებული ხატულის ბილიკი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:169
-#, fuzzy
-#| msgid "Select one document."
 msgid "Select the custom icon"
-msgstr "არჩიეთ ერთი დოკუმენტი."
+msgstr "აირჩიეთ თქვენი ხატულა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:177
-#, fuzzy
-#| msgid "Internal Pool:"
 msgid "Enter a Tooltip:"
-msgstr "შიდა პული:"
+msgstr "შეიყვანეთ მინიშნება:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:180
-#, fuzzy
-#| msgid "Tooltip"
 msgid "Tooltip text"
-msgstr "მინიშნება"
+msgstr "მინიშნების ტექსტი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:188
-#, fuzzy
-#| msgid "Select a Color"
 msgid "Select a tool:"
-msgstr "ფერის არჩევა"
+msgstr "აირჩიეთ ხელსაწყო:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:203
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Select brush preset"
 msgid "Select a brush preset:"
-msgstr "აირჩიეთ ფუნჯის პრესეტი"
+msgstr "აირჩიეთ ფუნჯის პრესეტი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:206
-#, fuzzy
-#| msgid "Brush presets"
 msgid "Brush preset name"
-msgstr "ფუნჯის პრესეტები"
+msgstr "ფუნჯის პრესეტის სახელი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:211
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Select brush preset"
 msgid "Select the brush preset"
 msgstr "აირჩიეთ ფუნჯის პრესეტი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:219
-#, fuzzy
-#| msgid "Foreground color"
 msgid "Select foreground color:"
-msgstr "წინა პლანის ფერი"
+msgstr "აირჩიეთ წინა პლანის ფერი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:221
-#, fuzzy
-#| msgid "Foreground color"
 msgid "Load current foreground color"
-msgstr "წინა პლანის ფერი"
+msgstr "მიმდინარე წინა პლანის ფერის ჩატვირთვა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:224
-#, fuzzy
-#| msgid "Foreground color"
 msgid "Clear foreground color"
-msgstr "წინა პლანის ფერი"
+msgstr "წინა პლანის ფერის გასუფთავება"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:234
 msgid "Color model ; depth ; profile ; components"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:251
-#, fuzzy
-#| msgid "Background color"
 msgid "Select background color:"
-msgstr "ფონის ფერი"
+msgstr "აირჩიეთ ფონის ფერი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:253
-#, fuzzy
-#| msgid "Background color"
 msgid "Load current background color"
-msgstr "ფონის ფერი"
+msgstr "მიმდინარე ფონის ფერის ჩატვირთვა"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:256
-#, fuzzy
-#| msgid "Background color"
 msgid "Clear background color"
-msgstr "ფონის ფერი"
+msgstr "ფონის ფერის გასუფთავება"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:282
-#, fuzzy
-#| msgid "Select a Folder"
 msgid "Select a script file:"
-msgstr "აირჩიეთ საქაღალდე"
+msgstr "აირჩიეთ სკრიპტის ფაილი:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:285
-#, fuzzy
-#| msgid "Select path"
 msgid "Script path"
-msgstr "ბილიკის არჩევა"
+msgstr "სკრიპტის ბილიკი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:304
-#, fuzzy
-#| msgid "Buttons"
 msgid "Buttons size:"
-msgstr "ღილაკები"
+msgstr "ღილაკის ზომა:"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:320
 msgid "Settings button position:"
 msgstr ""
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:322
-#, fuzzy
-#| msgctxt "toolbar position string"
-#| msgid "Bottom"
 msgid "Bottom bar"
-msgstr "ბოლოში"
+msgstr "ქვედა პანელი"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:323
-#, fuzzy
-#| msgctxt "@item:inmenu Layers Docker settings, checkbox"
-#| msgid "Inline"
 msgid "Inline"
 msgstr "ხაზში"
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:460
-#, fuzzy
-#| msgid "Icon Size"
 msgid "Icon files "
-msgstr "ხატულების ზომა"
+msgstr "ხატულის ფაილები "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:516
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:549
-#, fuzzy
-#| msgid "Color Engine:"
 msgid "Color info: "
-msgstr "ფერების ძრავა:"
+msgstr "ფერის ინფორმაცია: "
 
 #: plugins/python/workflow_buttons/buttons_settings_dialog.py:586
-#, fuzzy
-#| msgid "Scripts"
 msgid "Script files "
-msgstr "სკრიპტები"
+msgstr "სკრიპტის ფაილები "
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:25
-#, fuzzy
-#| msgid "Buttons"
 msgctxt "@title:window"
 msgid "Workflow Buttons"
-msgstr "ღილაკები"
+msgstr "სამუშაო პროცესის ღილაკები"
 
 #: plugins/python/workflow_buttons/workflow_buttons.py:64
 msgid "Open workflow buttons settings dialog"
@@ -60215,8 +59874,7 @@ msgid "Stabilizer"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_brush.cc:419
-#, fuzzy, kde-format
-#| msgid "Pixel"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Pixel"
 msgstr "პიქსელი"
@@ -60666,7 +60324,7 @@ msgstr ""
 #, kde-format
 msgctxt "angle value in degrees"
 msgid "%1°"
-msgstr ""
+msgstr "%1°"
 
 #: plugins/tools/basictools/kis_tool_measure.cc:177
 #, kde-format
@@ -61469,10 +61127,9 @@ msgstr "შენახვის მდებარეობა:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgid "Select Layer"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "ფენის მონიშვნა"
+msgstr "მონიშნული გამოსახულებების წაშლა"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -61482,25 +61139,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add a new Transparency Mask"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "ახალი გამჭვირვალობის ნიღბის დამატება"
+msgstr "ახალი მიმართული გამოსახულების დამატება:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Path options"
+#, kde-format
 msgid "Other options:"
-msgstr "ბილიკის მორგება"
+msgstr "სხვა პარამეტრები:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Delete All"
-msgstr "ყველაფრის მონიშვნა"
+msgstr "ყველას წაშლა"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -61583,10 +61236,9 @@ msgid "Please insert the name by which you want to save this profile:"
 msgstr "შეიყვანეთ სახელი, რომლითაც გნებავთ, ეს პროფილი შეინახოთ:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
-#, fuzzy, kde-format
-#| msgid "Sorry, the name you entered is invalid."
+#, kde-format
 msgid "The name you entered is invalid."
-msgstr "შეყვანილი სახელი არასწორია."
+msgstr "თქვენი შეყვანილი სახელი არასწორია."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -62094,11 +61746,10 @@ msgid "Similar Color Selection Tool"
 msgstr ""
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteDialog.cpp:47
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgctxt "@title:window"
 msgid "Glyph Palette"
-msgstr "პალიტრა"
+msgstr "გლიფის პალიტრა"
 
 #: plugins/tools/svgtexttool/glyphpalette/GlyphPaletteProxyModel.cpp:43
 #, kde-format
@@ -62788,10 +62439,9 @@ msgstr "SVG წყაროს ჩასწორება"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnGlyphPalette)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:332
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Glyph Palette"
-msgstr "პალიტრა"
+msgstr "გლიფის პალიტრა"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -62880,7 +62530,7 @@ msgstr ""
 #: plugins/tools/tool_crop/kis_tool_crop.cc:128
 #, kde-format
 msgid "Lock Ratio"
-msgstr ""
+msgstr "კოეციფიენტის ჩაკეტვა"
 
 #: plugins/tools/tool_crop/kis_tool_crop.cc:253
 #, kde-format

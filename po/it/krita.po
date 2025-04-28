@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-24 01:54+0000\n"
-"PO-Revision-Date: 2025-04-06 15:20+0200\n"
+"PO-Revision-Date: 2025-04-15 21:14+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -48689,7 +48689,7 @@ msgstr "Cerchio"
 #: plugins/filters/blur/wdgblur.ui:108
 #, kde-format
 msgid "Strength:"
-msgstr "Forza:"
+msgstr "Intensità:"
 
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
@@ -52647,6 +52647,25 @@ msgid ""
 "Modular mode - optimized for graphical content, illustrations, and lossless "
 "compression.</p><p><br/></p><p><br/></p></body></html>"
 msgstr ""
+"<html><head/><body><p><span style=\" font-size:18pt; text-decoration: "
+"underline;\">Avanzate</span></p><p>L'opzione &quot;Predefinito (il "
+"codificatore sceglie)&quot; è comune. Significa che il codificatore "
+"seleziona in automatico le impostazioni ottimali in base al compromesso tra "
+"qualità e velocità della tua scelta. Questa opzione è consigliata per la "
+"maggior parte degli utenti.</p><p><span style=\" font-size:14pt; text-"
+"decoration: underline;\">Parametri del codificatore:</span></p><p>le "
+"impostazioni generali che si applicano al processo di codifica JPEG XL "
+"complessivo, a prescindere dal metodo di compressione utilizzato.</"
+"p><p><span style=\" font-size:14pt; text-decoration: underline;\">>Parametri "
+"VarDCT:</span></p><p>Variable Discrete Cosine Transform (ossia 'trasformata "
+"discreta variabile del coseno', ottimizzata per i contenuti fotografici)</"
+"p><p>Fa parte della stessa famiglia di tecniche di compressione utilizzate "
+"da JPEG originale, pertanto è ottimizzata per le immagini ‘naturali’, quali "
+"fotografie e immagini con molte sfumature e trame.</p><p><span style=\" font-"
+"size:14pt; text-decoration: underline;\">Parametri modulari:</span></"
+"p><p>Impostazioni per la modalità modulare - ottimizzata per i contenuti "
+"grafici, le illustrazioni e la compressione senza perdita di dati.</p><p><br/"
+"></p><p><br/></p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -52879,7 +52898,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:395
 #, kde-format
 msgid "Hover this text for info tooltip"
-msgstr ""
+msgstr "Passa il mouse sopra questo testo per un'informativa"
 
 #. i18n: ectx: property (whatsThis), widget (QFrame, liquifyOptionsLayout)
 #. i18n: ectx: property (toolTip), widget (QTabWidget, advancedParameters)
@@ -52903,6 +52922,10 @@ msgid ""
 "Only recommended for low quality settings as it reduces sharpness at color "
 "transitions.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Riduce la risoluzione dei colori per ottenere file di "
+"dimensione più piccola. Consigliato soltanto per impostazioni di bassa "
+"qualità, poiché riduce la nitidezza nelle transizioni tra i colori.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
@@ -52925,19 +52948,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Reduces transparency channel resolution for smaller "
 "files. Only recommended for low quality or when precise transparency edges "
 "aren't critical.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Se attivata, imposta il canale alfa (trasparenza) in "
-"modalità senza perdita di dati. Utile per ridurre gli artefatti della "
-"trasparenza durante l'esportazione con perdita di dati.</p></body></html>"
+"<html><head/><body><p>Riduce la risoluzione del canale della trasparenza per "
+"file di dimensione più piccola. Consigliato soltanto per bassa qualità o "
+"quando i bordi con trasparenza precisi non sono critici.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:435
@@ -52964,6 +52983,10 @@ msgid ""
 "compression. Higher values reconstruct more noise, useful for preserving the "
 "natural look of high-ISO photos.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Separa i modelli di rumore del sensore della "
+"fotocamera per una migliore compressione. Valori più elevanti ricostruiscono "
+"un rumore più preciso, utile per mantenere un aspetto naturale delle "
+"fotografie con ISO alto.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:452
@@ -52996,6 +53019,9 @@ msgid ""
 "patterns in the image. Useful for scanned documents and certain textures.</"
 "p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifica e codifica in modo efficiente gli schemi di "
+"punti ripetuti nell'immagine. Utile per documenti scansionati e determinate "
+"trame.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:480
@@ -53018,6 +53044,10 @@ msgid ""
 "icons) and stores them once, referencing them elsewhere. Improves "
 "compression for digital illustrations and screenshots.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Identifica elementi ripetuti (come caratteri di testo "
+"o icone) e li memorizza una volta, facendovi riferimento ovunque. Migliora "
+"la compressione per le illustrazioni digitali e le schermate.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:497
@@ -53040,13 +53070,15 @@ msgid ""
 "compression without blurring important details. Higher values apply stronger "
 "filtering.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Ammorbidisce le aree preservando tuttavia i bordi "
+"nitidi, migliorando la compressione senza offuscare dettagli importanti. "
+"Valori più alti applicano un filtro più forte.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:514
-#, fuzzy, kde-format
-#| msgid "Edge preserving filter"
+#, kde-format
 msgid "Edge preserving filter strength"
-msgstr "Filtro di preservazione bordo"
+msgstr "Intensità del filtro di preservazione bordo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:538
@@ -53058,18 +53090,17 @@ msgstr "Forte"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:548
-#, fuzzy, kde-format
-#| msgid "<html><head/><body><p>Action Description</p></body></html>"
+#, kde-format
 msgid "<html><head/><body><p>Default (encoder chooses)</p></body></html>"
-msgstr "<html><head/><body><p>Descrizione dell'azione</p></body></html>"
+msgstr ""
+"<html><head/><body><p>Predefinito (sceglie il codificatore)</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNone1)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:551
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Auto"
-msgstr "Automatica"
+msgstr "Automatiche"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
@@ -53079,8 +53110,8 @@ msgid ""
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 "Livello del filtro di preservazione del bordo, da -1 a 3. Usa -1 come "
-"predefinito (il codificatore esegue la scelta), da 0 a 3 per impostare una "
-"forza."
+"predefinito (il codificatore esegue la scelta), da 0 a 3 per impostare "
+"un'intensità."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:579
@@ -53096,6 +53127,9 @@ msgid ""
 "compression of complex textured areas while preserving visual quality.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Filtro avanzato di analisi della trama che migliora la "
+"compressione di aree di trame complesse, preservando tuttavia la qualità "
+"visiva.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
@@ -53112,6 +53146,9 @@ msgid ""
 "compressing graphics with sharp edges and limited colors. Can be lossless or "
 "lossy.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Usa il sistema di compressione modulare, che eccelle "
+"nella compressione di immagini con bordi nitidi e colori limitati. Può "
+"essere con perdita di dati o senza perdita di dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:599
@@ -53144,19 +53181,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:630
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>If enabled, this will set alpha channel "
-#| "(transparency) to lossless. Useful to reduce transparency artifact on "
-#| "lossy export.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Preserves color information in fully transparent "
 "areas. Disable to reduce file size when colors under transparency aren't "
 "needed.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Se attivata, imposta il canale alfa (trasparenza) in "
-"modalità senza perdita di dati. Utile per ridurre gli artefatti della "
-"trasparenza durante l'esportazione con perdita di dati.</p></body></html>"
+"<html><head/><body><p>Mantiene le informazioni del colore nelle aree con "
+"piena trasparenza. Disabilita l'opzione per ridurre la dimensione del file "
+"quando non sono necessari i colori sotto la trasparenza.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:633
@@ -53166,19 +53199,15 @@ msgstr "Mantieni colore dei pixel invisibili"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:640
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Add the author nickname and the first contact of "
-#| "the author profile. This is overridden by the anonymizer.</p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Determines the order in which image tiles are encoded. "
 "'Center first' prioritizes the center of the image for progressive loading, "
 "useful for web content.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Aggiunge il soprannome dell'autore e le informazioni "
-"del primo contatto del suo profilo. Questa azione viene annullata "
-"dall'anonimizzatore.</p></body></html>"
+"<html><head/><body><p>Determina l'ordine in cui i riquadri delle immagini "
+"vengono codificati. «Prima centra» dà priorità al centro dell'immagine per "
+"il caricamento progressivo, utile per i contenuti web.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:643
@@ -53195,6 +53224,10 @@ msgid ""
 "file size. Very effective for natural images where brightness and color are "
 "correlated.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Fornisce la previsione del colore dalle informazioni "
+"sulla luminosità, riducendo la dimensione del file. Molto efficace per le "
+"immagini naturali, in cui luminosità e colore sono correlati.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:656
@@ -53218,6 +53251,10 @@ msgid ""
 "progressively sharper. Takes more time but provides better results.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Abilita il caricamento progressivo utilizzando la "
+"matematica del colore avanzata per dettagli fini. Le immagini caricano come "
+"anteprima grezza che diventa man mano più nitida. Carica più lentamente ma "
+"fornisce risultati migliori.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:673
@@ -53245,6 +53282,9 @@ msgid ""
 "compress fine details. Results in smaller file sizes but requires more "
 "encoding time.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Abilita il caricamento progressivo utilizzando la "
+"quantizzazione per comprimere i dettagli fini. Produce dimensioni più "
+"piccole ma richiede un maggior tempo di codifica.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
@@ -53260,6 +53300,10 @@ msgid ""
 "loading. Adds a few bytes to file size but improves the initial low-"
 "resolution preview quality.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Crea un'immagine di anteprima grezza migliore per il "
+"caricamento progressivo. Aggiunge alcuni byte alla dimensione del file ma "
+"migliora la qualità di anteprima a bassa risoluzione iniziale.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:707
@@ -53289,6 +53333,9 @@ msgid ""
 "load progressively from low to high quality as data streams in.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Abilita la trasformazione «Squeeze» per il caricamento "
+"progressivo delle immagini, da bassa ad alta qualità durante il flusso dei "
+"dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:731
@@ -53310,6 +53357,10 @@ msgid ""
 "image. 'All' uses the full range; smaller percentages create more efficient "
 "compression for images with limited color ranges.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Controlla come i valori dei colori vengono mappati "
+"sull'intera immagine. «Tutto» usa tutto l'intervallo; percentuali più "
+"piccole creano una compressione più efficiente per le immagini con "
+"intervalli di colore limitati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:748
@@ -53340,6 +53391,9 @@ msgid ""
 "tiles. More efficient for images with areas of limited color variety.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Controlla la mappatura dei colori all'interno dei "
+"riquadri di 256×256 pixel locali. Più efficiente per le immagini con aree di "
+"varietà di colori limitata.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:803
@@ -53370,6 +53424,9 @@ msgid ""
 "contains this number of unique colors or fewer. -1 lets the encoder decide "
 "automatically.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Attiva la compressione basata sulla tavolozza, quando "
+"l'immagine contiene questo numero di colori univoci, o meno. -1 lascia "
+"decidere al codificatore.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:858
@@ -53397,6 +53454,10 @@ msgid ""
 "differences between predicted and actual colors. Excellent for near-lossless "
 "compression of smooth gradients without banding artifacts.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Abilita la codifica dei colori relativa che memorizza "
+"le differenze tra i colori in previsione e quelli reali. Eccellente per "
+"compressione quasi senza perdita di dati di sfumature morbide senza "
+"artefatti a banda.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:897
@@ -53414,16 +53475,14 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:911
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Sets the tile size for compression. Larger groups may "
 "improve compression but require more memory.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Usa l'inclinazione della tavoletta per determinare le "
-"normali.</p></body></html>"
+"<html><head/><body><p>Imposta la dimensione dei riquadri per la "
+"compressione. Gruppi più grandi potrebbero migliorare la compressione ma "
+"questo richiede più memoria.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:914
@@ -53452,6 +53511,9 @@ msgid ""
 "based on surrounding pixels. Different predictors work better for different "
 "image types.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Seleziona l'algoritmo utilizzato per predire i valori "
+"dei pixel sulla base dei pixel circostanti. Elementi predittivi diversi "
+"funzionano meglio per tipi di immagini differenti.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:938
@@ -53469,6 +53531,10 @@ msgid ""
 "pixel. Higher values may improve compression but take longer.</p></body></"
 "html>"
 msgstr ""
+"<html><head/><body><p>Controlla quanti pixel vengono analizzati per generare "
+"l'albero decisionale meta-adattivo che seleziona il predittore ottimale per "
+"ciascun pixel. Valori più elevati possono migliorare la compressione ma "
+"hanno tempi di elaborazione più lunghi.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:948
@@ -55723,7 +55789,7 @@ msgstr "Spatial Noise Shaping: 0 = disattivato, 100 = massimo."
 #: plugins/impex/webp/kis_wdg_options_webp.ui:295
 #, kde-format
 msgid "SNS Strength"
-msgstr "Forza SNS"
+msgstr "Intensità SNS"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -55731,14 +55797,14 @@ msgstr "Forza SNS"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:325
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
-msgstr "Forza del filtro: 0 = disattivato, 100 = massimo."
+msgstr "Intensità del filtro: 0 = disattivato, 100 = massimo."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:318
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Strength"
-msgstr "Forza del filtro"
+msgstr "Intensità del filtro"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
@@ -55764,8 +55830,8 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
-"0 = Semplice, 1 = Forte. Utilizzato solo se la «Forza del filtro» è maggiore "
-"di 0 o la «Forza del filtro automatica» è abilitata."
+"0 = Semplice, 1 = Forte. Utilizzato solo se la «Intensità del filtro» è "
+"maggiore di 0 o la «Intensità del filtro automatica» è abilitata."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:364
@@ -55778,7 +55844,7 @@ msgstr "Tipo di filtro"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:378
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr "Forza del filtro automatica"
+msgstr "Intensità del filtro automatica"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -58396,7 +58462,7 @@ msgstr "Ripetizione"
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
-msgstr "Forza"
+msgstr "Intensità"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format
@@ -61862,10 +61928,8 @@ msgid "&Select freehand brush tool when pressing a shortcut"
 msgstr "&Seleziona il Pennello a mano libera quando premi una scorciatoia"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:38
-#, fuzzy
-#| msgid "Show on-canvas popup messages"
 msgid "Show on-canvas &popup message when activating brush preset"
-msgstr "Mostra i messaggi a comparsa sulla tela"
+msgstr "Mostra &messaggio sulla tela quando attivi la preimpostazione pennello"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:57
 msgid ""

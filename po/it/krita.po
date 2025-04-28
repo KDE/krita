@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-04-24 03:22+0000\n"
-"PO-Revision-Date: 2025-03-07 21:59+0100\n"
+"PO-Revision-Date: 2025-04-15 21:14+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -44425,7 +44425,7 @@ msgstr "Cerchio"
 #: plugins/filters/blur/wdgblur.ui:108
 #, kde-format
 msgid "Strength:"
-msgstr "Forza:"
+msgstr "Intensità:"
 
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
@@ -48421,7 +48421,7 @@ msgstr "Filtro di preservazione bordo"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:453
 #, kde-format
 msgid "Maximum strength"
-msgstr "Forza massima"
+msgstr "Intensità massima"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:470
@@ -48431,8 +48431,8 @@ msgid ""
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 "Livello del filtro di preservazione del bordo, da -1 a 3. Usa -1 come "
-"predefinito (il codificatore esegue la scelta), da 0 a 3 per impostare una "
-"forza."
+"predefinito (il codificatore esegue la scelta), da 0 a 3 per impostare "
+"un'intensità."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:491
@@ -50906,7 +50906,7 @@ msgstr "Spatial Noise Shaping: 0 = disattivato, 100 = massimo."
 #: plugins/impex/webp/kis_wdg_options_webp.ui:295
 #, kde-format
 msgid "SNS Strength"
-msgstr "Forza SNS"
+msgstr "Intensità SNS"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -50914,14 +50914,14 @@ msgstr "Forza SNS"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:325
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
-msgstr "Forza del filtro: 0 = disattivato, 100 = massimo."
+msgstr "Intensità del filtro: 0 = disattivato, 100 = massimo."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:318
 #, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Strength"
-msgstr "Forza del filtro"
+msgstr "Intensità del filtro"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
@@ -50947,8 +50947,8 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
-"0 = Semplice, 1 = Forte. Utilizzato solo se la «Forza del filtro» è maggiore "
-"di 0 o la «Forza del filtro automatica» è abilitata."
+"0 = Semplice, 1 = Forte. Utilizzato solo se la «Intensità del filtro» è "
+"maggiore di 0 o la «Intensità del filtro automatica» è abilitata."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:364
@@ -50961,7 +50961,7 @@ msgstr "Tipo di filtro"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:378
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr "Forza del filtro automatica"
+msgstr "Intensità del filtro automatica"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -53571,7 +53571,7 @@ msgstr "Ripetizione"
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:117
 #, kde-format
 msgid "Strength"
-msgstr "Forza"
+msgstr "Intensità"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:125
 #, kde-format

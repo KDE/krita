@@ -246,7 +246,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
-#if defined Q_OS_LINUX
+#if defined HAVE_X11
     if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
         qputenv("QT_QPA_PLATFORM", "xcb");
     }

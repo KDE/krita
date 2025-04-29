@@ -1,9 +1,9 @@
-find_package(Qt5 ${MIN_QT_VERSION}
+find_package(Qt${QT_MAJOR_VERSION} ${MIN_QT_VERSION}
     REQUIRED COMPONENTS
     Designer
 )
 
-include_directories(${Qt5Designer_INCLUDE_DIRS})
+include_directories(${Qt${QT_MAJOR_VERSION}Designer_INCLUDE_DIRS})
 
 set(KritaDesignerPlugin_SOURCES
     KisColorSpaceSelectorPlugin.cpp

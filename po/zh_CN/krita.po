@@ -26751,11 +26751,9 @@ msgid_plural "Brush speed smoothing: {n} samples"
 msgstr[0] "笔刷速度平滑：{n} 次采样"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1451
-#, fuzzy, kde-format
-#| msgid "Pen tilt direction offset: {n}°"
-#| msgid_plural "Pen tilt direction offset: {n}°"
+#, kde-format
 msgid "Pen tilt direction offset: "
-msgstr "笔身指向偏移：{n}°"
+msgstr "笔身指向偏移："
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, intSwapSize)
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1548

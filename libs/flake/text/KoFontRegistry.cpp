@@ -740,7 +740,11 @@ QFont::Style KoFontRegistry::slantMode(FT_FaceSP face)
     }
 }
 
-KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo info, const bool isHorizontal, const QString &text, quint32 xRes, quint32 yRes, bool disableFontMatching, const QString &language)
+KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo info,
+                                                               const bool isHorizontal, const KoSvgText::TextRendering rendering,
+                                                               const QString &text,
+                                                               quint32 xRes, quint32 yRes,
+                                                               bool disableFontMatching, const QString &language)
 {
     const QString suggestedHash = info.families.join(",")+":"+modificationsString(info, xRes, yRes)+language;
     KoSvgText::FontMetrics metrics;
@@ -759,13 +763,13 @@ KoSvgText::FontMetrics KoFontRegistry::fontMetricsForCSSValues(KoCSSFontInfo inf
             language);
 
         if (faces.empty()) return KoSvgText::FontMetrics(info.size, isHorizontal);
-        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal, KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale(language).script()));
+        metrics = KoFontRegistry::generateFontMetrics(faces.front(), isHorizontal, KoWritingSystemUtils::scriptTagForQLocaleScript(QLocale(language).script()), rendering);
         d->fontMetrics().insert(suggestedHash, metrics);
     }
     return metrics;
 }
 
-KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool isHorizontal, QString script)
+KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool isHorizontal, QString script, const KoSvgText::TextRendering rendering)
 {
     KoSvgText::FontMetrics metrics;
     hb_direction_t dir = isHorizontal? HB_DIRECTION_LTR: HB_DIRECTION_TTB;
@@ -778,7 +782,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
     hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
 
-    FT_Int32 faceLoadFlags = loadFlagsForFace(face.data(), isHorizontal);
+    const FT_Int32 faceLoadFlags = loadFlagsForFace(face.data(), isHorizontal, 0, rendering);
 
     metrics.isVertical = !isHorizontal;
     // Fontsize and advances.
@@ -1074,7 +1078,7 @@ KoSvgText::FontMetrics KoFontRegistry::generateFontMetrics(FT_FaceSP face, bool 
     return metrics;
 }
 
-int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_t loadFlags)
+int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_t loadFlags, const KoSvgText::TextRendering rendering)
 {
     FT_Int32 faceLoadFlags = loadFlags;
     if (FT_HAS_COLOR(face)) {
@@ -1086,6 +1090,28 @@ int32_t KoFontRegistry::loadFlagsForFace(FT_Face face, bool isHorizontal, int32_
     if (!FT_IS_SCALABLE(face)) {
         // This is needed for the CBDT version of Noto Color Emoji
         faceLoadFlags &= ~FT_LOAD_NO_BITMAP;
+    }
+
+    if (rendering == KoSvgText::RenderingGeometricPrecision || rendering == KoSvgText::RenderingAuto) {
+        // without load_no_hinting, the advance and offset will be rounded
+        // to nearest pixel, which we don't want as we're using the vector
+        // outline.
+        faceLoadFlags |= FT_LOAD_NO_HINTING;
+
+        // Disable embedded bitmaps because they _do not_ follow geometric
+        // precision, but is focused on legibility.
+        // This does not affect bitmap-only fonts.
+        faceLoadFlags |= FT_LOAD_NO_BITMAP;
+    } else if (rendering == KoSvgText::RenderingOptimizeSpeed) {
+        faceLoadFlags |= FT_LOAD_TARGET_MONO;
+    } else {
+        // When using hinting, sometimes the bounding box does not encompass the
+        // drawn glyphs properly.
+        // The default hinting works best for vertical, while the 'light'
+        // hinting mode works best for horizontal.
+        if (isHorizontal) {
+            faceLoadFlags |= FT_LOAD_TARGET_LIGHT;
+        }
     }
     return faceLoadFlags;
 }

@@ -1053,7 +1053,8 @@ KoSvgText::FontMetrics KoSvgTextProperties::metrics(const bool withResolvedLineH
     const KoCSSFontInfo info = cssFontInfo();
 
     const bool isHorizontal = propertyOrDefault(WritingModeId).toInt() == KoSvgText::HorizontalTB;
-    KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal);
+    const KoSvgText::TextRendering textRendering = KoSvgText::TextRendering(propertyOrDefault(KoSvgTextProperties::TextRenderingId).toInt());
+    KoSvgText::FontMetrics metrics = KoFontRegistry::instance()->fontMetricsForCSSValues(info, isHorizontal, textRendering);
 
     return withResolvedLineHeight? applyLineHeight(metrics): metrics;
 }

@@ -134,27 +134,6 @@ void KoSvgTextShape::Private::relayout()
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
-    FT_Int32 loadFlags = 0;
-    if (textRendering == KoSvgText::RenderingGeometricPrecision || textRendering == KoSvgText::RenderingAuto) {
-        // without load_no_hinting, the advance and offset will be rounded
-        // to nearest pixel, which we don't want as we're using the vector
-        // outline.
-        loadFlags |= FT_LOAD_NO_HINTING;
-
-        // Disable embedded bitmaps because they _do not_ follow geometric
-        // precision, but is focused on legibility.
-        // This does not affect bitmap-only fonts.
-        loadFlags |= FT_LOAD_NO_BITMAP;
-    } else {
-        // When using hinting, sometimes the bounding box does not encompass the
-        // drawn glyphs properly.
-        // The default hinting works best for vertical, while the 'light'
-        // hinting mode works best for horizontal.
-        if (isHorizontal) {
-            loadFlags |= FT_LOAD_TARGET_LIGHT;
-        }
-    }
-
     const auto getUcs4At = [](const QString &s, int i) -> char32_t {
         const QChar high = s.at(i);
         if (!high.isSurrogate()) {
@@ -474,7 +453,7 @@ void KoSvgTextShape::Private::relayout()
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
                 const FT_FaceSP &face = faces.at(static_cast<size_t>(i));
-                const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(face.data(), isHorizontal, loadFlags);
+                const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(face.data(), isHorizontal, 0, textRendering);
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
@@ -494,7 +473,7 @@ void KoSvgTextShape::Private::relayout()
                 for (int j=start; j<start+length; j++) {
                     const QChar::Script currentScript = QChar::script(getUcs4At(text, j));
                     if (!metricsList.contains(currentScript)) {
-                        metricsList.insert(currentScript, KoFontRegistry::generateFontMetrics(face, isHorizontal, KoWritingSystemUtils::scriptTagForQCharScript(currentScript)));
+                        metricsList.insert(currentScript, KoFontRegistry::generateFontMetrics(face, isHorizontal, KoWritingSystemUtils::scriptTagForQCharScript(currentScript), textRendering));
                     }
                     result[j].metrics = metricsList.value(currentScript);
                     if (fontSize < 1.0) {
@@ -561,7 +540,7 @@ void KoSvgTextShape::Private::relayout()
         }
         CharacterResult charResult = result[cluster];
 
-        const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(currentGlyph.ftface, isHorizontal, loadFlags);
+        const FT_Int32 faceLoadFlags = KoFontRegistry::loadFlagsForFace(currentGlyph.ftface, isHorizontal, 0, textRendering);
 
 
         const char32_t codepoint = getUcs4At(text, cluster);

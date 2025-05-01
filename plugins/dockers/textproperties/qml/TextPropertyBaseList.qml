@@ -109,6 +109,7 @@ ColumnLayout {
                 }
                 TabSize {
                 }
+                TextRendering {}
                 FontSize {
                 }
                 FontSizeAdjust {

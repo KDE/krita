@@ -214,6 +214,9 @@ public:
     LAGER_QT_CURSOR(int, textWrap);
     LAGER_QT_CURSOR(PropertyState, textWrapState);
 
+    LAGER_QT_CURSOR(int, textRendering);
+    LAGER_QT_CURSOR(PropertyState, textRenderingState);
+
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 

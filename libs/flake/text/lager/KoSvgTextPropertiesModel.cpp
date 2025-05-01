@@ -295,6 +295,8 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(textCollapseState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextCollapseId))}
     , LAGER_QT(textWrap){textData.zoom(createTextProperty(KoSvgTextProperties::TextWrapId)).zoom(variant_to<int>)}
     , LAGER_QT(textWrapState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextWrapId))}
+    , LAGER_QT(textRendering){textData.zoom(createTextProperty(KoSvgTextProperties::TextRenderingId)).zoom(variant_to<int>)}
+    , LAGER_QT(textRenderingState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextRenderingId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));

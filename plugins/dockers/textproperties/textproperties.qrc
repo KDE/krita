@@ -59,5 +59,6 @@
         <file alias="baseline-ideo-embox-horizontal-center.svg">icons/baseline-ideo-embox-horizontal-center.svg</file>
         <file alias="16_light_format-text-overline.svg">icons/16_light_format-text-overline.svg</file>
         <file alias="FontSizeAdjust.qml">qml/FontSizeAdjust.qml</file>
+        <file alias="TextRendering.qml">qml/TextRendering.qml</file>
     </qresource>
 </RCC>

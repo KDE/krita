@@ -489,7 +489,7 @@ public:
 
     void relayout();
 
-    static bool loadGlyph(const QTransform &ftTF,
+    static bool loadGlyph(const KoSvgText::ResolutionHandler &resHandler,
                    const FT_Int32 faceLoadFlags,
                    const bool isHorizontal,
                    const char32_t firstCodepoint,
@@ -527,7 +527,7 @@ public:
                             const QPointF subScript,
                             QVector<CharacterResult> &result,
                             int &currentIndex,
-                            const qreal res,
+                            const KoSvgText::ResolutionHandler resHandler,
                             const bool isHorizontal,
                             const bool disableFontMatching);
     static void handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
@@ -537,7 +537,7 @@ public:
     void computeTextDecorations(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                 const QVector<CharacterResult>& result,
                                 const QMap<int, int>& logicalToVisual,
-                                qreal minimumDecorationThickness,
+                                const KoSvgText::ResolutionHandler resHandler,
                                 KoPathShape *textPath,
                                 qreal textPathoffset,
                                 bool side,
@@ -545,14 +545,12 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping,
-                                const qreal res,
                                 const KoSvgTextProperties resolvedProps);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const int &start, const int &end,
-                                                                          const qreal res,
+                                                                          const KoSvgText::ResolutionHandler resHandler,
                                                                           const QVector<CharacterResult> &result,
                                                                           const bool isHorizontal,
                                                                           const KoSvgText::TextDecorations &decor,
-                                                                          const qreal &minimumDecorationThickness,
                                                                           const KoSvgText::TextDecorationStyle style = KoSvgText::TextDecorationStyle::Solid,
                                                                           const bool textDecorationSkipInset = false,
                                                                           const KoPathShape *currentTextPath = nullptr,

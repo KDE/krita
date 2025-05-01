@@ -1076,6 +1076,44 @@ struct TextUnderlinePosition : public boost::equality_comparable<TextUnderlinePo
 
 };
 
+/**
+ * @brief The ResolutionHandler class
+ *
+ * convenience struct to handle all the conversions between pixels and points and freetype pixels.
+ */
+struct ResolutionHandler {
+
+    ResolutionHandler() {}
+    ResolutionHandler(qreal _xRes = 72.0, qreal _yRes = 72.0, bool _roundToPixelHorizontal = false, bool _roundToPixelVertical = false)
+        : xRes(_xRes), yRes(_yRes), roundToPixelHorizontal(_roundToPixelHorizontal), roundToPixelVertical(_roundToPixelVertical) {}
+
+
+    qreal xRes = 72.0;
+    qreal yRes = 72.0;
+    bool roundToPixelHorizontal = false;
+    bool roundToPixelVertical = false;
+
+    const qreal freeTypePixel = 64.0; // 64 ints to a pixel for freetype, also called "26.6 fp" in the docs.
+    const qreal pointInInch = 72.0; // PostScript points, Krita's vector unit.
+
+    qreal freeTypePixelToPointFactor(const bool x = true) const;
+
+    QTransform freeTypeToPixelTransform() const;
+    QTransform freeTypeToPointTransform() const;
+
+    qreal pointToPixelFactor(const bool x = true) const;
+    QTransform pointToPixel() const;
+
+    qreal pixelToPointFactor(const bool x = true) const;
+    QTransform pixelToPoint() const;
+
+    /// Adjusts the point to rounded pixel values, based on whether roundToPixelHorizontal or roundToPixelVertical are true.
+    QPointF adjust(const QPointF point) const;
+
+    /// Adjusts the rect to rounded pixel values, based on whether roundToPixelHorizontal or roundToPixelVertical are true.
+    QRectF adjust(const QRectF rect) const;
+};
+
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextUnderlinePosition &position);
 
 } // namespace KoSvgText

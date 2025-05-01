@@ -474,7 +474,7 @@ std::pair<QTransform, qreal> KoSvgTextShape::Private::loadGlyphOnly(const QTrans
  * @return Whether the resulting charResult is valid.
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
+bool KoSvgTextShape::Private::loadGlyph(const KoSvgText::ResolutionHandler &resHandler,
                                         const FT_Int32 faceLoadFlags,
                                         const bool isHorizontal,
                                         const char32_t firstCodepoint,
@@ -483,9 +483,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
                                         CharacterResult &charResult,
                                         QPointF &totalAdvanceFTFontCoordinates)
 {
-    // Whenever the freetype docs talk about a 26.6 floating point unit, they
-    // mean a 1/64 value.
-    const qreal ftFontUnit = 64.0;
+    const QTransform ftTF = resHandler.freeTypeToPointTransform();
 
     /// The matrix for Italic (oblique) synthesis of outline glyphs, or for
     /// adjusting the bounding box of bitmap glyphs.
@@ -582,7 +580,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
             if (!isHorizontal) {
                 bboxPixel.moveLeft(-(bboxPixel.width() / 2));
             }
-            QRectF drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * ftFontUnit, bboxPixel.size() * ftFontUnit));
+            QRectF drawRect = ftTF.mapRect(QRectF(bboxPixel.topLeft() * resHandler.freeTypePixel, bboxPixel.size() * resHandler.freeTypePixel));
             drawRect.translate(charResult.advance - ftTF.map(advance));
             bitmapGlyph->drawRects.append(drawRect);
         }
@@ -602,8 +600,8 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         }
         bbox = glyphObliqueTf.mapRect(bbox);
         charResult.isHorizontal = isHorizontal;
-        QRectF scaledBBox = ftTF.mapRect(bbox);
-        charResult.scaledHalfLeading = ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading)).x();
+        QRectF scaledBBox = resHandler.adjust(ftTF.mapRect(bbox));
+        charResult.scaledHalfLeading = resHandler.adjust(ftTF.map(QPointF(charResult.fontHalfLeading, charResult.fontHalfLeading))).x();
         charResult.scaledAscent = isHorizontal? scaledBBox.top(): scaledBBox.right();
         charResult.scaledDescent = isHorizontal? scaledBBox.bottom(): scaledBBox.left();
 

@@ -151,19 +151,10 @@ void KoSvgTextShape::Private::relayout()
         return high.unicode();
     };
 
-    // Whenever the freetype docs talk about a 26.6 floating point unit, they
-    // mean a 1/64 value.
-    const qreal ftFontUnit = 64.0;
-    const qreal ftFontUnitFactor = 1 / ftFontUnit;
-    const qreal finalRes = qMin(this->xRes, this->yRes);
-    const qreal scaleToPT = 72. / finalRes;
-    const qreal scaleToPixel = finalRes / 72.;
-    const QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
-    const QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor) * dpiScale;
-
-    // Some fonts have a faulty underline thickness,
-    // so we limit the minimum to be a single pixel wide.
-    const qreal minimumDecorationThickness = scaleToPT;
+    // Setup the resolution handler.
+    const bool horzSnapping = textRendering != KoSvgText::RenderingGeometricPrecision || textRendering != KoSvgText::RenderingAuto;
+    const bool vertSnapping = (textRendering == KoSvgText::RenderingOptimizeLegibility && isHorizontal) || textRendering == KoSvgText::RenderingOptimizeSpeed;
+    const KoSvgText::ResolutionHandler resHandler(this->xRes, this->yRes, horzSnapping, vertSnapping);
 
     // First, get text. We use the subChunks because that handles bidi-insertion for us.
 
@@ -421,8 +412,8 @@ void KoSvgTextShape::Private::relayout()
                 lengths,
                 properties.cssFontInfo(),
                 chunk.text,
-                static_cast<quint32>(finalRes),
-                static_cast<quint32>(finalRes),
+                static_cast<quint32>(resHandler.xRes),
+                static_cast<quint32>(resHandler.yRes),
                 disableFontMatching);
             const qreal fontSize = properties.cssFontInfo().size;
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
@@ -438,14 +429,14 @@ void KoSvgTextShape::Private::relayout()
 
             if (!letterSpacing.isAuto) {
                 raqm_set_letter_spacing_range(layout.data(),
-                                              static_cast<int>(letterSpacing.length.value * ftFontUnit * scaleToPixel),
+                                              static_cast<int>(letterSpacing.length.value * resHandler.freeTypePixel * resHandler.pointToPixelFactor(isHorizontal)),
                                               static_cast<size_t>(start),
                                               static_cast<size_t>(length));
             }
 
             if (!wordSpacing.isAuto) {
                 raqm_set_word_spacing_range(layout.data(),
-                                            static_cast<int>(wordSpacing.length.value * ftFontUnit * scaleToPixel),
+                                            static_cast<int>(wordSpacing.length.value * resHandler.freeTypePixel * resHandler.pointToPixelFactor(isHorizontal)),
                                             static_cast<size_t>(start),
                                             static_cast<size_t>(length));
             }
@@ -487,12 +478,12 @@ void KoSvgTextShape::Private::relayout()
                         if (tabInfo.isNumber) {
                             // Try to avoid Nan situations.
                             if (result[j].metrics.spaceAdvance > 0) {
-                                tabSize = (result[j].metrics.spaceAdvance + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
+                                tabSize = (result[j].metrics.spaceAdvance + (tabInfo.extraSpacing*resHandler.freeTypePixel)) * tabInfo.value;
                             } else {
-                                tabSize = ((result[j].metrics.fontSize/2) + (tabInfo.extraSpacing*ftFontUnit)) * tabInfo.value;
+                                tabSize = ((result[j].metrics.fontSize/2) + (tabInfo.extraSpacing*resHandler.freeTypePixel)) * tabInfo.value;
                             }
                         } else {
-                            tabSize = tabInfo.length.value * ftFontUnit;
+                            tabSize = tabInfo.length.value * resHandler.freeTypePixel;
                         }
                         result[j].tabSize = tabSize;
                     }
@@ -551,7 +542,7 @@ void KoSvgTextShape::Private::relayout()
             this->isBidi = true;
         }
 
-        if (!this->loadGlyph(ftTF,
+        if (!this->loadGlyph(resHandler,
                              faceLoadFlags,
                              isHorizontal,
                              codepoint,
@@ -649,7 +640,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal, disableFontMatching);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), KoSvgText::FontMetrics(), KoSvgText::BaselineAuto, QPointF(), QPointF(), result, globalIndex, resHandler, isHorizontal, disableFontMatching);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms.value(0).absolutePos() - result.value(0).dominantBaselineOffset;
@@ -741,15 +732,14 @@ void KoSvgTextShape::Private::relayout()
         this->computeTextDecorations(textData.childBegin(),
                                   result,
                                   logicalToVisual,
-                                  minimumDecorationThickness,
+                                  resHandler,
                                   nullptr,
                                   0.0,
                                   false,
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  false,
-                                  finalRes, KoSvgTextProperties::defaultProperties());
+                                  false, KoSvgTextProperties::defaultProperties());
 
         // 8. Position on path
 
@@ -761,15 +751,14 @@ void KoSvgTextShape::Private::relayout()
         this->computeTextDecorations(textData.childBegin(),
                                   result,
                                   logicalToVisual,
-                                  minimumDecorationThickness,
+                                  resHandler,
                                   nullptr,
                                   0.0,
                                   false,
                                   globalIndex,
                                   isHorizontal,
                                   direction == KoSvgText::DirectionLeftToRight,
-                                  true,
-                                  finalRes, KoSvgTextProperties::defaultProperties());
+                                  true, KoSvgTextProperties::defaultProperties());
     }
 
     // 9. return result.
@@ -1071,7 +1060,7 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     const QPointF subScript,
     QVector<CharacterResult> &result,
     int &currentIndex,
-    const qreal res,
+    const KoSvgText::ResolutionHandler resHandler,
     const bool isHorizontal,
     const bool disableFontMatching)
 {
@@ -1093,17 +1082,17 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
         // Positive baseline-shift goes up in the inline-direction, which is up in horizontal and right in vertical.
         baselineShiftTotal = isHorizontal ? QPointF(0, -baselineShift.value) : QPointF(baselineShift.value, 0);
     }
+    baselineShiftTotal = resHandler.adjust(baselineShiftTotal);
 
     QVector<int> lengths;
     const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
         lengths,
         properties.cssFontInfo(),
         QString(),
-        static_cast<quint32>(res),
-        static_cast<quint32>(res),
+        static_cast<quint32>(resHandler.xRes),
+        static_cast<quint32>(resHandler.yRes),
         disableFontMatching);
 
-    const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
 
     KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::DominantBaselineId).toInt());
 
@@ -1121,12 +1110,12 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
     }
 
     // Get underline and super/subscripts.
-    QPointF newSuperScript = QPointF(metrics.superScriptOffset.first * freetypePixelsToPt, metrics.superScriptOffset.second * -freetypePixelsToPt);;
-    QPointF newSubScript = QPointF(metrics.subScriptOffset.first * freetypePixelsToPt, metrics.subScriptOffset.second * freetypePixelsToPt);
-
+    const QTransform ftTf = resHandler.freeTypeToPointTransform();
+    const QPointF newSuperScript = ftTf.map(QPointF(metrics.superScriptOffset.first, metrics.superScriptOffset.second));
+    const QPointF newSubScript = ftTf.map(QPointF(metrics.subScriptOffset.first, -metrics.subScriptOffset.second));
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, properties, metrics, dominantBaseline, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal, disableFontMatching);
+        computeFontMetrics(child, properties, metrics, dominantBaseline, newSuperScript, newSubScript, result, currentIndex, resHandler, isHorizontal, disableFontMatching);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.propertyOrDefault(KoSvgTextProperties::AlignmentBaselineId).toInt());
@@ -1141,7 +1130,7 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
 
     bool applyGlyphAlignment = KisForestDetail::childBegin(parent) == KisForestDetail::childEnd(parent);
     const int boxOffset = parentBaselineTable.valueForBaselineValue(baselineAdjust) - metrics.valueForBaselineValue(baselineAdjust);
-    const QPointF shift = isHorizontal? QPointF(0, (boxOffset) * -freetypePixelsToPt): QPointF((boxOffset) * freetypePixelsToPt, 0);
+    const QPointF shift = resHandler.adjust(ftTf.map(isHorizontal? QPointF(0, (boxOffset)): QPointF((boxOffset), 0)));
     if (baselineShiftMode == KoSvgText::ShiftSuper || baselineShiftMode == KoSvgText::ShiftSub) {
         // We need to remove the additional alignment shift to ensure that super and sub shifts don't get too dramatic.
         baselineShiftTotal -= shift;
@@ -1163,9 +1152,9 @@ void KoSvgTextShape::Private::computeFontMetrics(// NOLINT(readability-function-
             // We offset the whole glyph so that the origin is at the dominant baseline.
             // This will simplify having svg per-char transforms apply as per spec.
             const int originOffset = result[k].metrics.valueForBaselineValue(dominantBaseline);
-            const QPointF newOrigin = isHorizontal? QPointF(0, originOffset * -freetypePixelsToPt): QPointF(originOffset * freetypePixelsToPt, 0);
+            const QPointF newOrigin = resHandler.adjust(ftTf.map(isHorizontal? QPointF(0, originOffset): QPointF(originOffset, 0)));
             const int uniqueOffset = metrics.valueForBaselineValue(dominantBaseline);
-            const QPointF uniqueShift = isHorizontal? QPointF(0, uniqueOffset * -freetypePixelsToPt): QPointF(uniqueOffset * freetypePixelsToPt, 0);
+            const QPointF uniqueShift = resHandler.adjust(ftTf.map(isHorizontal? QPointF(0, uniqueOffset): QPointF(uniqueOffset, 0)));
             result[k].translateOrigin(newOrigin);
             result[k].metrics.offsetMetricsToNewOrigin(dominantBaseline);
             result[k].dominantBaselineOffset = uniqueShift;
@@ -1246,7 +1235,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
     const QVector<CharacterResult> &result,
     const QMap<int, int> &logicalToVisual,
-    qreal minimumDecorationThickness,
+    const KoSvgText::ResolutionHandler resHandler,
     KoPathShape *textPath,
     qreal textPathoffset,
     bool side,
@@ -1254,7 +1243,6 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     bool isHorizontal,
     bool ltr,
     bool wrapping,
-    const qreal res,
     const KoSvgTextProperties resolvedProps)
 {
 
@@ -1289,7 +1277,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
         computeTextDecorations(child,
                                result,
                                logicalToVisual,
-                               minimumDecorationThickness,
+                               resHandler,
                                currentTextPath,
                                currentTextPathOffset,
                                textPathSide,
@@ -1297,7 +1285,6 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                                isHorizontal,
                                ltr,
                                wrapping,
-                               res,
                                properties
                                );
     }
@@ -1310,9 +1297,8 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                         KoSvgTextProperties::TextDecorationStyleId).toInt());
 
         QMap<TextDecoration, QPainterPath> decorationPaths =
-                generateDecorationPaths(i, j, res,
-                                        result, isHorizontal, decor,
-                                        minimumDecorationThickness, style, false, currentTextPath,
+                generateDecorationPaths(i, j, resHandler,
+                                        result, isHorizontal, decor, style, false, currentTextPath,
                                         currentTextPathOffset, textPathSide, newUnderlinePosH, newUnderlinePosV
                                         );
 
@@ -1434,11 +1420,10 @@ void KoSvgTextShape::Private::finalizeDecoration (
 
 QMap<KoSvgText::TextDecoration, QPainterPath>
 KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &end,
-                                                 const qreal res,
+                                                 const KoSvgText::ResolutionHandler resHandler,
                                                  const QVector<CharacterResult> &result,
                                                  const bool isHorizontal,
                                                  const KoSvgText::TextDecorations &decor,
-                                                 const qreal &minimumDecorationThickness,
                                                  const KoSvgText::TextDecorationStyle style,
                                                  const bool textDecorationSkipInset,
                                                  const KoPathShape *currentTextPath,
@@ -1448,7 +1433,8 @@ KoSvgTextShape::Private::generateDecorationPaths(const int &start, const int &en
                                                  const KoSvgText::TextDecorationUnderlinePosition underlinePosV) {
     using namespace KoSvgText;
 
-    const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
+    const qreal freetypePixelsToPt = resHandler.freeTypePixelToPointFactor(isHorizontal);
+    const qreal minimumDecorationThickness = resHandler.pixelToPointFactor(isHorizontal);
 
     QMap<TextDecoration, QPainterPath> decorationPaths;
 
